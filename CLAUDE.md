@@ -88,11 +88,97 @@ See `PRODUCT.md` for the full accessibility floor. Quick summary:
 - No body text running to absolute viewport edge — always horizontal padding
 - No emojis as decoration
 
-## Typography (to be filled in during design system phase)
-- Primary typeface: TBD
-- Display typeface: TBD
-- Mono: TBD
-- Type scale: TBD (fixed for app UI, fluid for marketing pages)
+## Typography
+
+Locked May 2026. Implemented in `app/fonts.ts` and `app/globals.css`. 
+System designed around Bricolage Grotesque's three variable axes (wght, 
+wdth, opsz) — informed by Mathieu Triay's design notes at 
+https://ateliertriay.github.io/bricolage/#design-notes.
+
+### Typefaces
+- **Primary (everything):** Bricolage Grotesque (Google Fonts, variable)
+  - Loaded via `next/font/google` in `app/fonts.ts`
+  - Exposed as `--font-sans` (no separate display family)
+  - `font-optical-sizing: auto` enabled globally — small sizes render 
+    Mathieu's 12pt cut (neutral, readable), large sizes render his 96pt 
+    cut (expressive, ink-trapped)
+- **Mono:** None currently. Add only if a real need appears (code blocks 
+  in case studies). Recursive's `MONO` axis was considered and rejected 
+  for unified family in v1.
+
+### Hard constraints
+- **No italics.** Bricolage ships without italics or obliques. `<em>` 
+  and `<i>` are remapped in globals.css to `font-style: normal; 
+  font-weight: 600`. Never use synthetic browser italic — it looks bad 
+  on a font with no real italic.
+- **14px floor.** Nothing below 14px in the system. If something wants 
+  to be smaller, redesign the layout instead.
+- **No `font-variation-settings` unless absolutely necessary.** Use the 
+  standard CSS properties (`font-weight`, `font-stretch`, 
+  `font-optical-sizing`) — they map directly to Bricolage's axes and 
+  don't break the cascade.
+
+### The scale (role-based @utility classes)
+Defined in `app/globals.css`. Use semantic role utilities — never raw 
+Tailwind text-size classes like `text-4xl`.
+
+| Utility | Size (mobile → desktop) | Use |
+|---|---|---|
+| `text-display` | 64 → 112px | Home page hero name. Used once per page. |
+| `text-hero` | 48 → 80px | Case study & About hero |
+| `text-h1` | 36 → 56px | Case study titles, section page titles |
+| `text-h2` | 28 → 40px | Major section breaks within case studies |
+| `text-h3` | 22 → 28px (weight 500) | Subsections, card titles, callouts |
+| `text-lead` | 22px | Intro paragraph, project tagline |
+| `text-body` | 18px | All body copy, default |
+| `text-small` | 16px | Dense lists, captions, footnotes |
+| `text-caption` | 14px | Date, role, year, byline |
+| `text-eyebrow` | 14px caps | All-caps labels, tags |
+
+H3 uses weight 500 (not 600) to differentiate from H2 by weight as well 
+as size. There is intentionally no H4 — if a fourth heading level is 
+needed, the case study structure is too deep; flatten it or use 
+`text-eyebrow` as a sub-block label instead.
+
+### Width axis usage
+Bricolage's `wdth` axis is geographic: 100 = relaxed/French (Antique 
+Olive influence), lower = anxious/British (Grotesque No. 9 influence). 
+The scale uses:
+- `text-display`: 96% (slight editorial compression)
+- `text-hero`: 97% (slight editorial compression)
+- Everything else: 100% (default, warm)
+
+### Emphasis strategy
+- Inline emphasis: `<em>` → weight 600 (set in globals.css base layer)
+- Longer emphasized passages: weight 500 + slightly higher contrast 
+  color (when color tokens land)
+- Editorial flourishes (book titles, foreign words): quotation marks, 
+  not type style
+
+### Signature moves — deferred
+The system as locked is a solid neutral foundation. Distinctive 
+typographic moments (custom wordmark treatment, lead paragraph 
+character) are deferred until real home page and case study content 
+exists. Don't invent them in the abstract — design them against real 
+content. Likely candidates when revisited:
+- Wordmark: push compression to 84–88%, possibly drop weight, possibly 
+  open letter-spacing
+- Lead paragraph: push weight to 500, possibly tighter tracking
+
+### Reference doc
+Full rationale, manual axis-control patterns, and decisions-with-reasoning 
+live in `docs/typography-system.md`. Read that file before making any 
+typography changes — it's the source of truth for *why* the scale is 
+shaped this way.
+
+### Swap protocol
+If Bricolage is ever replaced (e.g. with a purchased Stornoway or 
+Tofino license), only two surfaces change:
+1. The `next/font` import in `app/fonts.ts`
+2. The `font-stretch` values in `text-display` and `text-hero` (delete 
+   if the new font has no `wdth` axis)
+
+The role utilities and component usage stay identical. No find-and-replace.
 
 ## Color tokens (to be filled in during design system phase)
 - Light mode palette: TBD (current placeholder in globals.css)
