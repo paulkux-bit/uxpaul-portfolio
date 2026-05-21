@@ -1,33 +1,349 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+/* ============================================================
+   THEME — Typography
+   Resolved at build time (no var() at runtime, no swap).
+   ============================================================ */
 
 @theme {
-  --breakpoint-xs: 360px;
-  --breakpoint-sm: 390px;
-  --breakpoint-md: 768px;
-  --breakpoint-lg: 1024px;
-  --breakpoint-xl: 1440px;
-  --breakpoint-2xl: 1920px;
+  --font-sans: var(--font-bricolage), system-ui, sans-serif;
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   THEME — Color
+   `inline` preserves var() references so .dark swaps at runtime.
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-canvas:                 var(--bg-canvas);
+  --color-surface:                var(--bg-surface);
+  --color-surface-elevated:       var(--bg-surface-elevated);
+  --color-sunken:                 var(--bg-sunken);
+
+  --color-text-primary:           var(--text-primary);
+  --color-text-secondary:         var(--text-secondary);
+  --color-text-muted:             var(--text-muted);
+  --color-text-subtle:            var(--text-subtle);
+
+  --color-border-subtle:          var(--border-subtle);
+  --color-border-default:         var(--border-default);
+  --color-border-strong:          var(--border-strong);
+
+  --color-focus-ring:             var(--focus-ring);
+  --color-focus-glow:             var(--focus-glow);
+  --color-selection-bg:           var(--selection-bg);
+  --color-selection-text:         var(--selection-text);
+  --color-link-hover:             var(--link-hover);
+
+  --color-popup-canvas:           var(--popup-canvas);
+  --color-popup-surface:          var(--popup-surface);
+  --color-popup-surface-elevated: var(--popup-surface-elevated);
+  --color-popup-border:           var(--popup-border);
+  --color-popup-text-primary:     var(--popup-text-primary);
+  --color-popup-text-muted:       var(--popup-text-muted);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+/* ============================================================
+   COLOR — Light (Paper)
+   ============================================================ */
+
+:root {
+  --bg-canvas:              oklch(0.975 0.018 78);
+  --bg-surface:             oklch(0.952 0.022 73);
+  --bg-surface-elevated:    oklch(0.930 0.024 70);
+  --bg-sunken:              oklch(0.915 0.026 68);
+
+  --text-primary:           oklch(0.215 0.018 55);
+  --text-secondary:         oklch(0.355 0.020 55);
+  --text-muted:             oklch(0.485 0.022 55);
+  --text-subtle:            oklch(0.625 0.020 60);
+
+  --border-subtle:          oklch(0.915 0.028 68);
+  --border-default:         oklch(0.870 0.032 62);
+  --border-strong:          oklch(0.760 0.040 55);
+
+  --focus-ring:             oklch(0.220 0.018 55 / 0.55);
+  --focus-glow:             oklch(0.700 0.140 60 / 0.22);
+  --selection-bg:           oklch(0.860 0.100 65);
+  --selection-text:         oklch(0.180 0.020 50);
+  --link-hover:             oklch(0.580 0.150 55);
+
+  --shadow-rest:            0 1px 2px oklch(0.30 0.04 50 / 0.05);
+  --shadow-hover:           0 2px 4px oklch(0.30 0.04 50 / 0.06),
+                            0 12px 28px oklch(0.30 0.04 50 / 0.10);
+
+  --popup-canvas:           oklch(0.955 0.044 62);
+  --popup-surface:          oklch(0.930 0.054 58);
+  --popup-surface-elevated: oklch(0.905 0.060 55);
+  --popup-border:           oklch(0.840 0.070 52);
+  --popup-text-primary:     oklch(0.245 0.030 52);
+  --popup-text-muted:       oklch(0.495 0.030 52);
+}
+
+/* ============================================================
+   COLOR — Dark (Low Light)
+   ============================================================ */
 
 .dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --bg-canvas:              oklch(0.165 0.020 50);
+  --bg-surface:             oklch(0.205 0.024 50);
+  --bg-surface-elevated:    oklch(0.255 0.028 50);
+  --bg-sunken:              oklch(0.130 0.016 48);
+
+  --text-primary:           oklch(0.945 0.012 78);
+  --text-secondary:         oklch(0.825 0.014 76);
+  --text-muted:             oklch(0.705 0.016 72);
+  --text-subtle:            oklch(0.565 0.018 68);
+
+  --border-subtle:          oklch(0.245 0.024 52);
+  --border-default:         oklch(0.310 0.028 50);
+  --border-strong:          oklch(0.430 0.034 50);
+
+  --focus-ring:             oklch(0.945 0.012 78 / 0.55);
+  --focus-glow:             oklch(0.720 0.150 60 / 0.30);
+  --selection-bg:           oklch(0.380 0.090 55);
+  --selection-text:         oklch(0.970 0.012 78);
+  --link-hover:             oklch(0.780 0.140 60);
+
+  --shadow-rest:            0 1px 2px oklch(0 0 0 / 0.30);
+  --shadow-hover:           0 2px 4px oklch(0 0 0 / 0.35),
+                            0 16px 36px oklch(0 0 0 / 0.40);
+
+  --popup-canvas:           oklch(0.215 0.040 52);
+  --popup-surface:          oklch(0.255 0.046 52);
+  --popup-surface-elevated: oklch(0.295 0.052 52);
+  --popup-border:           oklch(0.385 0.060 52);
+  --popup-text-primary:     oklch(0.935 0.020 75);
+  --popup-text-muted:       oklch(0.730 0.024 68);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================
+   BASE — typography defaults + color-scheme + body + paper
+   grain + selection + focus halo + link affordance + em/i map
+   ============================================================ */
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color-scheme: light;
+  }
+
+  html.dark { color-scheme: dark; }
+
+  body {
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    position: relative;
+    transition:
+      background-color 450ms var(--ease-out-soft),
+      color 450ms var(--ease-out-soft);
+  }
+
+  /* Paper grain overlay — light mode only. Fixed, non-interactive,
+     SVG noise via multiply blend. Drops to opacity 0 in dark mode. */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    transition: opacity 450ms var(--ease-out-soft);
+  }
+  html.dark body::before { opacity: 0; }
+
+  /* Lift content above the grain layer */
+  body > * { position: relative; z-index: 2; }
+
+  /* Bricolage has no italics — map em/i to weight emphasis instead. */
+  em, i {
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  ::selection {
+    background-color: var(--selection-bg);
+    color: var(--selection-text);
+  }
+
+  /* Two-layer focus: crisp inner ring + warm outer halo */
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 6px var(--focus-glow);
+  }
+  :focus:not(:focus-visible) { outline: none; box-shadow: none; }
+
+  /* Link: chromatic restraint at rest, two-channel signal on hover */
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+    text-decoration-color: var(--border-strong);
+    transition:
+      text-decoration-color 220ms var(--ease-out-soft),
+      text-decoration-thickness 220ms var(--ease-out-soft);
+  }
+  a:hover {
+    text-decoration-color: var(--link-hover);
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* ============================================================
+   UTILITIES — Typography (display & headings, fluid)
+   ============================================================ */
+
+@utility text-display {
+  font-size: clamp(4rem, 5vw + 2rem, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  font-weight: 600;
+  font-stretch: 96%;
+}
+
+@utility text-hero {
+  font-size: clamp(3rem, 3vw + 2rem, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  font-weight: 600;
+  font-stretch: 97%;
+}
+
+@utility text-h1 {
+  font-size: clamp(2.25rem, 1.75vw + 1.625rem, 3.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+@utility text-h2 {
+  font-size: clamp(1.75rem, 1vw + 1.375rem, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+@utility text-h3 {
+  font-size: clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+/* ============================================================
+   UTILITIES — Typography (body & supporting, fixed)
+   ============================================================ */
+
+@utility text-lead {
+  font-size: 1.375rem;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  font-weight: 400;
+}
+
+@utility text-body {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  font-weight: 400;
+}
+
+@utility text-small {
+  font-size: 1rem;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+@utility text-caption {
+  font-size: 0.875rem;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+@utility text-eyebrow {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* ============================================================
+   UTILITIES — Surface, text, borders
+   ============================================================ */
+
+@utility bg-canvas           { background-color: var(--bg-canvas); }
+@utility bg-surface          { background-color: var(--bg-surface); }
+@utility bg-surface-elevated { background-color: var(--bg-surface-elevated); }
+@utility bg-sunken           { background-color: var(--bg-sunken); }
+
+@utility text-primary        { color: var(--text-primary); }
+@utility text-secondary      { color: var(--text-secondary); }
+@utility text-muted          { color: var(--text-muted); }
+@utility text-subtle         { color: var(--text-subtle); }
+
+@utility border-subtle       { border-color: var(--border-subtle); }
+@utility border-default      { border-color: var(--border-default); }
+@utility border-strong       { border-color: var(--border-strong); }
+
+/* ============================================================
+   UTILITIES — Shadow and lift
+   Compose: <article className="lift hover:lift-hover">…</article>
+   ============================================================ */
+
+@utility shadow-rest  { box-shadow: var(--shadow-rest); }
+@utility shadow-hover { box-shadow: var(--shadow-hover); }
+
+@utility lift {
+  box-shadow: var(--shadow-rest);
+  transition:
+    transform 320ms var(--ease-out-soft),
+    box-shadow 320ms var(--ease-out-soft),
+    border-color 320ms var(--ease-out-soft);
+}
+@utility lift-hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* ============================================================
+   UTILITIES — PopUp annotation layer (use ONLY in annotations)
+   ============================================================ */
+
+@utility bg-popup-canvas           { background-color: var(--popup-canvas); }
+@utility bg-popup-surface          { background-color: var(--popup-surface); }
+@utility bg-popup-surface-elevated { background-color: var(--popup-surface-elevated); }
+@utility border-popup              { border-color: var(--popup-border); }
+@utility text-popup-primary        { color: var(--popup-text-primary); }
+@utility text-popup-muted          { color: var(--popup-text-muted); }
+
+/* ============================================================
+   POPUP STATE — applied to <body> when annotations toggle on
+   ============================================================ */
+
+body.popup-on {
+  background-color: color-mix(in oklch, var(--bg-canvas) 80%, var(--popup-canvas));
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

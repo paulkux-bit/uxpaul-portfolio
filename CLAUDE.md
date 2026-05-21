@@ -193,3 +193,96 @@ The role utilities and component usage stay identical. No find-and-replace.
   Mode for variant exploration
 - Commit messages in imperative mood ("Add header nav" not "Added header nav")
 - Always test in both light and dark mode before committing
+
+# CLAUDE.md — color system section
+
+Paste this into your existing `CLAUDE.md`, after the typography section.
+
+---
+
+## Color system — locked (v2)
+
+**Name:** Paper & Low Light
+**Spec:** `docs/color-system.md`
+**Implementation:** `app/globals.css`
+**Toggle:** `next-themes`, class-based (`.dark` on `<html>`)
+
+### Core principle
+
+**No accent at rest. Interaction earns color.**
+
+Nothing chromatic sits on the page idle. But when the user *does* something — hovers a link, selects text, focuses an input, picks up a card — the system responds with a warm chromatic moment. Interaction states are moments, not roles. This is compatible with chromatic restraint at the system level.
+
+The PopUp annotation layer is the one exception: it carries chromatic identity that persists at rest, because it's a distinct editorial voice.
+
+### Locked decisions
+
+- **Color space:** oklch only. No hex. No rgb. Anywhere downstream.
+- **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds.
+- **Naming:** role-based, semantic. `--text-primary`, `--bg-surface-elevated`. Never raw color names.
+- **Light and dark tuned independently.** Same hue axis, different chroma/contrast curves. Dark is not inverted light.
+- **PopUp tokens (`--popup-*`) are reserved for the annotation layer.** Do not use elsewhere.
+- **Interaction-state tokens (`--focus-glow`, `--selection-bg`, `--link-hover`) are moments, not paint.** Don't extend them to resting roles.
+
+### Token inventory
+
+- **Surface** — `--bg-canvas`, `--bg-surface`, `--bg-surface-elevated`, `--bg-sunken`
+- **Text** — `--text-primary`, `--text-secondary`, `--text-muted`, `--text-subtle`
+- **Borders** — `--border-subtle`, `--border-default`, `--border-strong`
+- **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
+- **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
+- **PopUp** — `--popup-canvas`, `--popup-surface`, `--popup-surface-elevated`, `--popup-border`, `--popup-text-primary`, `--popup-text-muted`
+
+### Signature treatments
+
+- **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
+- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-strong → link-hover) shift together.
+- **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
+- **Card lift** — `translateY(-3px)` + `shadow-hover` on interactive surfaces. Use the `lift` / `lift-hover` utility pair.
+- **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
+
+### Utility classes (mirror typography pattern)
+
+Defined in `app/globals.css` via `@utility`. Same naming convention as typography utilities.
+
+- Surface: `bg-canvas`, `bg-surface`, `bg-surface-elevated`, `bg-sunken`
+- Text: `text-primary`, `text-secondary`, `text-muted`, `text-subtle`
+- Borders: `border-subtle`, `border-default`, `border-strong`
+- Shadows + lift: `shadow-rest`, `shadow-hover`, `lift`, `lift-hover`
+- PopUp: `bg-popup-canvas`, `bg-popup-surface`, `bg-popup-surface-elevated`, `border-popup`, `text-popup-primary`, `text-popup-muted`
+
+For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-muted)' }}`.
+
+### Accessibility floor
+
+- Body text (`text-primary` on `bg-canvas`) hits **AAA** in both modes.
+- `text-muted` hits **AA normal** — fine for any body-text size.
+- `text-subtle` is **AA-large only** — never below 18px (or 14px bold). Lint this.
+- Focus uses `outline` + `box-shadow` (never `border-color`). Layout never shifts.
+- Link affordance is multi-channel — underline at rest, thicker + warmer on hover. Color alone is never the only signal.
+- `color-scheme` set per mode so native controls theme correctly.
+
+### Anti-patterns (extension of existing list)
+
+- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion.
+- ❌ No raw color tokens (e.g., `--color-blue-500`). All color is role-based.
+- ❌ No cool grays (hue ≥ 200) anywhere.
+- ❌ No pure black or pure white.
+- ❌ Dark mode is not inverted light mode.
+- ❌ Don't use `--popup-*` tokens outside the annotation context.
+- ❌ Don't extend `--focus-glow`, `--selection-bg`, or `--link-hover` to resting roles.
+- ❌ No paper grain in dark mode.
+- ❌ Don't add tokens inline. Extend `docs/color-system.md` first.
+
+### Theming wiring
+
+```tsx
+// app/layout.tsx
+import { ThemeProvider } from 'next-themes';
+
+<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+  {children}
+</ThemeProvider>
+```
+
+The `attribute="class"` is critical — the CSS expects `.dark` on `<html>`, not `data-theme="dark"`.
