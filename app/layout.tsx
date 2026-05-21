@@ -1,4 +1,5 @@
 import { bricolage } from './fonts';
+import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 export const metadata = {
@@ -9,7 +10,11 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={bricolage.variable} suppressHydrationWarning>
-      <body>{children}</body>
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
