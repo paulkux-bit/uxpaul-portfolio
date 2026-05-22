@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <main className="mx-auto max-w-3xl px-6 py-24 space-y-16">
+    <div className="mx-auto max-w-3xl px-6 py-24 space-y-16">
       {/* Hero block */}
       <section className="space-y-6">
         <h1 className="text-display">uxpaul</h1>
@@ -15,7 +15,7 @@ export default function Home() {
         <h3 className="text-h3">Cross-brand navigation</h3>
         <p className="text-body">
           Eight designers, four global brands — building a unified navigation system
-          that preserved each brand's voice within one shared design language. The <em>visible</em> 
+          that preserved each brand&apos;s voice within one shared design language. The <em>visible</em>
           : faster onboarding, fewer cross-brand support tickets.
         </p>
         <p className="text-caption">Lead designer · 8 months</p>
@@ -37,6 +37,6 @@ export default function Home() {
           <p className="text-eyebrow">Eyebrow — 14 caps</p>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

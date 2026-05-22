@@ -1,6 +1,7 @@
 import { bricolage } from './fonts';
 import { ThemeProvider } from '@/components/theme-provider';
 import { PopUpProvider } from '@/components/popup-context';
+import { SiteHeader } from '@/components/site-header';
 import './globals.css';
 
 // Pre-paint: apply the annotation tint before hydration so a previously-enabled
@@ -18,7 +19,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <script dangerouslySetInnerHTML={{ __html: popupInitScript }} />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <PopUpProvider>{children}</PopUpProvider>
+          <PopUpProvider>
+            <SiteHeader />
+            <main id="main" tabIndex={-1}>
+              {children}
+            </main>
+          </PopUpProvider>
         </ThemeProvider>
       </body>
     </html>
