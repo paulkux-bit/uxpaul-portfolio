@@ -132,6 +132,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
+    /* Keep the sticky header from obscuring focused / anchored targets
+       (WCAG 2.2 SC 2.4.11). 5rem clears the 56–64px header with room. */
+    scroll-padding-top: 5rem;
   }
 
   html.dark { color-scheme: dark; }
@@ -314,6 +317,123 @@
 @utility lift-hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-hover);
+}
+
+/* ============================================================
+   SITE HEADER
+   Transparent at rest; a hairline border + canvas fill fade in
+   once scrolled (data-scrolled). Appearance-only, 160ms — the
+   reduced-motion block collapses the transition to instant.
+   Dark parity: a shadow on espresso is invisible, so dark uses a
+   stronger border instead.
+   ============================================================ */
+
+.site-header {
+  background-color: transparent;
+  border-bottom: 1px solid transparent;
+  transition:
+    background-color 160ms var(--ease-out-soft),
+    border-color 160ms var(--ease-out-soft);
+}
+.site-header[data-scrolled] {
+  background-color: var(--bg-canvas);
+  border-bottom-color: var(--border-subtle);
+}
+.dark .site-header[data-scrolled] {
+  border-bottom-color: var(--border-default);
+}
+
+/* Skip link — first focusable element, revealed on focus. */
+.skip-link {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.75rem;
+  z-index: 60;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  background-color: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  text-decoration: none;
+  transform: translateY(-160%);
+  transition: transform 160ms var(--ease-out-soft);
+}
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* Programmatic focus on <main> (via skip link) needs no halo. */
+#main:focus,
+#main:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Wordmark — compact persistent chrome (text-small, weighted, a hint
+   of width compression). Not text-display; it must not fight the hero. */
+/* No underline in any state — that idiom belongs to nav links. Home is
+   signalled semantically via aria-current on the wordmark, not visually. */
+.wordmark {
+  font-size: 1rem;
+  font-weight: 600;
+  font-stretch: 88%;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+/* Nav links — chromatic restraint at rest; weight + neutral underline
+   carry the active route. Color shift is the only chromatic moment,
+   on hover (inherited from the base `a` rule). */
+.nav-link {
+  color: var(--text-secondary);
+  text-decoration-line: none;
+  text-underline-offset: 0.22em;
+  transition: color 160ms var(--ease-out-soft);
+}
+.nav-link:hover {
+  color: var(--text-primary);
+  text-decoration-line: underline;
+}
+.nav-link[data-active] {
+  color: var(--text-primary);
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--border-strong);
+}
+
+/* Annotation toggle — on-state reads via fill + weight + border, never
+   chroma (chroma is reserved for the focus moment). Disabled = inert. */
+.annotation-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border-default);
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    color 160ms var(--ease-out-soft),
+    border-color 160ms var(--ease-out-soft),
+    background-color 160ms var(--ease-out-soft);
+}
+.annotation-toggle:hover:not(:disabled) {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.annotation-toggle[data-on] {
+  background-color: var(--bg-surface-elevated);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+.annotation-toggle:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* ============================================================
