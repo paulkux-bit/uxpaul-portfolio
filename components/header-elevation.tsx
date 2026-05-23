@@ -32,9 +32,9 @@ export function HeaderElevation({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {/* Hysteresis sentinel — anchors to <body> (position: relative). */}
-      <div ref={sentinelRef} aria-hidden className="absolute left-0 top-0 h-2 w-full" />
-      <header data-scrolled={scrolled || undefined} className="site-header sticky top-0 z-50">
+      {/* Hysteresis sentinel — positioning owned by .site-header-sentinel. */}
+      <div ref={sentinelRef} aria-hidden className="site-header-sentinel" />
+      <header data-scrolled={scrolled || undefined} className="site-header">
         {children}
       </header>
     </>

@@ -329,11 +329,28 @@
    ============================================================ */
 
 .site-header {
+  /* Own the positioning here (unlayered → reliably beats the
+     `body > *` paper-grain rule and doesn't depend on Tailwind utilities
+     being generated in dev). */
+  position: sticky;
+  top: 0;
+  z-index: 50;
   background-color: transparent;
   border-bottom: 1px solid transparent;
   transition:
     background-color 160ms var(--ease-out-soft),
     border-color 160ms var(--ease-out-soft);
+}
+
+/* Scroll-elevation sentinel — a real, non-zero target pinned to the document
+   top so the IntersectionObserver reliably fires when it leaves the viewport.
+   Explicit positioning, not Tailwind utilities, so dev can't drop it. */
+.site-header-sentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
 }
 .site-header[data-scrolled] {
   background-color: var(--bg-canvas);
