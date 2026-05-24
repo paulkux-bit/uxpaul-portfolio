@@ -1,41 +1,50 @@
+import { CaseStudyCard } from '@/components/case-study-card';
+import { RevealGrid } from '@/components/reveal-grid';
+import { caseStudies } from '@/app/data/case-studies';
+
 export default function Home() {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-24 space-y-16">
-      {/* Hero block */}
+    <div className="mx-auto max-w-6xl px-6 md:px-8 py-16 md:py-20 xl:py-24 2xl:py-32 space-y-16 2xl:space-y-24">
+      {/* Hero — text-led: positioning statement + supporting line. No hero
+          visual in v1 (the type treatment carries it). Supporting line is
+          weight 500 (typography §9 "lead" move) at a readable measure.
+          Desktop padding/gap tightened so the first selected-work row clears
+          the 1440 fold; 1920 keeps the generous rhythm. */}
       <section className="space-y-6">
-        <h1 className="text-display">uxpaul</h1>
-        <p className="text-lead">
-          Senior product designer — consumer-grade craft for complex technical challenges.
+        {/* Meaning-unit line breaks forced from xl up (isolates the
+            differentiator "Consumer-grade craft" on line 1; lands line-end
+            emphasis on craft / complex / challenges). Below xl the breaks
+            collapse and text-statement's text-wrap:balance evens the rag.
+            max-w-5xl so each forced line fits at desktop size (verified 1440/1920). */}
+        <h1 className="text-statement text-primary max-w-5xl">
+          Consumer-grade craft{' '}
+          <br className="hidden xl:block" />
+          applied to complex{' '}
+          <br className="hidden xl:block" />
+          technical challenges.
+        </h1>
+        <p className="text-lead text-secondary font-medium max-w-[60ch]">
+          I&rsquo;m Paul Kali, a senior product designer — eight years bringing
+          the same standard to defense and government systems and the consumer
+          apps people use every day.
         </p>
       </section>
 
-      {/* Case study card preview */}
-      <section className="space-y-3 border-t border-neutral-200 pt-12">
-        <p className="text-eyebrow">2023 · URBN</p>
-        <h3 className="text-h3">Cross-brand navigation</h3>
-        <p className="text-body">
-          Eight designers, four global brands — building a unified navigation system
-          that preserved each brand&apos;s voice within one shared design language. The <em>visible</em>
-          : faster onboarding, fewer cross-brand support tickets.
+      {/* Case study index — labeled list, 2-up gallery, staggered reveal */}
+      <section aria-labelledby="selected-work" className="space-y-8">
+        {/* Sentence-case section label (not text-eyebrow's uppercase) — warmer
+            for the senior register; text-eyebrow stays reserved for true
+            all-caps tags. Weight + the whitespace gap above carry the label. */}
+        <p id="selected-work" className="text-caption font-semibold text-muted tracking-wide">
+          Selected work
         </p>
-        <p className="text-caption">Lead designer · 8 months</p>
-      </section>
-
-      {/* Full scale audit */}
-      <section className="space-y-6 border-t border-neutral-200 pt-12">
-        <h2 className="text-h2">Type scale audit</h2>
-        <div className="space-y-3">
-          <p className="text-display">Display 64→112</p>
-          <p className="text-hero">Hero 48→80</p>
-          <p className="text-h1">Heading 1 — 36→56</p>
-          <p className="text-h2">Heading 2 — 28→40</p>
-          <p className="text-h3">Heading 3 — 22→28</p>
-          <p className="text-lead">Lead paragraph — 22</p>
-          <p className="text-body">Body — 18. Default reading size for case studies and prose.</p>
-          <p className="text-small">Small — 16. Dense lists and captions.</p>
-          <p className="text-caption">Caption — 14. Meta and bylines.</p>
-          <p className="text-eyebrow">Eyebrow — 14 caps</p>
-        </div>
+        <RevealGrid className="grid gap-x-8 gap-y-12 lg:grid-cols-2">
+          {caseStudies.map((study) => (
+            <li key={study.slug}>
+              <CaseStudyCard study={study} />
+            </li>
+          ))}
+        </RevealGrid>
       </section>
     </div>
   );

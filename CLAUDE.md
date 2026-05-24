@@ -124,16 +124,19 @@ Tailwind text-size classes like `text-4xl`.
 
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
-| `text-display` | 64 → 112px | Home page hero name. Used once per page. |
+| `text-statement` | 40 → 96px | Home positioning statement (home h1). Largest type in the system. Once per page. |
 | `text-hero` | 48 → 80px | Case study & About hero |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
-| `text-h2` | 28 → 40px | Major section breaks within case studies |
-| `text-h3` | 22 → 28px (weight 500) | Subsections, card titles, callouts |
+| `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
+| `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
+| `text-cover` | 22 → 32px (weight 600) | Case-study card cover headline (typographic tier). Card-only. |
 | `text-lead` | 22px | Intro paragraph, project tagline |
 | `text-body` | 18px | All body copy, default |
 | `text-small` | 16px | Dense lists, captions, footnotes |
-| `text-caption` | 14px | Date, role, year, byline |
-| `text-eyebrow` | 14px caps | All-caps labels, tags |
+| `text-caption` | 14px | Date, role, year, byline; card project·client meta |
+| `text-eyebrow` | 14px caps | Reserved for all-caps tags (home section labels are sentence-case) |
+
+`text-display` was cut (homeless once the home h1 became `text-statement`; the deferred wordmark gets its own `text-wordmark`).
 
 H3 uses weight 500 (not 600) to differentiate from H2 by weight as well 
 as size. There is intentionally no H4 — if a fourth heading level is 
@@ -144,16 +147,23 @@ needed, the case study structure is too deep; flatten it or use
 Bricolage's `wdth` axis is geographic: 100 = relaxed/French (Antique 
 Olive influence), lower = anxious/British (Grotesque No. 9 influence). 
 The scale uses:
-- `text-display`: 96% (slight editorial compression)
+- `text-statement`: 96% (slight editorial compression)
 - `text-hero`: 97% (slight editorial compression)
+- `.wordmark` (header chrome): 88%
 - Everything else: 100% (default, warm)
+
+The `wdth` (and `opsz`) axes only render because `app/fonts.ts` loads them via
+`axes: ['opsz','wdth']`. Omitting that ships `wght`-only and silently disables
+every `font-stretch` and `font-optical-sizing` rule.
 
 ### Emphasis strategy
 - Inline emphasis: `<em>` → weight 600 (set in globals.css base layer)
-- Longer emphasized passages: weight 500 + slightly higher contrast 
-  color (when color tokens land)
+- Longer emphasized passages: the `emphasis-quiet` utility (weight 500 + 
+  `--text-secondary`), defined in globals.css
 - Editorial flourishes (book titles, foreign words): quotation marks, 
   not type style
+- Product/ship/project names (Bard, Dagr, FDT-E): normal-weight proper 
+  nouns, never emphasized
 
 ### Signature moves — deferred
 The system as locked is a solid neutral foundation. Distinctive 
@@ -174,9 +184,9 @@ shaped this way.
 ### Swap protocol
 If Bricolage is ever replaced (e.g. with a purchased Stornoway or 
 Tofino license), only two surfaces change:
-1. The `next/font` import in `app/fonts.ts`
-2. The `font-stretch` values in `text-display` and `text-hero` (delete 
-   if the new font has no `wdth` axis)
+1. The `next/font` import in `app/fonts.ts` (including the `axes` array)
+2. The `font-stretch` values in `text-statement`, `text-hero`, and 
+   `.wordmark` (delete if the new font has no `wdth` axis)
 
 The role utilities and component usage stay identical. No find-and-replace.
 
