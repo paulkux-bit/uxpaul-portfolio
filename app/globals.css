@@ -207,12 +207,19 @@
    UTILITIES — Typography (display & headings, fluid)
    ============================================================ */
 
-@utility text-display {
-  font-size: clamp(4rem, 5vw + 2rem, 7rem);
-  line-height: 0.9;
-  letter-spacing: -0.035em;
+/* Home-page positioning statement — the largest type in the system (text-display
+   was cut as homeless; the deferred wordmark gets its own text-wordmark per
+   typography doc §9). Stretch 96% (typography doc §11 rejected 92–94% as
+   "squeezed"); line-height 1.0 because this is a multi-line sentence in a wide
+   shell. text-wrap: balance evens the rag and prevents a one-word widow on the
+   last line — the wrap is still tuned per-instance via max-w on the hero. */
+@utility text-statement {
+  font-size: clamp(2.5rem, 4vw + 1.75rem, 6rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
   font-weight: 600;
   font-stretch: 96%;
+  text-wrap: balance;
 }
 
 @utility text-hero {
@@ -242,6 +249,18 @@
   line-height: 1.25;
   letter-spacing: -0.01em;
   font-weight: 500;
+}
+
+/* Case-study card cover headline. Sized between h3 and h2 and capped lower
+   than h2 so the longest first-person framings still fit the aspect-video
+   well at 360/390 without clipping; balanced wrap keeps the lines even. This
+   role is the typographic cover only — not a section heading. */
+@utility text-cover {
+  font-size: clamp(1.375rem, 1.4vw + 1rem, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  text-wrap: balance;
 }
 
 /* ============================================================
@@ -279,6 +298,17 @@
   letter-spacing: 0.08em;
   font-weight: 600;
   text-transform: uppercase;
+}
+
+/* Quiet emphasis (typography doc §6 Pattern B). Bricolage has no italics, so
+   <em> maps to weight 600 — that's LOUD emphasis. This is the quiet/contrastive
+   register italic would otherwise carry: a small weight lift + secondary color,
+   for longer emphasized passages where bold would shout. Inline span, not a
+   replacement for <em>. Product/ship names (Bard, Dagr) are NOT emphasized —
+   they're normal-weight proper nouns. */
+@utility emphasis-quiet {
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 /* ============================================================
@@ -453,6 +483,36 @@
   cursor: not-allowed;
 }
 
+/* Theme toggle — icon button. Border-only hover (no chroma; chroma is the
+   focus moment, inherited from the global :focus-visible halo). Sun/moon
+   visibility is driven by the .dark class, set pre-paint by next-themes. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    color 160ms var(--ease-out-soft),
+    border-color 160ms var(--ease-out-soft);
+}
+.theme-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+.theme-toggle svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+.theme-toggle .icon-sun { display: none; }
+.dark .theme-toggle .icon-sun { display: inline; }
+.dark .theme-toggle .icon-moon { display: none; }
+
 /* ============================================================
    UTILITIES — PopUp annotation layer (use ONLY in annotations)
    ============================================================ */
@@ -470,6 +530,31 @@
 
 body.popup-on {
   background-color: color-mix(in oklch, var(--bg-canvas) 80%, var(--popup-canvas));
+}
+
+/* ============================================================
+   CASE-STUDY INDEX REVEAL (progressive enhancement)
+   Driven by data attributes set in reveal-grid.tsx. The hidden + transition
+   states apply only when motion is allowed; without JS no attributes are set,
+   so cards render visible. See components/reveal-grid.tsx.
+   ============================================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-grid > [data-reveal-hidden] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .reveal-grid > [data-reveal-shown] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 360ms var(--ease-out-soft),
+      transform 360ms var(--ease-out-soft);
+  }
+  .reveal-grid > [data-reveal-shown]:nth-child(2) { transition-delay: 70ms; }
+  .reveal-grid > [data-reveal-shown]:nth-child(3) { transition-delay: 140ms; }
+  .reveal-grid > [data-reveal-shown]:nth-child(4) { transition-delay: 210ms; }
+  .reveal-grid > [data-reveal-shown]:nth-child(5) { transition-delay: 280ms; }
 }
 
 /* ============================================================

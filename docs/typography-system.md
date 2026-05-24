@@ -31,32 +31,51 @@ export const bricolage = Bricolage_Grotesque({
   subsets: ['latin'],
   variable: '--font-bricolage',
   display: 'swap',
-  // No `weight` array — that forces single-weight loading.
-  // Omitting it loads the full variable file with all three axes.
+  // `next/font/google` ships ONLY the default `wght` axis for a variable font
+  // unless the others are named explicitly. `opsz` and `wdth` MUST be listed
+  // here or `font-optical-sizing` and `font-stretch` have no axis to act on and
+  // are silently inert. `wght` is the default — do not list it. Do not add a
+  // `weight` prop; it's mutually exclusive with variable-axis loading.
+  axes: ['opsz', 'wdth'],
 });
 ```
+
+> **Hard-won note:** an earlier version of this doc claimed omitting `weight`
+> "loads the full variable file with all three axes." That is wrong, and it
+> shipped a bug — `opsz`/`wdth` were absent and every optical-sizing /
+> `font-stretch` rule did nothing in production until the `axes` line was added.
 
 ### `app/layout.tsx`
 
 ```tsx
 import { bricolage } from './fonts';
+import { ThemeProvider } from '@/components/theme-provider';
+import { PopUpProvider } from '@/components/popup-context';
+import { SiteHeader } from '@/components/site-header';
 import './globals.css';
-
-export const metadata = {
-  title: 'uxpaul',
-  description: 'Senior product designer — consumer-grade craft for complex technical challenges.',
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={bricolage.variable} suppressHydrationWarning>
-      <body suppressHydrationWarning>{children}</body>
+      <body suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <PopUpProvider>
+            <SiteHeader />
+            <main id="main" tabIndex={-1}>{children}</main>
+          </PopUpProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }
 ```
 
-The `suppressHydrationWarning` on both `<html>` and `<body>` prevents false hydration mismatches from `next-themes` and browser extensions (ColorZilla, Grammarly, etc.) that inject attributes after server render. It does not suppress real hydration errors — only attribute-level mismatches.
+Trimmed for the font wiring; see the real `app/layout.tsx` for the popup
+pre-paint script and metadata. Theme switching is **class-based** (`attribute="class"`
+→ `.dark` on `<html>`), not `data-theme`. The `suppressHydrationWarning` on both
+`<html>` and `<body>` prevents false hydration mismatches from `next-themes` and
+browser extensions (ColorZilla, Grammarly, etc.) that inject attributes after
+server render. It does not suppress real hydration errors — only attribute-level mismatches.
 
 ---
 
@@ -102,13 +121,21 @@ The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numb
 ```css
 /* === Display & headings (fluid) === */
 
-@utility text-display {
-  /* 64 → 112px — home page hero. Pushed high to fully activate the 96pt cut. */
-  font-size: clamp(4rem, 5vw + 2rem, 7rem);
-  line-height: 0.9;
-  letter-spacing: -0.035em;
+@utility text-statement {
+  /* 40 → 96px — home-page positioning statement, the largest type in the
+     system. (text-display, an unused 112px step, was cut — see §9; the deferred
+     wordmark gets its own text-wordmark, not text-display.) Floor lowered from
+     56px so the multi-line statement is ~4 lines at 390, not ~6. Stretch 96% —
+     matching §11, which rejected 92–94% as "squeezed" at display sizes;
+     line-height 1.0 because this is a multi-line sentence. text-wrap: balance
+     evens the rag and kills a one-word widow on the last line; per-instance
+     wrap is still tuned with max-w on the hero. */
+  font-size: clamp(3.5rem, 4vw + 1.75rem, 6rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
   font-weight: 600;
   font-stretch: 96%;
+  text-wrap: balance;
 }
 
 @utility text-hero {
@@ -143,6 +170,20 @@ The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numb
   line-height: 1.25;
   letter-spacing: -0.01em;
   font-weight: 500;
+}
+
+@utility text-cover {
+  /* 22 → 32px — case-study card cover headline (the typographic-tier cover,
+     where the first-person problem framing IS the cover). Sized between h3 and
+     h2 and capped lower than h2 so the longest framings still fit the
+     aspect-video well at 360/390 without clipping; text-wrap: balance evens the
+     lines. Cover-only role, not a section heading. No font-stretch — wdth
+     compression only earns its keep above ~48px; below that it just cramps. */
+  font-size: clamp(1.375rem, 1.4vw + 1rem, 2rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+  text-wrap: balance;
 }
 
 /* === Body & supporting (fixed) === */
@@ -193,16 +234,19 @@ The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numb
 
 | Utility | Size (mobile → desktop) | Where it goes |
 |---|---|---|
-| `text-display` | 64 → 112px | Home page hero name. Used once per page. |
+| `text-statement` | 40 → 96px | Home page positioning statement (the home h1). The largest type in the system. Once per page. |
 | `text-hero` | 48 → 80px | Case study & About hero |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
-| `text-h2` | 28 → 40px | Major section breaks within case studies |
-| `text-h3` | 22 → 28px (weight 500) | Subsections, card titles, callouts |
+| `text-h2` | 28 → 40px | Major section breaks within case studies; card title (media-tier cover) |
+| `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
+| `text-cover` | 22 → 32px (weight 600) | Case-study card cover headline (typographic tier). Card-only. |
 | `text-lead` | 22px | Intro paragraph, project tagline, key claim |
 | `text-body` | 18px | All body copy, default |
 | `text-small` | 16px | Dense lists, captions, footnotes |
-| `text-caption` | 14px | Date, role, year, byline |
-| `text-eyebrow` | 14px caps | All-caps labels, tags |
+| `text-caption` | 14px | Date, role, year, byline; card project·client meta |
+| `text-eyebrow` | 14px caps | Reserved for all-caps tags. (The home "Selected work" label is intentionally sentence-case, not eyebrow — warmer register.) |
+
+Eleven role utilities (`text-display` was cut as homeless — see §9).
 
 Floor is **14px**. Anything that wants to be smaller — change the layout, don't shrink the type.
 
@@ -226,7 +270,10 @@ Just write `<em>` (or `*emphasis*` in MDX). Renders at weight 600. No additional
 ```
 
 ### Pattern B — Quiet emphasis (longer passages)
-For full sentences or clauses where bold would be too heavy. Use a utility class that pulls weight up to 500 and shifts color slightly (once color tokens land).
+For full sentences or clauses where bold would be too heavy. `<em>` (weight 600)
+is *loud* emphasis; this is the *quiet*, contrastive register italic would
+otherwise carry. The `emphasis-quiet` utility is **defined** in `globals.css`:
+`font-weight: 500; color: var(--text-secondary)`.
 
 ```tsx
 <p className="text-body">
@@ -234,6 +281,11 @@ For full sentences or clauses where bold would be too heavy. Use a utility class
   <span className="emphasis-quiet">We had been solving the wrong problem all along.</span>
 </p>
 ```
+
+### Product, ship, and project names
+Do **not** emphasize them. "Bard", "Dagr", "FDT-E" are normal-weight proper
+nouns — they earn identity through repetition and context, not type style.
+Inline-bolding every codename is visual noise.
 
 ### Pattern C — No type-style emphasis at all
 For book titles, foreign words, ship names — use quotation marks or a different mechanism. Don't lean on type style.
@@ -343,7 +395,9 @@ Three places a signature move could live, with my current best guesses:
 - Eyebrows are conventional because they work
 - Messing with them creates extra reading work
 
-When this is revisited, add a `text-wordmark` utility specific to the home page hero rather than mutating `text-display`. Keeps the system clean for everywhere else.
+When this is revisited, add a dedicated `text-wordmark` utility for the home hero. (The old 112px `text-display` step was **cut** — it had no consumer once the home h1 became `text-statement`, and the wordmark wants its own compression anyway. Don't resurrect `text-display`; give the wordmark its own utility.)
+
+> **Axis dependency:** the current `.wordmark` chrome already sets `font-stretch: 88%`. That only renders once `app/fonts.ts` loads the `wdth` axis (`axes: ['opsz','wdth']` — see §2). Before that fix it was inert; expect the shipped wordmark's width to *change* when the axes land.
 
 ---
 
@@ -351,10 +405,10 @@ When this is revisited, add a `text-wordmark` utility specific to the home page 
 
 If Bricolage is ever replaced (e.g. with a purchased Stornoway, Tofino, or another variable font), only two surfaces change:
 
-1. The `next/font/google` import in `fonts.ts` (or move to a self-hosted file)
-2. The `font-stretch` values in `text-display` and `text-hero` — delete the lines if the new font has no `wdth` axis
+1. The `next/font/google` import in `fonts.ts` (or move to a self-hosted file) — including the `axes` array if the new font's non-default axes differ
+2. The `font-stretch` values in `text-statement` and `text-hero` (and `.wordmark`) — delete the lines if the new font has no `wdth` axis
 
-The ten role utilities, the role map, and every component that uses them stay identical. No find-and-replace, no per-component updates. The italic strategy in Section 6 may need revisiting if the new font *does* have italics — but that's an addition, not a refactor.
+The eleven role utilities, the role map, and every component that uses them stay identical. No find-and-replace, no per-component updates. The italic strategy in Section 6 may need revisiting if the new font *does* have italics — but that's an addition, not a refactor.
 
 ---
 
@@ -384,55 +438,28 @@ Naming by use, not by size. "Eyebrow" tells you it's an all-caps label sitting a
 **Why `font-weight: 600` and `letter-spacing: 0.08em` for `text-eyebrow`?**
 Caps at light weights look anemic. 600 gives them the visual weight to function as a label. First pass had tracking at 0.06em — caps almost always want more air than the eye initially thinks; 0.08em opens them up without making them feel sparse.
 
+**Why the font is ~128kb (an accepted budget exception)**
+Loading both non-default axes (`opsz` + `wdth`) puts the primary basic-latin
+woff2 at ~128kb. Measured cost: ~40kb wght-only, +~35kb per axis, ~128kb for
+both. The team's ordinary font budget is ≤80kb, which a single axis would meet
+(~75kb) — but dropping either axis kills half the personality (optical sizing OR
+editorial compression). Paul approved the overage (May 2026): on a portfolio
+where type *is* the craft signal, the full personality is worth 48kb, and
+`font-display: swap` keeps it non-render-blocking. Documented in the
+portfolio-fullstack-lead / portfolio-qa budgets so it isn't "fixed" back later.
+
 **Dark mode adjustment to anticipate**
 Type on a dark background appears slightly heavier than the same weight on a light background. If display or hero feels heavy in dark mode once `next-themes` is wired up, drop the weight by ~50 in the dark variant (600 → 550). Don't pre-empt this — wait until you can see it.
 
 ---
 
-## 12 — Test page
+## 12 — Test page (retired)
 
-Quick visual audit page at `app/page.tsx` (or wherever convenient during scaffolding):
+The scaffolding type-audit page has been superseded by the real home page
+(`app/page.tsx`) and case-study cards. No standalone audit page ships.
 
-```tsx
-export default function Home() {
-  return (
-    <main className="mx-auto max-w-3xl px-6 py-24 space-y-16">
-      <section className="space-y-6">
-        <h1 className="text-display">uxpaul</h1>
-        <p className="text-lead">
-          Senior product designer — consumer-grade craft for complex technical challenges.
-        </p>
-      </section>
-
-      <section className="space-y-3 border-t border-neutral-200 pt-12">
-        <p className="text-eyebrow">2023 · URBN</p>
-        <h3 className="text-h3">Cross-brand navigation</h3>
-        <p className="text-body">
-          Eight designers, four global brands — building a unified navigation system
-          that preserved each brand's voice within one shared design language. The
-          <em>visible</em> result: faster onboarding, fewer cross-brand support tickets.
-        </p>
-        <p className="text-caption">Lead designer · 8 months</p>
-      </section>
-
-      <section className="space-y-6 border-t border-neutral-200 pt-12">
-        <h2 className="text-h2">Type scale audit</h2>
-        <div className="space-y-3">
-          <p className="text-display">Display 64→112</p>
-          <p className="text-hero">Hero 48→80</p>
-          <p className="text-h1">Heading 1 — 36→56</p>
-          <p className="text-h2">Heading 2 — 28→40</p>
-          <p className="text-h3">Heading 3 — 22→28</p>
-          <p className="text-lead">Lead paragraph — 22</p>
-          <p className="text-body">Body — 18. Default reading size for case studies and prose.</p>
-          <p className="text-small">Small — 16. Dense lists and captions.</p>
-          <p className="text-caption">Caption — 14. Meta and bylines.</p>
-          <p className="text-eyebrow">Eyebrow — 14 caps</p>
-        </div>
-      </section>
-    </main>
-  );
-}
-```
-
-Delete this page once real home page content lands. The audit is scaffolding, not a feature.
+If you want a throwaway specimen sheet again, build it with the **current**
+utilities (no `text-display`; include `text-statement` and `text-cover`) and use
+**warm tokens** for any rules/borders (`border-subtle` / `border-default`) — never
+cool Tailwind neutrals like `border-neutral-200`, which violate the warm-only
+color rule.
