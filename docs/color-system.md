@@ -85,6 +85,43 @@ All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma st
 | `--popup-text-primary`      | `oklch(0.245 0.030 52)`        | `oklch(0.935 0.020 75)`        |
 | `--popup-text-muted`        | `oklch(0.495 0.030 52)`        | `oklch(0.730 0.024 68)`        |
 
+### Brand identity — the "Also shipped" shelf
+
+Each brief-work entry is a **calm bordered row** (Wise-register): a faint near-canvas brand **fill**
+(`--qh-*-fill`) + a 1.5px brand-color **border** (`--qh-*-base`) carrying the identity; typography
+does the work. This is **two sanctioned exceptions** to the system rules, per the
+per-case-study-color decision (attribution only, not a second interactive accent):
+
+1. **Chromatic color at rest** — the brand-color border + faint fill sit idle on this shelf.
+2. **`--qh-bbc-base` at hue 250** — a cool hue outside the warm 50–80 band, for BBC brand attribution.
+
+What keeps it disciplined: the **fill is faint** (near-canvas, calm — does not compete with Selected
+Work); **title + labels reuse `--text-primary` / `--text-secondary`** (theme-flipping; AAA on the
+fill — title 14–15:1, labels 9–10:1, both modes); the **border is tuned independently per mode**
+(dark-on-light fill in light, **brighter** bright-on-dark in dark — *not* inverted — so it carries
+identity at ≥3.7:1 in dark); **persimmon-clear** (off-hue and/or off-L from 0.68/0.16/45). No grain,
+no foil — the calm container is clean. `data-brand` aliases each pair onto `--base` / `--fill`.
+
+| Token | Light | Dark |
+|---|---|---|
+| `--qh-lionsgate-base` (border) | `oklch(0.40 0.10 80)` | `oklch(0.62 0.12 80)` |
+| `--qh-red-cross-base` | `oklch(0.39 0.13 25)` | `oklch(0.58 0.15 25)` |
+| `--qh-bbc-base` | `oklch(0.30 0.10 250)` | `oklch(0.58 0.12 250)` |
+| `--qh-k-hovnanian-base` | `oklch(0.39 0.07 60)` | `oklch(0.60 0.09 62)` |
+| `--qh-lionsgate-fill` | `oklch(0.93 0.016 85)` | `oklch(0.22 0.018 85)` |
+| `--qh-red-cross-fill` | `oklch(0.93 0.016 30)` | `oklch(0.22 0.018 30)` |
+| `--qh-bbc-fill` | `oklch(0.93 0.012 250)` | `oklch(0.22 0.014 250)` |
+| `--qh-k-hovnanian-fill` | `oklch(0.93 0.016 62)` | `oklch(0.22 0.016 62)` |
+
+Fills are deliberately **aged-stock muted** (chroma ≤0.018), not pastel — the border carries the
+brand, so the fill is near-parchment. The 1.5px brand border is the primary identity element, so it
+survives forced-colors mode (where the fill drops to system canvas) — the row still reads bounded.
+
+**Per-module title character.** Each `data-brand` also sets `--qh-wdth / --qh-wght / --qh-opsz`,
+fed to the title's `font-variation-settings` (typography doc §7 manual-axis case): Lionsgate 90/600/40
+(cinematic), Red Cross 96/500/14 (humane), BBC 84/650/48 (newspaper), K. Hovnanian 100/540/24
+(architectural). One family, four typographic personalities — width 84→100, weight 500→650, opsz 14→48.
+
 ---
 
 ## Role map
@@ -234,10 +271,10 @@ The decisions, in order of forking:
 
 ## Anti-patterns (no-fly list)
 
-- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion.
+- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. **One sanctioned exception:** the `--qh-*` brand border + faint fill on the "Also shipped" shelf (persimmon-clear, attribution-only — see the Brand identity token section). This is not a license for further resting color.
 - ❌ **No purple gradients.** Anywhere.
 - ❌ **No raw color tokens** (e.g., `--color-blue-500`). All tokens are role-based.
-- ❌ **No cool grays** (hue ≥ 200). The system is warm only.
+- ❌ **No cool grays** (hue ≥ 200). The system is warm only. **One sanctioned exception:** `--qh-bbc-base` (hue 250) on the "Also shipped" shelf, for BBC brand attribution — see the Brand identity token section. Not a license for cool hues elsewhere.
 - ❌ **No pure black or pure white.** Warmth lives in the neutrals.
 - ❌ **Dark mode is not inverted light mode.** Tune chroma and contrast independently.
 - ❌ **Don't use `--popup-*` tokens outside the annotation system.**
@@ -251,5 +288,5 @@ The decisions, in order of forking:
 
 - **Imagery treatment.** Case study screenshots will sit on both canvases. A subtle outer ring at `border-subtle` is the current plan — verify when content lands.
 - **Charts / data viz.** If case studies need charts, the chart palette is a separate (future) extension. Sequential warm-axis hues only; no categorical color.
-- **Per-case-study tinting.** Each case study could pick up a faint hero-only tint drawn from its imagery. Out of scope for v1.
+- **Per-case-study tinting.** Faint hero-only tints drawn from each study's imagery — still open for the Selected Work case studies. (The *brief-work* shelf has its own realized treatment below.)
 - **Active link state.** Currently links share the hover treatment when active. Worth revisiting if we add a "current page" indicator in nav.
