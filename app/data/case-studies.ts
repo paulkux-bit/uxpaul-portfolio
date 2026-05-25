@@ -47,8 +47,7 @@ export function coverTier(study: CaseStudy): CoverTier {
 export const caseStudies: CaseStudy[] = [
   {
     slug: 'uscg-bard',
-    problemFraming:
-      'I want to make my data sing so I can tell lawmakers what I need money for.',
+    problemFraming: 'How do you turn fleet data into a funding argument?',
     projectName: 'Bard',
     client: 'U.S. Coast Guard',
     headline: '[OUTCOME METRIC]',
@@ -61,8 +60,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: 'us-navy-fdt-e',
-    problemFraming:
-      'The AI agent found an anomaly — I need to manually verify it so I can escalate it properly.',
+    problemFraming: 'How do you verify what the AI thinks it saw?',
     projectName: 'FDT-E',
     client: 'U.S. Navy',
     headline: '[OUTCOME METRIC]',
@@ -101,8 +99,7 @@ export const caseStudies: CaseStudy[] = [
   },
   {
     slug: 'nuuly',
-    problemFraming:
-      'I need to optimize my machine washing cycles for this garment for her big meeting.',
+    problemFraming: 'How does a rented dress get back out in time?',
     projectName: 'Nuuly',
     client: 'Nuuly',
     headline: '[OUTCOME METRIC]',

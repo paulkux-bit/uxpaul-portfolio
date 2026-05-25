@@ -80,6 +80,24 @@
   --popup-border:           oklch(0.840 0.070 52);
   --popup-text-primary:     oklch(0.245 0.030 52);
   --popup-text-muted:       oklch(0.495 0.030 52);
+
+  /* Brand identity for the "Also shipped" shelf — a calm bordered row (Wise
+     register): a 1.5px brand-color BORDER (--base) + a faint near-canvas FILL
+     (--fill). Two sanctioned exceptions to the system: chromatic color at rest
+     (attribution only), and --qh-bbc-* at hue 250 (cool, outside warm 50-80).
+     Title/labels reuse --text-primary/--text-secondary (AAA on the faint fill,
+     both modes). Persimmon-clear. See docs/color-system.md.
+     --base = the 1.5px brand BORDER (full identity chroma). Light: dark-on-light fill. */
+  --qh-lionsgate-base:      oklch(0.40 0.10 80);
+  --qh-red-cross-base:      oklch(0.39 0.13 25);
+  --qh-bbc-base:            oklch(0.30 0.10 250);
+  --qh-k-hovnanian-base:    oklch(0.39 0.07 60);
+  /* --fill = the calm faint brand tint (near-canvas). Title/labels reuse --text-primary/secondary
+     (AAA on this fill). */
+  --qh-lionsgate-fill:      oklch(0.93 0.016 85);
+  --qh-red-cross-fill:      oklch(0.93 0.016 30);
+  --qh-bbc-fill:            oklch(0.93 0.012 250);
+  --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
 }
 
 /* ============================================================
@@ -117,6 +135,18 @@
   --popup-border:           oklch(0.385 0.060 52);
   --popup-text-primary:     oklch(0.935 0.020 75);
   --popup-text-muted:       oklch(0.730 0.024 68);
+
+  /* Brand borders — dark. BRIGHTER than light (not inverted): the border sits on a dark
+     fill/canvas, so it must be light enough to carry identity (verified >=3.7:1 vs both). */
+  --qh-lionsgate-base:      oklch(0.62 0.12 80);
+  --qh-red-cross-base:      oklch(0.58 0.15 25);
+  --qh-bbc-base:            oklch(0.58 0.12 250);
+  --qh-k-hovnanian-base:    oklch(0.60 0.09 62);
+  /* Calm faint fill — dark (muted to aged-stock, not candy). */
+  --qh-lionsgate-fill:      oklch(0.22 0.018 85);
+  --qh-red-cross-fill:      oklch(0.22 0.018 30);
+  --qh-bbc-fill:            oklch(0.22 0.014 250);
+  --qh-k-hovnanian-fill:    oklch(0.22 0.016 62);
 }
 
 /* ============================================================
@@ -261,6 +291,20 @@
   letter-spacing: -0.015em;
   font-weight: 600;
   text-wrap: balance;
+}
+
+/* "Also shipped" brief-block title. Per-module Bricolage character: each block
+   sets --qh-wdth / --qh-wght / --qh-opsz (via data-brand) so the four read as a
+   typographically-curated SET in one family — width (84-100), weight (500-650),
+   and optical size (14-48, forced for effect) all vary. Driven through
+   font-variation-settings (typography doc §7's sanctioned manual-axis case —
+   per-module multi-axis variation), which guarantees all three axes render and
+   is DevTools-inspectable. Size stays uniform so the rows align. */
+@utility text-qh-title {
+  font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  font-variation-settings: 'opsz' var(--qh-opsz, 28), 'wght' var(--qh-wght, 550), 'wdth' var(--qh-wdth, 100);
 }
 
 /* ============================================================
@@ -555,6 +599,77 @@ body.popup-on {
   .reveal-grid > [data-reveal-shown]:nth-child(3) { transition-delay: 140ms; }
   .reveal-grid > [data-reveal-shown]:nth-child(4) { transition-delay: 210ms; }
   .reveal-grid > [data-reveal-shown]:nth-child(5) { transition-delay: 280ms; }
+}
+
+/* ============================================================
+   "ALSO SHIPPED" shelf — brand → local var mapping + accents
+   data-brand on each <article> aliases the per-brand border + fill onto generic
+   --base / --fill locals, so the component markup stays brand-agnostic and
+   .dark swaps for free. Server-rendered; no JS, no theme read.
+   ============================================================ */
+
+/* --base = 1.5px border; --fill = faint container tint; --qh-wdth/wght/opsz =
+   the per-module title character (see text-qh-title). */
+[data-brand="lionsgate"] {
+  --base: var(--qh-lionsgate-base); --fill: var(--qh-lionsgate-fill);
+  --qh-wdth: 90; --qh-wght: 600; --qh-opsz: 40;   /* cinematic: compressed, bold, display */
+}
+[data-brand="red-cross"] {
+  --base: var(--qh-red-cross-base); --fill: var(--qh-red-cross-fill);
+  --qh-wdth: 96; --qh-wght: 500; --qh-opsz: 14;   /* classic/humane: open, light, readable cut */
+}
+[data-brand="bbc"] {
+  --base: var(--qh-bbc-base); --fill: var(--qh-bbc-fill);
+  --qh-wdth: 84; --qh-wght: 650; --qh-opsz: 48;   /* newspaper: narrowest, heaviest, display */
+}
+[data-brand="k-hovnanian"] {
+  --base: var(--qh-k-hovnanian-base); --fill: var(--qh-k-hovnanian-fill);
+  --qh-wdth: 100; --qh-wght: 540; --qh-opsz: 24;  /* architectural: full width, grounded */
+}
+
+/* Three-column row via named areas (cleaner than Tailwind arbitrary multi-string
+   template-areas). Mobile stacks: brand + industry on a top row, title beneath
+   (Option B). Desktop: fixed side columns (12rem fits "AMERICAN RED CROSS",
+   8rem fits "Entertainment") so all four blocks align; title centers in 1fr. */
+.quick-hit {
+  display: grid;
+  align-items: center;
+  column-gap: 1rem;
+  row-gap: 0.5rem;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'brand industry' 'title title';
+}
+.quick-hit > .qh-brand    { grid-area: brand; }
+.quick-hit > .qh-title    { grid-area: title; }
+.quick-hit > .qh-industry { grid-area: industry; }
+@media (min-width: 768px) {
+  .quick-hit {
+    column-gap: 2rem;
+    grid-template-columns: 12rem 1fr 8rem;
+    grid-template-areas: 'brand title industry';
+  }
+}
+
+/* ============================================================
+   REVEAL LIST (progressive enhancement, no stagger)
+   Mirrors the reveal-grid contract for a semantic <ol>. SSR renders visible;
+   JS sets data attributes only when motion is allowed. See reveal-list.tsx.
+   (Copied, not generalized from reveal-grid — second consumer; generalize on
+   the third.)
+   ============================================================ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-list > [data-reveal-hidden] {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .reveal-list > [data-reveal-shown] {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 360ms var(--ease-out-soft),
+      transform 360ms var(--ease-out-soft);
+  }
 }
 
 /* ============================================================

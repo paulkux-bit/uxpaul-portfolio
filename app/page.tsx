@@ -1,5 +1,6 @@
 import { CaseStudyCard } from '@/components/case-study-card';
 import { RevealGrid } from '@/components/reveal-grid';
+import { QuickHitsSection } from '@/components/quick-hits/quick-hits-section';
 import { caseStudies } from '@/app/data/case-studies';
 
 export default function Home() {
@@ -24,9 +25,9 @@ export default function Home() {
           technical challenges.
         </h1>
         <p className="text-lead text-secondary font-medium max-w-[60ch]">
-          I&rsquo;m Paul Kali, a senior product designer — eight years bringing
-          the same standard to defense and government systems and the consumer
-          apps people use every day.
+          I&rsquo;m Paul Kali, a senior product designer. Eight years of careful
+          research and practical design, with a taste for the technical problems
+          most teams route around.
         </p>
       </section>
 
@@ -46,6 +47,10 @@ export default function Home() {
           ))}
         </RevealGrid>
       </section>
+
+      {/* Also shipped — book-styled shelf of brief-work entries (Template B).
+          Non-interactive in v1. */}
+      <QuickHitsSection />
     </div>
   );
 }
