@@ -98,6 +98,10 @@
   --qh-red-cross-fill:      oklch(0.93 0.016 30);
   --qh-bbc-fill:            oklch(0.93 0.012 250);
   --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
+
+  /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
+     because heavy weight reads heavier on the espresso canvas. */
+  --mark-weight:            700;
 }
 
 /* ============================================================
@@ -147,6 +151,8 @@
   --qh-red-cross-fill:      oklch(0.22 0.018 30);
   --qh-bbc-fill:            oklch(0.22 0.014 250);
   --qh-k-hovnanian-fill:    oklch(0.22 0.016 62);
+
+  --mark-weight:            650;
 }
 
 /* ============================================================
@@ -670,6 +676,216 @@ body.popup-on {
       opacity 360ms var(--ease-out-soft),
       transform 360ms var(--ease-out-soft);
   }
+}
+
+/* ============================================================
+   OFF THE CLOCK — typographic wall of takes
+   12-col grid; hairlines via computed .div-r / .div-b flags (scales to any
+   count, unlike the demo's hardcoded nth-child). Composed entrance plays off
+   .in-view (reveal-wall.tsx, one IO client island) — marks settle in their
+   choreographed order, hairlines fade in after, content fades in last. Mark
+   character = per-slot font-stretch (wdth) + --mark-weight + opsz:auto.
+   ============================================================ */
+
+.takes-wall {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+}
+
+.take-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-height: 15rem;
+  padding: 1.75rem 1.75rem 2rem;
+  overflow: hidden; /* contain marks during entrance */
+  /* Hairlines start transparent and fade in AFTER the marks settle (0.7s). */
+  border: 0 solid transparent;
+  border-top-width: 1px;
+  transition:
+    border-color 0.6s var(--ease-out-soft) 0.7s,
+    background-color 0.25s var(--ease-out-soft);
+}
+.take-card.div-r { border-right-width: 1px; }
+.take-card.div-b { border-bottom-width: 1px; }
+.takes-wall.in-view .take-card { border-color: var(--border-subtle); }
+.take-card:hover { background-color: var(--bg-surface); } /* tint only — non-interactive */
+
+.slot-large   { grid-column: span 8; min-height: 20rem; }
+.slot-medium6 { grid-column: span 6; }
+.slot-medium5 { grid-column: span 5; }
+.slot-medium  { grid-column: span 4; }
+.slot-small4  { grid-column: span 4; }
+.slot-small3  { grid-column: span 3; }
+
+.mark {
+  color: var(--text-primary);
+  font-weight: var(--mark-weight);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  user-select: none;
+  transform-origin: top left;
+  opacity: 0;
+  will-change: transform, opacity;
+  transition:
+    opacity 0.7s var(--ease-out-soft),
+    transform 0.9s var(--ease-out-soft);
+  transition-delay: var(--take-delay, 0s);
+}
+.mark-stacked { display: flex; flex-direction: column; line-height: 0.82; }
+.mark-stacked > span { display: block; }
+.mark-inline { display: inline-block; }
+.mark-coords { font-variant-numeric: tabular-nums; line-height: 0.9; font-weight: 600; }
+.mark-coords > span { display: block; }
+.mark-play { font-size: 0.95em; line-height: 1; letter-spacing: 0; }
+
+/* Per-slot mark sizing — font-stretch is the wdth axis */
+.slot-large   .mark { font-size: clamp(3.5rem, 6.4vw, 6rem); font-stretch: 78%; }
+.slot-medium6 .mark { font-size: clamp(3rem, 5.2vw, 4.875rem); font-stretch: 80%; }
+.slot-medium5 .mark { font-size: clamp(2.875rem, 5vw, 4.5rem); font-stretch: 80%; }
+.slot-medium  .mark { font-size: clamp(2.5rem, 4.4vw, 3.75rem); font-stretch: 80%; }
+.slot-small4  .mark { font-size: clamp(2.25rem, 4vw, 3.25rem); font-stretch: 82%; }
+.slot-small3  .mark { font-size: clamp(2rem, 3.6vw, 3rem); font-stretch: 82%; }
+.slot-large   .mark-coords { font-size: clamp(2.125rem, 3.6vw, 3.375rem); font-stretch: 88%; }
+.slot-medium6 .mark-coords { font-size: clamp(1.75rem, 3vw, 2.75rem); font-stretch: 88%; }
+.slot-medium5 .mark-coords { font-size: clamp(1.75rem, 3vw, 2.625rem); font-stretch: 88%; }
+.slot-medium  .mark-coords { font-size: clamp(1.5rem, 2.6vw, 2.25rem); font-stretch: 88%; }
+.slot-small4  .mark-coords { font-size: clamp(1.375rem, 2.4vw, 2rem); font-stretch: 88%; }
+.slot-small3  .mark-coords { font-size: clamp(1.25rem, 2.2vw, 1.75rem); font-stretch: 88%; }
+
+/* Entrance pattern pre-states; settle on .in-view */
+.entrance-rise        { transform: translate(-40px, 30px) rotate(-3deg) scale(0.85); }
+.entrance-glide-right { transform: translate(60px, 0) scale(0.9); }
+.entrance-drop        { transform: translate(0, -40px) rotate(8deg) scale(0.7); }
+.entrance-settle      { transform: translate(0, 24px) scale(0.95); }
+.entrance-pop         { transform: scale(0); }
+.entrance-glide-left  { transform: translate(-50px, 0) scale(0.85); }
+.entrance-unfold      { transform: scale(0.4) rotate(-90deg); }
+.takes-wall.in-view .mark { opacity: 1; transform: translate(0, 0) rotate(0) scale(1); }
+
+.take-content {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.6s var(--ease-out-soft),
+    transform 0.6s var(--ease-out-soft);
+  transition-delay: 0.85s; /* after the marks settle */
+}
+.takes-wall.in-view .take-content { opacity: 1; transform: translateY(0); }
+
+/* Eyebrow at the 14px system floor (not the demo's 11px). */
+.take-eyebrow {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.take-thought {
+  color: var(--text-primary);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-stretch: 96%;
+  text-wrap: balance;
+}
+.slot-large   .take-thought { font-size: clamp(1.75rem, 3.4vw, 2.75rem); font-weight: 600; }
+.slot-medium6 .take-thought { font-size: clamp(1.375rem, 2.6vw, 2rem); }
+.slot-medium5 .take-thought { font-size: clamp(1.25rem, 2.4vw, 1.75rem); }
+.slot-medium  .take-thought { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+.slot-small4  .take-thought { font-size: clamp(1.0625rem, 1.7vw, 1.25rem); }
+.slot-small3  .take-thought { font-size: clamp(1rem, 1.5vw, 1.125rem); }
+
+@media (max-width: 767px) {
+  .takes-wall { grid-template-columns: 1fr; }
+  .take-card {
+    grid-column: span 1 !important;
+    min-height: 10rem;
+    padding: 1.5rem 1.25rem 1.75rem;
+    border-right-width: 0 !important;
+  }
+  .takes-wall.in-view .take-card { border-bottom-width: 1px; }
+  .mark { font-size: clamp(2.625rem, 14vw, 4rem) !important; font-stretch: 80% !important; }
+  .mark-coords { font-size: clamp(1.75rem, 8vw, 2.5rem) !important; font-stretch: 88% !important; }
+  .take-thought { font-size: clamp(1.25rem, 5vw, 1.625rem) !important; }
+}
+
+/* Reduced motion — skip the entrance; hairlines + content at rest. */
+@media (prefers-reduced-motion: reduce) {
+  .take-card { border-color: var(--border-subtle); }
+  .mark,
+  .take-content { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ---- Composition templates (v2) — per-card layout + axis + thought scale.
+   Each .comp-* overrides the v1 default (mark-stacked) layout. Axis is set via
+   font-variation-settings (overrides the slot's font-stretch); per-take
+   axisCharacter still wins over these. Visual values are a first pass — tune live. */
+
+/* mark-dominant: mark fills; thought is a small caption */
+.comp-mark-dominant .mark { font-variation-settings: 'opsz' 60, 'wght' 700, 'wdth' 78; }
+.comp-mark-dominant .take-thought {
+  font-size: 0.875rem; font-weight: 500; font-stretch: 100%;
+  letter-spacing: 0; color: var(--text-secondary);
+}
+
+/* mark-watermark: huge faint mark behind, thought overlaid bold */
+.comp-mark-watermark { justify-content: center; }
+.comp-mark-watermark .mark {
+  position: absolute; inset: 0; display: flex; align-items: center;
+  font-variation-settings: 'opsz' 96, 'wght' 800, 'wdth' 90;
+  font-size: clamp(5rem, 12vw, 11rem); opacity: 0.1; z-index: 0; pointer-events: none;
+}
+.comp-mark-watermark .take-content { position: relative; z-index: 1; margin-top: 0; }
+.comp-mark-watermark .take-thought { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; }
+
+/* mark-beside: mark left / content right */
+.comp-mark-beside { flex-direction: row; align-items: center; gap: 1.5rem; }
+.comp-mark-beside .mark { flex: 0 0 auto; font-variation-settings: 'opsz' 40, 'wght' 600, 'wdth' 88; }
+.comp-mark-beside .take-content { flex: 1; margin-top: 0; }
+
+/* mark-cropped: mark overflows + clipped by the card edge */
+.comp-mark-cropped .mark {
+  font-variation-settings: 'opsz' 96, 'wght' 700, 'wdth' 78;
+  font-size: clamp(6rem, 13vw, 12rem); line-height: 0.8;
+  margin: -0.15em -0.3em -0.25em -0.08em; /* push toward edges; .take-card clips */
+}
+
+/* word-swap: mark sits inline with the thought */
+.comp-word-swap .mark {
+  display: inline-block; margin-right: 0.4rem; vertical-align: baseline;
+  font-variation-settings: 'opsz' 28, 'wght' 600, 'wdth' 92;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+}
+
+/* statement: no mark; the thought is the display element */
+.comp-statement { justify-content: center; }
+.comp-statement .take-content { margin-top: 0; }
+.comp-statement .take-thought {
+  font-variation-settings: 'opsz' 40, 'wght' 550, 'wdth' 98;
+  font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.05;
+}
+
+/* coords-corner: mark in the top-right corner; thought dominant */
+.comp-coords-corner .mark {
+  position: absolute; top: 1.75rem; right: 1.75rem; text-align: right;
+  font-variation-settings: 'opsz' 24, 'wght' 600, 'wdth' 88;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+}
+.comp-coords-corner .take-content { margin-top: auto; }
+.comp-coords-corner .take-thought { font-size: clamp(1.5rem, 2.6vw, 2.25rem); font-weight: 600; }
+
+/* Forced-colors: hide the decorative behind/overflow marks (system colors flatten
+   them into noise); the thought reads on the system canvas. */
+@media (forced-colors: active) {
+  .comp-mark-watermark .mark,
+  .comp-mark-cropped .mark { display: none; }
 }
 
 /* ============================================================
