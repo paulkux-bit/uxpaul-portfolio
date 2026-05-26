@@ -28,6 +28,11 @@ role by Aug 31, 2026.
 - `CLAUDE.md` — this file (technical conventions)
 - `AGENTS.md` — auto-generated, leave alone
 
+### Page composition
+- Home (`app/page.tsx`): hero → Selected Work → Also Shipped → footer.
+- "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
+  renders on `/about`, not home.
+
 ## Breakpoints (match exactly)
 Defined as CSS custom properties in `app/globals.css` under `@theme`:
 - xs: 360px (small Android fallback)
