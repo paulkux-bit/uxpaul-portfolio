@@ -2,6 +2,7 @@ import { bricolage } from './fonts';
 import { ThemeProvider } from '@/components/theme-provider';
 import { PopUpProvider } from '@/components/popup-context';
 import { SiteHeader } from '@/components/site-header';
+import { SiteFooter } from '@/components/site-footer';
 import './globals.css';
 
 // Pre-paint: apply the annotation tint before hydration so a previously-enabled
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main id="main" tabIndex={-1}>
               {children}
             </main>
+            <SiteFooter />
           </PopUpProvider>
         </ThemeProvider>
       </body>
