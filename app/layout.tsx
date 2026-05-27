@@ -11,7 +11,8 @@ const popupInitScript = `try{if(localStorage.getItem('annotations')==='on')docum
 
 export const metadata = {
   title: 'uxpaul',
-  description: 'Senior product designer — consumer-grade craft for complex technical challenges.',
+  description:
+    'Paul Kali — senior product designer. Currently with the U.S. Navy, previously URBN. Open to senior IC, staff, and management roles.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

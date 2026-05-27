@@ -5,29 +5,49 @@ import { caseStudies } from '@/app/data/case-studies';
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-6xl px-6 md:px-8 py-16 md:py-20 xl:py-24 2xl:py-32 space-y-16 2xl:space-y-24">
-      {/* Hero — text-led: positioning statement + supporting line. No hero
-          visual in v1 (the type treatment carries it). Supporting line is
-          weight 500 (typography §9 "lead" move) at a readable measure.
-          Desktop padding/gap tightened so the first selected-work row clears
-          the 1440 fold; 1920 keeps the generous rhythm. */}
-      <section className="space-y-6">
-        {/* Meaning-unit line breaks forced from xl up (isolates the
-            differentiator "Consumer-grade craft" on line 1; lands line-end
-            emphasis on craft / complex / challenges). Below xl the breaks
-            collapse and text-statement's text-wrap:balance evens the rag.
-            max-w-5xl so each forced line fits at desktop size (verified 1440/1920). */}
-        <h1 className="text-statement text-primary max-w-5xl">
-          Consumer-grade craft{' '}
-          <br className="hidden xl:block" />
-          applied to complex{' '}
-          <br className="hidden xl:block" />
-          technical challenges.
+    <div className="mx-auto max-w-6xl px-6 md:px-8 py-16 md:py-20 xl:py-16 2xl:py-28 space-y-16 xl:space-y-12 2xl:space-y-24">
+      {/* Hero — "weighted sentence" (Direction D1), range-led copy. The h1 names
+          the three domains Paul works across; WEIGHT carries the emphasis:
+          connectives ride text-lede's thin 340 + recessive --text-muted, the
+          three domain nouns jump to font-[720] + --text-primary. No
+          font-variation-settings, opsz auto. Then the signature, the Navy/URBN
+          proof, and the availability beat. Four beats fade up via the .hero-beat
+          CSS entrance (reduced-motion + no-JS safe). Server component, pure CSS. */}
+      <section className="space-y-8 md:space-y-10">
+        <h1
+          className="hero-beat text-lede text-muted max-w-[18ch]"
+          style={{ ['--beat' as string]: 0 }}
+        >
+          I design across{' '}
+          <span className="font-[720] text-primary">consumer</span>,{' '}
+          <span className="font-[720] text-primary">enterprise</span>, and{' '}
+          <span className="font-[720] text-primary">defense</span>.
         </h1>
-        <p className="text-lead text-secondary font-medium max-w-[60ch]">
-          I&rsquo;m Paul Kali, a senior product designer. Eight years of careful
-          research and practical design, with a taste for the technical problems
-          most teams route around.
+
+        {/* Signature — name present but quiet; the role recedes. */}
+        <p className="hero-beat text-h3" style={{ ['--beat' as string]: 1 }}>
+          <span className="font-semibold text-primary">Paul Kali</span>
+          <span className="text-secondary"> · Senior Product Designer</span>
+        </p>
+
+        {/* Proof — Navy + URBN. Brand names wrapped in whitespace-nowrap so none
+            breaks mid-name at any width. */}
+        <p
+          className="hero-beat text-body text-primary max-w-[62ch]"
+          style={{ ['--beat' as string]: 2 }}
+        >
+          Currently at the U.S. Navy, modernizing intelligence platforms for
+          thousands of operators. Previously led design at URBN for the platform
+          behind{' '}
+          <span className="whitespace-nowrap">Anthropologie</span>,{' '}
+          <span className="whitespace-nowrap">Free People</span>,{' '}
+          <span className="whitespace-nowrap">Urban Outfitters</span>, and{' '}
+          <span className="whitespace-nowrap">Nuuly</span>.
+        </p>
+
+        {/* Availability — its own beat, quiet coda. No eyebrow label. */}
+        <p className="hero-beat text-small text-secondary max-w-[62ch]" style={{ ['--beat' as string]: 3 }}>
+          Open to senior and staff IC roles.
         </p>
       </section>
 

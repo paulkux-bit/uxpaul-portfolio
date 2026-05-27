@@ -122,19 +122,28 @@ The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numb
 /* === Display & headings (fluid) === */
 
 @utility text-statement {
-  /* 40 → 96px — home-page positioning statement, the largest type in the
-     system. (text-display, an unused 112px step, was cut — see §9; the deferred
-     wordmark gets its own text-wordmark, not text-display.) Floor lowered from
-     56px so the multi-line statement is ~4 lines at 390, not ~6. Stretch 96% —
-     matching §11, which rejected 92–94% as "squeezed" at display sizes;
-     line-height 1.0 because this is a multi-line sentence. text-wrap: balance
-     evens the rag and kills a one-word widow on the last line; per-instance
-     wrap is still tuned with max-w on the hero. */
-  font-size: clamp(3.5rem, 4vw + 1.75rem, 6rem);
+  /* 40 → 96px — the largest single type role. (text-display, an unused step, was
+     cut — see §9.) Stretch 96%, weight 600; §11 rejected 92–94% as "squeezed" at
+     display sizes. The May-2026 168px amplification was reverted (bombast); the
+     home hero now leads with text-lede instead. */
+  font-size: clamp(2.5rem, 4vw + 1.75rem, 6rem);
   line-height: 1;
   letter-spacing: -0.025em;
   font-weight: 600;
   font-stretch: 96%;
+  text-wrap: balance;
+}
+
+/* text-lede — home hero weighted sentence (Direction D1). The element rides a
+   thin 340 + recessive tone; the load-bearing noun phrases jump to font-[720] +
+   --text-primary inline, so weight carries the emphasis (Bricolage's wght axis
+   doing semantic work). No font-variation-settings; opsz auto. */
+@utility text-lede {
+  font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 340;
+  font-stretch: 100%;
   text-wrap: balance;
 }
 
@@ -234,7 +243,8 @@ The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numb
 
 | Utility | Size (mobile → desktop) | Where it goes |
 |---|---|---|
-| `text-statement` | 40 → 96px | Home page positioning statement (the home h1). The largest type in the system. Once per page. |
+| `text-statement` | 40 → 96px | Home positioning statement. The largest single type role. Once per page. |
+| `text-lede` | 32 → 60px | Home hero weighted sentence (h1). Thin base (340); key noun phrases jump to `font-[720]` so weight carries emphasis. |
 | `text-hero` | 48 → 80px | Case study & About hero |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks within case studies; card title (media-tier cover) |
@@ -332,12 +342,18 @@ Use sparingly. The whole point of `auto` is that the font modulates personality 
 ## 8 — Usage examples
 
 ```tsx
-// Home hero
+// Home hero — weighted sentence (Direction D1). h1 is text-lede; weight carries
+// the emphasis (thin connectives + bold noun phrases). Name is the signature.
 <section>
-  <h1 className="text-display">uxpaul</h1>
-  <p className="text-lead">
-    Senior product designer — consumer-grade craft for complex technical challenges.
+  <h1 className="text-lede text-muted">
+    I design <span className="font-[720] text-primary">intelligence platforms</span>{' '}
+    for the <span className="font-[720] text-primary">U.S.&nbsp;Navy</span>.
+  </h1>
+  <p className="text-h3">
+    <span className="font-semibold text-primary">Paul Kali</span>
+    <span className="text-secondary"> · Senior Product Designer</span>
   </p>
+  <p className="text-body">Modernizing the tools thousands of operators rely on…</p>
 </section>
 
 // Case study card
@@ -451,9 +467,82 @@ portfolio-fullstack-lead / portfolio-qa budgets so it isn't "fixed" back later.
 **Dark mode adjustment to anticipate**
 Type on a dark background appears slightly heavier than the same weight on a light background. If display or hero feels heavy in dark mode once `next-themes` is wired up, drop the weight by ~50 in the dark variant (600 → 550). Don't pre-empt this — wait until you can see it.
 
----
+### Tuning pass — May 2026 (hero rewrite)
 
-## 12 — Test page (retired)
+Triggered by the names-led hero rewrite ("Paul Kali" + role tag). Four candidates
+evaluated against the running site and the decisions already recorded above. The
+authoritative axis semantics were re-confirmed from Mathieu Triay's notes (wdth:
+Antique Olive/relaxed at 100 → Grotesque No.9/anxious as it compresses; opsz: 12pt
+↔ 96pt masters).
+
+- **Display wdth (`text-statement`) — NO CHANGE, stays 96%.** The brief proposed
+  92–94% for a more editorial feel, but that exact range is already on record
+  above as having read "squeezed" at full desktop display sizes. The new hero is
+  a short proper name rather than a multi-line statement, but that doesn't change
+  the per-glyph readability evidence at 96px, and the locked, eyeball-based 96%
+  decision shouldn't be overridden sight-unseen. Revisit only if the 1440 eyeball
+  finds 96% too loose for a two-word name.
+- **Body on mobile (`text-body`) — NO CHANGE, stays fixed 18px.** 18px is the
+  deliberate editorial body floor (rationale above). A `clamp()` dipping to 17px
+  on 390 would trade that away to solve a "chunky" perception that isn't
+  established; the measure (`max-w-[62ch]`) does the comfort work. Revisit only
+  if the 390 eyeball reads genuinely heavy.
+- **Eyebrow tracking (`text-eyebrow`) — NO CHANGE, stays 0.08em.** Already at the
+  value the brief targets (and already raised from a 0.06em first pass). 0.08em
+  gives the role tag ("Senior Product Designer") enough air at 14px without
+  feeling sparse; a global retune would ripple to every eyebrow.
+- **Dark display weight — NO CHANGE yet (candidate live).** The "don't pre-empt"
+  note above applies: a 600→550 dark drop for `text-statement` is the right move
+  *if* the Low Light eyeball finds the name heavy, via `.dark .text-statement
+  { font-weight: 550 }` (mirrors `--mark-weight` 700→650). Not applied blind.
+
+- **Confirmed satisfied (no work):** `font-optical-sizing: auto` is on `html`;
+  `text-statement` already emits `font-stretch` (live because `fonts.ts` loads
+  `axes: ['opsz','wdth']`).
+
+Net: the tuning pass made no blind code changes — every candidate either matches
+a prior eyeballed decision or is explicitly deferred to the in-browser check.
+
+### Amplification pass — May 2026 (hero name scale)
+
+A follow-up hero spec wanted the name much larger. Diagnosis: the issue was
+**scale, not the width axis** — at the 96px cap "Paul Kali" filled only ~40% of
+the desktop column. Change made:
+
+- **`text-statement` size cap 96px → 168px:** `clamp(3.75rem, 10vw, 10.5rem)` →
+  60px (390) · 102px (1024) · 144px (1440) · 168px (1920, capped). One line at
+  every breakpoint.
+- **Width stays 96%, weight stays 600.** The spec proposed 93% / 650; both were
+  declined in favour of the recorded "92–94% squeezed" finding and the weight-600
+  decision above. Width was never the problem.
+- **Method:** standard `font-stretch` / `font-weight` (not `font-variation-
+  settings`, per the CLAUDE.md constraint) — `opsz` still auto-tracks, so the
+  96pt master expresses at the new display sizes. DevTools shows
+  `font-stretch: 96%` + `font-weight: 600` + `font-optical-sizing: auto`.
+- **Hero entrance:** CSS keyframe staggered fade-up (`.hero-beat`,
+  motion-safe-gated), not Framer — keeps the hero a server component and visible
+  with JS off.
+
+### Reverted → "weighted sentence" (Direction D1, May 2026)
+
+The 168px amplification **regressed** (council grade B−): the giant name read as
+bombast, inverted the brand's restraint signal, competed with the proof for the
+first read, and opened a ~9× hierarchy cliff to the body. Reverted:
+
+- **`text-statement` back to 40→96px** (its lock). Now unused on home.
+- **New `text-lede` (32→60px) leads the hero** as a *weighted sentence*: the
+  element rides a thin 340 + `--text-muted`; the two key noun phrases jump to
+  `font-[720]` + `--text-primary`, so **weight carries the emphasis** — Bricolage's
+  wght axis doing semantic work (its signature move), all via plain `font-weight`
+  (no `font-variation-settings`; opsz auto). The name drops to a `text-h3`
+  signature. This is beautiful *and* senior: one expressive device, no shouting,
+  no color, proof-led. The lesson: the hero wanted *expression on the weight
+  axis*, not *more scale on the name*.
+
+- **Hero scale ladder (Phase 1 lock):** `text-lede` 60 → `text-h3` (name) 28 →
+  `text-body` (proof) 18 → `text-small` (availability) 16. Step ratios
+  2.14 / 1.56 / 1.13 — each register steps down intentionally (the availability
+  coda was moved 18→16 so no two registers share a size).
 
 The scaffolding type-audit page has been superseded by the real home page
 (`app/page.tsx`) and case-study cards. No standalone audit page ships.

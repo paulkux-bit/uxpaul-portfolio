@@ -12,6 +12,8 @@ Product design hiring managers and design leads at consumer-grade product compan
 
 A senior product designer's portfolio with eight years of leadership experience. The site must telegraph deliberate decision-making, range across problem types, and the ability to lead — within the first scroll. Not a gallery of polished mockups; a structured argument for hiring.
 
+The home hero leads with a **concrete proof statement**, not a positioning tagline: a single large line stating what Paul does and for whom (currently: intelligence platforms for the U.S. Navy), set so that *weight* carries the emphasis. The name follows as a quiet signature, then the fuller proof (URBN leadership across four brands). A fact does the arguing — no marketing tagline, no tenure number, no geographic qualifier. (The retired "Consumer-grade craft…" line is gone for good; "craft" and "consumer-grade" stay out of hero copy.)
+
 ## Brand Personality
 
 Warm, refined, inventive. Confident without being cold. Personal without being casual. The kind of person you'd want leading your design team: someone who makes deliberate choices, communicates clearly, and brings unexpected craft to everything they touch.

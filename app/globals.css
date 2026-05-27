@@ -250,12 +250,44 @@
    shell. text-wrap: balance evens the rag and prevents a one-word widow on the
    last line — the wrap is still tuned per-instance via max-w on the hero. */
 @utility text-statement {
+  /* Home positioning statement, the largest single type role. Locked 40→96px.
+     (The May-2026 168px amplification was reverted — it overshot into bombast and
+     broke the hero hierarchy. The home hero now leads with text-lede instead.) */
   font-size: clamp(2.5rem, 4vw + 1.75rem, 6rem);
   line-height: 1;
   letter-spacing: -0.025em;
   font-weight: 600;
   font-stretch: 96%;
   text-wrap: balance;
+}
+
+/* Hero lede — the weighted-sentence statement (Direction D1). The element rides
+   the thin connective weight (340) + a recessive tone; the load-bearing noun
+   phrases jump to font-[720] + --text-primary inline, so WEIGHT carries the
+   emphasis (Bricolage's signature axis move). No font-variation-settings — plain
+   font-weight maps to the wght axis; opsz stays auto. */
+@utility text-lede {
+  font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  font-weight: 340;
+  font-stretch: 100%;
+  text-wrap: balance;
+}
+
+/* Hero entrance — three beats fade up in sequence (--beat = stagger index, set
+   inline). CSS-only so the hero stays a server component and renders visible
+   with JS off; gated to motion-safe so reduced-motion users get the static
+   end-state. Mirrors the takes-wall entrance approach. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-beat {
+    animation: hero-rise 0.6s var(--ease-out-soft) backwards;
+    animation-delay: calc(var(--beat, 0) * 0.12s);
+  }
+  @keyframes hero-rise {
+    from { opacity: 0; transform: translateY(1rem); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 }
 
 @utility text-hero {
