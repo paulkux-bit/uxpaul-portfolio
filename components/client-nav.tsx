@@ -3,9 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-// The wordmark carries "home", so the nav doesn't repeat it. Work lands here
-// when case studies exist.
-const LINKS = [{ href: '/about', label: 'About' }] as const;
+// The wordmark carries "home", so the nav doesn't repeat it. "Work" is an
+// in-page anchor to the Selected Work section (/#selected-work works from any
+// page); it never matches pathname, so it carries no active state — by design.
+const LINKS = [
+  { href: '/#selected-work', label: 'Work' },
+  { href: '/about', label: 'About' },
+] as const;
 
 /** Primary nav links. Client-only for the `usePathname` active-state read. */
 export function ClientNav() {

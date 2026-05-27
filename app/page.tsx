@@ -54,7 +54,11 @@ export default function Home() {
 
           {/* Availability — quiet coda, grouped with the proof. */}
           <p className="hero-beat text-small text-secondary max-w-[62ch]" style={{ ['--beat' as string]: 3 }}>
-            Open to senior and staff IC roles.
+            {/* Quiet mailto: inherits text-small/secondary; no underline at rest,
+                underline on hover only. Same email as the footer. */}
+            <a href="mailto:paulk.ux@gmail.com" className="no-underline hover:underline">
+              Open to senior and staff IC roles.
+            </a>
           </p>
         </div>
       </section>

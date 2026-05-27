@@ -182,6 +182,9 @@
     /* Keep the sticky header from obscuring focused / anchored targets
        (WCAG 2.2 SC 2.4.11). 5rem clears the 56–64px header with room. */
     scroll-padding-top: 5rem;
+    /* Smooth in-page anchor scroll (e.g. the header "Work" → #selected-work).
+       The prefers-reduced-motion block forces this back to auto. */
+    scroll-behavior: smooth;
   }
 
   html.dark { color-scheme: dark; }
