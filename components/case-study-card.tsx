@@ -63,14 +63,14 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
           <div className="flex aspect-video items-end border-b border-subtle bg-sunken p-6 md:p-8">
             <h2 className="text-cover">{title}</h2>
           </div>
-          <div className="px-6 pb-6 pt-4 md:px-8 md:pb-8">{meta}</div>
+          <div className="px-6 pb-6 pt-3 md:px-8 md:pb-8">{meta}</div>
         </>
       ) : (
         <>
           <CardMediaSlot tier={tier} study={study} />
           <div className="p-6 md:p-8">
             <h2 className="text-h2">{title}</h2>
-            <div className="mt-3">{meta}</div>
+            <div className="mt-2">{meta}</div>
           </div>
         </>
       )}
