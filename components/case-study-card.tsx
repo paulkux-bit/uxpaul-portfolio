@@ -69,7 +69,8 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         <>
           <CardMediaSlot tier={tier} study={study} />
           <div className="p-6 md:p-8">
-            <h2 className="text-h2">{title}</h2>
+            {/* Major register: 90% width (card-scoped, not the global text-h2). */}
+            <h2 className="text-h2 [font-stretch:90%]">{title}</h2>
             <div className="mt-2">{meta}</div>
           </div>
         </>

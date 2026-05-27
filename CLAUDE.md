@@ -165,8 +165,26 @@ Olive influence), lower = anxious/British (Grotesque No. 9 influence).
 The scale uses:
 - `text-statement`: 96% (slight editorial compression)
 - `text-hero`: 97% (slight editorial compression)
+- `text-cover` + media-tier card `<h2>`: 90% (the **Major** register, Phase 2)
 - `.wordmark` (header chrome): 88%
 - Everything else: 100% (default, warm)
+
+### Page typographic arc + spacing (Phase 2)
+Five registers, each owning a different Bricolage axis so the page reads as one
+sequence:
+1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
+2. **Major** (work titles: Selected Work cards + Also Shipped) — owns **width**
+   (`font-stretch: 90%`); the two work modules read as one compressed family.
+3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
+4. **Eyebrow/Caption** (sentence-case section labels, project·client meta) — tracking.
+5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
+
+**Two-scale spacing** (drama through contrast, not uniform Tailwind rhythm):
+- **Intimate** 12–24px within groups (hero beat-groups 20px; label→grid 24px;
+  card title→meta 8–12px).
+- **Sectional** 96 / 80 / 128px (base / xl / 2xl) between sections + above footer.
+  Section breaks are space, not rules (the footer hairline is the one structural line).
+Full rationale + reference citations in `docs/typography-system.md` §11.
 
 The `wdth` (and `opsz`) axes only render because `app/fonts.ts` loads them via
 `axes: ['opsz','wdth']`. Omitting that ships `wght`-only and silently disables

@@ -328,6 +328,12 @@
   line-height: 1.12;
   letter-spacing: -0.015em;
   font-weight: 600;
+  /* Major register (Phase 2): work titles own the WIDTH axis (90%), distinct
+     from the hero's weight axis. Rhymes with Also Shipped's text-qh-title (also
+     ~90%) so Selected Work + Also Shipped read as one compressed-title family.
+     Compression also narrows glyphs, helping the long first-person framings fit
+     the aspect-video well. Fallback to 92% if it reads tight. */
+  font-stretch: 90%;
   text-wrap: balance;
 }
 
