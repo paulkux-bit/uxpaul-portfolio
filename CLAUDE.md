@@ -30,6 +30,12 @@ role by Aug 31, 2026.
 
 ### Page composition
 - Home (`app/page.tsx`): hero → Selected Work → Also Shipped → footer.
+- Home hero is a **weighted-sentence statement** (Direction D1): the h1 leads
+  with a concrete proof line (`text-lede`) where **weight carries the emphasis**
+  — thin connective words (`--text-muted`), bold key noun phrases (`font-[720]`
+  + `--text-primary`); the name is a quiet signature (`text-h3`) below; then the
+  proof paragraph. A concrete fact, not a positioning tagline. No tenure number,
+  no geographic qualifier.
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
   renders on `/about`, not home.
 
@@ -92,6 +98,10 @@ See `PRODUCT.md` for the full accessibility floor. Quick summary:
 - No nested cards or glassmorphism
 - No body text running to absolute viewport edge — always horizontal padding
 - No emojis as decoration
+- No "consumer-grade" or "craft" in positioning/hero copy (the old
+  "Consumer-grade craft…" positioning was retired May 2026). These remain fine
+  as internal design-principle language (e.g. "craft signal"), just not in
+  user-facing positioning.
 
 ## Typography
 
@@ -129,7 +139,8 @@ Tailwind text-size classes like `text-4xl`.
 
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
-| `text-statement` | 40 → 96px | Home positioning statement (home h1). Largest type in the system. Once per page. |
+| `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
+| `text-lede` | 32 → 60px | Home hero weighted sentence (h1). Thin base (wght 340); key noun phrases jump to `font-[720]` so weight carries emphasis. |
 | `text-hero` | 48 → 80px | Case study & About hero |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
