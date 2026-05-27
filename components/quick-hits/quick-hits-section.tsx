@@ -8,7 +8,7 @@ import { QuickHitsList } from './quick-hits-list';
  */
 export function QuickHitsSection() {
   return (
-    <section aria-labelledby="also-shipped" className="space-y-8">
+    <section aria-labelledby="also-shipped" className="space-y-6">
       <p id="also-shipped" className="text-caption font-semibold tracking-wide text-muted">
         Also shipped
       </p>

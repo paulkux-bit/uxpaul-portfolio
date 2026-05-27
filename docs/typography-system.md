@@ -544,6 +544,42 @@ first read, and opened a ~9× hierarchy cliff to the body. Reverted:
   2.14 / 1.56 / 1.13 — each register steps down intentionally (the availability
   coda was moved 18→16 so no two registers share a size).
 
+### Phase 2 — page arc + two-scale spacing
+
+The whole home page reads as one designed sequence by giving **each register a
+different Bricolage axis to express** (not just a different size):
+
+| Register | Where | cap | owns |
+|---|---|---|---|
+| Display | hero catch line (`text-lede`) | 60px | **weight** (340 → 720 shift) |
+| Major | work titles — Selected Work cards + Also Shipped | 32–40px | **width** (`font-stretch: 90%`) |
+| Editorial | hero proof, prose (`text-body`) | 18px | — (neutral, reading) |
+| Eyebrow/Caption | section labels (sentence-case), project·client meta | 14px | tracking |
+| Subordinate | availability (`text-small`), footer (`text-caption`) | 16/14px | tone |
+
+- **Major owns width:** `text-cover` (typographic card title) + the media-tier
+  card `<h2>` carry `font-stretch: 90%` — rhyming with Also Shipped's
+  `text-qh-title` (~90%) so the two work modules read as one compressed-title
+  family, distinct from the hero's weight device. Compression also helps the long
+  first-person framings fit the aspect-video well. Fallback 92% if tight.
+
+**Two-scale spacing** (editorial drama, not uniform Tailwind rhythm):
+- **Intimate** 12–24px within groups: hero beat-groups 20px (`space-y-5`),
+  label→grid 24px (`space-y-6`), card title→meta 8–12px.
+- **Sectional** 96 / 80 / 128px (base / xl / 2xl) between sections + 128px above
+  the footer. ~4–5× the intimate scale. Section breaks are **space, not rules** —
+  the footer's top hairline is the page's only structural line (declined adding
+  section dividers: they'd read agency-decorative).
+
+**Hero left-weight fix (Option 1):** the catch line widens to a 2-line band at
+desktop (`xl:max-w-[30ch]`, ≥1280) so the hero top spans the column like the
+cards; ≤1024 keeps the 18ch / 3-line wrap. `text-wrap: balance` guards the split.
+
+References studied: Triay specimen (weight-as-event, width-as-character,
+compressed leading, near-empty space framing display); Kosas (restraint, narrow
+column, sentence-case labels); Awwwards Bricolage portfolios as anti-refs (only
+Display is loud — no every-section-shouts, no decorative rules).
+
 The scaffolding type-audit page has been superseded by the real home page
 (`app/page.tsx`) and case-study cards. No standalone audit page ships.
 
