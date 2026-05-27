@@ -20,7 +20,7 @@ export default function Home() {
       <section className="space-y-12">
         <div className="space-y-5">
           <h1
-            className="hero-beat text-lede text-muted max-w-[18ch] xl:max-w-[30ch]"
+            className="hero-beat text-lede text-muted max-w-[18ch] min-[1280px]:max-w-[30ch]"
             style={{ ['--beat' as string]: 0 }}
           >
             I design across{' '}

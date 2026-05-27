@@ -7,6 +7,17 @@
 
 @theme {
   --font-sans: var(--font-bricolage), system-ui, sans-serif;
+
+  /* Breakpoints — wired to the project's documented design targets (CLAUDE.md).
+     Without these, Tailwind's defaults were active (sm 640 / xl 1280 / 2xl 1536).
+     sm/xl/2xl differ from default and are the meaningful changes; md is explicit
+     (== default 768); lg stays implicit (default 1024 == target). The home hero's
+     2-line band is intentionally NOT tied to xl — it triggers at min-[1280px]
+     (column-full), so 1280–1439 laptops keep it; see app/page.tsx. */
+  --breakpoint-sm: 390px;
+  --breakpoint-md: 768px;
+  --breakpoint-xl: 1440px;
+  --breakpoint-2xl: 1920px;
 }
 
 /* ============================================================
