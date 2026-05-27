@@ -539,6 +539,11 @@ first read, and opened a ~9× hierarchy cliff to the body. Reverted:
   no color, proof-led. The lesson: the hero wanted *expression on the weight
   axis*, not *more scale on the name*.
 
+- **Hero scale ladder (Phase 1 lock):** `text-lede` 60 → `text-h3` (name) 28 →
+  `text-body` (proof) 18 → `text-small` (availability) 16. Step ratios
+  2.14 / 1.56 / 1.13 — each register steps down intentionally (the availability
+  coda was moved 18→16 so no two registers share a size).
+
 The scaffolding type-audit page has been superseded by the real home page
 (`app/page.tsx`) and case-study cards. No standalone audit page ships.
 

@@ -46,7 +46,7 @@ export default function Home() {
         </p>
 
         {/* Availability — its own beat, quiet coda. No eyebrow label. */}
-        <p className="hero-beat text-body text-secondary max-w-[62ch]" style={{ ['--beat' as string]: 3 }}>
+        <p className="hero-beat text-small text-secondary max-w-[62ch]" style={{ ['--beat' as string]: 3 }}>
           Open to senior and staff IC roles.
         </p>
       </section>
