@@ -952,3 +952,601 @@ body.popup-on {
     scroll-behavior: auto !important;
   }
 }
+/* ============================================================
+   APPENDED: case-study additions from BardCaseStudy bundle.
+   Selector adapted: html[data-annotations='on'] body → body.popup-on
+   (to integrate with the existing PopUp system in popup-context.tsx).
+   ============================================================ */
+/* ──────────────────────────────────────────────────────────────────────────
+   Case study additions for app/globals.css
+   Append these to globals.css; do not replace what's already there.
+   Tokens reference --color-* and --font-* that you should already have
+   from the design-system pass. Where a token is missing, fall back values
+   are inlined as oklch so this file works standalone.
+   ────────────────────────────────────────────────────────────────────── */
+
+@theme {
+  /* Persimmon — reserved exclusively for the PopUp annotation layer. */
+  --color-popup: oklch(0.68 0.16 45);
+  --color-popup-soft: oklch(0.93 0.04 50);     /* light-mode bubble bg */
+  --color-popup-soft-dark: oklch(0.28 0.05 45); /* dark-mode bubble bg */
+  --color-popup-text: oklch(0.32 0.08 45);      /* light-mode bubble text */
+  --color-popup-text-dark: oklch(0.92 0.04 60); /* dark-mode bubble text */
+}
+
+/* ── Page + article layout ───────────────────────────────────────────── */
+
+.case-study-page {
+  width: 100%;
+  padding: 0 1.5rem 6rem;
+}
+
+.case-study-article {
+  position: relative;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.case-study-prose {
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  /* Body type baseline. */
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+@media (min-width: 1024px) {
+  /* Push the reading column slightly left so the right margin holds PopUps. */
+  .case-study-prose {
+    margin-left: 0;
+    margin-right: auto;
+    padding-right: 0;
+  }
+}
+
+/* Prose rhythm */
+.case-study-prose > h1 {
+  font-size: clamp(2rem, 4vw + 1rem, 3.25rem);
+  font-weight: 600;
+  font-stretch: 94%;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.25rem;
+  text-wrap: balance;
+}
+
+.case-study-prose > h1 + p {
+  font-size: clamp(1.125rem, 1vw + 0.95rem, 1.375rem);
+  line-height: 1.5;
+  margin: 0 0 2.5rem;
+  color: color-mix(in oklch, currentColor 78%, transparent);
+  text-wrap: pretty;
+}
+
+.case-study-prose > h2 {
+  font-size: clamp(1.5rem, 1.5vw + 1rem, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
+  margin: 4rem 0 1.25rem;
+  text-wrap: balance;
+}
+
+.case-study-prose > h3 {
+  font-size: 1.375rem;
+  font-weight: 600;
+  margin: 2.5rem 0 1rem;
+}
+
+.case-study-prose p {
+  margin: 0 0 1.25rem;
+}
+
+.case-study-prose em {
+  /* Bricolage has no italic — emphasis is weight or color instead. */
+  font-style: normal;
+  font-weight: 500;
+  color: color-mix(in oklch, currentColor 88%, var(--color-popup) 12%);
+}
+
+/* ── Meta block under the hook ───────────────────────────────────────── */
+
+.case-study-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+  padding: 1.25rem 1.5rem;
+  margin: 0 0 3rem;
+  border-top: 1px solid color-mix(in oklch, currentColor 18%, transparent);
+  border-bottom: 1px solid color-mix(in oklch, currentColor 18%, transparent);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+@media (min-width: 640px) {
+  .case-study-meta {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+  }
+}
+
+.case-study-meta p {
+  margin: 0;
+}
+
+.case-study-meta strong {
+  font-weight: 600;
+  margin-right: 0.4em;
+}
+
+/* ── The three big numbers ───────────────────────────────────────────── */
+
+.case-study-numbers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  margin: 0 0 4rem;
+  padding: 2.5rem 0;
+  border-top: 1px solid color-mix(in oklch, currentColor 18%, transparent);
+  border-bottom: 1px solid color-mix(in oklch, currentColor 18%, transparent);
+}
+
+@media (min-width: 768px) {
+  .case-study-numbers {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+.case-study-numbers h3 {
+  font-size: clamp(3rem, 6vw + 1rem, 5rem);
+  font-weight: 600;
+  font-stretch: 92%;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.75rem;
+  color: color-mix(in oklch, currentColor 92%, transparent);
+}
+
+.case-study-numbers strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.case-study-numbers p {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+  color: color-mix(in oklch, currentColor 72%, transparent);
+}
+
+/* ── PopUp annotation system ─────────────────────────────────────────── */
+
+/* Surface wash when annotations are on. Subtle warm tint to mark the canvas. */
+body.popup-on {
+  background-color: color-mix(in oklch, var(--color-bg, oklch(0.985 0.004 75)) 92%, var(--color-popup) 8%);
+  transition: background-color 240ms ease-out;
+}
+
+.popup {
+  position: relative;
+  margin: 0;
+}
+
+/* Inline marker icon (footnote-style on mobile/tablet) */
+.popup-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: var(--color-popup);
+  color: white;
+  font-size: 0.8rem;
+  line-height: 1;
+  font-weight: 600;
+}
+
+/* Tablet/mobile: inline expandable footnote-style */
+.popup-inline {
+  margin: 1.5rem 0;
+  border-left: 2px solid var(--color-popup);
+  padding-left: 1rem;
+}
+
+.popup-inline > summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-popup);
+  user-select: none;
+}
+
+.popup-inline > summary::-webkit-details-marker {
+  display: none;
+}
+
+.popup-inline__label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+}
+
+.popup-inline__body {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: color-mix(in oklch, currentColor 88%, transparent);
+}
+
+.popup-inline__body p {
+  margin: 0 0 0.5rem;
+}
+
+.popup-inline__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Desktop ≥1024px: gutter bubble, replaces inline */
+@media (min-width: 1024px) {
+  .popup-inline {
+    display: none;
+  }
+
+  .popup-bubble {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 2.5rem);
+    width: 16rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-popup-soft);
+    color: var(--color-popup-text);
+    border-radius: 4px;
+    border-left: 2px solid var(--color-popup);
+    font-size: 0.875rem;
+    line-height: 1.55;
+    z-index: 5;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.03), 0 8px 24px -12px rgb(0 0 0 / 0.08);
+  }
+
+  .popup-bubble__marker {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 999px;
+    background: var(--color-popup);
+    color: white;
+    font-size: 0.7rem;
+    line-height: 1;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .popup-bubble__body p {
+    margin: 0 0 0.5rem;
+  }
+
+  .popup-bubble__body p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Dark mode bubble */
+html.dark .popup-bubble {
+  background: var(--color-popup-soft-dark);
+  color: var(--color-popup-text-dark);
+}
+
+/* ── Toggle (header) ─────────────────────────────────────────────────── */
+
+.case-study-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in oklch, var(--color-bg, oklch(0.985 0.004 75)) 86%, transparent);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid color-mix(in oklch, currentColor 10%, transparent);
+}
+
+.case-study-header__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.case-study-header__brand {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  color: inherit;
+}
+
+.popup-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.875rem;
+  border: 1px solid color-mix(in oklch, currentColor 18%, transparent);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 160ms ease, background-color 160ms ease;
+  font-family: inherit;
+}
+
+.popup-toggle:hover {
+  border-color: color-mix(in oklch, currentColor 32%, transparent);
+}
+
+.popup-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.popup-toggle__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, currentColor 30%, transparent);
+  transition: background-color 200ms ease;
+}
+
+.popup-toggle.is-on .popup-toggle__dot {
+  background: var(--color-popup);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-popup) 24%, transparent);
+}
+
+.popup-toggle__state {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+  margin-left: 0.2em;
+}
+
+/* ── Figures ─────────────────────────────────────────────────────────── */
+
+.figure {
+  margin: 2.5rem 0 3rem;
+}
+
+.figure__image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
+}
+
+.figure__caption {
+  margin-top: 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: color-mix(in oklch, currentColor 65%, transparent);
+  text-wrap: pretty;
+  max-width: 640px;
+}
+
+/* Full bleed: break out of the reading column */
+.figure--full-bleed {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  margin-top: 3.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.figure--full-bleed .figure__image {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+.figure--full-bleed .figure__caption {
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 1.5rem;
+}
+
+/* Mode pair */
+.mode-pair__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .mode-pair__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mode-pair__cell {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
+}
+
+.mode-pair__cell--light {
+  background: oklch(0.985 0.004 75);
+}
+
+.mode-pair__cell--dark {
+  background: oklch(0.17 0.012 55);
+}
+
+.mode-pair__label {
+  position: absolute;
+  top: 0.625rem;
+  left: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  background: color-mix(in oklch, currentColor 8%, transparent);
+  color: inherit;
+  z-index: 2;
+}
+
+.mode-pair__cell--dark .mode-pair__label {
+  color: oklch(0.94 0.006 80);
+  background: color-mix(in oklch, oklch(0.94 0.006 80) 10%, transparent);
+}
+
+.mode-pair__cell .figure__image {
+  border: none;
+  border-radius: 0;
+}
+
+/* Compare */
+.compare__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .compare__grid {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+  }
+}
+
+.compare__cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.compare__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: color-mix(in oklch, currentColor 70%, transparent);
+}
+
+.compare__divider {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .compare__divider {
+    display: block;
+    width: 1px;
+    background: color-mix(in oklch, currentColor 14%, transparent);
+    margin: 0 1.25rem;
+  }
+}
+
+/* Detail */
+.figure--detail {
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Small multiples */
+.small-multiples__grid {
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+  .figure--small-multiples[data-columns='3'] .small-multiples__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .figure--small-multiples[data-columns='4'] .small-multiples__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .figure--small-multiples[data-columns='5'] .small-multiples__grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.small-multiples__cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.small-multiples__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: color-mix(in oklch, currentColor 65%, transparent);
+}
+
+/* Placeholder frame (rendered when an image is pending) */
+.figure-placeholder {
+  position: relative;
+  width: 100%;
+  border: 1px dashed color-mix(in oklch, currentColor 28%, transparent);
+  border-radius: 6px;
+  background: color-mix(in oklch, currentColor 4%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.figure-placeholder__inner {
+  padding: 1.5rem;
+  text-align: center;
+  max-width: 90%;
+}
+
+.figure-placeholder__label {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: color-mix(in oklch, currentColor 60%, transparent);
+  margin-bottom: 0.75rem;
+}
+
+.figure-placeholder__src {
+  display: block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  color: color-mix(in oklch, currentColor 75%, transparent);
+  word-break: break-all;
+  margin-bottom: 0.5rem;
+}
+
+.figure-placeholder__caption {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: color-mix(in oklch, currentColor 70%, transparent);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ── Reduced motion: cover anything Framer Motion can't see ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  .case-study-header,
+  body.popup-on {
+    transition: none !important;
+  }
+}
