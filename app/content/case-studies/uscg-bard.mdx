@@ -9,9 +9,9 @@ order: 1
 problemFraming: "I want to make my data sing so I can tell lawmakers what I need money for."
 projectName: "BARD"
 headline: "Collapsed 56 divergent state forms into one federal master schema."
-summary: "I rebuilt the federal system of record for boating-incident reporting across 56 jurisdictions, turning a twenty-year-old data-entry burden into a system that catches signal early."
+summary: "I rebuilt the federal system of record for boating-incident reporting across 56 jurisdictions."
 heroImage: "/case-studies/uscg-bard/hero-dashboard-fl.png"
-heroImageAlt: "The redesigned BARD dashboard for Florida, leading with one generated insight above a year of incident data."
+heroImageAlt: "The redesigned BARD dashboard for Florida."
 motionVideo: ""
 role: "Senior Product Designer"
 timeframe: "Q3 2025 – Spring 2027 (IOC)"
@@ -23,69 +23,80 @@ nda: false
 
 After twenty years, the system that counts them had stopped serving the people who feed it.
 
-BARD, the Boating Accident Report Database, is the federal system of record for every reportable recreational boating incident in the country. Fifty-six jurisdictions file into it. The Coast Guard publishes the national statistics it produces, and those numbers set safety policy, award grants, and defend federal rulemaking. I led the design of its first ground-up replacement in two decades.
+The Boating Accident Report Database is federal infrastructure. Fifty-six jurisdictions file into it. The numbers it produces set safety policy, award grants, and defend federal rulemaking. I led its first ground-up replacement in two decades.
 
 <FullBleed
   src="/case-studies/uscg-bard/hero-dashboard-fl.png"
   alt="The redesigned BARD dashboard for Florida, one generated insight leading a year of incident data."
-  caption="The redesigned dashboard for Florida, the highest-volume jurisdiction. One generated insight leads; everything beneath it is reference."
+  caption="Florida — the highest-volume jurisdiction. One generated insight leads; everything beneath is reference."
   placeholder
   priority
 />
 
 <div className="case-study-meta">
-  <p><strong>Role.</strong> Sole product designer. Research, information architecture, interaction, visual system, content, and prototyping.</p>
-  <p><strong>Team.</strong> A product owner and a dev anchor on the build; USCG BSX, the MISLE Program Office, and USCG PMO as stakeholders.</p>
-  <p><strong>Timeline.</strong> Q3 2025 to Spring 2027 initial operating capability.</p>
-  <p><strong>NDA.</strong> Public work. Every screen here uses synthetic data; no real records, CUI, or PII appear.</p>
+  <p><strong>Role.</strong> Sole product designer. Research through prototyping.</p>
+  <p><strong>Team.</strong> Product owner, dev anchor; stakeholders across USCG BSX, MISLE Program Office, USCG PMO.</p>
+  <p><strong>Timeline.</strong> Q3 2025 → Spring 2027 IOC.</p>
+  <p><strong>NDA.</strong> Public work. Synthetic data throughout.</p>
 </div>
 
 <div className="case-study-numbers">
 
 ### 56
 **Jurisdictions, one system.**
-Fifty states, D.C., and five territories report under one federal mandate. The legacy treated them as fifty-six loosely related installations.
+Fifty states, D.C., and five territories.
 
 ### 20 years
 **Since the last rebuild.**
-The platform every U.S. boating-safety statistic depends on, untouched at its foundation for two decades.
+Every U.S. boating-safety statistic depends on it.
 
 ### 56 → 1
 **Forms collapsed into one schema.**
-Only thirteen jurisdictions shared a form; the rest were programmed separately. I reduced them to a single master form governed by conditional logic.
+Only thirteen jurisdictions shared a form before.
 
 </div>
 
 <PopUp anchor="hook">
-The hard part was never the UI. It was that "the same field" was being collected fifty-six different ways, and the national numbers quietly papered over the difference. Most of the work was making the data comparable before any of it could be made legible.
+The hard part was never the UI. "The same field" was being collected fifty-six different ways, and the national numbers quietly papered over the difference.
 </PopUp>
 
-## The person at the other end of the form
+<div className="eyebrow">The user</div>
 
-Maria Chen is a proto-persona: a composite drawn from the twenty jurisdiction points-of-contact I interviewed, reality-checked against one real source. That source is a former Florida boating-safety coordinator who personally managed every accident report for the state for twelve years before moving to Coast Guard headquarters. Maria is one of more than twenty data staff on the Florida side of BARD, the highest-volume jurisdiction in the country. Her day is not one form. It is a queue: pull the morning's batch, run the import, work the cases that came back flagged, fix what the Coast Guard returned overnight, file the "no incidents" affirmation for the rural counties that did not report, then start the next batch. She moves fifteen to thirty cases in a single import session, several sessions a week. She is not analyzing. She is moving cases.
+## Maria moves cases, not forms.
+
+She's a Florida data coordinator — one of twenty staff at the highest-volume jurisdiction in the country. Fifteen to thirty cases per session, several sessions a week. The legacy fights her every step.
+
+<ol className="problem-list">
+  <li><span className="problem-list__index">01</span><span className="problem-list__text">Cases look complete and bounce.</span></li>
+  <li><span className="problem-list__index">02</span><span className="problem-list__text">Rejection emails name the case, never the field.</span></li>
+  <li><span className="problem-list__index">03</span><span className="problem-list__text">A sixty-day federal clock is always running.</span></li>
+</ol>
+
+<PopUp anchor="courtroom">
+Florida law enforcement uses BARD summary sheets in depositions. When what an officer entered doesn't match what the sheet prints, the officer ends up under oath explaining a software quirk instead of the facts of the incident.
+</PopUp>
 
 <Figure
   src="/case-studies/uscg-bard/incidents-queue.png"
   alt="The BARD Incidents list, showing 62 cases in Current Work with status colors and assignment."
-  caption="Maria's actual workspace is a queue, not a form. The list leads with the count that governs her week and the status that tells her who holds each case."
+  caption="The real workspace is a queue, not a form. Count and status do the work before the prose."
   placeholder
 />
 
-The worst moment in her week is a rejection. When the Coast Guard returns a case, the email names the case but rarely the field. A report can be marked "complete" with a required answer left blank, such as whether a fatality victim was wearing a life jacket, and the rejection reason gets typed into a comment box on a screen Maria never sees. So she has a rejected case, a vague reason, no field-level pointer, and a sixty-day federal clock that started the day the incident was reported. She hunts. She resubmits. She waits to see whether it bounces again.
+<div className="eyebrow">The research</div>
 
-<PopUp anchor="stakes">
-The stake that stuck with me: Florida law enforcement uses BARD summary sheets as evidence in depositions. When what an officer entered does not match what the sheet printed, the officer ends up under oath explaining a software quirk instead of the facts of the incident. A data-entry UX failure was escalating into the criminal-justice system.
-</PopUp>
+## When users build software to work around your software, the verdict is already in.
 
-None of this is internal tooling. BARD is the system of record under federal statute, and its output, the annual Recreational Boating Statistics in continuous publication since 1961, feeds national fatality rates, state grant allocations, and the rulemaking behind life-jacket and kill-switch regulations. If the system makes the data weaker, every decision built on that data gets weaker too.
+Twenty interviews across every volume tier — Florida to the territories. Mostly remote. The screen-shares were the unlock.
 
-## What the research actually found
+Watching people work, I kept seeing the same thing: a dozen tabs open. Everyone was reconciling the same record across views the system refused to reconcile for them.
 
-I interviewed twenty jurisdiction points-of-contact across every volume tier, presented early work to the boating-law-administrator community at a NASBLA conference, and visited the Coast Guard's offices to watch the review-and-compliance side, meaning what happens to a case after a state hits submit. Most interviews were remote. The screen-shares were the unlock.
+Then I looked at the Coast Guard side. Reviewers had built their own tools to make the legacy readable. The case for rebuilding had already been written, in shadow IT.
 
-Watching people work, I kept seeing the same thing: a dozen tabs open. The original write-up in one, the responding officer's notes in another, the legacy form in a third, and somewhere a private sense of what the reviewer would want to see. Everyone was reconciling the same record across views the system refused to reconcile for them.
-
-Then I looked at the data and found the loudest signal there is. The Coast Guard had built their own tools to survive the system. Because the legacy did no validation, reviewers were pulling and recombining fields by hand, out of more than 380 possible fields only 80 to 140 mattered for any given event, into shadow tools just to make a case readable. When your users build software to work around your software, the verdict is already in.
+<blockquote className="pull-quote">
+  <p>State coordinators have been wanting BARD to be improved for years.</p>
+  <cite>A twelve-year Florida boating-safety coordinator</cite>
+</blockquote>
 
 <SmallMultiples
   items={[
@@ -94,34 +105,42 @@ Then I looked at the data and found the loudest signal there is. The Coast Guard
     { src: '/case-studies/uscg-bard/filter-cause.png',    alt: 'Cause filter popover',    label: 'Cause' },
     { src: '/case-studies/uscg-bard/filter-severity.png', alt: 'Severity filter popover', label: 'Severity' },
   ]}
-  caption="Learning the domain: the filter taxonomy mirrors the doctrine analysts actually use, not a generic dropdown set. The vocabulary came from the field, not from me."
+  caption="Filter taxonomy mirrors the doctrine analysts actually use. The vocabulary came from the field."
   placeholder
   columns={4}
 />
 
-The veterans were blunt. A contractor who had spent twenty years inside BARD called it "an 1980s kinda look" and said the annual tables had looked "sort of the same since the 70s." The former Florida coordinator, the person who ran an entire state's reporting for over a decade, said state coordinators had "been wanting BARD to be improved for years." The formal record agreed. In a survey of fifty-three state users, only nineteen would affirm that BARD was intuitive to use. A system two-thirds of its users will not call usable is a system people have stopped expecting anything from.
-
 <PopUp anchor="research">
-The all-56-states form rule did not arrive as a flash. It accumulated, screen-share after screen-share, until I reached for a pattern from somewhere unexpected: Facebook's "View As," which lets you preview your profile the way the public sees it. The form needed the same move. One record, shown the way the state works and the way the Coast Guard reviews, without forcing either side to adapt to the other.
+The all-56-states rule arrived screen-share by screen-share, until I reached for an unexpected reference: Facebook's "View As." The form needed the same move — one record, shown two ways, neither side forced to adapt.
 </PopUp>
 
-## One thing loudly, everything else quietly
+<div className="eyebrow">The reframe</div>
 
-My guiding principle for the whole system: every surface should say exactly one thing loudly and everything else quietly, because the person reading it is on their fortieth case of the week, not their first. I evaluated against Nielsen's usability heuristics and held the system to Section 508 and WCAG 2.2 AA, computed rather than eyeballed, with contrast verified mathematically across every content-on-surface pairing in both light and dark modes. The work produced two patterns worth naming.
+## How might we let one record carry two readings?
 
-### The Insight Engine: making clean data speak
+That question shaped everything that followed.
 
-The legacy dashboard was tables. Nothing helped a user see a signal, which is exactly the actionable intelligence a Coast Guard analyst needs to move resources, and funding, early. So I built a system that reads the now-normalized data and renders a single plain-language insight at the top of each surface: *"Operator inattention remains Florida's leading factor this year."* *"Miami-Dade, Palm Beach, and Hillsborough account for 30% of Florida's incidents."*
+<div className="eyebrow">The principle</div>
+
+## Say one thing loudly. Say everything else quietly.
+
+Because the person reading any surface is on their fortieth case of the week, not their first. Evaluated against Nielsen's heuristics. Held to Section 508 and WCAG 2.2 AA, computed mathematically across every pairing.
+
+### The Insight Engine
+
+The legacy dashboard was tables. Nothing surfaced a signal.
+
+I built a system that reads the normalized data and writes one plain-language insight per surface. The same engine that writes one terse line on the dashboard writes a headline on the annual report.
 
 <FullBleed
   src="/case-studies/uscg-bard/reports-deadliest-season.png"
-  alt="The annual Reports surface with a generated headline: '75 fatalities. The deadliest season in five years.'"
-  caption="The annual report earns the most editorial voice in the system: '75 fatalities. The deadliest season in five years.' The same engine that writes one terse line on an operational surface writes a headline here."
+  alt="The annual Reports surface with a generated headline: 75 fatalities. The deadliest season in five years."
+  caption="The annual report earns the most editorial voice. The same engine that writes a terse line on an operational surface writes a headline here."
   placeholder
 />
 
 <PopUp anchor="insight-architecture">
-Under the hood it is eleven canonical insight shapes, families of meaning rather than page templates, mapped into surface-specific pools. A priority waterfall picks one per surface, first trigger wins, and the selection rotates daily so no render becomes wallpaper. A shape holds its meaning while changing form: the same shape that is one dashboard sentence becomes a multi-part hero on the annual report.
+Eleven canonical insight shapes — families of meaning, not page templates. Surface-specific pools. A priority waterfall picks one per surface; the selection rotates daily so no render becomes wallpaper.
 </PopUp>
 
 <SmallMultiples
@@ -131,20 +150,18 @@ Under the hood it is eleven canonical insight shapes, families of meaning rather
     { src: '/case-studies/uscg-bard/insight-l3.png', alt: 'L3 Incidents surface', label: 'L3 Incidents' },
     { src: '/case-studies/uscg-bard/insight-l4.png', alt: 'L4 Reports surface',   label: 'L4 Reports' },
   ]}
-  caption="One engine, four registers. Each surface gets its own verb set: operational on the dashboard, observational on the map, editorial on the report."
+  caption="One engine, four registers — operational on the dashboard, observational on the map, editorial on the report."
   placeholder
   columns={4}
 />
 
 <PopUp anchor="insight-engine">
-The decision I am most sure about: I did not reach for AI. Once the forms were normalized, I could derive every insight deterministically. Calculate the shape, call it into the UI, done. In 2026 the reflex is to bolt an LLM onto everything. This needed the opposite. The power was not a model. It was data quality, and a model would only have added a way to be confidently wrong about a federal safety statistic.
+The decision I'm most sure about: no AI. Once the forms were normalized, every insight was deterministic. In 2026 the reflex is to bolt an LLM onto everything. This needed the opposite. The power wasn't a model; it was data quality.
 </PopUp>
 
-A deliberate counterweight: two modules, the quarterly Compliance Summary and the annual Recreational Boating Statistics, sit outside the engine entirely. No triggers, no rotation. They are anchors of fact, not editorial voice. Knowing which surfaces should speak and which should simply state is the part most teams get wrong.
+### The form
 
-### The form: one record, two readings
-
-The second pattern answers what the screen-shares revealed. The form carries a single record but renders two views. *Your View*, ordered the way a state works, and *USCG View*, ordered the way a federal reviewer reads, so neither side has to adapt to the other. That same toggle is where the all-56-states rule lives: if any state populates a field in its real submissions, the field is preserved as optional rather than cut. I verified that rule against actual sample submissions from Illinois, Utah, and California.
+One record, two readings. *Your View* for filing. *USCG View* for reviewing. The toggle is the all-56-states rule made interactive: if any state populates a field in real submissions, the field stays. Verified against actual sample submissions from Illinois, Utah, and California.
 
 <Compare
   a="/case-studies/uscg-bard/form-your-view.png"
@@ -152,29 +169,31 @@ The second pattern answers what the screen-shares revealed. The form carries a s
   labelA="Your View"
   labelB="USCG View"
   alt="The same incident record rendered for the state filer and for the federal reviewer."
-  caption="One record, two readings. The toggle reorders the same fields for the person entering them and the person reviewing them, so the reconciliation the old system pushed onto users now happens in the interface."
+  caption="The reconciliation the old system pushed onto users now happens in the interface."
   placeholder
 />
 
-Compliance is a live score, not a final-pass gate. As Maria fills sections, a Federal Compliance percentage climbs, so she can see which section will move the number most. The opposite of a system that lets a case look "complete" and then bounces it. Submission stays locked until the threshold is met.
+Compliance is a live score, not a final-pass gate. As Maria fills sections, a Federal Compliance percentage climbs. The opposite of a system that lets a case look complete and then bounces it.
 
 <Detail
   src="/case-studies/uscg-bard/form-compliance-badge.png"
-  alt="The Federal Compliance progress badge, showing 20 percent on a partially filled form."
-  caption="A progress signal, not a gate. It tells Maria how close she is and what moves the number, while the sixty-day clock is running."
+  alt="The Federal Compliance progress badge."
+  caption="A progress signal, not a gate. Tells Maria how close she is, while the sixty-day clock is running."
   placeholder
 />
 
 <PopUp anchor="compliance">
-The first instinct was a validator that checks everything at submit and lists the errors. I argued for the live score instead. A validator tells you you have already failed. A live score tells you how close you are and what to do next. For someone racing a sixty-day federal clock, that difference is the whole experience.
+First instinct was a submit-time validator. I argued for the live score instead. A validator tells you you've already failed. A live score tells you how close you are.
 </PopUp>
 
-Underneath both patterns is a design system built for a twenty-five-year horizon: a three-layer token architecture (raw primitives, mode-aware semantic tokens, component bindings) where status and sentiment are kept parallel rather than nested, so a status color can diverge from a sentiment color years from now without a refactor. An eight-state case lifecycle gives every workflow state its own hue, so color alone tells a reviewer who currently holds the case, fixing a legacy failure where "draft" and "submitted" looked nearly identical at table scale.
+### The system
+
+Three-layer tokens for a twenty-five-year horizon. Status and sentiment kept parallel, not nested, so either can diverge without a refactor. Eight workflow states, each with their own hue, so color alone tells a reviewer who holds the case.
 
 <Figure
   src="/case-studies/uscg-bard/status-lifecycle.png"
   alt="The eight workflow states laid out in sequence, each with a unique hue."
-  caption="Eight workflow states, eight hues. A reviewer reads ownership from color before reading a word."
+  caption="Eight states, eight hues. Ownership readable before the prose."
   placeholder
   ratio="3 / 1"
 />
@@ -183,54 +202,78 @@ Underneath both patterns is a design system built for a twenty-five-year horizon
   light="/case-studies/uscg-bard/dashboard-light.png"
   dark="/case-studies/uscg-bard/dashboard-dark.png"
   alt="The BARD dashboard in light and dark modes."
-  caption="Light and dark are one token swap, not two designs. The warm-graphite primitive scale carries both, and contrast is verified mathematically in each."
+  caption="One token swap, not two designs. Contrast verified mathematically in each mode."
   placeholder
 />
 
 <PopUp anchor="heritage-orange">
-The system has exactly one piece of chromatic candy: the Coast Guard's own International Orange, the color Raymond Loewy chose for the service's racing stripe in 1967. It lives in the logotype and a few institutional moments, and it is forbidden everywhere it would be obvious. Never a button, a link, a chart, a status, or a focus ring. Turning down orange primary buttons is what lets the one orange that remains carry real institutional weight.
+The system has exactly one piece of chromatic candy: Coast Guard International Orange, the color Raymond Loewy chose for the racing stripe in 1967. Forbidden everywhere it would be obvious — never a button, link, chart, status, or focus ring.
 </PopUp>
 
 <ModePair
   light="/case-studies/uscg-bard/map-light.png"
   dark="/case-studies/uscg-bard/map-dark.png"
-  alt="The BARD map surface in light and dark modes, with incident markers."
-  caption="A custom basemap tuned so incident markers read as the one loud thing. The map recedes; the data sits on top of it."
+  alt="The BARD map surface in light and dark modes."
+  caption="Custom basemap tuned so markers carry the signal. The map recedes."
   placeholder
 />
 
-## What changed
+<div className="eyebrow">What changed</div>
 
-Early design work went to the boating-law-administrator community at a NASBLA gathering in March 2026, and it landed with the state users who are BARD's core audience. That reception is the one outcome I can point to today. The rest ships at initial operating capability in 2027.
+## A system, finally, that fifty-six jurisdictions can actually use.
 
-**Fifty-six jurisdictions, finally one system.** The territories were the clearest casualty of the old build: software made for the English-speaking mainland and extended outward without being designed for the places it had to serve. The rebuild starts from the opposite premise. One governing model, fifty-six first-class members of it. That premise is why the all-56-states form rule and the territory greeting pools exist, the architecture refusing to let any jurisdiction be an afterthought.
+<div className="transformations">
+  <div className="transformation">
+    <div className="transformation__before">56 forms</div>
+    <div className="transformation__arrow" aria-hidden>→</div>
+    <div className="transformation__after">1 schema</div>
+  </div>
+  <div className="transformation">
+    <div className="transformation__before">Tables</div>
+    <div className="transformation__arrow" aria-hidden>→</div>
+    <div className="transformation__after">Plain-language insights</div>
+  </div>
+  <div className="transformation">
+    <div className="transformation__before">Submit-time validator</div>
+    <div className="transformation__arrow" aria-hidden>→</div>
+    <div className="transformation__after">Live compliance score</div>
+  </div>
+</div>
+
+Early design went to the boating-law-administrator community at NASBLA in March 2026, and landed with the state users who are BARD's core audience. The rest ships at IOC in 2027.
 
 <Compare
   a="/case-studies/uscg-bard/greeting-pr-spanish.png"
   b="/case-studies/uscg-bard/greeting-hawaii.png"
   labelA="Puerto Rico"
   labelB="Hawaii"
-  alt="Jurisdiction-specific greetings on the BARD dashboard for Puerto Rico (Spanish) and Hawaii."
-  caption="The greeting system speaks five languages across six jurisdiction pools. A Puerto Rico coordinator and a Hawaii coordinator are each met in their own register, not in a mainland default. The phrasing is drafted from convention pending native-speaker validation — see reflection."
+  alt="Jurisdiction-specific greetings."
+  caption="Five languages, six jurisdiction pools. No mainland default. Phrasing drafted from convention, pending native-speaker validation."
   placeholder
 />
 
-**One schema where there were fifty-six.** Collapsing the forms means a Florida officer's entry and a Utah officer's entry are finally comparable at the field level, because they are finally collected the same way. The national dataset stops papering over differences it was never built to reconcile.
+BARD doesn't save lives directly. It is the measurement and policy-input layer, not an intervention. Stronger data makes stronger safety policy possible — the causal chain runs through NASBLA and federal rulemaking, not from my interface to the water.
 
-Beyond the structure, the rebuild makes things possible the isolated legacy could not: cross-jurisdictional pattern detection at speed, a pre-submission compliance view that lets states catch federal gaps before a rejection, faster reconciliation of news-media signal against the filed record, and interoperability with the Coast Guard's broader case-management program, where BARD is one node in an effort replacing more than eleven legacy systems.
+<div className="eyebrow">Reflection</div>
 
-One thing I am careful not to claim: BARD does not save lives directly. It is the measurement and policy-input layer, not an intervention. The honest version is that stronger data makes stronger safety policy possible, and the causal chain runs through NASBLA and federal rulemaking, not from my interface to the water.
+## What I got wrong.
 
-## What I got wrong, and what I still don't know
+I assumed a lean form was a better form. On the People form alone, eighteen fields looked dead by every measure I had. Then I checked them against real state submissions — Illinois, Utah, California. The "dead" fields were populated.
 
-The thing that surprised me was being wrong in an instructive way. I assumed a lean form was a better form and ran an aggressive cut pass. On the People form alone, eighteen fields looked dead by every measure I had. Then I checked the cuts against real state submissions, Illinois, Utah, California, and the "dead" fields were populated. States were quietly relying on fields my wireframes implied did not exist. The surprise was not being wrong about a field. It was realizing I had let the wrong artifact answer the question: a wireframe shows render state, not field inventory. That reversal became a governing rule, one master form, and if any single state uses a field it stays, and it permanently demoted my wireframes to render-state authority only.
+<blockquote className="pull-quote pull-quote--quiet">
+  <p>A wireframe shows render state, not field inventory.</p>
+</blockquote>
 
-What I would do differently follows from that: write the preservation rule before the first cut, not after the first reversal. I learned the principle by violating it. And I would sequence the localization the other way, recruiting native speakers from the territories to author the greeting phrasing first, rather than drafting from convention and scheduling validation after. The most culturally sensitive part of the system is the part that shipped as draft-pending-confirmation, and that ordering was mine to fix.
+That reversal became the governing rule: one master form, and if any single state uses a field, it stays.
 
 <PopUp anchor="reflection">
-The open question I cannot answer yet: I tuned the entire Insight Engine voice to one persona, the jurisdiction filer. The analyst and the executive surfaces do not exist yet. So I genuinely do not know whether the operational register holds for them, or whether each needs its own. Put another way, I do not yet know whether the voice I built belongs to the user or to the system. I will find out when those surfaces ship.
+I tuned the entire Insight Engine voice to one persona. The analyst and executive surfaces don't exist yet. So I don't yet know whether the voice I built belongs to the user or to the system. I'll find out when those surfaces ship.
 </PopUp>
 
-## Credit
+<div className="eyebrow">Credit</div>
 
-I was the sole designer on BARD: research, information architecture, interaction, the visual system, content, and prototyping. The build ran with a product owner and a dev anchor, and the work was shaped in close partnership with stakeholders across USCG BSX, the MISLE Program Office, and USCG PMO, then pressure-tested with the state boating-law-administrator community through NASBLA. The veterans who gave their time to the research, among them a contractor with two decades inside the legacy system and a former state coordinator who had run an entire jurisdiction's reporting, are the reason the design started from how the work actually happens, not from how the old software assumed it did.
+## Team.
+
+Sole designer — research, IA, interaction, visual system, content, prototyping. A product owner and a dev anchor on the build. Stakeholders across USCG BSX, the MISLE Program Office, and USCG PMO. The state boating-law-administrator community through NASBLA.
+
+The veterans who gave their time to the research — a contractor with two decades inside the legacy system, a former coordinator who'd run an entire jurisdiction's reporting for over a decade — are the reason the design started from how the work actually happens.
