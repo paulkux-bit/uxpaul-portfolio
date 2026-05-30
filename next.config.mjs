@@ -5,7 +5,13 @@ const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'mdx'],
   images: {
     formats: ['image/avif', 'image/webp'],
-    // Allowed densities/widths — defaults are fine; tighten later if needed.
+    // Next 16 narrowed the default qualities allowlist to [75]. The figure
+    // components ladder across 75 (small-multiples thumbs), 80 (workhorse
+    // Figure/Detail/Compare/ModePair/in-column), 85 (ConstrainedBleed +
+    // non-priority FullBleed + bento span≥3), and 90 (priority LCP — hero
+    // image, FullBleed-with-priority). All four must be declared or the
+    // un-listed values throw at render time.
+    qualities: [75, 80, 85, 90],
   },
 };
 

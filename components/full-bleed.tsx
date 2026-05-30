@@ -44,7 +44,7 @@ export function FullBleed({
           className="figure__image"
         />
       )}
-      {caption && !placeholder ? <figcaption className="figure__caption">{caption}</figcaption> : null}
+      {caption ? <figcaption className="figure__caption">{caption}</figcaption> : null}
     </figure>
   );
 }

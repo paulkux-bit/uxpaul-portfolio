@@ -1,0 +1,64 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
+<header
+  class="hero-block"
+>
+  <div
+    class="hero-block__type"
+  >
+    <p
+      class="hero-block__eyebrow"
+    >
+      BARD · U.S. COAST GUARD
+    </p>
+    <h1
+      class="hero-block__title"
+    >
+      <span
+        class="hero-block__sentence hero-block__sentence--open"
+      >
+        The data was there.
+      </span>
+      <span
+        class="hero-block__sentence hero-block__sentence--anxious"
+      >
+        The system couldn't speak it.
+      </span>
+    </h1>
+    <p
+      class="hero-block__role"
+    >
+      Sole designer on the first ground-up replacement of BARD in twenty years.
+    </p>
+  </div>
+  <div
+    class="hero-block__image"
+  >
+    <div
+      class="hero-block__image-frame"
+    >
+      <div
+        class="figure-placeholder"
+        style="aspect-ratio: 16 / 10;"
+      />
+    </div>
+    <aside
+      aria-label="GENERATED INSIGHT"
+      class="hero-block__callout"
+      role="note"
+    >
+      <p
+        class="hero-block__callout-label"
+      >
+        GENERATED INSIGHT
+      </p>
+      <p
+        class="hero-block__callout-body"
+      >
+        Operator inattention remains Florida's leading factor this year.
+      </p>
+    </aside>
+  </div>
+</header>
+`;

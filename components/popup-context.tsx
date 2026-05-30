@@ -2,8 +2,8 @@
 
 import {
   createContext,
+  use,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -81,7 +81,10 @@ export function PopUpProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useAnnotations(): Annotations {
-  const ctx = useContext(PopUpContext);
+  // React 19 `use()` instead of `useContext` — the consumer call is identical
+  // in this case; `use` is the forward-looking pattern (also allows conditional
+  // calls, which we don't need here but is worth defaulting to).
+  const ctx = use(PopUpContext);
   if (ctx === undefined) {
     throw new Error('useAnnotations must be used within a PopUpProvider');
   }

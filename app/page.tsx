@@ -5,7 +5,7 @@ import { caseStudies } from '@/app/data/case-studies';
 
 export default function Home() {
   return (
-    <div className="mx-auto max-w-6xl px-6 md:px-8 pt-16 md:pt-20 xl:pt-16 2xl:pt-28 pb-32 space-y-24 xl:space-y-20 2xl:space-y-32">
+    <div className="page-container pt-16 md:pt-20 xl:pt-16 2xl:pt-28 pb-32 space-y-24 xl:space-y-20 2xl:space-y-32">
       {/* Hero — "weighted sentence" (Direction D1), range-led copy. The h1 names
           the three domains Paul works across; WEIGHT carries the emphasis:
           connectives ride text-lede's thin 340 + recessive --text-muted, the

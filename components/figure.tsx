@@ -8,6 +8,10 @@ interface FigureProps {
   caption?: ReactNode;
   /** Set true while the screenshot is still missing. Shows a labeled box. */
   placeholder?: boolean;
+  /** Present the image on a warm-tinted canvas with padding around it
+   *  (Aaron James "shown specimen" treatment). Replaces the hairline border;
+   *  no shadow. Mode-aware via `currentColor`. */
+  framed?: boolean;
   width?: number;
   height?: number;
   ratio?: string;
@@ -21,12 +25,14 @@ export function Figure({
   alt,
   caption,
   placeholder,
+  framed,
   width = 1440,
   height = 900,
   ratio,
 }: FigureProps) {
+  const className = `figure${framed ? ' figure--framed' : ''}`;
   return (
-    <figure className="figure">
+    <figure className={className}>
       {placeholder ? (
         <PlaceholderFrame src={src} caption={caption} ratio={ratio} />
       ) : (
@@ -35,12 +41,12 @@ export function Figure({
           alt={alt}
           width={width}
           height={height}
-          sizes="(max-width: 768px) 100vw, 680px"
+          sizes="(max-width: 768px) 100vw, 660px"
           quality={80}
           className="figure__image"
         />
       )}
-      {caption && !placeholder ? <figcaption className="figure__caption">{caption}</figcaption> : null}
+      {caption ? <figcaption className="figure__caption">{caption}</figcaption> : null}
     </figure>
   );
 }

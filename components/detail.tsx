@@ -7,6 +7,10 @@ interface DetailProps {
   alt: string;
   caption?: ReactNode;
   placeholder?: boolean;
+  /** Present the image on a warm-tinted canvas with padding around it. Pays
+   *  hardest at this size — a 480px chip on a tinted frame reads as a curated
+   *  specimen. */
+  framed?: boolean;
   width?: number;
   height?: number;
   ratio?: string;
@@ -16,9 +20,19 @@ interface DetailProps {
  * Tight crop, narrower than the prose column. For badges, status chips,
  * a "look here" zoom on one element.
  */
-export function Detail({ src, alt, caption, placeholder, width = 720, height = 540, ratio = '4 / 3' }: DetailProps) {
+export function Detail({
+  src,
+  alt,
+  caption,
+  placeholder,
+  framed,
+  width = 720,
+  height = 540,
+  ratio = '4 / 3',
+}: DetailProps) {
+  const className = `figure figure--detail${framed ? ' figure--framed' : ''}`;
   return (
-    <figure className="figure figure--detail">
+    <figure className={className}>
       {placeholder ? (
         <PlaceholderFrame src={src} caption={caption} ratio={ratio} label="Detail" />
       ) : (
@@ -32,7 +46,7 @@ export function Detail({ src, alt, caption, placeholder, width = 720, height = 5
           className="figure__image"
         />
       )}
-      {caption && !placeholder ? <figcaption className="figure__caption">{caption}</figcaption> : null}
+      {caption ? <figcaption className="figure__caption">{caption}</figcaption> : null}
     </figure>
   );
 }

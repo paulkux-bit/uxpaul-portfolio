@@ -38,6 +38,9 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Case-study raw screenshots (originals stay local; only optimized copies ship).
+public/case-studies/**/_raw/
 next-env.d.ts
 
 # Impeccable critique snapshots (local archive, not source)
