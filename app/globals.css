@@ -1809,7 +1809,8 @@ html.dark .popup-bubble {
   .case-study-prose > .figure--asymmetric-pair,
   .case-study-prose > .figure--bento,
   .case-study-prose > .figure--mode-pair[data-breakout='true'],
-  .case-study-prose > .figure--compare {
+  .case-study-prose > .figure--compare,
+  .case-study-prose > .hero-block {
     width: min(calc(100vw - 4rem), calc(var(--page-max-width) - 4rem));
     max-width: none;
     margin-inline: 0;
