@@ -34,37 +34,53 @@ nda: false
   }}
 />
 
-<div className="eyebrow">The user</div>
+<section className="cs-section cs-section--problem">
+
+<div className="eyebrow">The problem</div>
 
 ## Florida's data coordinator moves cases, not forms.
 
-One of twenty staff at the highest-volume jurisdiction in the country. Fifteen to thirty cases per session, several sessions a week. The legacy fights her every step.
+<p className="section-lede">She runs boating-incident reporting for the highest-volume jurisdiction in the country. Fifteen to thirty cases a session, several sessions a week.</p>
 
-<ol className="problem-list">
-  <li><span className="problem-list__index">01</span><span className="problem-list__text">Cases look complete and bounce.</span></li>
-  <li><span className="problem-list__index">02</span><span className="problem-list__text">Rejection emails name the case, never the field.</span></li>
-  <li><span className="problem-list__index">03</span><span className="problem-list__text">A sixty-day federal clock, always running.</span></li>
-</ol>
+And the legacy system fights her on every one: cases look complete and bounce, rejection emails name the case but never the field, and a sixty-day federal clock never stops running.
 
 <PopUp anchor="courtroom">
 Florida law enforcement uses BARD summary sheets in depositions. When what the officer entered doesn't match what the sheet prints, they testify about a software quirk instead of the incident.
 </PopUp>
 
-<AsymmetricPair
-  ratio="65/35"
+<FramedPair
+  placeholder
   left={{
-    kind: 'image',
-    src: '/case-studies/uscg-bard/incidents-queue.png',
-    alt: 'The BARD Incidents list, showing 62 cases in Current Work with status colors and assignment.',
-    placeholder: true,
-    ratio: '4 / 3',
+    src: '/case-studies/uscg-bard/legacy-dashboard.png',
+    alt: 'The legacy BARD dashboard: dense tables of incident counts and status codes, no summary or signal.',
+    caption: 'The legacy dashboard: tables and status, no signal.',
   }}
   right={{
-    kind: 'text',
-    label: 'The workspace',
-    body: <>The real workspace is a queue, not a form. Count and status do the work before the prose.</>,
+    src: '/case-studies/uscg-bard/legacy-record.png',
+    alt: 'The legacy BARD incident record: a long, flat scroll of fields with no narrative structure.',
+    caption: 'The legacy incident record: long and shapeless.',
   }}
 />
+
+<ol className="thread-cols">
+  <li data-thread="1">
+    <span className="thread-index">01</span>
+    <span className="thread-cols__label">Fifty-six forms, <br />no standard.</span>
+    <p className="thread-cols__note">Every jurisdiction collected the same incident differently, so nothing was comparable.</p>
+  </li>
+  <li data-thread="2">
+    <span className="thread-index">02</span>
+    <span className="thread-cols__label">Endless tables, <br />no insight.</span>
+    <p className="thread-cols__note">The data was all there. It just never told anyone what it meant.</p>
+  </li>
+  <li data-thread="3">
+    <span className="thread-index">03</span>
+    <span className="thread-cols__label">A long, formless <br />record.</span>
+    <p className="thread-cols__note">The page ran long and shapeless, and never said what the Coast Guard needed.</p>
+  </li>
+</ol>
+
+</section>
 
 <div className="eyebrow">The research</div>
 

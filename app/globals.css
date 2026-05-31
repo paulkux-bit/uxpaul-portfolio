@@ -1069,8 +1069,11 @@ body.popup-on {
 }
 
 /* ── H2: section headings ─────────────────────────────────────────────── */
-
-.case-study-prose > h2 {
+/* Descendant (not child) so an h2 wrapped in a .cs-section band keeps its
+   register. Safe: no component renders an h2; flat sections still match.
+   h1 / h3 stay child selectors — relaxing h3 would collide with
+   .case-study-numbers h3. */
+.case-study-prose h2 {
   font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
   font-weight: 600;
   font-stretch: 96%;
@@ -1107,16 +1110,22 @@ body.popup-on {
 /* ── Eyebrow labels ───────────────────────────────────────────────────── */
 
 .eyebrow {
-  font-size: 0.75rem;
+  font-size: 0.875rem; /* 14px — meets the system floor; gains presence over the old 12px */
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: color-mix(in oklch, currentColor 45%, transparent);
+  color: color-mix(in oklch, currentColor 55%, transparent);
   margin: 5rem 0 -1rem;
 }
 
 .eyebrow + h2 {
   margin-top: 1rem;
+}
+
+/* Band sections: clear kicker gap above the heading (was jammed to ~0). Drops
+   the -1rem so .eyebrow + h2's 1rem top reads as a deliberate kicker gap. */
+.cs-section .eyebrow {
+  margin-bottom: 0;
 }
 
 /* ── Meta block ───────────────────────────────────────────────────────── */
@@ -1230,6 +1239,198 @@ body.popup-on {
   letter-spacing: -0.01em;
   color: var(--color-text-primary, currentColor);
   text-wrap: balance;
+}
+
+/* ── Container-width section band (Aaron James model) ─────────────────────
+   A case-study section spans the full article content width; only running
+   body prose stays at the ~64ch reading measure (.case-study-prose p). The
+   band mirrors the shared lg+ breakout rule (≈1807) so its left edge aligns
+   with the Hero and the prose column. Un-rebuilt flat sections keep working
+   in the 660px column; each converts to a band as it is rebuilt. */
+
+.cs-section {
+  /* The section break (the one intentionally-large gap) lives here, on both
+     sides, so it stays a single consistent value: margins collapse with the
+     neighbour (Hero's 6rem bottom, or the next section/eyebrow), giving 6rem
+     between any two sections rather than a compounded stack. */
+  margin: 6rem 0;
+}
+
+.cs-section > :first-child {
+  margin-top: 0;
+}
+
+.cs-section > :last-child {
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .case-study-prose > .cs-section {
+    width: min(calc(100vw - 4rem), calc(var(--page-max-width) - 4rem));
+    max-width: none;
+    margin-inline: 0;
+  }
+}
+
+@media (min-width: 1920px) {
+  .cs-section {
+    margin-block: 8rem;
+  }
+}
+
+/* Heading uses a wider measure in the band than the default 22ch. */
+.cs-section h2 {
+  max-width: 30ch;
+}
+
+/* ── Section lede / standfirst ────────────────────────────────────────────
+   Editorial standfirst: wider and larger than body, short of the full band.
+   Scoped under .case-study-prose so it outweighs `.case-study-prose p`. */
+.case-study-prose .section-lede {
+  font-size: clamp(1.375rem, 1vw + 1.1rem, 1.625rem);
+  line-height: 1.45;
+  font-weight: 400;
+  color: color-mix(in oklch, currentColor 82%, transparent);
+  max-width: 52ch;
+  margin: 1.25rem 0 1rem; /* subtle air before the felt-pain shift; the lede pair stays tight */
+  text-wrap: pretty;
+}
+
+/* ── Two-up framed evidence pair (FramedPair) ─────────────────────────────
+   Two co-equal evidence panels with per-image captions, side by side. Fills
+   its container (in a .cs-section band → half each → ~293px tall at 16:9).
+   Reuses the .figure--framed warm specimen treatment per cell. */
+.framed-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin: 1rem 0 0; /* evidence sits close to the prose it supports */
+}
+
+/* Reduce the preceding paragraph's bottom margin so the evidence hugs the prose
+   (the global p margin-bottom would otherwise floor the collapsed gap at 1.5rem).
+   NOTE: annotation-state-dependent — when the PopUp layer is toggled on and a
+   PopUp renders between this paragraph and the images, the adjacency breaks and
+   the gap reverts to 1.5rem. See docs/bard-animation-plumbing.md. */
+.cs-section p:has(+ .framed-pair) {
+  margin-bottom: 1rem;
+}
+
+.framed-pair .framed-pair__cell {
+  /* Outrank .figure's `margin: 3rem 0 3.5rem` (defined later, equal specificity).
+     Grid items don't collapse margins, so those cell margins were stacking with
+     the row-gap into a ~7rem void between the two stacked images. */
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .framed-pair[data-stack-mobile='true'] {
+    grid-template-columns: 1fr;
+    row-gap: 1rem; /* comfortable-tight stacked vertical gap (now that cell margins are 0) */
+  }
+}
+
+/* ── Three-problem columns — the three-thread spine (THE PROBLEM state) ─────
+   Three equal columns beneath the evidence grid, top hairline across the
+   group, no boxes. The marker (.thread-index) keeps its cross-page
+   .problem-list__index character; here it is block-stacked above the label
+   with margin separation (never glyph-against-text). The label is the Major
+   register (wdth 90%); echoed when 01/02/03 reappear in DESIGN / WHAT CHANGED. */
+.thread-cols {
+  list-style: none;
+  margin: 1.5rem 0 0; /* images → problems: marks the evidence→diagnosis shift, kept tight */
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr; /* stacked below lg; 3 columns only at band width */
+  gap: 0;
+}
+
+.thread-cols li {
+  margin: 0;
+  padding: 1.5rem 0;
+}
+
+.thread-cols li:first-child {
+  padding-top: 0; /* first stacked problem hugs the evidence above */
+}
+
+.thread-cols li + li {
+  border-top: 1px solid color-mix(in oklch, currentColor 16%, transparent);
+}
+
+.thread-index {
+  font-size: clamp(1rem, 0.4vw + 0.85rem, 1.25rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: color-mix(in oklch, currentColor 45%, transparent);
+  font-variant-numeric: tabular-nums;
+}
+
+.thread-cols .thread-index {
+  display: block;
+  margin-bottom: 0.75rem; /* marker → label: balanced against the 32px label */
+}
+
+.thread-cols__label {
+  display: block;
+  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px display register */
+  font-weight: 600; /* match the hero spine — boldness carries down the page */
+  font-stretch: 90%; /* spine identity; compressed-bold ties back to the hero */
+  line-height: 1.12;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary, currentColor);
+  text-wrap: balance;
+}
+
+/* Authored two-line break in the labels is suppressed below lg (titles wrap
+   naturally in the stacked single column) and enabled at lg+ (see the 1024px
+   block) so all three titles are forced to two lines at every desktop width. */
+.thread-cols__label br {
+  display: none;
+}
+
+.thread-cols .thread-cols__note {
+  /* Two classes (0,2,0) to outrank `.case-study-prose p` (0,1,1), which was
+     overriding the margin to `0 0 1.5rem` — i.e. top 0 (crowded the title) and
+     a trapped 1.5rem bottom (compounded the section break). */
+  margin: 1.75rem 0 0; /* title → note: comfortable breath below the two-line title; bottom 0 */
+  max-width: none;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--color-text-muted, currentColor);
+}
+
+/* 3-column grid only at band width (lg+), where columns are ~340px. Below lg the
+   problems stack (the 660px column is too narrow for three columns).
+   Each column is a subgrid participant so the marker / label / note rows share
+   tracks across all three columns: the label track auto-sizes to the tallest
+   label (durable for any line count), so the notes always align to one baseline.
+   With uniform two-line labels it reserves nothing; it's the durable backstop for
+   the reused pattern (DESIGN / WHAT CHANGED) where title lengths vary. Within-
+   column gaps stay as margins (marker margin-bottom, note margin-top), so row-gap
+   is 0. */
+@media (min-width: 1024px) {
+  .thread-cols {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto auto; /* marker / label / note — shared across columns */
+    column-gap: 2rem;
+    row-gap: 0;
+  }
+
+  .thread-cols li {
+    display: grid;
+    grid-row: 1 / -1;
+    grid-template-rows: subgrid;
+    padding: 0;
+  }
+
+  .thread-cols li + li {
+    border-top: none;
+  }
+
+  .thread-cols__label br {
+    display: inline; /* enable the authored break → all three titles forced to two lines */
+  }
 }
 
 /* ── Pull quote ──────────────────────────────────────────────────────── */
