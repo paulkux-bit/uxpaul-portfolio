@@ -121,6 +121,11 @@
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
      because heavy weight reads heavier on the espresso canvas. */
   --mark-weight:            700;
+
+  /* Containment radius for bright UI-capture images on the warm canvas (hero
+     dashboard, PROBLEM legacy screenshots) — one value so they read as one system.
+     Mode-independent. */
+  --radius-image:           12px;
 }
 
 /* ============================================================
@@ -1323,6 +1328,17 @@ body.popup-on {
   margin: 0;
 }
 
+/* PROBLEM legacy screenshots: same containment as the hero dashboard image so the
+   two bright UI captures read as one system — shared radius token, and a dark-mode
+   inset hairline so they don't glare on the espresso canvas (no recolor). */
+.cs-section--problem .framed-pair__cell .figure__image {
+  border-radius: var(--radius-image);
+}
+
+html.dark .cs-section--problem .framed-pair__cell .figure__image {
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
 @media (max-width: 767px) {
   .framed-pair[data-stack-mobile='true'] {
     grid-template-columns: 1fr;
@@ -2246,7 +2262,7 @@ html.dark .figure-placeholder {
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: 12px;
+  border-radius: var(--radius-image);
 }
 
 /* Dark mode: a hairline defines the light screenshot's edge against the espresso

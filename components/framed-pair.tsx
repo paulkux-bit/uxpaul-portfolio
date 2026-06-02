@@ -8,6 +8,11 @@ interface FramedPairItem {
   /** Per-image caption — rendered below each panel (not a shared caption).
    *  ReactNode so authors can include <cite>/<a> if needed. */
   caption?: ReactNode;
+  /** Intrinsic pixel dimensions. Additive — default to 1600×900 (16:9) so existing
+   *  callers are unchanged. Pass the real pixels for non-16:9 art (e.g. 3:2 crops)
+   *  so next/image renders the true ratio instead of letterboxing into 16:9. */
+  width?: number;
+  height?: number;
 }
 
 interface FramedPairProps {
@@ -55,8 +60,8 @@ export function FramedPair({
             <Image
               src={panel.src}
               alt={panel.alt}
-              width={1600}
-              height={900}
+              width={panel.width ?? 1600}
+              height={panel.height ?? 900}
               sizes={sizes}
               quality={85}
               className="figure__image"

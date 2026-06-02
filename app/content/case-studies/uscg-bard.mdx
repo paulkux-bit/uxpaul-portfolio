@@ -41,43 +41,29 @@ nda: false
 
 <p className="section-lede">She runs boating-incident reporting for the highest-volume jurisdiction in the country. Fifteen to thirty cases a session, several sessions a week.</p>
 
-And the legacy system fights her on every one: cases look complete and bounce, rejection emails name the case but never the field, and a sixty-day federal clock never stops running.
+The legacy system fights her on every one: cases look complete and bounce, rejection emails name the case but never the field, and a sixty-day federal clock never stops running.
 
 <PopUp anchor="courtroom">
 Florida law enforcement uses BARD summary sheets in depositions. When what the officer entered doesn't match what the sheet prints, they testify about a software quirk instead of the incident.
 </PopUp>
 
 <FramedPair
-  placeholder
+  framed={false}
   left={{
     src: '/case-studies/uscg-bard/legacy-dashboard.png',
-    alt: 'The legacy BARD dashboard: dense tables of incident counts and status codes, no summary or signal.',
-    caption: 'The legacy dashboard: tables and status, no signal.',
+    width: 1463,
+    height: 971,
+    alt: 'Screenshot of the legacy BARD dashboard, a dense table listing boating-incident cases by ID, date, water body, county, vessel and casualty counts, and status.',
+    caption: 'The legacy dashboard: every case is a row, with no way to see which one is closest to breaching the clock.',
   }}
   right={{
-    src: '/case-studies/uscg-bard/legacy-record.png',
-    alt: 'The legacy BARD incident record: a long, flat scroll of fields with no narrative structure.',
-    caption: 'The legacy incident record: long and shapeless.',
+    src: '/case-studies/uscg-bard/legacy-report.png',
+    width: 1866,
+    height: 1242,
+    alt: 'Screenshot of the legacy Florida Boating Accident Report, a single long form densely packed with input fields for incident type, location, conditions, and reporting party.',
+    caption: 'The incident record: one long form with no shape, the same whether the case is a near-miss or a fatality.',
   }}
 />
-
-<ol className="thread-cols">
-  <li data-thread="1">
-    <span className="thread-index">01</span>
-    <span className="thread-cols__label">Fifty-six forms, <br />no standard.</span>
-    <p className="thread-cols__note">Every jurisdiction collected the same incident differently, so nothing was comparable.</p>
-  </li>
-  <li data-thread="2">
-    <span className="thread-index">02</span>
-    <span className="thread-cols__label">Endless tables, <br />no insight.</span>
-    <p className="thread-cols__note">The data was all there. It just never told anyone what it meant.</p>
-  </li>
-  <li data-thread="3">
-    <span className="thread-index">03</span>
-    <span className="thread-cols__label">A long, formless <br />record.</span>
-    <p className="thread-cols__note">The page ran long and shapeless, and never said what the Coast Guard needed.</p>
-  </li>
-</ol>
 
 </section>
 
