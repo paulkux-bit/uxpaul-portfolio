@@ -1497,7 +1497,10 @@ body.popup-on {
 @media (min-width: 1024px) {
   .friction-beat {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); /* text ~60% | figure ~40% */
+    /* Figure capped at a fixed ~300px supporting size (was ~422px / 0.8fr — it
+       towered over the ~180px text block, reading co-equal + bottom-weighted).
+       Now ≈ text-block height: a supporting illustration, not a peer block. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 300px);
     gap: 2rem;
     align-items: start;
   }
