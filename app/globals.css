@@ -2236,82 +2236,47 @@ html.dark .figure-placeholder {
   position: relative;
 }
 
+/* 4:5 wrapper: the screenshot fills it edge-to-edge (cover), clipped to the radius.
+   border-radius is on-scale raw px — there is no radius token in the system. */
 .hero-block__image-frame {
-  background: color-mix(in oklch, currentColor 6%, transparent);
-  padding: 2.5rem;
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
   border-radius: 12px;
-  box-sizing: border-box;
-  /* min-height carries cell weight while the placeholder is up; once the real
-     image lands, the natural image height takes over. */
-  min-height: 28rem;
 }
 
-@media (max-width: 640px) {
-  .hero-block__image-frame {
-    padding: 1.5rem;
-    min-height: 18rem;
-  }
+/* Dark mode: a hairline defines the light screenshot's edge against the espresso
+   canvas. Inset shadow → no layout shift, follows the radius. */
+html.dark .hero-block__image-frame {
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
-.hero-block__image-img,
+.hero-block__image-img {
+  object-fit: cover;
+  object-position: top; /* next/image `fill` provides position + 100% size */
+}
+
 .hero-block__image-frame .figure-placeholder {
   display: block;
   width: 100%;
-  height: auto;
   border-radius: 6px;
 }
 
 /* ── Callout ─────────────────────────────────────────────────────────── */
 
+/* Contained info-card ON the image at ALL breakpoints — bottom-left, inset 1.25rem
+   (the wrapper has no padding now, so this lands on the image). Elevation + hairline
+   keep it crisp over the light dashboard; --shadow-hover is mode-aware. */
 .hero-block__callout {
-  background: var(--bg-canvas);
-  border: 1px solid var(--border-default);
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  max-width: min(78%, 21rem);
+  background: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-hover);
   border-radius: 8px;
   padding: 1.125rem 1.25rem;
-  margin-top: 1rem;
-}
-
-@media (min-width: 1024px) {
-  .hero-block__callout {
-    position: absolute;
-    left: -1.5rem;
-    bottom: -1.5rem;
-    margin-top: 0;
-    max-width: 22rem;
-    box-shadow:
-      0 1px 2px oklch(0.18 0.012 50 / 0.04),
-      0 16px 36px -18px oklch(0.18 0.012 50 / 0.22);
-  }
-  html.dark .hero-block__callout {
-    box-shadow:
-      0 1px 2px oklch(0 0 0 / 0.18),
-      0 16px 36px -18px oklch(0 0 0 / 0.55);
-  }
-}
-
-/* Mobile (below the lg stacking breakpoint): contain the callout inside the image
-   as a compact info-card, bottom-left, inset past the frame padding so it sits
-   inside the image — not over the warm frame border. Elevation + hairline keep it
-   crisp over the light dashboard image (it must not wash out). Desktop (lg+) above
-   is untouched. */
-@media (max-width: 1023px) {
-  .hero-block__callout {
-    position: absolute;
-    bottom: 2.5rem; /* frame pad 1.5rem (≤640) + ~1rem inset */
-    left: 2.5rem;
-    margin-top: 0;
-    max-width: 75%;
-    background: var(--bg-surface-elevated);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-hover);
-  }
-}
-
-@media (min-width: 641px) and (max-width: 1023px) {
-  .hero-block__callout {
-    bottom: 3.5rem; /* frame pad is 2.5rem in this tier + ~1rem inset */
-    left: 3.5rem;
-  }
 }
 
 .hero-block__callout-label {
@@ -2319,7 +2284,7 @@ html.dark .figure-placeholder {
   line-height: 1.3;
   letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: var(--color-popup);       /* persimmon — the hero's sanctioned single use */
+  color: var(--text-secondary);    /* eyebrow register — persimmon stays reserved for the PopUp layer */
   margin: 0 0 0.5rem;
   font-optical-sizing: none;
   font-stretch: 90%;

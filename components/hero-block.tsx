@@ -21,9 +21,10 @@ type HeroBlockProps = {
 };
 
 /**
- * Asymmetric case-study hero. Type left (~45%), framed image right (~55%) at
- * lg+; stacked single column at <lg with the callout below the image (not
- * overlapping). Server-rendered.
+ * Asymmetric case-study hero. Type left (~52%), image right (~48%) at lg+;
+ * stacked single column at <lg. The image is a 4:5 cover screenshot filling its
+ * wrapper (overflow-hidden, top-anchored); the callout is a compact info-card
+ * contained ON the image (bottom-left, inset) at all breakpoints. Server-rendered.
  *
  * Typography uses explicit font-variation-settings per the Phase 1 Tomás spec —
  * see .hero-block__sentence--open (wdth 100) and --anxious (wdth 88) in
@@ -63,7 +64,7 @@ export function HeroBlock({ eyebrow, title, role, image, callout }: HeroBlockPro
       <div className="hero-block__image">
         <div className="hero-block__image-frame">
           {image.placeholder ? (
-            <PlaceholderFrame src={image.src} ratio="16 / 10" />
+            <PlaceholderFrame src={image.src} ratio="4 / 5" />
           ) : (
             /* Hardcoded `priority` — this <Image> is the LCP for every page that
                mounts <HeroBlock />. Not exposed as a prop; sharing the LCP slot
@@ -73,14 +74,12 @@ export function HeroBlock({ eyebrow, title, role, image, callout }: HeroBlockPro
             <Image
               src={image.src}
               alt={image.alt}
-              width={2400}
-              height={1500}
+              fill
               priority
-              /* sizes math accounts for both the page-container inline padding
-                 (1.5rem mobile / 2rem md+, each side) AND the .hero-block__image-frame
-                 padding (1.25rem at <=640 / 2rem above, each side) at <lg, plus the
-                 3rem grid gap + 4rem frame padding at lg+. */
-              sizes="(max-width: 640px) calc(100vw - 5.5rem), (max-width: 1023px) calc(100vw - 7rem), calc((min(100vw - 4rem, 1088px) - 3rem) * 0.55 - 4rem)"
+              /* The wrapper is a sized 4:5 box; `fill` + object-cover (CSS) lets the
+                 screenshot fill it edge-to-edge. sizes ≈ the image cell: ~48% of the
+                 1088 band at lg+, full content width below. */
+              sizes="(min-width: 1024px) 520px, (min-width: 768px) calc(100vw - 4rem), calc(100vw - 3rem)"
               quality={90}
               className="hero-block__image-img"
             />
