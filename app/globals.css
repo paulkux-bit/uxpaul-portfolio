@@ -1480,17 +1480,18 @@ body.popup-on {
   max-width: 64ch;
 }
 
+/* The figure floats on paper — no box/border/background. color sets the ink the
+   SVG's fill="currentColor" inherits, so it renders in body-text ink and flips with
+   theme. Lever: step to var(--text-secondary) if full ink reads heavy. */
 .oku-figure {
   margin: 1.5rem 0 0; /* mobile (stacked): scene → figure */
+  color: var(--text-primary);
 }
 
-/* Lighten the oku placeholder (scoped — does NOT touch the shared .figure-placeholder):
-   a faint hairline wireframe frame on near-paper, so reserved space reads light, not as a
-   gray block / void on mobile. The FINAL oku figure floats borderless — currentColor line
-   art on paper, no fill/box (see oku-figure.tsx contract); this frame is only the stand-in. */
-.oku-figure .figure-placeholder {
-  background: transparent;
-  border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
+.oku-figure svg {
+  display: block;
+  width: 100%;
+  height: auto; /* scales to the SVG's own ~16:9 viewBox */
 }
 
 @media (min-width: 1024px) {
