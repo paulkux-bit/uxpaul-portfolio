@@ -32,6 +32,25 @@ while annotations are disabled (the default today). When the PopUp layer is buil
 images, so the `:has(+ .framed-pair)` selector stops matching and the gap reverts to 1.5rem.
 Recheck/adjust the evidence-gap spacing when the annotation layer ships.
 
+## THREE FRICTIONS — oku figures (built as placeholders, June 2026)
+
+The three friction beats each carry an `OkuFigure` (`components/oku-figure.tsx`) — variants
+`forms-diverge` / `insight-trapped` / `manual-reconcile`, depicting the FRICTION (not the fix).
+Static placeholders now. The full animation contract lives in the component's doc comment: inline
+SVG, `currentColor` stroke, no fills/monochrome, scroll-triggered play-once via IntersectionObserver
+(reuse `popup.tsx`), `prefers-reduced-motion` → final static frame. Placeholder box and animation
+share the locked `OKU_RATIO` (3/2) → drop-in with zero layout shift; `OkuFigure` becomes a client
+component then, the MDX section stays server. **DESIGN will add resolution-counterpart variants so
+the figures rhyme by thread number (01/02/03).**
+
+## Parked for DESIGN
+
+- **Filter-taxonomy `SmallMultiples`** (Status / Event / Cause / Severity popovers, caption
+  "Filter taxonomy mirrors the doctrine analysts use. The vocabulary came from the field.") —
+  pulled from THE OPPORTUNITY build (it's a design artifact, not did/found/opened). Hold it for the
+  DESIGN/system section, where the "vocabulary came from the field" caption becomes the
+  research→design bridge. Markup preserved in git history (commit before this build).
+
 ## Parked for DESIGN (Thread 1)
 
 The redesigned-queue image (`/case-studies/uscg-bard/incidents-queue.png`) and its line

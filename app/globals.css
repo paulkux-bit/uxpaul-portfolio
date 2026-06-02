@@ -1433,6 +1433,79 @@ body.popup-on {
   }
 }
 
+/* Screen-reader-only utility (visually hidden, still announced). Used by
+   case-study-card.tsx and available for any visually-hidden label. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── THREE FRICTIONS beats — stacked full-width [text | oku figure] units ───
+   Each beat its own vertical moment. Marker + Major-register headline rhyme
+   with THE PROBLEM by number (data-thread carries identity only). */
+.friction-beats {
+  list-style: none;
+  margin: 2rem 0 0; /* opener → first beat */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem; /* between beats — breathing room (whitespace, no rule); existing case-study value */
+}
+
+.friction-beat .thread-index {
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+.friction-beat__headline {
+  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
+  font-weight: 550; /* moderate, not heavy — easy and light */
+  font-stretch: 94%; /* open/relaxed; a subtle step below the H2's 96%, not the 90% compressed register */
+  line-height: 1.15;
+  letter-spacing: 0; /* airy, not tense */
+  color: var(--color-text-primary, currentColor);
+  margin: 0 0 1.25rem; /* generous space to the scene */
+  text-wrap: balance;
+}
+
+.friction-beat__scene {
+  margin: 0;
+  max-width: 64ch;
+}
+
+.oku-figure {
+  margin: 1.5rem 0 0; /* mobile (stacked): scene → figure */
+}
+
+/* Lighten the oku placeholder (scoped — does NOT touch the shared .figure-placeholder):
+   a faint hairline wireframe frame on near-paper, so reserved space reads light, not as a
+   gray block / void on mobile. The FINAL oku figure floats borderless — currentColor line
+   art on paper, no fill/box (see oku-figure.tsx contract); this frame is only the stand-in. */
+.oku-figure .figure-placeholder {
+  background: transparent;
+  border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
+}
+
+@media (min-width: 1024px) {
+  .friction-beat {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); /* text ~60% | figure ~40% */
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .friction-beat .oku-figure {
+    margin: 0; /* figure top-aligns with the text block in its column */
+  }
+}
+
 /* ── Pull quote ──────────────────────────────────────────────────────── */
 
 .pull-quote {
@@ -2213,6 +2286,31 @@ html.dark .figure-placeholder {
     box-shadow:
       0 1px 2px oklch(0 0 0 / 0.18),
       0 16px 36px -18px oklch(0 0 0 / 0.55);
+  }
+}
+
+/* Mobile (below the lg stacking breakpoint): contain the callout inside the image
+   as a compact info-card, bottom-left, inset past the frame padding so it sits
+   inside the image — not over the warm frame border. Elevation + hairline keep it
+   crisp over the light dashboard image (it must not wash out). Desktop (lg+) above
+   is untouched. */
+@media (max-width: 1023px) {
+  .hero-block__callout {
+    position: absolute;
+    bottom: 2.5rem; /* frame pad 1.5rem (≤640) + ~1rem inset */
+    left: 2.5rem;
+    margin-top: 0;
+    max-width: 75%;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-hover);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1023px) {
+  .hero-block__callout {
+    bottom: 3.5rem; /* frame pad is 2.5rem in this tier + ~1rem inset */
+    left: 3.5rem;
   }
 }
 

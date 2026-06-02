@@ -10,6 +10,7 @@ import { SmallMultiples } from '@/components/small-multiples';
 import { AsymmetricPair } from '@/components/asymmetric-pair';
 import { BentoGrid } from '@/components/bento-grid';
 import { FramedPair } from '@/components/framed-pair';
+import { OkuFigure } from '@/components/oku-figure';
 import { HeroBlock } from '@/components/hero-block';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -26,6 +27,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     AsymmetricPair,
     BentoGrid,
     FramedPair,
+    OkuFigure,
     HeroBlock,
   };
 }

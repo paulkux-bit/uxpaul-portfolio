@@ -82,44 +82,50 @@ Florida law enforcement uses BARD summary sheets in depositions. When what the o
 
 </section>
 
-<div className="eyebrow">The research</div>
+<section className="cs-section cs-section--frictions">
+
+<div className="eyebrow">Three frictions</div>
 
 ## When users build software to work around your software, the verdict is already in.
 
-Twenty interviews across every volume tier — Florida to the territories. Mostly remote. The screen-shares were the unlock.
-
-Watching people work, I kept seeing the same thing: a dozen tabs open. Everyone reconciled the same record across views the system refused to reconcile for them.
+I talked to twenty people who do the work — from the busiest states to the smallest territories, mostly over screen-share. Watching them work was the unlock. The same thing kept turning up: they'd quietly built their own tools just to get around the system.
 
 <PopUp anchor="hook">
 The first screen-share, the coordinator pulled up the same field across two state submissions. They didn't match. The redesign question changed in that minute.
 </PopUp>
 
-Then I looked at the Coast Guard side. Reviewers had built their own tools to make the legacy readable. The case for rebuilding had already been written, in shadow IT.
-
-<blockquote className="pull-quote">
-  <p>State coordinators have been wanting BARD to be improved for years.</p>
-  <cite>A twelve-year Florida boating-safety coordinator</cite>
-</blockquote>
-
-<SmallMultiples
-  items={[
-    { src: '/case-studies/uscg-bard/filter-status.png',   alt: 'Status filter popover',   label: 'Status' },
-    { src: '/case-studies/uscg-bard/filter-event.png',    alt: 'Event filter popover',    label: 'Event' },
-    { src: '/case-studies/uscg-bard/filter-cause.png',    alt: 'Cause filter popover',    label: 'Cause' },
-    { src: '/case-studies/uscg-bard/filter-severity.png', alt: 'Severity filter popover', label: 'Severity' },
-  ]}
-  caption="Filter taxonomy mirrors the doctrine analysts use. The vocabulary came from the field."
-  placeholder
-  columns={4}
-/>
-
 <PopUp anchor="research">
-The all-56-states rule arrived screen-share by screen-share, until I reached for an unexpected reference: Facebook's "View As." The form needed the same move: one record, two readings, neither side forced to adapt.
+The all-56-states rule arrived screen-share by screen-share, until I reached for an unexpected reference: Facebook's "View As." The form needed the same move: let each side read the same record its own way, neither forced to adapt.
 </PopUp>
 
-<div className="eyebrow">The reframe</div>
+<ol className="friction-beats">
+  <li className="friction-beat" data-thread="1">
+    <div className="friction-beat__text">
+      <span className="thread-index">01</span>
+      <h3 className="friction-beat__headline">Fifty-six forks</h3>
+      <p className="friction-beat__scene">Standardization had been tried before and always framed as all-or-nothing, so it always lost. Fifty-six jurisdictions had quietly forked the form to fit their own record-keeping. Not resistance, but rational adaptations to a standard that never bent.</p>
+    </div>
+    <OkuFigure variant="forms-diverge" placeholder alt="Fifty-six state forms diverging from a common origin, each adapting away from the others." />
+  </li>
+  <li className="friction-beat" data-thread="2">
+    <div className="friction-beat__text">
+      <span className="thread-index">02</span>
+      <h3 className="friction-beat__headline">Insight, once a year</h3>
+      <p className="friction-beat__scene">The national boating-safety picture existed for exactly one month a year, hand-cranked every spring from an Access dump. The data was there all twelve months. The meaning only showed up in one.</p>
+    </div>
+    <OkuFigure variant="insight-trapped" placeholder alt="A year of incident data with meaning lit in only a single month." />
+  </li>
+  <li className="friction-beat" data-thread="3">
+    <div className="friction-beat__text">
+      <span className="thread-index">03</span>
+      <h3 className="friction-beat__headline">The reconciliation tax</h3>
+      <p className="friction-beat__scene">A coordinator filing a case kept two tabs side by side: her narrative in one, the USCG required view in the other, reconciling them by hand. The system held one record but spoke two languages, and made her the translator.</p>
+    </div>
+    <OkuFigure variant="manual-reconcile" placeholder alt="One incident record forced into two readings, reconciled by hand across two open tabs." />
+  </li>
+</ol>
 
-## One record had to carry two readings.
+</section>
 
 <div className="eyebrow">The principle</div>
 
