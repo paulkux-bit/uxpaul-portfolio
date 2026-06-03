@@ -40,7 +40,7 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
     >
       <div
         class="figure-placeholder"
-        style="aspect-ratio: 16 / 10;"
+        style="aspect-ratio: 4 / 5;"
       />
     </div>
     <aside
