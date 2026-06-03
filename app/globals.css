@@ -1106,6 +1106,14 @@ body.popup-on {
   max-width: 64ch;
 }
 
+/* Body prose in the rebuilt band sections wraps prettily (no one-word last-line
+   orphans): fixes the PROBLEM sub-lede ("running."), the FRICTIONS opener and the
+   friction scenes. Adds only text-wrap; margin/measure stay from `.case-study-prose p`. */
+.cs-section--problem p,
+.cs-section--frictions p {
+  text-wrap: pretty;
+}
+
 .case-study-prose em {
   font-style: normal;
   font-weight: 500;
@@ -1117,9 +1125,10 @@ body.popup-on {
 .eyebrow {
   font-size: 0.875rem; /* 14px — meets the system floor; gains presence over the old 12px */
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.08em;          /* canonical text-eyebrow tracking (docs §490) — matches the hero eyebrow */
+  line-height: 1.4;
   text-transform: uppercase;
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted);        /* named token, parity with the hero eyebrow (was color-mix 55%) */
   margin: 5rem 0 -1rem;
 }
 
@@ -1298,7 +1307,7 @@ body.popup-on {
   color: color-mix(in oklch, currentColor 82%, transparent);
   max-width: 52ch;
   margin: 1.25rem 0 1rem; /* subtle air before the felt-pain shift; the lede pair stays tight */
-  text-wrap: pretty;
+  text-wrap: balance;     /* display-tier standfirst: even the lines, no short tail (like h2/headlines/labels) */
 }
 
 /* ── Two-up framed evidence pair (FramedPair) ─────────────────────────────
@@ -2153,18 +2162,17 @@ html.dark .figure-placeholder {
    HERO BLOCK — Case-study asymmetric hero
    Type left (~45%) / framed image right (~55%) at lg+; stacked at <lg.
    Optional Insight Engine callout overlaps the image at lg+; sits below
-   it at <lg. Every typographic element below carries explicit
-   font-variation-settings (see docs/typography-system.md §7 — the
-   sanctioned manual-axis case).
+   it at <lg.
 
-   CASCADE ORDER inside each typographic rule is intentional:
-     1. font-optical-sizing: none      (FVS overrides auto — must opt out)
-     2. font-stretch: X%                (fallback for engines without FVS)
-     3. font-weight: Y                  (fallback)
-     4. font-variation-settings: ...    (LAST — wins over the fallbacks in
-                                         every engine that supports it)
-   Do NOT reorder. font-variation-settings before the fallbacks lets the
-   fallbacks shadow the explicit axis values in dual-support browsers.
+   The type register (eyebrow / title / role) uses the standard axis
+   properties — font-optical-sizing: auto + font-stretch + font-weight —
+   so optical sizing tracks the rendered size (the display title gets the
+   expressive 96pt cut where it's large, a readable cut at the mobile floor)
+   and the wdth contrast (100 vs 88) maps straight to the wdth axis. No FVS.
+
+   The callout (.hero-block__callout-*) is the one element that still pins
+   axes via font-variation-settings; its cascade order there (FVS LAST, after
+   the font-stretch/font-weight fallbacks) is intentional — do not reorder.
    ============================================================ */
 
 .hero-block {
@@ -2198,10 +2206,8 @@ html.dark .figure-placeholder {
   text-transform: uppercase;
   color: var(--text-muted);
   margin: 0;
-  font-optical-sizing: none;
   font-stretch: 100%;
   font-weight: 600;
-  font-variation-settings: 'wght' 600, 'wdth' 100, 'opsz' 14;
 }
 
 .hero-block__title {
@@ -2214,14 +2220,12 @@ html.dark .figure-placeholder {
 
 .hero-block__sentence {
   display: block;
-  font-optical-sizing: none;
 }
 
 .hero-block__sentence--open {
   letter-spacing: -0.025em;
   font-stretch: 100%;
   font-weight: 600;
-  font-variation-settings: 'wght' 600, 'wdth' 100, 'opsz' 96;
 }
 
 /* wdth 88 — deliberate override of the system's locked "92-94% squeezed at
@@ -2234,7 +2238,6 @@ html.dark .figure-placeholder {
   letter-spacing: -0.02em;
   font-stretch: 88%;
   font-weight: 600;
-  font-variation-settings: 'wght' 600, 'wdth' 88, 'opsz' 96;
 }
 
 .hero-block__role {
@@ -2243,11 +2246,10 @@ html.dark .figure-placeholder {
   max-width: 38ch;
   color: var(--text-primary);
   margin: 0;
-  font-optical-sizing: none;
   font-stretch: 100%;
   /* wght 500 — authored credit register, not body prose */
   font-weight: 500;
-  font-variation-settings: 'wght' 500, 'wdth' 100, 'opsz' 18;
+  text-wrap: pretty;               /* credit line: no one-word last line at 38ch (body→pretty register) */
 }
 
 /* ── Image cell ──────────────────────────────────────────────────────── */
