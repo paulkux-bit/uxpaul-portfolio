@@ -2291,7 +2291,7 @@ html.dark .hero-block__image-frame {
   position: absolute;
   bottom: 1.25rem;
   left: 1.25rem;
-  max-width: min(78%, 21rem);
+  max-width: min(78%, 18rem); /* sized to the wrap so the card hugs the text on the right; 78% keeps mobile inset */
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-hover);
@@ -2318,7 +2318,7 @@ html.dark .hero-block__image-frame {
 .hero-block__callout .hero-block__callout-body {
   font-size: 1.125rem;
   line-height: 1.4;
-  max-width: 30ch;
+  /* No own measure — the card's content box is the single measure, so the card hugs the text. */
   color: var(--text-primary);
   margin: 0;                       /* beats .case-study-prose p's 1.5rem bottom — no trapped/bottom-heavy space */
   font-optical-sizing: none;
@@ -2326,7 +2326,7 @@ html.dark .hero-block__image-frame {
   /* wght 500 — featured insight, not body prose */
   font-weight: 500;
   font-variation-settings: 'wght' 500, 'wdth' 100, 'opsz' 18;
-  text-wrap: balance;
+  text-wrap: pretty;               /* fills the measure with a tidy rag (no widow); balance evened lines short → right-side band */
 }
 
 /* ── Reduced motion ──────────────────────────────────────────────────── */
