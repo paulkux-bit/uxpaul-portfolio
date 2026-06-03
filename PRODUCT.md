@@ -47,6 +47,7 @@ Warm, refined, inventive. Confident without being cold. Personal without being c
 3. **First-scroll conviction.** Five minutes, hundreds of portfolios. The opening must make the case before anyone scrolls to a case study. Structure and quality do the talking.
 4. **Craft as proof.** The portfolio itself is a case study. Interaction design, typography, and motion quality demonstrate capability directly. Practice what you preach.
 5. **Senior register.** Warm and personal, never casual or performative. Personality expressed through structural choices and voice, not decoration.
+6. **Rhythm is the baseline; deviation is a tool.** A consistent spacing/layout grid is the default, but intentional departure from it is a craft move, not a defect. Distinguish chosen-irregular (deliberate tension, overlap, asymmetry, density — a strength; respect it) from accidental-irregular (an unowned value off the grid that nobody decided on — a flaw; flag it). Flag only the accidents. Example: the mobile callout overlapping the hero image is chosen tension (keep); a 28px heading margin nobody chose is an accident (snap to grid).
 
 ## Accessibility & Inclusion
 
