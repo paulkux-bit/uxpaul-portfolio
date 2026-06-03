@@ -1101,7 +1101,10 @@ body.popup-on {
 
 /* ── Body paragraphs ──────────────────────────────────────────────────── */
 
-.case-study-prose p {
+/* :where() pins this at specificity 0,0,1 so component margins (.hero-block__eyebrow/__role,
+   .friction-beat__scene, etc.) win naturally — at 0,1,1 it had silently overridden them. It's
+   unlayered, so it still beats Tailwind preflight's layered `p { margin: 0 }`. */
+:where(.case-study-prose) p {
   margin: 0 0 1.5rem;
   max-width: 64ch;
 }
@@ -1318,16 +1321,16 @@ body.popup-on {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin: 1rem 0 0; /* evidence sits close to the prose it supports */
+  margin: 2rem 0 0; /* prose → evidence step (2rem); single-owned — the preceding p zeros its bottom */
 }
 
-/* Reduce the preceding paragraph's bottom margin so the evidence hugs the prose
-   (the global p margin-bottom would otherwise floor the collapsed gap at 1.5rem).
-   NOTE: annotation-state-dependent — when the PopUp layer is toggled on and a
-   PopUp renders between this paragraph and the images, the adjacency breaks and
-   the gap reverts to 1.5rem. See docs/bard-animation-plumbing.md. */
+/* Zero the preceding paragraph's bottom margin so .framed-pair's margin-top solely owns the
+   prose→evidence gap (single-owned 2rem; 0 + 2rem whether margins collapse or add).
+   NOTE: annotation-state-dependent — when the PopUp layer is toggled on a PopUp renders between
+   this paragraph and the images, the adjacency breaks and the gap reverts to the global 1.5rem.
+   See docs/bard-animation-plumbing.md. */
 .cs-section p:has(+ .framed-pair) {
-  margin-bottom: 1rem;
+  margin-bottom: 0;
 }
 
 .framed-pair .framed-pair__cell {
@@ -1481,7 +1484,8 @@ html.dark .cs-section--problem .framed-pair__cell .figure__image {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 3.5rem; /* between beats — breathing room (whitespace, no rule); existing case-study value */
+  gap: 3.5rem; /* between beats — intentional off-scale exception for a mid-tier sub-grouping:
+                  sits between the 2rem sub-group step and the 6rem section break (whitespace, no rule) */
 }
 
 .friction-beat .thread-index {
@@ -1509,7 +1513,7 @@ html.dark .cs-section--problem .framed-pair__cell .figure__image {
    SVG's fill="currentColor" inherits, so it renders in body-text ink and flips with
    theme. Lever: step to var(--text-secondary) if full ink reads heavy. */
 .oku-figure {
-  margin: 1.5rem 0 0; /* mobile (stacked): scene → figure */
+  margin: 0.75rem 0 0; /* mobile (stacked): scene → figure, kept tight so the figure stays attached */
   color: var(--text-primary);
 }
 
@@ -2179,7 +2183,7 @@ html.dark .figure-placeholder {
   display: grid;
   grid-template-columns: 1fr;
   gap: 2.5rem;
-  margin: 4rem 0 5rem;
+  margin: 6rem 0; /* even top/bottom on the section-break value; bottom collapses with PROBLEM's 6rem */
 }
 
 @media (min-width: 1024px) {
@@ -2187,7 +2191,12 @@ html.dark .figure-placeholder {
     grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
     gap: 4rem;
     align-items: center;
-    margin: 5rem 0 6rem;
+  }
+}
+
+@media (min-width: 1920px) {
+  .hero-block {
+    margin-block: 8rem; /* mirror .cs-section's 2xl step so the viewport rhythm stays continuous */
   }
 }
 
