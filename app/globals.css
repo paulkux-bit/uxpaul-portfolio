@@ -1512,7 +1512,7 @@ body.popup-on {
    theme. Lever: step to var(--text-secondary) if full ink reads heavy. */
 .oku-figure {
   margin: 0.75rem 0 0; /* mobile (stacked): scene → figure, kept tight so the figure stays attached */
-  color: var(--text-primary); /* light/Paper: full ink, stable (no vibration) */
+  color: var(--text-secondary); /* light/Paper: supporting weight (stepped down from primary so the figure recedes; dark override below wins in Low Light) */
 }
 
 /* Dark/Low Light: dim the figure ink from primary to muted so the cream-on-espresso
