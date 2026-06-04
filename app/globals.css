@@ -1307,7 +1307,7 @@ body.popup-on {
   font-size: clamp(1.375rem, 1vw + 1.1rem, 1.625rem);
   line-height: 1.45;
   font-weight: 400;
-  color: color-mix(in oklch, currentColor 82%, transparent);
+  color: var(--text-secondary); /* standfirst: dimmed-from-primary (≈ the old currentColor 82% mix), now a token */
   max-width: 52ch;
   margin: 1.25rem 0 1rem; /* subtle air before the felt-pain shift; the lede pair stays tight */
   text-wrap: balance;     /* display-tier standfirst: even the lines, no short tail (like h2/headlines/labels) */
@@ -1341,13 +1341,11 @@ body.popup-on {
 }
 
 /* PROBLEM legacy screenshots: same containment as the hero dashboard image so the
-   two bright UI captures read as one system — shared radius token, and a dark-mode
-   inset hairline so they don't glare on the espresso canvas (no recolor). */
+   two bright UI captures read as one system — shared radius token, and an inset
+   hairline in BOTH modes (parity) so the panels keep a defined edge against cream
+   (Paper) and espresso (Low Light). Mode-aware via --border-subtle; no recolor. */
 .cs-section--problem .framed-pair__cell .figure__image {
   border-radius: var(--radius-image);
-}
-
-html.dark .cs-section--problem .framed-pair__cell .figure__image {
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
@@ -1390,7 +1388,7 @@ html.dark .cs-section--problem .framed-pair__cell .figure__image {
   font-size: clamp(1rem, 0.4vw + 0.85rem, 1.25rem);
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: color-mix(in oklch, currentColor 45%, transparent);
+  color: var(--text-muted); /* quiet 01/02/03 marker — AA-normal at the 16px floor (not large-bold, so subtle undershoots) */
   font-variant-numeric: tabular-nums;
 }
 
@@ -1499,7 +1497,7 @@ html.dark .cs-section--problem .framed-pair__cell .figure__image {
   font-stretch: 94%; /* open/relaxed; a subtle step below the H2's 96%, not the 90% compressed register */
   line-height: 1.15;
   letter-spacing: 0; /* airy, not tense */
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary); /* canonical token (was the --color-text-primary alias) */
   margin: 0 0 1.25rem; /* generous space to the scene */
   text-wrap: balance;
 }
@@ -1514,7 +1512,15 @@ html.dark .cs-section--problem .framed-pair__cell .figure__image {
    theme. Lever: step to var(--text-secondary) if full ink reads heavy. */
 .oku-figure {
   margin: 0.75rem 0 0; /* mobile (stacked): scene → figure, kept tight so the figure stays attached */
-  color: var(--text-primary);
+  color: var(--text-primary); /* light/Paper: full ink, stable (no vibration) */
+}
+
+/* Dark/Low Light: dim the figure ink from primary to muted so the cream-on-espresso
+   line stops optically vibrating at rest, while staying well above the 3:1 graphics
+   floor. Per-mode wrapper color only — the SVG (currentColor) stays the single source.
+   By-eye dial: step to --text-subtle if it still buzzes. */
+html.dark .oku-figure {
+  color: var(--text-muted);
 }
 
 .oku-figure svg {
@@ -2274,11 +2280,9 @@ html.dark .figure-placeholder {
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius-image);
-}
-
-/* Dark mode: a hairline defines the light screenshot's edge against the espresso
-   canvas. Inset shadow → no layout shift, follows the radius. */
-html.dark .hero-block__image-frame {
+  /* Hairline defines the screenshot's edge in BOTH modes (parity): the light panel
+     against cream (Paper) and against espresso (Low Light). Mode-aware via
+     --border-subtle; inset → no layout shift, follows the radius. */
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
