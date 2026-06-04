@@ -1866,7 +1866,7 @@ html.dark .popup-bubble {
   margin-top: 1rem;
   font-size: 0.875rem;
   line-height: 1.5;
-  color: color-mix(in oklch, currentColor 60%, transparent);
+  color: var(--text-muted); /* AA-normal floor at 14px in both modes (was a currentColor 60% mix, sub-AA in dark) */
   text-wrap: pretty;
   max-width: 56ch;
 }
