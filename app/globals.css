@@ -2089,6 +2089,160 @@ html.dark .popup-bubble {
   color: color-mix(in oklch, currentColor 55%, transparent);
 }
 
+/* ── Resolution bento (Show the Work) ─────────────────────────────────────
+   Ramp model: similar-weight cards per block; emphasis from card count +
+   position, never one tile bigger than its row-mates. Sibling to .figure--bento,
+   NOT an extension. Structure is PER VISUAL ROW, not one block-spanning grid:
+   each row is its own grid (repeat(2|3,1fr)) with a 2-track media/caption subgrid
+   so captions baseline-lock ACROSS the row's cards even when they wrap to
+   different line counts. Rows are stacked by a flex parent with an independent
+   row→row gap — that's what lets media→caption stay tight (0.75rem) while row→row
+   is looser (1.25rem); a single spanning grid would force one uniform gap, and
+   its inter-row column gaps wouldn't align across a 2-up vs 3-up row anyway.
+   Three crop ratios only (16:10, 3:4, 1:1), set inline per row, varied by row. */
+
+.resolution-block {
+  margin: 0;
+}
+
+.resolution-block + .resolution-block {
+  margin-top: 2rem; /* block → block evidence step */
+}
+
+.resolution-block .thread-index {
+  display: block;
+  margin-bottom: 0.75rem; /* spine marker → headline; reuses the friction-beat marker character */
+}
+
+/* Resolution heading — rhymes .friction-beat__headline (same display register:
+   compressed-bold spine voice) so the friction→resolution read is headline-to-
+   headline, not marker-only. */
+.resolution-block__headline {
+  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px */
+  font-weight: 550;
+  font-stretch: 94%;
+  line-height: 1.15;
+  letter-spacing: 0;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem; /* headline → framing */
+  max-width: 42ch;     /* wider so a 2-sentence header breaks at its own period, not mid-clause */
+  text-wrap: pretty;
+}
+
+/* ── BentoTheme — reusable count-driven bento (generalizes "The Spine") ────
+   Author lists 2–5 captioned images; the component assigns slots (12-col span
+   + aspect) and places any asset in any slot via object-fit:cover +
+   object-position from each item's focal. Bare Paper, documented inset hairline,
+   NO card fill / NO fade. Two-part caption (bold lead + muted gloss) carried
+   from EngineSurfaces; per-row subgrid caption baseline-lock from ResolutionBento. */
+
+.figure--bento-theme {
+  /* framing → grid evidence step (matches the engine block); intentionally NOT
+     the bare .figure class, so it doesn't inherit .figure { margin: 3rem 0 3.5rem }. */
+  margin: 2rem 0 0;
+}
+
+.bento-theme__intro {
+  margin: 0 0 1rem;
+  max-width: 64ch; /* intro stays at the reading measure even on the band */
+}
+
+.bento-theme__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* row → row (scale {0.75,1,2,6}) */
+}
+
+.bento-theme__row {
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: anchors stack full-width */
+  gap: 1rem;                  /* card → card */
+}
+
+/* Satellite rows (3 tall/compact) collapse to a capped 2-col below lg so a 3:4
+   tile never towers; anchors (1- and 2-col rows) stay full-width single column. */
+.bento-theme__row[data-cols='3'] {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.bento-theme__item {
+  margin: 0;
+  display: flex;          /* mobile fallback; lg+ switches to subgrid */
+  flex-direction: column;
+  gap: 0.75rem;           /* caption → media: intimate bond (12px) */
+  min-width: 0;           /* grid-blowout guard */
+}
+
+.bento-theme__caption {
+  margin: 0;
+  font-size: 1.125rem;    /* 18px — off the 14px floor */
+  line-height: 1.35;
+  min-height: 3.04rem;    /* fallback == 1.125rem × 1.35 × 2 */
+  min-height: 2lh;        /* 2-line floor so media tops align even on a 1-line lead */
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+
+.bento-theme__lead {
+  font-weight: 600;
+  font-stretch: 92%;            /* joins the spine's compressed-bold display register */
+  color: var(--text-primary);  /* shipped anti-"timid" lead (FLAG: spec said --text-secondary) */
+}
+
+.bento-theme__gloss {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.bento-theme__media {
+  position: relative;
+  aspect-ratio: var(--bento-aspect, 3 / 4); /* slot aspect; reserves the box pre-paint (CLS) */
+  overflow: hidden;
+  border-radius: 4px;
+  /* documented image-edge parity hairline, both modes via the token */
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+.bento-theme__img {
+  object-fit: cover; /* object-position (from focal) set inline per item */
+}
+
+.bento-theme__placeholder {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  border-radius: 0; /* the media wrapper owns the radius + hairline */
+}
+
+/* srcDark: both <Image>s render (zero-JS); CSS reveals the mode-appropriate one.
+   Only swap when a dark source exists (data-has-dark) — else the single light
+   image must show in both modes. */
+.bento-theme__media[data-has-dark='true'] .bento-theme__img--dark { display: none; }
+html.dark .bento-theme__media[data-has-dark='true'] .bento-theme__img--light { display: none; }
+html.dark .bento-theme__media[data-has-dark='true'] .bento-theme__img--dark { display: block; }
+
+@media (min-width: 1024px) {
+  /* Slot spans on the 12-col band; satellite rows expand back to 3-up. */
+  .bento-theme__row {
+    grid-template-rows: auto auto; /* caption / media — the two shared subgrid tracks */
+    column-gap: 1rem;
+    row-gap: 0.75rem;              /* caption → media track gap */
+  }
+  .bento-theme__row[data-cols='1'] { grid-template-columns: 1fr; }
+  .bento-theme__row[data-cols='2'] { grid-template-columns: repeat(2, 1fr); }
+  .bento-theme__row[data-cols='3'] { grid-template-columns: repeat(3, 1fr); }
+
+  /* Each item adopts the row's two tracks, so every caption in the row sits in
+     one shared track and every media region starts at the same Y regardless of
+     caption line count (the baseline-lock the live EngineSurfaces had lost). */
+  .bento-theme__item {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+    gap: 0;
+  }
+}
+
 /* ── Framed treatment ────────────────────────────────────────────────────
    Used on .figure--framed Figure / Detail / inside AsymmetricPair / Bento.
    Tinted canvas replaces the hairline border; no shadow. Mode-aware via
