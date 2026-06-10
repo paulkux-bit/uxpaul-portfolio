@@ -14,8 +14,9 @@ import type { ReactNode } from 'react';
  */
 
 interface ResolutionBlockProps {
-  /** Spine rhyme — the same 01/02/03 marker the friction beat carried. */
-  thread: '01' | '02' | '03';
+  /** Spine rhyme — the same 01/02/03 marker the friction beat carried. (04/05
+   *  exist for the sandbox stress page; the real case study uses 01–03.) */
+  thread: '01' | '02' | '03' | '04' | '05';
   /** Resolution heading — rhymes the friction beat's headline. */
   headline: ReactNode;
   framing: ReactNode;
