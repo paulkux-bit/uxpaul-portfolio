@@ -140,6 +140,13 @@ fed to the title's `font-variation-settings` (typography doc §7 manual-axis cas
 - **`text-muted`** — metadata, captions, labels, eyebrows. AA normal on `bg-canvas`.
 - **`text-subtle`** — timestamps, tertiary info, footnote-rank text. **AA-large only** — never below 18px (or 14px+ bold).
 
+**Sanctioned exception — bento caption lead.** The two-part bento caption (`components/bento.tsx`)
+uses **`--text-primary` for the bold lead** (not `--text-secondary`, which the "leads" guidance above
+would suggest) + `--text-muted` for the gloss. At the 18px / weight-600 / 92%-width display register a
+`--text-secondary` lead reads timid against the muted gloss; the lead carries the hierarchy and wants
+full primary weight, the gloss preserves the two-tier read. This is the intended value, not a TODO —
+contrast only increases over the spec.
+
 ### Borders
 
 - **`border-subtle`** — hairlines, section dividers, default card borders at rest.

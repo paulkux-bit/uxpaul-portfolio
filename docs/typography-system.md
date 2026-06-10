@@ -571,6 +571,13 @@ different Bricolage axis to express** (not just a different size):
   the footer's top hairline is the page's only structural line (declined adding
   section dividers: they'd read agency-decorative).
 
+**Bento proximity pair (`--bento-caption-gap` / `--bento-row-gap`).** The bento gallery
+(`components/bento.tsx`) binds each caption DOWN to its own tile via a deliberate ratio: caption→media
+`0.5rem`, row→row `2rem` (1:4). `--bento-row-gap` is on the {0.75,1,2,6} scale; **`--bento-caption-gap:
+0.5rem` is a sanctioned off-scale value** — the scale's tightest step (0.75rem) doesn't bind tight
+enough to read as "this caption belongs to the tile below." Don't "correct" the 0.5rem to 0.75rem; it
+would weaken the bind.
+
 **Hero left-weight fix (Option 1):** the catch line widens to a 2-line band at
 desktop (`xl:max-w-[30ch]`, ≥1280) so the hero top spans the column like the
 cards; ≤1024 keeps the 18ch / 3-line wrap. `text-wrap: balance` guards the split.
