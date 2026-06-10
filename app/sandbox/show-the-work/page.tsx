@@ -1,34 +1,33 @@
 import type { Metadata } from 'next';
 import { ResolutionBlock } from '@/components/show-work';
-import { BentoTheme, BentoItem } from '@/components/bento';
+import { BentoTheme, BentoItem, BentoBand, BentoRibbon } from '@/components/bento';
 
-// Private scratch route for iterating the "Show the Work" layout. Mirrors the
-// real case-study shell (.case-study-article > .case-study-prose) so every band /
-// rhythm / breakout rule resolves identically; the live uscg-bard.mdx is untouched.
-// noindex — this is a design sandbox, not a shipped page.
+// Private scratch route — the bento STRESS TEST. Mirrors the case-study shell
+// (.case-study-article > .case-study-prose) so every band / rhythm / breakout
+// rule resolves identically. Labeled grey placeholders prove GEOMETRY only:
+// every count (2/3/4/5), the author-override compact trio, both breakouts, the
+// per-row baseline-lock (shared rows pair a 1-line vs 2-line caption), the
+// light/dark tone tiles, and the 2+1 mobile orphans. NOT real content — captions
+// are lorem (02's header is the one real line). The live uscg-bard.mdx is untouched.
 export const metadata: Metadata = {
-  title: 'Sandbox · Show the Work',
+  title: 'Sandbox · Bento stress test',
   robots: { index: false, follow: false },
 };
 
-// PARKED for the PopUp annotation layer (NOT rendered — keyed by surface src).
-// The glance layer carries the short two-part caption; these first-person
-// decision-claims become PopUp annotations on the real-MDX port.
-const ENGINE_CLAIMS: Record<string, string> = {
-  report: 'I opened the report with the finding in words, not a wall of charts.',
-  map: 'I plotted incidents on a map, not a table — patterns read before you query.',
-  pipeline: "I put the pipeline on one screen, so status isn't a USCG email.",
-  projection: "I projected compliance forward, not just today's number.",
-  coordinator: 'I had the engine greet the coordinator by name, not a dashboard.',
-};
-void ENGINE_CLAIMS;
-
-const ENGINE = '/case-studies/uscg-bard/engine';
+// Captions stay short: a bold lead + a few muted gloss words. Exactly ONE 2-line
+// gloss (GLOSS_2) lives in the Spine's tall trio (02) — the baseline-lock insurance
+// (lg+ 3-up AND the mobile 2-up top pair).
+const LEAD = 'Lorem ipsum';
+const GLOSS = ' dolor sit';
+const GLOSS_2 = ' dolor sit amet consectetur adipiscing elit sed';
 
 export default function ShowTheWorkSandbox() {
   return (
     <article className="case-study-article">
       <div className="case-study-prose">
+        {/* 01 — count 2 auto → [wide 16:10, wide 16:10]. Shared row stresses the lock.
+            The section intro (eyebrow + HMW + role-line lede) leads the section, as on the
+            real page; the stress blocks follow. */}
         <section className="cs-section">
           <div className="eyebrow">The resolutions</div>
 
@@ -39,12 +38,27 @@ export default function ShowTheWorkSandbox() {
             state to change how it files.
           </p>
 
-          {/* Block 02 — Insight Engine (resolves the staleness friction 02) · 5 engine surfaces ·
-              now on the reusable BentoTheme "Spine" preset ([[wide,wide],[tall,tall,tall]]).
-              Anchors (report, coordinator) land in 16:10 wide slots and are cover-cropped from
-              the native 3:4 assets via focal="top" (keeps the finding / the greeting). Satellites
-              stay native 3:4. Glance = the two-part caption; decision-claims parked in ENGINE_CLAIMS
-              for the PopUp layer. The headline IS the framing (framing={null}). */}
+          <ResolutionBlock
+            thread="01"
+            headline={
+              <>
+                Lorem ipsum dolor sit.
+                <br />
+                Count two, two wides.
+              </>
+            }
+            framing={null}
+          >
+            <BentoTheme>
+              <BentoItem caption={LEAD} gloss={GLOSS} label="01 · wide · 16:10" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="01 · wide · 16:10" />
+            </BentoTheme>
+          </ResolutionBlock>
+        </section>
+
+        {/* 02 — count 5 SPINE → [wide, wide]/[tall, tall, tall] + trailing band.
+            The two wides carry fixed light / dark tones (do NOT swap with theme). */}
+        <section className="cs-section">
           <ResolutionBlock
             thread="02"
             headline={
@@ -57,86 +71,83 @@ export default function ShowTheWorkSandbox() {
             framing={null}
           >
             <BentoTheme>
-              <BentoItem
-                src={`${ENGINE}/report.png`}
-                alt="The annual report opening with its leading finding written as a sentence, above the supporting charts."
-                caption="The finding"
-                gloss=", in words"
-                focal="top"
-              />
-              <BentoItem
-                src={`${ENGINE}/coordinator.png`}
-                alt="The dashboard greeting the state coordinator by name at the top of the screen."
-                caption="It greets her"
-                gloss=" by name"
-                focal="top"
-              />
-              <BentoItem
-                src={`${ENGINE}/map.png`}
-                alt="Boating incidents plotted as points across the jurisdiction map, clustering into visible patterns."
-                caption="Patterns"
-              />
-              <BentoItem
-                src={`${ENGINE}/pipeline.png`}
-                alt="Every case and its current review stage shown together on a single pipeline screen."
-                caption="Every case"
-              />
-              <BentoItem
-                src={`${ENGINE}/projection.png`}
-                alt="A compliance figure charted with its trend projected forward past the current value."
-                caption="Compliance"
-              />
+              <BentoItem caption="Light design" tone="light" label="02 · wide · 16:10 · light" />
+              <BentoItem caption="Dark design" tone="dark" label="02 · wide · 16:10 · dark" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="02 · tall · 3:4" />
+              <BentoItem caption={LEAD} gloss={GLOSS_2} label="02 · tall · 3:4" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="02 · tall · 3:4" />
+              <BentoBand aspect={4.9} label="02 · band · 4.9:1" />
             </BentoTheme>
           </ResolutionBlock>
         </section>
 
-        {/* ───────────────────────────────────────────────────────────────────
-            PRESET GEOMETRY SANITY — placeholders (sandbox only). These prove
-            GEOMETRY ONLY: arrangement per count, the per-row subgrid caption
-            baseline-lock, the <lg 2-col satellite collapse. Each box is at its
-            true slot aspect; captions are deliberately mixed-length — in each
-            theme one row pairs a 1-line lead+short gloss against a row-mate whose
-            gloss wraps to 2 lines, so the min-height:2lh + subgrid lock is under
-            stress. Do NOT tune caption density/spacing against these grey boxes;
-            per-theme tuning is deferred to the real-MDX port (01/03 crops). */}
-
+        {/* 03 — count 3 auto → [feature 16:10]/[standard 3:4, standard 3:4].
+            Captions short; the 2-line insurance lives in 02. On mobile the standard
+            pair goes 2-up (ratio-keyed), not towering full-width. */}
         <section className="cs-section">
-          <div className="eyebrow">Preset: 2 (wide · wide)</div>
-          <BentoTheme>
-            <BentoItem caption="Two-up" gloss=" short gloss" />
-            <BentoItem
-              caption="Two-up"
-              gloss=" a deliberately longer continuation that should wrap onto a second line at this measure"
-            />
-          </BentoTheme>
+          <ResolutionBlock
+            thread="03"
+            headline={
+              <>
+                Lorem ipsum dolor sit.
+                <br />
+                Count three, a feature.
+              </>
+            }
+            framing={null}
+          >
+            <BentoTheme>
+              <BentoItem caption={LEAD} gloss={GLOSS} label="03 · feature · 16:10" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="03 · standard · 3:4" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="03 · standard · 3:4" />
+            </BentoTheme>
+          </ResolutionBlock>
         </section>
 
+        {/* 04 — count 4 auto → [wide, wide]/[standard, standard] + trailing ribbon 13:1. */}
         <section className="cs-section">
-          <div className="eyebrow">Preset: 3 (feature / standard · standard)</div>
-          <BentoTheme>
-            <BentoItem caption="Feature" gloss=" full-band hero slot" />
-            <BentoItem caption="Standard" gloss=" short" />
-            <BentoItem
-              caption="Standard"
-              gloss=" a longer gloss here that wraps to two lines and tests the subgrid lock across the pair"
-            />
-          </BentoTheme>
+          <ResolutionBlock
+            thread="04"
+            headline={
+              <>
+                Lorem ipsum dolor sit.
+                <br />
+                Count four, plus a ribbon.
+              </>
+            }
+            framing={null}
+          >
+            <BentoTheme>
+              <BentoItem caption={LEAD} gloss={GLOSS} label="04 · wide · 16:10" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="04 · wide · 16:10" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="04 · standard · 3:4" />
+              <BentoItem caption={LEAD} gloss={GLOSS} label="04 · standard · 3:4" />
+              <BentoRibbon aspect={13} label="04 · ribbon · 13:1" />
+            </BentoTheme>
+          </ResolutionBlock>
         </section>
 
+        {/* 05 — author override: three slot="compact" → [1:1, 1:1, 1:1] (bypasses the
+            count-3 preset) + trailing ribbon 22:1. */}
         <section className="cs-section">
-          <div className="eyebrow">Preset: 4 (wide · wide / standard · standard)</div>
-          <BentoTheme>
-            <BentoItem caption="Wide" gloss=" one line" />
-            <BentoItem
-              caption="Wide"
-              gloss=" a noticeably longer continuation that wraps to a second line to test the row lock"
-            />
-            <BentoItem caption="Standard" gloss=" short" />
-            <BentoItem
-              caption="Standard"
-              gloss=" another long gloss so the pair's media tops stay locked across the row"
-            />
-          </BentoTheme>
+          <ResolutionBlock
+            thread="05"
+            headline={
+              <>
+                Lorem ipsum dolor sit.
+                <br />
+                Override: a compact trio.
+              </>
+            }
+            framing={null}
+          >
+            <BentoTheme>
+              <BentoItem slot="compact" caption={LEAD} gloss={GLOSS} label="05 · compact · 1:1" />
+              <BentoItem slot="compact" caption={LEAD} gloss={GLOSS} label="05 · compact · 1:1" />
+              <BentoItem slot="compact" caption={LEAD} gloss={GLOSS} label="05 · compact · 1:1" />
+              <BentoRibbon aspect={22} label="05 · ribbon · 22:1" />
+            </BentoTheme>
+          </ResolutionBlock>
         </section>
       </div>
     </article>
