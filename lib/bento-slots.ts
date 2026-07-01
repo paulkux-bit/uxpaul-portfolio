@@ -12,7 +12,7 @@ interface SlotGeom {
   maxRenderedWidthPx: number;
 }
 
-const slots = data.slots as Record<Slot, SlotGeom>;
+const slots = data.slots as unknown as Record<Slot, SlotGeom>;
 const SLOT_KEYS = Object.keys(slots) as Slot[];
 
 const bySlot = <T,>(pick: (g: SlotGeom) => T): Record<Slot, T> =>
