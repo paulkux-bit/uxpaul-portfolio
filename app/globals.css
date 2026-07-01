@@ -2313,6 +2313,15 @@ html.dark .popup-bubble {
   min-width: 0;
 }
 
+/* Breakouts are block-flow (no flex `gap`), so the caption→media bind that
+   .bento-theme__item gets from `gap: var(--bento-caption-gap)` is applied here
+   explicitly — the SAME token, so every tile type shares one caption→media gap
+   and it can't drift. BreakoutCaption renders the direct-child <p> above the media. */
+.bento-band > .bento-theme__caption,
+.bento-ribbon > .bento-theme__caption {
+  margin-bottom: var(--bento-caption-gap);
+}
+
 .bento-band__media {
   position: relative;
   width: 100%;
