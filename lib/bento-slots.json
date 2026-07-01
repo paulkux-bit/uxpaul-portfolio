@@ -1,0 +1,29 @@
+{
+  "$doc": "SINGLE SOURCE OF TRUTH for bento slot geometry. Read by components/bento.tsx (via lib/bento-slots.ts) AND by the bento-crop skill's crop.py retina-floor check. Do NOT fork these numbers into either consumer — change them here and both the render math and the crop floor move together.",
+  "container": {
+    "note": ".cs-section-pinned: inside .case-study-prose > .cs-section the prose caps at 660px below 1024px; the section breaks out to min(100vw-4rem, 1088px) at >=1024px. A bento in a WIDER or NARROWER container renders at different widths, which changes every derived floor. Re-measure and add a container variant here before trusting floors elsewhere.",
+    "gapPx": 16,
+    "breakpoints": { "xs": 312, "sm": 342, "md": 660, "lg": 960, "xl": 1088, "2xl": 1088 },
+    "maxWidthPx": 1088
+  },
+  "retina": {
+    "dpr": 2,
+    "note": "Source floor = dpr * maxRenderedWidthPx. Bump to 3 only if 3x-DPR delivery is required."
+  },
+  "slots": {
+    "feature": { "aspect": [16, 10], "cols": 1, "maxRenderedWidthPx": 1088 },
+    "wide": {
+      "aspect": [16, 10],
+      "cols": 2,
+      "maxRenderedWidthPx": 660,
+      "note": "MAX is the md 660px 1-up render, NOT the 536px desktop 2-up width — the trap."
+    },
+    "standard": { "aspect": [3, 4], "cols": 2, "maxRenderedWidthPx": 536 },
+    "tall": { "aspect": [3, 4], "cols": 3, "maxRenderedWidthPx": 352 },
+    "compact": { "aspect": [1, 1], "cols": 3, "maxRenderedWidthPx": 352 }
+  },
+  "breakouts": {
+    "note": "N:1 strips (BentoBand, BentoRibbon), full container width at >=768px. Ribbon below 768px = fixed-height horizontal-scroll canvas: width = ribbonTrackHeightPx * N. For steep N that exceeds the container (crossover N = maxWidthPx/ribbonTrackHeightPx = 1088/80 = 13.6), so the floor uses max(container, mobileCanvas). The aspect N comes from the crop-spec output's `aspect` field, not from here.",
+    "ribbonTrackHeightPx": 80
+  }
+}

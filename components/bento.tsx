@@ -8,6 +8,7 @@ import {
   type ReactElement,
   type ReactNode,
 } from 'react';
+import { type Slot, SLOT_ASPECT, SLOT_COLS } from '@/lib/bento-slots';
 
 /**
  * <BentoTheme> / <BentoItem> + breakouts <BentoBand> / <BentoRibbon>
@@ -32,7 +33,6 @@ import {
  * namespace (`.bento__*` belongs to the unrelated <BentoGrid>).
  */
 
-type Slot = 'feature' | 'wide' | 'standard' | 'tall' | 'compact';
 /** Crop anchor, 0..1 (manifest-native). 'top'/'center' are sugar. */
 type Focal = 'center' | 'top' | { x: number; y: number };
 
@@ -65,14 +65,6 @@ interface BentoThemeProps {
   children: ReactNode;
 }
 
-const SLOT_ASPECT: Record<Slot, string> = {
-  feature: '16 / 10',
-  wide: '16 / 10',
-  standard: '3 / 4',
-  tall: '3 / 4',
-  compact: '1 / 1',
-};
-
 /** Row aspect family — drives the MOBILE 1-up/2-up + lock decision (keyed on ratio,
  *  not column count, so 3:4 standard pairs go 2-up instead of towering full-width). */
 const SLOT_RATIO: Record<Slot, 'landscape' | 'portrait' | 'square'> = {
@@ -96,15 +88,6 @@ const SLOT_SIZES: Record<Slot, string> = {
 
 /** Full-width breakout sizes (feature/band/ribbon span the band). */
 const BREAKOUT_SIZES = '(max-width: 1152px) calc(100vw - 4rem), 1088px';
-
-/** Items-per-row capacity = 12 / span; drives override-mode chunking. */
-const SLOT_COLS: Record<Slot, number> = {
-  feature: 1,
-  wide: 2,
-  standard: 2,
-  tall: 3,
-  compact: 3,
-};
 
 /** count → rows of slots. Within a row slots share aspect → one height → subgrid lock. */
 const PRESETS: Record<number, Slot[][]> = {
