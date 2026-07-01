@@ -255,6 +255,26 @@ The role utilities and component usage stay identical. No find-and-replace.
 - Dark mode palette: TBD (current placeholder in globals.css)
 - Use `oklch()` for everything; CSS variables defined in globals.css
 
+## Color & illustration conventions
+
+- Use semantic `--text-*` / `--border-*` tokens only. Never `color-mix(currentColor X%)`
+  opacity weight-fakes, never the legacy `--color-text-*` aliases.
+- Text-role contrast floors: `--text-primary` AAA; `--text-secondary` / `--text-muted`
+  AA-normal (4.5:1); `--text-subtle` AA-large only (≥24px or ≥18.66px bold) — never
+  normal-size meaningful text.
+- `font-optical-sizing: auto` is global; do NOT hardcode `opsz` via font-variation-settings.
+  Width via the `font-stretch` property. FVS only on the hero callout.
+- Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
+  `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
+  light-only to `--border-default` — never change the base token.
+- Figures are illustrations (3:1 graphics floor, not text). Per-mode, intentional:
+  `.oku-figure { color: var(--text-secondary) }` and
+  `html.dark .oku-figure { color: var(--text-muted) }`. Do not normalize this to parity.
+- Illustrations are drawn bold/simple FOR display size (≥~1.5px lines), traced to
+  currentColor fill-based SVG → .tsx with its own viewBox. Never fix shimmer with added
+  strokes or layer promotion — fix it in the source art.
+- `.case-study-prose p` is wrapped `:where(.case-study-prose) p` so component margins win.
+
 ## Workflow conventions
 - Feature work happens on branches; PR before merge to main
 - Run `/impeccable polish` before declaring any page "done"
