@@ -1,0 +1,241 @@
+{
+  "section": "resolutions-01",
+  "slug": "uscg-bard",
+  "web_path_prefix": "/case-studies/uscg-bard/resolutions-01",
+  "layout": [
+    "location--chip-strip",
+    "location--band-b",
+    [
+      "event--card-portrait",
+      "columnpicker--portrait"
+    ],
+    "map--list-and-map",
+    "landing--result-table"
+  ],
+  "images": [
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/location--band-b-light.png",
+      "alt": "BARD incidents view, location filter open over the table with Florida counties ranked by count.",
+      "focalPoint": {
+        "x": 0.47,
+        "y": 0.56
+      },
+      "track": "bento",
+      "width": 4199,
+      "height": 1595,
+      "breakout": "band",
+      "aspect": 2.63,
+      "lens": "ux",
+      "beat": "1 location",
+      "caption": "One vocabulary reads every state's filings. County or waterbody, the same picker.",
+      "label": "location"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/location--chip-strip-light.png",
+      "alt": "BARD filter bar: Status, Location, Event, Cause, Severity; Location active.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "track": "bento",
+      "width": 1845,
+      "height": 130,
+      "breakout": "ribbon",
+      "aspect": 14.19,
+      "beat": "filters",
+      "caption": "One filter set, every filing. Status, location, event, cause, severity.",
+      "label": "the shared filter set"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/event--card-portrait-light.png",
+      "alt": "BARD event filter open: grouped event taxonomy (Vessel Impacts, Person and Vessel State) as a portrait tile.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "track": "bento",
+      "width": 1235,
+      "height": 1647,
+      "slot": "standard",
+      "lens": "ux",
+      "beat": "2 event",
+      "caption": "A second axis. What happened, not just where.",
+      "label": "event"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/columnpicker--portrait-light.png",
+      "alt": "BARD column picker open over the table: nine visible columns as toggles plus an Available list including State Case Number.",
+      "focalPoint": {
+        "x": 0.59,
+        "y": 0.53
+      },
+      "track": "bento",
+      "width": 1461,
+      "height": 1948,
+      "slot": "standard",
+      "lens": "ux",
+      "beat": "3 columns",
+      "caption": "9 shared columns. Including each state's own case number.",
+      "label": "columns"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/landing--result-table-light.png",
+      "alt": "The resulting Accepted incidents table below the filter bar: nine shared columns (Case ID, Date, Location, Primary Event, Primary Cause, Status, POC, Fatal, Inj) populated across Florida cases.",
+      "focalPoint": {
+        "x": 0.35,
+        "y": 0.55
+      },
+      "track": "bento",
+      "width": 4319,
+      "height": 1380,
+      "breakout": "band",
+      "aspect": 3.13,
+      "lens": "product",
+      "beat": "3 result",
+      "caption": "56 jurisdictions, 9 columns. Every filing normalized into one queryable table.",
+      "label": "the result"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/map--list-and-map-light.png",
+      "alt": "BARD map view: left rail of incident cards beside the Florida map with clustered markers; the selected case FL-2026-0438 is highlighted in the rail and opened as a map popover, list and map from one source.",
+      "focalPoint": {
+        "x": 0.7,
+        "y": 0.4
+      },
+      "track": "bento",
+      "width": 4319,
+      "height": 2699,
+      "slot": "feature",
+      "lens": "ux",
+      "beat": "4 map",
+      "caption": "One source, two views. The list and the map never disagree.",
+      "label": "map sync"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/location--band-b-dark.png",
+      "alt": "BARD incidents view, location filter open over the table with Florida counties ranked by count.",
+      "focalPoint": {
+        "x": 0.47,
+        "y": 0.56
+      },
+      "track": "bento",
+      "width": 4199,
+      "height": 1595,
+      "breakout": "band",
+      "aspect": 2.63,
+      "lens": "ux",
+      "beat": "1 location",
+      "caption": "One vocabulary reads every state's filings. County or waterbody, the same picker.",
+      "label": "location"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/location--chip-strip-dark.png",
+      "alt": "BARD filter bar: Status, Location, Event, Cause, Severity; Location active.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "track": "bento",
+      "width": 1845,
+      "height": 130,
+      "breakout": "ribbon",
+      "aspect": 14.19,
+      "beat": "filters",
+      "caption": "One filter set, every filing. Status, location, event, cause, severity.",
+      "label": "the shared filter set"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/event--card-portrait-dark.png",
+      "alt": "BARD event filter open: grouped event taxonomy (Vessel Impacts, Person and Vessel State) as a portrait tile.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "track": "bento",
+      "width": 1235,
+      "height": 1647,
+      "slot": "standard",
+      "lens": "ux",
+      "beat": "2 event",
+      "caption": "A second axis. What happened, not just where.",
+      "label": "event"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/columnpicker--portrait-dark.png",
+      "alt": "BARD column picker open over the table: nine visible columns as toggles plus an Available list including State Case Number.",
+      "focalPoint": {
+        "x": 0.59,
+        "y": 0.53
+      },
+      "track": "bento",
+      "width": 1461,
+      "height": 1948,
+      "slot": "standard",
+      "lens": "ux",
+      "beat": "3 columns",
+      "caption": "9 shared columns. Including each state's own case number.",
+      "label": "columns"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/landing--result-table-dark.png",
+      "alt": "The resulting Accepted incidents table below the filter bar: nine shared columns (Case ID, Date, Location, Primary Event, Primary Cause, Status, POC, Fatal, Inj) populated across Florida cases.",
+      "focalPoint": {
+        "x": 0.35,
+        "y": 0.55
+      },
+      "track": "bento",
+      "width": 4319,
+      "height": 1380,
+      "breakout": "band",
+      "aspect": 3.13,
+      "lens": "product",
+      "beat": "3 result",
+      "caption": "56 jurisdictions, 9 columns. Every filing normalized into one queryable table.",
+      "label": "the result"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-01/map--list-and-map-dark.png",
+      "alt": "BARD map view: left rail of incident cards beside the Florida map with clustered markers; the selected case FL-2026-0438 is highlighted in the rail and opened as a map popover, list and map from one source.",
+      "focalPoint": {
+        "x": 0.7,
+        "y": 0.4
+      },
+      "track": "bento",
+      "width": 4319,
+      "height": 2699,
+      "slot": "feature",
+      "lens": "ux",
+      "beat": "4 map",
+      "caption": "One source, two views. The list and the map never disagree.",
+      "label": "map sync"
+    }
+  ],
+  "composition": [
+    {
+      "name": "location--chip-strip",
+      "mode": "dark"
+    },
+    {
+      "name": "location--band-b",
+      "mode": "light"
+    },
+    [
+      {
+        "name": "event--card-portrait",
+        "mode": "light"
+      },
+      {
+        "name": "columnpicker--portrait",
+        "mode": "light"
+      }
+    ],
+    {
+      "name": "map--list-and-map",
+      "mode": "dark"
+    },
+    {
+      "name": "landing--result-table",
+      "mode": "light"
+    }
+  ]
+}
