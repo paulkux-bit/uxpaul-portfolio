@@ -8,9 +8,9 @@ Each crop ships light + dark. Layout (council): ribbon > band > standard x2 > fe
 - **chip strip (ribbon opener)** — One filter set, every filing. Status, location, event, cause, severity.
 - **location band (wide hero)** — One vocabulary reads every state's filings. County or waterbody, the same picker.
 - **event (portrait)** — A second axis. What happened, not just where.
-- **column picker (portrait)** — 9 shared columns. Including each state's own case number.
+- **column picker (portrait)** — The columns everyone shares. Including each state's own case number.
 - **map (feature)** — One source, two views. The list and the map never disagree.
-- **landing table (band)** — 56 jurisdictions, 9 columns. Every filing normalized into one queryable table.
+- **landing table (band)** — 56 jurisdictions, one table. Every filing normalized into one queryable set.
 
 ## PopUp depth (reflection layer, off-grid)
 

@@ -75,7 +75,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "3 columns",
-      "caption": "9 shared columns. Including each state's own case number.",
+      "caption": "The columns everyone shares. Including each state's own case number.",
       "label": "columns"
     },
     {
@@ -92,7 +92,7 @@
       "aspect": 3.13,
       "lens": "product",
       "beat": "3 result",
-      "caption": "56 jurisdictions, 9 columns. Every filing normalized into one queryable table.",
+      "caption": "56 jurisdictions, one table. Every filing normalized into one queryable set.",
       "label": "the result"
     },
     {
@@ -173,7 +173,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "3 columns",
-      "caption": "9 shared columns. Including each state's own case number.",
+      "caption": "The columns everyone shares. Including each state's own case number.",
       "label": "columns"
     },
     {
@@ -190,7 +190,7 @@
       "aspect": 3.13,
       "lens": "product",
       "beat": "3 result",
-      "caption": "56 jurisdictions, 9 columns. Every filing normalized into one queryable table.",
+      "caption": "56 jurisdictions, one table. Every filing normalized into one queryable set.",
       "label": "the result"
     },
     {
