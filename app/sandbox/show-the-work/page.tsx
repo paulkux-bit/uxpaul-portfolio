@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { ResolutionBlock } from '@/components/show-work';
 import { BentoTheme, BentoItem, BentoBand, BentoRibbon } from '@/components/bento';
+import Resolutions01Bento from '@/components/case-studies/uscg-bard/Resolutions01Bento';
 
 // Private scratch route — the bento STRESS TEST. Mirrors the case-study shell
 // (.case-study-article > .case-study-prose) so every band / rhythm / breakout
@@ -37,6 +38,40 @@ export default function ShowTheWorkSandbox() {
             As the sole designer, I had one hard constraint: unify the data without asking a single
             state to change how it files.
           </p>
+
+          {/* Resolutions 01 — first theme beneath the section intro. Real content via the
+              manifest → <BentoTheme> adapter (fixed-mix: light everything, dark map only).
+              The grey GEOMETRY stress block below is separate.
+
+              Header hierarchy is sandbox-scoped (engine/manifest untouched):
+              • Label is a QUIET NUMERAL LOCKUP (numeral 01 + sentence-case "How you file"),
+                NOT a second uppercase-tracked eyebrow. The section already owns one tracked
+                eyebrow ("THE RESOLUTIONS"); a second one here — plus the repeated word
+                "Resolutions" — was an AI-slop tell, so this sits in a different register:
+                small, sentence-case, numeral-anchored. One tracked eyebrow per section, max.
+              • Title is the block <h3>, styled to the prose `> h3` ramp — one step under the
+                section <h2> on the SAME ramp (fluid clamp, wght 600, ramp tracking). Inlined
+                because that prose rule is direct-child-scoped and this h3 is nested in .cs-section.
+              Spacing is per-boundary (the section model is margin-collapse based):
+              lede→lockup mt-24/40 (the one dramatic break, halves on mobile), lockup→title
+              mt-2 (one unit), title→bento mb-10/14 (collapses with the figure's own 2rem top —
+              the larger wins, so this stays exact). */}
+          <div className="mt-24 md:mt-40 flex items-baseline gap-2 text-caption">
+            <span className="font-semibold tabular-nums text-secondary">01</span>
+            <span className="text-muted">How you file</span>
+          </div>
+          <h3
+            className="mt-2 mb-10 md:mb-14"
+            style={{
+              fontSize: 'clamp(1.375rem, 1vw + 0.95rem, 1.625rem)',
+              fontWeight: 600,
+              letterSpacing: '-0.005em',
+              lineHeight: 1.2,
+            }}
+          >
+            Every state files differently. One set of filters reads them all.
+          </h3>
+          <Resolutions01Bento />
 
           <ResolutionBlock
             thread="01"
