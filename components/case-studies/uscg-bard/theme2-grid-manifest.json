@@ -1,0 +1,136 @@
+{
+  "section": "resolutions-02",
+  "theme": "02 - how you see",
+  "thesis": "Every jurisdiction sees its own dashboard. One live source underneath.",
+  "slug": "uscg-bard",
+  "mode_policy": "all-light (02 in the locked 01-dark / 02-light / 03-dark rhythm)",
+  "render_target": "sandbox /sandbox/show-the-work, Theme-2 section, via manifest -> BentoTheme adapter",
+  "composition": [
+    {
+      "order": 1,
+      "name": "projection--band",
+      "mode": "light",
+      "breakout": "band",
+      "aspect": 5.54
+    },
+    {
+      "order": 2,
+      "name": "annual-bars--band",
+      "mode": "light",
+      "breakout": "band",
+      "aspect": 5.54
+    },
+    {
+      "order": 3,
+      "name": "empty-state--band",
+      "mode": "light",
+      "aspect": 2.176,
+      "breakout": "band"
+    },
+    {
+      "order": 4,
+      "name": "kpi-strip--band",
+      "mode": "light",
+      "breakout": "band",
+      "aspect": 11.37
+    }
+  ],
+  "images": [
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/projection--band.png",
+      "alt": "Florida dashboard trend chart: monthly incidents rising to 420 through September, above 2025, with the remaining year projected.",
+      "caption": {
+        "lead": "Florida's trend.",
+        "tail": "The same dataset, month by month against 2025."
+      },
+      "width": 4068,
+      "height": 735,
+      "focalPoint": {
+        "x": 0.57,
+        "y": 0.2
+      },
+      "mode": "light",
+      "jurisdiction": "FL",
+      "breakout": "band",
+      "aspect": 5.54
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/annual-bars--band.png",
+      "alt": "Hawaii dashboard chart: annual incidents declining from 14 in 2022 to 7 in 2026.",
+      "caption": {
+        "lead": "Hawaii's five years.",
+        "tail": "The same dataset, seven this year."
+      },
+      "width": 4068,
+      "height": 735,
+      "focalPoint": {
+        "x": 0.87,
+        "y": 0.8
+      },
+      "mode": "light",
+      "jurisdiction": "HI",
+      "breakout": "band",
+      "aspect": 5.54
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/empty-state--band.png",
+      "alt": "Hawaii dashboard work queue in its empty state: a small boat illustration above the words All caught up, No incidents in your queue, and a View All Incidents button.",
+      "caption": {
+        "lead": "Hawaii's queue, empty.",
+        "tail": "The same panel, at zero."
+      },
+      "width": 2176,
+      "height": 1000,
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "mode": "light",
+      "jurisdiction": "HI",
+      "aspect": 2.176,
+      "breakout": "band"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/kpi-strip--band.png",
+      "alt": "Florida dashboard summary strip: 420 incidents year to date, 47 fatalities, 38 this week, 89 percent federal compliance.",
+      "caption": {
+        "lead": "Florida's snapshot.",
+        "tail": "420 year to date, 38 this week, 89% compliant."
+      },
+      "width": 3865,
+      "height": 340,
+      "focalPoint": {
+        "x": 0.08,
+        "y": 0.5
+      },
+      "mode": "light",
+      "jurisdiction": "FL",
+      "breakout": "band",
+      "aspect": 11.37
+    }
+  ],
+  "working_library_dark": [
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/projection--band--dark.png",
+      "note": "not rendered on page; for Claude Code + reviews"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/annual-bars--band--dark.png",
+      "note": "not rendered on page; for Claude Code + reviews"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/empty-state--band--dark.png",
+      "note": "not rendered on page; for Claude Code + reviews"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-02/kpi-strip--band--dark.png",
+      "note": "not rendered on page; for Claude Code + reviews"
+    }
+  ],
+  "caption_status": "revised via Copywriter + Content lenses against landed crops",
+  "change_log": [
+    "empty-state standard(3:4)->feature(16:10): lone standard stretched full-width+soft; feature is the correct solo slot (full-width but ~680px tall, sharp)",
+    "kpi-strip ribbon->band: band scales as a unit so all 4 KPIs stay visible on mobile",
+    "empty-state feature(16:10)->band(2.18:1): 16:10 couldn't fit the 1345px clean band between column-headers and the in-context heading without bleeding; 2.18 band clears both with margin, renders ~500px tall"
+  ]
+}
