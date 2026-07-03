@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { ResolutionBlock } from '@/components/show-work';
 import { BentoTheme, BentoItem, BentoBand, BentoRibbon } from '@/components/bento';
 import Resolutions01Bento from '@/components/case-studies/uscg-bard/Resolutions01Bento';
+import Resolutions02Bento from '@/components/case-studies/uscg-bard/Resolutions02Bento';
 
 // Private scratch route — the bento STRESS TEST. Mirrors the case-study shell
 // (.case-study-article > .case-study-prose) so every band / rhythm / breakout
@@ -26,9 +27,9 @@ export default function ShowTheWorkSandbox() {
   return (
     <article className="case-study-article">
       <div className="case-study-prose">
-        {/* 01 — count 2 auto → [wide 16:10, wide 16:10]. Shared row stresses the lock.
-            The section intro (eyebrow + HMW + role-line lede) leads the section, as on the
-            real page; the stress blocks follow. */}
+        {/* Resolutions section intro (eyebrow + HMW + role-line lede) + Theme 1 (01 · How you
+            file). The count-2 geometry stress block that used to trail Theme 1 here was removed
+            so 01 and 02 read adjacent; the remaining stress blocks (02–05) live below Theme 2. */}
         <section className="cs-section">
           <div className="eyebrow">The resolutions</div>
 
@@ -72,23 +73,38 @@ export default function ShowTheWorkSandbox() {
             Every state files differently. One set of filters reads them all.
           </h3>
           <Resolutions01Bento />
+        </section>
 
-          <ResolutionBlock
-            thread="01"
-            headline={
-              <>
-                Lorem ipsum dolor sit.
-                <br />
-                Count two, two wides.
-              </>
-            }
-            framing={null}
+        {/* Resolutions 02 — "How you see". Second real theme, its OWN section (distinct from
+            the Theme-1 section above and from the grey GEOMETRY stress blocks below). Rendered
+            through the generic ResolutionsBento adapter reading theme2-grid-manifest.json —
+            all-light, per the 01-dark / 02-light / 03-dark rhythm. Header matches Theme 1's
+            treatment: a quiet numeral lockup (02 · sentence-case "How you see") over a bold
+            display title; one tracked eyebrow max, no stacked uppercase labels (the slop tell
+            the council killed on 01).
+
+            The lockup is this section's FIRST child, so `.cs-section > :first-child {
+            margin-top: 0 }` (unlayered) would zero a plain mt-24. The `!` important restores
+            Theme 1's dramatic preamble void (mt-24 md:mt-40) at a section-leading position;
+            it collapses with the section break → ~6rem mobile / ~10rem desktop, matching 01. */}
+        <section className="cs-section">
+          {/* `!` beats the unlayered `.cs-section > :first-child { margin-top: 0 }` so this first-child lockup still gets the responsive preamble void — a required override, not a hack. */}
+          <div className="mt-24! md:mt-40! flex items-baseline gap-2 text-caption">
+            <span className="font-semibold tabular-nums text-secondary">02</span>
+            <span className="text-muted">How you see</span>
+          </div>
+          <h3
+            className="mt-2 mb-10 md:mb-14"
+            style={{
+              fontSize: 'clamp(1.375rem, 1vw + 0.95rem, 1.625rem)',
+              fontWeight: 600,
+              letterSpacing: '-0.005em',
+              lineHeight: 1.2,
+            }}
           >
-            <BentoTheme>
-              <BentoItem caption={LEAD} gloss={GLOSS} label="01 · wide · 16:10" />
-              <BentoItem caption={LEAD} gloss={GLOSS} label="01 · wide · 16:10" />
-            </BentoTheme>
-          </ResolutionBlock>
+            Every jurisdiction sees its own dashboard. One live source underneath.
+          </h3>
+          <Resolutions02Bento />
         </section>
 
         {/* 02 — count 5 SPINE → [wide, wide]/[tall, tall, tall] + trailing band.
