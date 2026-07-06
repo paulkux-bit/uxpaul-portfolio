@@ -2384,6 +2384,19 @@ html.dark .popup-bubble {
   }
 }
 
+/* Small-phone floor (≤430px): the fixed 80px mobile track shrinks the ultra-wide
+   linear ribbons — filter-bar chip-strip (14.2:1, 130px native) and dashboard-alert
+   banner (16.6:1, 254px native) — to ~62% / 31% of native, where their content goes
+   illegible. A min-height floor holds a native-ish scale; the canvas keeps its aspect
+   (height:100%, width:auto) so the strip just scrolls wider. Ribbons only — the
+   width-constrained KPI band (.bento-band, aspect-ratio driven, no --ribbon-h) is not
+   a scroll case and is deliberately excluded (being re-cropped separately). */
+@media (max-width: 430px) {
+  .bento-ribbon__track {
+    min-height: 128px; /* ≈ chip-strip native (98%); banner to 50% — both up from 80px */
+  }
+}
+
 /* ── Framed treatment ────────────────────────────────────────────────────
    Used on .figure--framed Figure / Detail / inside AsymmetricPair / Bento.
    Tinted canvas replaces the hairline border; no shadow. Mode-aware via
