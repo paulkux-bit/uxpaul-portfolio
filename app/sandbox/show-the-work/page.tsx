@@ -3,6 +3,7 @@ import { ResolutionBlock } from '@/components/show-work';
 import { BentoTheme, BentoItem, BentoBand, BentoRibbon } from '@/components/bento';
 import Resolutions01Bento from '@/components/case-studies/uscg-bard/Resolutions01Bento';
 import Resolutions02Bento from '@/components/case-studies/uscg-bard/Resolutions02Bento';
+import Resolutions03Bento from '@/components/case-studies/uscg-bard/Resolutions03Bento';
 
 // Private scratch route — the bento STRESS TEST. Mirrors the case-study shell
 // (.case-study-article > .case-study-prose) so every band / rhythm / breakout
@@ -105,6 +106,32 @@ export default function ShowTheWorkSandbox() {
             Every jurisdiction sees its own dashboard. One live source underneath.
           </h3>
           <Resolutions02Bento />
+        </section>
+
+        {/* Resolutions 03 — "How you count". Third + final theme, its OWN section, immediately
+            after Theme 2. The closer, rendered DARK (composition default, per the 01-dark /
+            02-light / 03-dark rhythm): band opener → matched 2-up (verdicts ‖ cadence, the shape
+            02 lacked) → ribbon climax. Generic ResolutionsBento reading theme3-grid-manifest.json.
+            Header matches 01/02: quiet numeral lockup over the bold display title, one tracked
+            eyebrow max. Same first-child preamble-void !important as 02 (rationale documented there). */}
+        <section className="cs-section">
+          {/* `!` beats the unlayered `.cs-section > :first-child { margin-top: 0 }` — see the 02 note. */}
+          <div className="mt-24! md:mt-40! flex items-baseline gap-2 text-caption">
+            <span className="font-semibold tabular-nums text-secondary">03</span>
+            <span className="text-muted">How you count</span>
+          </div>
+          <h3
+            className="mt-2 mb-10 md:mb-14"
+            style={{
+              fontSize: 'clamp(1.375rem, 1vw + 0.95rem, 1.625rem)',
+              fontWeight: 600,
+              letterSpacing: '-0.005em',
+              lineHeight: 1.2,
+            }}
+          >
+            When two states count the same thing differently, one number wins.
+          </h3>
+          <Resolutions03Bento />
         </section>
 
         {/* 02 — count 5 SPINE → [wide, wide]/[tall, tall, tall] + trailing band.
