@@ -2195,6 +2195,10 @@ html.dark .popup-bubble {
 
 .bento-theme__caption {
   margin: 0;
+  max-width: 64ch;        /* self-owns the measure that :where(.case-study-prose) p supplied
+                             while this was a <p>; the <figcaption> no longer matches that rule,
+                             so declaring it here keeps captions >64ch (e.g. the KPI line) wrapping
+                             identically — the figcaption swap stays pixel-for-pixel invisible */
   font-size: 1.125rem;    /* 18px — off the 14px floor */
   line-height: 1.35;
   min-height: 1.52rem;    /* fallback == 1.125rem × 1.35 */
