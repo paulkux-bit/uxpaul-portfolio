@@ -179,10 +179,10 @@ function BentoMediaInner({ src, alt, label, tone, sizes, objectPosition, priorit
 function BreakoutCaption({ caption, gloss }: { caption?: string; gloss?: string }) {
   if (!caption) return null;
   return (
-    <p className="bento-theme__caption">
+    <figcaption className="bento-theme__caption">
       <span className="bento-theme__lead">{caption}</span>
       {gloss ? <span className="bento-theme__gloss">{gloss}</span> : null}
-    </p>
+    </figcaption>
   );
 }
 
@@ -193,10 +193,10 @@ function BentoFigure({ slot, priority, ...item }: BentoItemProps & { slot: Slot;
       data-slot={slot}
       style={{ '--bento-aspect': SLOT_ASPECT[slot] } as CSSProperties}
     >
-      <p className="bento-theme__caption">
+      <figcaption className="bento-theme__caption">
         <span className="bento-theme__lead">{item.caption}</span>
         {item.gloss ? <span className="bento-theme__gloss">{item.gloss}</span> : null}
-      </p>
+      </figcaption>
       <div className="bento-theme__media">
         <BentoMediaInner
           src={item.src}
