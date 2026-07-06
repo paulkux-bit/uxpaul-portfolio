@@ -1,0 +1,110 @@
+{
+  "section": "resolutions-03",
+  "theme": "03 - how you count",
+  "thesis": "When two states count the same thing differently, one number wins.",
+  "header": {
+    "numeral": "03",
+    "kicker": "How you count",
+    "title": "When two states count the same thing differently, one number wins."
+  },
+  "mode_policy": "MIXED per council (spine-continuity review): opener band LIGHT, verdicts + cadence + banner DARK. 03 mirrors 01's light-dominant-with-dark-accents structure so it reads as the closing bookend around the all-light 02, not an all-dark slab; dark stays where the evidence pops (pills, Overdue red, banner outline). Both light + dark entries exist per tile, so mode is a one-field flip.",
+  "images": [
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-feature-cards--dark.png",
+      "alt": "BARD Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
+      "caption": { "lead": "One federal standard.", "tail": "Compliance held at 94% against 33 CFR." },
+      "width": 4191,
+      "height": 820,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "dark",
+      "breakout": "band",
+      "aspect": 5.11
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-feature-cards.png",
+      "alt": "BARD Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
+      "caption": { "lead": "One federal standard.", "tail": "Compliance held at 94% against 33 CFR." },
+      "width": 4191,
+      "height": 820,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "light",
+      "breakout": "band",
+      "aspect": 5.11
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-verdicts--dark.png",
+      "alt": "BARD incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
+      "caption": { "lead": "The state files.", "tail": "The Coast Guard rules on every one." },
+      "width": 1598,
+      "height": 2131,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "dark",
+      "slot": "standard"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-verdicts.png",
+      "alt": "BARD incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
+      "caption": { "lead": "The state files.", "tail": "The Coast Guard rules on every one." },
+      "width": 1598,
+      "height": 2131,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "light",
+      "slot": "standard"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-cadence--dark.png",
+      "alt": "BARD My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
+      "caption": { "lead": "Each on a federal clock.", "tail": "Two due back, one already overdue." },
+      "width": 1598,
+      "height": 2131,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "dark",
+      "slot": "standard"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-cadence.png",
+      "alt": "BARD My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
+      "caption": { "lead": "Each on a federal clock.", "tail": "Two due back, one already overdue." },
+      "width": 1598,
+      "height": 2131,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "light",
+      "slot": "standard"
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-banner--dark.png",
+      "alt": "BARD dashboard alert: the U.S. Coast Guard returned 2 incidents for corrections this week, with a Review now action.",
+      "caption": { "lead": "Two came back this week.", "tail": "This is how the 94% holds." },
+      "width": 4218,
+      "height": 254,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "dark",
+      "breakout": "ribbon",
+      "aspect": 16.61
+    },
+    {
+      "src": "/case-studies/uscg-bard/resolutions-03/03-banner.png",
+      "alt": "BARD dashboard alert: the U.S. Coast Guard returned 2 incidents for corrections this week, with a Review now action.",
+      "caption": { "lead": "Two came back this week.", "tail": "This is how the 94% holds." },
+      "width": 4218,
+      "height": 254,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "light",
+      "breakout": "ribbon",
+      "aspect": 16.61
+    }
+  ],
+  "composition": [
+    { "name": "03-feature-cards", "mode": "light", "breakout": "band", "aspect": 5.11 },
+    [
+      { "name": "03-verdicts", "mode": "dark" },
+      { "name": "03-cadence", "mode": "dark" }
+    ],
+    { "name": "03-banner", "mode": "dark", "breakout": "ribbon", "aspect": 16.61 }
+  ],
+  "_notes": {
+    "reconciled": "Rebuilt from the authored draft into the real ResolutionsBento contract (theme-2 schema): tiles->images (light+dark split), src:{dark,light}->per-mode src strings, slot:band/ribbon->breakout, added measured aspect + focalPoint, {row,tiles}->CompRow[] with mode per entry. Crops renamed to <name>.png / <name>--dark.png.",
+    "no_crop": "Every tile's aspect equals its native crop aspect (band 5.11, standards 0.75=3:4, ribbon 16.61), so nothing cover-crops; focalPoint is centered and inert.",
+    "off_page": "03-reports-table-light is a working-library resave only; not in images/composition."
+  }
+}
