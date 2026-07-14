@@ -2330,10 +2330,14 @@ html.dark .popup-bubble {
 /* Breakouts are block-flow (no flex `gap`), so the caption→media bind that
    .bento-theme__item gets from `gap: var(--bento-caption-gap)` is applied here
    explicitly — the SAME token, so every tile type shares one caption→media gap
-   and it can't drift. BreakoutCaption renders the direct-child <p> above the media. */
+   and it can't drift. BreakoutCaption renders the direct-child <p> above the media.
+   The 0.5rem fallback matches the token's .figure--bento-theme value and is REQUIRED
+   for a standalone band interleaved in prose (Reflection / Product): there the band is
+   a child of .cs-section, not a descendant of .figure--bento-theme, so the token isn't
+   inherited and an un-fallbacked var() would compute to 0 (caption hugging the image). */
 .bento-band > .bento-theme__caption,
 .bento-ribbon > .bento-theme__caption {
-  margin-bottom: var(--bento-caption-gap);
+  margin-bottom: var(--bento-caption-gap, 0.5rem);
 }
 
 .bento-band__media {
