@@ -22,6 +22,7 @@ nda: false
 import Resolutions01Bento from '@/components/case-studies/uscg-bard/Resolutions01Bento';
 import Resolutions02Bento from '@/components/case-studies/uscg-bard/Resolutions02Bento';
 import Resolutions03Bento from '@/components/case-studies/uscg-bard/Resolutions03Bento';
+import { BentoBand } from '@/components/bento';
 
 <HeroBlock
   eyebrow="BARD · U.S. COAST GUARD"
@@ -183,3 +184,53 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
   </h3>
   <Resolutions03Bento />
 </section>
+
+<section className="cs-section">
+
+<div className="eyebrow">Reflection</div>
+
+## The hard part wasn't the design.
+
+<p className="section-lede">Standardizing fifty-six state forms into one was an information architecture problem. Getting fifty-six jurisdictions to agree to it was the real work.</p>
+
+I thought the win would be a leaner form. It was the opposite. Every state built its form for a reason, and none of them wanted to give it up. So I kept every state's fields and made them optional for everyone. No one lost anything; they gained a shared spine underneath.
+
+<BentoBand
+  src="/case-studies/uscg-bard/reflection/reflection-table--band.png"
+  alt="BARD field-inventory spreadsheet: every incident field mapped to Your View, USCG View, and Mobile columns across all form sections."
+  caption="Every field, mapped to who sees it."
+  gloss="State view, Coast Guard view, mobile."
+  focal="top"
+  aspect={2.263}
+/>
+
+Then I showed each office what that trade actually buys. Once the data is standardized, the system can read it and surface what needs attention on its own. Fifty-six separate spreadsheets never could.
+
+<BentoBand
+  src="/case-studies/uscg-bard/reflection/reflection-insightwide--band.png"
+  alt="BARD Incidents dashboard showing a plain-English engine line ('2 cases returned by USCG, 1 overdue, 1 due Nov 3') beside the deterministic shape-card spec that generates it."
+  caption="Standardized data surfaces what matters."
+  gloss="The upside fifty-six formats couldn't give."
+  focal={{ x: 0, y: 0.5 }}
+  aspect={2.435}
+/>
+
+None of this was a pitch. Before I asked a single office to give anything up, the whole thing was designed and mapped, every section, every state, every view. The ask was credible because the work was already done.
+
+<BentoBand
+  src="/case-studies/uscg-bard/reflection/reflection-figma-canvas--band.png"
+  alt="Zoomed-out Figma canvas of the BARD Incident form: an information-architecture outline beside four form states (empty, single-vessel, multi-vessel, USCG view)."
+  caption="The whole form, designed before the ask."
+  gloss="Every section, every state, every view."
+  aspect={1.904}
+/>
+
+BARD reaches initial operating capability with the Coast Guard in spring 2027. In build and testing now.
+
+</section>
+
+<div className="eyebrow">Credit · draft</div>
+
+## Team
+
+Sole product designer on the BARD modernization. [ORG-TODO: Paul to wordsmith the employer / Coast Guard relationship, leave this bracket visible in the render as a reminder, do not guess it]. Partnered with product and engineering across the rebuild.
