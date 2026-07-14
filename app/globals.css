@@ -1493,7 +1493,7 @@ body.popup-on {
 
 .friction-beat__headline {
   font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
-  font-weight: 550; /* moderate, not heavy — easy and light */
+  font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off; rhymes the resolutions header) */
   font-stretch: 94%; /* open/relaxed; a subtle step below the H2's 96%, not the 90% compressed register */
   line-height: 1.15;
   letter-spacing: 0; /* airy, not tense */
@@ -2119,7 +2119,7 @@ html.dark .popup-bubble {
    headline, not marker-only. */
 .resolution-block__headline {
   font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px */
-  font-weight: 550;
+  font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */
   font-stretch: 94%;
   line-height: 1.15;
   letter-spacing: 0;
@@ -2315,6 +2315,16 @@ html.dark .popup-bubble {
 .bento-ribbon {
   margin: 0;        /* the .bento-theme__rows gap owns row→row spacing */
   min-width: 0;
+}
+
+/* Standalone breakout interleaved directly in prose (e.g. the Reflection + Product
+   beats: <BentoBand> as a direct child of .cs-section, not nested in a BentoTheme).
+   There the .bento-theme__rows gap doesn't exist, so the band would inherit only the
+   preceding <p>'s 1.5rem bottom margin above and 0 below (paragraphs carry bottom
+   margin only) — asymmetric. Give it deliberate symmetric rhythm matching the engine's
+   --bento-row-gap. Child combinator so it never touches theme-nested bands. */
+.cs-section > .bento-band {
+  margin-block: 2rem;
 }
 
 /* Breakouts are block-flow (no flex `gap`), so the caption→media bind that
@@ -2628,7 +2638,7 @@ html.dark .figure-placeholder {
 .hero-block__callout .hero-block__callout-label {
   font-size: 0.875rem;
   line-height: 1.3;
-  letter-spacing: 0.10em;
+  letter-spacing: 0.08em;          /* canonical text-eyebrow tracking — unified with .eyebrow (was 0.10em); the callout stays distinct via wdth 90% + --text-secondary + on-image placement */
   text-transform: uppercase;
   color: var(--text-secondary);    /* eyebrow register — persimmon stays reserved for the PopUp layer */
   margin: 0 0 0.5rem;              /* tight single step: eyebrow hugs the body */

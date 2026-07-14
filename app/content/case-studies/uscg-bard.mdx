@@ -118,6 +118,44 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
 </section>
 
 <section className="cs-section">
+
+<div className="eyebrow">The bet</div>
+
+## Standardize the data, not the people.
+
+The three frictions share one root. Fifty-six ways of filing meant the system could hold the data and never read it.
+
+The obvious fix, one national form, always died against fifty-six ways of working. So I bet the other way: leave every state's process alone, and unify only the record underneath. One filing, one picture, one number, without asking anyone to change.
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">The product</div>
+
+## One form. Two audiences. Fifty-six states.
+
+The form every jurisdiction now files into. It shows each state only the fields their case needs, scores federal compliance as they work instead of at the end, and lets a Coast Guard reviewer see exactly what the state sees, in the same screen.
+
+<BentoBand
+  src="/case-studies/uscg-bard/product/form-structure.png"
+  alt="The BARD incident form in two synchronized views: the state filer sees only the fields their case needs; the Coast Guard reviewer sees the same record alongside."
+  caption="One form, two views."
+  gloss="What the state fills, what the Coast Guard sees."
+  aspect={1.6}
+/>
+
+<BentoBand
+  src="/case-studies/uscg-bard/product/form-map.png"
+  alt="The BARD incident form adapting to the case: conditional tidal and water-condition fields appearing in the location section only when the incident requires them."
+  caption="The form adapts to the case."
+  gloss="Tidal fields appear only when the water demands them."
+  aspect={1.6}
+/>
+
+</section>
+
+<section className="cs-section">
   <div className="eyebrow">The resolutions</div>
 
   <h2>How might every jurisdiction keep working its own way, and still add up to one current national picture?</h2>
@@ -127,17 +165,18 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
     state to change how it files.
   </p>
 
-  <div className="mt-24 md:mt-40 flex items-baseline gap-2 text-caption">
-    <span className="font-semibold tabular-nums text-secondary">01</span>
+  <div className="mt-24 2xl:mt-32 flex items-baseline gap-2 text-caption">
+    <span className="thread-index">01</span>
     <span className="text-muted">How you file</span>
   </div>
   <h3
-    className="mt-2 mb-10 md:mb-14"
+    className="mt-2 mb-10 md:mb-10"
     style={{
-      fontSize: 'clamp(1.375rem, 1vw + 0.95rem, 1.625rem)',
+      fontSize: 'clamp(1.5rem, 1.4vw + 1rem, 2rem)',
       fontWeight: 600,
-      letterSpacing: '-0.005em',
-      lineHeight: 1.2,
+      fontStretch: '94%',
+      letterSpacing: 0,
+      lineHeight: 1.15,
     }}
   >
     Every state files differently. One set of filters reads them all.
@@ -147,17 +186,18 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
 
 <section className="cs-section">
   {/* `!` overrides the unlayered `.cs-section > :first-child { margin-top: 0 }` so this first-child lockup keeps the responsive preamble void — a required override, not a hack. */}
-  <div className="mt-24! md:mt-40! flex items-baseline gap-2 text-caption">
-    <span className="font-semibold tabular-nums text-secondary">02</span>
+  <div className="mt-24! 2xl:mt-32! flex items-baseline gap-2 text-caption">
+    <span className="thread-index">02</span>
     <span className="text-muted">How you see</span>
   </div>
   <h3
-    className="mt-2 mb-10 md:mb-14"
+    className="mt-2 mb-10 md:mb-10"
     style={{
-      fontSize: 'clamp(1.375rem, 1vw + 0.95rem, 1.625rem)',
+      fontSize: 'clamp(1.5rem, 1.4vw + 1rem, 2rem)',
       fontWeight: 600,
-      letterSpacing: '-0.005em',
-      lineHeight: 1.2,
+      fontStretch: '94%',
+      letterSpacing: 0,
+      lineHeight: 1.15,
     }}
   >
     Every jurisdiction sees its own dashboard. One live source underneath.
@@ -167,17 +207,18 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
 
 <section className="cs-section">
   {/* `!` overrides the unlayered `.cs-section > :first-child { margin-top: 0 }` — see the 02 note. */}
-  <div className="mt-24! md:mt-40! flex items-baseline gap-2 text-caption">
-    <span className="font-semibold tabular-nums text-secondary">03</span>
+  <div className="mt-24! 2xl:mt-32! flex items-baseline gap-2 text-caption">
+    <span className="thread-index">03</span>
     <span className="text-muted">How you count</span>
   </div>
   <h3
-    className="mt-2 mb-10 md:mb-14"
+    className="mt-2 mb-10 md:mb-10"
     style={{
-      fontSize: 'clamp(1.375rem, 1vw + 0.95rem, 1.625rem)',
+      fontSize: 'clamp(1.5rem, 1.4vw + 1rem, 2rem)',
       fontWeight: 600,
-      letterSpacing: '-0.005em',
-      lineHeight: 1.2,
+      fontStretch: '94%',
+      letterSpacing: 0,
+      lineHeight: 1.15,
     }}
   >
     When two states count the same thing differently, one number wins.
@@ -229,8 +270,12 @@ BARD reaches initial operating capability with the Coast Guard in spring 2027. I
 
 </section>
 
+<section className="cs-section">
+
 <div className="eyebrow">Credit · draft</div>
 
 ## Team
 
 Sole product designer on the BARD modernization. [ORG-TODO: Paul to wordsmith the employer / Coast Guard relationship, leave this bracket visible in the render as a reminder, do not guess it]. Partnered with product and engineering across the rebuild.
+
+</section>
