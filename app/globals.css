@@ -1313,6 +1313,78 @@ body.popup-on {
   text-wrap: balance;     /* display-tier standfirst: even the lines, no short tail (like h2/headlines/labels) */
 }
 
+/* ── Reflection milestone: the arrival crescendo ──────────────────────────
+   The reflection's closing line rebuilt as a display status block on its own warm
+   surface (full-bleed within the section band, NO card border). Three-tier scale:
+   a quiet framing clause -> the date as hero -> a quiet subline. No motion (static
+   surface), so prefers-reduced-motion is inherently respected.
+   Date scale ratios (swap --ms-date-size to compare on render):
+     A restrained     clamp(2.5rem, 4vw + 1.25rem, 4.5rem)   40 -> 72px
+     B bold (default) clamp(3.25rem, 5vw + 1.5rem, 5.5rem)   52 -> 88px
+     C crescendo      clamp(3.75rem, 6vw + 1.75rem, 7rem)    60 -> 112px */
+.milestone {
+  margin-top: 2rem;
+  padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 3rem);
+  background: var(--bg-surface-elevated); /* warm lift, distinct from the --bg-canvas field; AA verified */
+  border-radius: 8px;                     /* soft panel, no border — not a card */
+}
+.milestone__frame {
+  margin: 0;
+  max-width: 40ch;
+  font-size: 1.375rem;      /* text-lead tier — supporting */
+  line-height: 1.4;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  color: var(--text-secondary);
+  text-wrap: balance;
+}
+.milestone__date {
+  margin: 0.5rem 0 0;
+  font-size: var(--ms-date-size, clamp(3.25rem, 5vw + 1.5rem, 5.5rem)); /* ratio B default */
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  /* Signature display treatment: Bricolage's 96pt optical cut (ink-trapped) at
+     wdth 100 / wght 520 for the arrival crescendo. Follows the text-qh-title
+     sanctioned manual-axis case (typography doc §7). font-optical-sizing:none + FVS
+     as the LAST declaration so opsz 96 wins over the standard-property fallbacks
+     (mirrors the hero callout pattern). */
+  font-weight: 520;
+  font-stretch: 100%;
+  font-optical-sizing: none;
+  font-variation-settings: 'opsz' 96, 'wdth' 100, 'wght' 520;
+}
+.milestone__sub {
+  margin: 1rem 0 0;
+  font-size: 1rem;          /* text-small — quiet */
+  line-height: 1.5;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* ── Reflection zone surface (OPTIONAL variant — toggle to compare, do NOT merge) ─
+   Puts the ENTIRE reflection section on a warm full-bleed surface (edge-to-edge, no
+   card border) to signal the first-person register. Warm/light family ONLY, never
+   dark: the token is the warm paper lift — in light mode the light release after
+   03's dark climax; it must not invert to a dark slab. Background painted via
+   ::before bled to viewport width (the .figure--full-bleed math) so the section's
+   own width/margin math is untouched. Apply by adding this modifier to the
+   Reflection <section> className; left off by default (restraint is variant a). */
+.cs-section--reflection-zone {
+  position: relative;
+  isolation: isolate;
+  padding-block: clamp(2.5rem, 5vw, 4.5rem);
+}
+.cs-section--reflection-zone::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  background: var(--bg-surface); /* one step lighter than the milestone's elevated, so they nest */
+  z-index: -1;
+}
+
 /* ── Two-up framed evidence pair (FramedPair) ─────────────────────────────
    Two co-equal evidence panels with per-image captions, side by side. Fills
    its container (in a .cs-section band → half each → ~293px tall at 16:9).

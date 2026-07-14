@@ -337,6 +337,15 @@ For book titles, foreign words, ship names — use quotation marks or a differen
 
 Use sparingly. The whole point of `auto` is that the font modulates personality at the right places. Manual overrides are for breaking the rule deliberately, not for tuning the system.
 
+### Sanctioned multi-axis instances
+
+The examples above are single-axis (`opsz` alone, or `wdth` via `font-stretch`). Folding **multiple** axes into one `font-variation-settings` declaration — instead of opsz-via-FVS plus wdth/wght via standard properties — is reserved for cases where the axes must render *together* and can't be allowed to drift apart in the cascade (mixing an opsz-only FVS with `font-weight`/`font-stretch` is fragile; FVS and the standard properties can fight, hence the LAST-declaration rule below). Two live, sanctioned instances:
+
+1. **`text-qh-title`** ("Also shipped" brief titles) — per-module `opsz`/`wght`/`wdth` so the four blocks read as one curated set (first instance).
+2. **`.milestone__date`** (BARD reflection arrival crescendo) — `'opsz' 96, 'wdth' 100, 'wght' 520` forces Bricolage's ink-trapped 96pt display cut on the "Spring 2027" payoff line. The case study's closing moment earns the display exception (second instance, added 2026-07-14).
+
+Both pair `font-optical-sizing: none` with the FVS as the **last** declaration in the rule so the forced `opsz` wins over any standard-property fallback. Any new multi-axis FVS use should be deliberate and logged here. (The `CLAUDE.md` "FVS only on the hero callout" summary predates both and is now stale — treat this section as the source of truth.)
+
 ---
 
 ## 8 — Usage examples
