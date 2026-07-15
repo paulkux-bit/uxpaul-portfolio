@@ -32,6 +32,9 @@ interface ManifestImage {
   slot?: 'feature' | 'standard';
   breakout?: 'band' | 'ribbon';
   aspect?: number;
+  /** Band only: below md, floor the media at this px width in a scroll track (targeted
+   *  per-crop; unset = no floor). Set for the KPI strip, illegibly thin on mobile. */
+  scrollFloor?: number;
 }
 type CompEntry = { name: string; mode: Mode };
 type CompRow = CompEntry | CompEntry[];
@@ -66,7 +69,8 @@ export default function ResolutionsBento({ manifest }: { manifest: ResolutionsMa
       focal: im.focalPoint,
     };
     if (im.breakout === 'ribbon') return <BentoRibbon key={key} {...shared} aspect={im.aspect!} />;
-    if (im.breakout === 'band') return <BentoBand key={key} {...shared} aspect={im.aspect!} />;
+    if (im.breakout === 'band')
+      return <BentoBand key={key} {...shared} aspect={im.aspect!} scrollFloor={im.scrollFloor} />;
     return <BentoItem key={key} {...shared} slot={im.slot!} />;
   }
 
