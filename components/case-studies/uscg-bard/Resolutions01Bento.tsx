@@ -39,7 +39,7 @@ const images = manifest.images as ManifestImage[];
 const defaultComposition = manifest.composition as CompRow[];
 
 /** Manifest src → bare filename, e.g. ".../location--chip-strip-light.png" → "location--chip-strip-light". */
-const stem = (src: string) => src.split('/').pop()!.replace(/\.png$/, '');
+const stem = (src: string) => (src.split('/').pop() ?? src).replace(/\.png$/, '');
 const byStem = new Map(images.map((im) => [stem(im.src), im]));
 
 /** A composition entry names a crop + its mode; the stem encodes both. */

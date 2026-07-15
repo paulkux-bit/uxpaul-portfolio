@@ -42,7 +42,7 @@ export interface ResolutionsManifest {
 }
 
 /** Filename stem: `.../projection--band.png` → `projection--band`. */
-const stem = (src: string) => src.split('/').pop()!.replace(/\.png$/, '');
+const stem = (src: string) => (src.split('/').pop() ?? src).replace(/\.png$/, '');
 
 export default function ResolutionsBento({ manifest }: { manifest: ResolutionsManifest }) {
   const byStem = new Map(manifest.images.map((im) => [stem(im.src), im]));
