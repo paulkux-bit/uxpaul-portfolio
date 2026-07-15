@@ -24,6 +24,7 @@
   },
   "breakouts": {
     "note": "N:1 strips (BentoBand, BentoRibbon), full container width at >=768px. Ribbon below 768px = fixed-height horizontal-scroll canvas: width = ribbonTrackHeightPx * N. For steep N that exceeds the container (crossover N = maxWidthPx/ribbonTrackHeightPx = 1088/80 = 13.6), so the floor uses max(container, mobileCanvas). The aspect N comes from the crop-spec output's `aspect` field, not from here.",
+    "mobileLegibilityFloorNote": "The retina floor guards source pixels, not readability. A NON-SCROLLING band below ~110px rendered height is texture, not information. At the 326px mobile container (390px viewport minus the 4rem .case-study-prose inset) ~110px is roughly a 3:1 aspect, so a non-scrolling band steeper than ~3:1 goes illegible on mobile and needs a scrollFloor (BentoBand's mobile scroll track), a mobile-specific crop, or a shallower cut. Measured on BARD: 2.63 -> 124px legible; 3.13 -> 104px texture; 5.54 -> 59px; 11.37 -> 29px (the KPI strip, now scrollFloored to 1088). Ribbons are exempt: they carry a 128px min-height floor and scroll natively.",
     "ribbonTrackHeightPx": 80
   }
 }
