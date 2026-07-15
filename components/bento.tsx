@@ -181,7 +181,7 @@ function BreakoutCaption({ caption, gloss }: { caption?: string; gloss?: string 
   return (
     <figcaption className="bento-theme__caption">
       <span className="bento-theme__lead">{caption}</span>
-      {gloss ? <span className="bento-theme__gloss">{gloss}</span> : null}
+      {gloss ? <span className="bento-theme__gloss">{' '}{gloss}</span> : null}
     </figcaption>
   );
 }
@@ -195,7 +195,7 @@ function BentoFigure({ slot, priority, ...item }: BentoItemProps & { slot: Slot;
     >
       <figcaption className="bento-theme__caption">
         <span className="bento-theme__lead">{item.caption}</span>
-        {item.gloss ? <span className="bento-theme__gloss">{item.gloss}</span> : null}
+        {item.gloss ? <span className="bento-theme__gloss">{' '}{item.gloss}</span> : null}
       </figcaption>
       <div className="bento-theme__media">
         <BentoMediaInner

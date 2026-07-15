@@ -53,7 +53,7 @@ function resolve({ name, mode }: CompEntry): ManifestImage {
 function splitCaption(text: string): { caption: string; gloss?: string } {
   const i = text.indexOf('. ');
   if (i < 0) return { caption: text };
-  return { caption: text.slice(0, i + 1), gloss: ' ' + text.slice(i + 2) };
+  return { caption: text.slice(0, i + 1), gloss: text.slice(i + 2) };
 }
 
 function renderTile(entry: CompEntry, key: string) {
