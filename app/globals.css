@@ -378,6 +378,18 @@
   font-variation-settings: 'opsz' var(--qh-opsz, 28), 'wght' var(--qh-wght, 550), 'wdth' var(--qh-wdth, 100);
 }
 
+/* Resolutions numbered-block headline (uscg-bard "How you file/see/count"). Type only —
+   margins stay on the authoring markup so this can't drift the block's spacing. Distinct
+   from text-h3 (bigger, heavier, compressed). Standard properties, no FVS: font-stretch
+   maps straight to Bricolage's wdth axis. */
+@utility text-resolution-headline {
+  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
+  font-weight: 600;
+  font-stretch: 94%;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
 /* ============================================================
    UTILITIES — Typography (body & supporting, fixed)
    ============================================================ */
