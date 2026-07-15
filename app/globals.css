@@ -1362,29 +1362,6 @@ body.popup-on {
   color: var(--text-muted);
 }
 
-/* ── Reflection zone surface (OPTIONAL variant — toggle to compare, do NOT merge) ─
-   Puts the ENTIRE reflection section on a warm full-bleed surface (edge-to-edge, no
-   card border) to signal the first-person register. Warm/light family ONLY, never
-   dark: the token is the warm paper lift — in light mode the light release after
-   03's dark climax; it must not invert to a dark slab. Background painted via
-   ::before bled to viewport width (the .figure--full-bleed math) so the section's
-   own width/margin math is untouched. Apply by adding this modifier to the
-   Reflection <section> className; left off by default (restraint is variant a). */
-.cs-section--reflection-zone {
-  position: relative;
-  isolation: isolate;
-  padding-block: clamp(2.5rem, 5vw, 4.5rem);
-}
-.cs-section--reflection-zone::before {
-  content: '';
-  position: absolute;
-  inset-block: 0;
-  left: calc(50% - 50vw);
-  width: 100vw;
-  background: var(--bg-surface); /* one step lighter than the milestone's elevated, so they nest */
-  z-index: -1;
-}
-
 /* ── Two-up framed evidence pair (FramedPair) ─────────────────────────────
    Two co-equal evidence panels with per-image captions, side by side. Fills
    its container (in a .cs-section band → half each → ~293px tall at 16:9).

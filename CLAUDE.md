@@ -262,8 +262,11 @@ The role utilities and component usage stay identical. No find-and-replace.
 - Text-role contrast floors: `--text-primary` AAA; `--text-secondary` / `--text-muted`
   AA-normal (4.5:1); `--text-subtle` AA-large only (≥24px or ≥18.66px bold) — never
   normal-size meaningful text.
-- `font-optical-sizing: auto` is global; do NOT hardcode `opsz` via font-variation-settings.
-  Width via the `font-stretch` property. FVS only on the hero callout.
+- `font-optical-sizing: auto` is global; do NOT hardcode `opsz` via font-variation-settings
+  for ordinary type. Width via the `font-stretch` property. FVS is reserved for sanctioned
+  multi-axis display moments where the axes must render together: the hero callout, the Also
+  Shipped titles (`text-qh-title`), and the reflection milestone date. Log any new instance in
+  `docs/typography-system.md` §7 (the source of truth).
 - Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
   `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
   light-only to `--border-default` — never change the base token.
