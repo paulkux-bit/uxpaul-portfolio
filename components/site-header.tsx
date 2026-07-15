@@ -14,8 +14,7 @@ import { ThemeToggle } from './theme-toggle';
  * the home page, About page, and case-study article on a single source of
  * truth. The shared axis preserves the prior 1152 / 24-32 convention exactly.
  *
- * The annotation toggle is intentionally absent in v1 (no page has PopUps yet);
- * the PopUp-system build mounts <AnnotationToggle> here. See annotation-toggle.tsx.
+ * No annotation toggle: the PopUp annotation layer was decommissioned.
  */
 export function SiteHeader() {
   return (

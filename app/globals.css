@@ -586,40 +586,6 @@
   text-decoration-color: var(--border-strong);
 }
 
-/* Annotation toggle — on-state reads via fill + weight + border, never
-   chroma (chroma is reserved for the focus moment). Disabled = inert. */
-.annotation-toggle {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0 0.75rem;
-  border: 1px solid var(--border-default);
-  border-radius: 8px;
-  background-color: transparent;
-  color: var(--text-secondary);
-  font-size: 0.875rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition:
-    color 160ms var(--ease-out-soft),
-    border-color 160ms var(--ease-out-soft),
-    background-color 160ms var(--ease-out-soft);
-}
-.annotation-toggle:hover:not(:disabled) {
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-.annotation-toggle[data-on] {
-  background-color: var(--bg-surface-elevated);
-  border-color: var(--border-strong);
-  color: var(--text-primary);
-  font-weight: 600;
-}
-.annotation-toggle:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
 /* Theme toggle — icon button. Border-only hover (no chroma; chroma is the
    focus moment, inherited from the global :focus-visible halo). Sun/moon
    visibility is driven by the .dark class, set pre-paint by next-themes. */
@@ -649,25 +615,6 @@
 .theme-toggle .icon-sun { display: none; }
 .dark .theme-toggle .icon-sun { display: inline; }
 .dark .theme-toggle .icon-moon { display: none; }
-
-/* ============================================================
-   UTILITIES — PopUp annotation layer (use ONLY in annotations)
-   ============================================================ */
-
-@utility bg-popup-canvas           { background-color: var(--popup-canvas); }
-@utility bg-popup-surface          { background-color: var(--popup-surface); }
-@utility bg-popup-surface-elevated { background-color: var(--popup-surface-elevated); }
-@utility border-popup              { border-color: var(--popup-border); }
-@utility text-popup-primary        { color: var(--popup-text-primary); }
-@utility text-popup-muted          { color: var(--popup-text-muted); }
-
-/* ============================================================
-   POPUP STATE — applied to <body> when annotations toggle on
-   ============================================================ */
-
-body.popup-on {
-  background-color: color-mix(in oklch, var(--bg-canvas) 80%, var(--popup-canvas));
-}
 
 /* ============================================================
    CASE-STUDY INDEX REVEAL (progressive enhancement)
@@ -1374,10 +1321,7 @@ body.popup-on {
 }
 
 /* Zero the preceding paragraph's bottom margin so .framed-pair's margin-top solely owns the
-   prose→evidence gap (single-owned 2rem; 0 + 2rem whether margins collapse or add).
-   NOTE: annotation-state-dependent — when the PopUp layer is toggled on a PopUp renders between
-   this paragraph and the images, the adjacency breaks and the gap reverts to the global 1.5rem.
-   See docs/bard-animation-plumbing.md. */
+   prose→evidence gap (single-owned 2rem; 0 + 2rem whether margins collapse or add). */
 .cs-section p:has(+ .framed-pair) {
   margin-bottom: 0;
 }
@@ -1705,195 +1649,6 @@ html.dark .oku-figure {
 @media (max-width: 640px) {
   .transformation__after {
     text-align: center;
-  }
-}
-
-/* ── PopUp surface wash (when annotations on) ─────────────────────────── */
-
-body.popup-on {
-  background-color: color-mix(in oklch, var(--color-bg, oklch(0.985 0.004 75)) 92%, var(--color-popup) 8%);
-  transition: background-color 240ms ease-out;
-}
-
-.popup {
-  position: relative;
-  margin: 0;
-}
-
-.popup-marker {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 999px;
-  background: var(--color-popup);
-  color: oklch(0.985 0.004 75);
-  font-size: 0.8rem;
-  line-height: 1;
-  font-weight: 600;
-}
-
-.popup-inline {
-  margin: 1.75rem 0;
-  border-left: 2px solid var(--color-popup);
-  padding-left: 1.125rem;
-}
-
-.popup-inline > summary {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  list-style: none;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-popup);
-  user-select: none;
-}
-
-.popup-inline > summary::-webkit-details-marker {
-  display: none;
-}
-
-.popup-inline__body {
-  margin-top: 0.875rem;
-  font-size: 0.9375rem;
-  line-height: 1.6;
-  color: color-mix(in oklch, currentColor 85%, transparent);
-}
-
-.popup-inline__body p {
-  margin: 0 0 0.5rem;
-  max-width: none;
-}
-
-.popup-inline__body p:last-child {
-  margin-bottom: 0;
-}
-
-@media (min-width: 1024px) {
-  .popup-inline {
-    display: none;
-  }
-
-  .popup-bubble {
-    position: absolute;
-    top: 0;
-    left: calc(100% + 3rem);
-    width: 17rem;
-    padding: 1.125rem 1.375rem;
-    background: var(--color-popup-soft);
-    color: var(--color-popup-text);
-    border-radius: 6px;
-    border-left: 2px solid var(--color-popup);
-    font-size: 0.875rem;
-    line-height: 1.55;
-    z-index: 5;
-    box-shadow: 0 1px 2px oklch(0.18 0.012 50 / 0.03), 0 12px 28px -14px oklch(0.18 0.012 50 / 0.1);
-  }
-
-  .popup-bubble__marker {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.125rem;
-    height: 1.125rem;
-    border-radius: 999px;
-    background: var(--color-popup);
-    color: oklch(0.985 0.004 75);
-    font-size: 0.7rem;
-    line-height: 1;
-    font-weight: 600;
-    margin-bottom: 0.625rem;
-  }
-
-  .popup-bubble__body p {
-    margin: 0 0 0.5rem;
-    max-width: none;
-  }
-
-  .popup-bubble__body p:last-child {
-    margin-bottom: 0;
-  }
-}
-
-html.dark .popup-bubble {
-  background: var(--color-popup-soft-dark);
-  color: var(--color-popup-text-dark);
-}
-
-/* ── Floating annotation button (replaces header toggle) ─────────────── */
-
-.annotation-fab {
-  position: fixed;
-  bottom: max(1.5rem, env(safe-area-inset-bottom, 0));
-  left: max(1.5rem, env(safe-area-inset-left, 0));
-  z-index: 30;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 0.625rem 1rem 0.625rem 0.875rem;
-  border-radius: 999px;
-  background: color-mix(in oklch, var(--color-bg, oklch(0.985 0.004 75)) 80%, transparent);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  border: 1px solid color-mix(in oklch, currentColor 18%, transparent);
-  font-family: inherit;
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  color: inherit;
-  cursor: pointer;
-  box-shadow: 0 1px 2px oklch(0.18 0.012 50 / 0.04), 0 12px 32px -16px oklch(0.18 0.012 50 / 0.18);
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 280ms ease-out, transform 280ms ease-out, border-color 160ms ease;
-  pointer-events: none;
-}
-
-.annotation-fab.is-visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
-
-.annotation-fab:hover {
-  border-color: color-mix(in oklch, currentColor 32%, transparent);
-}
-
-.annotation-fab:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 3px;
-}
-
-.annotation-fab__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 999px;
-  background: color-mix(in oklch, currentColor 28%, transparent);
-  transition: background-color 220ms ease, box-shadow 220ms ease;
-}
-
-.annotation-fab.is-on .annotation-fab__dot {
-  background: var(--color-popup);
-  box-shadow: 0 0 0 4px color-mix(in oklch, var(--color-popup) 22%, transparent);
-}
-
-.annotation-fab__state {
-  font-variant-numeric: tabular-nums;
-  opacity: 0.65;
-  margin-left: 0.2em;
-}
-
-@media (max-width: 640px) {
-  .annotation-fab {
-    bottom: max(1rem, env(safe-area-inset-bottom, 0));
-    left: max(1rem, env(safe-area-inset-left, 0));
-    padding: 0.5rem 0.875rem 0.5rem 0.75rem;
-    font-size: 0.75rem;
   }
 }
 
@@ -2715,15 +2470,3 @@ html.dark .figure-placeholder {
   text-wrap: pretty;               /* fills the measure with a tidy rag (no widow); balance evened lines short → right-side band */
 }
 
-/* ── Reduced motion ──────────────────────────────────────────────────── */
-
-@media (prefers-reduced-motion: reduce) {
-  body.popup-on,
-  .annotation-fab {
-    transition: none !important;
-  }
-  .annotation-fab {
-    opacity: 1;
-    transform: none;
-  }
-}

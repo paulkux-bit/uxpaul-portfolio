@@ -1,5 +1,4 @@
 import type { MDXComponents } from 'mdx/types';
-import { PopUp } from '@/components/popup';
 import { Figure } from '@/components/figure';
 import { FullBleed } from '@/components/full-bleed';
 import { ConstrainedBleed } from '@/components/constrained-bleed';
@@ -17,7 +16,6 @@ import { HeroBlock } from '@/components/hero-block';
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-    PopUp,
     Figure,
     FullBleed,
     ConstrainedBleed,

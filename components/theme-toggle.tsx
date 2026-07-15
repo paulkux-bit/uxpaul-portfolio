@@ -4,8 +4,7 @@ import { useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
 
 // Returns false during SSR and the hydration commit, true thereafter — without
-// an effect (no cascading render). Mirrors the helper in annotation-toggle.tsx;
-// copied rather than shared (copy before generalizing).
+// an effect (no cascading render).
 function useHydrated(): boolean {
   return useSyncExternalStore(
     () => () => {},
