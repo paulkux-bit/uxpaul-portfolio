@@ -42,11 +42,13 @@ import { BentoBand } from '@/components/bento';
 
 <div className="eyebrow">The problem</div>
 
-## Florida's data coordinator moves cases, not forms.
+## Investigators have to get the case right. The system fought them.
 
-<p className="section-lede">She runs boating-incident reporting for the highest-volume jurisdiction in the country. Fifteen to thirty cases a session, several sessions a week.</p>
+**Boating accident cases are rising**, and every one becomes a federal record.
 
-The legacy system fights her on every one: cases look complete and bounce, rejection emails name the case but never the field, and a sixty-day federal clock never stops running.
+**The job isn't pushing forms.** Investigators have to get the details right, because the case is evidence.
+
+**The legacy system worked against that.** The interface was clunky. Cases looked complete while missing required data. Federal mandates went unmet.
 
 <PopUp anchor="courtroom">
 Florida law enforcement uses BARD summary sheets in depositions. When what the officer entered doesn't match what the sheet prints, they testify about a software quirk instead of the incident.
@@ -74,11 +76,11 @@ Florida law enforcement uses BARD summary sheets in depositions. When what the o
 
 <section className="cs-section cs-section--frictions">
 
-<div className="eyebrow">Three frictions</div>
+<div className="eyebrow">What I found</div>
 
 ## The real work was happening around the system, not in it.
 
-I talked to twenty people who do the work, from the busiest states to the smallest territories.
+I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the survey results and support tickets from the legacy system.
 
 <PopUp anchor="hook">
 The first screen-share, the coordinator pulled up the same field across two state submissions. They didn't match. The redesign question changed in that minute.
@@ -93,7 +95,7 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
     <div className="friction-beat__text">
       <span className="thread-index">01</span>
       <h3 className="friction-beat__headline">Fifty-six forks</h3>
-      <p className="friction-beat__scene">Fifty-six jurisdictions forked the intake form into fifty-six versions, each shaped to its own records. Standardization always came all-or-nothing, so it always lost: a standard that never bent.</p>
+      <p className="friction-beat__scene">Every jurisdiction rebuilt the form its own way. Standardizing meant all or nothing, so it never happened.</p>
     </div>
     <OkuFigure variant="forms-diverge" alt="Fifty-six state forms diverging from a common origin, each adapting away from the others." />
   </li>
@@ -101,7 +103,7 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Always last year's picture</h3>
-      <p className="friction-beat__scene">Every spring, someone hand-cranked the national picture from an Access database, six months after the year it covered. The data sat there all twelve months. The meaning arrived once, already stale.</p>
+      <p className="friction-beat__scene">The national numbers were hand-built from an Access database each spring, six months late. The data was there all year. Nobody could read it.</p>
     </div>
     <OkuFigure variant="insight-trapped" alt="A year of incident data with meaning lit in only a single month." />
   </li>
@@ -109,7 +111,7 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">The reconciliation tax</h3>
-      <p className="friction-beat__scene">To file a single case, a coordinator kept four tabs open: her narrative, the USCG's required view, the incident notes, and Google Maps. Nothing connected them, so she reconciled by hand, every case.</p>
+      <p className="friction-beat__scene">Four tabs to file one case, and nothing connected them. She reconciled by hand, every time.</p>
     </div>
     <OkuFigure variant="manual-reconcile" alt="One incident record forced into two readings, reconciled by hand across two open tabs." />
   </li>
@@ -121,21 +123,21 @@ The all-56-states rule arrived screen-share by screen-share, until I reached for
 
 <div className="eyebrow">The bet</div>
 
-## Standardize the data, not the people.
+## How might every state keep working its own way, and still add up to one national picture?
 
-The three frictions share one root. Fifty-six ways of filing meant the system could hold the data and never read it.
+All three frictions share one root. Fifty-six versions of the form meant no one could see across them. An investigator couldn't spot a trend. A reviewer couldn't act on one.
 
-The obvious fix, one national form, always died against fifty-six ways of working. So I bet the other way: leave every state's process alone, and unify only the record underneath. One filing, one picture, one number, without asking anyone to change.
+The obvious fix was one national form. It never survived contact with how people actually work. So I bet the other way: leave every state's process alone, and unify only the record underneath.
 
 </section>
 
 <section className="cs-section">
 
-<div className="eyebrow">The product</div>
+<div className="eyebrow">The solution</div>
 
-## One form. Two audiences. Fifty-six states.
+## The form bends. The record doesn't.
 
-The form every jurisdiction now files into. It shows each state only the fields their case needs, scores federal compliance as they work instead of at the end, and lets a Coast Guard reviewer see exactly what the state sees, in the same screen.
+Every state's fields live in one schema, and every field is optional. So an investigator opens the form and sees only what their case needs, nothing else. As they work, the form scores its own federal compliance, so nothing is missing at submission. And when the Coast Guard reviews it, they read the same record from their own view.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
@@ -153,19 +155,14 @@ The form every jurisdiction now files into. It shows each state only the fields 
   aspect={1.6}
 />
 
+**The output is standardized. The process never had to be.**
+
 </section>
 
 <section className="cs-section">
-  <div className="eyebrow">The resolutions</div>
+  <div className="eyebrow">How it works</div>
 
-  <h2>How might every jurisdiction keep working its own way, and still add up to one current national picture?</h2>
-
-  <p className="section-lede">
-    As the sole designer, I had one hard constraint: unify the data without asking a single
-    state to change how it files.
-  </p>
-
-  <div className="mt-16 2xl:mt-20 flex items-baseline gap-2 text-caption">
+  <div className="mt-8 flex items-baseline gap-2 text-caption">
     <span className="thread-index">01</span>
     <span className="text-muted">How you file</span>
   </div>
@@ -228,7 +225,7 @@ The form every jurisdiction now files into. It shows each state only the fields 
 
 <section className="cs-section">
 
-<div className="eyebrow">Reflection</div>
+<div className="eyebrow">What it took</div>
 
 ## The hard part wasn't the design.
 
@@ -245,7 +242,7 @@ I thought the win would be a leaner form. It was the opposite. Every state built
   aspect={2.263}
 />
 
-Then I showed each office what that trade actually buys. Once the data is standardized, the system can read it and surface what needs attention on its own. Fifty-six separate spreadsheets never could.
+Then I showed them the payoff. Standardized data reads itself, and surfaces what needs attention. Fifty-six spreadsheets never could.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-insightwide--band.png"
@@ -256,7 +253,7 @@ Then I showed each office what that trade actually buys. Once the data is standa
   aspect={2.435}
 />
 
-None of this was a pitch. Before I asked a single office to give anything up, the whole thing was designed and mapped, every section, every state, every view. The ask was credible because the work was already done.
+I didn't pitch it. I mapped every section and every state view, then tested the permutations with the people who would use it.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-figma-canvas--band.png"
@@ -280,6 +277,6 @@ None of this was a pitch. Before I asked a single office to give anything up, th
 
 ## Role
 
-Sole product designer on the BARD modernization, working for the U.S. Navy in support of the U.S. Coast Guard. Partnered with product, engineering, and Coast Guard stakeholders.
+Sole product designer on the BARD modernization, working for the U.S. Navy in support of the U.S. Coast Guard. Partnered with product, engineering, and Coast Guard stakeholders. November 2025 to present.
 
 </section>
