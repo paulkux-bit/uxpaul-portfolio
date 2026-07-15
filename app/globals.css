@@ -2152,6 +2152,31 @@ html.dark .oku-figure {
   border-radius: 4px;
 }
 
+/* Band scroll track (opt-in via BentoBand's `scrollFloor`, e.g. the dense product form
+   shots). Reuses the ribbon's scroll-container + focus mechanism, but WIDTH-driven, not
+   the ribbon's fixed-height mobile sizing: a 16:10 shot floored by min-width stays upright
+   and legible where a fixed height would shrink it. Present at all widths; on desktop the
+   media is width:100% ≤ track → no overflow, so the track is an inert (benign) tab stop,
+   exactly as the ribbon track is on desktop. */
+.bento-band__track {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+@media (max-width: 767px) {
+  /* Floor the media wider than the viewport so its content reads at scale; aspect-ratio
+     derives the height. overflow-x on the track → horizontal pan, right-edge clip is the cue. */
+  .bento-band__track .bento-band__media {
+    min-width: var(--band-scroll-floor, 760px);
+  }
+  .bento-band__track {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+}
+
 /* Ribbon — desktop/tablet (≥md): a full-width strip at its native aspect. The
    track is a scroll container at ALL widths so its tabIndex sits on a genuine
    scroller; on desktop the canvas fits exactly → no overflow, no scrollbar. */
@@ -2170,9 +2195,10 @@ html.dark .oku-figure {
   border-radius: 4px;
 }
 
-/* The ribbon track is keyboard-focusable (tabIndex/role on the element) so a
-   keyboard user can scroll the strip on mobile; two-layer halo per the focus convention. */
-.bento-ribbon__track:focus-visible {
+/* The ribbon + band scroll tracks are keyboard-focusable (tabIndex/role on the element) so a
+   keyboard user can scroll the strip on mobile; one shared two-layer halo per the focus convention. */
+.bento-ribbon__track:focus-visible,
+.bento-band__track:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
   box-shadow: var(--focus-glow);

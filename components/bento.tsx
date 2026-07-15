@@ -58,6 +58,9 @@ type BreakoutProps = {
   focal?: Focal;
   aspect: number;
   label?: string;
+  /** BentoBand only: below md, floor the media at this px width inside a horizontal
+   *  scroll track (dense screenshots stay legible, pan instead of squishing to texture). */
+  scrollFloor?: number;
 } & ({ src: string; alt: string } | { src?: undefined; alt?: undefined });
 
 interface BentoThemeProps {
@@ -218,21 +221,43 @@ export function BentoItem(props: BentoItemProps) {
   return <BentoFigure {...props} slot={props.slot ?? 'standard'} priority={false} />;
 }
 
-/** Variable-aspect solo-row tile (e.g. 4.9:1). Full-width, upright at every breakpoint. */
-export function BentoBand({ src, alt, caption, gloss, focal, aspect, label }: BreakoutProps) {
+/** Variable-aspect solo-row tile (e.g. 4.9:1). Full-width, upright at every breakpoint.
+ *  With `scrollFloor`, the media sits in a focusable horizontal scroll track (reusing the
+ *  ribbon's track chrome + focus halo) so a dense shot pans instead of squishing on mobile. */
+export function BentoBand({ src, alt, caption, gloss, focal, aspect, label, scrollFloor }: BreakoutProps) {
+  const media = (
+    <div className="bento-band__media">
+      <BentoMediaInner
+        src={src}
+        alt={alt}
+        label={label}
+        sizes={BREAKOUT_SIZES}
+        objectPosition={focalToPosition(focal)}
+        priority={false}
+      />
+    </div>
+  );
+  const style = {
+    '--band-aspect': `${aspect} / 1`,
+    ...(scrollFloor ? { '--band-scroll-floor': `${scrollFloor}px` } : null),
+  } as CSSProperties;
   return (
-    <figure className="bento-band" style={{ '--band-aspect': `${aspect} / 1` } as CSSProperties}>
+    <figure className="bento-band" style={style}>
       <BreakoutCaption caption={caption} gloss={gloss} />
-      <div className="bento-band__media">
-        <BentoMediaInner
-          src={src}
-          alt={alt}
-          label={label}
-          sizes={BREAKOUT_SIZES}
-          objectPosition={focalToPosition(focal)}
-          priority={false}
-        />
-      </div>
+      {scrollFloor ? (
+        // Caption stays outside the scroller (full-width); only the media pans — the
+        // same split the ribbon uses. Focusable so keyboard users can scroll on mobile.
+        <div
+          className="bento-band__track"
+          tabIndex={0}
+          role="group"
+          aria-label={caption ?? alt ?? 'Scrollable image'}
+        >
+          {media}
+        </div>
+      ) : (
+        media
+      )}
     </figure>
   );
 }
