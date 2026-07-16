@@ -47,7 +47,7 @@ export function coverTier(study: CaseStudy): CoverTier {
 export const caseStudies: CaseStudy[] = [
   {
     slug: 'uscg-bard',
-    problemFraming: 'How do you turn fleet data into a funding argument?',
+    problemFraming: 'How do you unify 56 jurisdictions without changing one?',
     projectName: 'Bard',
     client: 'U.S. Coast Guard',
     headline: '[OUTCOME METRIC]',
