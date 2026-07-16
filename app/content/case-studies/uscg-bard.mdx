@@ -46,9 +46,9 @@ import { BentoBand } from '@/components/bento';
 
 **Boating accident cases are rising**, and every one becomes a federal record.
 
-**The job isn't pushing forms.** Investigators have to get the details right, because the case is evidence.
+**The job isn't pushing forms.** The case becomes evidence, so the details have to hold up.
 
-**The legacy system worked against that.** The interface was clunky. Cases looked complete while missing required data. Federal mandates went unmet.
+**The legacy system worked against that.** Cases looked complete while missing required data. Federal mandates went unmet.
 
 <FramedPair
   framed={false}
@@ -57,14 +57,14 @@ import { BentoBand } from '@/components/bento';
     width: 1463,
     height: 971,
     alt: 'Screenshot of the legacy BARD dashboard, a dense table listing boating-incident cases by ID, date, water body, county, vessel and casualty counts, and status.',
-    caption: 'The legacy dashboard: every case is a row, with no way to see which one is closest to breaching the clock.',
+    caption: 'The legacy dashboard: every case is a row, with no way to see which is closest to breaching the clock.',
   }}
   right={{
     src: '/case-studies/uscg-bard/legacy-report.png',
     width: 1866,
     height: 1242,
     alt: 'Screenshot of the legacy Florida Boating Accident Report, a single long form densely packed with input fields for incident type, location, conditions, and reporting party.',
-    caption: 'The incident record: one long form with no shape, the same whether the case is a near-miss or a fatality.',
+    caption: 'The incident record: one long form, the same whether the case is a near-miss or a fatality.',
   }}
 />
 
@@ -76,7 +76,7 @@ import { BentoBand } from '@/components/bento';
 
 ## The real work was happening around the system, not in it.
 
-I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the survey results and support tickets from the legacy system.
+I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the legacy system's survey results and support tickets.
 
 <ol className="friction-beats">
   <li className="friction-beat" data-thread="1">
@@ -99,7 +99,7 @@ I talked to twenty people who do the work, from the busiest states to the smalle
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">The reconciliation tax</h3>
-      <p className="friction-beat__scene">A coordinator kept four tabs open to file one case, and nothing connected them. She reconciled by hand, every time.</p>
+      <p className="friction-beat__scene">Four tabs open to file one case, nothing connecting them. A coordinator reconciled by hand, every time.</p>
     </div>
     <OkuFigure variant="manual-reconcile" alt="One incident record forced into two readings, reconciled by hand across two open tabs." />
   </li>
@@ -111,11 +111,11 @@ I talked to twenty people who do the work, from the busiest states to the smalle
 
 <div className="eyebrow">The bet</div>
 
-## How might every jurisdiction keep working its own way, and still add up to one national picture?
+## How do you unify 56 jurisdictions without changing one?
 
 **Standardize the data, not the people.** All three frictions share one root. Fifty-six versions of the form meant no one could see across them. An investigator couldn't spot a trend. A reviewer couldn't act on one.
 
-The obvious fix was one national form. It never survived contact with how people actually work. So I bet the other way: leave every jurisdiction's process alone, and unify only the record underneath.
+The obvious fix was one national form. It had been tried, and it always lost. So I bet the other way: leave every jurisdiction's process alone, and unify only the record underneath.
 
 </section>
 
@@ -125,7 +125,7 @@ The obvious fix was one national form. It never survived contact with how people
 
 ## The form bends. The record doesn't.
 
-Every state's fields live in one schema, and every field is optional. So an investigator opens the form and sees only what their case needs, nothing else. As they work, the form scores its own federal compliance, so nothing is missing at submission. And when the Coast Guard reviews it, they read the same record from their own view.
+Every jurisdiction's fields live in one schema. Federal fields are required; everything else is optional for everyone. So an investigator opens the form and sees only what their case needs. As they work, the form scores its own federal compliance, so nothing is missing at submission. And when the Coast Guard reviews it, they read the same record from their own view.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
@@ -190,7 +190,7 @@ Every state's fields live in one schema, and every field is optional. So an inve
 
 ## The hard part wasn't the design.
 
-<p className="section-lede">Standardizing fifty-six forms into one was an information architecture problem. Getting fifty-six jurisdictions to agree to it was the real work.</p>
+<p className="section-lede">Standardizing fifty-six forms into one was an information architecture problem. **But getting fifty-six jurisdictions to agree to it was the real work.**</p>
 
 I thought the win would be a leaner form. It was the opposite. Every state built its form for a reason, and none of them wanted to give it up. So I kept every state's fields and made them optional for everyone. No one lost anything; they gained a shared spine underneath.
 
@@ -203,7 +203,7 @@ I thought the win would be a leaner form. It was the opposite. Every state built
   aspect={2.263}
 />
 
-Then I showed them the payoff. Standardized data reads itself, and surfaces what needs attention. Fifty-six spreadsheets never could.
+Then I showed them the payoff. Standardized data reads itself and surfaces what needs attention. Fifty-six spreadsheets never could.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-insightwide--band.png"
@@ -220,9 +220,11 @@ I didn't pitch it. I mapped every section and every state view, then tested the 
   src="/case-studies/uscg-bard/reflection/reflection-figma-canvas--band.png"
   alt="Zoomed-out Figma canvas of the BARD Incident form: an information-architecture outline beside four form states (empty, single-vessel, multi-vessel, USCG view)."
   caption="The whole form, designed before the ask."
-  gloss="Every section, every state, every view."
+  gloss="Empty, filled, multi-vessel, and the Coast Guard's view."
   aspect={1.904}
 />
+
+Every jurisdiction's fields are in the build.
 
 <div className="milestone">
   <p className="milestone__frame">BARD reaches initial operating capability with the U.S. Coast Guard</p>
