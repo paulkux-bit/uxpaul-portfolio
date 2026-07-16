@@ -287,6 +287,20 @@ The role utilities and component usage stay identical. No find-and-replace.
 - Commit messages in imperative mood ("Add header nav" not "Added header nav")
 - Always test in both light and dark mode before committing
 
+## Verification chain (don't re-derive this)
+
+The named gates are three different tools; two are external and do NOT read prose:
+- **detector** = Impeccable's **visual** anti-pattern scanner. External, lives in the
+  installed impeccable plugin (`~/.claude/.../impeccable/scripts/detector/`), not a repo
+  script. It inspects markup + CSS for AI-slop tells (side-tab borders, gradient text,
+  overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
+- **typeset** = Impeccable's typography check. Also external, also not prose.
+- **prose** (em-dash + banned words) = `npm run lint:prose` (`scripts/lint-prose.mjs`), a
+  real repo script. Scans rendered `.next` HTML: HARD-fails on em-dash U+2014, WARNs on the
+  project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
+
+Full chain: **tsc -> eslint -> build -> lint:prose -> detector (visual, external) -> typeset (external)**.
+
 # CLAUDE.md — color system section
 
 Paste this into your existing `CLAUDE.md`, after the typography section.
