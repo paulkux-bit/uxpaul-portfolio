@@ -1,8 +1,22 @@
 import createMDX from '@next/mdx';
+import { BLOCK_INDEXING } from './seo.config.mjs';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'mdx'],
+  // Enforcing counterpart to app/robots.ts. robots.txt is only advisory, so
+  // while the launch flag is set we also send X-Robots-Tag: noindex, nofollow
+  // on every route, which Google honors even for disallowed-but-linked URLs.
+  // Gated by the single BLOCK_INDEXING flag (seo.config.mjs) -> flip it to launch.
+  async headers() {
+    if (!BLOCK_INDEXING) return [];
+    return [
+      {
+        source: '/:path*',
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
+      },
+    ];
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
     // Next 16 narrowed the default qualities allowlist to [75]. The figure
