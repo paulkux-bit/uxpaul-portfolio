@@ -71,9 +71,9 @@ export default function Home() {
         <p id="selected-work" className="text-caption font-semibold text-muted tracking-wide">
           Selected work
         </p>
-        <RevealGrid className="grid gap-x-8 gap-y-12 lg:grid-cols-2">
+        <RevealGrid className="grid gap-x-8 gap-y-12 lg:grid-cols-2 lg:[grid-auto-rows:1fr]">
           {caseStudies.map((study) => (
-            <li key={study.slug}>
+            <li key={study.slug} className="h-full">
               <CaseStudyCard study={study} />
             </li>
           ))}

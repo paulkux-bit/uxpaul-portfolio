@@ -1515,6 +1515,19 @@
 /* The figure floats on paper — no box/border/background. color sets the ink the
    SVG's fill="currentColor" inherits, so it renders in body-text ink and flips with
    theme. Lever: step to var(--text-secondary) if full ink reads heavy. */
+/* Card cover line art (raster, pure-white bg). One asset per theme via blend:
+   light multiply drops the white into the card fill, black ink stays; dark inverts
+   (ink -> white) then screen drops the now-black bg into the card fill. Composites
+   against the card's opaque bg-surface (the card is `isolate`), never the page. */
+.cover-art {
+  display: block;
+  mix-blend-mode: multiply;
+}
+html.dark .cover-art {
+  filter: invert(1);
+  mix-blend-mode: screen;
+}
+
 .oku-figure {
   margin: 0.75rem 0 0; /* mobile (stacked): scene → figure, kept tight so the figure stays attached */
   color: var(--text-secondary); /* light/Paper: supporting weight (stepped down from primary so the figure recedes; dark override below wins in Low Light) */

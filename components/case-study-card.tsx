@@ -2,6 +2,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { coverTier, type CaseStudy, type CoverTier } from '@/app/data/case-studies';
 
+// Per-card cover illustration, keyed by slug -> asset basename in
+// public/case-studies/covers/ (webp + png). Decorative line art; the question
+// and client carry the meaning, so it renders aria-hidden. A card without an
+// entry still renders (question + meta only). Theme-flip via the .cover-art
+// blend rule in globals.css.
+const COVER_ART: Record<string, string> = {
+  'uscg-bard': 'bard',
+  'us-navy-fdt-e': 'fdte',
+  'us-navy-dagr': 'dagr',
+  'urbn-shipping': 'urbn',
+  nuuly: 'nuuly',
+};
+
 /**
  * One entry in the case-study index. The cover resolves through three tiers
  * (motion > image > typographic; see `coverTier`):
@@ -30,6 +43,7 @@ import { coverTier, type CaseStudy, type CoverTier } from '@/app/data/case-studi
  */
 export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const tier = coverTier(study);
+  const art = COVER_ART[study.slug];
 
   const title = (
     <Link
@@ -55,16 +69,36 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   );
 
   return (
-    <article className="group relative overflow-hidden rounded-sm border border-subtle bg-surface lift hover:lift-hover focus-within:lift-hover hover:border-strong focus-within:border-strong">
+    <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift hover:lift-hover focus-within:lift-hover hover:border-strong focus-within:border-strong">
       {tier === 'typographic' ? (
-        <>
-          {/* Typographic cover — its own un-clipped, un-transformed well, so
-              the stretched link still covers the whole article. */}
-          <div className="flex aspect-video items-end border-b border-subtle bg-sunken p-6 md:p-8">
+        // One cream surface: a floating centered illustration over the question
+        // (left) and the muted meta. flex-col + the mt-auto text block pin the
+        // question/meta to the bottom so the cards equalize height (grid-auto-rows:1fr
+        // on the grid) with the illustration floating above.
+        <div className="flex flex-1 flex-col px-6 py-8 md:px-8 md:py-12">
+          {art ? (
+            /* Decorative, pre-sized, mix-blended asset served directly via
+               <picture> (webp + png). next/image would re-encode and strip the
+               fixed dimensions the blend relies on. The <picture> is the block
+               sizing box (percentage width on an inline picture's <img> misresolves);
+               ~40% card width, centered, floating over the question. */
+            <picture className="mx-auto mb-6 block w-[40%] max-w-[200px] md:mb-8">
+              <source srcSet={`/case-studies/covers/${art}.webp`} type="image/webp" />
+              <img
+                src={`/case-studies/covers/${art}.png`}
+                alt=""
+                aria-hidden="true"
+                width={600}
+                height={600}
+                className="cover-art w-full"
+              />
+            </picture>
+          ) : null}
+          <div className="mt-auto">
             <h2 className="text-cover">{title}</h2>
+            <div className="mt-3">{meta}</div>
           </div>
-          <div className="px-6 pb-6 pt-3 md:px-8 md:pb-8">{meta}</div>
-        </>
+        </div>
       ) : (
         <>
           <CardMediaSlot tier={tier} study={study} />
