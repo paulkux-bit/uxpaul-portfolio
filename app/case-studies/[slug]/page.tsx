@@ -5,7 +5,7 @@ import type { Metadata } from 'next';
 // analyzable so Next.js can build them at compile time.
 const caseStudies = {
   'uscg-bard': () => import('@/app/content/case-studies/uscg-bard.mdx'),
-  // 'us-navy-fdt-e':   () => import('@/app/content/case-studies/us-navy-fdt-e.mdx'),
+  'us-navy-fdt-e': () => import('@/app/content/case-studies/us-navy-fdt-e.mdx'),
   // 'us-navy-dagr':    () => import('@/app/content/case-studies/us-navy-dagr.mdx'),
   // 'urbn-shipping':   () => import('@/app/content/case-studies/urbn-shipping.mdx'),
   // 'nuuly':           () => import('@/app/content/case-studies/nuuly.mdx'),

@@ -2483,12 +2483,21 @@ html.dark .figure-placeholder {
   position: absolute;
   bottom: 1.25rem;
   left: 1.25rem;
+  /* --top-left variant below swaps the corner; everything else identical. */
   max-width: min(78%, 18rem); /* sized to the wrap so the card hugs the text on the right; 78% keeps mobile inset */
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-hover);
   border-radius: 8px;
   padding: 1.25rem; /* single even token — tight, no baggy margins */
+}
+
+/* Corner variant: float the callout over the image's TOP-left instead. For heroes
+   whose lower region carries content the card must not cover (FDT-E: the
+   Verify/Respond/Analyze steps). Same card, same 1.25rem inset — corner only. */
+.hero-block__callout--top-left {
+  bottom: auto;
+  top: 1.25rem;
 }
 
 /* Two classes (0,2,0) so these beat `.case-study-prose p` (0,1,1), which otherwise

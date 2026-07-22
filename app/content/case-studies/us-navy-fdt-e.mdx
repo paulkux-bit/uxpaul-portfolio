@@ -1,0 +1,316 @@
+---
+title: "An anomaly isn't intelligence until someone works it."
+slug: "us-navy-fdt-e"
+client: "U.S. Navy"
+template: "A"
+disciplines: ["decision support", "human-AI interaction", "data visualization", "defense"]
+featured: true
+order: 2
+problemFraming: "How do you verify what the AI thinks it saw?"
+projectName: "FDT-E"
+headline: "In active use across multiple major commands."
+summary: "I designed the workflow that turns an AI's anomaly into something an analyst can verify against doctrine, then escalate with confidence."
+heroImage: "/case-studies/us-navy-fdt-e/hero.png"
+heroImageAlt: "A detected C2 anomaly opened as a case over the watch map: OSINT and COMINT sources, an 80 percent confidence reading, and a Verify, Respond, Analyze workflow."
+motionVideo: ""
+role: "Lead Product Designer"
+timeframe: "2024–2025"
+team: "Blended team of Navy product and engineering, active-duty SMEs, and industry partners (Northrop Grumman, Palantir, Georgia Tech)."
+nda: false
+---
+
+{/* ─────────────────────────────────────────────────────────────
+    FDT-E – Template A case study. Copy frozen (canonical file);
+    this pass wires the frozen prose to the real Template A
+    components, mirroring uscg-bard.mdx. Voice: first person at the
+    entry and exit; terse evidence register in captions. No
+    em-dashes (lint:prose hard-fails). All imagery notional /
+    unclassified. FdteFigure variants are STUBS pending real art.
+   ───────────────────────────────────────────────────────────── */}
+
+import { BentoBand } from '@/components/bento';
+import { FdteFigure } from '@/components/fdte-figure';
+
+<HeroBlock
+  eyebrow="FDT-E · U.S. NAVY"
+  title={["An anomaly isn't intelligence", 'until someone works it.']}
+  role="I designed FDT-E, the system Naval Intelligence uses to track enemy air, ground, and maritime forces. Lead designer, start to fielded. In active use across multiple major commands."
+  image={{
+    src: '/case-studies/us-navy-fdt-e/hero.png',
+    alt: 'A detected C2 anomaly opened as a case over the watch map: OSINT and COMINT sources, an 80 percent confidence reading, and a Verify, Respond, Analyze workflow.',
+  }}
+  callout={{
+    label: 'The Premise',
+    body: 'Most AI hands you an answer. This one opens a case a person has to work.',
+  }}
+  calloutPosition="top-left"
+/>
+
+<section className="cs-section cs-section--problem">
+
+<div className="eyebrow">The problem</div>
+
+## An analyst has to be certain before they act. The AI gives them a hunch.
+
+**An alert fires: the AI thinks it has found an enemy command node.** The analyst has minutes, not hours.
+
+**Two ways to be wrong, both expensive.** Act on a false flag and you spend assets, or cue a strike on the wrong thing. Sit on a real one and the picture moves on without you.
+
+**The machine is confident. The analyst is accountable.** A model can be wrong at no cost. The person who acts on it cannot.
+
+**And certainty has to come from this.** Every intelligence discipline reporting at once, thousands of entities across a whole theater, arriving faster than anyone can read. The signal that matters is in there, somewhere, and the clock is running.
+
+{/* Wide pair (Bard's shared-row pattern): the feels-like illustration beside
+    the real intel-tool overwhelm. Both tiles 16:10, so heights match and the
+    caption baselines lock. Per-tile lead/gloss captions render below each
+    image in the terse evidence register (.figure__caption). */}
+<FramedPair
+  framed={false}
+  left={{
+    src: '/case-studies/us-navy-fdt-e/problem-dataflood--feature.png',
+    width: 2320,
+    height: 1450,
+    alt: 'Editorial illustration: an analyst dwarfed by a swirling flood of intelligence fragments, one warm signal in the noise.',
+    caption: (
+      <>
+        <strong>What it feels like.</strong> One analyst, buried in sensor
+        feeds, open source, and specialized intelligence, all at once.
+      </>
+    ),
+  }}
+  right={{
+    src: '/case-studies/us-navy-fdt-e/intel-example--wide.png',
+    width: 2539,
+    height: 1587,
+    alt: 'A live flight-tracking map with hundreds of aircraft icons packed over a region, the everyday overwhelm of a tracking tool.',
+    caption: (
+      <>
+        <strong>What it is.</strong> Intel tools show every hit on the map in
+        real time. It&apos;s overwhelming.
+      </>
+    ),
+  }}
+/>
+
+It looks like a problem of too much data. It wasn't.
+
+</section>
+
+{/* HELD for the What I Found rebuild (H2 will be "On site, the blocker wasn't
+    the volume. It was trust.") — the active/destroyed analyst detail, removed
+    from The Problem when the two sections merged:
+      The same unit was "active ten minutes ago" and "destroyed last week."
+      Which is ground truth?
+      > "So many tracks have location but no timestamp or ID. Are they even
+      >  relevant, or just noise?"
+      > "Intel brief says 'possible adversary here,' but no size, no type.
+      >  That doesn't help me decide anything."
+      > – Analysts, immersion sessions
+    Also unplaced by the merge, available for later modules: gate-walk crops
+    provenance--band, order-of-battle--feature, lineage--popover,
+    activity-feed--tall; FdteFigure variant "int-convergence" (superseded by
+    the dataflood illustration). */}
+
+<section className="cs-section cs-section--frictions">
+
+<div className="eyebrow">What I found</div>
+
+## How much uncertainty a user will tolerate changes with the tempo of the war.
+
+I ran discovery in two places at once: inside the doctrine, and in the field beside the analysts who live by it. Good intel analysts don't trust data blindly. They weigh it, argue with it, and own the call, and getting to design for that judgment was the privilege of the project. Interviews ran from junior operators up to flag officers.
+
+The finding that reorganized the project was not about a feature. It was about trust. Analysts do not hold one standard for believing a piece of intelligence. They hold three, and the tempo of the fight decides which one is in force.
+
+<ol className="friction-beats">
+  <li className="friction-beat" data-thread="1">
+    <div className="friction-beat__text">
+      <span className="thread-index">01</span>
+      <h3 className="friction-beat__headline">In sustained operations, ambiguity is affordable.</h3>
+      <p className="friction-beat__scene">Peacetime pace, generous tolerance.</p>
+    </div>
+    <FdteFigure variant="tempo-sustained" alt="An aperture of tolerated ambiguity, wide open: sustained operations afford ambiguity." />
+  </li>
+  <li className="friction-beat" data-thread="2">
+    <div className="friction-beat__text">
+      <span className="thread-index">02</span>
+      <h3 className="friction-beat__headline">In training, friction is the point.</h3>
+      <p className="friction-beat__scene">The goal is to surface gaps, so rough edges are welcome.</p>
+    </div>
+    <FdteFigure variant="tempo-training" alt="The aperture with its gaps lit: training surfaces the rough edges." />
+  </li>
+  <li className="friction-beat" data-thread="3">
+    <div className="friction-beat__text">
+      <span className="thread-index">03</span>
+      <h3 className="friction-beat__headline">In war, they want one fact with its confidence attached.</h3>
+      <p className="friction-beat__scene">Tempo collapses the window, and the analyst who wanted to see everything now wants only the thing that changes the decision.</p>
+    </div>
+    <FdteFigure variant="tempo-war" alt="The aperture collapsed to a single fact with its confidence attached: the war sets the dial." />
+  </li>
+</ol>
+
+So uncertainty could not be shown one way. The war sets the dial, not the interface.
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">The bet</div>
+
+## I designed the AI to open a case, not close one.
+
+The obvious move with a capable model is to let it answer. Surface the conclusion, badge it, and let the analyst accept or dismiss. That is the pattern most tools reach for, and it is the pattern that produces black-box mistrust and, under pressure, analysis paralysis.
+
+I bet the other way. In FDT-E, the AI is not permitted to hand you an answer. When it detects something, it opens a case, and a case has to be worked. The design turns every anomaly into a short, guided investigation whose steps are lifted from the doctrine analysts already answer to.
+
+That last part was the non-obvious call, and it came from a conversation I keep returning to. A former adversary-army officer, now a subject-matter expert supporting U.S. forces, told the team:
+
+> "In the Russian army, we didn't just read your doctrine; we mastered it, often better than your own forces seemed to. The problem is that your own forces don't always read or follow it."
+>
+> – Former adversary-army officer, U.S. Army Indo-Pacom subject-matter expert
+
+Doctrine was already the shared language of correctness. The adversary had studied it; our own tempo sometimes buried it. So instead of writing a verification flow from scratch and asking analysts to trust my logic, I shaped the flow out of theirs. The steps the tool walks you through are the doctrinal steps for confirming a threat. Following the software and following the doctrine became the same act. I call the pattern the **verification gate**: the fixed, doctrine-shaped checkpoint an AI claim has to pass through before a human carries it forward.
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">How it works</div>
+
+## How the gate works
+
+The baseline is a live disposition view. On the left, the entities under watch. On the right, an activity feed of what changed and when. Nothing is asserted without an "as-of" time.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/gate-walk/baseline-map--feature.png"
+  alt="FDT-E map view of Operation Avalanche: red threat markers inside a blue watch-area polygon over southern Italy."
+  caption="The baseline."
+  gloss={'Current disposition, left; what changed and when, right. Every track carries its "as-of" time. Notional data throughout.'}
+  aspect={1.6}
+  focal={{ x: 0.62, y: 0.6 }}
+/>
+
+<h3 className="text-h3 mt-12 mb-4">Confidence first, answer second.</h3>
+
+The anomaly does not arrive as a headline. It arrives as a marker that states its own confidence before it states its claim: an eighty-percent reading on a possible command-and-control node, sitting quietly at the edge of the map. Leading with the number is the first move in managing the machine's ambiguity honestly. The analyst knows how much to lean before they know what they are leaning on.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/gate-walk/anomaly--feature.png"
+  alt="The watchlist with a C2 anomaly flagged: a highlighted row and map marker, and an 80 percent confidence pill at lower right."
+  caption="The claim announces its confidence before its content."
+  gloss="80 percent, lower right, before a word about what it found."
+  aspect={1.6}
+  focal={{ x: 0.85, y: 0.9 }}
+/>
+
+<Detail
+  src="/case-studies/us-navy-fdt-e/gate-walk/anomaly--confidence-pill.png"
+  alt="Anomaly marker reading C2 Anomaly, 80 percent confidence."
+  width={804}
+  height={158}
+/>
+
+<h3 className="text-h3 mt-12 mb-4">A "why" before a "what."</h3>
+
+Open the anomaly and the first thing the design gives you is provenance, not a conclusion. It names what the model suspects, a potential C2 node, and shows the disciplines the suspicion is built from before it asks anything of you. Seeing that the read came from open-source and communications intelligence is what dissolves the black box. The model is no longer asserting; it is showing its work.
+
+<h3 className="text-h3 mt-12 mb-4">The verification steps are the doctrine.</h3>
+
+Choosing to verify drops the analyst into a guided, all-source correlation. The tool pulls relevant hits from each intelligence discipline over the window that matters, scores them, and lets the analyst rescan as the picture moves. The step names, all-source correlation, fusion, collaborative verification, are not interface inventions. They are the doctrinal sequence for confirming a threat, with a link to the reference sitting right in the step. Procedural compliance stops being a separate chore and becomes the path of least resistance.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/gate-walk/verification--band.png"
+  alt="C2 anomaly verification: an all-source correlation workflow with a link to CJADC2 doctrine, beside seven intelligence disciplines scored by relevant hits."
+  caption="The workflow is the doctrine."
+  gloss="Correlate across domains, score each, and the reference is one click inside the step."
+  aspect={1.778}
+  focal={{ x: 0.55, y: 0.45 }}
+/>
+
+<Figure
+  src="/case-studies/us-navy-fdt-e/gate-walk/verification--sources.png"
+  alt="Intelligence Sources scored by discipline over the past twenty-four hours: GEOINT twelve hits, MASINT none."
+  width={2265}
+  height={1975}
+/>
+
+<h3 className="text-h3 mt-12 mb-4">The human escalates. The software only makes the case.</h3>
+
+When the case holds, the tool moves to response, and here it stays deliberately subordinate. It drafts the escalation, elevate the alert, push to the common operational picture, cue countermeasures, and hands the analyst the pen. Coordination happens in line, with the other watch standers who will act on the call. The design proposes; the person decides and disseminates. That division is the point of the whole system.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/gate-walk/response--feature.png"
+  alt="Anomaly response step: Elevate Alert Level with a Disseminate Alert button, beside a live analyst chat coordinating the response."
+  caption="The software drafts the response."
+  gloss="The analyst signs it. The escalation is a human act, coordinated in line with the watch."
+  aspect={1.6}
+  focal={{ x: 0.72, y: 0.45 }}
+/>
+
+<Figure
+  src="/case-studies/us-navy-fdt-e/gate-walk/response--chat.png"
+  alt="Chatsurfer panel: analysts from JIC, DIA, and NIFC coordinating on the C2 anomaly in real time."
+  width={2232}
+  height={2074}
+/>
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">What I got wrong</div>
+
+## The richest picture was the wrong one.
+
+The first serious build was the impressive one. Live sensor streaming, everything fused, motion on the map, the whole disposition breathing in real time. It demoed beautifully. Then we took it to a Red Flag exercise and ran it against real streaming data in the conditions it would meet at the edge, and it fell apart. Not because the analysis was wrong. Because the environment could not carry it. Denied, degraded, intermittent, and limited bandwidth is the norm at the edge, and the richest version of the picture was the first thing to die on a starved connection.
+
+I had believed, without examining it, that more fidelity was more help. The field corrected me in an afternoon. The version that survived is the quieter one, the one that leads with a single confident claim and lets the analyst pull on more only when the link and the moment allow. Restraint turned out to be the operational requirement, not the aesthetic preference.
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">What I can't show you</div>
+
+## The real FDT-E lives on the high side, and it is a better app than the one on this page.
+
+We designed and built in an unclassified environment and deployed into a secured one. I was not ready for the gap. The volume, the velocity, and the variance of the data on the classified network are past anything the unclassified build ever had to hold, and the tool grew richer and sharper to meet it. What you are reading is the shadow of the system, drawn with notional data. The version operators use is the better one, and it is the one I cannot show.
+
+I have made peace with that being the honest shape of defense work. The evidence stays behind the fence. What travels is the thinking.
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">Where it is now</div>
+
+## It's in active use across multiple major commands.
+
+That reach is the outcome I hold onto, because it was not a given. FDT-E supports dozens of mission types, including ones as consequential as strike and search-and-rescue, and it keeps taking on more. It has become a platform other systems want to plug into, with integration requests arriving from elsewhere in the department. And on the thing the project was built for, operators report more confidence working through ambiguity, because the workflow and the transparency give them somewhere to stand when the data will not settle.
+
+I finished my work in 2025.
+
+{/* QUEUED (Paul-approved, apply during the "Where it is now" MODULE REBUILD —
+    resolves the "2025 celebrates the exit year" flag; the slot carries the
+    reach, the status line replaces the date):
+      frame:  "Dozens of mission types, from strike to search-and-rescue"
+      status: "Fielded"          (goes in the date slot — no calendar year)
+      sub:    "A platform other systems now plug into. Still growing."
+    Keep the section H2 and the outcome paragraph above the box; the box is the
+    crescendo and must say something the H2 doesn't. */}
+<div className="milestone">
+  <p className="milestone__frame">In active use across multiple major commands.</p>
+  <p className="milestone__date">2025</p>
+  <p className="milestone__sub">The system is still in the field, and still growing.</p>
+</div>
+
+</section>
+
+<section className="cs-section">
+
+<div className="eyebrow">Credit</div>
+
+## Role
+
+Lead product designer on FDT-E across UX strategy, implementation, and UI, working for the U.S. Navy at Naval Information Warfare Center Pacific, in support of the Office of Naval Intelligence and Joint forces. The work belonged to a blended team: Navy product and engineering, active-duty analysts and planners serving as subject-matter experts, and industry partners including Northrop Grumman, Palantir, and Georgia Tech. The research reached from junior operators to flag officers. Designed 2024 to 2025, from first build to fielding.
+
+</section>

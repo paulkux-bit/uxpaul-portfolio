@@ -18,6 +18,11 @@ type HeroBlockProps = {
      *  family precedent (AsymmetricPair text-cell, Figure caption). */
     body: ReactNode;
   };
+  /** Which corner of the image the callout floats over. Default bottom-left
+   *  (Bard). Use top-left when the image's lower region carries content the
+   *  card must not cover (FDT-E: the Verify/Respond/Analyze steps). Same card
+   *  styling and inset either way — only the corner changes. */
+  calloutPosition?: 'bottom-left' | 'top-left';
 };
 
 /**
@@ -38,7 +43,14 @@ type HeroBlockProps = {
  * 3.5rem bottom) would push the image off-axis from the type column. Same
  * primitives, no margin drift.
  */
-export function HeroBlock({ eyebrow, title, role, image, callout }: HeroBlockProps) {
+export function HeroBlock({
+  eyebrow,
+  title,
+  role,
+  image,
+  callout,
+  calloutPosition = 'bottom-left',
+}: HeroBlockProps) {
   const sentences = typeof title === 'string' ? [title] : title;
 
   return (
@@ -89,7 +101,14 @@ export function HeroBlock({ eyebrow, title, role, image, callout }: HeroBlockPro
           /* aria-label derives from the authored label so other case studies
              can use this component with non-BARD callouts (pull quotes, status
              chips, credits) without lying to screen readers. */
-          <aside className="hero-block__callout" role="note" aria-label={callout.label}>
+          <aside
+            className={
+              'hero-block__callout' +
+              (calloutPosition === 'top-left' ? ' hero-block__callout--top-left' : '')
+            }
+            role="note"
+            aria-label={callout.label}
+          >
             <p className="hero-block__callout-label">{callout.label}</p>
             <p className="hero-block__callout-body">{callout.body}</p>
           </aside>
