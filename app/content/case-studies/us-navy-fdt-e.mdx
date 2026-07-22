@@ -117,7 +117,7 @@ Discovery surfaced a split: commands push data down by doctrine, but the operato
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Analysis paralysis</h3>
-      <p className="friction-beat__scene">Facing conflicting reports with no fast way to compare them or weigh confidence, analysts hesitate. At tempo, that delay is its own failure.</p>
+      <p className="friction-beat__scene">Facing conflicting reports with no fast way to compare them or weigh confidence, analysts hesitate. At wartime tempo, that delay is its own failure.</p>
       <blockquote className="pull-quote pull-quote--quiet">
         <p>“The database shows a unit active ten minutes ago and reported destroyed last week. Which is ground truth?”</p>
         <cite>Analyst, immersion session</cite>
@@ -129,16 +129,19 @@ Discovery surfaced a split: commands push data down by doctrine, but the operato
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">The black box</h3>
-      <p className="friction-beat__scene">A confident answer they can't interrogate gets set aside, not believed. Transparency wasn't optional; it was one of the few things FDT-E had to get right.</p>
+      <p className="friction-beat__scene">The analysts were consistent on this. They would not act on a call they couldn't see the reasoning behind. A confident answer they can't interrogate gets set aside, not believed. Transparency wasn't optional; it was one of the few things FDT-E had to get right.</p>
     </div>
     <FdteFigure variant="black-box" alt="An analyst, chin in hand, scrutinizes a flagged position on a large wall map." />
   </li>
 </ol>
 
-{/* Section closer: the lede register (the system's section-statement voice) +
-    mt-14 (3.5rem, the friction-beats gap token) so it lands one beat-step below
-    the list and reads as the section's conclusion, not beat 03's continuation. */}
-<p className="section-lede mt-14!">So the problem was never how to show more, or less. It was how to make the machine's claim something a person could interrogate against a standard they already trusted.</p>
+{/* Section closer: body register (matches the intro and beat scenes) + mt-14
+    (3.5rem, the friction-beats gap token) so it lands one beat-step below the
+    list and reads as the section's conclusion, not beat 03's continuation.
+    The ! is load-bearing even without section-lede: the unlayered
+    `:where(.case-study-prose) p` margin beats layered Tailwind utilities
+    regardless of specificity. */}
+<p className="mt-14!">So the problem was never how much to show. It was whether a person could interrogate the claim.</p>
 
 </section>
 

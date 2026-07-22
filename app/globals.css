@@ -1567,6 +1567,20 @@ html.dark .oku-figure {
                           300px figure column regardless of its own width */
 }
 
+/* The FDT-E drawings are single hand-drawn FILLED paths whose hairline linework
+   collapses at the 148px render (muddy in dark). Add constant weight via stroke:
+   non-scaling-stroke keeps it a fixed screen 0.75px across the three different
+   viewBox scales (1220 / 1784 / 1582); a geometry-space stroke would render three
+   weights. Stroke follows currentColor, so the per-mode wrapper ink stays the single
+   color source. 0.75px tested clean on figure 03's dense map grid. FDT-E-scoped
+   one-off exception (Paul, July 2026) to the "fix line weight in the source art"
+   convention — Bard's Oku figures have native weight and stay stroke-free. */
+.fdte-figure svg path {
+  stroke: currentColor;
+  stroke-width: 0.75px;
+  vector-effect: non-scaling-stroke;
+}
+
 /* A pull quote INSIDE a friction beat: the display-scale 3.5rem block margins are
    for quotes standing alone in prose; inside a beat's text cell they blow a
    beat-gap-sized hole after the scene. Step down to the beat's own internal
