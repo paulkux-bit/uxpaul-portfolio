@@ -57,14 +57,24 @@ import { BentoBand } from '@/components/bento';
     width: 1463,
     height: 971,
     alt: 'Screenshot of the legacy BARD dashboard, a dense table listing boating-incident cases by ID, date, water body, county, vessel and casualty counts, and status.',
-    caption: 'The legacy dashboard: every case is a row, with no way to see which is closest to breaching the clock.',
+    caption: (
+      <>
+        <strong>No triage.</strong> Every case is just another row; the one
+        closest to breaching the clock looks like all the others.
+      </>
+    ),
   }}
   right={{
     src: '/case-studies/uscg-bard/legacy-report.png',
     width: 1866,
     height: 1242,
     alt: 'Screenshot of the legacy Florida Boating Accident Report, a single long form densely packed with input fields for incident type, location, conditions, and reporting party.',
-    caption: 'The incident record: one long form, the same whether the case is a near-miss or a fatality.',
+    caption: (
+      <>
+        <strong>No hierarchy.</strong> One long form, the same whether the
+        case is a near-miss or a fatality.
+      </>
+    ),
   }}
 />
 
