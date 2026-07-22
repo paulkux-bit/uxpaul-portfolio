@@ -96,59 +96,49 @@ It looks like a problem of too much data. It wasn't.
 
 </section>
 
-{/* HELD for the What I Found rebuild (H2 will be "On site, the blocker wasn't
-    the volume. It was trust.") — the active/destroyed analyst detail, removed
-    from The Problem when the two sections merged:
-      The same unit was "active ten minutes ago" and "destroyed last week."
-      Which is ground truth?
-      > "So many tracks have location but no timestamp or ID. Are they even
-      >  relevant, or just noise?"
-      > "Intel brief says 'possible adversary here,' but no size, no type.
-      >  That doesn't help me decide anything."
-      > – Analysts, immersion sessions
-    Also unplaced by the merge, available for later modules: gate-walk crops
-    provenance--band, order-of-battle--feature, lineage--popover,
-    activity-feed--tall; FdteFigure variant "int-convergence" (superseded by
-    the dataflood illustration). */}
-
 <section className="cs-section cs-section--frictions">
 
 <div className="eyebrow">What I found</div>
 
-## How much uncertainty a user will tolerate changes with the tempo of the war.
+## On site, the blocker wasn't the volume. It was trust.
 
-I ran discovery in two places at once: inside the doctrine, and in the field beside the analysts who live by it. Good intel analysts don't trust data blindly. They weigh it, argue with it, and own the call, and getting to design for that judgment was the privilege of the project. Interviews ran from junior operators up to flag officers.
-
-The finding that reorganized the project was not about a feature. It was about trust. Analysts do not hold one standard for believing a piece of intelligence. They hold three, and the tempo of the fight decides which one is in force.
+Discovery surfaced a split: commands push data down by doctrine, but the operators at the tip of the spear weigh it, argue with it, and make their own call. Three findings reorganized the project, and none was about volume.
 
 <ol className="friction-beats">
   <li className="friction-beat" data-thread="1">
     <div className="friction-beat__text">
       <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">In sustained operations, ambiguity is affordable.</h3>
-      <p className="friction-beat__scene">Peacetime pace, generous tolerance.</p>
+      <h3 className="friction-beat__headline">The war sets the dial</h3>
+      <p className="friction-beat__scene">In peacetime an analyst can tolerate ambiguity; in war they want one fact, with its confidence attached. The tempo of the fight sets the standard, not the interface.</p>
     </div>
-    <FdteFigure variant="tempo-sustained" alt="An aperture of tolerated ambiguity, wide open: sustained operations afford ambiguity." />
+    <FdteFigure variant="tempo" alt="An operator works a console lever beneath a huge clock face, its hands racing ahead of him." />
   </li>
   <li className="friction-beat" data-thread="2">
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
-      <h3 className="friction-beat__headline">In training, friction is the point.</h3>
-      <p className="friction-beat__scene">The goal is to surface gaps, so rough edges are welcome.</p>
+      <h3 className="friction-beat__headline">Analysis paralysis</h3>
+      <p className="friction-beat__scene">Facing conflicting reports with no fast way to compare them or weigh confidence, analysts hesitate. At tempo, that delay is its own failure.</p>
+      <blockquote className="pull-quote pull-quote--quiet">
+        <p>“The database shows a unit active ten minutes ago and reported destroyed last week. Which is ground truth?”</p>
+        <cite>Analyst, immersion session</cite>
+      </blockquote>
     </div>
-    <FdteFigure variant="tempo-training" alt="The aperture with its gaps lit: training surfaces the rough edges." />
+    <FdteFigure variant="paralysis" alt="An analyst stands frozen at a fork in the road between two contradictory signs." />
   </li>
   <li className="friction-beat" data-thread="3">
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
-      <h3 className="friction-beat__headline">In war, they want one fact with its confidence attached.</h3>
-      <p className="friction-beat__scene">Tempo collapses the window, and the analyst who wanted to see everything now wants only the thing that changes the decision.</p>
+      <h3 className="friction-beat__headline">The black box</h3>
+      <p className="friction-beat__scene">A confident answer they can't interrogate gets set aside, not believed. Transparency wasn't optional; it was one of the few things FDT-E had to get right.</p>
     </div>
-    <FdteFigure variant="tempo-war" alt="The aperture collapsed to a single fact with its confidence attached: the war sets the dial." />
+    <FdteFigure variant="black-box" alt="An analyst, chin in hand, scrutinizes a flagged position on a large wall map." />
   </li>
 </ol>
 
-So uncertainty could not be shown one way. The war sets the dial, not the interface.
+{/* Section closer: the lede register (the system's section-statement voice) +
+    mt-14 (3.5rem, the friction-beats gap token) so it lands one beat-step below
+    the list and reads as the section's conclusion, not beat 03's continuation. */}
+<p className="section-lede mt-14!">So the problem was never how to show more, or less. It was how to make the machine's claim something a person could interrogate against a standard they already trusted.</p>
 
 </section>
 

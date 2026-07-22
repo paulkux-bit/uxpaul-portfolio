@@ -1553,6 +1553,28 @@ html.dark .oku-figure {
   height: auto; /* scales to the SVG's own ~16:9 viewBox */
 }
 
+/* FDT-E finding figures: three drawings with mixed aspects (portrait / landscape /
+   near-square). A shared HEIGHT seats all three INSIDE their beat's text block
+   (~164px at desktop): at 180px the portrait figure out-topped its text and read
+   as a tall column, not a supporting companion. Width follows each drawing's own
+   aspect. Compound selector (.oku-figure.fdte-figure) outranks `.oku-figure svg`
+   by specificity, so the override is order-independent — safe against file
+   reorgs. FDT-E only — Bard's bare .oku-figure is untouched. */
+.oku-figure.fdte-figure svg {
+  width: auto;
+  height: 148px; /* was 180px */
+  margin-inline: auto; /* one shared horizontal axis: every drawing centers in the
+                          300px figure column regardless of its own width */
+}
+
+/* A pull quote INSIDE a friction beat: the display-scale 3.5rem block margins are
+   for quotes standing alone in prose; inside a beat's text cell they blow a
+   beat-gap-sized hole after the scene. Step down to the beat's own internal
+   rhythm (1.25rem = the headline->scene step); zero bottom (last cell element). */
+.friction-beat .pull-quote {
+  margin: 1.25rem 0 0;
+}
+
 @media (min-width: 1024px) {
   .friction-beat {
     display: grid;
@@ -1585,19 +1607,19 @@ html.dark .oku-figure {
   letter-spacing: -0.015em;
   margin: 0 0 1rem;
   max-width: 22ch;
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary); /* canonical token (was the retired --color-text-* alias) */
   text-wrap: balance;
 }
 
 .pull-quote p::before {
   content: '“';
   margin-right: 0.1em;
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted); /* real token, AA-normal (was a color-mix 55% weight-fake) */
 }
 
 .pull-quote p::after {
   content: '”';
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted);
 }
 
 .pull-quote cite {
@@ -1606,7 +1628,7 @@ html.dark .oku-figure {
   font-size: 0.875rem;
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted); /* AA-normal at 14px (the 55% mix risked sub-AA) */
 }
 
 .pull-quote--quiet p {
