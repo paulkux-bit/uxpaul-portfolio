@@ -1329,7 +1329,13 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  margin: 2rem 0 0; /* prose → evidence step (2rem); single-owned — the preceding p zeros its bottom */
+  /* Symmetric evidence step (2rem both sides, matching .cs-section > .bento-band's
+     margin-block): the top is single-owned (preceding p zeros its bottom, below);
+     the bottom separates the pair from a FOLLOWING beat so it reads as its own
+     statement, not an addendum to the taller caption. Grid bottom = tallest cell,
+     so the gap clears a 2-line caption by construction. When the pair is the
+     section's last child, .cs-section > :last-child zeros it (Bard unchanged). */
+  margin: 2rem 0;
 }
 
 /* Zero the preceding paragraph's bottom margin so .framed-pair's margin-top solely owns the
