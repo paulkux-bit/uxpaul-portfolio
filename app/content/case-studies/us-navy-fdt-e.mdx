@@ -149,19 +149,15 @@ Discovery surfaced a split: commands push data down by doctrine, but the operato
 
 <div className="eyebrow">The bet</div>
 
-## I designed the AI to open a case, not close one.
+## How do you trust what you can't question?
 
-The obvious move with a capable model is to let it answer. Surface the conclusion, badge it, and let the analyst accept or dismiss. That is the pattern most tools reach for, and it is the pattern that produces black-box mistrust and, under pressure, analysis paralysis.
+**Don't make the machine convincing. Make it checkable.** Everyone wanted a smarter model. I thought the question was whether an analyst would trust it. They won't act on an answer they can't check.
 
-I bet the other way. In FDT-E, the AI is not permitted to hand you an answer. When it detects something, it opens a case, and a case has to be worked. The design turns every anomaly into a short, guided investigation whose steps are lifted from the doctrine analysts already answer to.
+So I ran workshops and interviews, and the same thing kept coming up: they already trust doctrine. The machine didn't need to win them over. It needed to speak doctrine. So that's what we built: it shows how sure it is, then walks the same checks an analyst would.
 
-That last part was the non-obvious call, and it came from a conversation I keep returning to. A former adversary-army officer, now a subject-matter expert supporting U.S. forces, told the team:
+**Doctrine binds the machine, not the analyst.** Past the checklist, they can escalate, get a second opinion, or trust their own read. The person makes the call.
 
-> "In the Russian army, we didn't just read your doctrine; we mastered it, often better than your own forces seemed to. The problem is that your own forces don't always read or follow it."
->
-> – Former adversary-army officer, U.S. Army Indo-Pacom subject-matter expert
-
-Doctrine was already the shared language of correctness. The adversary had studied it; our own tempo sometimes buried it. So instead of writing a verification flow from scratch and asking analysts to trust my logic, I shaped the flow out of theirs. The steps the tool walks you through are the doctrinal steps for confirming a threat. Following the software and following the doctrine became the same act. I call the pattern the **verification gate**: the fixed, doctrine-shaped checkpoint an AI claim has to pass through before a human carries it forward.
+FDT-E never hands down a verdict. Every call clears a doctrine gate first.
 
 </section>
 
