@@ -1,0 +1,149 @@
+{
+  "images": [
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/establish--band.png",
+      "alt": "The full FDT-E watch board for Operation Avalanche: the records table beside the map, 187 records, nothing flagged.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "breakout": "band",
+      "aspect": 1.832,
+      "caption": {
+        "lead": "The board they already trust.",
+        "tail": "Operation Avalanche: 187 records, nothing flagged."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/anomaly--feature.png",
+      "alt": "A flagged anomaly card, possible command node detected, leading with its own confidence of eighty percent above a Verification, Response, Analysis workflow.",
+      "focalPoint": {
+        "x": 0.62,
+        "y": 0.45
+      },
+      "slot": "feature",
+      "caption": {
+        "lead": "It says how sure it is.",
+        "tail": "A possible command node, flagged at 80% confidence."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/verification--band.png",
+      "alt": "The verification step: all-source correlation scored by intelligence discipline and linked directly to the CJADC2 doctrine on command nodes.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "breakout": "band",
+      "aspect": 2.105,
+      "caption": {
+        "lead": "Checked against command doctrine.",
+        "tail": "All-source correlation, linked to CJADC2."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/geoint--compact.png",
+      "alt": "GEOINT discipline card showing twelve relevant hits with a sparkline.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "compact",
+      "caption": {
+        "lead": "Strongest read."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/comint--compact.png",
+      "alt": "COMINT discipline card showing eight relevant hits with a sparkline.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "compact",
+      "caption": {
+        "lead": "Second source."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/masint--compact.png",
+      "alt": "MASINT discipline card showing zero relevant hits.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "compact",
+      "caption": {
+        "lead": "Honest zero."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/chat--standard.png",
+      "alt": "Analysts from JIC, DIA, and NIFC coordinating the anomaly response in a live chat thread.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.45
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "No verdict handed down.",
+        "tail": "JIC, DIA, and NIFC talk it through."
+      }
+    },
+    {
+      "src": "/case-studies/us-navy-fdt-e/gate-walk/elevate--standard.png",
+      "alt": "The Elevate Alert Level step with a Disseminate action and a progress stepper.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.4
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "The analyst makes the call.",
+        "tail": "The gate informs the decision. It never makes it."
+      }
+    }
+  ],
+  "composition": [
+    {
+      "name": "establish--band",
+      "mode": "light",
+      "breakout": "band",
+      "aspect": 1.832
+    },
+    {
+      "name": "anomaly--feature",
+      "mode": "light"
+    },
+    {
+      "name": "verification--band",
+      "mode": "light",
+      "breakout": "band",
+      "aspect": 2.105
+    },
+    [
+      {
+        "name": "geoint--compact",
+        "mode": "light"
+      },
+      {
+        "name": "comint--compact",
+        "mode": "light"
+      },
+      {
+        "name": "masint--compact",
+        "mode": "light"
+      }
+    ],
+    [
+      {
+        "name": "chat--standard",
+        "mode": "light"
+      },
+      {
+        "name": "elevate--standard",
+        "mode": "light"
+      }
+    ]
+  ]
+}

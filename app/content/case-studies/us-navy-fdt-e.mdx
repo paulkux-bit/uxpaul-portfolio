@@ -28,8 +28,8 @@ nda: false
     unclassified. FdteFigure variants are STUBS pending real art.
    ───────────────────────────────────────────────────────────── */}
 
-import { BentoBand } from '@/components/bento';
 import { FdteFigure } from '@/components/fdte-figure';
+import GateWalkBento from '@/components/case-studies/us-navy-fdt-e/GateWalkBento';
 
 <HeroBlock
   eyebrow="FDT-E · U.S. NAVY"
@@ -58,7 +58,7 @@ import { FdteFigure } from '@/components/fdte-figure';
 
 **The machine is confident. The analyst is accountable.** A model can be wrong at no cost. The person who acts on it cannot.
 
-**And certainty has to come from this.** Every intelligence discipline reporting at once, thousands of entities across a whole theater, arriving faster than anyone can read. The signal that matters is in there, somewhere, and the clock is running.
+**And that certainty has to come out of a flood:** every discipline reporting at once, thousands of entities across the theater, arriving faster than anyone can read.
 
 {/* Wide pair (Bard's shared-row pattern): the feels-like illustration beside
     the real intel-tool overwhelm. Both tiles 16:10, so heights match and the
@@ -102,7 +102,7 @@ It looks like a problem of too much data. It wasn't.
 
 ## On site, the blocker wasn't the volume. It was trust.
 
-Discovery surfaced a split: commands push data down by doctrine, but the operators at the tip of the spear weigh it, argue with it, and make their own call. Three findings reorganized the project, and none was about volume.
+The research turned up a split. Commanders push data down to their units by doctrine; the operators at the tip of the spear weigh it, argue with it, make their own call. Three findings reorganized the project, and none was about volume.
 
 <ol className="friction-beats">
   <li className="friction-beat" data-thread="1">
@@ -117,7 +117,7 @@ Discovery surfaced a split: commands push data down by doctrine, but the operato
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Analysis paralysis</h3>
-      <p className="friction-beat__scene">Facing conflicting reports with no fast way to compare them or weigh confidence, analysts hesitate. At wartime tempo, that delay is its own failure.</p>
+      <p className="friction-beat__scene">Analysts get conflicting reports with no fast way to compare them, so they hesitate. At wartime tempo, that delay is its own failure.</p>
       <blockquote className="pull-quote pull-quote--quiet">
         <p>“The database shows a unit active ten minutes ago and reported destroyed last week. Which is ground truth?”</p>
         <cite>Analyst, immersion session</cite>
@@ -129,7 +129,7 @@ Discovery surfaced a split: commands push data down by doctrine, but the operato
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">The black box</h3>
-      <p className="friction-beat__scene">The analysts were consistent on this. They would not act on a call they couldn't see the reasoning behind. A confident answer they can't interrogate gets set aside, not believed. Transparency wasn't optional; it was one of the few things FDT-E had to get right.</p>
+      <p className="friction-beat__scene">The analysts were consistent on this. They would not act on a call they couldn't see the reasoning behind. Showing that reasoning wasn't optional; it was one of the few things FDT-E had to get right.</p>
     </div>
     <FdteFigure variant="black-box" alt="An analyst, chin in hand, scrutinizes a flagged position on a large wall map." />
   </li>
@@ -165,82 +165,13 @@ FDT-E never hands down a verdict. Every call clears a doctrine gate first.
 
 <div className="eyebrow">How it works</div>
 
-## How the gate works
+<h3 className="mt-2 mb-10 md:mb-10 text-resolution-headline">
+  Watch one anomaly clear the gate.
+</h3>
 
-The baseline is a live disposition view. On the left, the entities under watch. On the right, an activity feed of what changed and when. Nothing is asserted without an "as-of" time.
+<p>The machine flags a possible command node. Before anyone acts, it walks the same checks an analyst would, in the open.</p>
 
-<BentoBand
-  src="/case-studies/us-navy-fdt-e/gate-walk/baseline-map--feature.png"
-  alt="FDT-E map view of Operation Avalanche: red threat markers inside a blue watch-area polygon over southern Italy."
-  caption="The baseline."
-  gloss={'Current disposition, left; what changed and when, right. Every track carries its "as-of" time. Notional data throughout.'}
-  aspect={1.6}
-  focal={{ x: 0.62, y: 0.6 }}
-/>
-
-<h3 className="text-h3 mt-12 mb-4">Confidence first, answer second.</h3>
-
-The anomaly does not arrive as a headline. It arrives as a marker that states its own confidence before it states its claim: an eighty-percent reading on a possible command-and-control node, sitting quietly at the edge of the map. Leading with the number is the first move in managing the machine's ambiguity honestly. The analyst knows how much to lean before they know what they are leaning on.
-
-<BentoBand
-  src="/case-studies/us-navy-fdt-e/gate-walk/anomaly--feature.png"
-  alt="The watchlist with a C2 anomaly flagged: a highlighted row and map marker, and an 80 percent confidence pill at lower right."
-  caption="The claim announces its confidence before its content."
-  gloss="80 percent, lower right, before a word about what it found."
-  aspect={1.6}
-  focal={{ x: 0.85, y: 0.9 }}
-/>
-
-<Detail
-  src="/case-studies/us-navy-fdt-e/gate-walk/anomaly--confidence-pill.png"
-  alt="Anomaly marker reading C2 Anomaly, 80 percent confidence."
-  width={804}
-  height={158}
-/>
-
-<h3 className="text-h3 mt-12 mb-4">A "why" before a "what."</h3>
-
-Open the anomaly and the first thing the design gives you is provenance, not a conclusion. It names what the model suspects, a potential C2 node, and shows the disciplines the suspicion is built from before it asks anything of you. Seeing that the read came from open-source and communications intelligence is what dissolves the black box. The model is no longer asserting; it is showing its work.
-
-<h3 className="text-h3 mt-12 mb-4">The verification steps are the doctrine.</h3>
-
-Choosing to verify drops the analyst into a guided, all-source correlation. The tool pulls relevant hits from each intelligence discipline over the window that matters, scores them, and lets the analyst rescan as the picture moves. The step names, all-source correlation, fusion, collaborative verification, are not interface inventions. They are the doctrinal sequence for confirming a threat, with a link to the reference sitting right in the step. Procedural compliance stops being a separate chore and becomes the path of least resistance.
-
-<BentoBand
-  src="/case-studies/us-navy-fdt-e/gate-walk/verification--band.png"
-  alt="C2 anomaly verification: an all-source correlation workflow with a link to CJADC2 doctrine, beside seven intelligence disciplines scored by relevant hits."
-  caption="The workflow is the doctrine."
-  gloss="Correlate across domains, score each, and the reference is one click inside the step."
-  aspect={1.778}
-  focal={{ x: 0.55, y: 0.45 }}
-/>
-
-<Figure
-  src="/case-studies/us-navy-fdt-e/gate-walk/verification--sources.png"
-  alt="Intelligence Sources scored by discipline over the past twenty-four hours: GEOINT twelve hits, MASINT none."
-  width={2265}
-  height={1975}
-/>
-
-<h3 className="text-h3 mt-12 mb-4">The human escalates. The software only makes the case.</h3>
-
-When the case holds, the tool moves to response, and here it stays deliberately subordinate. It drafts the escalation, elevate the alert, push to the common operational picture, cue countermeasures, and hands the analyst the pen. Coordination happens in line, with the other watch standers who will act on the call. The design proposes; the person decides and disseminates. That division is the point of the whole system.
-
-<BentoBand
-  src="/case-studies/us-navy-fdt-e/gate-walk/response--feature.png"
-  alt="Anomaly response step: Elevate Alert Level with a Disseminate Alert button, beside a live analyst chat coordinating the response."
-  caption="The software drafts the response."
-  gloss="The analyst signs it. The escalation is a human act, coordinated in line with the watch."
-  aspect={1.6}
-  focal={{ x: 0.72, y: 0.45 }}
-/>
-
-<Figure
-  src="/case-studies/us-navy-fdt-e/gate-walk/response--chat.png"
-  alt="Chatsurfer panel: analysts from JIC, DIA, and NIFC coordinating on the C2 anomaly in real time."
-  width={2232}
-  height={2074}
-/>
+<GateWalkBento />
 
 </section>
 

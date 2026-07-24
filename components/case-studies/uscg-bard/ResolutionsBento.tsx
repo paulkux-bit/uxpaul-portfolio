@@ -7,7 +7,7 @@ import { BentoTheme, BentoItem, BentoBand, BentoRibbon } from '@/components/bent
  * built generic now that Theme 2 is the first second consumer. It is a THIN adapter that
  * feeds the existing bento engine (components/bento.tsx): all slot geometry, cover/focal,
  * retina floors, ribbon behaviour, and caption typography (`.bento-theme__lead` →
- * --text-primary, `.bento-theme__gloss` → --text-secondary) live in the engine. This file
+ * --text-primary, `.bento-theme__gloss` → --text-muted) live in the engine. This file
  * only maps manifest → engine children. NOT a new engine, NOT a copy of it.
  *
  * Manifest shape (Theme 2 onward):
@@ -29,7 +29,7 @@ interface ManifestImage {
   alt: string;
   focalPoint: { x: number; y: number };
   caption: { lead: string; tail?: string };
-  slot?: 'feature' | 'standard';
+  slot?: 'feature' | 'wide' | 'standard' | 'tall' | 'compact';
   breakout?: 'band' | 'ribbon';
   aspect?: number;
   /** Band only: below md, floor the media at this px width in a scroll track (targeted
