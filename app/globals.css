@@ -1560,11 +1560,16 @@ html.dark .oku-figure {
    aspect. Compound selector (.oku-figure.fdte-figure) outranks `.oku-figure svg`
    by specificity, so the override is order-independent — safe against file
    reorgs. FDT-E only — Bard's bare .oku-figure is untouched. */
-.oku-figure.fdte-figure svg {
-  width: auto;
-  height: 148px; /* was 180px */
-  margin-inline: auto; /* one shared horizontal axis: every drawing centers in the
-                          300px figure column regardless of its own width */
+@media (min-width: 1024px) {
+  /* Desktop-only: shared companion height seats the three mixed-aspect drawings
+     in the 300px column. Below lg they fall back to the base `.oku-figure svg`
+     fluid rule (width:100%, height:auto) and scale edge-to-edge like the Bard
+     Oku figures, instead of sitting as fixed 148px stamps in a wide column. */
+  .oku-figure.fdte-figure svg {
+    width: auto;
+    height: 148px;
+    margin-inline: auto;
+  }
 }
 
 /* The FDT-E drawings are single hand-drawn FILLED paths whose hairline linework
