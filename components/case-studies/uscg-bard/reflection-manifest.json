@@ -1,0 +1,100 @@
+{
+  "_READ_FIRST": {
+    "status": "CONTENT SPEC — not a verified drop-in engine manifest",
+    "why_this_matters": "This file carries the reflection's tile data and locked copy, but do NOT assume it is a valid ResolutionsBento manifest. Two open concerns below must be resolved before wiring.",
+    "concern_1_vehicle": "The reflection is PROSE interleaved with THREE bands (opener -> band -> paragraph -> band -> paragraph -> band -> close). That is NOT the dense multi-tile grid the ResolutionsBento manifest was built for. It is very likely cleaner to author as MDX prose + three inline <BentoBand> components than as a grid manifest. Decide the vehicle by reading the real code; prefer whichever needs NO engine/adapter changes. If inline bands win, this file becomes reference data for the band props, not a manifest that ships.",
+    "concern_2_schema": "The engine/manifest recon used to build this was PARTIALLY CORRUPTED in transit. Every field name here (caption.lead / caption.tail, breakout vs slot, focalPoint, aspect, mode, composition refs) is a best-effort reconstruction. Reconcile 1:1 against a real Theme 2/3 manifest before trusting any key. Field names in this file may be wrong.",
+    "concern_3_rhythm": "All three tiles are bands. Three stacked wide bands can read monotonous; the 1.904:1 canvas is chunkier than the two ~2.4:1 bands, which helps a little. Confirm against the live render whether one tile should reshape (e.g. insight as a feature) for variety. Do not pre-solve; judge on the render.",
+    "concern_4_prose_home": "Body prose does NOT live in this manifest. The bento renders TILES ONLY. The five paragraphs are authored in the MDX/section wrapper and interleaved with the bands. This file includes the prose under 'content' purely so the copy travels with the spec — it is the locked source of truth for the words, not a render field.",
+    "constraints": [
+      "No em-dashes in any rendered copy.",
+      "Light mode only — no dark twins exist for these sources.",
+      "Themes 01/02/03 manifests stay pristine; author NEW reflection assets only.",
+      "Captions are the evidence register (factual). The frank first-person voice is the section PROSE only, never the captions."
+    ]
+  },
+
+  "section": "Reflection",
+  "placement": "AFTER Resolutions 03, BEFORE Credit. Final close order: Resolutions 03 -> Reflection -> Credit. Retire any Status / 'Where it stands' block between 03 and Credit — the spring-2027 line now lives in this section's closing paragraph.",
+  "mode_policy": "ALL LIGHT. The reflection is the light release after Resolutions 03's dark evidence climax.",
+
+  "content": {
+    "eyebrow": "Reflection",
+    "header": "The hard part wasn't the design.",
+    "subhead": "Standardizing fifty-six state forms into one was an information architecture problem. Getting fifty-six jurisdictions to agree to it was the real work.",
+    "interleave_order": [
+      "p1",
+      "tile:reflection-table",
+      "p2",
+      "tile:reflection-insightwide",
+      "p3",
+      "tile:reflection-figma-canvas",
+      "close"
+    ],
+    "p1": "I thought the win would be a leaner form. It was the opposite. Every state built its form for a reason, and none of them wanted to give it up. So I kept every state's fields and made them optional for everyone. No one lost anything; they gained a shared spine underneath.",
+    "p2": "Then I showed each office what that trade actually buys. Once the data is standardized, the system can read it and surface what needs attention on its own. Fifty-six separate spreadsheets never could.",
+    "p3": "None of this was a pitch. Before I asked a single office to give anything up, the whole thing was designed and mapped, every section, every state, every view. The ask was credible because the work was already done.",
+    "close": "BARD reaches initial operating capability with the Coast Guard in spring 2027. In build and testing now."
+  },
+
+  "tiles": [
+    {
+      "id": "reflection-table",
+      "src": "/case-studies/uscg-bard/reflection/reflection-table--band.png",
+      "alt": "BARD field-inventory spreadsheet: every incident field mapped to Your View, USCG View, and Mobile columns across all form sections.",
+      "caption": { "lead": "Every field, mapped to who sees it.", "tail": "State view, Coast Guard view, mobile." },
+      "width": 6848,
+      "height": 3026,
+      "aspect": 2.263,
+      "focalPoint": { "x": 0.5, "y": 0.0, "_note": "anchor top to keep the column-header row in frame" },
+      "mode": "light",
+      "breakout": "band",
+      "retina_floor_w": 2176,
+      "clears_floor": true,
+      "job_in_story": "the receipt — no state loses a field"
+    },
+    {
+      "id": "reflection-insightwide",
+      "src": "/case-studies/uscg-bard/reflection/reflection-insightwide--band.png",
+      "alt": "BARD Incidents dashboard showing a plain-English engine line ('2 cases returned by USCG, 1 overdue, 1 due Nov 3') beside the deterministic shape-card spec that generates it.",
+      "caption": { "lead": "Standardized data surfaces what matters.", "tail": "The upside fifty-six formats couldn't give." },
+      "width": 7500,
+      "height": 3080,
+      "aspect": 2.435,
+      "focalPoint": { "x": 0.0, "y": 0.5, "_note": "anchor left to keep the dashboard + insight line in frame" },
+      "mode": "light",
+      "breakout": "band",
+      "retina_floor_w": 2176,
+      "clears_floor": true,
+      "job_in_story": "the carrot — what unified data unlocks",
+      "_note": "This is the combined dashboard + shape-cards crop (includes a hand-drawn connector arrow, per Paul's preference). If the arrow reads as working-file at build, the fallback is the dashboard-only feature tile + shape-cards as a separate tile."
+    },
+    {
+      "id": "reflection-figma-canvas",
+      "src": "/case-studies/uscg-bard/reflection/reflection-figma-canvas--band.png",
+      "alt": "Zoomed-out Figma canvas of the BARD Incident form: an information-architecture outline beside four form states (empty, single-vessel, multi-vessel, USCG view).",
+      "caption": { "lead": "The whole form, designed before the ask.", "tail": "Every section, every state, every view." },
+      "width": 6378,
+      "height": 3350,
+      "aspect": 1.904,
+      "focalPoint": { "x": 0.5, "y": 0.5 },
+      "mode": "light",
+      "breakout": "band",
+      "retina_floor_w": 2176,
+      "clears_floor": true,
+      "job_in_story": "the rigor — the work that earned the ask",
+      "_note": "Scope/texture shot, not legible detail. The caption is load-bearing: at this zoom the forms are not readable, so the words carry the meaning. Confirm no Figma editor chrome / cursor avatars leaked into the crop edges."
+    }
+  ],
+
+  "verification_checklist": [
+    "Reconcile every key against a real Theme 2/3 manifest (schema was corrupted in recon).",
+    "Decide render vehicle: inline MDX <BentoBand> vs grid manifest — no engine changes either way.",
+    "Confirm the three PNGs exist at the src paths and clear the 2176w retina floor.",
+    "Confirm object-position honors each focalPoint (table top, insightwide left).",
+    "tsc -> eslint -> build -> detector -> typeset all green.",
+    "No em-dashes in rendered copy. Credit [ORG-TODO] left visible, not guessed.",
+    "390px mobile: three wide bands must not collapse illegibly (1.904:1 canvas is the risk).",
+    "A2 test: captions hidden, does the consensus argument still read from the bands alone."
+  ]
+}
