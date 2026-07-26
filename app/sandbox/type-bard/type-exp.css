@@ -1,0 +1,162 @@
+/* ================================================================
+   SANDBOX ONLY — /sandbox/type-bard — typography experiment layer
+   ================================================================
+   Every rule is scoped under `.type-exp` (the pill toggles it) so the
+   same DOM renders production vs proposed. Nothing here ships as-is:
+   adopted changes graduate into globals.css with their own comments;
+   rejected ones die with this file.
+
+   The argument, in one line: the hero already maps Bricolage's width
+   axis to meaning (100% relaxed fact / 88% anxious failure) — and then
+   the page never modulates again. Six h2s at one weight and one width;
+   the font's thin display cut never appears. These rules extend the
+   hero's move into a page-level arc: tense in the problem half,
+   released in the resolution half, with one thin display moment at
+   the arrival.
+
+   Section order in uscg-bard.mdx (all siblings in .case-study-prose):
+     1 --problem   2 --frictions   3 (the bet)   4 (the solution)
+     5–7 (how it works, h3 registers)   8 (what it took)   9 (credit)
+   Targeting leans on the two authored classes + adjacency from
+   --frictions, so it survives copy edits without nth-of-type fragility
+   (HeroBlock renders before section 1 and must not shift the count).
+   ================================================================ */
+
+/* ── 1 · The arc: h2 width per story beat ─────────────────────────
+   Problem half tightens from the current uniform 96% to 94% (the
+   friction-headline register — the tension becomes shared, deliberate).
+   After the bet, sections release to 98%; the last two arrive at the
+   full relaxed 100% — the width the hero's opening fact was set at.
+   The reader shouldn't notice; they should just feel the page exhale. */
+
+.type-exp .cs-section--problem h2,
+.type-exp .cs-section--frictions h2 {
+  font-stretch: 94%;
+}
+
+/* The bet — "How do you unify fifty-six jurisdictions without changing
+   one?" — is the pivot of the whole study and currently reads in the
+   same declarative 600 as every statement around it. A question can
+   hold its breath: same size, weight drops to 430. The ONLY modulated
+   h2 on the page, which is exactly why it lands. (Interval check:
+   430 sits two clear steps below the 600 h2s and two above the 260
+   milestone date — three display voices total, no mush.) */
+.type-exp .cs-section--frictions + .cs-section h2 {
+  font-weight: 430;
+  font-stretch: 97%;
+  letter-spacing: -0.015em; /* lighter cut needs a touch less negative tracking than 600's -0.02em */
+}
+
+/* Everything after the bet: released, not slack. */
+.type-exp .cs-section--frictions + .cs-section ~ .cs-section h2 {
+  font-stretch: 98%;
+}
+
+/* The last two sections (what it took, credit) arrive at full width.
+   Same 0,4,1 specificity as the ~ rule above — source order decides,
+   so this block must stay below it. */
+.type-exp .case-study-prose .cs-section:nth-last-of-type(-n + 2) h2 {
+  font-stretch: 100%;
+}
+
+/* Resolution headlines rhyme friction headlines (both 94%) by design —
+   but the rhyme is stronger as a TRANSFORMATION: same structure, tension
+   released. Frictions stay 94 (they're in the tense half); resolutions
+   ease to 97. If the friction↔resolution echo reads broken on render,
+   this is the first rule to revert. */
+.type-exp .resolution-block__headline,
+.type-exp h3.text-resolution-headline {
+  font-stretch: 97%;
+}
+
+/* ── 2 · The thin display moment: milestone date ──────────────────
+   "Spring 2027" is the largest type on the page and currently a heavier
+   echo of the h2s (520). Dropped to 260 it becomes the one place the
+   96pt cut shows its designed detail — flared thin stems against open
+   ink traps — and semantically it's right: a date is a held breath,
+   not a claim. The existing FVS pin stays (sanctioned manual-axis case,
+   typography doc §7; FVS must carry the weight too — it beats
+   font-weight, so overriding the standard property alone is a no-op). */
+.type-exp .milestone__date {
+  font-weight: 260; /* fallback for the FVS line below; keep in sync */
+  letter-spacing: -0.01em; /* thin wide glyphs want less squeeze than the 520 cut's -0.02em */
+  font-variation-settings: 'opsz' 96, 'wdth' 100, 'wght' 260;
+}
+
+/* ── 3 · Friction markers as folio numerals ───────────────────────
+   01/02/03 currently whisper at 16–20px/600. Recast in the font's
+   wonky compressed-thin register (wdth 75 — Grotesque №9 territory,
+   per Triay) at display size, they read as anxious marginalia beside
+   the 94% headlines: the "fifty-six forks" nervous energy living in
+   the numbers themselves. DELIBERATE ASYMMETRY: the resolution-block
+   markers keep their calm production register — the wonky voice
+   belongs to the problem half only. That contrast IS the arc; do not
+   unify them.
+   Color stays --text-muted: at ≥32px this is large-text tier, muted
+   clears AA-large with room (see 02-design-system.md ramp table). */
+.type-exp .friction-beat .thread-index {
+  font-size: clamp(2rem, 1.5vw + 1.5rem, 2.75rem); /* 32 → 44px: compression needs scale to read as character, not error */
+  font-weight: 230;
+  font-stretch: 75%;
+  line-height: 1;
+  letter-spacing: 0.02em; /* thin-compressed sets tight on its own; open it a hair */
+  margin-bottom: 0.5rem; /* was 0.75 against a 16px marker; the larger numeral carries its own air */
+}
+
+/* ── 4 · Emphasis: chosen, not defaulted ──────────────────────────
+   Body strongs render at browser-default 700 — no authored rule exists,
+   so the current voice was never chosen. Against 400 body at 18px,
+   400→700 bangs every few lines (34 paragraphs, 6+ bold lead-ins).
+   600 emphasizes without shouting and matches the system's semibold
+   register. The 26px section-lede strong drops with it (700 at lede
+   scale was the loudest single element in the prose). */
+.type-exp :where(.case-study-prose) p strong {
+  font-weight: 600;
+}
+.type-exp .case-study-prose .section-lede strong {
+  font-weight: 600;
+}
+
+/* Dark-mode weight compensation — light-on-dark text optically blooms
+   heavier (Low Light runs cream on espresso, near-max contrast). One
+   variable-font notch counters it: body 400→380, strong 600→580. The
+   classic move a GRAD axis would do; Bricolage has none, so wght does
+   the job. Invisible as a change, visible as polish. */
+html.dark .type-exp :where(.case-study-prose) p {
+  font-weight: 380;
+}
+html.dark .type-exp :where(.case-study-prose) p strong {
+  font-weight: 580;
+}
+
+/* ── 5 · Caption drift back to the locked scale ───────────────────
+   figure__caption renders 14px/400; the locked type scale says caption
+   = 14px/500 ("floor size needs the weight"). Eight instances. Pure
+   hygiene — this one should graduate regardless of the experiment. */
+.type-exp .figure__caption {
+  font-weight: 500;
+}
+
+/* ================================================================
+   Sandbox chrome (NOT part of the experiment — unscoped on purpose
+   so the pill works when .type-exp is toggled off).
+   ================================================================ */
+.type-exp-pill {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  font: inherit;
+  font-size: 0.875rem; /* 14px floor */
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.5em 1.1em;
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--bg-surface-elevated, var(--bg-canvas));
+  border: 1px solid var(--border-default);
+  cursor: pointer;
+}
+.type-exp-pill:hover {
+  border-color: var(--border-strong);
+}
