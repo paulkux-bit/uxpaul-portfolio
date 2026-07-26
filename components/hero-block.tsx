@@ -18,10 +18,10 @@ type HeroBlockProps = {
      *  family precedent (AsymmetricPair text-cell, Figure caption). */
     body: ReactNode;
   };
-  /** Which corner of the image the callout floats over. Default bottom-left
-   *  (Bard). Use top-left when the image's lower region carries content the
-   *  card must not cover (FDT-E: the Verify/Respond/Analyze steps). Same card
-   *  styling and inset either way — only the corner changes. */
+  /** Which corner of the image the callout floats over. Default bottom-left.
+   *  Use `top-left` when the image's lower region carries content the card
+   *  must not cover. Same card styling and inset either way, only the corner
+   *  changes. */
   calloutPosition?: 'bottom-left' | 'top-left';
 };
 

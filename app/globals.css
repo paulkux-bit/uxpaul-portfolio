@@ -2520,9 +2520,9 @@ html.dark .figure-placeholder {
   padding: 1.25rem; /* single even token — tight, no baggy margins */
 }
 
-/* Corner variant: float the callout over the image's TOP-left instead. For heroes
-   whose lower region carries content the card must not cover (FDT-E: the
-   Verify/Respond/Analyze steps). Same card, same 1.25rem inset — corner only. */
+/* Corner variant: float the callout over the image's TOP-left instead. Use it when
+   the image's lower region carries content the card must not cover. Same card
+   styling and 1.25rem inset either way, only the corner changes. */
 .hero-block__callout--top-left {
   bottom: auto;
   top: 1.25rem;
