@@ -30,6 +30,7 @@ nda: false
 
 import { FdteFigure } from '@/components/fdte-figure';
 import GateWalkBento from '@/components/case-studies/us-navy-fdt-e/GateWalkBento';
+import { BentoBand } from '@/components/bento';
 
 <HeroBlock
   eyebrow="FDT-E · U.S. NAVY"
@@ -177,13 +178,35 @@ FDT-E never hands down a verdict. Every call clears a doctrine gate first.
 
 <section className="cs-section">
 
-<div className="eyebrow">What I got wrong</div>
+<div className="eyebrow">What it took</div>
 
 ## The richest picture was the wrong one.
 
-The first serious build was the impressive one. Live sensor streaming, everything fused, motion on the map, the whole disposition breathing in real time. It demoed beautifully. Then we took it to a Red Flag exercise and ran it against real streaming data in the conditions it would meet at the edge, and it fell apart. Not because the analysis was wrong. Because the environment could not carry it. Denied, degraded, intermittent, and limited bandwidth is the norm at the edge, and the richest version of the picture was the first thing to die on a starved connection.
+<p className="section-lede">The first serious build was the impressive one. Live sensor streaming, everything fused, motion on the map, the whole disposition breathing in real time. **It demoed beautifully, and it died at Red Flag.**</p>
 
-I had believed, without examining it, that more fidelity was more help. The field corrected me in an afternoon. The version that survived is the quieter one, the one that leads with a single confident claim and lets the analyst pull on more only when the link and the moment allow. Restraint turned out to be the operational requirement, not the aesthetic preference.
+**The analysis was never the problem. The environment was.** Denied, degraded, intermittent, and limited bandwidth is the norm at the edge, and the richest version of the picture was the first thing to go on a starved connection. I had believed, without examining it, that more fidelity was more help. The field corrected me in an afternoon.
+
+So the disposition stopped moving and started reporting. What changed, when, and on whose authority, in text a starved link can carry.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/reflection/reflection-activity--band.png"
+  alt="The FDT-E watch map with the activity rail open beside it: a time-stamped list of what changed on each tracked entity, including new locations, status alerts, and operational condition changes."
+  caption="What changed, in text a link can carry."
+  gloss="Location, status, condition. Time-stamped."
+  aspect={1.9}
+/>
+
+Everything else became something the analyst pulls, not something the tool pushes. One confident claim on the surface, the provenance one click under it, available when the link and the moment allow.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/reflection/reflection-provenance--band.png"
+  alt="A record popover opened over the FDT-E watchlist table: emitter parameters for a tracked patrol vessel beside a timeline map of where the track has been."
+  caption="The provenance is one click down."
+  gloss="Emitter parameters, and where the track has been."
+  aspect={2.402}
+/>
+
+Restraint was the operational requirement, not the aesthetic preference.
 
 </section>
 
