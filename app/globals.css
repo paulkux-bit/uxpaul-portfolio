@@ -1553,33 +1553,14 @@ html.dark .oku-figure {
   height: auto; /* scales to the SVG's own ~16:9 viewBox */
 }
 
-/* FDT-E finding figures: three drawings with mixed aspects (portrait / landscape /
-   near-square). A shared HEIGHT seats all three INSIDE their beat's text block
-   (~164px at desktop): at 180px the portrait figure out-topped its text and read
-   as a tall column, not a supporting companion. Width follows each drawing's own
-   aspect. Compound selector (.oku-figure.fdte-figure) outranks `.oku-figure svg`
-   by specificity, so the override is order-independent — safe against file
-   reorgs. FDT-E only — Bard's bare .oku-figure is untouched. */
-@media (min-width: 1024px) {
-  /* Desktop-only: shared companion height seats the three mixed-aspect drawings
-     in the 300px column. Below lg they fall back to the base `.oku-figure svg`
-     fluid rule (width:100%, height:auto) and scale edge-to-edge like the Bard
-     Oku figures, instead of sitting as fixed 148px stamps in a wide column. */
-  .oku-figure.fdte-figure svg {
-    width: auto;
-    height: 148px;
-    margin-inline: auto;
-  }
-}
-
 /* The FDT-E drawings are single hand-drawn FILLED paths whose hairline linework
-   collapses at the 148px render (muddy in dark). Add constant weight via stroke:
-   non-scaling-stroke keeps it a fixed screen 0.75px across the three different
-   viewBox scales (1220 / 1784 / 1582); a geometry-space stroke would render three
-   weights. Stroke follows currentColor, so the per-mode wrapper ink stays the single
-   color source. 0.75px tested clean on figure 03's dense map grid. FDT-E-scoped
-   one-off exception (Paul, July 2026) to the "fix line weight in the source art"
-   convention — Bard's Oku figures have native weight and stay stroke-free. */
+   collapses at the rendered size (muddy in dark). Add constant weight via stroke:
+   non-scaling-stroke pins it to a fixed 0.75px of SCREEN, not of the drawing's own
+   coordinate space, so the weight holds wherever the figure is scaled. Stroke follows
+   currentColor, so the per-mode wrapper ink stays the single color source. 0.75px
+   tested clean on figure 03's dense map grid. FDT-E-scoped one-off exception (Paul,
+   July 2026) to the "fix line weight in the source art" convention — Bard's Oku
+   figures have native weight and stay stroke-free. */
 .fdte-figure svg path {
   stroke: currentColor;
   stroke-width: 0.75px;
