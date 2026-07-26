@@ -45,3 +45,13 @@ next-env.d.ts
 
 # Impeccable critique snapshots (local archive, not source)
 .impeccable/
+
+# Local Claude Code settings (skills under .claude/skills/ ARE tracked)
+.claude/settings.local.json
+
+# Throwaway review renders. Sandbox ROUTES are tracked; these are not.
+public/sandbox/_*
+public/sandbox/figure-framing.*
+
+# Handoff prompts staged from Cowork. Never source.
+/_prompts/
