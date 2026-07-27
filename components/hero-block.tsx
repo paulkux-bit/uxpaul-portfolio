@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { PlaceholderFrame } from './_placeholder-utils';
 
 type HeroBlockProps = {
@@ -23,6 +23,11 @@ type HeroBlockProps = {
    *  must not cover. Same card styling and inset either way, only the corner
    *  changes. */
   calloutPosition?: 'bottom-left' | 'top-left';
+  /** Max width of the callout card, e.g. '24rem'. Omit for the 18rem CSS default.
+   *  Widen it when the image's quiet zone is wider than it is tall: a wider card
+   *  reflows the body to fewer lines, so it gets shorter as it gets wider. Feeds
+   *  --hero-callout-w; the 78% mobile-inset term still governs on narrow slots. */
+  calloutWidth?: string;
 };
 
 /**
@@ -50,6 +55,7 @@ export function HeroBlock({
   image,
   callout,
   calloutPosition = 'bottom-left',
+  calloutWidth,
 }: HeroBlockProps) {
   const sentences = typeof title === 'string' ? [title] : title;
 
@@ -105,6 +111,11 @@ export function HeroBlock({
             className={
               'hero-block__callout' +
               (calloutPosition === 'top-left' ? ' hero-block__callout--top-left' : '')
+            }
+            /* Inline style only when the prop is passed, so consumers that omit it
+               (uscg-bard) render byte-identically with no stray style attribute. */
+            style={
+              calloutWidth ? ({ '--hero-callout-w': calloutWidth } as CSSProperties) : undefined
             }
             role="note"
             aria-label={callout.label}

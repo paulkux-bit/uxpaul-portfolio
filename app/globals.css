@@ -2512,7 +2512,7 @@ html.dark .figure-placeholder {
   bottom: 1.25rem;
   left: 1.25rem;
   /* --top-left variant below swaps the corner; everything else identical. */
-  max-width: min(78%, 18rem); /* sized to the wrap so the card hugs the text on the right; 78% keeps mobile inset */
+  max-width: min(78%, var(--hero-callout-w, 18rem)); /* 78% keeps the mobile inset; the fallback is the default card width, overridable per case study via HeroBlock's calloutWidth */
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-hover);
