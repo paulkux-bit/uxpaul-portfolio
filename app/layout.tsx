@@ -7,7 +7,7 @@ import './globals.css';
 export const metadata = {
   title: 'uxpaul',
   description:
-    'Paul Kali — senior product designer. Currently with the U.S. Navy, previously URBN. Open to senior IC, staff, and management roles.',
+    'Paul Kali. Senior product designer. Currently with the U.S. Navy, previously URBN. Open to senior IC, staff, and management roles.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
