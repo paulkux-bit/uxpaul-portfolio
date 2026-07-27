@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { coverTier, type CaseStudy, type CoverTier } from '@/app/data/case-studies';
+import { isPublished } from '@/app/data/case-study-routes';
 
 // Per-card cover illustration, keyed by slug -> asset basename in
 // public/case-studies/covers/ (webp + png). Decorative line art; the question
@@ -44,8 +45,11 @@ const COVER_ART: Record<string, string> = {
 export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const tier = coverTier(study);
   const art = COVER_ART[study.slug];
+  const published = isPublished(study.slug);
 
-  const title = (
+  // Unpublished: plain text, so the stretched-link ::after goes with it. The
+  // visually-hidden destination goes too — there is no destination to announce.
+  const title = published ? (
     <Link
       href={`/case-studies/${study.slug}`}
       className="text-primary no-underline hover:underline after:absolute after:inset-0 after:content-['']"
@@ -55,6 +59,8 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         . {study.projectName}, {study.client} case study
       </span>
     </Link>
+  ) : (
+    study.problemFraming
   );
 
   const meta = (
@@ -65,11 +71,23 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
     <p className="text-caption">
       <span className="text-secondary">{study.projectName} · </span>
       <span className="font-semibold text-primary">{study.client}</span>
+      {published ? null : <span className="text-secondary"> · Coming soon</span>}
     </p>
   );
 
   return (
-    <article className="group relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift hover:lift-hover focus-within:lift-hover hover:border-strong focus-within:border-strong">
+    <article
+      className={[
+        'group relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift',
+        // Hover/focus response is a promise of a click target. An unpublished
+        // card has none, so it rests: same border, same elevation, no lift.
+        published
+          ? 'hover:lift-hover focus-within:lift-hover hover:border-strong focus-within:border-strong'
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       {tier === 'typographic' ? (
         // One cream surface: a floating centered illustration over the question
         // (left) and the muted meta. flex-col + the mt-auto text block pin the
