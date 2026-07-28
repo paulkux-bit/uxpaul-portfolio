@@ -180,11 +180,37 @@ FDT-E never hands down a verdict. Every call clears a doctrine gate first.
 
 <div className="eyebrow">What it took</div>
 
-## The richest picture was the wrong one.
+## The model got the credit. The schema did the work.
 
-<p className="section-lede">The first serious build was the impressive one. Live sensor streaming, everything fused, motion on the map, the whole disposition breathing in real time. **It demoed beautifully, and it died at Red Flag.**</p>
+<p className="section-lede">An agent can only flag what it can find, name, timestamp. Before anomaly detection was worth anything, three unglamorous things had to be right underneath it: **search, metadata, freshness.**</p>
 
-**The analysis was never the problem. The environment was.** Denied, degraded, intermittent, and limited bandwidth is the norm at the edge, and the richest version of the picture was the first thing to go on a starved connection. I had believed, without examining it, that more fidelity was more help. The field corrected me in an afternoon.
+**Search came first, because nothing downstream works without it.** I specified it story by story: multi-select, select-all, autocomplete, grouping, drawing an area on the map. Every state drawn before anyone wrote a query.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/foundations/search-ia--band.jpg"
+  alt="A wall of search specification artboards, each headed as a numbered search story and broken into steps: multi-select, select-all with grouping, autocomplete on keyword, dropdown behavior, and initiating an area draw on the map."
+  caption="Search, specified story by story."
+  gloss="Multi-select, autocomplete, grouping, area draw."
+  aspect={2.426}
+/>
+
+An analyst who cannot narrow the picture cannot ask the model a useful question either. Search was the vocabulary for both.
+
+**Then the metadata, one equipment type at a time.** A radar and a patrol vessel do not describe themselves with the same fields. Getting that right meant workshops with operators and subject-matter experts, arguing field by field over what actually identifies a thing and what is just noise on the record. It was the slowest work on the project.
+
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/reflection/reflection-provenance--band.png"
+  alt="A record popover opened over the FDT-E watchlist table: emitter parameters for a tracked patrol vessel beside a timeline map of where the track has been."
+  caption="Metadata tailored to the equipment."
+  gloss="Emitter parameters, and where the track has been."
+  aspect={2.402}
+/>
+
+One confident claim on the surface, the provenance one click under it. Tailored fields are what let the model say this is unusual for this kind of thing, rather than unusual in general.
+
+**Then freshness, which is where I was wrong.** The first serious build was the impressive one. Live sensor streaming, everything fused, motion on the map, the whole disposition breathing in real time. **It demoed beautifully, and it died at Red Flag.**
+
+**The analysis was never the problem. The environment was.** Denied, degraded, intermittent, limited bandwidth is the norm at the edge, and the richest version of the picture was the first thing to go on a starved connection. I had believed, without examining it, that more fidelity was more help. The field corrected me in an afternoon.
 
 So the disposition stopped moving and started reporting. What changed, when, and on whose authority, in text a starved link can carry.
 
@@ -196,17 +222,9 @@ So the disposition stopped moving and started reporting. What changed, when, and
   aspect={1.9}
 />
 
-Everything else became something the analyst pulls, not something the tool pushes. One confident claim on the surface, the provenance one click under it, available when the link and the moment allow.
+Everything else became something the analyst pulls, not something the tool pushes. Restraint was the operational requirement, not the aesthetic preference.
 
-<BentoBand
-  src="/case-studies/us-navy-fdt-e/reflection/reflection-provenance--band.png"
-  alt="A record popover opened over the FDT-E watchlist table: emitter parameters for a tracked patrol vessel beside a timeline map of where the track has been."
-  caption="The provenance is one click down."
-  gloss="Emitter parameters, and where the track has been."
-  aspect={2.402}
-/>
-
-Restraint was the operational requirement, not the aesthetic preference.
+**None of this is the part people ask about.** The anomaly agent got the attention. It worked because it was searching a schema that knew what everything was and when it last changed.
 
 </section>
 
@@ -218,24 +236,16 @@ Restraint was the operational requirement, not the aesthetic preference.
 
 We designed and built in an unclassified environment and deployed into a secured one. I was not ready for the gap. The volume, the velocity, and the variance of the data on the classified network are past anything the unclassified build ever had to hold, and the tool grew richer and sharper to meet it. What you are reading is the shadow of the system, drawn with notional data. The version operators use is the better one, and it is the one I cannot show.
 
-I have made peace with that being the honest shape of defense work. The evidence stays behind the fence. What travels is the thinking.
+I have made peace with that. The evidence stays behind the fence. What travels is the thinking.
 
-</section>
+**What I can tell you is how far it went.** Operators report more confidence working through ambiguity, because the workflow and the transparency give them somewhere to stand when the data will not settle.
 
-<section className="cs-section">
-
-<div className="eyebrow">Where it is now</div>
-
-## It outgrew what we built it for.
-
-That reach is the outcome I hold onto, because it was not a given. FDT-E supports dozens of mission types, including ones as consequential as strike and search-and-rescue, and it keeps taking on more. It has become a platform other systems want to plug into, with integration requests arriving from elsewhere in the department. And on the thing the project was built for, operators report more confidence working through ambiguity, because the workflow and the transparency give them somewhere to stand when the data will not settle.
-
-I finished my work in 2025.
+I handed the work off in 2025.
 
 <div className="milestone">
   <p className="milestone__frame">Dozens of mission types, from strike to search-and-rescue</p>
   <p className="milestone__date">Fielded</p>
-  <p className="milestone__sub">A platform other systems now plug into. Still growing.</p>
+  <p className="milestone__sub">Now a platform other systems integrate with.</p>
 </div>
 
 </section>
