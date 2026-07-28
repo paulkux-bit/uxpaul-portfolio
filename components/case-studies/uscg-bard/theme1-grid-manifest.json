@@ -27,7 +27,7 @@
       "aspect": 2.63,
       "lens": "ux",
       "beat": "1 location",
-      "caption": "One vocabulary reads every state's filings. County or waterbody, the same picker.",
+      "caption": "Shared vocabulary. Every state picks from the same list.",
       "label": "location"
     },
     {
@@ -59,7 +59,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "2 event",
-      "caption": "A second axis. What happened, not just where.",
+      "caption": "Second axis. Captures what happened, not just where.",
       "label": "event"
     },
     {
@@ -75,7 +75,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "3 columns",
-      "caption": "The columns everyone shares. Including each state's own case number.",
+      "caption": "Core columns. Every state includes its own case number.",
       "label": "columns"
     },
     {
@@ -92,7 +92,7 @@
       "aspect": 3.13,
       "lens": "product",
       "beat": "3 result",
-      "caption": "56 jurisdictions, one table. Every filing normalized into one queryable set.",
+      "caption": "Unified table. All fifty-six feed into one dataset.",
       "label": "the result"
     },
     {
@@ -108,7 +108,7 @@
       "slot": "feature",
       "lens": "ux",
       "beat": "4 map",
-      "caption": "One source, two views. The list and the map never disagree.",
+      "caption": "One source. List and map always match.",
       "label": "map sync"
     },
     {
@@ -125,7 +125,7 @@
       "aspect": 2.63,
       "lens": "ux",
       "beat": "1 location",
-      "caption": "One vocabulary reads every state's filings. County or waterbody, the same picker.",
+      "caption": "Shared vocabulary. Every state picks from the same list.",
       "label": "location"
     },
     {
@@ -157,7 +157,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "2 event",
-      "caption": "A second axis. What happened, not just where.",
+      "caption": "Second axis. Captures what happened, not just where.",
       "label": "event"
     },
     {
@@ -173,7 +173,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "3 columns",
-      "caption": "The columns everyone shares. Including each state's own case number.",
+      "caption": "Core columns. Every state includes its own case number.",
       "label": "columns"
     },
     {
@@ -190,7 +190,7 @@
       "aspect": 3.13,
       "lens": "product",
       "beat": "3 result",
-      "caption": "56 jurisdictions, one table. Every filing normalized into one queryable set.",
+      "caption": "Unified table. All fifty-six feed into one dataset.",
       "label": "the result"
     },
     {
@@ -206,7 +206,7 @@
       "slot": "feature",
       "lens": "ux",
       "beat": "4 map",
-      "caption": "One source, two views. The list and the map never disagree.",
+      "caption": "One source. List and map always match.",
       "label": "map sync"
     }
   ],
