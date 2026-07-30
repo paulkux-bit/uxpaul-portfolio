@@ -40,8 +40,8 @@
       "src": "/case-studies/uscg-bard/resolutions-02/projection--band.png",
       "alt": "Florida dashboard trend chart: monthly incidents rising to 420 through September, above 2025, with the remaining year projected.",
       "caption": {
-        "lead": "Florida's trend.",
-        "tail": "Monthly counts from the same data, against 2025."
+        "lead": "Comparative trends.",
+        "tail": "See monthly case volume against last year to spot spikes."
       },
       "width": 4068,
       "height": 735,
@@ -58,8 +58,8 @@
       "src": "/case-studies/uscg-bard/resolutions-02/annual-bars--band.png",
       "alt": "Hawaii dashboard chart: annual incidents declining from 14 in 2022 to 7 in 2026.",
       "caption": {
-        "lead": "Hawaii's five years.",
-        "tail": "Only 7 incidents this year."
+        "lead": "Low-volume jurisdictions.",
+        "tail": "Visuals adapt for small datasets like Hawaii's seven annual cases."
       },
       "width": 4068,
       "height": 735,
@@ -77,7 +77,7 @@
       "alt": "Hawaii dashboard work queue in its empty state: a small boat illustration above the words All caught up, No incidents in your queue, and a View All Incidents button.",
       "caption": {
         "lead": "Empty queue.",
-        "tail": "Hawaii's panel shows zero cases."
+        "tail": "Clear indicators show when a state's queue is empty."
       },
       "width": 2176,
       "height": 1000,
@@ -94,8 +94,8 @@
       "src": "/case-studies/uscg-bard/resolutions-02/kpi-strip--band.png",
       "alt": "Florida dashboard summary strip: 420 incidents year to date, 47 fatalities, 38 this week, 89 percent federal compliance.",
       "caption": {
-        "lead": "Florida's snapshot.",
-        "tail": "420 this year, 38 this week, 89% compliant."
+        "lead": "Metrics summary.",
+        "tail": "At-a-glance totals for YTD incidents, weekly cases, and compliance."
       },
       "width": 3865,
       "height": 340,

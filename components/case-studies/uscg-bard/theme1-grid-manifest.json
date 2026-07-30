@@ -27,7 +27,7 @@
       "aspect": 2.63,
       "lens": "ux",
       "beat": "1 location",
-      "caption": "Shared vocabulary. Every state picks from the same list.",
+      "caption": "Controlled vocabulary. Standardized picklists keep local terms aligned.",
       "label": "location"
     },
     {
@@ -59,7 +59,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "2 event",
-      "caption": "Second axis. Captures what happened, not just where.",
+      "caption": "Event-level context. Records what happened alongside where it happened.",
       "label": "event"
     },
     {
@@ -75,7 +75,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "3 columns",
-      "caption": "Core columns. Every state includes its own case number.",
+      "caption": "Tailored metadata. Users see the case info that matters most to them.",
       "label": "columns"
     },
     {
@@ -92,7 +92,7 @@
       "aspect": 3.13,
       "lens": "product",
       "beat": "3 result",
-      "caption": "Unified table. All fifty-six feed into one dataset.",
+      "caption": "Actionable dashboard. Users see real-time events in their own jurisdiction.",
       "label": "the result"
     },
     {
@@ -108,7 +108,7 @@
       "slot": "feature",
       "lens": "ux",
       "beat": "4 map",
-      "caption": "One source. List and map always match.",
+      "caption": "State-synced interface. Table rows and map markers always show the same results.",
       "label": "map sync"
     },
     {
@@ -125,7 +125,7 @@
       "aspect": 2.63,
       "lens": "ux",
       "beat": "1 location",
-      "caption": "Shared vocabulary. Every state picks from the same list.",
+      "caption": "Controlled vocabulary. Standardized picklists keep local terms aligned.",
       "label": "location"
     },
     {
@@ -157,7 +157,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "2 event",
-      "caption": "Second axis. Captures what happened, not just where.",
+      "caption": "Event-level context. Records what happened alongside where it happened.",
       "label": "event"
     },
     {
@@ -173,7 +173,7 @@
       "slot": "standard",
       "lens": "ux",
       "beat": "3 columns",
-      "caption": "Core columns. Every state includes its own case number.",
+      "caption": "Tailored metadata. Users see the case info that matters most to them.",
       "label": "columns"
     },
     {
@@ -190,7 +190,7 @@
       "aspect": 3.13,
       "lens": "product",
       "beat": "3 result",
-      "caption": "Unified table. All fifty-six feed into one dataset.",
+      "caption": "Actionable dashboard. Users see real-time events in their own jurisdiction.",
       "label": "the result"
     },
     {
@@ -206,7 +206,7 @@
       "slot": "feature",
       "lens": "ux",
       "beat": "4 map",
-      "caption": "One source. List and map always match.",
+      "caption": "State-synced interface. Table rows and map markers always show the same results.",
       "label": "map sync"
     }
   ],

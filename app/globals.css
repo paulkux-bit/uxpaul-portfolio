@@ -388,6 +388,11 @@
   font-stretch: 94%;
   letter-spacing: 0;
   line-height: 1.15;
+  /* Explicit token, matching .friction-beat__headline. Without it these headings
+     inherit .case-study-prose's color-mix(currentColor 92%) — a banned pattern
+     (CLAUDE.md) — which left them measurably lighter than the friction headlines
+     they are meant to rhyme with. */
+  color: var(--text-primary);
 }
 
 /* ============================================================

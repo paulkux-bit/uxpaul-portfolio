@@ -27,7 +27,7 @@ import { BentoBand } from '@/components/bento';
 <HeroBlock
   eyebrow="BARD · U.S. COAST GUARD"
   title={['The data was there.', "The system couldn't speak it."]}
-  role="I helped rebuild BARD, the federal database every U.S. state and territory uses to report boating accidents. Sole designer, first ground-up overhaul in over twenty years."
+  role="I helped rebuild BARD, the federal database every U.S. state and territory uses to report boating accidents: sole designer, first ground-up overhaul in over twenty years."
   image={{
     src: '/case-studies/uscg-bard/hero.png',
     alt: "BARD dashboard greeting a state coordinator by name, summarizing the year's leading contributing factor, flagging two incidents returned for correction, and charting year-to-date incidents against the prior year. Synthetic data.",
@@ -93,7 +93,7 @@ I talked to twenty people who do the work, from the busiest states to the smalle
     <div className="friction-beat__text">
       <span className="thread-index">01</span>
       <h3 className="friction-beat__headline">Fifty-six forks</h3>
-      <p className="friction-beat__scene">Each jurisdiction had its own form. Standardizing required everyone to agree, so it never happened.</p>
+      <p className="friction-beat__scene">Each jurisdiction had its own form. Standardizing inputs never moved past the planning phase.</p>
     </div>
     <OkuFigure variant="forms-diverge" alt="Fifty-six forms diverging from a common origin, each adapting away from the others." />
   </li>
@@ -101,7 +101,7 @@ I talked to twenty people who do the work, from the busiest states to the smalle
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Six months behind</h3>
-      <p className="friction-beat__scene">National numbers were compiled by hand, always six months behind. The data existed year-round, but nobody could access it in real time.</p>
+      <p className="friction-beat__scene">Because national figures were aggregated by hand, decision-makers were always working with six-month-old data.</p>
     </div>
     <OkuFigure variant="insight-trapped" alt="A year of incident data with meaning lit in only a single month." />
   </li>
@@ -109,7 +109,7 @@ I talked to twenty people who do the work, from the busiest states to the smalle
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">Four disconnected tabs</h3>
-      <p className="friction-beat__scene">Filing one case meant juggling four tabs, with nothing connected. Coordinators reconciled everything manually.</p>
+      <p className="friction-beat__scene">Filing one case required staff to manually reconcile data across four disconnected browser tabs.</p>
     </div>
     <OkuFigure variant="manual-reconcile" alt="One incident record forced into two readings, reconciled by hand across two open tabs." />
   </li>
@@ -123,75 +123,65 @@ I talked to twenty people who do the work, from the busiest states to the smalle
 
 ## How do you unify fifty-six jurisdictions without changing one?
 
-**Standardize the data, not the people.** With fifty-six different forms, no one could see trends or act on them.
-
-People kept trying to force a single national form, but it never worked. I took a different approach: keep everyone's process, just standardize the data underneath.
+**Standardize the data, not the people.** Forcing fifty-six jurisdictions onto a single form was an operational dead end. I kept local processes as they were and built a standard data structure underneath. Suddenly, trends and comparisons were possible.
 
 </section>
 
 <section className="cs-section">
 
-<div className="eyebrow">How I solved it</div>
+<div className="eyebrow">How I Solved It</div>
 
 ## Flexible forms, unified records.
 
-All jurisdictions share a single data structure. Federal fields are required; everything else is optional. Investigators see only what their case needs, with compliance scored in real time. The Coast Guard reviews the same record from its own view.
+I designed a modular form on a single, shared data structure. Federal fields are required; everything else is optional. Role-based views keep the interface clean. Local investigators see only what matters for their case, while Coast Guard reviewers get a high-level view with real-time compliance scoring.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
   alt="The BARD incident form in the state filer's view, with a Your View / USCG View toggle to switch to the Coast Guard's read of the same record; a live 20% Federal Compliance meter scores the draft as fields are filled."
-  caption="One form, two views."
-  gloss="Switch between what the state fills and what the Coast Guard sees."
+  caption="Dual-view capability."
+  gloss="Investigators enter local details; the Coast Guard's view is one toggle away."
   aspect={1.6}
 />
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-map.png"
   alt="The full BARD incident screen for a Bay/Sound location: a 'Showing tidal fields' banner and a Tide stage field appear because the water-body type calls for them."
-  caption="Form adapts."
-  gloss="Tidal fields appear only when needed."
+  caption="Conditional logic."
+  gloss="Inputs like tidal data appear only when relevant."
   aspect={1.6}
 />
-
-**The output is standardized. The process never had to be.**
 
 </section>
 
 <section className="cs-section">
-  <div className="eyebrow">How it works</div>
+  <div className="eyebrow">Design in Action</div>
 
-  <p className="section-lede">My whole approach: a localized surface over standardized data underneath.</p>
+  <h2>One data structure changed how you file, see, and count.</h2>
 
-  <div className="mt-8 flex items-baseline gap-2 text-caption">
+  {/* The axis lockup is now the section header: the sentence h3 it used to precede is gone,
+      so this carries the heading role. text-resolution-headline is the same register as
+      .friction-beat__headline, keeping the friction→resolution read headline-to-headline. */}
+  <h3 className="mt-8 mb-10 md:mb-10 flex items-baseline gap-2 text-resolution-headline">
     <span className="thread-index">01</span>
-    <span className="text-muted">How you file</span>
-  </div>
-  <h3 className="mt-2 mb-10 md:mb-10 text-resolution-headline">
-    Every state files differently, but one set of filters standardizes the data.
+    <span>How you file</span>
   </h3>
   <Resolutions01Bento />
 </section>
 
 <section className="cs-section">
   {/* `!` overrides the unlayered `.cs-section > :first-child { margin-top: 0 }` so this first-child lockup keeps the responsive preamble void — a required override, not a hack. */}
-  <div className="mt-24! 2xl:mt-32! flex items-baseline gap-2 text-caption">
+  <h3 className="mt-24! 2xl:mt-32! mb-10 md:mb-10 flex items-baseline gap-2 text-resolution-headline">
     <span className="thread-index">02</span>
-    <span className="text-muted">How you see</span>
-  </div>
-  <h3 className="mt-2 mb-10 md:mb-10 text-resolution-headline">
-    Every jurisdiction sees its own dashboard. One live source underneath.
+    <span>How you see</span>
   </h3>
   <Resolutions02Bento />
 </section>
 
 <section className="cs-section">
   {/* `!` overrides the unlayered `.cs-section > :first-child { margin-top: 0 }` — see the 02 note. */}
-  <div className="mt-24! 2xl:mt-32! flex items-baseline gap-2 text-caption">
+  <h3 className="mt-24! 2xl:mt-32! mb-10 md:mb-10 flex items-baseline gap-2 text-resolution-headline">
     <span className="thread-index">03</span>
-    <span className="text-muted">How you count</span>
-  </div>
-  <h3 className="mt-2 mb-10 md:mb-10 text-resolution-headline">
-    Conflicting counts? Federal standards set a single, reliable number.
+    <span>How you count</span>
   </h3>
   <Resolutions03Bento />
 </section>
@@ -202,15 +192,13 @@ All jurisdictions share a single data structure. Federal fields are required; ev
 
 ## The hardest part was collaboration, not design.
 
-<p className="section-lede">Standardizing the forms was a technical challenge; getting fifty-six jurisdictions to buy in was the real work.</p>
-
-**I thought the win was a shorter form, fewer fields. It turned out every state had reasons for the ones it kept.** So I kept them all, made them optional, and built a common foundation underneath. Nobody lost a field. Everyone got the same base.
+<p className="section-lede">Getting fifty-six jurisdictions to agree was the real challenge. Instead of forcing a single form, I preserved local needs while unifying the data underneath. To get buy-in, here's what I did:</p>
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-table--band.png"
   alt="BARD field-inventory spreadsheet: every incident field mapped to Your View, USCG View, and Mobile columns across all form sections."
-  caption="Mapped fields."
-  gloss="Each view shows only what's needed."
+  caption="Information architecture buy-in."
+  gloss="Walked every jurisdiction and SME through exactly what they'd get."
   focal="top"
   aspect={2.263}
 />
@@ -218,8 +206,8 @@ All jurisdictions share a single data structure. Federal fields are required; ev
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-insightwide--band.png"
   alt="BARD Incidents dashboard showing a plain-English engine line ('2 cases returned by USCG, 1 overdue, 1 due Nov 3') beside the deterministic shape-card spec that generates it."
-  caption="Clear signals."
-  gloss="At key moments, the UI turns standardized data into plain-English insights."
+  caption="Data into insight."
+  gloss="Built an engine that turns standard data into plain-English insights."
   focal={{ x: 0, y: 0.5 }}
   aspect={2.435}
 />
@@ -229,12 +217,12 @@ I mapped every section and state view, then tested the variations directly with 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-figma-canvas--band.png"
   alt="Zoomed-out Figma canvas of the BARD Incident form: an information-architecture outline beside four form states (empty, single-vessel, multi-vessel, USCG view)."
-  caption="Designed ahead."
-  gloss="Every scenario was built and tested."
+  caption="Prototyping with users."
+  gloss="Mapped, built, and tested every view directly with end users."
   aspect={1.904}
 />
 
-A payoff I didn't expect: **standardized data pushes the urgent case to the top.** Something fifty-six separate forms never could.
+What surprised me most was how standardized data made urgent cases visible right away, unlike the old system.
 
 </section>
 
@@ -243,7 +231,7 @@ A payoff I didn't expect: **standardized data pushes the urgent case to the top.
 <div className="eyebrow">Impact</div>
 
 <div className="milestone">
-  <p className="milestone__frame">BARD reaches initial operating capability with the U.S. Coast Guard</p>
+  <p className="milestone__frame">On track for Initial Operating Capability with the U.S. Coast Guard.</p>
   <p className="milestone__date">Spring 2027</p>
   <p className="milestone__sub">In build and testing now.</p>
 </div>
