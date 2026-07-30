@@ -1733,6 +1733,16 @@ html.dark .oku-figure {
   max-width: 56ch;
 }
 
+/* The lead separates from its gloss on colour, not weight alone: the <strong>
+   used to inherit --text-muted from the rule above, so lead and gloss rendered
+   the same colour and the caption read as a photo credit. 600 also replaces the
+   unowned 700 that Tailwind preflight's `b, strong { font-weight: bolder }` was
+   supplying. Size stays 14px; the gloss stays muted. */
+.figure__caption strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
 .figure--full-bleed {
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);

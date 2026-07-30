@@ -35,6 +35,14 @@ interface FramedPairProps {
  * caption): FramedPair is for two co-equal pieces of evidence shown together,
  * captioned independently. Fills its container (e.g. a .cs-section band → half
  * each); stacks below md by default for legibility. Server-rendered.
+ *
+ * The caption renders BELOW its image, deliberately — do not "fix" this to match
+ * the bento captions. These annotate legacy screenshots with a verdict, and a
+ * verdict reads after the evidence it judges; above, it would tell the reader
+ * what to see before they can check it. The panels are static images, not
+ * controls, so nothing depends on the caption as an accessible name. The bento
+ * captions sit above for exactly that opposite reason; see BreakoutCaption in
+ * components/bento.tsx.
  */
 export function FramedPair({
   left,
