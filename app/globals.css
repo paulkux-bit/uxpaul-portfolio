@@ -1004,7 +1004,7 @@
   position: relative;
   font-size: 1.125rem;
   line-height: 1.7;
-  color: color-mix(in oklch, currentColor 92%, transparent);
+  color: var(--text-primary);
 }
 
 @media (min-width: 1024px) {
