@@ -10,8 +10,8 @@
       "breakout": "band",
       "aspect": 1.832,
       "caption": {
-        "lead": "The board they already trust.",
-        "tail": "Operation Avalanche: 187 records, nothing flagged."
+        "lead": "Trusted Board.",
+        "tail": "Near real-time view of enemy units."
       }
     },
     {
@@ -23,8 +23,8 @@
       },
       "slot": "feature",
       "caption": {
-        "lead": "It says how sure it is.",
-        "tail": "A possible command node, flagged at 80% confidence."
+        "lead": "Confidence Level.",
+        "tail": "Metadata and reasoning for the anomaly."
       }
     },
     {
@@ -37,8 +37,8 @@
       "breakout": "band",
       "aspect": 2.105,
       "caption": {
-        "lead": "Checked against command doctrine.",
-        "tail": "All-source correlation, linked to CJADC2."
+        "lead": "Doctrine Check.",
+        "tail": "All-source correlation for a clear picture."
       }
     },
     {
@@ -50,7 +50,8 @@
       },
       "slot": "compact",
       "caption": {
-        "lead": "Strongest read."
+        "lead": "GEOINT Source.",
+        "tail": "Geospatial intelligence shows hits and distribution."
       }
     },
     {
@@ -62,7 +63,8 @@
       },
       "slot": "compact",
       "caption": {
-        "lead": "Second source."
+        "lead": "COMINT Source.",
+        "tail": "Communications intel highlights matching signals."
       }
     },
     {
@@ -74,7 +76,8 @@
       },
       "slot": "compact",
       "caption": {
-        "lead": "Honest zero."
+        "lead": "MASINT Zero.",
+        "tail": "Measurement and signature intel. No hits, which is evidence."
       }
     },
     {
@@ -86,8 +89,8 @@
       },
       "slot": "standard",
       "caption": {
-        "lead": "No verdict handed down.",
-        "tail": "JIC, DIA, and NIFC talk it through."
+        "lead": "Collaborative Review.",
+        "tail": "Experts discuss the case in chat."
       }
     },
     {
@@ -99,8 +102,8 @@
       },
       "slot": "standard",
       "caption": {
-        "lead": "The analyst makes the call.",
-        "tail": "The gate informs the decision. It never makes it."
+        "lead": "Analyst Decision.",
+        "tail": "The analyst makes the final call."
       }
     }
   ],

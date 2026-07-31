@@ -35,31 +35,25 @@ import { BentoBand } from '@/components/bento';
 <HeroBlock
   eyebrow="FDT-E · U.S. NAVY"
   title={["An anomaly isn't intelligence", 'until someone works it.']}
-  role="I designed FDT-E, the system Naval Intelligence uses to track enemy air, ground, and maritime forces. Lead designer, start to fielded. In active use across multiple major commands."
+  role="I helped design FDT-E (Force Disposition Tracker Enterprise), used by Naval Intelligence to track enemy air, ground, and maritime forces. I contributed from the first build through fielding. Now in active use across major commands."
   image={{
     src: '/case-studies/us-navy-fdt-e/hero.png',
     alt: 'The FDT-E anomaly workspace: a C2 anomaly case under Operation Avalanche, with a four-phase rail (Verification, Response, Analysis, Modification) beside a five-step verification timeline running from all-source correlation to predictive modeling.',
   }}
   callout={{
-    label: 'The Premise',
-    body: 'Most AI hands you an answer. This one opens a case a person has to work.',
+    label: 'The premise',
+    body: 'Most AI gives you an answer. This one gives you a case to work.',
   }}
   calloutWidth="24rem"
 />
 
 <section className="cs-section cs-section--problem">
 
-<div className="eyebrow">The problem</div>
+<div className="eyebrow">Why certainty matters</div>
 
-## An analyst has to be certain before they act. The AI gives them a hunch.
+## An analyst can't act on a guess. The AI suggests a lead.
 
-**An alert fires: the AI thinks it has found an enemy command node.** The analyst has minutes, not hours.
-
-**Two ways to be wrong, both expensive.** Act on a false flag and you spend assets, or cue a strike on the wrong thing. Sit on a real one and the picture moves on without you.
-
-**The machine is confident. The analyst is accountable.** A model can be wrong at no cost. The person who acts on it cannot.
-
-**And that certainty has to come out of a flood:** every discipline reporting at once, faster than anyone can read.
+When something happens on the battlefield, there are minutes to decide. **A mistake wastes assets or hits the wrong target. A delay lets the real threat slip away.** There's too much data and not enough time. The analyst is accountable, having to pick out what matters most under pressure.
 
 {/* Wide pair (Bard's shared-row pattern): the feels-like illustration beside
     the real intel-tool overwhelm. Both tiles 16:10, so heights match and the
@@ -75,7 +69,7 @@ import { BentoBand } from '@/components/bento';
     caption: (
       <>
         <strong>Too much.</strong> One analyst, buried in sensor feeds, open
-        source, and specialized intelligence, all at once.
+        source, and specialized intel.
       </>
     ),
   }}
@@ -86,14 +80,11 @@ import { BentoBand } from '@/components/bento';
     alt: 'A live flight-tracking map with hundreds of aircraft icons packed over a region, the everyday overwhelm of a tracking tool.',
     caption: (
       <>
-        <strong>Too fast.</strong> Intel tools show every hit on the map in
-        real time.
+        <strong>Too fast.</strong> Intel tools show every hit as it happens.
       </>
     ),
   }}
 />
-
-It looks like a problem of too much data. It wasn't.
 
 </section>
 
@@ -101,16 +92,16 @@ It looks like a problem of too much data. It wasn't.
 
 <div className="eyebrow">What I found</div>
 
-## On site, the blocker wasn't the volume. It was trust.
+## On site, the blocker wasn't data volume. It was trust.
 
-By doctrine, commanders push data down to their units. The operators receiving it weigh it, argue with it, make their own call. Three findings reorganized the project.
+By doctrine, commanders push data down. Operators weigh it, debate it, and make their own call. But three things stood in the way:
 
 <ol className="friction-beats">
   <li className="friction-beat" data-thread="1">
     <div className="friction-beat__text">
       <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">The war sets the dial</h3>
-      <p className="friction-beat__scene">In peacetime an analyst can tolerate ambiguity; in war they want one fact, with its confidence attached. The tempo of the fight sets the standard, not the interface.</p>
+      <h3 className="friction-beat__headline">The fight sets the tempo</h3>
+      <p className="friction-beat__scene">In peacetime, analysts can live with ambiguity. In war, they want facts, with confidence attached. The fight's tempo, not the interface, sets the standard.</p>
     </div>
     <FdteFigure variant="tempo" alt="An operator works a console lever beneath a huge clock face, its hands racing ahead of him." />
   </li>
@@ -130,7 +121,7 @@ By doctrine, commanders push data down to their units. The operators receiving i
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">The black box</h3>
-      <p className="friction-beat__scene">The analysts were consistent on this. They would not act on a call whose reasoning they couldn't see.</p>
+      <p className="friction-beat__scene">Analysts won't act unless they can see and question the reasoning behind a call.</p>
     </div>
     <FdteFigure variant="black-box" alt="An analyst, chin in hand, scrutinizes a flagged position on a large wall map." />
   </li>
@@ -142,23 +133,19 @@ By doctrine, commanders push data down to their units. The operators receiving i
     The ! is load-bearing even without section-lede: the unlayered
     `:where(.case-study-prose) p` margin beats layered Tailwind utilities
     regardless of specificity. */}
-<p className="mt-14!">So the problem was never how much to show. It was whether a person could interrogate the claim.</p>
+<p className="mt-14!">**So the problem was never how much to show. It was whether a person could interrogate the claim.**</p>
 
 </section>
 
 <section className="cs-section">
 
-<div className="eyebrow">The bet</div>
+<div className="eyebrow">My approach</div>
 
 ## How do you trust what you can't question?
 
-**Don't make the machine convincing. Make it checkable.** Everyone wanted a smarter model. I thought the question was whether an analyst would trust it. They won't act on an answer they can't check.
+The product team wanted a smarter model. I used user research to keep us focused on what analysts would actually trust. By the end of discovery, it was clear: analysts won't act on an answer they can't check.
 
-In workshops and interviews the same thing kept coming up: they already trust doctrine. The machine didn't need to win them over. It needed to speak doctrine. So that's what we built.
-
-**Doctrine binds the machine, not the analyst.** Past the checklist, they can escalate, get a second opinion, or trust their own read. The person makes the call.
-
-FDT-E never hands down a verdict. Every call clears a doctrine gate first.
+So we built military doctrine directly into the app's business rules. **Doctrine guides the system, not the analysts.** The model presents checklists and options, but the person always makes the call. They can escalate, get a second opinion, or trust their own read. FDT-E never delivers a verdict; it offers doctrine-backed choices, and the analyst decides what happens next.
 
 </section>
 
@@ -167,10 +154,10 @@ FDT-E never hands down a verdict. Every call clears a doctrine gate first.
 <div className="eyebrow">How it works</div>
 
 <h3 className="mt-2 mb-10 md:mb-10 text-resolution-headline">
-  Watch one anomaly clear the gate.
+  Watch an anomaly clear the gate.
 </h3>
 
-<p>The machine flags a possible command node. Before anyone acts, it walks the same checks an analyst would, in the open.</p>
+<p>The system flags a possible command node. Before anything happens, it runs the same checks an analyst would, in the open.</p>
 
 <GateWalkBento />
 
@@ -180,72 +167,46 @@ FDT-E never hands down a verdict. Every call clears a doctrine gate first.
 
 <div className="eyebrow">What it took</div>
 
-## The model got the credit. The schema did the work.
+## Anomaly detection wasn't where I started.
 
-<p className="section-lede">An agent can only flag what it can find, name, timestamp. Before anomaly detection was worth anything, three unglamorous things had to be right underneath it: **search, metadata, freshness.**</p>
-
-**Search came first, because nothing downstream works without it.** I specified it story by story: multi-select, select-all, autocomplete, grouping, drawing an area on the map. Every state drawn before anyone wrote a query.
+<p className="section-lede">It was only possible after building three key foundations first.</p>
 
 <BentoBand
   src="/case-studies/us-navy-fdt-e/foundations/search-ia--band.jpg"
   alt="A wall of search specification artboards, each headed as a numbered search story and broken into steps: multi-select, select-all with grouping, autocomplete on keyword, dropdown behavior, and initiating an area draw on the map."
-  caption="Search, specified story by story."
-  gloss="Multi-select, autocomplete, grouping, area draw."
+  caption="Scalable Search."
+  gloss="Built global search so analysts could find the right data across every source and type."
   aspect={2.426}
 />
-
-An analyst who cannot narrow the picture cannot ask the model a useful question either. Search was the vocabulary for both.
-
-**Then the metadata, one equipment type at a time.** A radar and a patrol vessel do not describe themselves with the same fields. Getting that right meant workshops with operators and subject-matter experts, arguing field by field over what actually identifies a thing and what is just noise on the record. It was the slowest work on the project.
-
-<BentoBand
-  src="/case-studies/us-navy-fdt-e/reflection/reflection-provenance--band.png"
-  alt="A record popover opened over the FDT-E watchlist table: emitter parameters for a tracked patrol vessel beside a timeline map of where the track has been."
-  caption="Metadata tailored to the equipment."
-  gloss="Emitter parameters, and where the track has been."
-  aspect={2.402}
-/>
-
-One confident claim on the surface, the provenance one click under it. Tailored fields are what let the model say this is unusual for this kind of thing, rather than unusual in general.
-
-**Then freshness, which is where I was wrong.** The first serious build was the impressive one. Live sensor streaming, everything fused, motion on the map, the whole disposition breathing in real time. **It demoed beautifully, and it died at Red Flag.**
-
-**The analysis was never the problem. The environment was.** Denied, degraded, intermittent, limited bandwidth is the norm at the edge, and the richest version of the picture was the first thing to go on a starved connection. I had believed, without examining it, that more fidelity was more help. The field corrected me in an afternoon.
-
-So the disposition stopped moving and started reporting. What changed, when, and on whose authority, in text a starved link can carry.
 
 <BentoBand
   src="/case-studies/us-navy-fdt-e/reflection/reflection-activity--band.png"
   alt="The FDT-E watch map with the activity rail open beside it: a time-stamped list of what changed on each tracked entity, including new locations, status alerts, and operational condition changes."
-  caption="What changed, in text a link can carry."
-  gloss="Location, status, condition. Time-stamped."
+  caption="Live Data Activity."
+  gloss="Made sure the model could handle real-time, streaming data with no waiting and no stale information."
   aspect={1.9}
 />
 
-Everything else became something the analyst pulls, not something the tool pushes. Restraint was the operational requirement, not the aesthetic preference.
+<BentoBand
+  src="/case-studies/us-navy-fdt-e/reflection/reflection-provenance--band.png"
+  alt="A record popover opened over the FDT-E watchlist table: emitter parameters for a tracked patrol vessel beside a timeline map of where the track has been."
+  caption="Unified Quicklook."
+  gloss="Pulled everything together into a single, cohesive summary so analysts could see the whole picture fast."
+  aspect={2.402}
+/>
 
-**None of this is the part people ask about.** The anomaly agent got the attention. It worked because it was searching a schema that knew what everything was and when it last changed.
+What you're seeing here is only the shadow, built on notional data. **The version operators use is better, and it lives in a high-security environment I cannot show.**
 
 </section>
 
 <section className="cs-section">
 
-<div className="eyebrow">What I can't show you</div>
-
-## The real FDT-E lives on the high side, and it is a better app than the one on this page.
-
-We designed and built in an unclassified environment and deployed into a secured one. I was not ready for the gap. The volume, the velocity, and the variance of the data on the classified network are past anything the unclassified build ever had to hold, and the tool grew richer and sharper to meet it. What you are reading is the shadow of the system, drawn with notional data. The version operators use is the better one, and it is the one I cannot show.
-
-I have made peace with that. The evidence stays behind the fence. What travels is the thinking.
-
-**What I can tell you is how far it went.** Operators report more confidence working through ambiguity, because the workflow and the transparency give them somewhere to stand when the data will not settle.
-
-I handed the work off in 2025.
+<div className="eyebrow">Impact</div>
 
 <div className="milestone">
   <p className="milestone__frame">Dozens of mission types, from strike to search-and-rescue</p>
   <p className="milestone__date">Fielded</p>
-  <p className="milestone__sub">Now a platform other systems integrate with.</p>
+  <p className="milestone__sub">A platform other systems now plug into. Still growing.</p>
 </div>
 
 </section>
@@ -256,6 +217,6 @@ I handed the work off in 2025.
 
 ## Role
 
-Lead product designer on FDT-E across UX strategy, implementation, and UI, working for the U.S. Navy at Naval Information Warfare Center Pacific, in support of the Office of Naval Intelligence and Joint forces. The work belonged to a blended team: Navy product and engineering, active-duty analysts and planners serving as subject-matter experts, and industry partners including Northrop Grumman, Palantir, and Georgia Tech. The research reached from junior operators to flag officers. Designed 2024 to 2025, from first build to fielding.
+Lead product designer on FDT-E, responsible for UX strategy, design specification, and UI. Worked for the U.S. Navy at Naval Information Warfare Center Pacific, supporting the Office of Naval Intelligence. Designed from 2024 to the end of 2025, taking the project from first build to fielding as part of a cross-functional team.
 
 </section>
