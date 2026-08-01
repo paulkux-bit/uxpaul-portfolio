@@ -62,6 +62,9 @@
   --color-popup-text-muted:       var(--popup-text-muted);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-hover: 200ms;
+  --duration-reveal: 560ms;
 }
 
 /* ============================================================
@@ -126,6 +129,12 @@
      dashboard, PROBLEM legacy screenshots) — one value so they read as one system.
      Mode-independent. */
   --radius-image:           12px;
+
+  /* Portrait sibling to --radius-image. Deliberately tighter: a person is not a
+     screenshot, and the near-square corner reads editorial rather than avatar.
+     The one intended departure from image parity — do not "correct" it to
+     --radius-image. */
+  --radius-portrait:        4px;
 }
 
 /* ============================================================
@@ -2558,3 +2567,545 @@ html.dark .figure-placeholder {
   text-wrap: pretty;               /* fills the measure with a tidy rag (no widow); balance evened lines short → right-side band */
 }
 
+
+/* ============================================================
+   ABOUT PAGE
+   Component classes for /about. Follows the .cs-section / .hero-block
+   precedent: real classes here rather than long utility stacks in JSX,
+   because these carry media queries and state selectors that utilities
+   can't express cleanly.
+
+   Nothing here styles focus or links. The base layer already owns both
+   (the two-layer :focus-visible halo and the two-channel link hover), so
+   every control on the page inherits them. Do not add a local ring.
+
+   Accent-free at rest (CLAUDE.md director frame): every value below is a
+   semantic text/border/surface token. No --color-popup, no chroma.
+   ============================================================ */
+
+/* ── Reveal (progressive enhancement) ─────────────────────────────────────
+   Same data-attribute contract as .reveal-grid / .reveal-list: SSR emits no
+   attributes, so no-JS and reduced-motion both render visible.
+   TODO: generalize the three reveals separately (this is the third copy;
+   reveal-grid.tsx carries the same note). Not done here because the other
+   two are rendered by the home page, which this module must not touch. */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-hidden].about-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  [data-reveal-shown].about-reveal {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity var(--duration-reveal) var(--ease-out-quint),
+      transform var(--duration-reveal) var(--ease-out-quint);
+  }
+}
+
+/* ── Hero ─────────────────────────────────────────────────────────────── */
+
+.about-hero {
+  display: grid;
+  grid-template-columns: 0.82fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .about-hero {
+    gap: 3.5rem;
+  }
+}
+
+/* Single column below the hero's own stack point (not a site breakpoint:
+   the two-column lockup fails on measure before md does). The portrait is
+   capped so it cannot own the whole first screen on a phone. */
+@media (max-width: 720px) {
+  .about-hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .about-hero .framed-image {
+    max-width: 320px;
+  }
+}
+
+/* The portrait's frame is <FramedImage variant="portrait">; the shared frame
+   rules live in the FRAMED IMAGE block below. Only the mobile cap is local:
+   the portrait must not own the first phone screen. */
+
+/* POV line: the hero's focal statement. text-h3 rather than text-lead because
+   it needs a real clamp (22 -> 28px) to grow on desktop, and because text-lead
+   is already the subhead's role directly above it. Existing role, no new
+   utility; .about-drawer__company sets the same non-heading precedent. */
+.about-hero__pov {
+  color: var(--text-primary);
+  text-wrap: balance;
+  max-width: 24ch;
+}
+
+/* ── Action pills ─────────────────────────────────────────────────────── */
+
+.about-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* text-decoration:none is safe here even though these are links: the pill's
+   shape and fill carry the affordance, so the signal is never colour alone.
+   min-height meets the 44px touch target with room for two wrapped rows. */
+.about-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.625rem 1.125rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--text-primary);
+  color: var(--bg-canvas);
+  font-size: 1rem;
+  line-height: 1.2;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.about-pill--ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .about-pill {
+    transition:
+      transform var(--duration-hover) var(--ease-out-quint),
+      opacity var(--duration-hover) var(--ease-out-quint),
+      border-color var(--duration-hover) var(--ease-out-quint);
+  }
+  /* Lift, not cursor-follow. A magnet reads as a trick; this reads as response. */
+  .about-pill:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.about-pill:hover {
+  opacity: 0.88;
+}
+
+.about-pill--ghost:hover {
+  opacity: 1;
+  border-color: var(--border-strong);
+}
+
+/* ── Timeline ─────────────────────────────────────────────────────────────
+   Line and dots, years only. A dot marks the START of each era and is placed
+   by the proportional grid, so horizontal distance reads as duration. Phase
+   names deliberately do not appear here: they are the section titles below,
+   and printing them twice was the redundancy this replaced.
+
+   Dot and its years live in the SAME cell at both orientations, which is the
+   property that stops them decoupling (an earlier two-grid version drifted as
+   soon as a label wrapped). */
+
+.about-timeline {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  /* Not magic numbers: the real spans are 4 years (2006-2010), 7 (2010-2017)
+     and 9 (2017-now), so the tracks are 0.8 / 1.4 / 1.8 of 4fr. That puts the
+     dots at 0% / 20% / 55%, and the distance between two dots is the duration
+     of the era that starts at the left one. Update the last track as the
+     current era grows. */
+  grid-template-columns: 0.8fr 1.4fr 1.8fr;
+}
+
+/* The rule itself. Runs the full content width and past the last dot to the
+   right edge: the overhang is what reads as "ongoing". */
+.about-timeline::before {
+  content: '';
+  position: absolute;
+  top: 5px; /* dot radius, so the line passes through dot centres */
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-default);
+  transform-origin: left center;
+}
+
+.about-timeline__era {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-right: 1.5rem;
+}
+
+.about-timeline__dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  background: var(--text-muted);
+  /* The canvas ring is what makes the hairline break cleanly around the dot
+     instead of running under it. (--bg does not exist; the canvas role is
+     --bg-canvas.) */
+  box-shadow: 0 0 0 5px var(--bg-canvas);
+  position: relative;
+  z-index: 1;
+}
+
+/* The current era reads filled. Tone, not colour. */
+.about-timeline__era:last-child .about-timeline__dot {
+  background: var(--text-primary);
+}
+
+.about-timeline__years {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* Draw-in on the section's own reveal attribute: no second observer. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-hidden] .about-timeline::before {
+    transform: scaleX(0);
+  }
+  [data-reveal-shown] .about-timeline::before {
+    transform: scaleX(1);
+    transition: transform 600ms var(--ease-out-quint);
+  }
+  [data-reveal-hidden] .about-timeline__dot {
+    opacity: 0;
+  }
+  [data-reveal-shown] .about-timeline__dot {
+    opacity: 1;
+    transition: opacity 320ms var(--ease-out-quint);
+  }
+  [data-reveal-shown] .about-timeline__era:nth-child(2) .about-timeline__dot { transition-delay: 200ms; }
+  [data-reveal-shown] .about-timeline__era:nth-child(3) .about-timeline__dot { transition-delay: 380ms; }
+}
+
+/* Below the stack point the same content rotates: dots run down a left rule
+   with each era's years beside its own dot. */
+@media (max-width: 720px) {
+  .about-timeline {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .about-timeline::before {
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    right: auto;
+    width: 1px;
+    height: auto;
+    transform-origin: center top;
+  }
+  .about-timeline__era {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding-right: 0;
+  }
+  .about-timeline__dot {
+    flex: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-reveal-hidden] .about-timeline::before {
+      transform: scaleY(0);
+    }
+    [data-reveal-shown] .about-timeline::before {
+      transform: scaleY(1);
+    }
+  }
+}
+
+/* ── Phase sections ───────────────────────────────────────────────────── */
+
+.about-phase {
+  scroll-margin-top: 6rem;
+}
+
+/* Two binding gaps that override the container's 6rem section rhythm.
+   Tailwind v4 compiles space-y as
+     :where(.space-y-24 > :not(:last-child)) { margin-block-end: ... }
+   so the gap belongs to the PREVIOUS sibling's bottom margin, and :where()
+   pins it at specificity 0,0,0. These plain classes therefore win outright:
+   no !important, no layer fight. */
+
+/* The timeline is the lead-in to the list, not a band floating between two
+   sections. Flat rather than stepping at 2xl on purpose: a binding gap that
+   grows with the viewport stops binding. */
+.about-timeline-section {
+  margin-block-end: 3rem;
+}
+
+/* Keeps "See selected work" attached to the experience list above it rather
+   than stranded midway to Credentials. */
+.about-phase--last {
+  margin-block-end: 2.5rem;
+}
+
+/* ── Drawers ──────────────────────────────────────────────────────────── */
+
+.about-drawer {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.about-drawer:last-child {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.about-drawer__summary {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1.25rem 0;
+  cursor: pointer;
+  list-style: none; /* strip the native disclosure triangle */
+}
+
+/* Company over role. min-width:0 lets a long company name wrap inside its own
+   column instead of shoving the year off the row. */
+.about-drawer__id {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.about-drawer__role {
+  color: var(--text-muted);
+}
+
+.about-drawer__summary::-webkit-details-marker {
+  display: none;
+}
+
+.about-drawer__company {
+  color: var(--text-primary);
+}
+
+.about-drawer__year {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  white-space: nowrap; /* a span must never break across lines ("2006 –" / "2010") */
+}
+
+.about-drawer__mark {
+  flex: none;
+  /* Baseline, not centre. Centre made the mark drift down the row as soon as a
+     company name wrapped to two lines. Baseline pins it to the same baseline
+     the year already sits on, so the two stay level at every width, including
+     wrapped rows, without a viewport-dependent nudge. (start would key off the
+     company's line box, which is text-h3 and clamps 22->28px, so any fixed
+     offset would only be right at one width.) */
+  align-self: baseline;
+  /* Baseline puts the mark's BOX bottom on the baseline, so its centre lands
+     2.75px above the year's optical centre. Measured identical at 320/390/768/
+     1280, because both the mark and the year are fixed 16px, so this is a
+     constant, not a width-dependent guess. Nudged visually with position rather
+     than margin: a margin would feed back into the baseline offset and move the
+     box the wrong way. */
+  position: relative;
+  top: 2.75px;
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  fill: none;
+  /* Explicit identity rather than the initial `none`: transitioning out of the
+     `none` keyword is the one case that does not interpolate reliably. */
+  transform: rotate(0deg);
+}
+
+/* The plus reads as a cross at 45deg. */
+.about-drawer[open] .about-drawer__mark {
+  transform: rotate(45deg);
+}
+
+.about-drawer__inner {
+  padding-bottom: 1.5rem;
+}
+
+/* Calm hover: the company name takes a thin underline and nothing else moves.
+   This is an affordance on a child, NOT a focus ring: the base layer's
+   two-layer :focus-visible halo still owns the summary's focus state. */
+.about-drawer__summary:hover .about-drawer__company,
+.about-drawer__summary:focus-visible .about-drawer__company {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--border-strong);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .about-drawer__mark {
+    transition: transform 240ms var(--ease-out-quint);
+  }
+}
+
+/* Open/close animation, driven entirely by the [open] attribute so the
+   disclosure stays the browser's own (no JS holding `open` open through a
+   transition, which is what broke Enter and Space in an earlier pass).
+   interpolate-size is set here rather than on :root to keep auto-keyword
+   interpolation scoped to this page. Browsers without ::details-content ignore
+   the whole block and open instantly. */
+@media (prefers-reduced-motion: no-preference) {
+  .about-drawer {
+    interpolate-size: allow-keywords;
+  }
+
+  .about-drawer::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 240ms var(--ease-out-quint),
+      content-visibility 240ms allow-discrete;
+  }
+
+  .about-drawer[open]::details-content {
+    block-size: auto;
+  }
+}
+
+.about-drawer__meta {
+  color: var(--text-secondary);
+  margin: 0 0 0.75rem;
+}
+
+.about-drawer__tag {
+  display: inline-block;
+  margin: 0 0 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  color: var(--text-muted);
+}
+
+.about-drawer__body {
+  color: var(--text-secondary);
+  max-width: 68ch;
+  margin: 0 0 1rem;
+}
+
+.about-drawer__body:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Role progression ─────────────────────────────────────────────────────
+   Newest first. The connector is a single left border on the list; each step
+   hangs a dot on it, so promotions read as one vertical thread. Monochrome:
+   recency is carried by tone, not colour. */
+
+.about-roles {
+  list-style: none;
+  /* The 4px inset is load-bearing, not decorative. Each dot is centred on the
+     connector, so it overhangs this element's left edge by half its width; the
+     drawer's ::details-content clips to its box (overflow:hidden, required by
+     the open animation), which sheared the left half off every dot. */
+  margin: 0 0 1.25rem 4px;
+  padding: 0 0 0 1rem;
+  border-left: 1px solid var(--border-default);
+}
+
+.about-roles__step {
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.about-roles__step:last-child {
+  padding-bottom: 0;
+}
+
+.about-roles__step::before {
+  content: '';
+  position: absolute;
+  left: calc(-1rem - 3px);
+  top: 0.5em;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--text-muted);
+}
+
+/* The current/most recent role carries the strongest dot and title. */
+.about-roles__step:first-child::before {
+  background: var(--text-primary);
+}
+
+.about-roles__title {
+  display: block;
+  color: var(--text-primary);
+}
+
+.about-roles__step:not(:first-child) .about-roles__title {
+  color: var(--text-secondary);
+}
+
+.about-roles__dates {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+
+/* ── Credentials ──────────────────────────────────────────────────────── */
+
+.about-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* One treatment for all three. An earlier version promoted the clearance and
+   the JPME with a heavier outline, but across a row of three that reads as two
+   chips styled inconsistently rather than two chips promoted. Their weight is
+   carried by order and by the note beneath, so the row stays uniform. */
+.about-chip {
+  padding: 0.5rem 0.875rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
+}
+
+
+/* ============================================================
+   FRAMED IMAGE
+   The site's image edge, extracted from CSS that had been repeated at
+   .hero-block__image-frame, the framed-pair cell, and the About portrait.
+   See components/framed-image.tsx.
+
+   Deliberately NOT built on .figure__image, whose base rule paints its edge
+   with border: 1px solid color-mix(in oklch, currentColor 12%, transparent),
+   the opacity weight-fake CLAUDE.md bans. The inset hairline below is the
+   sanctioned treatment: mode-aware via --border-subtle, and inset so it
+   follows the radius and shifts no layout.
+   ============================================================ */
+
+.framed-image {
+  position: relative;
+  overflow: hidden;
+  /* aspect-ratio is set inline from the `ratio` prop: it reserves the box
+     before the bytes land, which is what keeps the LCP image from shifting. */
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+.framed-image--image {
+  border-radius: var(--radius-image);
+}
+
+.framed-image--portrait {
+  border-radius: var(--radius-portrait);
+}
+
+.framed-image__img {
+  object-fit: cover;
+}
