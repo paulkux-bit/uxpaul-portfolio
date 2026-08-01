@@ -37,7 +37,16 @@ role by Aug 31, 2026.
   proof paragraph. A concrete fact, not a positioning tagline. No tenure number,
   no geographic qualifier.
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
-  renders on `/about`, not home.
+  is currently rendered on **no route**. It was pulled from `/about` when that
+  page was rebuilt around the career arc; the components stay on disk, intact
+  and unrendered, pending a decision on where (or whether) it returns.
+- About (`app/about/page.tsx`): hero → career timeline → three phase sections
+  with résumé drawers → credentials → contact. The timeline is line-and-dots
+  carrying **years only**; each dot and its years share one cell (never split
+  them into sibling grids, which is what decoupled them on mobile). Phase names
+  appear once, as the section titles. Each phase is one quiet `text-h3` title
+  plus its rows: no eyebrow, no note, no folio. The role reads in the closed
+  drawer row, because that is what a skimming reader is looking for.
 
 ## Breakpoints (match exactly)
 Defined as CSS custom properties in `app/globals.css` under `@theme`:
@@ -393,3 +402,26 @@ import { ThemeProvider } from 'next-themes';
 ```
 
 The `attribute="class"` is critical — the CSS expects `.dark` on `<html>`, not `data-theme="dark"`.
+---
+
+## Design intent & director frame (read before any design or content change)
+
+Portfolio for Paul Kali, senior product designer, targeting **Senior IC, Staff IC, and Design Manager** roles at mission-driven orgs (consumer/FAANG, defense, civic tech). "Best offer wins." The site itself is a portfolio piece: its craft is evidence.
+
+**Audience — design for these three, name them when a change affects behavior:**
+- **Dana** (Director, ~3-min skim): experiences the site as perceived performance + polish. Never opens a drawer.
+- **Marcus** (Senior hiring manager, ~5–7 min): reads outcomes + role clarity; cross-checks every claim against LinkedIn. Any mismatch is disqualifying.
+- **Jordan** (Staff/Principal IC): reads the code and opens DevTools; extrapolates from small imprecisions.
+
+**Governing principle:** signal and craft with restraint. Do NOT add things for the sake of adding. Elegance is subtraction. References: Titan, Karolis Kosas, Madeline Snow.
+
+**Locked constraints:**
+- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**. The PopUp system is retired; `--color-popup`/persimmon is dead legacy — do not use it as an accent.
+- Bricolage Grotesque; **never animate its weight/width axes** (gimmicky). Semantic oklch tokens only; no raw hex/rgb.
+- **em-dashes (U+2014) are hard-banned** by lint:prose; en-dashes (U+2013) in date ranges are fine.
+- **No company or client logos** anywhere (endorsement risk + palette break).
+- Direct employers (U.S. Navy, URBN, SevOne, Comcast) stay **visibly separate** from agency-era CLIENT work (Abercrombie, Red Cross, DirecTV, Merck, PGA, etc., done via Empathy Lab/Tonic). Never imply a client was an employer.
+- **No total-years/tenure number** on any page (ageism); dated entries are fine.
+- All motion under `prefers-reduced-motion: no-preference`.
+
+Before any design/content change, ask: does this serve Dana, Marcus, or Jordan, and does it honor restraint? If it's decoration, cut it.
