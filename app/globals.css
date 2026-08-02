@@ -397,6 +397,11 @@
   font-stretch: 94%;
   letter-spacing: 0;
   line-height: 1.15;
+  /* Explicit token, matching .friction-beat__headline. Without it these headings
+     inherit .case-study-prose's color-mix(currentColor 92%) — a banned pattern
+     (CLAUDE.md) — which left them measurably lighter than the friction headlines
+     they are meant to rhyme with. */
+  color: var(--text-primary);
 }
 
 /* ============================================================
@@ -1008,7 +1013,7 @@
   position: relative;
   font-size: 1.125rem;
   line-height: 1.7;
-  color: color-mix(in oklch, currentColor 92%, transparent);
+  color: var(--text-primary);
 }
 
 @media (min-width: 1024px) {
@@ -1735,6 +1740,16 @@ html.dark .oku-figure {
   color: var(--text-muted); /* AA-normal floor at 14px in both modes (was a currentColor 60% mix, sub-AA in dark) */
   text-wrap: pretty;
   max-width: 56ch;
+}
+
+/* The lead separates from its gloss on colour, not weight alone: the <strong>
+   used to inherit --text-muted from the rule above, so lead and gloss rendered
+   the same colour and the caption read as a photo credit. 600 also replaces the
+   unowned 700 that Tailwind preflight's `b, strong { font-weight: bolder }` was
+   supplying. Size stays 14px; the gloss stays muted. */
+.figure__caption strong {
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .figure--full-bleed {

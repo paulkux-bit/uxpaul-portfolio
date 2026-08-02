@@ -179,6 +179,13 @@ function BentoMediaInner({ src, alt, label, tone, sizes, objectPosition, priorit
   );
 }
 
+/**
+ * Rendered ABOVE the media, deliberately — do not "fix" this to match FramedPair.
+ * The caption lead doubles as the `aria-label` of the focusable scroll region
+ * (`role="group"` + `tabIndex={0}` on the track below), and a label has to precede
+ * the control it names. FramedPair puts its caption below for the opposite and
+ * equally deliberate reason; see the note in components/framed-pair.tsx.
+ */
 function BreakoutCaption({ caption, gloss }: { caption?: string; gloss?: string }) {
   if (!caption) return null;
   return (

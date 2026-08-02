@@ -12,7 +12,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-feature-cards--dark.png",
       "alt": "BARD Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
-      "caption": { "lead": "One federal standard.", "tail": "Compliance held at 94% against 33 CFR." },
+      "caption": { "lead": "Compliance tracking.", "tail": "Automatically checks reports against federal standards." },
       "width": 4191,
       "height": 820,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -23,7 +23,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-feature-cards.png",
       "alt": "BARD Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
-      "caption": { "lead": "One federal standard.", "tail": "Compliance held at 94% against 33 CFR." },
+      "caption": { "lead": "Compliance tracking.", "tail": "Automatically checks reports against federal standards." },
       "width": 4191,
       "height": 820,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -34,7 +34,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-verdicts--dark.png",
       "alt": "BARD incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
-      "caption": { "lead": "The state files.", "tail": "The Coast Guard rules on every one." },
+      "caption": { "lead": "Federal review queue.", "tail": "Coast Guard reviewers access new state filings directly." },
       "width": 1598,
       "height": 2131,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -44,7 +44,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-verdicts.png",
       "alt": "BARD incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
-      "caption": { "lead": "The state files.", "tail": "The Coast Guard rules on every one." },
+      "caption": { "lead": "Federal review queue.", "tail": "Coast Guard reviewers access new state filings directly." },
       "width": 1598,
       "height": 2131,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -54,7 +54,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-cadence--dark.png",
       "alt": "BARD My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
-      "caption": { "lead": "Each on a federal clock.", "tail": "Two due back, one already overdue." },
+      "caption": { "lead": "Deadline monitoring.", "tail": "Flags cases at risk of missing reporting deadlines." },
       "width": 1598,
       "height": 2131,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -64,7 +64,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-cadence.png",
       "alt": "BARD My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
-      "caption": { "lead": "Each on a federal clock.", "tail": "Two due back, one already overdue." },
+      "caption": { "lead": "Deadline monitoring.", "tail": "Flags cases at risk of missing reporting deadlines." },
       "width": 1598,
       "height": 2131,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -74,7 +74,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-banner--dark.png",
       "alt": "BARD dashboard alert: the U.S. Coast Guard returned 2 incidents for corrections this week, with a Review now action.",
-      "caption": { "lead": "Two came back this week.", "tail": "This is how the 94% holds." },
+      "caption": { "lead": "Return audit.", "tail": "Tracks returned cases and updates compliance scores instantly." },
       "width": 4218,
       "height": 254,
       "focalPoint": { "x": 0.5, "y": 0.5 },
@@ -85,7 +85,7 @@
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-banner.png",
       "alt": "BARD dashboard alert: the U.S. Coast Guard returned 2 incidents for corrections this week, with a Review now action.",
-      "caption": { "lead": "Two came back this week.", "tail": "This is how the 94% holds." },
+      "caption": { "lead": "Return audit.", "tail": "Tracks returned cases and updates compliance scores instantly." },
       "width": 4218,
       "height": 254,
       "focalPoint": { "x": 0.5, "y": 0.5 },

@@ -31,9 +31,13 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
+/**
+ * A <div>, not a <main>: the root layout already owns the page's single
+ * <main id="main"> landmark, and <main> cannot nest inside <main>.
+ */
 export default function TypeBardSandbox() {
   return (
-    <main className="case-study-page">
+    <div className="case-study-page">
       <article className="case-study-article type-exp" id="type-exp-root">
         <div className="case-study-prose">
           <MDXContent />
@@ -50,6 +54,6 @@ export default function TypeBardSandbox() {
           __html: `(function(){var b=document.getElementById('type-exp-toggle'),r=document.getElementById('type-exp-root');if(!b||!r)return;b.addEventListener('click',function(){var on=r.classList.toggle('type-exp');b.textContent='type: '+(on?'proposed':'current');b.setAttribute('aria-pressed',String(on));});})();`,
         }}
       />
-    </main>
+    </div>
   );
 }
