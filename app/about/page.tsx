@@ -57,7 +57,7 @@ export default function AboutPage() {
               rel="noopener"
               download
             >
-              Resume (PDF)
+              Résumé (PDF)
             </a>
             <a
               className="about-link text-body"
@@ -105,7 +105,6 @@ export default function AboutPage() {
           <AboutDrawer
             company="Empathy Lab (EPAM)"
             year="2010 – 2014"
-            tag="Agency · client work"
             roles={[
               { title: 'Director, Experience Design', dates: 'Jun 2013 – Jan 2014' },
               { title: 'Senior UX Designer', dates: 'Oct 2011 – May 2013' },
@@ -114,7 +113,7 @@ export default function AboutPage() {
           >
             <p className="about-row__body text-body">
               Started as an information architect and left running experience design as a director,
-              in under four years. UX lead across DirecTV, American Red Cross, Lionsgate,
+              in under four years. UX lead for clients including DirecTV, American Red Cross, Lionsgate,
               Philosophy, Sentara, and Televisa, including OTT apps for live TV and video on demand
               across Televisa, Cablevision Mexico, and Sky Mexico.
             </p>
@@ -135,7 +134,6 @@ export default function AboutPage() {
           <AboutDrawer
             company="Tonic Design Co."
             year="2014 – 2017"
-            tag="Agency · client work"
             roles={[
               { title: 'Director, UX Design', dates: 'Aug 2016 – Jul 2017' },
               { title: 'Senior UX Designer', dates: 'Jun 2014 – Aug 2016' },

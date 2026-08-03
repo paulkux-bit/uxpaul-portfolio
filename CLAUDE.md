@@ -40,13 +40,24 @@ role by Aug 31, 2026.
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
   and unrendered, pending a decision on where (or whether) it returns.
-- About (`app/about/page.tsx`): hero → career timeline → three phase sections
-  with résumé drawers → credentials → contact. The timeline is line-and-dots
-  carrying **years only**; each dot and its years share one cell (never split
-  them into sibling grids, which is what decoupled them on mobile). Phase names
-  appear once, as the section titles. Each phase is one quiet `text-h3` title
-  plus its rows: no eyebrow, no note, no folio. The role reads in the closed
-  drawer row, because that is what a skimming reader is looking for.
+- About (`app/about/page.tsx`), v4: hero → three phase sections with résumé
+  drawers → a selected-work band → credentials → contact. **The career timeline
+  was deleted**; no `about-timeline` or `ERAS` references remain, and its CSS
+  went with it. Dates live only on the rows. Each phase is a declarative
+  sentence title at `text-h2`; phase three carries a single note line
+  (`.about-phase__note`, "First retail, then defense, on purpose."). The role
+  reads in the closed drawer row, because that is what a skimming reader is
+  looking for.
+- About's hero is the page's one two-tone moment: a single `<h1>` split into a
+  muted lead span and a primary remainder, so the accessible name stays one
+  sentence. The name above it is a label, not the heading.
+- Résumé rows are one DOM at both breakpoints. Company, role and year are flat
+  siblings and only the grid definition changes: company on its own line with a
+  muted "Role · Year" beneath it on mobile, all four inline from md up. The
+  interpunct is a `::after` on the role, never a text node, so desktop can drop
+  it without a second markup branch. Do not reintroduce a wrapper around company
+  and role: that is what forced the two layouts to disagree about what the grid
+  items were.
 
 ## Breakpoints (match exactly)
 Defined as CSS custom properties in `app/globals.css` under `@theme`:
@@ -93,6 +104,19 @@ See `PRODUCT.md` for the full accessibility floor. Quick summary:
 - Full keyboard navigation including PopUp toggle
 - Meaningful alt text on every image (not "screenshot of design")
 - Semantic HTML before ARIA
+
+## Eyebrows are functional only (site-wide)
+
+Decorative category eyebrows are banned. Every section leads with a declarative
+sentence header that carries the point; a label reading "Credentials" above a
+list of credentials tells the reader nothing the heading did not.
+
+An eyebrow is permitted only when it is **functional**: when it carries
+information the headline cannot. The annotation label on a case-study callout
+("What changed") is the shape that qualifies, because it names what kind of
+thing follows. A section-category name never does.
+
+This governs the case studies too, not just About.
 
 ## Don't do this
 - No purple gradients (anywhere)
@@ -176,7 +200,7 @@ Tailwind text-size classes like `text-4xl`.
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
 | `text-lede` | 32 → 60px | Home hero weighted sentence (h1). Thin base (wght 340); key noun phrases jump to `font-[720]` so weight carries emphasis. |
-| `text-hero` | 48 → 80px | Case study & About hero |
+| `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |

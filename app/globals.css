@@ -2751,10 +2751,17 @@ html.dark .figure-placeholder {
 }
 
 /* ── Résumé rows ──────────────────────────────────────────────────────────
-   One DOM, two layouts. Mobile stacks company + year on line one and the role
-   on line two; from md up all four sit inline. The only thing that changes is
-   grid-template-columns and the placement, which is why company and role are
-   flat siblings rather than a wrapped pair. */
+   One DOM, two layouts, and the only difference is the grid definition.
+
+   mobile   company owns its own line across the full width minus the mark,
+            then one muted meta line reading "Role · Year". The interpunct is
+            a ::after on the role rather than a text node, so desktop drops it
+            without needing a second markup branch.
+   desktop  a single line: company, role, year right-aligned, mark.
+
+   Company and year previously shared line one, so the year took ~90px off the
+   front of a 342px row and long names wrapped, which orphaned the year beside
+   line one and left the mark floating between the two. */
 
 .about-row {
   border-top: 1px solid var(--border-subtle);
@@ -2766,11 +2773,12 @@ html.dark .figure-placeholder {
 
 .about-row__summary {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  column-gap: 1rem;
+  /* col 1 sizes to the meta text, col 2 absorbs the slack, col 3 is the mark. */
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  column-gap: 0;
   row-gap: 0.25rem;
   align-items: baseline;
-  /* Tap target floor, and 4px on the right so the mark's rotated corners stay
+  /* Tap target floor, plus 4px on the right so the mark's rotated corners stay
      inside the box (a 16px square swings ~3.3px past its edge at 45deg). */
   min-height: 44px;
   padding: 1.25rem 4px 1.25rem 0;
@@ -2783,32 +2791,41 @@ html.dark .figure-placeholder {
 }
 
 .about-row__company {
-  grid-area: 1 / 1;
+  grid-area: 1 / 1 / 2 / 3;
   color: var(--text-primary);
 }
 
 .about-row__role {
-  grid-area: 2 / 1 / 2 / -1;
+  grid-area: 2 / 1;
   color: var(--text-muted);
 }
 
+/* The separator lives here so the desktop grid can switch it off. */
+.about-row__role::after {
+  content: '·';
+  margin-inline: 0.4em;
+}
+
 .about-row__year {
-  grid-area: 1 / 2;
+  grid-area: 2 / 2;
+  justify-self: start;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-/* The mark is the summary's ::after: a grid item that is not a node, so there
-   is nothing for a screen reader to skip. Drawn from two gradients rather than
-   a glyph so the cross stays geometric at any font. */
+/* The mark is the summary's ::after: the fourth grid item without being a node.
+   Baseline, not centre: centre measures against the whole row box, so a company
+   name that wrapped dragged the mark half a line below the year. */
 .about-row__summary::after {
   content: '';
   grid-area: 1 / 3;
-  align-self: center;
+  align-self: baseline;
   width: 16px;
   height: 16px;
-  flex: none;
+  margin-inline-start: 1rem;
+  position: relative;
+  top: 2px;
   background:
     linear-gradient(var(--text-muted) 0 0) center / 100% 1.5px no-repeat,
     linear-gradient(var(--text-muted) 0 0) center / 1.5px 100% no-repeat;
@@ -2822,10 +2839,18 @@ html.dark .figure-placeholder {
 @media (min-width: 768px) {
   .about-row__summary {
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto auto;
+    column-gap: 1.5rem;
     row-gap: 0;
+  }
+  .about-row__company {
+    grid-area: 1 / 1;
   }
   .about-row__role {
     grid-area: 1 / 2;
+  }
+  /* One line: the interpunct has nothing to join. */
+  .about-row__role::after {
+    content: none;
   }
   .about-row__year {
     grid-area: 1 / 3;
@@ -2833,6 +2858,7 @@ html.dark .figure-placeholder {
   }
   .about-row__summary::after {
     grid-area: 1 / 4;
+    margin-inline-start: 0;
   }
 }
 
@@ -2855,8 +2881,18 @@ html.dark .figure-placeholder {
   }
 }
 
-/* Calm hover: the company name takes a thin underline and nothing moves. */
-.about-row__summary:hover .about-row__company,
+/* Hover is gated to real pointers. iOS latches :hover on tap, so an opened row
+   kept a stray underline afterwards. :focus-visible stays ungated: it is the
+   keyboard affordance and must never depend on pointer type. */
+@media (hover: hover) and (pointer: fine) {
+  .about-row__summary:hover .about-row__company {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--border-interactive);
+  }
+}
+
 .about-row__summary:focus-visible .about-row__company {
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -2866,20 +2902,6 @@ html.dark .figure-placeholder {
 
 .about-row__inner {
   padding-bottom: 1.5rem;
-}
-
-.about-row__meta {
-  color: var(--text-secondary);
-  margin: 0 0 0.75rem;
-}
-
-.about-row__tag {
-  display: inline-block;
-  margin: 0 0 0.75rem;
-  padding: 0.125rem 0.5rem;
-  border: 1px solid var(--border-subtle);
-  border-radius: 999px;
-  color: var(--text-muted);
 }
 
 .about-row__body {
@@ -2892,54 +2914,52 @@ html.dark .figure-placeholder {
   margin-bottom: 0;
 }
 
+/* Precise months for a single-role company, beneath the prose. */
+.about-row__meta {
+  color: var(--text-muted);
+  margin: 1rem 0 0;
+}
+
 /* ── Role progression ─────────────────────────────────────────────────────
-   Newest first. A single left border is the connector; each step hangs a dot
-   on it. The 4px inset is load-bearing: the dot is centred on the connector,
-   so it overhangs this element's left edge, and ::details-content clips to its
-   box. Without the inset the left half of every dot was sheared off. */
+   Two columns, role left and dates right-aligned, so each step is one line
+   instead of two. Sits BELOW the prose, which is what keeps the row's muted
+   role line away from the identical bright title at the top of this list. */
 
 .about-roles {
   list-style: none;
-  margin: 0 0 1.25rem 4px;
-  padding: 0 0 0 1rem;
-  border-left: 1px solid var(--border-default);
+  margin: 1.25rem 0 0;
+  padding: 0;
 }
 
 .about-roles__step {
-  position: relative;
-  padding-bottom: 0.75rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  /* Tight on mobile so the longest title ("Director, Experience Design") still
+     lands on one line beside its dates; the whole point of the two-column form
+     is that each step is one line. */
+  column-gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border-subtle);
 }
 
-.about-roles__step:last-child {
-  padding-bottom: 0;
-}
-
-.about-roles__step::before {
-  content: '';
-  position: absolute;
-  left: calc(-1rem - 3px);
-  top: 0.5em;
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--text-muted);
-}
-
-.about-roles__step:first-child::before {
-  background: var(--text-primary);
+@media (min-width: 768px) {
+  .about-roles__step {
+    column-gap: 1.5rem;
+  }
 }
 
 .about-roles__title {
-  display: block;
-  color: var(--text-primary);
-}
-
-.about-roles__step:not(:first-child) .about-roles__title {
   color: var(--text-secondary);
 }
 
+.about-roles__step:first-child .about-roles__title {
+  color: var(--text-primary);
+}
+
 .about-roles__dates {
-  display: block;
+  justify-self: end;
+  white-space: nowrap;
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
 }

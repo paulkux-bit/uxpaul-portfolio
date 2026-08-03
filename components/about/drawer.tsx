@@ -9,12 +9,10 @@ type AboutDrawerProps = {
   /** Full span shown on the row, e.g. "2010 – 2014". */
   year: string;
   /**
-   * Role history, NEWEST FIRST. One entry renders the single meta line; more
-   * than one renders the progression thread.
+   * Role history, NEWEST FIRST. One entry renders the precise date line; more
+   * than one renders the progression list.
    */
   roles: AboutRole[];
-  /** Optional provenance tag, e.g. "Agency · client work". */
-  tag?: string;
   children: React.ReactNode;
 };
 
@@ -24,21 +22,29 @@ type AboutDrawerProps = {
  * bind, so open/close, Enter and Space, and the screen-reader disclosure role
  * are all the browser's own.
  *
- * ONE DOM for both breakpoints. Company, role and year are flat siblings, and
- * the layout difference is entirely grid-template-columns: stacked as
- * company + year / role on mobile, and company | role | year | mark inline from
- * md up. An earlier version wrapped company and role in a shared element, which
- * forced the two layouts to disagree about what the grid items were.
+ * ONE DOM for both breakpoints. Company, role and year are flat siblings and
+ * the layout difference is entirely the grid definition:
  *
- * The mark is the summary's ::after, so it is a grid item without being a node:
- * nothing for a screen reader to skip, and no SVG to keep in sync. It is drawn
- * from two gradients rather than a glyph so the cross stays geometric at any
- * font, and it rotates 45deg on open only when motion is allowed.
+ *   mobile   company on its own line, then a single muted meta line reading
+ *            "Role · Year". The interpunct is a ::after on the role, not a
+ *            text node, so the desktop layout can drop it without a second
+ *            markup branch.
+ *   desktop  one line: company, role, year right-aligned, mark.
  *
- * The whole row is the affordance: <summary> is the click and focus target, and
- * it carries a 44px minimum so the tap area clears the floor.
+ * The mark is the summary's own ::after, which makes it the fourth grid item
+ * without being a node: nothing for a screen reader to skip, and no SVG to keep
+ * in sync. It is drawn from two gradients rather than a glyph so the cross stays
+ * geometric at any font, and it aligns to the FIRST baseline so a company name
+ * that wraps cannot drag it down the row.
+ *
+ * The whole row is the affordance: <summary> is the click and focus target and
+ * carries a 44px minimum so the tap area clears the floor.
+ *
+ * Open body order is prose first, then the role history. That separation is
+ * what stops the row's muted role line sitting directly above an identical
+ * bright progression title.
  */
-export function AboutDrawer({ company, year, roles, tag, children }: AboutDrawerProps) {
+export function AboutDrawer({ company, year, roles, children }: AboutDrawerProps) {
   const isProgression = roles.length > 1;
 
   return (
@@ -50,7 +56,7 @@ export function AboutDrawer({ company, year, roles, tag, children }: AboutDrawer
       </summary>
 
       <div className="about-row__inner">
-        {tag ? <p className="about-row__tag text-caption">{tag}</p> : null}
+        {children}
 
         {isProgression ? (
           <ol className="about-roles">
@@ -62,12 +68,13 @@ export function AboutDrawer({ company, year, roles, tag, children }: AboutDrawer
             ))}
           </ol>
         ) : (
-          /* Dates only. The title already reads on the row, so repeating it here
-             would echo it a line later. The precise months are the added value. */
-          <p className="about-row__meta text-eyebrow">{roles[0].dates}</p>
+          /* The precise months, which the row's coarse span does not carry.
+             text-caption, not text-eyebrow: that utility is reserved for
+             all-caps tags, and it was rendering these dates as tracked
+             uppercase while the progression list a screen away stayed sentence
+             case. */
+          <p className="about-row__meta text-caption">{roles[0].dates}</p>
         )}
-
-        {children}
       </div>
     </details>
   );
