@@ -9,23 +9,15 @@ export const metadata = {
   title: 'About · uxpaul',
 };
 
-/**
- * Timeline eras. Years only: the phase names live once, as the section titles
- * below. Column widths are proportional to duration, so a dot's position on
- * the line reads as when, and the distance to the next reads as how long.
- */
-const ERAS = ['2006 – 2010', '2010 – 2017', '2017 – Now'];
-
 export default function AboutPage() {
   return (
     <div className="page-container py-24 md:py-32 space-y-24 2xl:space-y-32">
       {/* ── Hero ───────────────────────────────────────────────────────────
-          Portrait left, type right. The portrait is the LCP element, so it
-          carries `priority` and explicit intrinsic dimensions; the 4:5 frame
-          reserves its box before the bytes land, so nothing shifts. The static
-          import is what lets Next generate the blur placeholder at build.
-          Not wrapped in RevealSection: it is above the fold, and hiding the LCP
-          element to fade it in would be self-defeating. */}
+          Portrait leads in the DOM, which is also the mobile reading order;
+          from md up the grid moves it to the right column. It is the LCP
+          element, so it keeps priority and the blur placeholder, and the 4:5
+          box reserves its space before the bytes land. Not wrapped in
+          RevealSection: hiding the LCP element to fade it in is self-defeating. */}
       <header className="about-hero">
         <FramedImage
           src={portrait}
@@ -33,78 +25,58 @@ export default function AboutPage() {
           ratio="4 / 5"
           variant="portrait"
           priority
-          sizes="(max-width:720px) 320px, 340px"
+          position="50% 18%"
+          className="about-hero__portrait"
+          sizes="(max-width: 767px) min(100vw - 3rem, 300px), 440px"
         />
 
-        <div className="space-y-6">
-          <p className="text-eyebrow text-muted">About</p>
-
-          {/* Heading level and visual scale are deliberately split here. The
-              greeting stays the <h1> for the document outline, but the POV line
-              below is the hero's focal statement, so it carries the larger role.
-              An h1 at text-h2 above a p at text-h1 is intentional, not a slip. */}
-          <div className="space-y-3">
-            <h1 className="text-h2">Hi, I&apos;m Paul.</h1>
-            <p className="text-lead text-secondary">Product Designer</p>
+        <div className="about-hero__type">
+          <div className="space-y-2">
+            <p className="about-hero__name text-h2">Paul Kali</p>
+            <p className="about-hero__title text-lead">Senior Product Designer</p>
           </div>
 
-          <div className="space-y-3">
-            <p className="about-hero__pov text-h1">
-              I design the parts of a product people can&apos;t afford to get wrong.
-            </p>
-            <p className="text-body text-secondary">
-              Right now, intelligence systems for the U.S. Navy. Before that, the platform behind
-              URBN&apos;s brands, from Anthropologie to Nuuly.
-            </p>
-          </div>
+          {/* The page's only two-tone moment. One <h1>, two spans: the
+              accessible name is the whole sentence, and the spans carry
+              nothing but colour. */}
+          <h1 className="about-hero__pov text-h1">
+            <span className="about-hero__pov-lead">I design the parts of</span>{' '}
+            <span>a product people can&apos;t afford to get wrong.</span>
+          </h1>
 
-          <div className="about-pills">
+          <p className="about-hero__grounding text-body">
+            Right now, intelligence systems for the U.S. Navy. Before that, the platform behind
+            URBN&apos;s brands, from Anthropologie to Nuuly.
+          </p>
+
+          <div className="about-actions">
             <a
-              className="about-pill"
+              className="about-btn"
               href="/Paul-Kali-Resume-2026.pdf"
               target="_blank"
               rel="noopener"
               download
             >
-              Résumé (PDF) ↓
+              Resume (PDF)
             </a>
             <a
-              className="about-pill about-pill--ghost"
+              className="about-link text-body"
               href="https://linkedin.com/in/uxpaul"
               target="_blank"
               rel="noopener noreferrer"
             >
               LinkedIn
             </a>
-            <a className="about-pill about-pill--ghost" href="mailto:paulk.ux@gmail.com">
+            <a className="about-link text-body" href="mailto:paulk.ux@gmail.com">
               Email
             </a>
           </div>
         </div>
       </header>
 
-      {/* ── Timeline ───────────────────────────────────────────────────────
-          A dot marks the start of each era; the rule runs past the last one to
-          the right edge, which is what carries "ongoing". Dot and years sit in
-          the same cell at both orientations, so they cannot decouple. The line
-          and dots are decoration; the years are the real text. */}
-      <RevealSection aria-labelledby="career-timeline" className="about-timeline-section">
-        <h2 id="career-timeline" className="sr-only">
-          Career timeline
-        </h2>
-        <ol className="about-timeline">
-          {ERAS.map((years) => (
-            <li key={years} className="about-timeline__era">
-              <span className="about-timeline__dot" aria-hidden="true" />
-              <span className="about-timeline__years text-caption">{years}</span>
-            </li>
-          ))}
-        </ol>
-      </RevealSection>
-
       {/* ── Phase 1 ────────────────────────────────────────────────────── */}
       <RevealSection aria-labelledby="phase-foundations" className="about-phase space-y-8">
-        <h2 id="phase-foundations" className="text-h3">
+        <h2 id="phase-foundations" className="about-phase__title text-h2">
           Where I learned the trade.
         </h2>
 
@@ -114,7 +86,7 @@ export default function AboutPage() {
             year="2006 – 2010"
             roles={[{ title: 'Information Architect', dates: 'Apr 2006 – Jan 2010' }]}
           >
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Designed the information architecture behind Comcast.net and Xfinitytv.com, in front
               of millions of households. Where the fundamentals came from: systems thinking, IA,
               and designing for scale.
@@ -124,9 +96,9 @@ export default function AboutPage() {
       </RevealSection>
 
       {/* ── Phase 2 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-adaptation" className="about-phase space-y-8">
-        <h2 id="phase-adaptation" className="text-h3">
-          The agency years.
+      <RevealSection aria-labelledby="phase-lead" className="about-phase space-y-8">
+        <h2 id="phase-lead" className="about-phase__title text-h2">
+          From maker to lead.
         </h2>
 
         <div>
@@ -140,7 +112,7 @@ export default function AboutPage() {
               { title: 'Information Architect', dates: 'Feb 2010 – Sep 2011' },
             ]}
           >
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Started as an information architect and left running experience design as a director,
               in under four years. UX lead across DirecTV, American Red Cross, Lionsgate,
               Philosophy, Sentara, and Televisa, including OTT apps for live TV and video on demand
@@ -153,7 +125,7 @@ export default function AboutPage() {
             year="2014"
             roles={[{ title: 'Senior UX Designer', dates: 'Jan 2014 – Jun 2014' }]}
           >
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Designed the UX framework for a next-gen, mobile-first enterprise network-management
               tool, and built the demos that helped secure $48M in Series C funding from Bain
               Capital.
@@ -169,7 +141,7 @@ export default function AboutPage() {
               { title: 'Senior UX Designer', dates: 'Jun 2014 – Aug 2016' },
             ]}
           >
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Joined as a senior designer, left as director. Designed the Abercrombie &amp; Fitch
               loyalty program, which drove a 30% increase in repeat app visits, and led strategy
               and concept validation that won new retail and healthcare business.
@@ -179,12 +151,12 @@ export default function AboutPage() {
       </RevealSection>
 
       {/* ── Phase 3 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-delivery" className="about-phase about-phase--last space-y-8">
+      <RevealSection aria-labelledby="phase-ownership" className="about-phase space-y-8">
         <div className="space-y-3">
-          <h2 id="phase-delivery" className="text-h3">
-            Full ownership, discovery to shipped.
+          <h2 id="phase-ownership" className="about-phase__title text-h2">
+            Full ownership, end to end.
           </h2>
-          <p className="text-body text-secondary">First retail, then defense, on purpose.</p>
+          <p className="about-phase__note text-body">First retail, then defense, on purpose.</p>
         </div>
 
         <div>
@@ -193,7 +165,7 @@ export default function AboutPage() {
             year="2017 – 2019"
             roles={[{ title: 'Manager, Product Design', dates: 'Nov 2017 – Oct 2019' }]}
           >
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Led product design on the platform behind URBN&apos;s brands (Anthropologie, Free
               People, Urban Outfitters, and Nuuly), and mentored the team building it. Together we
               took Nuuly&apos;s rental platform from concept to launch, including its 0→1 warehouse
@@ -207,13 +179,13 @@ export default function AboutPage() {
             year="2019 – Now"
             roles={[{ title: 'Senior Product Designer', dates: 'Nov 2019 – Present' }]}
           >
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Sole design lead for core intelligence platforms used by thousands of operators,
               discovery through delivery. Cut mission-critical reporting time by 25% around direct
               user research, and turned static briefing slides into interactive data
               visualizations.
             </p>
-            <p className="about-drawer__body text-body">
+            <p className="about-row__body text-body">
               Moving to a hands-on IC role was a deliberate choice: to go deep on systems where a
               wrong call carries real weight. The hard part isn&apos;t the pixels. It&apos;s
               designing for air-gapped systems with no internet, and making the case for UX to
@@ -223,46 +195,60 @@ export default function AboutPage() {
         </div>
       </RevealSection>
 
-      {/* The one bridge out of this page. Plain text link: it inherits the site's
-          link treatment and focus halo, so it needs no local CSS. Points at the
-          same target the header's "Work" nav uses, since there is no /work
-          route. */}
-      <p className="text-small">
-        <Link href="/#selected-work">See selected work →</Link>
-      </p>
+      {/* ── Selected-work band ─────────────────────────────────────────────
+          The one bridge out of this page. Points at the same target the
+          header's "Work" nav uses, since there is no /work route. */}
+      <RevealSection aria-label="Selected work">
+        <Link className="about-work-band" href="/#selected-work">
+          <span className="about-work-band__label text-h3">See selected work</span>
+          <span className="about-work-band__arrow text-h3" aria-hidden="true">
+            →
+          </span>
+        </Link>
+      </RevealSection>
 
-      {/* ── Credentials ──────────────────────────────────────────────────
-          The label and the chips, nothing else. A clearance and a war-college
-          certificate are facts a reader can weigh unaided; a line telling them
-          what to conclude turned the credential into a pitch, so it is gone. */}
-      <RevealSection aria-labelledby="credentials" className="space-y-6">
-        <p id="credentials" className="text-eyebrow text-muted">
-          Credentials
-        </p>
-        <ul className="about-chips text-small">
-          <li className="about-chip">Active TS/SCI clearance</li>
-          <li className="about-chip">JPME Phase 1 · Naval War College</li>
-          <li className="about-chip">B.A. · Rutgers University</li>
+      {/* ── Credentials ────────────────────────────────────────────────── */}
+      <RevealSection aria-labelledby="credentials" className="space-y-8">
+        <h2 id="credentials" className="about-phase__title text-h2">
+          Cleared, credentialed, and current.
+        </h2>
+
+        <ul className="about-creds">
+          <li className="about-creds__item">
+            <span className="about-creds__label text-body">Active TS/SCI clearance</span>
+          </li>
+          <li className="about-creds__item">
+            <span className="about-creds__label text-body">JPME Phase 1</span>
+            <span className="about-creds__context text-small">U.S. Naval War College</span>
+          </li>
+          <li className="about-creds__item">
+            <span className="about-creds__label text-body">B.A.</span>
+            <span className="about-creds__context text-small">Rutgers University</span>
+          </li>
         </ul>
       </RevealSection>
 
       {/* ── Contact ────────────────────────────────────────────────────── */}
-      {/* space-y-8 puts the h2 on the same 2rem step as every other module
-          heading; the nested space-y-6 keeps the paragraph and its links at the
-          intimate tier. */}
       <RevealSection aria-labelledby="contact" className="space-y-8">
-        <h2 id="contact" className="text-h2">
+        <h2 id="contact" className="about-phase__title text-h2">
           Let&apos;s talk.
         </h2>
+
         <div className="space-y-6">
-          <p className="text-body text-secondary max-w-[64ch]">
-            Open to senior IC, staff, and design-management roles on teams with a real mission.
-            Philadelphia-based; remote, hybrid, or the occasional NYC/DC trip.
+          <p className="about-contact__body text-body">
+            Open to senior IC, staff, and design-management roles. Philadelphia-based; remote,
+            hybrid, or the occasional NYC/DC trip.
           </p>
-          <p className="text-body">
-            <a href="mailto:paulk.ux@gmail.com">paulk.ux@gmail.com</a>
-            {' · '}
-            <a href="https://linkedin.com/in/uxpaul" target="_blank" rel="noopener noreferrer">
+          <p className="about-contact__links">
+            <a className="about-link text-body" href="mailto:paulk.ux@gmail.com">
+              paulk.ux@gmail.com
+            </a>
+            <a
+              className="about-link text-body"
+              href="https://linkedin.com/in/uxpaul"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               LinkedIn
             </a>
           </p>
