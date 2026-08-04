@@ -2630,10 +2630,14 @@ html.dark .figure-placeholder {
 }
 
 /* Portrait above the name on mobile (it leads in the DOM), and the right
-   column from the stack point up. Capped by max-width only: a max-height
-   would fight the 4:5 box and reintroduce the crop it exists to hold. */
+   column from the stack point up.
+
+   No max-width on mobile: it fills the content column edge to edge, so its left
+   and right edges line up with the name and the POV line. The previous
+   300px cap plus left alignment left an asymmetric gap on the right that read
+   as a broken crop. Not full bleed: the page container's gutters still apply. */
 .about-hero__portrait {
-  max-width: min(100%, 300px);
+  width: 100%;
 }
 
 .about-hero__type {
@@ -2777,9 +2781,11 @@ html.dark .figure-placeholder {
 
 .about-row__summary {
   display: grid;
-  /* col 1 sizes to the meta text, col 2 absorbs the slack, col 3 is the mark. */
-  grid-template-columns: max-content minmax(0, 1fr) auto;
-  column-gap: 0;
+  /* Mobile: company spans the full width on row 1 with the chevron far right,
+     then role left and year RIGHT-ALIGNED on row 2. Right-aligning the year is
+     what gives every row a shared right edge. */
+  grid-template-columns: minmax(0, 1fr) 1.25rem;
+  column-gap: 1rem;
   row-gap: 0.25rem;
   align-items: baseline;
   /* The 4px right pad is gone with the plus that needed it: a square rotating
@@ -2797,7 +2803,7 @@ html.dark .figure-placeholder {
 }
 
 .about-row__company {
-  grid-area: 1 / 1 / 2 / 3;
+  grid-area: 1 / 1;
   color: var(--text-primary);
 }
 
@@ -2806,15 +2812,9 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
 }
 
-/* The separator lives here so the desktop grid can switch it off. */
-.about-row__role::after {
-  content: '·';
-  margin-inline: 0.4em;
-}
-
 .about-row__year {
-  grid-area: 2 / 2;
-  justify-self: start;
+  grid-area: 2 / 1;
+  justify-self: end;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -2829,11 +2829,11 @@ html.dark .figure-placeholder {
    company's line box. Centre would measure against the whole row box, so a
    company name that wrapped would drag the mark half a line down. */
 .about-row__mark {
-  grid-area: 1 / 3;
+  grid-area: 1 / 2;
   align-self: start;
+  justify-self: end;
   flex: none;
   color: var(--text-muted);
-  margin-inline-start: 1rem;
   margin-block-start: calc((clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 1.25 - 20px) / 2);
   transform: rotate(0deg);
 }
@@ -2843,8 +2843,13 @@ html.dark .figure-placeholder {
 }
 
 @media (min-width: 768px) {
+  /* FIXED tracks for the year and chevron, never auto. Each row is its own
+     grid, so an auto track sizes to that row's own content: "2014" and
+     "2010 - 2014" would produce different track widths and push the role column
+     to a different x on every row. Fixed tracks give every role one left edge
+     and every year one right edge. */
   .about-row__summary {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) auto auto;
+    grid-template-columns: 1fr 1fr 7.5rem 1.25rem;
     column-gap: 1.5rem;
     row-gap: 0;
   }
@@ -2854,17 +2859,12 @@ html.dark .figure-placeholder {
   .about-row__role {
     grid-area: 1 / 2;
   }
-  /* One line: the interpunct has nothing to join. */
-  .about-row__role::after {
-    content: none;
-  }
   .about-row__year {
     grid-area: 1 / 3;
     justify-self: end;
   }
   .about-row__mark {
     grid-area: 1 / 4;
-    margin-inline-start: 0;
   }
 }
 
@@ -2927,32 +2927,56 @@ html.dark .figure-placeholder {
 }
 
 /* ── Role progression ─────────────────────────────────────────────────────
-   Two columns, role left and dates right-aligned, so each step is one line
-   instead of two. Sits BELOW the prose, which is what keeps the row's muted
-   role line away from the identical bright title at the top of this list. */
+   An inline timeline, not a table: a dot per step with a 1px hairline running
+   between them, role left and dates right-aligned. The connector is drawn on
+   each step EXCEPT the last, so the line stops at the final dot instead of
+   trailing into space.
+
+   No left border on the list and no nesting rule on the body: the dots carry
+   the structure, so a container rule would be a second, competing one. */
 
 .about-roles {
   list-style: none;
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
 }
 
 .about-roles__step {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  /* Tight on mobile so the longest title ("Director, Experience Design") still
-     lands on one line beside its dates; the whole point of the two-column form
-     is that each step is one line. */
-  column-gap: 0.75rem;
+  column-gap: 1rem;
   align-items: baseline;
-  padding: 0.5rem 0;
-  border-top: 1px solid var(--border-subtle);
+  /* Room for the dot and its rail. */
+  padding: 0 0 1rem 1.25rem;
 }
 
-@media (min-width: 768px) {
-  .about-roles__step {
-    column-gap: 1.5rem;
-  }
+.about-roles__step:last-child {
+  padding-bottom: 0;
+}
+
+/* The dot. 0.34em down from the step's top edge puts it on the text's optical
+   centre rather than its box top, at whatever size the role renders. */
+.about-roles__step::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.34em;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--text-muted);
+}
+
+/* The connector, from under this dot to the next one. Not on the last step. */
+.about-roles__step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: calc(0.34em + 7px);
+  bottom: -0.34em;
+  width: 1px;
+  background: var(--border-default);
 }
 
 .about-roles__title {

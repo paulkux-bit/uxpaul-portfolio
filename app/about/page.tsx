@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 
-import portrait from '@/public/paul-portrait.jpg';
+import portrait from '@/public/paul-portrait-square.jpg';
 import { AboutDrawer } from '@/components/about/drawer';
 import { FramedImage } from '@/components/framed-image';
 import { RevealSection } from '@/components/about/reveal-section';
@@ -23,12 +23,11 @@ export default function AboutPage() {
         <FramedImage
           src={portrait}
           alt="Paul Kali, smiling, at a waterfront"
-          ratio="4 / 5"
+          ratio="1 / 1"
           variant="portrait"
           priority
-          position="50% 18%"
           className="about-hero__portrait"
-          sizes="(max-width: 767px) min(100vw - 3rem, 300px), 440px"
+          sizes="(max-width: 767px) calc(100vw - 3rem), 440px"
         />
 
         <div className="about-hero__type">
@@ -86,7 +85,7 @@ export default function AboutPage() {
           <AboutDrawer
             company="Comcast Interactive Media"
             year="2006 – 2010"
-            roles={[{ title: 'Information Architect', dates: 'Apr 2006 – Jan 2010' }]}
+            roles={[{ title: 'Information Architect', dates: '2006 – 2010' }]}
           >
             <p className="about-row__body text-body">
               Designed the information architecture behind Comcast.net and Xfinitytv.com, in front
@@ -108,9 +107,9 @@ export default function AboutPage() {
             company="Empathy Lab (EPAM)"
             year="2010 – 2014"
             roles={[
-              { title: 'Director, Experience Design', dates: 'Jun 2013 – Jan 2014' },
-              { title: 'Senior UX Designer', dates: 'Oct 2011 – May 2013' },
-              { title: 'Information Architect', dates: 'Feb 2010 – Sep 2011' },
+              { title: 'Director, Experience Design', dates: '2013 – 2014' },
+              { title: 'Senior UX Designer', dates: '2011 – 2013' },
+              { title: 'Information Architect', dates: '2010 – 2011' },
             ]}
           >
             <p className="about-row__body text-body">
@@ -124,7 +123,7 @@ export default function AboutPage() {
           <AboutDrawer
             company="SevOne"
             year="2014"
-            roles={[{ title: 'Senior UX Designer', dates: 'Jan 2014 – Jun 2014' }]}
+            roles={[{ title: 'Senior UX Designer', dates: '2014' }]}
           >
             <p className="about-row__body text-body">
               Designed the UX framework for a next-gen, mobile-first enterprise network-management
@@ -137,8 +136,8 @@ export default function AboutPage() {
             company="Tonic Design Co."
             year="2014 – 2017"
             roles={[
-              { title: 'Director, UX Design', dates: 'Aug 2016 – Jul 2017' },
-              { title: 'Senior UX Designer', dates: 'Jun 2014 – Aug 2016' },
+              { title: 'Director, UX Design', dates: '2016 – 2017' },
+              { title: 'Senior UX Designer', dates: '2014 – 2016' },
             ]}
           >
             <p className="about-row__body text-body">
@@ -163,7 +162,7 @@ export default function AboutPage() {
           <AboutDrawer
             company="URBN"
             year="2017 – 2019"
-            roles={[{ title: 'Manager, Product Design', dates: 'Nov 2017 – Oct 2019' }]}
+            roles={[{ title: 'Manager, Product Design', dates: '2017 – 2019' }]}
           >
             <p className="about-row__body text-body">
               Led product design on the platform behind URBN&apos;s brands (Anthropologie, Free
@@ -177,7 +176,7 @@ export default function AboutPage() {
           <AboutDrawer
             company="U.S. Navy · NIWC Pacific"
             year="2019 – Now"
-            roles={[{ title: 'Senior Product Designer', dates: 'Nov 2019 – Present' }]}
+            roles={[{ title: 'Senior Product Designer', dates: '2019 – Now' }]}
           >
             <p className="about-row__body text-body">
               Sole design lead for core intelligence platforms used by thousands of operators,
