@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 
 import portrait from '@/public/paul-portrait.jpg';
 import { AboutDrawer } from '@/components/about/drawer';
@@ -32,7 +33,7 @@ export default function AboutPage() {
 
         <div className="about-hero__type">
           <div className="space-y-2">
-            <p className="about-hero__name text-h2">Paul Kali</p>
+            <p className="about-hero__name text-h3">Paul Kali</p>
             <p className="about-hero__title text-lead">Senior Product Designer</p>
           </div>
 
@@ -58,6 +59,7 @@ export default function AboutPage() {
               download
             >
               Résumé (PDF)
+              <ArrowDown className="about-btn__icon" size={16} aria-hidden="true" focusable="false" />
             </a>
             <a
               className="about-link text-body"
@@ -199,9 +201,12 @@ export default function AboutPage() {
       <RevealSection aria-label="Selected work">
         <Link className="about-work-band" href="/#selected-work">
           <span className="about-work-band__label text-h3">See selected work</span>
-          <span className="about-work-band__arrow text-h3" aria-hidden="true">
-            →
-          </span>
+          <ArrowRight
+            className="about-work-band__arrow"
+            size={24}
+            aria-hidden="true"
+            focusable="false"
+          />
         </Link>
       </RevealSection>
 

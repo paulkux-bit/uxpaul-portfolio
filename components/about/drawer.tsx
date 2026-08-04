@@ -1,3 +1,5 @@
+import { ChevronDown } from 'lucide-react';
+
 export type AboutRole = {
   title: string;
   /** e.g. "Jun 2013 – Jan 2014". En-dash, never U+2014. */
@@ -31,11 +33,15 @@ type AboutDrawerProps = {
  *            markup branch.
  *   desktop  one line: company, role, year right-aligned, mark.
  *
- * The mark is the summary's own ::after, which makes it the fourth grid item
- * without being a node: nothing for a screen reader to skip, and no SVG to keep
- * in sync. It is drawn from two gradients rather than a glyph so the cross stays
- * geometric at any font, and it aligns to the FIRST baseline so a company name
- * that wraps cannot drag it down the row.
+ * The mark is a real ChevronDown node (lucide-react), the fourth grid item. It
+ * replaced a ::after drawn from two gradients: one mark implementation, not two.
+ * Decorative, so it is aria-hidden and unfocusable. lucide ships plain SVG, so
+ * this stays a Server Component.
+ *
+ * It aligns to the START of the row, not the baseline or the centre, and is then
+ * optically centred on the company's FIRST line by a margin derived from
+ * text-h3's own clamp. Centre would measure against the whole row box, so a
+ * wrapping company name would drag the mark half a line down.
  *
  * The whole row is the affordance: <summary> is the click and focus target and
  * carries a 44px minimum so the tap area clears the floor.
@@ -53,6 +59,13 @@ export function AboutDrawer({ company, year, roles, children }: AboutDrawerProps
         <span className="about-row__company text-h3">{company}</span>
         <span className="about-row__role text-small">{roles[0].title}</span>
         <span className="about-row__year text-small">{year}</span>
+        <ChevronDown
+          className="about-row__mark"
+          size={20}
+          strokeWidth={2}
+          aria-hidden="true"
+          focusable="false"
+        />
       </summary>
 
       <div className="about-row__inner">

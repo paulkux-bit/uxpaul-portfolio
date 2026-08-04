@@ -2705,6 +2705,7 @@ html.dark .figure-placeholder {
 .about-btn {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem; /* the trailing ArrowDown */
   min-height: 44px;
   padding: 0.625rem 1.25rem;
   border-radius: 10px;
@@ -2716,12 +2717,15 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-btn {
-    transition: opacity var(--duration-hover) var(--ease-out-quint);
+    transition: background-color var(--duration-hover) var(--ease-out-quint);
   }
 }
 
+/* A token step, not opacity. opacity:0.88 made the whole button translucent, so
+   the light-mode paper grain read through a solid fill. --text-secondary holds
+   the surface opaque: 10.4:1 light and 11.2:1 dark against --bg-canvas. */
 .about-btn:hover {
-  opacity: 0.88;
+  background: var(--text-secondary);
 }
 
 /* Text links beside the button. --border-interactive rather than
@@ -2778,10 +2782,12 @@ html.dark .figure-placeholder {
   column-gap: 0;
   row-gap: 0.25rem;
   align-items: baseline;
-  /* Tap target floor, plus 4px on the right so the mark's rotated corners stay
-     inside the box (a 16px square swings ~3.3px past its edge at 45deg). */
+  /* The 4px right pad is gone with the plus that needed it: a square rotating
+     45deg swung its corners ~3.3px past the box, a chevron rotating 180deg does
+     not overhang at all. The row's right edge now lines up with the section
+     rules above and below it. */
   min-height: 44px;
-  padding: 1.25rem 4px 1.25rem 0;
+  padding: 1.25rem 0;
   cursor: pointer;
   list-style: none;
 }
@@ -2814,26 +2820,26 @@ html.dark .figure-placeholder {
   white-space: nowrap;
 }
 
-/* The mark is the summary's ::after: the fourth grid item without being a node.
-   Baseline, not centre: centre measures against the whole row box, so a company
-   name that wrapped dragged the mark half a line below the year. */
-.about-row__summary::after {
-  content: '';
+/* The mark is a real ChevronDown node (lucide-react), the fourth grid item.
+   It replaced a ::after drawn from two gradients: one implementation, not two.
+
+   align-self:start, then optically centred on the company's FIRST line. The
+   offset is derived from text-h3's own clamp rather than hardcoded, so it holds
+   at every width: half the leftover after the 20px box is taken out of the
+   company's line box. Centre would measure against the whole row box, so a
+   company name that wrapped would drag the mark half a line down. */
+.about-row__mark {
   grid-area: 1 / 3;
-  align-self: baseline;
-  width: 16px;
-  height: 16px;
+  align-self: start;
+  flex: none;
+  color: var(--text-muted);
   margin-inline-start: 1rem;
-  position: relative;
-  top: 2px;
-  background:
-    linear-gradient(var(--text-muted) 0 0) center / 100% 1.5px no-repeat,
-    linear-gradient(var(--text-muted) 0 0) center / 1.5px 100% no-repeat;
+  margin-block-start: calc((clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 1.25 - 20px) / 2);
   transform: rotate(0deg);
 }
 
-.about-row[open] .about-row__summary::after {
-  transform: rotate(45deg);
+.about-row[open] .about-row__mark {
+  transform: rotate(180deg);
 }
 
 @media (min-width: 768px) {
@@ -2856,14 +2862,14 @@ html.dark .figure-placeholder {
     grid-area: 1 / 3;
     justify-self: end;
   }
-  .about-row__summary::after {
+  .about-row__mark {
     grid-area: 1 / 4;
     margin-inline-start: 0;
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .about-row__summary::after {
+  .about-row__mark {
     transition: transform 240ms var(--ease-out-quint);
   }
   .about-row {
@@ -2981,9 +2987,15 @@ html.dark .figure-placeholder {
   text-decoration: none;
 }
 
+/* Now an ArrowRight node rather than a glyph; flex:none keeps the SVG at its
+   intrinsic 24px instead of being squeezed by the label. */
 .about-work-band__arrow {
   flex: none;
   color: var(--text-muted);
+}
+
+.about-btn__icon {
+  flex: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
