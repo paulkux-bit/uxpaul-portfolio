@@ -2813,7 +2813,13 @@ html.dark .figure-placeholder {
 }
 
 .about-row__year {
-  grid-area: 2 / 1;
+  /* Spans THROUGH the chevron column rather than ending with column 1. Ending
+     at column 1 right-aligned the date to the end of the text column, which is
+     36px short of the row's right edge (the 1.25rem chevron track plus the 1rem
+     gap), so it aligned to nothing visible. Spanning to the row's end puts every
+     date on the same edge as the chevron and the section hairlines. The chevron
+     is on row 1 and the date on row 2, so the span cannot collide with it. */
+  grid-area: 2 / 1 / 3 / 3;
   justify-self: end;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
