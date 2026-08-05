@@ -1105,6 +1105,10 @@
 
 /* ── Eyebrow labels ───────────────────────────────────────────────────── */
 
+/* Section eyebrows were removed from all shipped case studies (Aug 2026): every
+   one restated the h2 immediately below it in smaller type. The class survives
+   for the sandbox route only. The hero eyebrow is a different thing (a nameplate
+   on <HeroBlock />) and stays. Do not reintroduce these on case-study routes. */
 .eyebrow {
   font-size: 0.875rem; /* 14px — meets the system floor; gains presence over the old 12px */
   font-weight: 600;
@@ -1291,6 +1295,19 @@
   max-width: 52ch;
   margin: 1.25rem 0 1rem; /* subtle air before the felt-pain shift; the lede pair stays tight */
   text-wrap: balance;     /* display-tier standfirst: even the lines, no short tail (like h2/headlines/labels) */
+}
+
+/* Standing disclosure about the artifacts on the page (synthetic data, redaction,
+   NDA scope). Deliberately quiet: caption register, muted, one line where it fits.
+   Sits below a section heading, not inside a figure, so it governs everything after
+   it rather than one image. */
+.case-study-prose .section-note {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 56ch;
+  margin: 1.25rem 0 0;
+  text-wrap: pretty;
 }
 
 /* ── Reflection milestone: the arrival crescendo ──────────────────────────
