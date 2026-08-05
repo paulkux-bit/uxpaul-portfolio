@@ -2759,13 +2759,18 @@ html.dark .figure-placeholder {
 }
 
 /* ── Résumé rows ──────────────────────────────────────────────────────────
-   One DOM, two layouts, and the only difference is the grid definition.
+   One DOM, three layouts, and the only difference is the grid definition.
 
-   mobile   company owns its own line across the full width minus the mark,
-            then one muted meta line reading "Role · Year". The interpunct is
-            a ::after on the role rather than a text node, so desktop drops it
-            without needing a second markup branch.
-   desktop  a single line: company, role, year right-aligned, mark.
+   < 600    company owns its own line across the full width minus the mark, then
+            role left and date FLUSH RIGHT on line two, so the date lands on the
+            same edge as the chevron and the section hairlines.
+   600-899  still stacked, but line two closes up into one phrase: the date sits
+            immediately after the role, separated by an interpunct. A row this
+            wide has no right edge the date needs to anchor to.
+   >= 900   a single line: company, role, date right-aligned, mark.
+
+   The interpunct is a ::after on the role rather than a text node, so the bands
+   that do not want it drop it without a second markup branch.
 
    Company and year previously shared line one, so the year took ~90px off the
    front of a 342px row and long names wrapped, which orphaned the year beside
@@ -2846,6 +2851,66 @@ html.dark .figure-placeholder {
 
 .about-row[open] .about-row__mark {
   transform: rotate(180deg);
+}
+
+/* The stacked layout spans phones and tablet portrait, and one meta line cannot
+   serve both. Below 600 the row is narrow, so pinning the date flush right is
+   what lines it up with the chevron and the section hairlines instead of
+   stopping 36px short of them. By 768 the row is ~704px wide and that same rule
+   strands the role at the left and the date at the right with ~500px of nothing
+   between: two orphans sharing a line rather than one meta line.
+
+   So above 600, while still stacked, the date sits immediately after the role as
+   a phrase, "Information Architect · 2006 - 2010", left-aligned. At that width
+   the pair reads as a caption and has no right edge it needs to anchor to.
+
+   The interpunct is a ::after on the role, never a text node, and it exists only
+   inside this query, so both the flush-right band below and the four-column
+   layout above drop it with no second markup branch.
+
+   Row 2 becomes two tracks: max-content for the role, then the date at the start
+   of the flexible track. The gutter stays 0 so the pair is spaced by the
+   interpunct's own margins, which is what keeps the glyph optically centred
+   between the two: 8px, dot, 8px. The company keeps its own end padding so a
+   long name still clears the mark.
+
+   Hiding the glyph from assistive tech needs the `content: '.' / ''` alt-text
+   syntax, which older engines do not parse, and an unsupported `content` value
+   invalidates the WHOLE declaration: no pseudo-element box, and its margins go
+   with it. So the base declaration is deliberately kept plain and always valid,
+   and only the alt text is layered on behind @supports. Old engines render the
+   dot with correct spacing and expose it to AT, exactly as this shipped before;
+   current ones render identically and drop it from the accessible name, so the
+   row's name no longer changes with viewport width. Spacing never depends on
+   the new syntax parsing. */
+@media (min-width: 600px) and (max-width: 899px) {
+  .about-row__summary {
+    grid-template-columns: max-content minmax(0, 1fr) 1.25rem;
+    column-gap: 0;
+  }
+  .about-row__company {
+    grid-area: 1 / 1 / 2 / 3;
+    padding-inline-end: 1.5rem;
+  }
+  .about-row__role {
+    grid-area: 2 / 1;
+  }
+  .about-row__role::after {
+    content: '\00B7';
+    margin-inline: 0.5rem;
+  }
+  @supports (content: 'x' / '') {
+    .about-row__role::after {
+      content: '\00B7' / '';
+    }
+  }
+  .about-row__year {
+    grid-area: 2 / 2;
+    justify-self: start;
+  }
+  .about-row__mark {
+    grid-area: 1 / 3;
+  }
 }
 
 /* 900px, not the 768px this block used to sit at. The four-column row needs two
