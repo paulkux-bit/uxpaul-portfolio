@@ -2848,7 +2848,18 @@ html.dark .figure-placeholder {
   transform: rotate(180deg);
 }
 
-@media (min-width: 768px) {
+/* 900px, not the 768px this block used to sit at. The four-column row needs two
+   text tracks wide enough for the longest company name: "Comcast Interactive
+   Media" measures 277.9px, and at 768 each 1fr resolves to only 246px once the
+   7.5rem date track, the 1.25rem chevron and three 1.5rem gaps are taken out, so
+   it wrapped to two lines. The measured floor is 816px, but every iPad portrait
+   width sits just under it (810 on the 10.2in, 820 on the Air, 834 on the 11in
+   Pro), which would leave the worst offenders one resize from wrapping again.
+   900 puts the whole tablet-portrait band on the stacked layout that is designed
+   for constrained width, and leaves 34px of slack in the track at the boundary.
+   Only THIS block moved: the other 768px queries in this file, .page-container
+   padding among them, are a different concern and stay at 768. */
+@media (min-width: 900px) {
   /* FIXED tracks for the year and chevron, never auto. Each row is its own
      grid, so an auto track sizes to that row's own content: "2014" and
      "2010 - 2014" would produce different track widths and push the role column
