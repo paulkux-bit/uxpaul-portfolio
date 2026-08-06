@@ -55,3 +55,8 @@ public/sandbox/figure-framing.*
 
 # Handoff prompts staged from Cowork. Never source.
 /_prompts/
+
+# Staging artifacts from other tooling. Never source, and large enough to matter:
+# a 68MB whole-repo tarball landed here mid-session and was only kept out of a
+# commit because files were staged by name rather than with `git add -A`.
+/_to_delete/
