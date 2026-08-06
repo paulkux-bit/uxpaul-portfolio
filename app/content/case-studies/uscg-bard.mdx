@@ -40,8 +40,6 @@ import { BentoBand } from '@/components/bento';
 
 <section className="cs-section cs-section--problem">
 
-<div className="eyebrow">Why the old system failed</div>
-
 ## Investigators need to get every case right, but the system made that harder, not easier.
 
 **Boating accident cases are rising**, and each one becomes a federal record, filed against a statutory deadline.
@@ -82,11 +80,9 @@ import { BentoBand } from '@/components/bento';
 
 <section className="cs-section cs-section--frictions">
 
-<div className="eyebrow">What I found</div>
-
 ## The real work was happening around the system, not in it.
 
-I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the legacy system's survey results and support tickets.
+<p className="section-lede">I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the legacy system's survey results and support tickets.</p>
 
 <ol className="friction-beats">
   <li className="friction-beat" data-thread="1">
@@ -119,21 +115,21 @@ I talked to twenty people who do the work, from the busiest states to the smalle
 
 <section className="cs-section">
 
-<div className="eyebrow">My approach</div>
-
 ## How do you unify fifty-six jurisdictions without changing one?
 
-**Standardize the data, not the people.** Forcing fifty-six jurisdictions onto a single form was an operational dead end. I kept local processes as they were and built a standard data structure underneath. Suddenly, trends and comparisons were possible.
+<p className="section-lede">Standardize the data, not the people.</p>
+
+Forcing fifty-six jurisdictions onto a single form was an operational dead end. I kept local processes as they were and built a standard data structure underneath. Suddenly, trends and comparisons were possible.
 
 </section>
 
 <section className="cs-section">
 
-<div className="eyebrow">How I solved it</div>
+## The form bends. The record underneath does not.
 
-## Flexible forms, unified records.
+<p className="section-lede">Federal fields are required. Everything else is up to the jurisdiction.</p>
 
-I designed a modular form on a single, shared data structure. Federal fields are required; everything else is optional. Role-based views keep the interface clean. Local investigators see only what matters for their case, while Coast Guard reviewers get a high-level view with real-time compliance scoring.
+I designed a modular form on a single, shared data structure. Role-based views keep the interface clean. Local investigators see only what matters for their case, while Coast Guard reviewers get a high-level view with real-time compliance scoring.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
@@ -154,9 +150,9 @@ I designed a modular form on a single, shared data structure. Federal fields are
 </section>
 
 <section className="cs-section">
-  <div className="eyebrow">Design in action</div>
-
   <h2>One data structure changed how you file, see, and count.</h2>
+
+  <p className="section-note">Every screen on this page runs on synthetic data. The live system runs on federal records.</p>
 
   {/* The axis lockup is now the section header: the sentence h3 it used to precede is gone,
       so this carries the heading role. text-resolution-headline is the same register as
@@ -186,11 +182,11 @@ I designed a modular form on a single, shared data structure. Federal fields are
 
 <section className="cs-section">
 
-<div className="eyebrow">Building the system</div>
-
 ## The hardest part was collaboration, not design.
 
-<p className="section-lede">Getting fifty-six jurisdictions to agree was the real challenge. Instead of forcing a single form, I preserved local needs while unifying the data underneath. To get buy-in, here's what I did:</p>
+<p className="section-lede">Getting fifty-six jurisdictions to agree was the real challenge.</p>
+
+Instead of forcing a single form, I preserved local needs while unifying the data underneath. To get buy-in, here's what I did:
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-table--band.png"
@@ -226,7 +222,7 @@ What surprised me most was how standardized data made urgent cases visible right
 
 <section className="cs-section">
 
-<div className="eyebrow">Impact</div>
+## Where BARD stands.
 
 <div className="milestone">
   <p className="milestone__frame">On track for Initial Operating Capability with the U.S. Coast Guard.</p>
@@ -237,8 +233,6 @@ What surprised me most was how standardized data made urgent cases visible right
 </section>
 
 <section className="cs-section">
-
-<div className="eyebrow">Credit</div>
 
 ## Role
 
