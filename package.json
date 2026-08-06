@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",
+    "lint:type": "node scripts/lint-type.mjs",
     "test": "vitest",
     "regen:oku": "node scripts/regen-oku-tsx.mjs",
     "regen:fdte": "node scripts/regen-fdte-tsx.mjs"

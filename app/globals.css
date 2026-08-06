@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+/* Build tooling is not markup. Tailwind v4 auto-detects sources and extracts
+   utility candidates from any non-ignored file, so an ordinary English word in
+   a script's comment ships a real rule: "a clamp() hidden inside a var()" in
+   scripts/lint-type.mjs emitted `.hidden{display:none}` into the production
+   bundle. Excluded structurally rather than by policing vocabulary — "block",
+   "grid", "fixed", "table" and friends would all do the same thing. */
+@source not "../scripts";
+
 /* ============================================================
    THEME — Typography
    Resolved at build time (no var() at runtime, no swap).
@@ -26,6 +34,61 @@
      was the outlier (1200/24-flat) and snaps onto this axis. */
   --page-max-width: 72rem;
   --page-padding-inline: 1.5rem;
+}
+
+/* ============================================================
+   THEME — Axis tokens (type system v3, §3.1 + §3.2)
+   `static` guarantees these are emitted. Measured on Tailwind 4.3.0,
+   theme tree-shaking is NAMESPACE-SCOPED: it drops unreferenced
+   variables in namespaces Tailwind generates utilities from, and
+   passes unknown namespaces through verbatim. Proof in this file —
+   --color-popup-soft / -soft-dark / -text sit in a plain @theme at
+   the case-study block and are absent from the production bundle,
+   while --wdth-* and --wght-* survive with or without `static`.
+
+   So `static` is not currently load-bearing for THESE names, and the
+   v3 doc's stated reason for it is wrong as written. Kept anyway: it
+   is cheap, it states the requirement instead of leaning on an
+   undocumented namespace-matching detail, and it becomes real the
+   moment a token is renamed into a recognised namespace. The failure
+   it guards is silent — font-stretch INHERITS, so an undefined token
+   resolves to `inherit` and renders as though it worked.
+
+   A separate block rather than `static` on the typography @theme
+   above: that one holds --font-sans, the breakpoints and --page-*,
+   and force-emitting those is a change this commit has no business
+   making. Multiple @theme blocks merge.
+
+   Width is stored UNITLESS and converted at the property site:
+     font-stretch: calc(var(--wdth-display) * 1%);
+   because a percentage cannot appear inside a font-variation-settings
+   string, and one token has to serve both spellings.
+
+   Nothing consumes these yet — C1 (width bands) and C4 (weight) do.
+   ============================================================ */
+
+@theme static {
+  /* Width — three bands, assigned by the rung's DESKTOP CEILING so an
+     element never changes width as the viewport resizes. There is no
+     fourth value: picking a width by eye means you are outside the
+     system. Bands: reading (rungs 0-2, 14-26px), display (rungs 3-4,
+     32-52px ceiling), large display (rungs 5-6, 72-88px ceiling). */
+  --wdth-read:    100;
+  --wdth-display:  94;
+  --wdth-large:    88;
+
+  /* Weight — carries hierarchy and expression. --wght-thin and
+     --wght-loud are the signature pair: reserved for three placements
+     sitewide (home hero, about opener, one moment per case study),
+     illegal below 40px, and illegal anywhere else without a lint
+     allowlist entry. They are a WEIGHT contrast on purpose — R9, the
+     Arial-based next/font fallback carries no wdth axis, so a width
+     distinction would vanish during swap and on a blocked CDN. */
+  --wght-thin:    340;
+  --wght-body:    400;
+  --wght-credit:  500;
+  --wght-display: 600;
+  --wght-loud:    720;
 }
 
 /* ============================================================
