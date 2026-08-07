@@ -314,6 +314,18 @@
     font-weight: 600;
   }
 
+  /* v3 R4: emphasis is AUTHORED. Tailwind preflight ships
+     `b, strong { font-weight: bolder }`, which resolves against the 400 body
+     to the browser's 700 — nobody chose it, and it made an inline emphasis in
+     18px body the heaviest thing on the page. 600 is --wght-display, so a
+     strong now matches the headings rather than out-shouting them. Scoped
+     rules that already author 600 (.case-study-meta, .case-study-numbers,
+     .figure__caption) are unaffected; they now agree with the base instead of
+     each patching it locally. */
+  b, strong {
+    font-weight: 600;
+  }
+
   ::selection {
     background-color: var(--selection-bg);
     color: var(--selection-text);
@@ -1427,15 +1439,21 @@
   line-height: 0.98;
   letter-spacing: -0.02em;
   color: var(--text-primary);
-  /* Signature display treatment: Bricolage's 96pt optical cut (ink-trapped) at
-     wdth 100 / wght 520 for the arrival crescendo. Follows the text-qh-title
-     sanctioned manual-axis case (typography doc §7). font-optical-sizing:none + FVS
-     as the LAST declaration so opsz 96 wins over the standard-property fallbacks
-     (mirrors the hero callout pattern). */
-  font-weight: 520;
-  font-stretch: 100%;
+  /* Signature display treatment: Bricolage's 96pt optical cut (ink-trapped) for
+     the arrival crescendo. One of the two optical-size pins v3 §6 keeps, because
+     at 52-88px that is a real 44-unit push and the one place the drawn display
+     cut actually shows.
+
+     v3 ruling 5: 520/100 -> 600/88. 520 was an off-ladder weight nobody chose;
+     600 is --wght-display. 88 is the large-display band, which rung 6 sits in.
+     Both have to be carried in the FVS string as well as the standard
+     properties: per R8, font-variation-settings overrides the high-level
+     property PER AXIS, so leaving 'wght' 520 in the string would have made the
+     font-weight change a no-op. */
+  font-weight: 600;
+  font-stretch: calc(var(--wdth-large) * 1%);
   font-optical-sizing: none;
-  font-variation-settings: 'opsz' 96, 'wdth' 100, 'wght' 520;
+  font-variation-settings: 'opsz' 96, 'wdth' 88, 'wght' 600;
 }
 .milestone__sub {
   margin: 1rem 0 0;
