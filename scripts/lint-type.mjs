@@ -88,7 +88,13 @@ const ALLOWLIST = {
     { selector: '.comp-statement .take-thought', reason: '§6 takes wall — per-take composition' },
     { selector: '.comp-coords-corner .mark', reason: '§6 takes wall — per-take composition' },
   ],
-  signature: [], // C4b: the three 340/720 placements. Blocked on a design call.
+  // §3.2 permits three signature placements sitewide. ONE is spent. The home
+  // hero is a single placement covering four declarations: .text-lede carries
+  // the 340, and the three font-[720] spans in app/page.tsx are noun phrases
+  // inside that same h1. The about opener and one case-study moment are unspent.
+  signature: [
+    { selector: '.text-lede', reason: '§3.2 placement 1 of 3 — the home hero h1; its 340 and the three font-[720] spans inside it are one signature, ceiling 60px' },
+  ],
 };
 
 // ── The ladder (§3.3), mapped to the selectors that carry each rung ────────

@@ -62,13 +62,17 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 | Token | Value | Used by |
 |---|---|---|
-| `--wght-thin` | `340` | Signature only, ≥40px |
+| `--wght-thin` | `340` | Signature only, ceiling ≥40px |
 | `--wght-body` | `400` | Body, standfirsts, captions |
 | `--wght-credit` | `500` | Credit lines, quiet emphasis, h3 |
 | `--wght-display` | `600` | Headings, headlines, eyebrows, prose emphasis |
-| `--wght-loud` | `720` | Signature only, ≥40px |
+| `--wght-loud` | `720` | Signature only, ceiling ≥40px |
 
-**The signature (ruling 3).** The 340/720 pair is reserved for exactly three placements: the home hero, the about page opener, and one moment per case study chosen by the author. It is illegal below 40px, and illegal anywhere else without an entry in the lint allowlist. It exists because it is the one typographic idea on the site that reads in under a second, at any size, and survives the fallback font.
+**The signature (ruling 3).** The 340/720 pair is reserved for exactly three placements: the home hero, the about page opener, and one moment per case study chosen by the author. It is illegal on any role whose **desktop ceiling** is under 40px, and illegal anywhere else without an entry in the lint allowlist. It exists because it is the one typographic idea on the site that reads in under a second, at any size, and survives the fallback font.
+
+**"≥40px" means the role's ceiling, not its rendered size (settled 7 Aug 2026).** The earlier wording said only "illegal below 40px," which read as a statement about rendered size and put the home hero in breach of the spec on every phone: `text-lede` is `clamp(2rem, 4.5vw, 3.75rem)`, so it sits at 32px until an 889px viewport. Assertion 4 had always tested the ceiling, so spec and test disagreed. Resolved in favour of the test, on evidence: the hero was checked on device in both modes at the 32px floor, and the contrast registers in well under a second with the light weight reading as recessive rather than fragile. The signature is a *relationship* between two weights, and that relationship survives the scale change; a rendered-size rule would also have made the same role legal on desktop and illegal on mobile, which is not a property a role can have.
+
+**Inventory, so the count is not misread.** The home hero is **one** placement, not four: `text-lede` carries the 340, and the three `font-[720]` spans in `app/page.tsx` are load-bearing noun phrases *inside that same `h1`*. One allowlist entry covers all four declarations. Two of the three permitted placements are still unspent — the about opener and one case-study moment. The signature is currently **under**-used.
 
 ### 3.3 The ladder
 
@@ -106,7 +110,54 @@ Measured worst adjacent ratio across 320–2560 with the corrected ladder is **1
 
 ### 3.5 Colour
 
-`--text-primary` body and display. `--text-secondary` standfirsts. `--text-muted` captions, eyebrows, notes, attributions. `--text-subtle` never on normal-size text.
+Four roles, four full-opacity values per mode. The literal oklch lives in `globals.css`; `docs/color-system.md` owns the palette and is not superseded by this document. What follows is the type system's use of it.
+
+**Assignment by rung.** Every rung has a stated colour; none is left to judgement.
+
+| Rung | Role | Colour |
+|---|---|---|
+| 6 | Arrival crescendo | `--text-primary` |
+| 5 | Case-study hero | `--text-primary` |
+| 4 | Section heading | `--text-primary` |
+| 3 | Numbered headline | `--text-primary` |
+| 2 | Standfirst | `--text-secondary` |
+| 1 | Body | `--text-primary` |
+| 0.5 | Support | `--text-secondary`, or `--text-muted` when the content is metadata |
+| 0 | Caption / eyebrow | `--text-muted` |
+
+All display rungs take `--text-primary`. An earlier draft left that implicit by saying "body and display," which invited per-module invention at exactly the sizes where a designer is most tempted to reach for something softer.
+
+**Measured, not asserted.** Resolved lightness and WCAG ratio against canvas, light / dark, verified June 2026:
+
+| Role | L | Contrast | Safe for |
+|---|---|---|---|
+| `--text-primary` | 0.215 / 0.945 | 15.10 / 15.72 | Body, display — AAA |
+| `--text-secondary` | 0.355 / 0.825 | 9.72 / 11.21 | Standfirsts, support — AA-normal |
+| `--text-muted` | 0.485 / 0.705 | 5.65 / 7.30 | Captions, eyebrows, markers — AA-normal |
+| `--text-subtle` | 0.625 / 0.565 | ≈ 3:1 | **AA-large only** — never normal-size text |
+
+The ramp is deliberately **not** mirrored between modes: the gaps compress differently in light and dark because each mode was tuned rather than inverted. Do not "correct" it toward symmetry.
+
+`--text-subtle` is the one trap. It clears only 3:1, so it is valid solely for genuinely large-bold text — 24px and above, or 18.66px bold. It was once mapped to the 01/02/03 friction markers at 16px/600; that undershot AA-normal at the mobile end and was corrected to `--text-muted`. Any normal-size text that carries meaning takes `--text-muted` or stronger.
+
+**The authoring rule: mix to author a token, never to apply one.**
+
+A `color-mix` that produces a named token in the theme layer is legitimate. A `color-mix` appearing at the point of use on a `color:` property is a weight-fake — it approximates a lighter role by thinning an existing one, reads dimmer than the doc-validated token, and undershoots the contrast floor it appears to satisfy. Reach for the semantic role that already exists rather than nudging opacity until it looks right.
+
+Four reasons this is a rule and not a preference:
+
+1. **Contrast stops being computable.** An alpha value's effective ratio depends on its backdrop, so the same declaration passes on the canvas and fails on `--surface-elevated`. A full value has one ratio, verified once.
+2. **Alpha compounds.** `currentColor`-based alpha inherits, so a muted caption inside a muted block double-mutes.
+3. **It breaks the two-mode principle.** 60% black on white and 60% white on black are not perceptually equivalent; one ramp forces one mode to be wrong. Light and dark are first-class designs here, which is structurally incompatible with a single alpha ramp.
+4. **It undershoots.** Every time.
+
+This repo proved the point before the rule was written. From `globals.css`: *"A token step, not opacity. opacity:0.88 made the whole button translucent."*
+
+**Where alpha remains correct**, and is not covered by this rule: state layers (hover, press), scrims, shadows, and focus rings. Those are surfaces and effects, not type colour. Ten oklch alpha values ship today across focus rings and shadows; all are legitimate.
+
+**Sitewide status, verified 7 Aug 2026:** zero alpha on text colour, zero `rgba`/`hsla` anywhere, zero Tailwind alpha utilities (`text-*/50`) in JSX. Sixteen `currentColor` mixes remain on borders and backgrounds — out of scope for this section, since they are not type colour, but they bypass `--border-*` tokens in roughly a third of cases and are queued for their own pass.
+
+**Dark mode is unresolved on one point** and §9 records it: light text on a dark ground gains optical weight, so a given weight is not the same gesture in both modes. This matters most to the 340/720 signature. Nothing depends on the answer; the pair was checked on device at 32px in both modes and reads in under a second either way.
 
 ---
 
