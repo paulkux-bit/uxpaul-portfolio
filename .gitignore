@@ -60,3 +60,9 @@ public/sandbox/figure-framing.*
 # a 68MB whole-repo tarball landed here mid-session and was only kept out of a
 # commit because files were staged by name rather than with `git add -A`.
 /_to_delete/
+
+# Internal reviews. THIS REPOSITORY IS PUBLIC. These are candid working
+# documents — the director review grades the portfolio and inventories its
+# weaknesses by name — which is useful to write and wrong to publish next to
+# the portfolio it critiques. The files stay on disk; they just never ship.
+docs/reviews/
