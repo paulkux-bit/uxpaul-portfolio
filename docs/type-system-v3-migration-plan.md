@@ -16,11 +16,17 @@ The `static` keyword is load-bearing and the reason this commit is separate from
 
 **C1 — Width bands.** The largest commit and the only one with broad visual consequence. Replace every `font-stretch` and every FVS `wdth` on the shipped pages with one of the three tokens, per the table in §5: the hero clause split retires (100/88 → 88/88), `h2` 96 → 94, `.text-cover` 90 → 94, `.text-statement` 96 → 88, `text-hero` 97 → 88, `.bento-theme__lead` 92 → 100, `.wordmark` 88 → 100, `.hero-block__callout-label` 90 → 100, and `.thread-index` gets its own pinned 100 so it stops inheriting from whatever heading it sits in. Turns assertion 1 green.
 
+Four selectors not named in §5 are also forced by check 1 and all take **88**: `.transformation` and `.case-study-prose > h1` (both 76px, inside the large-display span), plus `.text-statement` and `.text-hero`, which §5 already answers. Assign the width; leave their sizes alone. See §9 of the locked doc — their off-ladder *sizes* are a separate open question and must not be settled inside this commit.
+
+**The allowlist rule: an entry lands in the commit that owns the assertion it unblocks.** Thirteen of check 1's twenty-four violations are the takes wall, an §6 exception surface whose widths are meant to be off-band — they cannot be fixed by editing, only by allowlisting. So the **width** allowlist entries are written here, in C1, or this commit cannot turn its own assertion green. FVS entries still wait for C6, which owns check 7. Do not batch all allowlisting into C6: that would take checks 1 and 7 green in the same commit and break the one-commit-one-assertion property the whole harness rests on.
+
 Verify by screenshot diff on the Bard and FDT-E heroes, the home statement, and the wordmark in site chrome. The wordmark appears on every page, so it is the one regression here that would ship everywhere at once.
 
 **C2 — The 14px floor.** Raise or delete the five rules currently shipping below it: `.mode-pair__label`, `.asymmetric-pair__label`, `.bento__label`, `.small-multiples__label` (all 11.2px) and `.compare__label` (12px). Deleting is usually right — a label that only worked at 11px was carrying a hierarchy the layout should carry instead. Turns assertion 2 green.
 
-**C3 — The ladder.** Retune the rung 3 and rung 2 clamps to fix the 1.03 convergence at 560px, and retune rung 5 so its crossovers align with rung 4 at 430 and 1180 with endpoints unchanged at 40 and 72. Turns assertion 3 green. This is the one commit where the lint assertion is a genuinely better check than the eye: it computes the worst adjacent ratio across 320–2560 from the clamps directly.
+**C3 — The ladder.** Retune the rung 3 and rung 2 clamps to fix the 1.03 convergence at 560px; retune rung 5 so its crossovers align with rung 4 at 430 and 1180, endpoints unchanged at 40 and 72; and retune **rung 6 to `clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)`** so it shares those same crossovers. Turns assertion 3 green.
+
+The rung 6 value was missing from the first draft of §3.3 and was found by the C0 harness, not by eye: the old rung 6 pinched the 6/5 pair to 1.1418 at 560px and no rung 5 value could fix it, because the pinch is rung 6 sitting on its floor while rung 5 climbs. Corrected worst 6/5 is 1.222; the ladder's overall worst adjacent ratio stays 1.15, set by 3/2. This is the one commit where the lint assertion is a genuinely better check than the eye — it computes the worst adjacent ratio across 320–2560 from the clamps directly, which is how the gap surfaced at all.
 
 **C4 — Weight.** Author `strong, b { font-weight: 600 }` in the base layer so it stops inheriting preflight's `bolder`; set `.milestone__date` to 600 at width 88 in the FVS string; and register the three signature placements (home hero, about opener, one moment per case study) in the allowlist with their one-line reasons. Turns assertions 4 and 5 green.
 
@@ -44,7 +50,9 @@ Two live decisions belong to this commit, not to C0. `text-lede` currently sits 
 
 **Order within C1 doesn't matter; order between C1 and C3 does.** Retuning clamps under old widths, or vice versa, means judging two changes through each other. Land the widths, look at it, then move the ladder.
 
-**`.impeccable` / `npm run typeset` already exists.** There is a separate external typography check in this repo. `lint:type` is not a replacement for it and should not try to absorb it. Check for overlapping assertions before adding rules, and if the two disagree on a value, v3 wins and `typeset`'s config gets updated.
+**There is no `npm run typeset`.** An earlier draft of this plan claimed one existed and warned about overlapping assertions with `lint:type`. It never has — `typeset` is an LLM slash-command mode under `.impeccable` with no code, no config and no exit status, so there was no overlap to avoid and nothing to reconcile. `lint:type` is the only mechanical typography check in the repo. (`CLAUDE.md`'s line describing `typeset` as an external check is misleading and gets corrected in C8.)
+
+**The sandbox is deliberately out of scope.** `app/sandbox/type-bard/type-exp.css` carries its own violations — `font-stretch: 75%`, weights 230/260/380/430/580 — and §7 scopes the lint to `app/globals.css`, so they are invisible to it. That is a decision, not an oversight: the sandbox is where widths and weights get tried before they earn a place in the system, and linting it would defeat its purpose. If it ever stops being a sandbox, it comes into scope.
 
 ---
 

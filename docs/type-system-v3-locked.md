@@ -74,7 +74,7 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 | Rung | Role | Clamp | 320px | 1568px | Width |
 |---|---|---|---|---|---|
-| 6 | Arrival crescendo | `clamp(3.25rem, 5vw + 1.5rem, 5.5rem)` | 52 | 88 | 88 |
+| 6 | Arrival crescendo | `clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)` | 52 | 88 | 88 |
 | 5 | Case-study hero | `clamp(2.5rem, 4.267vw + 1.353rem, 4.5rem)` | 40 | 72 | 88 |
 | 4 | Section heading | `clamp(1.875rem, 3vw + 1rem, 3.25rem)` | 30 | 52 | 94 |
 | 3 | Numbered headline | `clamp(1.625rem, 1.4vw + 1rem, 2rem)` | 26 | 32 | 94 |
@@ -83,7 +83,11 @@ There is no fourth value and no per-module choice. If you are picking a width by
 | 0.5 | Support | `1rem` | 16 | 16 | 100 |
 | 0 | Caption / eyebrow | `0.875rem` | 14 | 14 | 100 |
 
-Rungs 3 and 2 are the fix for the 1.03 convergence at 560px; measured worst adjacent ratio across 320–2560 is now **1.15**. Rung 5's clamp is retuned so its crossovers align with rung 4 at 430 and 1180; endpoints are unchanged at 40 and 72.
+Rungs 3 and 2 are the fix for the 1.03 convergence at 560px. Rung 5's clamp is retuned so its crossovers align with rung 4 at 430 and 1180; endpoints are unchanged at 40 and 72.
+
+**Rung 6 is retuned for the same reason (corrected 6 Aug 2026).** An earlier draft of this table left rung 6 at `clamp(3.25rem, 5vw + 1.5rem, 5.5rem)`, which leaves its floor at 560 and reaches its ceiling at 1280 — crossovers rung 5 does not share. That mismatch pinches the 6/5 pair to **1.1418 at 560px**, under the R5 floor, and no change to rung 5 fixes it, because the pinch is rung 6 sitting on its floor while rung 5 climbs. Giving rung 6 rung 5's crossovers (430 and 1180) with its endpoints unchanged yields slope `(88−52)/(1180−430) = 0.048` → `4.8vw + 1.96rem`. Worst 6/5 ratio becomes **1.222**, and the 320/1568 column values in this table are unchanged.
+
+Measured worst adjacent ratio across 320–2560 with the corrected ladder is **1.15**, set by the 3/2 pair.
 
 ### 3.4 Line-height, tracking, measure, wrap
 
@@ -164,7 +168,9 @@ Five rules currently ship below the 14px floor and must be raised or deleted: `.
 **Exception surfaces (ruling 7).** Two surfaces are governed by their own rules rather than by §3:
 
 - **Also Shipped.** Per-brand three-axis variation, `wdth` 84–100, `wght` 500–650, `opsz` 14–48. The four blocks are a curated set; their variation is the content. Bounded by: the 14px floor still applies, `wdth` may not go below 84, and each block's values are declared once in `data-brand` rather than authored ad hoc.
-- **The takes wall.** Slot-driven marks at `wdth` 78–82 with per-take FVS compositions. Currently unmounted. Bounded by: the 14px floor applies, and any new composition must be added to the lint allowlist with a one-line reason.
+- **The takes wall.** Slot-driven marks at `wdth` 78–82 with per-take FVS compositions. Currently unmounted — verified 6 Aug 2026: nothing under `app/` imports it. Bounded by: the 14px floor applies, and any new composition must be added to the lint allowlist with a one-line reason.
+
+  Two discrepancies to reconcile **before it is ever mounted**, not now. As built it reaches wider than this section states: `.take-thought` sits at 96 and `.comp-statement .take-thought` at 98, and the watermark and word-swap compositions use `wdth` 90 and 92. The 78–82 range describes the marks only. And `.take-thought` is running prose, which collides with the rule below that neither exception surface may set type read in sentences. Allowlisting the surface in C1 records these as known, not as resolved.
 
 Both surfaces are display-only. Neither may set type that is read in sentences.
 
@@ -184,7 +190,9 @@ Both surfaces are display-only. Neither may set type that is read in sentences.
 8. **8a, static.** `app/fonts.ts` declares `axes: ['opsz','wdth']`. This repo shipped the bug once: with those axes absent, every `font-stretch` and optical-sizing rule was silently inert in production. Lint-time and deterministic.
 9. **8b, runtime.** A client-side probe that the variable font actually loaded, because every width decision in this document is invisible in the Arial fallback. Not checkable by a CSS parser; it is app code.
 
-Assertion 4 has two halves and both are enforced: a weight of 340 or 720 fails if the role's ceiling is under 40px, **and** fails if the placement is not one of the three allowlisted signature uses. Note that a `globals.css`-only parser cannot see arbitrary weight utilities authored in JSX (`font-[720]` in `app/page.tsx`); until the scan is extended in C4, the script prints the count of unchecked JSX weight utilities rather than passing silently.
+Assertion 4 has two halves and both are enforced: a weight of 340 or 720 fails if the role's ceiling is under 40px, **and** fails if the placement is not one of the three allowlisted signature uses.
+
+**Two things this lint cannot see, and both must be reported rather than passed silently.** First, a `globals.css`-only parser cannot see arbitrary weight utilities authored in JSX (`font-[720]` in `app/page.tsx`); until the scan is extended in C4, the script prints the count of unchecked JSX weight utilities. Second, a width driven through a CSS variable is unresolvable at parse time — `.text-qh-title` sets `wdth` via `var(--qh-wdth, 100)`, so check 1 skips it and the Also Shipped surface is effectively invisible to the width rule. Neither gap is a failure; both are blind spots, and a blind spot that prints is a known limit while a blind spot that doesn't is a false pass.
 
 Every allowlist entry carries a one-line reason. Run against `main` today, **eight of the nine fail** — only 8a passes, and it passes because the axes bug was already found and fixed. That makes the test the migration checklist: each rule lands in its own commit that turns one assertion green.
 
@@ -199,5 +207,20 @@ A fourth width value for one module. Compressing type at 14–18px. Forcing `ops
 ## 9. Still open
 
 These were not on the decision list and remain unspecified: the about page (`.about-phase h2` at 36.4px sits between rungs 3 and 4; `.about-row__company` at 25.2px/500 is off-ladder), nav, footer, buttons, card meta, and all type states — hover, focus, visited, disabled, `forced-colors`, `prefers-contrast`, 200% zoom, and print. Dark mode has no stated position on optical weight gain against a dark ground.
+
+**Four shipped selectors have size ceilings that sit on no rung** (found by the C0 harness, 6 Aug 2026). §3.1 assigns width by rung, so for these it returns nothing:
+
+| Selector | Ceiling | Width in C1 | Basis |
+|---|---|---|---|
+| `.text-statement` | 96px | 88 | §5 states it |
+| `.text-hero` | 80px | 88 | §5 states it |
+| `.transformation` | 76px | 88 | Inside the 72–88 large-display span |
+| `.case-study-prose > h1` | 76px | 88 | Inside the 72–88 large-display span |
+| `.text-lede` | 60px | unchanged at 100 | Already in-band; band undecided |
+| `.pull-quote p` | 56px | unchanged at 94 | Already in-band; band undecided |
+
+The first four take 88, so C1 is unblocked on those. The last two are different: 60px and 56px sit in the **53–71px gap** between the display and large-display bands, so §3.1 genuinely returns nothing — but both already hold a legal value, so check 1 is satisfied and no edit is forced. They stay as literal percentages rather than being tokenised, because tokenising them would encode a banding answer being deliberately deferred. `.text-lede` is the home `h1`, the most visible type on the site; it deserves to be decided against real content rather than by rounding to the nearer band.
+
+Their **sizes** are the open question in every case. `.text-statement` at 96px is larger than rung 6's 88px ceiling, meaning the home statement currently outranks the top of the ladder. Whether these six join the ladder, or the ladder grows to hold them, is unresolved. Nothing in the migration depends on the answer.
 
 None of these block the migration. All of them block calling the system complete.
