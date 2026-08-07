@@ -138,7 +138,7 @@ fed to the title's `font-variation-settings` (typography doc §7 manual-axis cas
 - **`text-primary`** — body copy, headings, anything you need to read fluently. AAA on `bg-canvas`.
 - **`text-secondary`** — leads, deck text, supporting prose. AAA on `bg-canvas`.
 - **`text-muted`** — metadata, captions, labels, eyebrows. AA normal on `bg-canvas`.
-- **`text-subtle`** — timestamps, tertiary info, footnote-rank text. **AA-large only** — never below 18px (or 14px+ bold).
+- **`text-subtle`** — timestamps, tertiary info, footnote-rank text. **AA-large only** — never below 24px (or 18.66px bold).
 
 **Sanctioned exception — bento caption lead.** The two-part bento caption (`components/bento.tsx`)
 uses **`--text-primary` for the bold lead** (not `--text-secondary`, which the "leads" guidance above
@@ -219,7 +219,11 @@ Knobs (set in `globals.css`):
 
 - **Body text hits AAA** in both modes. `text-primary` on `bg-canvas` measures ~14–15:1.
 - **`text-muted` hits AA normal** (~5.5–6:1) at all body sizes.
-- **`text-subtle` is AA-large only** (~3.5–4:1). Never use below 18px or 14px bold. Lint this.
+- **`text-subtle` is AA-large only** (~3.5–4:1). Never use below 24px or 18.66px bold. Lint this.
+  WCAG states large text as 18pt / 14pt bold; in CSS pixels that is 24px / 18.66px. Both
+  figures here previously read "18px (or 14px+ bold)", a pt-for-px substitution that
+  authorised a 3:1 colour six pixels under the real floor. That is the error that once put
+  `text-subtle` on the 16px friction markers.
 - **Focus uses `outline` + `box-shadow`**, never `border-color`. Layout never shifts on focus. The halo extends the ring's visual presence without expanding hit areas.
 - **Selection contrast verified** in both modes: `selection-text` on `selection-bg` hits AAA in light (~10:1) and ~7:1 in dark.
 - **Link affordance is multi-channel.** Underline at rest, thicker + warmer on hover. Color alone is never the only signal.
