@@ -142,7 +142,7 @@ fed to the title's `font-variation-settings` (typography doc §7 manual-axis cas
 
 **Sanctioned exception — bento caption lead.** The two-part bento caption (`components/bento.tsx`)
 uses **`--text-primary` for the bold lead** (not `--text-secondary`, which the "leads" guidance above
-would suggest) + `--text-muted` for the gloss. At the 18px / weight-600 / 92%-width display register a
+would suggest) + `--text-muted` for the gloss. At the 18px / weight-600 display register a
 `--text-secondary` lead reads timid against the muted gloss; the lead carries the hierarchy and wants
 full primary weight, the gloss preserves the two-tier read. This is the intended value, not a TODO —
 contrast only increases over the spec.

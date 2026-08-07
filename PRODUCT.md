@@ -52,7 +52,8 @@ Warm, refined, inventive. Confident without being cold. Personal without being c
 ## Accessibility & Inclusion
 
 - WCAG AAA contrast on body text where feasible; AA minimum elsewhere
-- Full keyboard navigation including annotation/popup toggles
+- Full keyboard navigation on every interactive control (the annotation/popup
+  toggle this used to name is gone; that system is retired)
 - Visible focus states on every interactive element — no `outline: none` without a replacement
 - Contrast verified in both light and dark modes
 - Semantic HTML before ARIA — no div soup with role attributes papered on

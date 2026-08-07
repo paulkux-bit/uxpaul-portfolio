@@ -1,6 +1,33 @@
 # Typography system — Bricolage Grotesque
 
-Locked May 2026. Source of truth for the portfolio's typography. Engineered around the font's three variable axes (`wght`, `wdth`, `opsz`) — informed by Mathieu Triay's design notes at https://ateliertriay.github.io/bricolage/#design-notes.
+> ## ⚠ SUPERSEDED — this is no longer the source of truth
+>
+> **`docs/type-system-v3-locked.md` is.** Locked 5 Aug 2026, adopted 7 Aug 2026, and
+> enforced by `npm run lint:type`, which gates `npm run build`. Where this document
+> and v3 disagree, **v3 wins and this document is the finding.**
+>
+> This file is kept for its rationale, its reference material on how Bricolage is
+> drawn, and its record of what was tried and rejected. It is **not** a spec any
+> more. Do not implement from it.
+>
+> What v3 changed, in the order it will bite you:
+>
+> | This doc says | v3 says | Where |
+> |---|---|---|
+> | `font-stretch` 96% / 97%; 92–94% rejected as "squeezed" | Three bands only: **100 reading, 94 display, 88 large display** | §4, §11 below → v3 §3.1 |
+> | Width is tonal: compressed = anxious/wonky, wide = relaxed/confident | Width follows the **rung**, never mood. Contrast comes from **weight** | §1, §4 below → v3 R2, R9 |
+> | FVS must be the LAST declaration or opsz loses | FVS overrides **per axis, regardless of source order** | §7 below → v3 R8 |
+> | `font-stretch: 80%` as a worked example | Below the v3 floor of 88 | §7 below → v3 §3.1 |
+> | Consider a `text-wordmark` utility for *more* compression | The wordmark moved **to 100**; 16px is a reading rung | §11 below → v3 §5, R10 |
+> | Emphasis strategy silent on `strong` | `strong, b` is **authored at 600**, never preflight's `bolder` | §6 below → v3 R4 |
+>
+> The reason width stopped being tonal is not taste. Per v3 R9, the `next/font`
+> fallback is Arial-based with no `wdth` axis, so any meaning carried by width
+> alone disappears during font swap and permanently on a blocked CDN. Keep the
+> axis semantics below as background on how the typeface is drawn; do not read
+> them as instruction.
+
+Locked May 2026. **Superseded 7 Aug 2026 — see the banner above.** Engineered around the font's three variable axes (`wght`, `wdth`, `opsz`) — informed by Mathieu Triay's design notes at https://ateliertriay.github.io/bricolage/#design-notes.
 
 This isn't a generic type scale with Bricolage swapped in. The scale exists to use the personality Mathieu drew into the font at different sizes.
 
@@ -11,6 +38,13 @@ This isn't a generic type scale with Bricolage swapped in. The scale exists to u
 Bricolage Grotesque is essentially two fonts in one file — connected by a continuous optical-size axis (`opsz`). At the 12pt master, the font is a neutral, contemporary humanist sans optimized for reading. At the 96pt master, it's an expressive editorial display with visible ink traps, more contrast, and more attitude. Everything between is interpolated.
 
 The width axis (`wdth`, 75–100) is the font's geographic personality: 100 is its French/Antique Olive side — relaxed, confident, slightly warm. 75 is its British/Grotesque No. 9 side — anxious, compressed, slightly wonky. Compressed at large sizes leans editorial-British (closer to Stornoway). Default-width at large sizes leans editorial-French (closer to Tofino).
+
+> **Background, not instruction (v3 R2).** That is an accurate description of how
+> Mathieu drew the axis, and it is worth knowing. It is no longer how the system
+> assigns width. v3 retires mood registers: width is a function of the rung, three
+> values, never a per-module choice, and expressive contrast is carried by weight
+> instead. R9 is the reason — the Arial-based fallback has no `wdth` axis, so a
+> tone that rides on width is a tone that vanishes on a slow network.
 
 Weight (`wght`, 200–800) is straightforward, with one detail: at very light weights, the stems flare up to maintain visual weight against the ink traps. This is a stylistic decision by Mathieu — light weights still have spine.
 
@@ -114,6 +148,14 @@ Enable optical sizing globally. This means every rendered size automatically get
 
 ## 4 — The type scale
 
+> **SUPERSEDED by v3 §3.1 and §3.3.** Every `font-stretch` value in this section
+> is stale: the system now has exactly three widths (100 reading, 94 display,
+> 88 large display), assigned by rung rather than chosen per utility, and the
+> ladder is eight rungs with clamps tuned so adjacent rungs never come closer
+> than 1.15× between 320 and 2560px. `text-statement` 96 → 88 and `text-hero`
+> 97 → 88. Read the clamps and widths from v3; the reasoning below is history.
+> The 14px floor and the 18px body in the next line are still correct.
+
 Floor raised: nothing below 14px. Body at 18px (editorial standard). Display sizes pushed harder to reach Mathieu's 96pt cut and get the full character.
 
 The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numbers = more British/compressed. Used only on display and hero — body text stays at default 100% for warmth.
@@ -149,6 +191,7 @@ The `font-stretch` property maps directly to Bricolage's `wdth` axis. Lower numb
 
 @utility text-hero {
   /* 48 → 80px — case study & about page heroes */
+  /* SUPERSEDED: width is 88 (large-display band, v3 §5). The 97 below is stale. */
   font-size: clamp(3rem, 3vw + 2rem, 5rem);
   line-height: 0.95;
   letter-spacing: -0.025em;
@@ -330,6 +373,8 @@ For book titles, foreign words, ship names — use quotation marks or a differen
 }
 
 /* A single hero word with maximum British/anxious compression */
+/* SUPERSEDED: 80 is below the v3 floor. The three legal widths are 100, 94
+   and 88, and none of them is chosen per element (v3 §3.1, R2, R10). */
 .hero-word-compressed {
   font-stretch: 80%;
 }
@@ -345,6 +390,22 @@ The examples above are single-axis (`opsz` alone, or `wdth` via `font-stretch`).
 2. **`.milestone__date`** (BARD reflection arrival crescendo) — `'opsz' 96, 'wdth' 100, 'wght' 520` forces Bricolage's ink-trapped 96pt display cut on the "Spring 2027" payoff line. The case study's closing moment earns the display exception (second instance, added 2026-07-14).
 
 Both pair `font-optical-sizing: none` with the FVS as the **last** declaration in the rule so the forced `opsz` wins over any standard-property fallback. Any new multi-axis FVS use should be deliberate and logged here. (The `CLAUDE.md` "FVS only on the hero callout" summary predates both and is now stale — treat this section as the source of truth.)
+
+> **SUPERSEDED by v3 R8 — the LAST-declaration rule was a superstition.**
+> `font-variation-settings` overrides the high-level properties **per axis,
+> regardless of source order**, and an axis not named in the string still obeys
+> its standard property. Order never made `opsz` win; naming it in the string
+> did. The "FVS LAST, do not reorder" comments were deleted from `globals.css`
+> in C6, and the two remaining pins (`.milestone__date`, `.text-qh-title`) are
+> now allowlist entries in `scripts/lint-type.mjs`, not entries logged here.
+> **New FVS goes in that allowlist with a one-line reason, and nowhere else** —
+> `npm run lint:type` check 7 fails the build otherwise. The hero-callout pins
+> named above are gone: both reproduced what `font-optical-sizing: auto`
+> already resolved, and the body one pinned every descendant, since FVS
+> inherits as a string.
+>
+> `CLAUDE.md` is now the correct summary and this section is the stale one, the
+> reverse of what the parenthetical above claims.
 
 ---
 
@@ -406,7 +467,7 @@ The system as locked is a solid neutral foundation. Distinctive typographic mome
 Three places a signature move could live, with my current best guesses:
 
 **Wordmark ("uxpaul" on home hero)** — strongest candidate
-- Push compression further (84–88%) just on the wordmark for real editorial-British bite
+- ~~Push compression further (84–88%) just on the wordmark for real editorial-British bite~~ **SUPERSEDED (v3 §5, R10): the wordmark went the other way, to 100. It is 16px, a reading rung, and compression is banned at reading size.**
 - Drop weight to 400 or 500 for an unexpected light-display moment (Bricolage's light weights have those flared stems Mathieu mentions — they look great big)
 - Add subtle letter-spacing variation
 - Pull the wordmark size up further — make it dominate, not just lead
@@ -421,6 +482,11 @@ Three places a signature move could live, with my current best guesses:
 - Messing with them creates extra reading work
 
 When this is revisited, add a dedicated `text-wordmark` utility for the home hero. (The old 112px `text-display` step was **cut** — it had no consumer once the home h1 became `text-statement`, and the wordmark wants its own compression anyway. Don't resurrect `text-display`; give the wordmark its own utility.)
+
+> **SUPERSEDED in its premise (v3 §5, R10).** The wordmark does not want its own
+> compression; it wants none. It moved to 100 because 16px is a reading rung. A
+> `text-wordmark` utility could still be justified on other grounds, but not
+> this one, and it would take a width from the three bands like everything else.
 
 > **Axis dependency:** the current `.wordmark` chrome already sets `font-stretch: 88%`. That only renders once `app/fonts.ts` loads the `wdth` axis (`axes: ['opsz','wdth']` — see §2). Before that fix it was inert; expect the shipped wordmark's width to *change* when the axes land.
 
@@ -450,6 +516,20 @@ Mathieu's 96pt cut is designed to be seen. If display tops out at 72px, the desi
 
 **Why `font-stretch: 96%` and `97%` (not 92/94)?**
 First pass was 92/94. At full desktop display sizes, that read as "squeezed" rather than "considered editorial." 96/97 keeps the editorial intent without sacrificing readability. If wordmark wants more compression later, add a dedicated `text-wordmark` utility — don't push the system-level utilities further.
+
+> **SUPERSEDED by v3 §3.1 and §5, and this is the single most misleading entry
+> in this file.** v3 goes *past* the range rejected here: display is **94** and
+> large display is **88**. The rejection above, and the two later passes that
+> re-affirm it, were all judged against one question — how a multi-line
+> statement reads at 96px on a desktop. v3 decided from rendered comparisons
+> across the whole ladder, with width assigned by rung rather than picked per
+> utility. Where the two disagree, v3 wins; do not re-litigate the 92–94
+> finding on the strength of this paragraph.
+>
+> The `text-wordmark` suggestion is inverted too. The wordmark moved **to 100**,
+> not to more compression: it is 16px, 16px is a reading rung, and R10 bans
+> compression at reading size because the 12pt master exists to open counters
+> and compression closes them.
 
 **Why H3 at weight 500 (not 600)?**
 First pass had H3 at 600. Side-by-side with H2 at 600, the two read as the same heading at slightly different sizes. Dropping H3 to 500 differentiates by weight as well as size — H3 reads as "section heading inside content" rather than "small section title."
@@ -484,6 +564,8 @@ authoritative axis semantics were re-confirmed from Mathieu Triay's notes (wdth:
 Antique Olive/relaxed at 100 → Grotesque No.9/anxious as it compresses; opsz: 12pt
 ↔ 96pt masters).
 
+<!-- SUPERSEDED: v3 §3.1 sets display to 94 and large display to 88, past the
+     range the bullet below declines. This re-affirmation is history, not a veto. -->
 - **Display wdth (`text-statement`) — NO CHANGE, stays 96%.** The brief proposed
   92–94% for a more editorial feel, but that exact range is already on record
   above as having read "squeezed" at full desktop display sizes. The new hero is
@@ -521,6 +603,7 @@ the desktop column. Change made:
 - **`text-statement` size cap 96px → 168px:** `clamp(3.75rem, 10vw, 10.5rem)` →
   60px (390) · 102px (1024) · 144px (1440) · 168px (1920, capped). One line at
   every breakpoint.
+<!-- SUPERSEDED: third re-affirmation of a finding v3 §3.1 overturns. -->
 - **Width stays 96%, weight stays 600.** The spec proposed 93% / 650; both were
   declined in favour of the recorded "92–94% squeezed" finding and the weight-600
   decision above. Width was never the problem.
@@ -554,6 +637,19 @@ first read, and opened a ~9× hierarchy cliff to the body. Reverted:
   coda was moved 18→16 so no two registers share a size).
 
 ### Phase 2 — page arc + two-scale spacing
+
+> **SUPERSEDED by v3 R2 — there is no mood register, and no register "owns" an
+> axis.** The table below assigns width to the Major register as its expressive
+> property; v3 retires that. Width is a function of the rung, three values, and
+> `font-stretch: 90%` is not one of them: `text-cover` and the media-tier card
+> `<h2>` both moved to **94**, the display band. Expressive contrast is carried
+> by weight, and the 340/720 signature is the one place it is spent.
+>
+> R9 is the reason it cannot ride on width. The `next/font` fallback is
+> Arial-based with no `wdth` axis, so a register that expresses itself through
+> width expresses nothing during font swap or on a blocked CDN. Weight survives
+> the fallback; width does not. The **two-scale spacing** half of this section
+> is untouched by v3 and still stands.
 
 The whole home page reads as one designed sequence by giving **each register a
 different Bricolage axis to express** (not just a different size):

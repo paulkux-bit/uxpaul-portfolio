@@ -76,32 +76,36 @@ Defined as CSS custom properties in `app/globals.css` under `@theme`:
 - No shadcn/ui — roll custom; my components are part of my craft signal
 - Avoid premature abstraction; copy before generalizing
 
-## PopUp annotation system (VH1 Pop-Up Video style)
-Case studies live in `app/content/case-studies/*.mdx` (path TBD when 
-implemented). Inline annotations authored as:
+## PopUp annotation system — RETIRED
+**The PopUp system is decommissioned. Do not build against it, and do not treat
+persimmon as a live accent.** `--color-popup` and the `--popup-*` tokens are dead
+legacy: the site is monochrome-warm and **accent-free at rest**, with no
+exception. `components/popup-context.tsx` is gone, no route renders an
+annotation layer, and the `<PopUp>` authoring syntax is not available.
 
-    <PopUp anchor="section-id">commentary text</PopUp>
+This section previously described the layer as "the portfolio's signature
+interaction" and reserved persimmon for it, which contradicted the director
+frame further down this same file. The director frame was right.
 
-Behavior:
-- A global PopUpContext (in `components/popup-context.tsx`) toggles the 
-  entire annotation layer on/off via a header button
-- Each PopUp uses IntersectionObserver to trigger when its `anchor` 
-  element enters viewport
-- Framer Motion handles enter/exit (spring physics, gentle)
-- Respect `prefers-reduced-motion`: skip animation, render as static 
-  side annotation
-- Mobile (below sm breakpoint): collapse pop-ups to footnote-style 
-  inline links
+Kept as a record of what was tried: a toggleable VH1-style commentary layer over
+case studies, anchored per section via IntersectionObserver, intended to solve
+process visibility without forcing a linear walkthrough. The problem it targeted
+is real and still unsolved; the mechanism is not coming back in this form.
 
-This system is the portfolio's signature interaction — it solves the 
-process-visibility gap without forcing linear case study walkthroughs.
+Two consequences that are easy to miss:
+- The `--popup-*` tokens still defined in `globals.css` are dead. They are not
+  in the type system's scope, so `lint:type` does not flag them.
+- Anything that claims family resemblance to the annotation layer as a design
+  rationale is resting on a retired system, including the Template B card
+  description in the external knowledge docs.
 
 ## Accessibility (non-negotiable)
 See `PRODUCT.md` for the full accessibility floor. Quick summary:
 - WCAG AAA contrast on body text where feasible; AA elsewhere
 - Honor `prefers-reduced-motion` for all motion
 - Visible focus states on every interactive element
-- Full keyboard navigation including PopUp toggle
+- Full keyboard navigation on every interactive control (the theme toggle, the
+  header nav, every link and card)
 - Meaningful alt text on every image (not "screenshot of design")
 - Semantic HTML before ARIA
 
@@ -218,22 +222,42 @@ as size. There is intentionally no H4 — if a fourth heading level is
 needed, the case study structure is too deep; flatten it or use 
 `text-eyebrow` as a sub-block label instead.
 
-### Width axis usage
-Bricolage's `wdth` axis is geographic: 100 = relaxed/French (Antique 
-Olive influence), lower = anxious/British (Grotesque No. 9 influence). 
-The scale uses:
-- `text-statement`: 96% (slight editorial compression)
-- `text-hero`: 97% (slight editorial compression)
-- `text-cover` + media-tier card `<h2>`: 90% (the **Major** register, Phase 2)
-- `.wordmark` (header chrome): 88%
-- Everything else: 100% (default, warm)
+### Width axis usage — three bands, assigned by rung
+Width is a **function of the rung**, never a per-module choice. Three values, no
+fourth. If you are picking a width by eye you are outside the system (v3 R2).
+
+| Token | Value | Band | Rungs |
+|---|---|---|---|
+| `--wdth-read` | `100` | Reading | 14–26px |
+| `--wdth-display` | `94` | Display | 32–52px ceiling |
+| `--wdth-large` | `88` | Large display | 72–88px ceiling |
+
+Bands key to the rung's **desktop ceiling**, so an element never changes width as
+the viewport resizes. Authored at the property site as
+`font-stretch: calc(var(--wdth-display) * 1%)` — the token is unitless because a
+percentage cannot appear inside a `font-variation-settings` string.
+
+Two roles are **off-ladder and deliberately left at a literal value** (v3 §9):
+`text-lede` at 100 and `.pull-quote p` at 94, whose 60px and 56px ceilings fall in
+the 53–71px gap between bands. Both are legal; tokenising them would encode an
+answer that is being deferred.
+
+`npm run lint:type` check 1 fails the build on any width outside {100, 94, 88}.
+
+> **The tonal reading is background, not instruction.** Mathieu Triay draws the
+> axis as geographic: 100 relaxed/French (Antique Olive), compressed
+> anxious/British (Grotesque No. 9). True of the typeface, and worth knowing.
+> It is **not** how this system assigns width. v3 R2 retires mood registers;
+> R9 is why — the `next/font` fallback is Arial-based with no `wdth` axis, so
+> any meaning riding on width vanishes during font swap and on a blocked CDN.
+> Contrast is carried by **weight**, which survives the fallback.
 
 ### Page typographic arc + spacing (Phase 2)
-Five registers, each owning a different Bricolage axis so the page reads as one
-sequence:
+Registers separate on **size, weight and colour**. No register "owns" an axis:
+the width column that used to appear here (Major at `font-stretch: 90%`) is
+retired by R2, and `text-cover` plus the media-tier card `<h2>` are now 94.
 1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
-2. **Major** (work titles: Selected Work cards + Also Shipped) — owns **width**
-   (`font-stretch: 90%`); the two work modules read as one compressed family.
+2. **Major** (work titles: Selected Work cards + Also Shipped) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, project·client meta) — tracking.
 5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
@@ -243,7 +267,8 @@ sequence:
   card title→meta 8–12px).
 - **Sectional** 96 / 80 / 128px (base / xl / 2xl) between sections + above footer.
   Section breaks are space, not rules (the footer hairline is the one structural line).
-Full rationale + reference citations in `docs/typography-system.md` §11.
+Spacing rationale in `docs/typography-system.md` §11 (that file is superseded on
+type, but its spacing section stands).
 
 The `wdth` (and `opsz`) axes only render because `app/fonts.ts` loads them via
 `axes: ['opsz','wdth']`. Omitting that ships `wght`-only and silently disables
@@ -268,25 +293,63 @@ content. Likely candidates when revisited:
   open letter-spacing
 - Lead paragraph: push weight to 500, possibly tighter tracking
 
-### Reference doc
-Full rationale, manual axis-control patterns, and decisions-with-reasoning 
-live in `docs/typography-system.md`. Read that file before making any 
-typography changes — it's the source of truth for *why* the scale is 
-shaped this way.
+### Reference doc — read this order
+**`docs/type-system-v3-locked.md` is the source of truth for typography.**
+Locked 5 Aug 2026, adopted 7 Aug 2026, enforced by `npm run lint:type`, which
+gates `npm run build`. Read it before making any typography change.
+
+`docs/typography-system.md` ("Locked May 2026") is **superseded** and carries a
+banner saying so. It is still worth reading for how Bricolage is drawn and for
+the record of what was tried and rejected, but it is not a spec: its
+`font-stretch` values, its tonal reading of the width axis, its
+"FVS LAST" rule and its `text-wordmark` suggestion all disagree with v3, and v3
+wins on every one. Do not implement from it.
+
+`docs/type-system-v3-migration-plan.md` records how the adoption was sequenced
+(C0–C8) and what each lint check maps to.
 
 ### Swap protocol
 If Bricolage is ever replaced (e.g. with a purchased Stornoway or 
 Tofino license), only two surfaces change:
 1. The `next/font` import in `app/fonts.ts` (including the `axes` array)
-2. The `font-stretch` values in `text-statement`, `text-hero`, and 
-   `.wordmark` (delete if the new font has no `wdth` axis)
+2. The three width tokens in the `@theme static` block (`--wdth-read`,
+   `--wdth-display`, `--wdth-large`). Every `font-stretch` in the system reads
+   from them, so this is one edit, not a sweep. Delete them and their call sites
+   if the new font has no `wdth` axis.
 
 The role utilities and component usage stay identical. No find-and-replace.
 
-## Color tokens (to be filled in during design system phase)
-- Light mode palette: TBD (current placeholder in globals.css)
-- Dark mode palette: TBD (current placeholder in globals.css)
-- Use `oklch()` for everything; CSS variables defined in globals.css
+## Colour by rung (type system v3 §3.5)
+Every rung has a stated colour. None is left to judgement, and all display rungs
+take `--text-primary` — the softer choice is most tempting exactly where it is
+most wrong.
+
+| Rung | Role | Colour |
+|---|---|---|
+| 6 | Arrival crescendo | `--text-primary` |
+| 5 | Case-study hero | `--text-primary` |
+| 4 | Section heading | `--text-primary` |
+| 3 | Numbered headline | `--text-primary` |
+| 2 | Standfirst | `--text-secondary` |
+| 1 | Body | `--text-primary` |
+| 0.5 | Support | `--text-secondary`, or `--text-muted` for metadata |
+| 0 | Caption / eyebrow | `--text-muted` |
+
+**The authoring rule: mix to author a token, never to apply one.** A `color-mix`
+that produces a named token in the theme layer is legitimate. A `color-mix` at
+the point of use on a `color:` property is a weight-fake, and `lint:type` check 6
+fails the build on it. Four reasons it is a rule and not a preference: contrast
+stops being computable, because an alpha's effective ratio depends on its
+backdrop; alpha compounds, so a muted caption inside a muted block double-mutes;
+it breaks the two-mode principle, since 60% black on white and 60% white on black
+are not perceptually equivalent and one ramp forces one mode to be wrong; and it
+undershoots, every time.
+
+**Alpha is still correct** for state layers (hover, press), scrims, shadows and
+focus rings. Those are surfaces and effects, not type colour.
+
+The palette itself lives in `docs/color-system.md`, which is **not** superseded
+by v3 and owns the values.
 
 ## Color & illustration conventions
 
@@ -296,10 +359,14 @@ The role utilities and component usage stay identical. No find-and-replace.
   AA-normal (4.5:1); `--text-subtle` AA-large only (≥24px or ≥18.66px bold) — never
   normal-size meaningful text.
 - `font-optical-sizing: auto` is global; do NOT hardcode `opsz` via font-variation-settings
-  for ordinary type. Width via the `font-stretch` property. FVS is reserved for sanctioned
-  multi-axis display moments where the axes must render together: the hero callout, the Also
-  Shipped titles (`text-qh-title`), and the reflection milestone date. Log any new instance in
-  `docs/typography-system.md` §7 (the source of truth).
+  for ordinary type. Width via the `font-stretch` property, from the three-band tokens.
+  FVS is reserved for the sanctioned multi-axis moments where the axes must render
+  together: the reflection milestone date (`.milestone__date`), the Also Shipped titles
+  (`text-qh-title`), and the takes-wall compositions. **The hero-callout pins are gone** —
+  both reproduced what `auto` already resolved, and the body one pinned every descendant,
+  since FVS inherits as a string (v3 R8). New FVS goes in `ALLOWLIST.fvs` in
+  `scripts/lint-type.mjs` with a one-line reason, and nowhere else; check 7 fails the
+  build otherwise. Source order is irrelevant: FVS overrides per axis regardless of it.
 - Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
   `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
   light-only to `--border-default` — never change the base token.
@@ -327,18 +394,25 @@ The named gates are three different tools; two are external and do NOT read pros
   installed impeccable plugin (`~/.claude/.../impeccable/scripts/detector/`), not a repo
   script. It inspects markup + CSS for AI-slop tells (side-tab borders, gradient text,
   overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
-- **typeset** = Impeccable's typography check. Also external, also not prose.
+- **type** = `npm run lint:type` (`scripts/lint-type.mjs`), a real repo script and the
+  only mechanical typography check that exists. Parses `app/globals.css` with postcss
+  and enforces the nine v3 §7 assertions: the three width bands, the 14px floor, the
+  1.15× rung ratio computed across 320–2560, the 340/720 signature, authored `strong`,
+  no `color-mix(… currentColor …)` on text colour, the FVS allowlist, and both halves
+  of the font-load check. **It gates `npm run build`** — the build runs it first and
+  stops on failure. Allowlist entries live in the script, each with a one-line reason.
+  It also prints three UNCHECKED blind spots it cannot see: widths driven through a
+  CSS variable, and arbitrary width/weight utilities authored in JSX.
+- **There is no `npm run typeset`.** Earlier notes here described `typeset` as an
+  external typography check; it is a slash-command mode of the Impeccable skill, backed
+  by prose guidance with no code, no config file and no exit status, so it cannot gate
+  anything. It does not overlap `lint:type`.
 - **prose** (em-dash + banned words) = `npm run lint:prose` (`scripts/lint-prose.mjs`), a
   real repo script. Scans rendered `.next` HTML: HARD-fails on em-dash U+2014, WARNs on the
   project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
 
-Full chain: **tsc -> eslint -> build -> lint:prose -> detector (visual, external) -> typeset (external)**.
-
-# CLAUDE.md — color system section
-
-Paste this into your existing `CLAUDE.md`, after the typography section.
-
----
+Full chain: **tsc -> eslint -> build (runs lint:type first, and fails on it) ->
+lint:prose -> detector (visual, external)**.
 
 ## Color system — locked (v2)
 
@@ -353,7 +427,10 @@ Paste this into your existing `CLAUDE.md`, after the typography section.
 
 Nothing chromatic sits on the page idle. But when the user *does* something — hovers a link, selects text, focuses an input, picks up a card — the system responds with a warm chromatic moment. Interaction states are moments, not roles. This is compatible with chromatic restraint at the system level.
 
-The PopUp annotation layer is the one exception: it carries chromatic identity that persists at rest, because it's a distinct editorial voice.
+There is **no exception**. The PopUp annotation layer used to be one, on the
+grounds that it was a distinct editorial voice carrying chromatic identity at
+rest; that system is retired, so the rule is now absolute. Nothing chromatic
+sits at rest anywhere on the site.
 
 ### Locked decisions
 
@@ -361,7 +438,9 @@ The PopUp annotation layer is the one exception: it carries chromatic identity t
 - **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds.
 - **Naming:** role-based, semantic. `--text-primary`, `--bg-surface-elevated`. Never raw color names.
 - **Light and dark tuned independently.** Same hue axis, different chroma/contrast curves. Dark is not inverted light.
-- **PopUp tokens (`--popup-*`) are reserved for the annotation layer.** Do not use elsewhere.
+- **PopUp tokens (`--popup-*`) are dead legacy.** The annotation layer they were
+  reserved for is retired. Do not use them anywhere, and do not reach for
+  persimmon as an accent.
 - **Interaction-state tokens (`--focus-glow`, `--selection-bg`, `--link-hover`) are moments, not paint.** Don't extend them to resting roles.
 
 ### Token inventory
@@ -371,7 +450,7 @@ The PopUp annotation layer is the one exception: it carries chromatic identity t
 - **Borders** — `--border-subtle`, `--border-default`, `--border-strong`
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
-- **PopUp** — `--popup-canvas`, `--popup-surface`, `--popup-surface-elevated`, `--popup-border`, `--popup-text-primary`, `--popup-text-muted`
+- ~~**PopUp** — `--popup-canvas`, `--popup-surface`, `--popup-surface-elevated`, `--popup-border`, `--popup-text-primary`, `--popup-text-muted`~~ **DEAD LEGACY** (system retired; still defined in `globals.css`, consumed by nothing)
 
 ### Signature treatments
 
@@ -389,7 +468,7 @@ Defined in `app/globals.css` via `@utility`. Same naming convention as typograph
 - Text: `text-primary`, `text-secondary`, `text-muted`, `text-subtle`
 - Borders: `border-subtle`, `border-default`, `border-strong`
 - Shadows + lift: `shadow-rest`, `shadow-hover`, `lift`, `lift-hover`
-- PopUp: `bg-popup-canvas`, `bg-popup-surface`, `bg-popup-surface-elevated`, `border-popup`, `text-popup-primary`, `text-popup-muted`
+- ~~PopUp: `bg-popup-canvas`, `bg-popup-surface`, `bg-popup-surface-elevated`, `border-popup`, `text-popup-primary`, `text-popup-muted`~~ **DEAD LEGACY** (system retired)
 
 For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-muted)' }}`.
 
@@ -397,7 +476,12 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 
 - Body text (`text-primary` on `bg-canvas`) hits **AAA** in both modes.
 - `text-muted` hits **AA normal** — fine for any body-text size.
-- `text-subtle` is **AA-large only** — never below 18px (or 14px bold). Lint this.
+- `text-subtle` is **AA-large only** — never below **24px (or 18.66px bold)**, which is
+  the actual WCAG large-text definition. It clears roughly 3:1 and nothing more, so any
+  normal-size text that carries meaning takes `--text-muted` or stronger. (An earlier
+  line here said "18px, or 14px bold"; that was too permissive and disagreed with this
+  file's own contrast-floor bullet. `docs/color-system.md` still carries the looser
+  figure and is the remaining place to reconcile.)
 - Focus uses `outline` + `box-shadow` (never `border-color`). Layout never shifts.
 - Link affordance is multi-channel — underline at rest, thicker + warmer on hover. Color alone is never the only signal.
 - `color-scheme` set per mode so native controls theme correctly.
@@ -409,7 +493,8 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 - ❌ No cool grays (hue ≥ 200) anywhere.
 - ❌ No pure black or pure white.
 - ❌ Dark mode is not inverted light mode.
-- ❌ Don't use `--popup-*` tokens outside the annotation context.
+- ❌ Don't use `--popup-*` tokens at all. The annotation layer is retired and
+  persimmon is not an accent.
 - ❌ Don't extend `--focus-glow`, `--selection-bg`, or `--link-hover` to resting roles.
 - ❌ No paper grain in dark mode.
 - ❌ Don't add tokens inline. Extend `docs/color-system.md` first.

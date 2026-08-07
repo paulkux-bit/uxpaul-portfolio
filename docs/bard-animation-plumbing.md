@@ -1,5 +1,13 @@
 # BARD case study — animation plumbing
 
+> **One item here is superseded.** The proposed wdth-axis entrance on the problem
+> labels (animating `font-stretch` 100% → 90%) is banned twice over by type-system
+> v3: **R11** and **§8** forbid animating any axis, and 90 is not one of the three
+> legal widths ({100, 94, 88}), so `npm run lint:type` check 1 would fail the build
+> on the end state. The structural hooks and the reduced-motion guard below are
+> unaffected. Anything referencing the PopUp layer is also stale; that system is
+> retired.
+
 Motion is **not** implemented during the section-by-section craft rebuild. This file records
 the structural hooks set up so animation slots in later **without a refactor**. Every future
 motion must be guarded by `prefers-reduced-motion: reduce` (skip/disable, never degrade content).
@@ -17,8 +25,10 @@ prose → two-up `FramedPair` evidence → three problem **columns** (`.thread-c
 | Discrete block elements | `h2`, `.section-lede`, the pain `<p>`, each column, each panel | Each unit is its own element — entrance animations (fade/translate) attach per element with no wrapper changes. |
 
 ### Candidates noted, deferred
-- **wdth-axis entrance on the problem labels** — animate `font-stretch` (e.g. 100% → 90%) on
-  `.thread-cols__label` as each column enters. No markup change required.
+- ~~**wdth-axis entrance on the problem labels** — animate `font-stretch` (e.g. 100% → 90%) on
+  `.thread-cols__label` as each column enters. No markup change required.~~
+  **SUPERSEDED:** banned by v3 R11 and §8 (no axis animation), and 90 is not one
+  of the three legal widths. `.thread-cols__label` is now 94, the display band.
 - **Per-sentence reveal of the felt-pain staccato** — would require splitting the pain `<p>`
   into per-sentence spans. **Not** done now (keeps the prose clean / `text-wrap` intact).
 

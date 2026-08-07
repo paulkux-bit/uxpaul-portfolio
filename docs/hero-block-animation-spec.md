@@ -1,5 +1,29 @@
 # HeroBlock — animation spec (deferred implementation)
 
+> ## ⚠ SUPERSEDED — its keystone move is now banned
+>
+> **Do not implement this document.** Its central idea, animating the `wdth`
+> axis so the second sentence travels from width 100 to 88 on load, is banned
+> outright by type-system v3 **R11** ("No axis animation") and listed in **§8**
+> anti-patterns ("Animating any axis").
+>
+> The premise underneath it is gone too. This spec is built on the H1's
+> "wdth-axis divergence (`wdth 100` ↔ `wdth 88`)", and v3 **ruling 1** retires
+> that clause split: both hero sentences are rung 5, rung 5 is the large-display
+> band, and both now render at **88**. There is no divergence left to animate.
+> R9 is the reason it was retired — the Arial fallback has no `wdth` axis, so
+> meaning carried by width vanishes on font swap.
+>
+> Two further conflicts: the keyframes pin `'opsz' 96` on the hero, which R1
+> forbids outside the two sanctioned pins; and the overshoot idea (`wdth 86`
+> settling to 88) proposes a width outside the three legal bands.
+>
+> The `--anxious` / `--open` class names in `globals.css` survive as history.
+> They no longer describe a width difference.
+>
+> Kept for the entrance-timing and stagger work, which is unaffected. If a
+> motion layer is ever built, it moves opacity and position, not axes.
+
 **Status:** specification only. Not implemented. Awaits a Riley motion-review pass before any code lands.
 
 The static `<HeroBlock />` is the locked deliverable (Phase 1 design + Phase 2 implementation). This document specifies the motion layer that COULD ride on top of it. Every move below earns its place by extending the typographic spec rather than decorating it — the H1's wdth-axis divergence (`wdth 100` ↔ `wdth 88`) is the keystone, and the most distinctive motion candidate is letting the axis itself animate.
