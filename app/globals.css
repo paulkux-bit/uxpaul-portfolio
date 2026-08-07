@@ -102,10 +102,9 @@
   --color-surface-elevated:       var(--bg-surface-elevated);
   --color-sunken:                 var(--bg-sunken);
 
-  --color-text-primary:           var(--text-primary);
-  --color-text-secondary:         var(--text-secondary);
-  --color-text-muted:             var(--text-muted);
-  --color-text-subtle:            var(--text-subtle);
+  /* The --color-text-* aliases are retired (v3 C5). Every consumer now reads
+     the canonical --text-* role directly. Nothing in JSX referenced the
+     Tailwind utilities this namespace generated, so removing them is inert. */
 
   --color-border-subtle:          var(--border-subtle);
   --color-border-default:         var(--border-default);
@@ -1131,7 +1130,7 @@
   letter-spacing: -0.025em;
   margin: 4rem 0 1.5rem;
   text-wrap: balance;
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary);
 }
 
 .case-study-prose > h1 + p {
@@ -1139,7 +1138,7 @@
   line-height: 1.45;
   margin: 0 0 2.5rem;
   font-weight: 400;
-  color: color-mix(in oklch, currentColor 75%, transparent);
+  color: var(--text-secondary); /* standfirst role; was a currentColor 75% weight-fake */
   text-wrap: pretty;
   max-width: 38ch;
 }
@@ -1188,10 +1187,15 @@
   text-wrap: pretty;
 }
 
+/* No colour declaration on purpose. This carried
+   `color-mix(in oklch, currentColor 100%, transparent)`, which is an identity
+   mix: 100% currentColor against 0% transparent is currentColor. Re-pointing it
+   at --text-primary would have been a behaviour change, because an <em> inside
+   a --text-secondary standfirst would have jumped to primary. Emphasis inherits
+   its context and separates on weight, which is what R4 asks of it. */
 .case-study-prose em {
   font-style: normal;
   font-weight: 500;
-  color: color-mix(in oklch, currentColor 100%, transparent);
 }
 
 /* ── Eyebrow labels ───────────────────────────────────────────────────── */
@@ -1278,7 +1282,7 @@
   line-height: 0.92;
   letter-spacing: -0.04em;
   margin: 0 0 1rem;
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary);
 }
 
 .case-study-numbers strong {
@@ -1294,7 +1298,7 @@
   line-height: 1.5;
   margin: 0;
   max-width: none;
-  color: color-mix(in oklch, currentColor 65%, transparent);
+  color: var(--text-muted); /* was a currentColor 65% weight-fake */
 }
 
 /* ── Problem list (Aaron James pattern) ──────────────────────────────── */
@@ -1318,7 +1322,10 @@
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.04em;
-  color: color-mix(in oklch, currentColor 45%, transparent);
+  /* --text-muted, not --text-subtle: this is a 14px/600 marker, and 600 at 14px
+     is not "large" for WCAG, so subtle would undershoot. Same reasoning already
+     recorded on .thread-index. Was a currentColor 45% weight-fake. */
+  color: var(--text-muted);
   font-variant-numeric: tabular-nums;
   min-width: 2rem;
   flex-shrink: 0;
@@ -1329,7 +1336,7 @@
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: -0.01em;
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary);
   text-wrap: balance;
 }
 
@@ -1566,7 +1573,7 @@
   font-stretch: calc(var(--wdth-display) * 1%);
   line-height: 1.12;
   letter-spacing: -0.01em;
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary);
   text-wrap: balance;
 }
 
@@ -1585,7 +1592,7 @@
   max-width: none;
   font-size: 1rem;
   line-height: 1.5;
-  color: var(--color-text-muted, currentColor);
+  color: var(--text-muted);
 }
 
 /* 3-column grid only at band width (lg+), where columns are ~340px. Below lg the
@@ -1835,10 +1842,14 @@ html.dark .oku-figure {
 }
 
 .transformation__before {
-  color: color-mix(in oklch, currentColor 50%, transparent);
+  /* The superseded state: quieter than its replacement, with a strike quieter
+     still. Both were currentColor weight-fakes (50% and 35%). --text-subtle is
+     legal on the strike because .transformation is 26px at its smallest, so
+     this is large text, and a strike rule is not meaningful text either way. */
+  color: var(--text-muted);
   text-decoration: line-through;
   text-decoration-thickness: 1px;
-  text-decoration-color: color-mix(in oklch, currentColor 35%, transparent);
+  text-decoration-color: var(--text-subtle);
   text-align: right;
 }
 
@@ -1851,11 +1862,13 @@ html.dark .oku-figure {
 .transformation__arrow {
   font-size: 0.85em;
   font-weight: 400;
-  color: color-mix(in oklch, currentColor 40%, transparent);
+  /* --text-muted, not --text-subtle: 0.85em of the 1.625rem mobile floor is
+     23.8px at weight 400, just under the 24px AA-large threshold. */
+  color: var(--text-muted);
 }
 
 .transformation__after {
-  color: var(--color-text-primary, currentColor);
+  color: var(--text-primary);
   text-align: left;
 }
 
@@ -1991,7 +2004,7 @@ html.dark .oku-figure {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: color-mix(in oklch, currentColor 65%, transparent);
+  color: var(--text-muted); /* was a currentColor 65% weight-fake */
 }
 
 .compare__divider {
@@ -2055,7 +2068,7 @@ html.dark .oku-figure {
   /* Slightly larger than .figure__caption — this is content, not fine print. */
   font-size: 1rem;
   line-height: 1.55;
-  color: color-mix(in oklch, currentColor 80%, transparent);
+  color: var(--text-secondary); /* was a currentColor 80% weight-fake */
   max-width: 38ch;
   padding-top: 0.25rem;
 }
@@ -2065,7 +2078,7 @@ html.dark .oku-figure {
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted); /* was a currentColor 55% weight-fake */
 }
 
 .asymmetric-pair__body p {
@@ -2113,7 +2126,7 @@ html.dark .oku-figure {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted); /* was a currentColor 55% weight-fake */
 }
 
 /* ── Resolution bento (Show the Work) ─────────────────────────────────────
@@ -2534,7 +2547,7 @@ html.dark .oku-figure {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: color-mix(in oklch, currentColor 55%, transparent);
+  color: var(--text-muted); /* was a currentColor 55% weight-fake */
 }
 
 /* ── Placeholder frame — quiet: tinted block, no border, no labels ───── */
