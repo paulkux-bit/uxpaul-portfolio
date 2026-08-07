@@ -473,7 +473,7 @@
    from text-h3 (bigger, heavier, compressed). Standard properties, no FVS: font-stretch
    maps straight to Bricolage's wdth axis. */
 @utility text-resolution-headline {
-  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
+  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
   font-weight: 600;
   font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
   letter-spacing: 0;
@@ -1367,7 +1367,9 @@
    Editorial standfirst: wider and larger than body, short of the full band.
    Scoped under .case-study-prose so it outweighs `.case-study-prose p`. */
 .case-study-prose .section-lede {
-  font-size: clamp(1.375rem, 1vw + 1.1rem, 1.625rem);
+  /* Rung 2. Endpoints unchanged at 22 and 26; the slope is retuned so it stops
+     converging on rung 3, which met it at 1.030x at 572px (v3 §3.3). */
+  font-size: clamp(1.375rem, 0.932vw + 0.959rem, 1.625rem);
   line-height: 1.45;
   font-weight: 400;
   color: var(--text-secondary); /* standfirst: dimmed-from-primary (≈ the old currentColor 82% mix), now a token */
@@ -1395,9 +1397,14 @@
    a quiet framing clause -> the date as hero -> a quiet subline. No motion (static
    surface), so prefers-reduced-motion is inherently respected.
    Date scale ratios (swap --ms-date-size to compare on render):
-     A restrained     clamp(2.5rem, 4vw + 1.25rem, 4.5rem)   40 -> 72px
-     B bold (default) clamp(3.25rem, 5vw + 1.5rem, 5.5rem)   52 -> 88px
-     C crescendo      clamp(3.75rem, 6vw + 1.75rem, 7rem)    60 -> 112px */
+     A restrained     clamp(2.5rem, 4vw + 1.25rem, 4.5rem)       40 -> 72px
+     B bold (default) clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)    52 -> 88px
+     C crescendo      clamp(3.75rem, 6vw + 1.75rem, 7rem)        60 -> 112px
+   B is rung 6 and was retuned in C3: its endpoints are unchanged, but the
+   slope now gives it rung 5's crossovers (430 and 1180) instead of its own
+   560/1280. See v3 §3.3 — sharing crossovers is the mechanism R5 asks for,
+   and the old value pinched the 6/5 pair to 1.1418 at 560px. A and C are
+   comparison options only and are NOT on the ladder. */
 .milestone {
   margin-top: 2rem;
   padding: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 3rem);
@@ -1416,7 +1423,7 @@
 }
 .milestone__date {
   margin: 0.5rem 0 0;
-  font-size: var(--ms-date-size, clamp(3.25rem, 5vw + 1.5rem, 5.5rem)); /* ratio B default */
+  font-size: var(--ms-date-size, clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)); /* rung 6, ratio B */
   line-height: 0.98;
   letter-spacing: -0.02em;
   color: var(--text-primary);
@@ -1532,7 +1539,7 @@
 
 .thread-cols__label {
   display: block;
-  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px display register */
+  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem); /* rung 3, 26 → 32px */
   font-weight: 600; /* match the hero spine — boldness carries down the page */
   /* 90 -> 94. Not a §5 row; derived from its 32px ceiling (rung 3, display).
      The old "spine identity via compression" note is retired by R2 — width
@@ -1629,7 +1636,7 @@
 }
 
 .friction-beat__headline {
-  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
+  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
   font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off; rhymes the resolutions header) */
   /* 94, unchanged — rung 3. Both this and h2 are now token-driven, so the old
      "a subtle step below the H2's 96%" no longer describes it: h2 is 94 too,
@@ -2120,7 +2127,7 @@ html.dark .oku-figure {
    compressed-bold spine voice) so the friction→resolution read is headline-to-
    headline, not marker-only. */
 .resolution-block__headline {
-  font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px */
+  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem); /* rung 3, 26 → 32px */
   font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */
   font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
   line-height: 1.15;
@@ -2582,7 +2589,9 @@ html.dark .figure-placeholder {
 }
 
 .hero-block__title {
-  font-size: clamp(2.5rem, 5vw + 1rem, 4.5rem);
+  /* Rung 5. Endpoints unchanged at 40 and 72; the slope is retuned so its
+     crossovers land on rung 4's, at 430 and 1180 (v3 §3.3). */
+  font-size: clamp(2.5rem, 4.267vw + 1.353rem, 4.5rem);
   line-height: 1.0;
   color: var(--text-primary);
   margin: 0;
