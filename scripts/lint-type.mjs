@@ -73,8 +73,22 @@ const ALLOWLIST = {
     { selector: '.comp-word-swap .mark', reason: '§6 takes wall — 92, ABOVE the stated 78-82, unreconciled' },
     { selector: '.comp-statement .take-thought', reason: '§6 takes wall — 98, ABOVE the stated 78-82, unreconciled' },
   ],
-  fvs: [], // C6: .milestone__date + .text-qh-title survive; both exception surfaces
-  signature: [], // C4: the three 340/720 placements
+  // The FVS half of the split that put widths above. Two categories:
+  // the two pins §6 sanctions by name, and the takes-wall compositions, whose
+  // per-take three-axis variation IS the content of that exception surface.
+  // Every other pin was deleted in C6 rather than allowlisted.
+  fvs: [
+    { selector: '.milestone__date', reason: '§6 sanctioned pin — opsz 96 at 52-88px is a real 44-unit push, the one place the drawn display cut shows' },
+    { selector: '.text-qh-title', reason: '§6 Also Shipped — per-brand three-axis variation driven from data-brand; the axes must render together' },
+    { selector: '.comp-mark-dominant .mark', reason: '§6 takes wall — per-take composition' },
+    { selector: '.comp-mark-watermark .mark', reason: '§6 takes wall — per-take composition' },
+    { selector: '.comp-mark-beside .mark', reason: '§6 takes wall — per-take composition' },
+    { selector: '.comp-mark-cropped .mark', reason: '§6 takes wall — per-take composition' },
+    { selector: '.comp-word-swap .mark', reason: '§6 takes wall — per-take composition' },
+    { selector: '.comp-statement .take-thought', reason: '§6 takes wall — per-take composition' },
+    { selector: '.comp-coords-corner .mark', reason: '§6 takes wall — per-take composition' },
+  ],
+  signature: [], // C4b: the three 340/720 placements. Blocked on a design call.
 };
 
 // ── The ladder (§3.3), mapped to the selectors that carry each rung ────────

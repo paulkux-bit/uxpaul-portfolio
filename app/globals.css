@@ -1455,8 +1455,10 @@
      600 is --wght-display. 88 is the large-display band, which rung 6 sits in.
      Both have to be carried in the FVS string as well as the standard
      properties: per R8, font-variation-settings overrides the high-level
-     property PER AXIS, so leaving 'wght' 520 in the string would have made the
-     font-weight change a no-op. */
+     property PER AXIS, REGARDLESS OF SOURCE ORDER, so leaving 'wght' 520 in
+     the string would have made the font-weight change a no-op. The old note
+     here claimed the FVS had to come LAST for opsz to win; R8 retires that as
+     superstition. Order does not matter, the axis list does. */
   font-weight: 600;
   font-stretch: calc(var(--wdth-large) * 1%);
   font-optical-sizing: none;
@@ -2574,9 +2576,12 @@ html.dark .figure-placeholder {
    expressive 96pt cut where it's large, a readable cut at the mobile floor)
    and the wdth contrast (100 vs 88) maps straight to the wdth axis. No FVS.
 
-   The callout (.hero-block__callout-*) is the one element that still pins
-   axes via font-variation-settings; its cascade order there (FVS LAST, after
-   the font-stretch/font-weight fallbacks) is intentional — do not reorder.
+   The callout (.hero-block__callout-*) used to pin its axes through
+   font-variation-settings as well. Both pins are gone (v3 C6): they set opsz
+   to exactly what `auto` already resolved at those sizes, and per R8 the body
+   one additionally pinned every descendant, since FVS inherits as a string and
+   cannot be re-weighted downstream. The whole block is now on the standard
+   properties.
    ============================================================ */
 
 .hero-block {
@@ -2731,15 +2736,12 @@ html.dark .figure-placeholder {
   text-transform: uppercase;
   color: var(--text-secondary);    /* eyebrow register — persimmon stays reserved for the PopUp layer */
   margin: 0 0 0.5rem;              /* tight single step: eyebrow hugs the body */
-  font-optical-sizing: none;
-  /* v3 §5: 90 -> 100. 14px is the floor rung and R10 bans compression there.
-     The wdth in the FVS string has to move too: per R8 font-variation-settings
-     overrides the standard property PER AXIS regardless of source order, so
-     changing font-stretch alone would be a no-op. The opsz pin itself is
-     redundant with `auto` and gets deleted in C6, not here. */
+  /* v3 §5: width 90 -> 100. 14px is the floor rung and R10 bans compression
+     there. The opsz pin and its FVS string are deleted (C6): 'opsz' 14 at a
+     14px role is exactly what font-optical-sizing: auto already resolves, so
+     the pin reproduced the default and bought nothing. */
   font-stretch: calc(var(--wdth-read) * 1%);
   font-weight: 600;
-  font-variation-settings: 'wght' 600, 'wdth' 100, 'opsz' 14;
 }
 
 .hero-block__callout .hero-block__callout-body {
@@ -2748,11 +2750,13 @@ html.dark .figure-placeholder {
   /* No own measure — the card's content box is the single measure, so the card hugs the text. */
   color: var(--text-primary);
   margin: 0;                       /* beats .case-study-prose p's 1.5rem bottom — no trapped/bottom-heavy space */
-  font-optical-sizing: none;
+  /* The opsz pin and its FVS string are deleted (C6). 'opsz' 18 at an 18px
+     role reproduced font-optical-sizing: auto, and this one was the worse of
+     the two: FVS inherits as a string, so per R8 it pinned every descendant of
+     the callout body and nothing inside it could be re-weighted. */
   font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — featured insight, not body prose */
   font-weight: 500;
-  font-variation-settings: 'wght' 500, 'wdth' 100, 'opsz' 18;
   text-wrap: pretty;               /* fills the measure with a tidy rag (no widow); balance evened lines short → right-side band */
 }
 
