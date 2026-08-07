@@ -132,9 +132,13 @@ All display rungs take `--text-primary`. An earlier draft left that implicit by 
 | Role | L | Contrast | Safe for |
 |---|---|---|---|
 | `--text-primary` | 0.215 / 0.945 | 15.10 / 15.72 | Body, display — AAA |
-| `--text-secondary` | 0.355 / 0.825 | 9.72 / 11.21 | Standfirsts, support — AA-normal |
+| `--text-secondary` | 0.355 / 0.825 | 9.72 / 11.21 | Standfirsts, support — **AAA** |
 | `--text-muted` | 0.485 / 0.705 | 5.65 / 7.30 | Captions, eyebrows, markers — AA-normal |
 | `--text-subtle` | 0.625 / 0.565 | ≈ 3:1 | **AA-large only** — never normal-size text |
+
+`--text-secondary` was labelled AA-normal in `02-design-system.md` and in the first draft of this section. That under-claimed it: AAA for normal text is 7:1 and both modes clear it comfortably. Corrected 7 Aug 2026.
+
+**Large text means 24px, or 18.66px bold.** WCAG's threshold is 18pt and 14pt bold; converted to CSS pixels that is 24px and 18.66px. `docs/color-system.md` stated the floor as "18px (or 14px+ bold)" in two places, which is a pt-for-px substitution and authorised `--text-subtle` six pixels below the real limit. This is the same class of error that once put `--text-subtle` on the 16px friction markers. Both occurrences were corrected in `e7892bb`; the rule stands regardless — where any two documents disagree on this figure, **24px / 18.66px is correct.**
 
 The ramp is deliberately **not** mirrored between modes: the gaps compress differently in light and dark because each mode was tuned rather than inverted. Do not "correct" it toward symmetry.
 
