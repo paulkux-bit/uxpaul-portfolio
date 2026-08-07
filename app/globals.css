@@ -363,7 +363,10 @@
   line-height: 1;
   letter-spacing: -0.025em;
   font-weight: 600;
-  font-stretch: 96%;
+  /* v3 §5: 96 -> 88. Large-display band. Its 96px ceiling sits above rung 6's
+     88px, so it is off-ladder by size (§9) — the width is settled, the size
+     is not. Currently unused in production. */
+  font-stretch: calc(var(--wdth-large) * 1%);
   text-wrap: balance;
 }
 
@@ -377,6 +380,12 @@
   line-height: 1.08;
   letter-spacing: -0.02em;
   font-weight: 340;
+  /* NOT tokenised, deliberately. v3 §9: this role's 60px ceiling sits in the
+     53-71px gap between the display and large-display bands, so §3.1 returns
+     no band for it. 100 is already legal so check 1 is satisfied and no edit
+     is forced; tokenising would encode a banding answer that is being
+     deferred. This is the home h1 — decided against real content, not by
+     rounding to the nearer band. */
   font-stretch: 100%;
   text-wrap: balance;
 }
@@ -401,7 +410,8 @@
   line-height: 0.95;
   letter-spacing: -0.025em;
   font-weight: 600;
-  font-stretch: 97%;
+  /* v3 §5: 97 -> 88. Large-display band (80px ceiling). Unused in production. */
+  font-stretch: calc(var(--wdth-large) * 1%);
 }
 
 @utility text-h1 {
@@ -434,12 +444,13 @@
   line-height: 1.12;
   letter-spacing: -0.015em;
   font-weight: 600;
-  /* Major register (Phase 2): work titles own the WIDTH axis (90%), distinct
-     from the hero's weight axis. Rhymes with Also Shipped's text-qh-title (also
-     ~90%) so Selected Work + Also Shipped read as one compressed-title family.
-     Compression also narrows glyphs, helping the long first-person framings fit
-     the aspect-video well. Fallback to 92% if it reads tight. */
-  font-stretch: 90%;
+  /* v3 §5: 90 -> 94. Display band (32px ceiling). Card covers loosen by 4%.
+     The old note here claimed a per-module "Major register" that rhymed with
+     Also Shipped at ~90% — v3 R2 retires mood registers: width follows the
+     rung, and contrast is carried by weight. Also Shipped is now an §6
+     exception surface with its own rules, so the rhyme is no longer a
+     constraint on this role. */
+  font-stretch: calc(var(--wdth-display) * 1%);
   text-wrap: balance;
 }
 
@@ -464,7 +475,7 @@
 @utility text-resolution-headline {
   font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
   font-weight: 600;
-  font-stretch: 94%;
+  font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
   letter-spacing: 0;
   line-height: 1.15;
   /* Explicit token, matching .friction-beat__headline. Without it these headings
@@ -655,7 +666,10 @@
 .wordmark {
   font-size: 1rem;
   font-weight: 600;
-  font-stretch: 88%;
+  /* v3 §5: 88 -> 100. 16px is a reading rung, and R10 bans compression at
+     reading size — the 12pt master opens counters, compression closes them.
+     Site chrome, so this one ships on every page. */
+  font-stretch: calc(var(--wdth-read) * 1%);
   letter-spacing: -0.01em;
   color: var(--text-primary);
   text-decoration: none;
@@ -1098,7 +1112,9 @@
 .case-study-prose > h1 {
   font-size: clamp(2.25rem, 5.5vw + 1rem, 4.75rem);
   font-weight: 600;
-  font-stretch: 92%;
+  /* 92 -> 88. Not a §5 row; derived. Its 76px ceiling falls inside rung 5/6's
+     72-88 large-display span, so §3.1 answers directly. Logged in §9. */
+  font-stretch: calc(var(--wdth-large) * 1%);
   line-height: 1.02;
   letter-spacing: -0.025em;
   margin: 4rem 0 1.5rem;
@@ -1124,7 +1140,7 @@
 .case-study-prose h2 {
   font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
   font-weight: 600;
-  font-stretch: 96%;
+  font-stretch: calc(var(--wdth-display) * 1%); /* v3 §5: 96 -> 94. Rung 4. */
   line-height: 1.08;
   letter-spacing: -0.02em;
   margin: 5rem 0 2rem;
@@ -1246,7 +1262,7 @@
 .case-study-numbers h3 {
   font-size: clamp(4rem, 9vw + 1rem, 7.5rem);
   font-weight: 600;
-  font-stretch: 88%;
+  font-stretch: calc(var(--wdth-large) * 1%); /* 88, unchanged. Unused in prod. */
   line-height: 0.92;
   letter-spacing: -0.04em;
   margin: 0 0 1rem;
@@ -1499,6 +1515,11 @@
 .thread-index {
   font-size: clamp(1rem, 0.4vw + 0.85rem, 1.25rem);
   font-weight: 600;
+  /* R6, one mark one rendering. Declares its own width so the 01/02/03 marker
+     cannot inherit whatever the heading around it happens to set — it appears
+     inside .friction-beat (94) and .thread-cols, and rendered two ways it
+     stops reading as the same mark. 20px ceiling, so reading band. */
+  font-stretch: calc(var(--wdth-read) * 1%);
   letter-spacing: 0.04em;
   color: var(--text-muted); /* quiet 01/02/03 marker — AA-normal at the 16px floor (not large-bold, so subtle undershoots) */
   font-variant-numeric: tabular-nums;
@@ -1513,7 +1534,11 @@
   display: block;
   font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px display register */
   font-weight: 600; /* match the hero spine — boldness carries down the page */
-  font-stretch: 90%; /* spine identity; compressed-bold ties back to the hero */
+  /* 90 -> 94. Not a §5 row; derived from its 32px ceiling (rung 3, display).
+     The old "spine identity via compression" note is retired by R2 — width
+     follows the rung, and the tie back to the hero is carried by weight.
+     Unused in production. */
+  font-stretch: calc(var(--wdth-display) * 1%);
   line-height: 1.12;
   letter-spacing: -0.01em;
   color: var(--color-text-primary, currentColor);
@@ -1606,7 +1631,10 @@
 .friction-beat__headline {
   font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem);
   font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off; rhymes the resolutions header) */
-  font-stretch: 94%; /* open/relaxed; a subtle step below the H2's 96%, not the 90% compressed register */
+  /* 94, unchanged — rung 3. Both this and h2 are now token-driven, so the old
+     "a subtle step below the H2's 96%" no longer describes it: h2 is 94 too,
+     and the two rungs separate on size, not width. */
+  font-stretch: calc(var(--wdth-display) * 1%);
   line-height: 1.15;
   letter-spacing: 0; /* airy, not tense */
   color: var(--text-primary); /* canonical token (was the --color-text-primary alias) */
@@ -1703,6 +1731,10 @@ html.dark .oku-figure {
 .pull-quote p {
   font-size: clamp(1.75rem, 3vw + 0.8rem, 3.5rem);
   font-weight: 600;
+  /* NOT tokenised, deliberately. v3 §9: the 56px ceiling sits in the 53-71px
+     gap between the display and large-display bands, so §3.1 returns no band.
+     94 is already legal, so nothing is forced; tokenising would encode a
+     deferred answer. */
   font-stretch: 94%;
   line-height: 1.2;
   letter-spacing: -0.015em;
@@ -1762,7 +1794,9 @@ html.dark .oku-figure {
   text-align: center;
   font-size: clamp(1.75rem, 4.5vw + 0.5rem, 4.75rem);
   font-weight: 700;
-  font-stretch: 90%;
+  /* 90 -> 88. Not a §5 row; derived from its 76px ceiling (large display).
+     Unused in production. */
+  font-stretch: calc(var(--wdth-large) * 1%);
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
@@ -2088,7 +2122,7 @@ html.dark .oku-figure {
 .resolution-block__headline {
   font-size: clamp(1.5rem, 1.4vw + 1rem, 2rem); /* 24 → 32px */
   font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */
-  font-stretch: 94%;
+  font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
   line-height: 1.15;
   letter-spacing: 0;
   color: var(--text-primary);
@@ -2177,7 +2211,11 @@ html.dark .oku-figure {
 
 .bento-theme__lead {
   font-weight: 600;
-  font-stretch: 92%;            /* joins the spine's compressed-bold display register */
+  /* v3 §5: 92 -> 100. It inherits 18px from .bento-theme__caption, and 18px is
+     a reading rung — R10 bans compression there. The "compressed-bold display
+     register" it used to join is retired by R2; the lead still separates from
+     its gloss on weight and colour. */
+  font-stretch: calc(var(--wdth-read) * 1%);
   color: var(--text-primary);  /* sanctioned exception over --text-secondary — see docs/color-system.md (Text) */
 }
 
@@ -2227,7 +2265,9 @@ html.dark .oku-figure {
 .bento-theme__plabel {
   font-size: 0.875rem;
   font-weight: 600;
-  font-stretch: 92%;
+  /* 92 -> 100. Not a §5 row; derived. 14px is the floor rung — reading band,
+     and R10 bans compression at reading size. */
+  font-stretch: calc(var(--wdth-read) * 1%);
   letter-spacing: 0.01em;
   color: var(--text-muted);
   text-align: center;
@@ -2537,7 +2577,7 @@ html.dark .figure-placeholder {
   text-transform: uppercase;
   color: var(--text-muted);
   margin: 0;
-  font-stretch: 100%;
+  font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 14px, rung 0 */
   font-weight: 600;
 }
 
@@ -2553,21 +2593,23 @@ html.dark .figure-placeholder {
   display: block;
 }
 
+/* v3 §5 + ruling 1: the clause split retires. Both sentences are rung 5, and
+   rung 5 is the large-display band, so both are 88 and the widths no longer
+   differ. The old note here argued the 100/88 contrast was semantic — one
+   "open" clause against one "anxious" one. R2 retires that: width follows the
+   rung, never mood, and R9 is the second reason — the Arial fallback has no
+   wdth axis, so a meaning carried only by width disappears during font swap
+   and permanently on a blocked CDN. Letter-spacing still differs, which is
+   deliberate and out of scope here. */
 .hero-block__sentence--open {
   letter-spacing: -0.025em;
-  font-stretch: 100%;
+  font-stretch: calc(var(--wdth-large) * 1%); /* 100 -> 88 */
   font-weight: 600;
 }
 
-/* wdth 88 — deliberate override of the system's locked "92-94% squeezed at
-   display sizes" finding. That finding was tested against text-statement
-   running as a multi-line full statement; this is one short anxious sentence
-   whose semantics demand Grotesque-No.9's compressed register. The general
-   rule still stands for other contexts; sentence 1's wdth 100 provides the
-   contrast that justifies the local exception. */
 .hero-block__sentence--anxious {
   letter-spacing: -0.02em;
-  font-stretch: 88%;
+  font-stretch: calc(var(--wdth-large) * 1%); /* 88, unchanged */
   font-weight: 600;
 }
 
@@ -2577,7 +2619,7 @@ html.dark .figure-placeholder {
   max-width: 38ch;
   color: var(--text-primary);
   margin: 0;
-  font-stretch: 100%;
+  font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — authored credit register, not body prose */
   font-weight: 500;
   text-wrap: pretty;               /* credit line: no one-word last line at 38ch (body→pretty register) */
@@ -2645,14 +2687,19 @@ html.dark .figure-placeholder {
 .hero-block__callout .hero-block__callout-label {
   font-size: 0.875rem;
   line-height: 1.3;
-  letter-spacing: 0.08em;          /* canonical text-eyebrow tracking — unified with .eyebrow (was 0.10em); the callout stays distinct via wdth 90% + --text-secondary + on-image placement */
+  letter-spacing: 0.08em;          /* canonical text-eyebrow tracking — unified with .eyebrow (was 0.10em); the callout stays distinct via --text-secondary + on-image placement */
   text-transform: uppercase;
   color: var(--text-secondary);    /* eyebrow register — persimmon stays reserved for the PopUp layer */
   margin: 0 0 0.5rem;              /* tight single step: eyebrow hugs the body */
   font-optical-sizing: none;
-  font-stretch: 90%;
+  /* v3 §5: 90 -> 100. 14px is the floor rung and R10 bans compression there.
+     The wdth in the FVS string has to move too: per R8 font-variation-settings
+     overrides the standard property PER AXIS regardless of source order, so
+     changing font-stretch alone would be a no-op. The opsz pin itself is
+     redundant with `auto` and gets deleted in C6, not here. */
+  font-stretch: calc(var(--wdth-read) * 1%);
   font-weight: 600;
-  font-variation-settings: 'wght' 600, 'wdth' 90, 'opsz' 14;
+  font-variation-settings: 'wght' 600, 'wdth' 100, 'opsz' 14;
 }
 
 .hero-block__callout .hero-block__callout-body {
@@ -2662,7 +2709,7 @@ html.dark .figure-placeholder {
   color: var(--text-primary);
   margin: 0;                       /* beats .case-study-prose p's 1.5rem bottom — no trapped/bottom-heavy space */
   font-optical-sizing: none;
-  font-stretch: 100%;
+  font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — featured insight, not body prose */
   font-weight: 500;
   font-variation-settings: 'wght' 500, 'wdth' 100, 'opsz' 18;

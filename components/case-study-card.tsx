@@ -121,8 +121,15 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         <>
           <CardMediaSlot tier={tier} study={study} />
           <div className="p-6 md:p-8">
-            {/* Major register: 90% width (card-scoped, not the global text-h2). */}
-            <h2 className="text-h2 [font-stretch:90%]">{title}</h2>
+            {/* v3 §3.1: 90 -> 94, the display band. text-h2's ceiling is 40px,
+                which is rung 4. The old card-scoped "Major register" is retired
+                by R2 — width follows the rung, never a per-module choice.
+                Authored through the token so this cannot drift from globals.css.
+                NOTE: this is the media tier, currently rendered by no card, and
+                a width in JSX is invisible to lint:type, which parses
+                app/globals.css only. The linter now prints it as a known blind
+                spot rather than passing over it in silence. */}
+            <h2 className="text-h2 [font-stretch:calc(var(--wdth-display)*1%)]">{title}</h2>
             <div className="mt-2">{meta}</div>
           </div>
         </>
