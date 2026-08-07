@@ -1920,7 +1920,7 @@ html.dark .oku-figure {
   position: absolute;
   top: 0.625rem;
   left: 0.75rem;
-  font-size: 0.7rem;
+  font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1962,7 +1962,7 @@ html.dark .oku-figure {
 }
 
 .compare__label {
-  font-size: 0.75rem;
+  font-size: 0.875rem; /* v3 §2: was 0.75rem/12px, under the 14px floor */
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -2036,7 +2036,7 @@ html.dark .oku-figure {
 }
 
 .asymmetric-pair__label {
-  font-size: 0.7rem;
+  font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -2084,7 +2084,7 @@ html.dark .oku-figure {
 }
 
 .bento__label {
-  font-size: 0.7rem;
+  font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2505,7 +2505,7 @@ html.dark .oku-figure {
 }
 
 .small-multiples__label {
-  font-size: 0.7rem;
+  font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
