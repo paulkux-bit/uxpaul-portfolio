@@ -32,7 +32,7 @@ const STEPS = {
   xl: 3,
   '2xl': 4,
 };
-const FLUID = ['section', 'gutter']; // clamp-valued, checked by assertion 5
+const FLUID = ['section', 'gutter', 'crescendo']; // clamp-valued, checked by assertion 5
 
 const GRID_FINE = 0.25; // below 1rem, step by 4px
 const GRID_COARSE = 0.5; // at and above 1rem, step by 8px

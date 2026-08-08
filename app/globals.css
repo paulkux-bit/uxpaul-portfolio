@@ -142,7 +142,12 @@
      fixed 6rem AND the 1920 step-up together: the 73% drift and the
      33% snap both go to zero. Note the direction — less air than
      today on a 390px phone, more on a wide desktop. */
-  --spacing-section: clamp(4.61rem, 7.38vw + 2.46rem, 8rem);
+  /* TERMS ARE EXACT, NOT ROUNDED. rung 4 x 2.46 is
+     clamp(4.6125rem, 7.38vw + 2.46rem, 7.995rem). The spec publishes it
+     rounded to 4.61 and 8, and those two roundings alone cost 0.117% drift
+     across 320-2560 — the construction was exact, the printed constants were
+     not. Measured again with these: 0.0000%. */
+  --spacing-section: clamp(4.6125rem, 7.38vw + 2.46rem, 7.995rem);
 
   /* GUTTER — fluid on VIEWPORT but not on type, and never a pair
      (§3.1, ruling 4). It is horizontal: its job is holding measure
@@ -150,6 +155,16 @@
      by growing with the reader's text size. A gutter that scales with
      a 24px root eats the measure it exists to protect. */
   --spacing-gutter: clamp(1.5rem, 1.2vw + 1.03rem, 3rem);  /* 24 → 48 */
+
+  /* ARRIVAL CRESCENDO — the second measured pair, added in S5 because it was
+     measured, not assumed. The milestone's inset against rung 6
+     (.milestone__date) drifted 69.2% across 320-2560 once S2 put it on a
+     static token: the date grows 52 -> 88px while a flat 3rem inset does not.
+     Same construction as --spacing-section — every term of rung 6's clamp
+     multiplied by R = 0.625 — so it shares that rung's crossovers and the
+     ratio holds by arithmetic. R is what the original fluid padding already
+     implied (32 -> 56px against 52 -> 88px), not a number anyone liked. */
+  --spacing-crescendo: clamp(2.03125rem, 3vw + 1.225rem, 3.4375rem);  /* 32.5 → 55 */
 }
 
 /* ============================================================
@@ -1465,7 +1480,7 @@
    comparison options only and are NOT on the ladder. */
 .milestone {
   margin-top: var(--spacing-l);
-  padding: var(--spacing-xl) var(--spacing-m);
+  padding: var(--spacing-crescendo) var(--spacing-m);
   background: var(--bg-surface-elevated); /* warm lift, distinct from the --bg-canvas field; AA verified */
   border-radius: 8px;                     /* soft panel, no border — not a card */
 }
