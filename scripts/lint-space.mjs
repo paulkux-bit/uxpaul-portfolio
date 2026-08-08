@@ -60,7 +60,14 @@ const SR_ONLY_EXCEPTION = { selector: '.sr-only', prop: 'margin', value: '-1px' 
 // a breakout, collapsing a grid to one column, changing direction — is
 // allowlisted. "I did not get to it" is not a reason.
 const ALLOWLIST = {
-  values: [], // literals that may stay: { selector, prop, value, reason }
+  values: [
+    {
+      selector: '.about-row__mark',
+      prop: 'margin-block-start',
+      reason:
+        'S1 — optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Its rem terms are the text-h3 font-size clamp and the mark’s own 1.25rem box, neither of which is on the spacing scale.',
+    },
+  ], // literals that may stay: { selector, prop, value, reason }
   media: [], // spacing inside @media that does layout: { selector, prop, reason }
   fluid: [], // sanctioned clamp() pairs beyond the two tokens: { selector, reason }
   responsive: [], // JSX responsive variants that do layout: { file, util, reason }
