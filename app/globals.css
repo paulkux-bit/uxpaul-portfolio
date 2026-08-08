@@ -1298,7 +1298,6 @@
   .case-study-meta {
     grid-template-columns: 1fr 1fr;
     column-gap: var(--spacing-xl);
-    row-gap: var(--spacing-xs);
   }
 }
 
@@ -1327,7 +1326,6 @@
 @media (min-width: 768px) {
   .case-study-numbers {
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xl);
   }
 }
 
@@ -1661,7 +1659,6 @@
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: auto auto auto; /* marker / label / note — shared across columns */
     column-gap: var(--spacing-l);
-    row-gap: 0;
   }
 
   .thread-cols li {
@@ -2387,7 +2384,6 @@ html.dark .oku-figure {
   /* Slot spans on the 12-col band; satellite rows expand back to 3-up. */
   .bento-theme__row {
     grid-template-rows: auto auto;     /* caption / media — the two shared subgrid tracks */
-    column-gap: var(--spacing-s);
     row-gap: var(--bento-caption-gap); /* caption → media track (no wrap at lg+, so this is the bind) */
   }
   .bento-theme__row[data-cols='1'] { grid-template-columns: 1fr; }
@@ -2401,7 +2397,6 @@ html.dark .oku-figure {
     display: grid;
     grid-template-rows: subgrid;
     grid-row: span 2;
-    row-gap: var(--bento-caption-gap);
     column-gap: 0;
   }
 }

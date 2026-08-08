@@ -68,7 +68,47 @@ const ALLOWLIST = {
         'S1 — optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Its rem terms are the text-h3 font-size clamp and the mark’s own 1.25rem box, neither of which is on the spacing scale.',
     },
   ], // literals that may stay: { selector, prop, value, reason }
-  media: [], // spacing inside @media that does layout: { selector, prop, reason }
+  media: [
+    // LAYOUT, not rhythm. Each of these does something no spacing token can
+    // express: changes alignment, changes grid direction, or cancels a value
+    // that only makes sense in the other layout. Only --spacing-section and
+    // --spacing-gutter are fluid, so an override of a STATIC value is never
+    // made inert by a token — deleting one would be a design change wearing a
+    // migration's clothes. The five that WERE redundant were deleted in S3.
+    { selector: '.case-study-prose', prop: 'margin-left', reason: 'S3 layout — the reading column stops being centred and left-aligns at 1024' },
+    { selector: '.case-study-prose', prop: 'margin-right', reason: 'S3 layout — pair of the margin-left switch above' },
+    { selector: '.case-study-prose > .cs-section', prop: 'margin-inline', reason: 'S3 layout — cancels the negative breakout once the column has room for it' },
+    { selector: ".case-study-prose > .figure--constrained-bleed, .case-study-prose > .figure--asymmetric-pair, .case-study-prose > .figure--bento, .case-study-prose > .figure--mode-pair[data-breakout='true'], .case-study-prose > .figure--compare, .case-study-prose > .hero-block", prop: 'margin-inline', reason: 'S3 layout — same breakout cancellation, for every figure variant that breaks out' },
+    { selector: '.thread-cols', prop: 'column-gap', reason: 'S3 layout — a column gap only exists once the spine is three columns at 1024' },
+    { selector: '.thread-cols li', prop: 'padding', reason: 'S3 layout — stacked rows need vertical padding, columns do not' },
+    { selector: '.friction-beat', prop: 'gap', reason: 'S3 layout — the beat has no gap stacked; the gap appears with the two-column grid' },
+    { selector: '.friction-beat .oku-figure', prop: 'margin', reason: 'S3 layout — the figure loses its prose margin inside a grid cell' },
+    { selector: '.compare__grid', prop: 'gap', reason: 'S3 layout — a deliberate zero so the two halves read as one seamless comparison' },
+    { selector: '.compare__divider', prop: 'margin', reason: 'S3 layout — the divider only exists in the two-up arrangement' },
+    { selector: '.bento-theme__item', prop: 'column-gap', reason: 'S3 layout — caption sits beside its media at 1024, not beneath it' },
+    { selector: '.bento-theme__row', prop: 'row-gap', reason: 'S3 layout — row rhythm changes with the caption-beside arrangement' },
+    { selector: '.about-row__summary', prop: 'column-gap', reason: 'S3 layout — the resume row is stacked below 900 and four columns above; the gap is zero in one and real in the other' },
+    { selector: '.about-row__summary', prop: 'row-gap', reason: 'S3 layout — pair of the column-gap switch' },
+    { selector: '.about-row__company', prop: 'padding-inline-end', reason: 'S3 layout — only the 600-899 band puts the company beside its meta line' },
+    { selector: '.about-row__role::after', prop: 'margin-inline', reason: 'S3 layout — the interpunct exists only in the 600-899 phrase form' },
+    { selector: ".framed-pair[data-stack-mobile='true']", prop: 'row-gap', reason: 'S3 layout — a row gap only exists once the pair stacks below 767' },
+
+    // DELIBERATE PER-BREAKPOINT DENSITY. These retune a static value at a
+    // breakpoint. No fluid token replaces them, so deleting them would change
+    // the design rather than migrate it. They are candidates for a measured
+    // fluid pair later (S5 measures; §3.1 forbids inventing pairs), and until
+    // one is measured they stay, declared, with a reason.
+    { selector: '.quick-hit', prop: 'column-gap', reason: 'S3 density — the shelf row loosens from 16 to 32 when it goes multi-column at 768; no measured pair yet' },
+    { selector: '.take-card', prop: 'padding', reason: 'S3 density — tighter card inset below 767; unmounted surface, no measured pair' },
+    { selector: '.case-study-meta', prop: 'column-gap', reason: 'S3 density — meta columns separate widely once they sit on one line at 640' },
+    { selector: '.transformation', prop: 'gap', reason: 'S3 density — before/after tighten when they stack below 640' },
+    { selector: '.asymmetric-pair__grid', prop: 'gap', reason: 'S3 density — pair loosens from 24 to 32 when side by side at 768' },
+    { selector: '.bento-theme__row', prop: 'column-gap', reason: 'S3 density — caption-beside arrangement sets its own column rhythm at 1024' },
+    { selector: ".figure--framed .figure__image, .figure--framed .figure-placeholder", prop: 'padding', reason: 'S3 density — framed inset drops from 32 to 24 below 640 so the image keeps its width' },
+    { selector: '.hero-block', prop: 'gap', reason: 'S3 density — type column to image opens from 48 to 64 at 1024 where they sit side by side' },
+    { selector: '.about-hero', prop: 'gap', reason: 'S3 density — portrait to text opens from 32 to 48 at 768' },
+    { selector: '.about-creds__item', prop: 'gap', reason: 'S3 density — credential label and value sit on one line at 768 and need a real column gap' },
+  ], // spacing inside @media that does layout: { selector, prop, reason }
   fluid: [], // sanctioned clamp() pairs beyond the two tokens: { selector, reason }
   responsive: [], // JSX responsive variants that do layout: { file, util, reason }
 };
