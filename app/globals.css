@@ -33,7 +33,12 @@
      invisible on surfaces that were already using it; the case-study article
      was the outlier (1200/24-flat) and snaps onto this axis. */
   --page-max-width: 72rem;
-  --page-padding-inline: 1.5rem;
+  /* The shared gutter. Fluid on VIEWPORT (24 -> 48) but never paired to a type
+     rung: per ruling 4 it is horizontal, and its job is holding measure and
+     keeping content off the viewport edge, neither of which improves by
+     tracking the reader's text size. Kept as its own name because the page
+     container, the case-study article and any future consumer share it. */
+  --page-padding-inline: var(--spacing-gutter);
 }
 
 /* ============================================================
@@ -654,12 +659,6 @@
   padding-inline: var(--page-padding-inline);
 }
 
-@media (min-width: 768px) {
-  .page-container {
-    padding-inline: var(--spacing-l);
-  }
-}
-
 /* ============================================================
    SITE HEADER
    Transparent at rest; a hairline border + canvas fill fade in
@@ -1148,14 +1147,6 @@
   padding-inline: var(--page-padding-inline);
 }
 
-@media (min-width: 768px) {
-  .case-study-article {
-    /* Matches .page-container's md+ step. The local override (rather than
-       mutating --page-padding-inline) keeps the variable's resting value
-       stable for any future consumer. */
-    padding-inline: var(--spacing-l);
-  }
-}
 
 /* Reading column stays narrow for prose; display elements break out. */
 .case-study-prose {
