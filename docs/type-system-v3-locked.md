@@ -261,9 +261,13 @@ A fourth width value for one module. Compressing type at 14–18px. Forcing `ops
 
 ## 9. Still open
 
-These were not on the decision list and remain unspecified: the about page (`.about-phase h2` at 36.4px sits between rungs 3 and 4; `.about-row__company` at 25.2px/500 is off-ladder), nav, footer, buttons, card meta, and all type states — hover, focus, visited, disabled, `forced-colors`, `prefers-contrast`, 200% zoom, and print. Dark mode has no stated position on optical weight gain against a dark ground.
+These were not on the decision list and remain unspecified: the about page (`.about-phase h2` at 36.4px sits between rungs 3 and 4; `.about-row__company` at 25.2px/500 is off-ladder), and all type states — hover, focus, visited, disabled, `forced-colors`, `prefers-contrast`, and print. Dark mode has no stated position on optical weight gain against a dark ground.
 
-**Four shipped selectors have size ceilings that sit on no rung** (found by the C0 harness, 6 Aug 2026). §3.1 assigns width by rung, so for these it returns nothing:
+**Nav, footer, buttons and card meta moved to `unspecified-surfaces.md`** (8 Aug 2026). They appeared in this §9 *and* in the spacing system's, which makes them one piece of work rather than two.
+
+**200% zoom is no longer open — the spacing system measured it** (8 Aug 2026). At a 32px root, vertical spacing scales +61% and the horizontal gutter holds flat at 0.0%, verified in that migration's QA. This document previously listed 200% zoom as unspecified while the neighbouring system had a tested position on the same behaviour, which is two specs disagreeing about one thing. Type has no further position to state: the ladder is `rem`-anchored throughout, so it scales with the root by construction.
+
+**Six shipped selectors have size ceilings that sit on no rung** (found by the C0 harness, 6 Aug 2026). §3.1 assigns width by rung, so for these it returns nothing:
 
 | Selector | Ceiling | Width in C1 | Basis |
 |---|---|---|---|

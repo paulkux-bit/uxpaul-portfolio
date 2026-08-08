@@ -68,6 +68,11 @@ Until C8 lands, three documents on disk disagree with this one. All three are st
 
 ## Out of scope
 
-§9 of the locked doc lists what remains unspecified: the about page (`.about-phase h2` at 36.4px sits between rungs 3 and 4, `.about-row__company` at 25.2px/500 is off-ladder), nav, footer, buttons, card meta, and every type state — hover, focus, visited, disabled, `forced-colors`, `prefers-contrast`, 200% zoom, print. Dark mode has no stated position on optical weight gain against a dark ground.
+**§9 of the locked doc is the list; read it there rather than here.** This
+paragraph used to restate it, and a restatement drifts: it still named nav,
+footer, buttons and card meta after those moved to `unspecified-surfaces.md`,
+and still called 200% zoom unspecified after the spacing migration measured it
+(+61% vertical, gutter flat). Two copies of a list is one copy too many, which
+is the same reasoning that consolidated the four surfaces in the first place.
 
 None of it blocks this migration. All of it blocks calling the system complete.
