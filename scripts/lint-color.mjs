@@ -104,11 +104,27 @@ root.walkDecls((d) => {
 // dark inherits anything it does not override
 for (const [k, v] of byMode.light) if (!byMode.dark.has(k)) byMode.dark.set(k, v);
 
+/** The oklch() body, paren-balanced. A regex cannot do this: the old pattern
+ *  allowed ONE level of nesting, so it read a literal oklch(0.165 0.020 50)
+ *  correctly and truncated a composed calc(var(--chroma-unit) * 3) at the first
+ *  inner ')'. Check 4 then failed with "cannot resolve" on every pair — still
+ *  red, so the score never lied, but red for the wrong reason and no longer
+ *  measuring anything. Depth-count instead. */
+function oklchBody(value) {
+  const i = value.search(/oklch\(/i);
+  if (i < 0) return null;
+  let depth = 0;
+  for (let j = i + 5; j < value.length; j++) {
+    if (value[j] === '(') depth++;
+    else if (value[j] === ')' && --depth === 0) return value.slice(i + 6, j);
+  }
+  return null;
+}
+
 /** Resolve a composed oklch() to [L, C, H], or null. */
 function resolveOklch(value, mode) {
-  const m = /oklch\(\s*([^)]*(?:\([^)]*\)[^)]*)*)\)/i.exec(value);
-  if (!m) return null;
-  const body = m[1];
+  const body = oklchBody(value);
+  if (body === null) return null;
   if (/\//.test(body)) return null; // has alpha; assertion 2 owns it
   const parts = [];
   let depth = 0;
