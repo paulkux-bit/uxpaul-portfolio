@@ -435,6 +435,21 @@ a system says *spacing derives from type because X*, it creates a claim whose
 scope can quietly mismatch its application. Deriving buys correctness and
 introduces this in exchange.
 
+**A latent per-mode collision in `lint:space` — found 8 Aug 2026, not yet
+fixed.** Line 243 builds `customProps` as a Map keyed by property name, so a
+custom property defined in both `:root` and `.dark` silently keeps only the
+last definition. Forty-two properties in `globals.css` are defined twice this
+way; **none of them is a property `lint:space` consumes**, because no spacing
+token is currently per-mode. The bug is therefore latent, not live, and the
+gate is sound today.
+
+It becomes real the moment anyone defines a spacing token per mode — a
+different gutter in dark, say — at which point `resolveVars` would take the
+wrong value without reporting anything. The identical shape went silent on a
+real alpha in `lint:color` during the colour migration. `lint:type` is clear:
+it uses arrays throughout, so the shape cannot occur. Fix wants its own small
+commit; do not fold it into unrelated work.
+
 **On what an allowlist entry means.** Media queries and responsive variants
 divide into two kinds, and only one is the migration's business. A rule doing
 **rhythm** — a section break stepping up at 1920 — is what a fluid token
