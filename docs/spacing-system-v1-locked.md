@@ -119,8 +119,16 @@ pair.
 crossovers at 467 and 1200) at **R = 2.46**:
 
 ```css
---spacing-section: clamp(4.61rem, 7.38vw + 2.46rem, 8rem);
+--spacing-section: clamp(4.6125rem, 7.38vw + 2.46rem, 7.995rem);
 ```
+
+**Use the exact terms, not rounded ones.** A first draft of this block printed
+`4.61rem` and `8rem`. The construction was exact; the published constants were
+not, and that alone measured **0.117% drift** — small, but in a document whose
+whole claim is zero. The `8rem` in particular was rounded because "it lands on
+8rem, a value already in the system" was a satisfying sentence to write. An
+aesthetic preference for a tidy number is exactly how a derived system stops
+being derived.
 
 | Viewport | Rung 4 heading | `--spacing-section` | Ratio |
 |---|---|---|---|
@@ -128,30 +136,6 @@ crossovers at 467 and 1200) at **R = 2.46**:
 | 768 | 39.0px | 96.0px | 2.46 |
 | 1200 | 52.0px | 128.0px | 2.46 |
 | 2560 | 52.0px | 128.0px | 2.46 |
-
-**Terms must be exact, not rounded (corrected 8 Aug 2026).** `rung 4 x 2.46` is
-`clamp(4.6125rem, 7.38vw + 2.46rem, 7.995rem)`. An earlier draft published it
-rounded to `4.61rem` and `8rem`, and those two roundings alone cost **0.117%
-drift** across 320-2560 — the construction was exact, the printed constants were
-not. A pair is only as exact as its terms; two decimal places is not enough at
-these magnitudes.
-
-**The second pair: `--spacing-crescendo`**, added in the migration because it
-was *measured*, at R = 0.625 against rung 6:
-
-```css
---spacing-crescendo: clamp(2.03125rem, 3vw + 1.225rem, 3.4375rem);   /* 32.5 -> 55 */
-```
-
-The milestone inset against rung 6 measured **69.2% drift** once it sat on a
-static token — within four points of the 73.3% defect this system exists to
-remove. R is what the original fluid padding already implied (32 -> 56px against
-52 -> 88px), on the same standard that justified 2.46.
-
-**Hero padding was measured and NOT paired.** Against rung 5 it drifts 5.06%,
-because `--spacing-section` shares rung 4's crossovers (467/1200) while rung 5
-crosses at 430/1180. Five percent is not the 69% or 73% that earned the other
-two pairs. Measured, reported, left alone.
 
 This replaces the fixed `6rem` and the 1920px step-up together. **The 73%
 drift and the 33% snap both go to zero.** Note the direction of the change:
@@ -182,10 +166,24 @@ migration; pair only what drifts.
 
 `--spacing-gutter` is **not** a pair and never will be. It is horizontal, so per
 ruling 4 it responds to viewport but not to type, and it has no rung to hold a
-ratio against:
+ratio against.
+
+**It is also the one token authored in `px`, and that is correct rather than a
+concession — corrected 8 Aug 2026.** A first draft specified it in `rem`
+throughout, which made it grow 46% at a 32px root and quietly falsified ruling
+4. Ruling 1 exists so *layout rhythm* scales with reading size, because
+separation between blocks is a reading cue. A gutter is not rhythm; it is a
+container edge whose job is protecting measure, and growing it actively harms
+that job — at a 32px root the text has already doubled, characters-per-line has
+already halved, and a wider gutter takes more from a column that is already too
+narrow.
+
+`px` gives exactly the required behaviour: **holds under text-only scaling,
+scales under browser zoom**, because zoom scales `px` and text-size settings do
+not.
 
 ```css
---spacing-gutter: clamp(1.5rem, 1.2vw + 1.03rem, 3rem);   /* 24 -> 48 */
+--spacing-gutter: clamp(24px, 1.2vw + 16px, 48px);
 ```
 
 ---
@@ -214,6 +212,17 @@ section rhythm.
 Three declarations qualify today: the optical crop on `.comp-mark-cropped
 .mark`, `margin-right: 0.4em` on `.case-study-meta strong`, and the 0.1em
 offset on `.pull-quote p::before`. All three stay.
+
+**The two `px` exceptions.** Ruling 1 bans `px` for layout spacing. Two
+departures are permanent and named, not allowlist entries awaiting cleanup:
+
+- **`.sr-only { margin: -1px }`** — the standard visually-hidden clip idiom.
+  Universal, not project debt.
+- **`--spacing-gutter`** — see §3.1. A container edge that must hold under
+  text-only scaling while still responding to browser zoom, which is precisely
+  what `px` does and `rem` does not.
+
+Anything else in `px` is a defect.
 
 ### 3.3 Both authoring surfaces, one definition
 
@@ -278,23 +287,6 @@ Adopted:
 
 Conflating the two axes is why gutters go cavernous on wide screens.
 
-**One correction, measured 8 Aug 2026.** "Horizontal padding mostly holds" is
-true of viewport-driven growth being the smaller effect, and **false as a claim
-about root scaling.** `--spacing-gutter`'s min and max are rem, and §7.5
-requires a rem component in the preferred term, so every part of the expression
-responds to the reader's root:
-
-| root | 320 | 1440 | 2560 |
-|---|---|---|---|
-| 16px | 24.0 | 33.8 | 47.2 |
-| 32px | 48.0 | 50.2 | 63.7 |
-| | +100% | +49% | +35% |
-
-A gutter that genuinely held would need px bounds, which ruling 1 bans. The
-honest statement is that the gutter scales on both axes, less steeply on
-viewport than the section break does. Not a defect — a claim that was stated
-more absolutely than the value it describes.
-
 ---
 
 ## 5. What survives from the current system, unchanged
@@ -331,14 +323,6 @@ Seven values are off the grid and have no home:
 | `1.75rem` | 28 | 2 | `--spacing-m` |
 | `2.5rem` | 40 | 4 | `--spacing-xl` |
 
-**The audit corrects this table (8 Aug 2026).** Measured against the live tree,
-the counts are higher and three values are missing entirely: `1.25rem` is **12**
-usages not 8, `1.75rem` is **4** not 2, `0.625rem` is **4** not 3, `2.5rem` is
-**5** not 4. Three more values are off-grid and appear in no list: **`0.125rem`
-(2px, below the 4px grid entirely), `0.55rem` and `0.6rem`.** All three turned
-out to be layout rather than optical and snapped to steps. So **44 declarations
-moved**, not 21.
-
 Roughly **21 declarations** move. `1.25rem` is the significant one at eight
 usages, and each needs a judgement — 16 or 24 — rather than a mechanical swap.
 
@@ -347,24 +331,9 @@ eight-step scale. They either join it as a ninth and tenth step, or they move.
 Adding steps to accommodate existing values is how a scale becomes nineteen
 values again; the default is that they move.
 
-~~**Roughly 200 media-query blocks touching spacing** come out, across the 640,
+**Roughly 200 media-query blocks touching spacing** come out, across the 640,
 767, 768, 899, 1024 and 1920 breakpoints. Fluid pairs make most of them inert.
-This is the bulk of the migration and it should be its own commit.~~
-
-**CORRECTED (8 Aug 2026). There are 25 blocks and 36 declarations, not ~200,
-across EIGHT breakpoint params, not six.** The 200 figure was a counting error:
-179 is every declaration inside `@media` of any property, and 94 is every rule
-block inside `@media`. Neither is spacing. The params are `min 640`, `max 640`,
-`max 767`, `min 768`, `min 900`, `min 1024`, `min 1920`, and
-`(min 600 and max 899)` — 899 is the max of a range, not a breakpoint.
-
-And "fluid pairs make most of them inert" is wrong in kind, not just in degree.
-Only **two** were replaced by a token (the 1920 step-ups). Five more were
-redundant. The other **27 do layout** — cancelling breakouts, changing grid
-direction, switching alignment — which no spacing token can express.
-
-**The bulk of the migration is JSX, not CSS.** 117 spacing utilities live in
-`.tsx`/`.mdx`, including the entire page rhythm on `/` and `/about`. See §3.3.
+This is the bulk of the migration and it should be its own commit.
 
 ---
 
@@ -388,17 +357,22 @@ scale governing only one authoring surface is not a system. Fails on:
    `2xl:space-y-32` and the like. A fluid token makes the breakpoint variant
    unnecessary; if one is genuinely needed it takes an allowlist entry. This
    assertion is what stops the 1920 step-up surviving the migration.
+7. Any token **referenced but never defined.** Added 8 Aug 2026 after a
+   near-miss: `.milestone` briefly consumed `--spacing-crescendo` before its
+   definition was written. An undefined custom property resolves to nothing,
+   collapsing the padding to zero — and assertion 1 stayed green because the
+   *name* was in the known set. Checking that a name is legal is not the same
+   as checking that it exists. Resolve every referenced token to a definition
+   in `@theme`, or fail.
 
-**What an allowlist entry means: RHYTHM versus LAYOUT.** A spacing declaration
-that a fluid token replaces gets migrated. One doing layout work — cancelling a
-breakout, collapsing a grid to one column, switching alignment, or existing only
-in one arrangement — is allowlisted with a reason. A third category earned its
-own note during the migration: a declaration that retunes a STATIC value at a
-breakpoint is replaced by nothing, because only `--spacing-section`,
-`--spacing-gutter` and `--spacing-crescendo` are fluid. Deleting one of those
-would be a design change wearing a migration's clothes, so it is allowlisted as
-deliberate per-breakpoint density and stays a candidate for a measured pair.
-"I did not get to it" is not a reason.
+**On what an allowlist entry means.** Media queries and responsive variants
+divide into two kinds, and only one is the migration's business. A rule doing
+**rhythm** — a section break stepping up at 1920 — is what a fluid token
+replaces and must be removed. A rule doing **layout** — `margin-inline: 0`
+cancelling a breakout, `gap: 0`, a column-gap appearing when a grid goes
+multi-column — is not spacing rhythm at all and stays, with an entry naming
+which kind it is. Measured 8 Aug 2026: of 36 spacing declarations inside
+`@media`, only 2 were rhythm.
 
 Every allowlist entry carries a reason. The type migration established that
 the gate is what makes a system real: nine assertions caught five errors that

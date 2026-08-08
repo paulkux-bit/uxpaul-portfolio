@@ -52,6 +52,13 @@ const EM_BANNED_PROP =
 // design system carries and which must be px.
 const SR_ONLY_EXCEPTION = { selector: '.sr-only', prop: 'margin', value: '-1px' };
 
+// The second of §3.2's two permanent px exceptions. --spacing-gutter is a
+// container edge, not rhythm: it must HOLD under text-only scaling (a wider
+// gutter takes from a measure that has already halved) while still responding
+// to browser zoom. px is the only unit that does both. Named here rather than
+// allowlisted so nobody "cleans it up" later.
+const PX_EXCEPTION_TOKENS = new Set(['--spacing-gutter']);
+
 // ── Allowlist ──────────────────────────────────────────────────────────────
 // EMPTY IN S0, ON PURPOSE. Every entry carries a one-line reason.
 //
@@ -270,7 +277,10 @@ const isSrOnly = (d) =>
   d.value.replace(/\s+/g, ' ') === SR_ONLY_EXCEPTION.value;
 
 // JSX/MDX spacing utilities.
-const SP_UTIL = /^(-?(?:m|p)[trblxyse]?|gap|gap-x|gap-y|space-x|space-y)-(.+)$/;
+// Longest alternatives FIRST: with `gap` before `gap-x`, the utility `gap-x-8`
+// parses as prefix `gap` and key `x-8`, which assertion 7 then reads as a
+// reference to a token named --spacing-x-8.
+const SP_UTIL = /^(-?(?:m|p)[trblxyse]?|gap-x|gap-y|gap|space-x|space-y)-(.+)$/;
 const jsxUtils = [];
 async function walkJsx(dir) {
   let entries;
@@ -419,6 +429,11 @@ const blindSpots = [];
   for (const [name, val] of customProps) {
     if (!name.startsWith('--spacing-')) continue;
     if (!/clamp\(/.test(val)) continue;
+    // §2's rem requirement is about PAIRS, which must keep responding to the
+    // reader's root. --spacing-gutter is explicitly not a pair (§3.1) and is
+    // px by design, so demanding a rem term of it would enforce the opposite
+    // of what §4 wants.
+    if (PX_EXCEPTION_TOKENS.has(name)) continue;
     seen.add(name);
     checkClamp(name, `${CSS_FILE} (@theme)`, val);
   }
@@ -443,6 +458,39 @@ const blindSpots = [];
     f.push({ where: `${u.file}:${u.line}`, detail: `responsive spacing utility "${u.token}"` });
   }
   add(6, 'No responsive spacing utilities in JSX/MDX (§7.6)', f);
+}
+
+// 7 — every referenced token must RESOLVE to a definition (§7.7).
+// Checking that a name is legal is not the same as checking that it exists. An
+// undefined custom property resolves to nothing rather than erroring, so the
+// space silently collapses to zero while assertion 1 stays green on spelling.
+// Added after exactly that near-miss: .milestone consumed --spacing-crescendo
+// for a few minutes before its definition was written, and only a grep caught
+// it. Covers both authoring surfaces — a JSX `gap-m` implies --spacing-m just
+// as much as a CSS var() does.
+{
+  const f = [];
+  const defined = new Set([...customProps.keys()]);
+  const seen = new Map(); // token -> where first referenced
+
+  for (const d of decls) {
+    for (const m of d.value.matchAll(/var\(\s*(--spacing-[\w-]+)\s*[,)]/g))
+      if (!seen.has(m[1])) seen.set(m[1], `${CSS_FILE}:${d.line}`);
+  }
+  // Tailwind utilities name the token implicitly: gap-m -> --spacing-m.
+  for (const u of jsxUtils) {
+    const m = SP_UTIL.exec(u.bare);
+    if (!m) continue;
+    const key = m[2].replace(/!$/, '');
+    if (/^\[/.test(key) || /^\d/.test(key) || key === 'auto' || key === 'px') continue;
+    const token = `--spacing-${key}`;
+    if (!seen.has(token)) seen.set(token, `${u.file}:${u.line}`);
+  }
+  for (const [token, where] of seen) {
+    if (!defined.has(token))
+      f.push({ where, detail: `${token} is referenced but never defined — it resolves to nothing, and the space silently collapses to zero` });
+  }
+  add(7, 'Every referenced spacing token resolves to a definition (§7.7)', f);
 }
 
 // ── Blind spots, reported rather than passed over ──────────────────────────

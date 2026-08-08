@@ -150,11 +150,21 @@
   --spacing-section: clamp(4.6125rem, 7.38vw + 2.46rem, 7.995rem);
 
   /* GUTTER — fluid on VIEWPORT but not on type, and never a pair
-     (§3.1, ruling 4). It is horizontal: its job is holding measure
-     and keeping content off the viewport edge, and neither improves
-     by growing with the reader's text size. A gutter that scales with
-     a 24px root eats the measure it exists to protect. */
-  --spacing-gutter: clamp(1.5rem, 1.2vw + 1.03rem, 3rem);  /* 24 → 48 */
+     (§3.1, ruling 4). AUTHORED IN px, and that is correct rather than a
+     concession: it is one of the two permanent px exceptions §3.2 names.
+
+     Ruling 1 puts layout spacing in rem so RHYTHM scales with reading
+     size, because separation between blocks is a reading cue. A gutter
+     is not rhythm. It is a container edge protecting measure, and
+     growing it actively harms that job — at a 32px root the text has
+     already doubled and characters-per-line has already halved, so a
+     wider gutter takes more from a column that is already too narrow.
+
+     px gives exactly the behaviour required: HOLDS under text-only
+     scaling, still SCALES under browser zoom, because zoom scales px
+     and a text-size setting does not. In rem this grew 46% at a 32px
+     root and quietly falsified ruling 4. */
+  --spacing-gutter: clamp(24px, 1.2vw + 16px, 48px);  /* 24 → 48 */
 
   /* ARRIVAL CRESCENDO — the second measured pair, added in S5 because it was
      measured, not assumed. The milestone's inset against rung 6
