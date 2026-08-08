@@ -350,19 +350,26 @@
   --hue-surface:  60;
   --hue-text:     74;
 
-  --bg-canvas:              oklch(0.165 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) - 5));
-  --bg-surface:             oklch(0.205 calc(var(--chroma-unit) * 12) calc(var(--hue-ground) - 5));
-  --bg-surface-elevated:    oklch(0.255 calc(var(--chroma-unit) * 14) calc(var(--hue-surface) - 10));
-  --bg-sunken:              oklch(0.130 calc(var(--chroma-unit) * 8) calc(var(--hue-ground) - 7));
+  /* Ruling 3: the ground goes quiet so the raised surface can carry warmth.
+     Lightness is untouched from v1 — every change here is chroma and hue.
+     The canvas drops to 3 units and the sunken to 2, which is what pulls
+     channel bias down to 1.33x; the elevated surface holds 13, so chroma
+     now climbs 4.33x from canvas to card instead of 1.40x. */
+  --bg-canvas:              oklch(0.165 calc(var(--chroma-unit) * 3) var(--hue-ground));
+  --bg-surface:             oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+  --bg-surface-elevated:    oklch(0.255 calc(var(--chroma-unit) * 13) var(--hue-surface));
+  --bg-sunken:              oklch(0.130 calc(var(--chroma-unit) * 2) var(--hue-ground));
 
   --text-primary:           oklch(0.945 calc(var(--chroma-unit) * 6) calc(var(--hue-text) + 4));
   --text-secondary:         oklch(0.825 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 2));
   --text-muted:             oklch(0.705 calc(var(--chroma-unit) * 8) calc(var(--hue-text) - 2));
   --text-subtle:            oklch(0.565 calc(var(--chroma-unit) * 9) calc(var(--hue-text) - 6));
 
-  --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 12) calc(var(--hue-ground) - 3));
-  --border-default:         oklch(0.310 calc(var(--chroma-unit) * 14) calc(var(--hue-ground) - 5));
-  --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 5));
+  /* The borders follow the grounds down, or they read as warm lines drawn on a
+     neutral page. Subtle tracks --bg-surface exactly, at 7 units and +2. */
+  --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+  --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
+  --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
   --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
