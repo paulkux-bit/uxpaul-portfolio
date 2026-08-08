@@ -170,9 +170,22 @@ itself getting heavier.
 | `--border-interactive` | `0.620 0.020 60` | `#90847a` | |
 
 **Lightness is untouched.** Every dark change is chroma and hue only. Channel
-bias falls from 3.0× to 1.33× at the canvas, while chroma climbs **6.5×** from
-ground to elevated — so the page steps back toward neutral and the card, the
-elevated surface and the warm cream text carry the warmth. That is ruling 3.
+bias falls from 3.0× to 1.33× at the canvas, while chroma climbs **4.33× from
+the canvas to elevated (6.5× measured from the sunken floor)** — so the page
+steps back toward neutral and the card, the elevated surface and the warm cream
+text carry the warmth. That is ruling 3.
+
+**"Untouched" means untouched in oklch, and only there.** Holding `L` constant
+does not hold WCAG relative luminance constant: `L` is perceptual lightness,
+relative luminance is computed from the sRGB channels, and moving chroma and hue
+moves those channels. K2 held every dark `L` byte-identical and still shifted
+`--text-primary` on `--bg-surface` by 0.0645 (15.299 → 15.235). Read any future
+"lightness untouched" claim in this document that way.
+
+Which is also why the preservation bar is **relative, not absolute**. An
+absolute ceiling bites hardest at the highest-contrast pair in the matrix, where
+it means least. The rule: **no pair moves more than 0.5%, and no pair moves
+toward a floor.** K2's worst case is 0.42% and no pair moved floorward.
 
 ---
 

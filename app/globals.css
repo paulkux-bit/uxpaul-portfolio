@@ -268,18 +268,26 @@
    ============================================================ */
 
 :root {
-  --bg-canvas:              oklch(0.975 calc(var(--chroma-unit) * 9) calc(var(--hue-ground) + 8));
-  --bg-surface:             oklch(0.952 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 3));
-  --bg-surface-elevated:    oklch(0.930 calc(var(--chroma-unit) * 12) calc(var(--hue-surface) + 2));
-  --bg-sunken:              oklch(0.915 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) - 2));
+  /* Canvas is held at the top and the three surfaces below it drop, so a card
+     reads as an object rather than as a slightly different patch of page —
+     without the page itself getting heavier. Separation goes 0.023 / 0.022 /
+     0.015 -> 0.030 / 0.030 / 0.018. Unlike the dark side, lightness moves
+     here: that is the point of the commit. */
+  --bg-canvas:              oklch(0.978 calc(var(--chroma-unit) * 8) calc(var(--hue-ground) + 6));
+  --bg-surface:             oklch(0.948 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+  --bg-surface-elevated:    oklch(0.918 calc(var(--chroma-unit) * 13) var(--hue-surface));
+  --bg-sunken:              oklch(0.900 calc(var(--chroma-unit) * 14) calc(var(--hue-ground) - 4));
 
   --text-primary:           oklch(0.215 calc(var(--chroma-unit) * 9) var(--hue-text));
   --text-secondary:         oklch(0.355 calc(var(--chroma-unit) * 10) var(--hue-text));
   --text-muted:             oklch(0.485 calc(var(--chroma-unit) * 11) var(--hue-text));
-  --text-subtle:            oklch(0.625 calc(var(--chroma-unit) * 10) calc(var(--hue-text) + 5));
+  /* 0.625 -> 0.590 repairs a live WCAG failure, not a side effect of the
+     surfaces moving: at 0.625 this measured 2.91 on elevated and 2.78 on
+     sunken, both under the 3.0 AA-large floor, and both shipped. */
+  --text-subtle:            oklch(0.590 calc(var(--chroma-unit) * 10) calc(var(--hue-text) + 5));
 
-  --border-subtle:          oklch(0.915 calc(var(--chroma-unit) * 14) calc(var(--hue-ground) - 2));
-  --border-default:         oklch(0.870 calc(var(--chroma-unit) * 16) calc(var(--hue-ground) - 8));
+  --border-subtle:          oklch(0.905 calc(var(--chroma-unit) * 15) calc(var(--hue-ground) - 4));
+  --border-default:         oklch(0.855 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 10));
   --border-strong:          oklch(0.760 calc(var(--chroma-unit) * 20) calc(var(--hue-ground) - 15));
   /* Non-text contrast carrier for underlines and interactive edges.
      --border-default (0.360 chroma-light) sits under 3:1 against the cream
