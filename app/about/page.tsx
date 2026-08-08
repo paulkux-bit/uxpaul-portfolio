@@ -12,7 +12,7 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="page-container py-24 md:py-32 space-y-24 2xl:space-y-32">
+    <div className="page-container py-section space-y-section">
       {/* ── Hero ───────────────────────────────────────────────────────────
           Portrait leads in the DOM, which is also the mobile reading order;
           from md up the grid moves it to the right column. It is the LCP

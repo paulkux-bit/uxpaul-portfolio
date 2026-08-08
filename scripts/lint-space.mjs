@@ -110,7 +110,38 @@ const ALLOWLIST = {
     { selector: '.about-creds__item', prop: 'gap', reason: 'S3 density — credential label and value sit on one line at 768 and need a real column gap' },
   ], // spacing inside @media that does layout: { selector, prop, reason }
   fluid: [], // sanctioned clamp() pairs beyond the two tokens: { selector, reason }
-  responsive: [], // JSX responsive variants that do layout: { file, util, reason }
+  responsive: [
+    // SANDBOX — out of scope by instruction, not by merit. app/sandbox/* and
+    // components/sandbox/* are private scratch routes; the migration brief
+    // excludes them explicitly. They carry the same non-monotonic rhythm the
+    // home page had, because home-video is a clone of it. If a sandbox is ever
+    // promoted, it comes into scope with everything else.
+    { file: 'app/sandbox/home-video/page.tsx', util: 'md:pt-20', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/home-video/page.tsx', util: 'xl:pt-16', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/home-video/page.tsx', util: '2xl:pt-28', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/home-video/page.tsx', util: 'xl:space-y-20', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/home-video/page.tsx', util: '2xl:space-y-32', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/show-the-work/page.tsx', util: 'md:mt-40', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/show-the-work/page.tsx', util: 'md:mt-40!', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'app/sandbox/show-the-work/page.tsx', util: 'md:mb-14', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'components/sandbox/video-cover-card.tsx', util: 'md:p-8', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'components/sandbox/video-cover-card.tsx', util: 'md:px-8', reason: 'S3.5 sandbox — excluded by the migration brief' },
+    { file: 'components/sandbox/video-cover-card.tsx', util: 'md:pb-8', reason: 'S3.5 sandbox — excluded by the migration brief' },
+
+    // COMPONENT INSETS — density, the same category S3 allowlisted in CSS. Each
+    // opens a card or a chrome element at md where it gains room. No fluid
+    // token replaces a static inset, and §3.1 forbids inventing a pair for a
+    // relationship nobody has measured, so these stay declared with a reason.
+    { file: 'components/case-study-card.tsx', util: 'md:px-8', reason: 'S3.5 density — card inset opens 24 -> 32 at md' },
+    { file: 'components/case-study-card.tsx', util: 'md:py-12', reason: 'S3.5 density — card inset opens 32 -> 48 at md' },
+    { file: 'components/case-study-card.tsx', util: 'md:mb-8', reason: 'S3.5 density — cover art to title opens at md' },
+    { file: 'components/case-study-card.tsx', util: 'md:p-8', reason: 'S3.5 density — media-tier card inset' },
+    { file: 'components/quick-hits/quick-hit.tsx', util: 'md:px-8', reason: 'S3.5 density — shelf row inset matches the card' },
+    { file: 'components/quick-hits/quick-hits-list.tsx', util: 'md:space-y-8', reason: 'S3.5 density — shelf rows separate further once each is one line' },
+    { file: 'components/site-footer.tsx', util: 'md:px-8', reason: 'S3.5 density — footer inset tracks the page container' },
+    { file: 'components/site-footer.tsx', util: 'md:py-12', reason: 'S3.5 density — footer inset tracks the page container' },
+    { file: 'components/site-header.tsx', util: 'md:gap-6', reason: 'S3.5 density — nav items separate once the header is one row' },
+  ], // JSX responsive variants that do layout: { file, util, reason }
 };
 
 const inList = (list, pred) => list.some(pred);
@@ -177,7 +208,12 @@ function clampPreferred(term) {
  */
 const KNOWN_TOKENS = new Set([...Object.keys(STEPS), ...FLUID]);
 function tokenRef(term) {
-  const m = /^var\(\s*--spacing-([a-z0-9]+)\s*\)$/.exec(term.trim());
+  const t = term.trim();
+  // A plain reference, or a negated one. `calc(var(--spacing-s) * -1)` is how a
+  // negative value stays on the scale instead of reintroducing a literal.
+  const m =
+    /^var\(\s*--spacing-([a-z0-9]+)\s*\)$/.exec(t) ||
+    /^calc\(\s*var\(\s*--spacing-([a-z0-9]+)\s*\)\s*\*\s*-1\s*\)$/.exec(t);
   return m && KNOWN_TOKENS.has(m[1]) ? m : null;
 }
 
@@ -196,7 +232,7 @@ root.walkDecls((d) => {
 });
 function resolveVars(term, depth = 0) {
   if (depth > 4) return term;
-  return term.replace(/var\(\s*(--[\w-]+)\s*(?:,([^)]*))?\)/g, (whole, name, fallback) => {
+  return term.replace(/var\(\s*(--[\w-]+)\s*(?:,((?:[^()]|\([^()]*\))*))?\)/g, (whole, name, fallback) => {
     if (name.startsWith('--spacing-')) return whole; // a token: leave for tokenRef
     if (customProps.has(name)) return resolveVars(customProps.get(name), depth + 1);
     return fallback !== undefined ? fallback.trim() : whole;
