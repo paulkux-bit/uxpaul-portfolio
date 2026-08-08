@@ -183,8 +183,35 @@ scales under browser zoom**, because zoom scales `px` and text-size settings do
 not.
 
 ```css
---spacing-gutter: clamp(24px, 1.2vw + 16px, 48px);
+--spacing-gutter: clamp(24px, 1.786vw + 10.29px, 32px);
 ```
+
+**The maximum is set by `--page-max-width`, not by taste — corrected 8 Aug
+2026.** A first draft capped the gutter at 48px and let it grow across the
+whole viewport range. That was wrong for a reason the same §4 argument should
+have caught: **once the container's `max-width` binds, the container has
+stopped touching the viewport edge, so a wider gutter protects nothing and
+subtracts from the content column for free.**
+
+With `--page-max-width: 72rem` the cap engages near 1216px. Measured cost of
+the first draft:
+
+| Viewport | Content, before | Content, 48px cap | Per card in the 2-up grid |
+|---|---|---|---|
+| 1440 | 1088px | 1085px | 464 → 463 |
+| 1920 | 1088px | 1074px | 464 → 457 |
+| 2560 | 1088px | 1059px | **464 → 449** |
+
+At 2560 each card lost 3.2% of its measure, which is enough to add a line to a
+card headline. The corrected token reaches 32px exactly where the cap engages
+and holds there, returning the content column to 1088px at every width above
+it.
+
+**The rule this generalises to:** a fluid horizontal token must stop growing
+at the viewport where its container's `max-width` binds. Beyond that point it
+is no longer protecting content from an edge — it is taking measure away from
+content that has no edge to fear. Vertical rhythm has no equivalent ceiling,
+which is why only horizontal tokens need this.
 
 ---
 
@@ -364,6 +391,25 @@ scale governing only one authoring surface is not a system. Fails on:
    *name* was in the known set. Checking that a name is legal is not the same
    as checking that it exists. Resolve every referenced token to a definition
    in `@theme`, or fail.
+
+**Prove every assertion in both directions, in S0, before any value moves.**
+Recorded 8 Aug 2026, after three separate checks in this migration passed for
+a reason other than the one intended: a `space-y` grep, a `gap-x` alternation,
+and assertion 2 exempting `--spacing-gutter` only because the check never
+reached it rather than because it was named.
+
+A green check that is green by accident is indistinguishable from a green
+check that is green by design — until the incidental reason evaporates and the
+rule silently stops testing anything. Writing one deliberately failing case
+per assertion costs minutes and is the only way to know a rule tests what its
+name says.
+
+The evidence is in the type system next door. Of `lint:type`'s nine
+assertions, exactly one was ever proved in both directions — 8b, the font-load
+probe, verified against Bricolage giving a 197.3px axis delta and Arial giving
+0.0. That is also the only one whose implementation bug was caught before it
+shipped. The other eight were only ever observed passing or failing in situ,
+which is observation, not proof.
 
 **On what an allowlist entry means.** Media queries and responsive variants
 divide into two kinds, and only one is the migration's business. A rule doing

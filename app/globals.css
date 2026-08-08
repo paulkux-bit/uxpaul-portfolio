@@ -163,8 +163,22 @@
      px gives exactly the behaviour required: HOLDS under text-only
      scaling, still SCALES under browser zoom, because zoom scales px
      and a text-size setting does not. In rem this grew 46% at a 32px
-     root and quietly falsified ruling 4. */
-  --spacing-gutter: clamp(24px, 1.2vw + 16px, 48px);  /* 24 → 48 */
+     root and quietly falsified ruling 4.
+
+     THE MAXIMUM IS SET BY --page-max-width, NOT BY TASTE. A first draft
+     capped this at 48px and let it grow across the whole viewport
+     range. Once the container's max-width binds — near 1216px at
+     72rem — the container has stopped touching the viewport edge, so a
+     wider gutter protects nothing and subtracts from the content column
+     for free. It cost 3.2% of each card's measure at 2560, enough to
+     add a line to a card headline.
+
+     This reaches 32px exactly where the cap engages and holds there.
+     The general rule: a fluid HORIZONTAL token must stop growing at the
+     viewport where its container's max-width binds. Vertical rhythm has
+     no equivalent ceiling, which is why only horizontal tokens need
+     one. */
+  --spacing-gutter: clamp(24px, 1.786vw + 10.29px, 32px);  /* 24 → 32 at 1216 */
 
   /* ARRIVAL CRESCENDO — the second measured pair, added in S5 because it was
      measured, not assumed. The milestone's inset against rung 6
