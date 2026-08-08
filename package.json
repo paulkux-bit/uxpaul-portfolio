@@ -9,6 +9,7 @@
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",
     "lint:type": "node scripts/lint-type.mjs",
+    "lint:space": "node scripts/lint-space.mjs",
     "test": "vitest",
     "regen:oku": "node scripts/regen-oku-tsx.mjs",
     "regen:fdte": "node scripts/regen-fdte-tsx.mjs"

@@ -92,6 +92,62 @@
 }
 
 /* ============================================================
+   THEME — Spacing scale (spacing system v1, §3 + §3.1)
+   Registered in Tailwind's `--spacing-*` namespace ON PURPOSE, not in
+   a private `--sp-*` one. That namespace generates real utilities, so
+   `gap-m`, `pt-section` and `space-y-section` exist in JSX from the
+   same definition that answers `var(--spacing-m)` in CSS. §3.3: a
+   scale governing one authoring surface is not a system, and 117 of
+   this project's spacing declarations live in JSX/MDX where a
+   globals.css parser cannot see them.
+
+   `static` matters MORE here than it did for the axis tokens. Unlike
+   the width and weight namespaces, `--spacing-` IS one Tailwind
+   generates utilities from, so it is exactly the case where tree-shaking
+   drops unreferenced variables. The failure is silent in a new
+   costume: an ungenerated `space-y-section` is an inert class name,
+   the rhythm vanishes, and the lint still passes because the class
+   spelling is correct.
+
+   THE GRID (§3): below 1rem values step by 0.25rem, because small
+   gaps are where a designer legitimately tunes by eye. At and above
+   1rem they step by 0.5rem, because at that size the difference
+   between 96 and 104 is noise, and the coarseness is what stops the
+   scale sprawling back to nineteen values.
+
+   Nothing consumes these yet — S1 through S4 do.
+   ============================================================ */
+
+@theme static {
+  /* Eight static steps. There is no ninth and no per-module value;
+     picking a spacing by eye means working outside the system. */
+  --spacing-3xs: 0.25rem;  /*  4px — hairline offsets, icon nudges   */
+  --spacing-2xs: 0.5rem;   /*  8px — inline label to value           */
+  --spacing-xs:  0.75rem;  /* 12px — eyebrow to title                */
+  --spacing-s:   1rem;     /* 16px — within a control, tight rows    */
+  --spacing-m:   1.5rem;   /* 24px — INTIMATE: title to lede         */
+  --spacing-l:   2rem;     /* 32px — EVIDENCE STEP: prose to screens */
+  --spacing-xl:  3rem;     /* 48px — sub-section separation          */
+  --spacing-2xl: 4rem;     /* 64px — major block separation          */
+
+  /* SECTION BREAK — the one measured pair. Built by multiplying every
+     term of rung 4's clamp (1.875rem, 3vw + 1rem, 3.25rem) by R=2.46,
+     so it shares that rung's crossovers at 467 and 1200 and the ratio
+     holds by arithmetic rather than by looking fluid. Replaces the
+     fixed 6rem AND the 1920 step-up together: the 73% drift and the
+     33% snap both go to zero. Note the direction — less air than
+     today on a 390px phone, more on a wide desktop. */
+  --spacing-section: clamp(4.61rem, 7.38vw + 2.46rem, 8rem);
+
+  /* GUTTER — fluid on VIEWPORT but not on type, and never a pair
+     (§3.1, ruling 4). It is horizontal: its job is holding measure
+     and keeping content off the viewport edge, and neither improves
+     by growing with the reader's text size. A gutter that scales with
+     a 24px root eats the measure it exists to protect. */
+  --spacing-gutter: clamp(1.5rem, 1.2vw + 1.03rem, 3rem);  /* 24 → 48 */
+}
+
+/* ============================================================
    THEME — Color
    `inline` preserves var() references so .dark swaps at runtime.
    ============================================================ */
