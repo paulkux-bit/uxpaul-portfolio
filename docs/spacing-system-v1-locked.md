@@ -411,6 +411,30 @@ probe, verified against Bricolage giving a 197.3px axis delta and Arial giving
 shipped. The other eight were only ever observed passing or failing in situ,
 which is observation, not proof.
 
+**A second discipline, for a failure fixtures cannot catch.** Four things in
+this migration passed review for a reason other than the one intended. Three
+were checks — a grep expecting `{` after a class name, an alternation putting
+`gap` before `gap-x`, an exemption that worked only because a `@theme`
+definition never reaches a declaration walker. Fixtures catch all three.
+
+The fourth was different in kind. §4's argument — that a growing horizontal
+space eats the measure it exists to protect — was correct, and it was applied
+to text-size scaling only. It generalises to viewport scaling the moment a
+container's `max-width` binds, and nothing in the ruleset noticed, because the
+rule was internally consistent. It cost 3.2% of card measure at 2560px and an
+extra line on a card headline.
+
+So: **when a rule's justification generalises, check whether the rule does
+too.** Write the reason next to the rule, then ask what else that reason
+implies. Where it implies more than the rule covers, either widen the rule or
+record why it stops.
+
+This failure class is specific to derived systems. A hand-tuned system has no
+reason to over-generalise from — values are simply right or wrong. The moment
+a system says *spacing derives from type because X*, it creates a claim whose
+scope can quietly mismatch its application. Deriving buys correctness and
+introduces this in exchange.
+
 **On what an allowlist entry means.** Media queries and responsive variants
 divide into two kinds, and only one is the migration's business. A rule doing
 **rhythm** — a section break stepping up at 1920 — is what a fluid token
@@ -437,10 +461,24 @@ eye — above `1rem`, the scale decides.
 
 ## 9. Still open
 
-Nav, footer and button internal spacing. Card meta density. The bento and
-small-multiples grid gaps, which may want their own module rules the way the
-takes wall does in the type system. Print. Whether `--spacing-gutter` should have a
-maximum below the 2xl container width.
+**Nav, footer, buttons and card meta live in `unspecified-surfaces.md`.** Those
+four appear in this §9 *and* in the type system's, which means they are one
+piece of work rather than two — a button has type inside it and spacing around
+that type, and specifying either alone produces something correct in two
+documents and wrong on screen. That file is the single list; when it is done,
+this entry goes and the file is deleted rather than becoming a third place the
+answer lives.
+
+Spacing-only, and still open here: the bento and small-multiples grid gaps,
+which may want their own module rules the way the takes wall does in the type
+system. Print.
+
+**Closed 8 Aug 2026:** whether `--spacing-gutter` needs a maximum below the
+container width. It does, and the maximum is not a matter of taste — it is set
+by the viewport at which `--page-max-width` binds. See §3.1.
+
+**Scheduled, not open:** R = 2.46 is revisited once three case studies can be
+read in sequence. One number, one token; see §3.1.
 
 None of these block the migration. All of them block calling the system
 complete.
