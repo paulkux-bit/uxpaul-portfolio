@@ -264,9 +264,9 @@ retired by R2, and `text-cover` plus the media-tier card `<h2>` are now 94.
 
 **Spacing is its own locked system now** — `docs/spacing-system-v1-locked.md`,
 enforced by `npm run lint:space`, which gates `npm run build` beside
-`lint:type`. Eight static steps plus three fluid pairs, all in `rem` so they
-grow with the reader's root setting, registered in Tailwind's `--spacing-*`
-namespace so one definition serves `var(--spacing-m)` in CSS and `gap-m` in JSX.
+`lint:type`. Eight static steps, two measured fluid pairs and one fluid gutter,
+registered in Tailwind's `--spacing-*` namespace so one definition serves
+`var(--spacing-m)` in CSS and `gap-m` in JSX.
 
 - **Intimate** → `--spacing-m`. **Evidence step** → `--spacing-l`.
   **Section break** → `--spacing-section`.
@@ -275,9 +275,18 @@ namespace so one definition serves `var(--spacing-m)` in CSS and `gap-m` in JSX.
   between 1440 and 1919 before snapping at 1920. `--spacing-section` is one
   continuous curve holding 2.46 against rung 4 with 0.0000% drift.
   Section breaks are space, not rules (the footer hairline is the one structural line).
-- **Never author a raw spacing value.** No ninth step, no px, no `em` on
-  block-level spacing, no responsive spacing utility in JSX. Each is a lint
-  assertion, and each allowlist entry carries a one-line reason.
+- **Vertical scales, horizontal holds.** Layout spacing is `rem` so rhythm
+  tracks reading size. `--spacing-gutter` is `px` on purpose: a gutter is a
+  container edge protecting measure, not rhythm, and growing it at a 32px root
+  takes from a column whose characters-per-line has already halved. `px` holds
+  under text-only scaling and still scales under browser zoom, which is exactly
+  the behaviour wanted. Measured: vertical +75.5% at a 32px root, gutter flat.
+- **Never author a raw spacing value.** No ninth step, no `em` on block-level
+  spacing, no responsive spacing utility in JSX, and no `px` outside the two
+  permanent exceptions §3.2 names — `--spacing-gutter` and `.sr-only`'s `-1px`
+  clip idiom. Both are exempted in the lint by name, not allowlisted, so
+  neither reads as debt awaiting cleanup. Each rule is an assertion, and each
+  allowlist entry carries a one-line reason.
 
 `docs/typography-system.md` §11's spacing notes are superseded along with the
 rest of that file.

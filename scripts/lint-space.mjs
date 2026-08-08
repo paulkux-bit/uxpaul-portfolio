@@ -57,6 +57,11 @@ const SR_ONLY_EXCEPTION = { selector: '.sr-only', prop: 'margin', value: '-1px' 
 // gutter takes from a measure that has already halved) while still responding
 // to browser zoom. px is the only unit that does both. Named here rather than
 // allowlisted so nobody "cleans it up" later.
+//
+// Assertion 2 consults this BY NAME rather than relying on the fact that a
+// @theme definition is not a spacing declaration and so never reaches it. That
+// incidental safety would evaporate the moment anyone inlined the clamp on a
+// container, and it records nothing about intent where the rule lives.
 const PX_EXCEPTION_TOKENS = new Set(['--spacing-gutter']);
 
 // ── Allowlist ──────────────────────────────────────────────────────────────
@@ -360,10 +365,14 @@ const blindSpots = [];
 // 2 — no px; no em on block-level layout spacing (§3.2).
 {
   const f = [];
+  const fromPxException = (v) =>
+    [...PX_EXCEPTION_TOKENS].some((t) => resolveVars(v).includes(t) || v.includes(t));
   for (const d of decls) {
-    if (isSrOnly(d)) continue;
+    if (isSrOnly(d)) continue; // §3.2 exception 1, by name
     const v = d.value;
-    if (/(?<![\w-])-?[\d.]+px/.test(v))
+    // §3.2 exception 2, by name: px reaching a declaration THROUGH one of the
+    // named px tokens is the system working, not a defect.
+    if (/(?<![\w-])-?[\d.]+px/.test(v) && !fromPxException(v))
       f.push({ where: `${CSS_FILE}:${d.line}`, detail: `px — ${d.sel} { ${d.prop}: ${v} }` });
     if (/(?<![\w-])-?[\d.]+em(?![a-z])/.test(v) && EM_BANNED_PROP.test(d.prop))
       f.push({
