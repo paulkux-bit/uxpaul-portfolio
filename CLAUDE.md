@@ -262,13 +262,25 @@ retired by R2, and `text-cover` plus the media-tier card `<h2>` are now 94.
 4. **Eyebrow/Caption** (sentence-case section labels, project·client meta) — tracking.
 5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
 
-**Two-scale spacing** (drama through contrast, not uniform Tailwind rhythm):
-- **Intimate** 12–24px within groups (hero beat-groups 20px; label→grid 24px;
-  card title→meta 8–12px).
-- **Sectional** 96 / 80 / 128px (base / xl / 2xl) between sections + above footer.
+**Spacing is its own locked system now** — `docs/spacing-system-v1-locked.md`,
+enforced by `npm run lint:space`, which gates `npm run build` beside
+`lint:type`. Eight static steps plus three fluid pairs, all in `rem` so they
+grow with the reader's root setting, registered in Tailwind's `--spacing-*`
+namespace so one definition serves `var(--spacing-m)` in CSS and `gap-m` in JSX.
+
+- **Intimate** → `--spacing-m`. **Evidence step** → `--spacing-l`.
+  **Section break** → `--spacing-section`.
+- **The 1920 step-up is retired.** Sectional spacing was 96 / 80 / 128px across
+  base / xl / 2xl, which was *non-monotonic* — the home page's rhythm tightened
+  between 1440 and 1919 before snapping at 1920. `--spacing-section` is one
+  continuous curve holding 2.46 against rung 4 with 0.0000% drift.
   Section breaks are space, not rules (the footer hairline is the one structural line).
-Spacing rationale in `docs/typography-system.md` §11 (that file is superseded on
-type, but its spacing section stands).
+- **Never author a raw spacing value.** No ninth step, no px, no `em` on
+  block-level spacing, no responsive spacing utility in JSX. Each is a lint
+  assertion, and each allowlist entry carries a one-line reason.
+
+`docs/typography-system.md` §11's spacing notes are superseded along with the
+rest of that file.
 
 The `wdth` (and `opsz`) axes only render because `app/fonts.ts` loads them via
 `axes: ['opsz','wdth']`. Omitting that ships `wght`-only and silently disables

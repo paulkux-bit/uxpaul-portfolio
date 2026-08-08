@@ -8,12 +8,16 @@ change. **Not a spec.** The spec follows once the direction is agreed.
 
 ## 1. What you have, measured
 
-**Nineteen distinct spacing values** across margin and padding: 0.25, 0.35,
+**Nineteen distinct spacing values** across margin and padding (**corrected: the
+audit found three more — `0.125rem`, `0.55rem`, `0.6rem` — and higher counts on
+four of the seven off-grid values; see the locked doc §6**): 0.25, 0.35,
 0.4, 0.5, 0.625, 0.75, 0.875, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4, 5, 6,
 8rem. Twelve more in `gap`, overlapping but not identical.
 
-**Roughly 200 media-query blocks touch spacing**, across six breakpoints: 640,
-767, 768, 899, 1024 and 1920.
+~~**Roughly 200 media-query blocks touch spacing**, across six breakpoints: 640,
+767, 768, 899, 1024 and 1920.~~ **CORRECTED 8 Aug 2026: 25 blocks, 36
+declarations, eight params.** 200 counted every declaration inside `@media` of
+any property (179) or every rule block inside one (94). See the locked doc §6.
 
 **Exactly one `clamp()` appears in spacing** — `padding: clamp(2rem, 4vw,
 3.5rem) clamp(1.5rem, 3vw, 3rem)` at `globals.css:1429`.
