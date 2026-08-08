@@ -2087,6 +2087,23 @@ html.dark .oku-figure {
   border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
 }
 
+/* STALE: depicts the pre-v2 palette. Do not render until the pinned-specimen
+   surface is resolved (docs/unspecified-surfaces.md, entry 5).
+
+   These are pinned specimens: a light/dark comparison pair must NOT swap with
+   the theme, so they cannot take a semantic token. They are also already wrong.
+   Measured against v2, the light cell carries a QUARTER of the canvas chroma
+   (0.004 vs 0.016) and the dark cell TWICE it (0.012 vs 0.006), while lightness
+   is nearly right — so they depict a light mode that is almost neutral and a
+   dark mode warmer than its own ground. That is the palette v2 replaced,
+   inverted. It has never shipped as a visible lie only because ModePair is
+   used in zero .mdx files.
+
+   Not fixed here on purpose: hand-correcting them writes the palette down a
+   second place, and it goes stale again the moment layer 1 moves. The real
+   answer is a specimen that references the other mode's actual value, which
+   needs the token layer to expose light and dark by name rather than only
+   through the cascade. That is a layer-1 restructure. */
 .mode-pair__cell--light { background: oklch(0.985 0.004 75); }
 .mode-pair__cell--dark  { background: oklch(0.17 0.012 55); }
 
@@ -2104,6 +2121,10 @@ html.dark .oku-figure {
   z-index: 2;
 }
 
+/* STALE: same pinned-specimen deferral as the cells above. The alpha here is
+   legitimate under R1 — a label plate is a state layer, not a named surface —
+   but the mix's BASE is one of the stale values, so this must come back as a
+   token plus alpha rather than surviving the cleanup by looking considered. */
 .mode-pair__cell--dark .mode-pair__label {
   color: oklch(0.94 0.006 80);
   background: color-mix(in oklch, oklch(0.94 0.006 80) 10%, transparent);
@@ -2450,10 +2471,24 @@ html.dark .oku-figure {
   padding: 0 var(--spacing-2xs);
 }
 
-/* Fixed warm-oklch placeholder tones — sandbox stand-ins for fixed-pixel
-   screenshots that do NOT swap with the theme. Sandbox-only exception to the
-   tokens-only rule (real images are theme-independent pixels too). These omit
-   `.figure-placeholder`, so its mode-aware background can't override the tone. */
+/* STALE: depicts the pre-v2 palette. Do not render until the pinned-specimen
+   surface is resolved (docs/unspecified-surfaces.md, entry 5).
+
+   Fixed placeholder tones standing in for fixed-pixel screenshots, which do not
+   swap with the theme. They omit `.figure-placeholder` so its mode-aware
+   background cannot override the tone.
+
+   This comment previously called them a "sandbox-only exception to the
+   tokens-only rule". That was false: the class is emitted by
+   components/bento.tsx, which the BARD and FDT-E case studies both use. It
+   renders nowhere today only because no manifest sets `tone` — live-capable
+   dead CSS, not sandbox-scoped. Setting `tone` on a manifest enables this; it
+   does not fix it.
+
+   Already wrong against v2: the light tone carries HALF the canvas chroma
+   (0.008 vs 0.016) and the dark tone is drifting off --bg-surface (0.012 at
+   L 0.220 vs 0.014 at L 0.205). Left as literals deliberately — see the
+   ModePair note above for why hand-correcting is the wrong repair. */
 .bento-theme__placeholder--light {
   background: oklch(0.97 0.008 80);
 }

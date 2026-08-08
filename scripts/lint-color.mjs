@@ -42,6 +42,31 @@ const ALPHA_ALLOWED = /^--(focus-ring|focus-glow|shadow-rest|shadow-hover)$/;
 const ALLOWLIST = {
   literals: [], // inline colours that may stay: { selector, prop, reason }
   pairs: [], // text-on-surface pairs exempt from a floor: { text, surface, mode, reason }
+
+  // Consumed by check 7 (the literal sweep), which lands in K5. Written in K4
+  // because the ENTRY IS THE DEFERRAL RECORD: these eight are not absolved,
+  // they are parked with a reason, and the lint is meant to keep surfacing
+  // them. Nothing reads this array yet — that is the one commit's gap between
+  // recording the decision and enforcing it.
+  //
+  // All eight are pinned specimens: a colour whose job is to NOT follow the
+  // theme, so no semantic token can serve it. They are also all stale, fossils
+  // of the pre-v2 palette that depict a near-neutral light mode and a dark mode
+  // warmer than its own ground. Correcting them by hand would write the palette
+  // down a second time and go stale again on the next layer-1 move. The
+  // resolution is a specimen that references the other mode's actual value,
+  // which needs layer 1 to expose light and dark by name.
+  // See docs/unspecified-surfaces.md entry 5.
+  specimens: [
+    { selector: '.mode-pair__cell--light', prop: 'background', reason: 'STALE pinned specimen: 0.985 0.004 75, a quarter of canvas chroma. Deferred to the pinned-specimen surface.' },
+    { selector: '.mode-pair__cell--dark', prop: 'background', reason: 'STALE pinned specimen: 0.17 0.012 55, twice canvas chroma. Deferred to the pinned-specimen surface.' },
+    { selector: '.mode-pair__cell--dark .mode-pair__label', prop: 'color', reason: 'STALE pinned specimen: label plate on a pinned cell. Deferred.' },
+    { selector: '.mode-pair__cell--dark .mode-pair__label', prop: 'background', reason: 'STALE pinned specimen: R1 permits the alpha (state layer), but the mix BASE is a stale literal. Must return as token + alpha, not a literal mix.' },
+    { selector: '.bento-theme__placeholder--light', prop: 'background', reason: 'STALE pinned specimen: 0.97 0.008 80, half of canvas chroma. Renders only when a manifest sets tone.' },
+    { selector: '.bento-theme__placeholder--light .bento-theme__plabel', prop: 'color', reason: 'STALE pinned specimen: label on a pinned tone. Deferred.' },
+    { selector: '.bento-theme__placeholder--dark', prop: 'background', reason: 'STALE pinned specimen: 0.22 0.012 60, drifting off --bg-surface. Renders only when a manifest sets tone.' },
+    { selector: '.bento-theme__placeholder--dark .bento-theme__plabel', prop: 'color', reason: 'STALE pinned specimen: label on a pinned tone. Deferred.' },
+  ],
 };
 const inList = (l, p) => l.some(p);
 
