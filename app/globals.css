@@ -192,6 +192,40 @@
 }
 
 /* ============================================================
+   THEME — Colour tuning primitives (colour system v2, §3)
+   Layer 1. The palette's temperature lives here and nowhere else.
+
+   CHROMA IS A UNIT AND INTEGER MULTIPLIERS. All 24 chroma values in
+   both modes are exact multiples of 0.002 — multipliers 2, 3, 6, 7, 8,
+   9, 10, 11, 13, 14, 15, 17, 20, no remainders — so the whole palette
+   expresses against one unit with no arithmetic beyond multiplication,
+   and without changing a single shipped value.
+
+   HUE IS A BAND PLUS A SIGNED OFFSET, because the bands carry real
+   internal variance: light grounds span 66-76, dark grounds 55-60.
+
+   SAME NAMES IN BOTH MODES, redefined in .dark, rather than -light and
+   -dark vocabularies. The bands SWAP between modes — light text sits at
+   55 while light grounds run 66-76; dark text is 68-78 while dark
+   grounds run 55-60. One vocabulary makes that inversion legible as a
+   per-mode setting of the same role; two would hide it and let the
+   modes drift apart with nothing noticing.
+
+   R4 is about DEPENDENCE, not about literals. A literal value makes a
+   token independent — it stops moving when its primitive moves, which
+   is how the last palette drifted one hand-tuned token at a time. A
+   multiplier or a degree offset preserves dependence. Lightness is
+   authored directly: it carries no temperature and belongs to no band.
+   ============================================================ */
+
+@theme static {
+  --chroma-unit:  0.002;   /* warmth INTENSITY — one knob, both modes */
+  --hue-ground:   70;      /* grounds and their borders */
+  --hue-surface:  68;      /* raised surfaces */
+  --hue-text:     55;      /* the text ramp */
+}
+
+/* ============================================================
    THEME — Color
    `inline` preserves var() references so .dark swaps at runtime.
    ============================================================ */
@@ -308,6 +342,14 @@
    ============================================================ */
 
 .dark {
+  /* Layer 1, per-mode. The bands SWAP: light text is 55 against grounds at
+     66-76; dark text is 68-78 against grounds at 55-60. Same names, inverted
+     settings — that is the point of one vocabulary. --chroma-unit is not
+     redefined; warmth intensity is one knob for both modes. */
+  --hue-ground:   55;
+  --hue-surface:  60;
+  --hue-text:     74;
+
   --bg-canvas:              oklch(0.165 0.020 50);
   --bg-surface:             oklch(0.205 0.024 50);
   --bg-surface-elevated:    oklch(0.255 0.028 50);
