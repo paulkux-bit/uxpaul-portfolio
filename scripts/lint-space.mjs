@@ -245,6 +245,13 @@ const blindSpots = [];
       // still has 4rem and 1.5rem checked; exempting whole declarations would
       // blind this to 51 of them.
       if (isZero(raw) || isKeyword(raw)) continue;
+      // §3.2-permitted em. Assertion 1 read alone would fail these, which would
+      // make §3.2 unreachable: it names three declarations that "stay", and a
+      // scale token cannot express an optical offset that must track the text
+      // beside it. Assertion 2 owns the em rule and enforces the block-level
+      // ban; this defers to it rather than contradicting it. Hard-coded like
+      // the sr-only idiom, not allowlisted — a permanent unit rule is not debt.
+      if (/^-?[\d.]+em$/.test(raw) && !EM_BANNED_PROP.test(d.prop)) continue;
       if (tokenRef(raw)) continue;
       const resolved = resolveVars(raw);
       if (tokenRef(resolved)) continue;
