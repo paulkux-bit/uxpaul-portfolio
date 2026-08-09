@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run lint:type && npm run lint:space && npm run lint:color && npm run lint:interaction && next build",
+    "build": "npm run lint:type && npm run lint:space && npm run lint:color && next build",
     "start": "next start",
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",

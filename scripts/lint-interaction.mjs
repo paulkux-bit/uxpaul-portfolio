@@ -9,6 +9,11 @@
 // Fourth in the family, after lint-type, lint-space and lint-color. Same house
 // style, same postcss dependency, same allowlist-with-a-reason discipline.
 //
+// Not wired into `npm run build` until I6, mirroring lint:color, which entered
+// the build script in df70f8f — the FINAL commit of the colour migration — and
+// carried this same note until then. A checklist that gates the build blocks
+// preview deploys for the whole migration.
+//
 // THIS SCRIPT IS THE MIGRATION CHECKLIST. It is red on purpose at I0. Each
 // later commit turns assertions green by changing the CODE. The rules are
 // written once, at full strength, here, and are not softened afterwards: a rule
@@ -62,6 +67,12 @@ export const ALLOWLIST = {
 const inList = (l, p) => l.some(p);
 
 const SKIP_DIRS = new Set(['node_modules', '.next', '.git', '_to_delete', 'dist', 'out', 'coverage', '.vercel']);
+
+// Sandbox is scratch space under a standing do-not-touch instruction, so it
+// cannot gate. It is counted and PRINTED EVERY RUN rather than skipped: a
+// surface excluded silently is a surface nobody remembers is excluded.
+const SANDBOX = ['app/sandbox/', 'components/sandbox/'];
+export const isSandboxPath = (rel) => SANDBOX.some((d) => rel.startsWith(d));
 const TSX_EXTS = new Set(['.tsx', '.mdx']);
 
 // ── Patterns ───────────────────────────────────────────────────────────────
@@ -97,8 +108,13 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
   const cssFiles = all.filter((f) => extname(f) === '.css' && (includeFixtures || !isFixturePath(f)));
 
   const checks = [];
-  const add = (id, title, failures, excluded = []) =>
-    checks.push({ id, title, failures, excluded, pass: failures.length === 0 });
+  // Sandbox findings are split out of `failures` into `sandbox` so they neither
+  // gate nor vanish.
+  const add = (id, title, failures, excluded = []) => {
+    const sandbox = failures.filter((x) => isSandboxPath(x.where.split(':')[0]));
+    const gated = failures.filter((x) => !isSandboxPath(x.where.split(':')[0]));
+    checks.push({ id, title, failures: gated, sandbox, excluded, pass: gated.length === 0 });
+  };
 
   // Parse every stylesheet once.
   const sheets = [];
@@ -418,13 +434,24 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         if (list.length > 8) console.log(`        … and ${list.length - 8} more in this file`);
       }
     }
+    if (c.sandbox.length) {
+      const files = [...new Set(c.sandbox.map((x) => x.where.split(':')[0]))];
+      console.log(`    SANDBOX  ${c.sandbox.length} in ${files.length} file${files.length === 1 ? '' : 's'} — informational, does not gate`);
+      for (const file of files.sort()) console.log(`      ${file}  (${c.sandbox.filter((x) => x.where.startsWith(`${file}:`)).length})`);
+    }
     console.log('');
   }
+  const sandboxTotal = checks.reduce((a, c) => a + c.sandbox.length, 0);
+  console.log(`SANDBOX — ${sandboxTotal} finding${sandboxTotal === 1 ? '' : 's'} under a standing do-not-touch`);
+  console.log('  instruction. Counted and printed, never silently skipped, so the');
+  console.log('  exclusion stays visible. Excluded from pass/fail by ruling 2.\n');
   console.log('UNCHECKED — stated rather than implied:');
   console.log('  - §2.3 "every container that sets font-weight and holds an icon sets');
   console.log('    --icon-stroke" is only half mechanical. Check 6 validates every value');
   console.log('    it finds and flags every ungoverned icon, but cannot resolve which CSS');
   console.log('    selector wraps a given JSX node. The containment half is manual.');
+  console.log('  - Cross-file class composition: check 6 resolves an icon\'s ancestors');
+  console.log('    within one file, not a class applied by a parent component elsewhere.');
   console.log('  - Runtime stroke is not measured. Check 6 reads authored values only.\n');
   const passing = checks.filter((c) => c.pass).length;
   console.log(
