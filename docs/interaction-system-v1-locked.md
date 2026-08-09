@@ -84,8 +84,54 @@ tracks metrics per placement.
 .icon { width: 1em; height: 1em; flex: none; stroke-width: var(--icon-stroke, 1.70); }
 ```
 
-Every container that sets `font-weight` and holds an icon sets `--icon-stroke`
-from the table beside it. Size needs no declaration at all — `1em` inherits.
+**The container that holds an icon declares `--icon-stroke`** from the table
+beside it. 1.70 is the default because weight 500 is the commonest adjacent
+weight here.
+
+**The icon must be put into its type context, because it is usually not already
+in one.** An earlier version of this section said "size needs no declaration at
+all — `1em` inherits", and paired it with "every container that sets
+`font-weight` and holds an icon sets `--icon-stroke`". Both sentences assume the
+icon is a **descendant** of the element carrying the adjacent type. Measured
+against the four surfaces this system governs, that is true of exactly one:
+
+| surface | relation to the adjacent type | so |
+|---|---|---|
+| `.about-btn` | descendant | inherits correctly; nothing to add |
+| `.about-work-band` | **sibling** of `__label` (`text-h3`) | icon carries `text-h3` |
+| `.about-row__summary` | **sibling** of three spans at two rungs | icon carries `text-h3` |
+| `.theme-toggle` | **no adjacent text at all** | container declares the context |
+
+**The rung goes on the icon node, not on the container.** Putting the type
+utility on the container is the tidier-looking fix and it leaks: `text-h3` also
+carries `letter-spacing` and `line-height`, and `text-small` — which the drawer
+row's role and year use — declares neither, so the tracking would inherit into
+both. On an `<svg>` those same declarations are **inert**, because it is a
+replaced element. That is the whole reason this placement is safe, and it is the
+reason to prefer it.
+
+Not the alternative of setting `font-size` on the icon's own class: that copies a
+rung's clamp into a component rule, which is drift. `.about-row__mark` already
+carried such a copy and this migration removed it.
+
+**Which sibling is "adjacent" is a judgment, and it is recorded.**
+`.about-row__summary` holds a company (`text-h3`, weight 500), a role and a year
+(`text-small`, weight 400). The company is the row's subject and the mark is
+optically centred against its first line, so the mark takes `text-h3` and 1.70.
+The choice moves the stroke between 1.70 and 1.43 and the box between 25.2px and
+16px, so it is not a detail.
+
+**An icon with no adjacent text takes the nearest type in its chrome, declared
+explicitly.** `.theme-toggle` has no text inside it. Its adjacent type is the
+wordmark — 1rem at weight 600, the only other type in the header — so it strokes
+at **1.95** and declares `font-size: 1rem; font-weight: 600` itself. The weight
+is inert there; it exists to state the context, which is what makes the
+containment rule resolvable at all. A judgment, not a derivation.
+
+**A descendant selector can silently outrank `.icon`.**
+`.theme-toggle svg { width: 1.125rem }` at (0,1,1) beats `.icon` at (0,1,0), and
+would have pinned the converted icons to 18px with every check green. Size an
+icon through `.icon` or not at all.
 
 ### 2.4 Out of scope
 
@@ -316,10 +362,21 @@ min-height   44px                 (touch target, unchanged)
 padding      --spacing-2xs / --spacing-m
 radius       --radius-m
 label        weight 500 → --icon-stroke: 1.70
-gap          0.5em                (scales with the label)
+gap          --spacing-2xs
+pressed      translateY(1px)      (§5; no resting shadow to drop)
 ```
 
 A second size gets added when a second real use appears, not before.
+
+**Two rows corrected.** `gap` was written here as `0.5em "(scales with the
+label)"`; the code has always used `--spacing-2xs`, and an `em` gap would in any
+case collide with spacing v1's ruling on `em` in block-level spacing. `pressed`
+was added because §5's Button row specified "sink 1px + drop to
+`--shadow-rest`" for an element that has no shadow at rest — only the card
+does.
+
+This is the surface where §2.3's "1em inherits" is true as written: the icon is a
+descendant of the element carrying the label, so it needs no rung of its own.
 
 ---
 
@@ -413,6 +470,18 @@ Fixtures assert a positive result — "scanned, N found, M excluded" — never t
 absence of output. A negative control that stops appearing is indistinguishable
 from a file that was never opened, which is how the `.mdx` gap hid during the
 colour migration.
+
+**Every section of this document that enumerated shipped code got it wrong.** §4's
+map omitted a 16px card and mistook two visible changes for six; §5's table
+described a hover that had been deleted, an offset off by a pixel, an underline
+called a border, and a shadow on an element that has none; §2.3's implementation
+rule held for one of the four surfaces it governs; §6 named a gap the code has
+never used. Each was found by reading the code during the migration that touched
+it — never by a gate, because the gates were derived from the same reading.
+
+The rate is the finding. A spec written from an audit inherits that audit's blind
+spots, and a check written from the spec cannot see past them. Anything here that
+claims what the code does is a claim to re-derive, not to trust.
 
 **A rule can be the untested half too.** §4's radius map was written by an audit
 that grepped CSS and never read JSX, and check 3 enforced it with the identical
