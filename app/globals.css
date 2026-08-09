@@ -901,6 +901,22 @@
   border-color: var(--border-strong);
 }
 
+/* Pressed (§5). AUTHORED AFTER THE HOVER ON PURPOSE — equal specificity means
+   source order decides, and an :active written above would never apply while
+   the pointer is down. This is the sharpest case on the site: hover is -3px and
+   pressed is +1px, so a press from a hovered card is a 4px move that would
+   vanish completely if these two rules swapped places, with every rest and
+   hover pixel still identical.
+
+   :active lands on the <article> rather than the stretched title link because
+   the browser applies it up the activation chain — verified in the browser, not
+   assumed. Border stays --border-strong: the surface is still hovered, and §5
+   changes only the offset and the shadow. */
+.case-card--linked:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-rest);
+}
+
 /* Nav links — chromatic restraint at rest; weight + neutral underline
    carry the active route. Color shift is the only chromatic moment,
    on hover (inherited from the base `a` rule). */
@@ -913,6 +929,10 @@
 .nav-link:hover {
   color: var(--text-primary);
   text-decoration-line: underline;
+}
+/* Pressed (§5): sink 1px. After the hover, per the cascade note on the card. */
+.nav-link:active {
+  transform: translateY(1px);
 }
 .nav-link[data-active] {
   color: var(--text-primary);
@@ -943,6 +963,10 @@
 .theme-toggle:hover {
   color: var(--text-primary);
   border-color: var(--border-strong);
+}
+/* Pressed (§5): sink 1px. */
+.theme-toggle:active {
+  transform: translateY(1px);
 }
 .theme-toggle svg {
   width: 1.125rem;
@@ -3133,6 +3157,15 @@ html.dark .figure-placeholder {
   background: var(--text-secondary);
 }
 
+/* Pressed (§5): sink 1px, and NOTHING ELSE. §5's row also said "drop to
+   --shadow-rest", which is vacuous here — .about-btn has no box-shadow at rest,
+   so there is nothing to drop. Only the card carries a resting shadow, via
+   @utility lift. The row is corrected in this commit rather than implemented
+   as written. */
+.about-btn:active {
+  transform: translateY(1px);
+}
+
 /* Text links beside the button. --border-interactive rather than
    --border-default: an underline is the affordance, so it owes 3:1. */
 .about-link {
@@ -3533,6 +3566,16 @@ html.dark .figure-placeholder {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
   text-decoration-color: var(--border-interactive);
+}
+
+/* Pressed (§5): the BAND sinks, not the arrow and the label separately.
+   .about-work-band is the <Link> — the interactive surface — and its hover is
+   expressed on two descendants, which is why check 7 reported it twice. An
+   :active on the ancestor covers both, and sinking the two children
+   independently to satisfy a selector-string rule would have been a worse
+   interface. Authored after both hover rules. */
+.about-work-band:active {
+  transform: translateY(1px);
 }
 
 /* ── Credentials ──────────────────────────────────────────────────────────

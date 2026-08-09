@@ -388,6 +388,58 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
   });
 });
 
+// ── §5's pressed states, guarded ───────────────────────────────────────────
+//
+// Check 7 proves an :active EXISTS and is authored after its :hover. It does not
+// prove the :active says what §5 says — translateY(4px) would pass it. Same gap
+// the I2 motion and I3 radius guards were written for.
+describe('§5 pressed states — the specified values, on the specified surfaces', () => {
+  const src = readFileSync(join(REPO, 'app', 'globals.css'), 'utf8');
+  const css = postcss.parse(src);
+  const activeDecls = (selector) => {
+    const out = new Map();
+    css.walkRules((r) => {
+      if (!r.selector.split(',').some((s) => s.trim() === `${selector}:active`)) return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl') out.set(d.prop, d.value.trim());
+    });
+    return out;
+  };
+
+  // Every surface sinks by exactly 1px. §5 chose the sink over scale and tint.
+  for (const sel of ['.case-card--linked', '.about-btn', '.nav-link', '.theme-toggle', '.about-work-band']) {
+    it(`${sel}:active sinks 1px`, () => {
+      const d = activeDecls(sel);
+      expect(d.size, `${sel}:active has no declarations`).toBeGreaterThan(0);
+      expect(d.get('transform')).toBe('translateY(1px)');
+    });
+  }
+
+  // Only the card has a resting shadow to drop, so it is the only row where the
+  // shadow half of §5 means anything.
+  it('the card drops to --shadow-rest; nothing else claims a shadow it lacks', () => {
+    expect(activeDecls('.case-card--linked').get('box-shadow')).toContain('--shadow-rest');
+    for (const sel of ['.about-btn', '.nav-link', '.theme-toggle', '.about-work-band']) {
+      expect(activeDecls(sel).has('box-shadow'), `${sel} has no resting shadow to drop`).toBe(false);
+    }
+  });
+
+  // The exemptions are decisions, so they are asserted rather than left as the
+  // absence of a rule — which is what an oversight also looks like.
+  it('the two exempt surfaces have NO :active, by design', () => {
+    for (const sel of ['a', '.quiet-link', '.case-card__title-link', '.about-row__summary']) {
+      expect(activeDecls(sel).size, `${sel} should have no :active (§5)`).toBe(0);
+    }
+  });
+
+  // The work band sinks as a band. If this ever becomes two descendant rules,
+  // the interface got worse to satisfy a selector-string reading of check 7.
+  it('the work band sinks itself, not its arrow and label separately', () => {
+    expect(activeDecls('.about-work-band').get('transform')).toBe('translateY(1px)');
+    expect(src).not.toContain('.about-work-band:active .about-work-band__arrow');
+    expect(src).not.toContain('.about-work-band:active .about-work-band__label');
+  });
+});
+
 // ── The radius mapping, guarded ────────────────────────────────────────────
 //
 // Check 3 proves a radius is TOKENISED. It does not prove the token is the

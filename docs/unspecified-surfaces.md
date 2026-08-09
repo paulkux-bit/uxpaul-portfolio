@@ -78,6 +78,19 @@ live-capable dead CSS today:
   BARD and FDT-E case studies both use — it is not sandbox-scoped, whatever the
   old comment claimed.
 
+**This is now a property of the repo, not a run of bad luck: five kinds.**
+`ModePair`, the bento tones, `CardMediaSlot` (resolved by deletion in
+`099a172`), the takes wall (`components/takes/*`, rendered on no route), and —
+found while migrating radius in I3 — five styled surfaces that return zero
+instances on every route: `.mode-pair__cell`, `.mode-pair__label`,
+`.figure-placeholder`, `.hero-block__image-frame .figure-placeholder` and
+`.figure--constrained-bleed .figure__image`.
+
+Every migration so far has paid to move CSS that reaches no reader, and twice a
+spec has claimed a visible change that could not be seen. Recorded so the next
+person weighs deletion against migration; **not** an invitation to go hunting for
+a sixth.
+
 Setting `tone` on a manifest, or dropping a `ModePair` into a case study, ships
 a widget that misrepresents the site's own colour — on a portfolio whose thesis
 is colour judgement. All eight are allowlisted in `scripts/lint-color.mjs`

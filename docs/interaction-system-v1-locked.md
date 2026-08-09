@@ -239,16 +239,64 @@ unchanged and every control continues to inherit it.
 | Surface | Hover | Pressed |
 |---|---|---|
 | Text link | colour + underline (two channels, unchanged) | none — text has no surface to move |
-| Nav link | colour + bottom border | sink 1px |
-| Button | background `--text-primary` → `--text-secondary` | sink 1px + drop to `--shadow-rest` |
+| Nav link | colour + underline | sink 1px |
+| Button | background `--text-primary` → `--text-secondary` | sink 1px |
 | Theme toggle | colour + border `--border-strong` | sink 1px |
-| Card | `translateY(-3px)` + `--shadow-hover` + `--border-strong` + media `scale(1.03)` | sink 1px + drop to `--shadow-rest` |
-| Work band | arrow `translateX(4px)` + label underline | sink 1px |
+| Card | `translateY(-3px)` + `--shadow-hover` + `--border-strong` | sink 1px + drop to `--shadow-rest` |
+| Work band | arrow `translateX(3px)` + label underline | sink 1px, **on the band** |
 | Disclosure row | colour | none — the rotation is the feedback |
 
-**Pressed is `translateY(1px)` and a drop to the resting shadow.** Chosen over
-scale because scaling a large card reads as the layout breaking, and over tint
-because tint nearly vanishes on the dark ground.
+**Pressed is `translateY(1px)`, and a drop to the resting shadow wherever there
+is one to drop.** Chosen over scale because scaling a large card reads as the
+layout breaking, and over tint because tint nearly vanishes on the dark ground.
+
+**Only the card has a resting shadow** (via `@utility lift`), so it is the only
+row where the shadow half means anything. The button, nav link, theme toggle and
+work band sink and do nothing else.
+
+**The work band sinks as a band.** It is a single `<Link>` whose hover is
+expressed on two descendants, so `lint:interaction` check 7 reports it twice; the
+`:active` belongs on the surface being pressed, not on the arrow and the label
+independently.
+
+**A transitioned press cannot finish inside a tap, and only the card
+transitions one.** Measured on an emulated device with a real tap: the four
+controls have no `transform` transition, so they snap to the full 1px and hold it
+for ~150ms. The card transitions `transform` at `--duration-card` (300ms) via
+`@utility lift`, so a ~43ms tap reaches **0.53px** and eases back without ever
+arriving at the specified offset. Held with a mouse it reaches 1px exactly.
+
+This is §3 and §5 meeting where neither section looks: §3 assigns the card its
+duration for lift and shadow, §5 specifies the pressed offset, and the tap is
+shorter than the transition. Recorded rather than changed — altering it means
+changing motion, which is a locked system, and the pressed value itself is
+correct. **Open**: whether the press should run at `--duration-control` on every
+surface.
+
+**Source order is part of the specification, not an implementation detail.**
+`:hover` and `:active` on the same element have equal specificity, so an
+`:active` authored above its `:hover` never applies while the pointer is down.
+Every rest and hover pixel stays identical and the press silently does nothing.
+Check 7 fails that ordering; on the card it would hide a 4px move.
+
+### Corrections, and why they survived a lock
+
+Four rows above described behaviour the code did not have. Each was found by
+reading the code during I4 rather than by any gate:
+
+- **Card** listed `media scale(1.03)`. The card media tier was deleted in
+  `099a172` — on this branch, *after* §5 was locked — and the row was never
+  updated. A spec goes stale the moment its subject is removed.
+- **Work band** said arrow `translateX(4px)`; the code is `3px`.
+- **Nav link** said "colour + bottom border"; the code is colour +
+  `text-decoration-line: underline`. An underline is not a bottom border.
+- **Button** said "sink 1px + drop to `--shadow-rest`" for an element with no
+  shadow at rest.
+
+`.take-card:hover` is also worth naming: it is exempted from check 7 as "a
+typographic wall, not a control", and that reason exists **only** in the lint
+allowlist — there is no row for it here. It is also on a surface that renders on
+no route.
 
 **Deliberately unspecified.** `:disabled` — no disabled control exists on the
 site, and specifying one would be structure built ahead of use. `:visited` —
@@ -300,6 +348,30 @@ every size tested from 14px to 32px.
 
 **What ships today**, for the record: four icons at 60%, 76%, 61% and 73% of
 the stem of the text beside them. Under this spec all four become 65%.
+
+### Enumerate what RENDERS, not what the stylesheet says
+
+A rule can be live, correct, migrated, and reach no pixel. Before claiming a
+change is visible — or that a surface is covered — query the routes for the
+selector and read the computed value on the elements that come back.
+
+Two kinds of miss, both found here:
+
+- **The selector matches nothing.** Five radius sites (`.mode-pair__cell`,
+  `.mode-pair__label`, `.figure-placeholder`,
+  `.hero-block__image-frame .figure-placeholder`,
+  `.figure--constrained-bleed .figure__image`) return zero instances on `/`,
+  `/about` and both case studies.
+- **The selector matches, and loses.** `.figure__image` renders twice per case
+  study and computes 12px on every instance, because
+  `.cs-section--problem .framed-pair__cell .figure__image` is more specific. Its
+  6px rule is live, correct, and reaches nothing.
+
+This has now produced **two wrong predictions from two different authors** —
+§4's original map, written from a CSS grep, and §4's I3-B rewrite, written from
+the stylesheet again. That is a standing rule, not an anecdote: enumerating what
+a stylesheet *says* is not enumerating what a reader *sees*, and only the second
+is what "changes shipped appearance" means.
 
 ---
 
