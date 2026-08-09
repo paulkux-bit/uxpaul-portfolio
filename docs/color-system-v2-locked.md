@@ -175,17 +175,8 @@ the canvas to elevated (6.5× measured from the sunken floor)** — so the page
 steps back toward neutral and the card, the elevated surface and the warm cream
 text carry the warmth. That is ruling 3.
 
-**"Untouched" means untouched in oklch, and only there.** Holding `L` constant
-does not hold WCAG relative luminance constant: `L` is perceptual lightness,
-relative luminance is computed from the sRGB channels, and moving chroma and hue
-moves those channels. K2 held every dark `L` byte-identical and still shifted
-`--text-primary` on `--bg-surface` by 0.0645 (15.299 → 15.235). Read any future
-"lightness untouched" claim in this document that way.
-
-Which is also why the preservation bar is **relative, not absolute**. An
-absolute ceiling bites hardest at the highest-contrast pair in the matrix, where
-it means least. The rule: **no pair moves more than 0.5%, and no pair moves
-toward a floor.** K2's worst case is 0.42% and no pair moved floorward.
+"Untouched" here means untouched **in oklch**, which is not the same as
+untouched in contrast — see §5, which owns measurement claims.
 
 ---
 
@@ -193,6 +184,21 @@ toward a floor.** K2's worst case is 0.42% and no pair moved floorward.
 
 Every text role against every surface, both modes. Floors: AA-normal 4.5,
 AA-large 3.0.
+
+**Every ratio in this document is browser-rasterised unless marked otherwise.**
+Each colour is painted to a 1×1 canvas and read back as 8-bit RGB, so the number
+is what a user's screen actually shows. `lint:color` computes the same ratios in
+continuous floating point instead, and the two paths diverge slightly by
+construction: roughly **0.01 near 3:1** and **0.065 near 15:1**. So the lint
+reporting `2.91` where this document records `2.92` is two instruments agreeing,
+not two sources disagreeing. It also explains K2's `0.0645`, which is otherwise
+an anomaly.
+
+**Holding `L` constant does not hold contrast constant.** `L` is perceptual
+lightness; WCAG relative luminance is computed from the sRGB channels, and
+moving chroma or hue moves those channels. K2 held every dark `L` byte-identical
+and still shifted `--text-primary` on `--bg-surface` by 0.0645 (15.299 →
+15.235). Read every "lightness untouched" claim in this document that way.
 
 **Dark — zero failures.** Worst case is `--text-subtle` on `elevated` at 3.46.
 `--text-primary` ranges 13.48–17.12.
@@ -249,6 +255,16 @@ following it.
 **R5** Contrast is measured, not estimated, and the measurement is written
 down. Any new pairing states its ratio.
 
+**R5a** When a change is meant to **preserve** contrast rather than move it, the
+bar is **relative, not absolute**: no pair moves more than **0.5%**, and no pair
+moves **toward a floor**. An absolute ceiling was tried first and rejected — it
+bites hardest at the highest-contrast pair in the matrix, which is exactly where
+a shift matters least. K2 held 0.42% at worst and moved no pair floorward, while
+failing a 0.05 absolute bar on one pair at 15.3:1.
+
+R5a does not apply to a change that deliberately moves lightness; there the
+floors in §5 are the only bar. K3 is the worked example.
+
 **R6** Light and dark are separate designs, not inversions. They already differ
 in hue, chroma and separation, and should.
 
@@ -272,6 +288,10 @@ Fails on:
 6. Any referenced colour token without a definition. Carried from
    `lint:space` assertion 7 — checking that a name is legal is not checking
    that it exists.
+7. Any colour literal outside the token definitions — at the point of **use**,
+   anywhere in the repo. Scanning lives in `scripts/color-literals.mjs`;
+   fixtures in `scripts/fixtures/color-literals/`; assertions in
+   `__tests__/color-literals.test.mjs`.
 
 **Prove every assertion in both directions before any value moves.** Four
 checks in the spacing migration passed for a reason other than the one
@@ -295,6 +315,34 @@ The proof that held rasterises each colour to a 1×1 canvas and compares RGBA
 integers — format-independent, and it is what actually reaches the eye. **A
 check reporting a difference real in the string and absent in the pixels is as
 wrong as one that passes for the wrong reason.**
+
+**A fixture must produce a positive, not merely fail to produce a negative.**
+A negative control that stops appearing in the output is indistinguishable from
+a file that was never opened, so "no findings" cannot be the passing condition.
+Every candidate is reported as accepted or as excluded **with a named reason**,
+and a fixture asserts it was *scanned* before it asserts any count.
+
+The worked example is the `.mdx` gap. The K4 census planted positive literals in
+`.tsx` and `.css` but only *negative* controls in `.mdx`. That file then dropped
+out of the report entirely, which reads as a passing control — so the entire
+`.mdx` channel went unproven while the census reported a clean result. It was
+found only by asking which specific channels the proof had actually covered.
+
+The rule earned itself again on its first run. All sixteen check-7 fixtures
+failed with "was never scanned": Vite statically rewrites
+`new URL('…', import.meta.url)` into an asset reference, and the fixture path
+resolved to a root-relative directory that does not exist. Under the old design
+every fixture would have reported zero findings and every negative would have
+passed. The fixtures then found two further real defects — markdown links
+`[top](#abc)` accepted as a colour, and a fragment-reference control whose ids
+were not hex-shaped and so tested nothing.
+
+**Corollary for allowlists: scope to the construct, never to the directory.** A
+colour detector is necessarily built out of colour literals, so `scripts/` is
+among the largest literal sources in the repo. A blanket skip would be the one
+allowlist entry nobody re-examines, silently absolving any real literal written
+there. Each construct is named with a reason, and the test that matters is that
+a literal added *elsewhere in the same file* is still caught.
 
 ---
 

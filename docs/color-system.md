@@ -1,7 +1,28 @@
 # Color system — Paper & Low Light
 
-**Status:** locked (v2)
-**Last revised:** May 2026
+> **`docs/color-system-v2-locked.md` owns the palette.** Every token value,
+> the two-layer architecture, the rules and every measured ratio live there and
+> only there. **This file no longer specifies colour values**, and where the two
+> disagree, v2 wins without argument.
+>
+> Its "v2" status line below refers to the May 2026 palette revision, not to the
+> August 2026 colour-system v2 — the names collide and the documents do not.
+>
+> **Why this is scoped rather than deleted.** Two documents describing one
+> palette is R4 at the documentation layer: the second copy drifts, and this one
+> already produced two wrong accessibility floors — the pt-for-px substitution
+> caught during the type migration, and `--text-subtle` at "~3.5–4:1" when the
+> real value was 2.78 and failing. But a bare pointer would delete live material
+> v2 does not cover: the `--qh-*` brand shelf, the paper grain, the theme-swap
+> protocol, the role map, and the non-text accessibility decisions. Those
+> sections are the reason this file survives.
+>
+> **The token tables below are superseded and were not updated.** Read §4 of the
+> v2 document instead.
+
+**Status:** implementation and usage notes (palette superseded)
+**Last revised:** May 2026; scoped 8 Aug 2026
+**Palette spec:** `docs/color-system-v2-locked.md`
 **Implementation:** `app/globals.css`
 **Toggle:** `next-themes` with class-based switching (`.dark` on `<html>`)
 
@@ -219,7 +240,11 @@ Knobs (set in `globals.css`):
 
 - **Body text hits AAA** in both modes. `text-primary` on `bg-canvas` measures ~14–15:1.
 - **`text-muted` hits AA normal** (~5.5–6:1) at all body sizes.
-- **`text-subtle` is AA-large only** (~3.5–4:1). Never use below 24px or 18.66px bold. Lint this.
+- **`text-subtle` is AA-large only** (**3.04–3.86:1**, measured in K3 across the four
+  light surfaces; 3.46–4.41 in dark). Never use below 24px or 18.66px bold. `lint:color`
+  check 4 enforces it. The earlier "~3.5–4:1" here was an estimate, and it was wrong at
+  the bottom: the real floor-adjacent value was 2.78, a live WCAG failure that shipped
+  until K3 moved the token to `L 0.590`.
   WCAG states large text as 18pt / 14pt bold; in CSS pixels that is 24px / 18.66px. Both
   figures here previously read "18px (or 14px+ bold)", a pt-for-px substitution that
   authorised a 3:1 colour six pixels under the real floor. That is the error that once put
