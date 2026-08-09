@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run lint:type && npm run lint:space && npm run lint:color && next build",
+    "build": "npm run lint:type && npm run lint:space && npm run lint:color && npm run lint:interaction && next build",
     "start": "next start",
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",
     "lint:type": "node scripts/lint-type.mjs",
     "lint:space": "node scripts/lint-space.mjs",
     "lint:color": "node scripts/lint-color.mjs",
+    "lint:interaction": "node scripts/lint-interaction.mjs",
     "test": "vitest",
     "regen:oku": "node scripts/regen-oku-tsx.mjs",
     "regen:fdte": "node scripts/regen-fdte-tsx.mjs"

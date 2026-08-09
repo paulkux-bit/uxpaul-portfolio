@@ -1,0 +1,159 @@
+import { describe, expect, it } from 'vitest';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { run } from '../scripts/lint-interaction.mjs';
+
+// NOT `new URL('…', import.meta.url)`: Vite statically rewrites that pattern as
+// an asset reference. It resolved to a root-relative path that did not exist,
+// and every fixture then reported zero findings — which is what a passing
+// negative control also looks like. Found during the colour migration; the same
+// trap would be invisible here.
+const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), '..', 'scripts', 'fixtures', 'interaction');
+
+const { checks, scanned } = await run(FIXTURES, { includeFixtures: true });
+const check = (id) => {
+  const c = checks.find((x) => x.id === id);
+  expect(c, `check ${id} did not run`).toBeDefined();
+  return c;
+};
+const where = (c) => [...c.failures, ...c.excluded].map((x) => x.where);
+const failFiles = (c) => c.failures.map((x) => x.where.split(':')[0]);
+const excReasons = (c) => c.excluded.map((x) => x.reason);
+
+// ── The load-bearing assertion ─────────────────────────────────────────────
+// Every count below is meaningless if the files were never opened. A fixture
+// that is skipped produces no failures, which is exactly what a correct
+// negative control produces (§8).
+describe('the fixtures were actually scanned', () => {
+  it('reaches every fixture file', () => {
+    expect(scanned.css.sort()).toEqual(['clean.css', 'violations.css']);
+    expect(scanned.tsx.sort()).toEqual([
+      'clean.tsx', 'components/oku/artwork.tsx', 'violations.tsx',
+    ]);
+  });
+  it('runs all eight checks', () => {
+    expect(checks.map((c) => c.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+  });
+  it('every clean fixture is represented in the output, as exclusions', () => {
+    // positive result, not absence of output
+    const seen = checks.flatMap(where).map((w) => w.split(':')[0]);
+    expect(seen).toContain('clean.css');
+    expect(seen).toContain('clean.tsx');
+    expect(seen).toContain('components/oku/artwork.tsx');
+  });
+});
+
+describe('check 1 — literal durations', () => {
+  const c = () => check(1);
+  it('catches a literal duration', () => {
+    expect(c().failures.some((f) => f.detail.includes('240ms'))).toBe(true);
+  });
+  it('counts a repeated shorthand literal once, not three times', () => {
+    const hits = c().failures.filter((f) => f.detail.includes('320ms'));
+    expect(hits).toHaveLength(1);
+    expect(hits[0].detail).toContain('×3');
+  });
+  it('never flags a tokenised duration or a transition-delay', () => {
+    expect(failFiles(c())).not.toContain('clean.css');
+  });
+  it('excludes the reduced-motion kill switch BY NAME', () => {
+    expect(excReasons(c())).toContain('allowlisted-duration');
+  });
+});
+
+describe('check 2 — easing tokens', () => {
+  const c = () => check(2);
+  it('catches a bare keyword easing', () => {
+    expect(c().failures.some((f) => f.detail.includes("bare 'ease-in-out'"))).toBe(true);
+  });
+  it('catches an inline cubic-bezier', () => {
+    expect(c().failures.some((f) => f.detail.includes('inline cubic-bezier'))).toBe(true);
+  });
+  it('excludes token-eased transitions with a reason', () => {
+    expect(excReasons(c())).toContain('uses-ease-token');
+  });
+});
+
+describe('check 3 — radius scale', () => {
+  const c = () => check(3);
+  it('catches a literal radius', () => {
+    expect(c().failures.some((f) => f.detail.includes('6px'))).toBe(true);
+  });
+  it('excludes a scale token, a reset, and the token definitions by name', () => {
+    expect(excReasons(c())).toEqual(expect.arrayContaining([
+      'uses-radius-token', 'zero-or-keyword', 'token-definition',
+    ]));
+  });
+});
+
+describe('check 4 — hand-authored svg', () => {
+  const c = () => check(4);
+  it('catches a hand-drawn icon in .tsx', () => {
+    expect(failFiles(c())).toContain('violations.tsx');
+  });
+  it('catches a non-grain svg payload in CSS', () => {
+    expect(failFiles(c())).toContain('violations.css');
+  });
+  it('excludes case-study artwork via the SHARED allowlist, not a second list', () => {
+    const art = c().excluded.filter((x) => x.where.startsWith('components/oku/'));
+    expect(art.length).toBeGreaterThan(0);
+    expect(art.every((x) => x.reason === 'artwork')).toBe(true);
+  });
+  it('excludes the paper grain as artwork', () => {
+    expect(c().excluded.some((x) => x.where.startsWith('clean.css') && x.reason === 'artwork')).toBe(true);
+  });
+});
+
+describe('check 5 — icons sized in em', () => {
+  const c = () => check(5);
+  it('catches size, width and height in px', () => {
+    const d = c().failures.map((f) => f.detail).join(' ');
+    expect(d).toContain('size={24}');
+    expect(d).toContain('width={20}');
+    expect(d).toContain('height={20}');
+  });
+  it('does NOT mistake next/image width for an icon', () => {
+    expect(c().failures.some((f) => f.detail.includes('1600'))).toBe(false);
+    expect(failFiles(c())).not.toContain('clean.tsx');
+  });
+  it('reports an unsized icon as an exclusion, not silence', () => {
+    expect(excReasons(c())).toContain('no-px-size');
+  });
+});
+
+describe('check 6 — stroke table', () => {
+  const c = () => check(6);
+  it('catches an --icon-stroke off the table', () => {
+    expect(c().failures.some((f) => f.detail.includes('--icon-stroke: 2'))).toBe(true);
+  });
+  it('catches a strokeWidth off the table', () => {
+    expect(c().failures.some((f) => f.detail.includes('strokeWidth={2}'))).toBe(true);
+  });
+  it('accepts a table value from either surface', () => {
+    expect(excReasons(c()).filter((r) => r === 'in-table').length).toBeGreaterThanOrEqual(2);
+  });
+});
+
+describe('check 7 — hover implies active', () => {
+  const c = () => check(7);
+  it('catches :hover with no :active', () => {
+    expect(c().failures.some((f) => f.detail.includes('.v-hover-only:hover'))).toBe(true);
+  });
+  it('excludes a complete hover/active pair', () => {
+    expect(excReasons(c())).toContain('has-active');
+  });
+  it('excludes a text link by its written reason', () => {
+    expect(excReasons(c())).toContain('allowlisted-no-active');
+  });
+});
+
+describe('check 8 — no state variants in .tsx', () => {
+  const c = () => check(8);
+  it('catches all four variant forms', () => {
+    const d = c().failures.map((f) => f.detail).join(' ');
+    for (const v of ['hover:', 'focus:', 'active:', 'group-hover:']) expect(d).toContain(v);
+  });
+  it('does not flag the same words used as prose', () => {
+    expect(failFiles(c())).not.toContain('clean.tsx');
+  });
+});
