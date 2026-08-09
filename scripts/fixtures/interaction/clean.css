@@ -64,3 +64,16 @@
 a:hover {
   color: var(--link-hover);
 }
+
+/* check 5 — a class that sizes an icon to 1em in BOTH axes: excluded as sized-1em */
+.fx-icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* check 6 — a CONTAINER that governs stroke for the icons inside it. The icon
+   itself carries no strokeWidth; §2.3 puts --icon-stroke on the container. */
+.fx-governed {
+  font-weight: 600;
+  --icon-stroke: 1.95;
+}

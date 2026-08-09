@@ -223,41 +223,114 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
   }
 
   // ── checks 5 & 6 — icon sizing and stroke ───────────────────────────────
+  //
+  // BOTH HALVES. The first version of these tested only the negative: check 5
+  // flagged an explicit `size={n}` and treated an icon with no size prop as
+  // clean, and check 6 declared §2.3's containment half UNCHECKED.
+  //
+  // "No size prop" is not clean. lucide-react 1.28.0 defaults `width: 24,
+  // height: 24` and writes them as px ATTRIBUTES, so an ungoverned icon renders
+  // at 24px and stops scaling with the reader's root size — the precise bug R2
+  // exists to kill. A check that goes green with half its rule unimplemented is
+  // worse than one that stays red, and both of these would have gone green
+  // falsely at I5.
+  //
+  // SCOPE: check 5 governs Lucide nodes only. `.theme-toggle svg` sizes a
+  // hand-authored SVG, which is check 4's finding today and stops existing when
+  // I5 replaces it with Lucide. Flagging it here too would report one defect
+  // twice under two rules.
   {
     const f5 = [], ex5 = [], f6 = [], ex6 = [];
+
+    // CSS side, gathered once: which classes size something to exactly 1em in
+    // BOTH axes, which size in some other unit, and which set --icon-stroke.
+    const sizedOneEm = new Map(); // class -> {w, h}
+    const sizedOther = new Map(); // class -> "width: 1.125rem"
+    const strokeClasses = new Set();
+    const classesOf = (sel) => [...sel.matchAll(/\.(-?[_a-zA-Z][\w-]*)/g)].map((x) => x[1]);
+    for (const s of sheets) {
+      s.root.walkRules((r) => {
+        const cls = classesOf(r.selector);
+        if (!cls.length) return;
+        for (const d of r.nodes ?? []) {
+          if (d.type !== 'decl') continue;
+          if (d.prop === '--icon-stroke') for (const c of cls) strokeClasses.add(c);
+          if (d.prop !== 'width' && d.prop !== 'height') continue;
+          const v = d.value.trim();
+          for (const c of cls) {
+            if (v === '1em') {
+              const e = sizedOneEm.get(c) ?? { w: false, h: false };
+              e[d.prop === 'width' ? 'w' : 'h'] = true;
+              sizedOneEm.set(c, e);
+            } else if (/^[\d.]+(px|rem|em|%)$/.test(v) && v !== '1em') {
+              // rem fails as surely as px: 1.125rem is not 1em and does not
+              // track adjacent type, which is the whole point of R2.
+              sizedOther.set(c, `${d.prop}: ${v}`);
+            }
+          }
+        }
+      });
+    }
+    const isOneEm = (c) => sizedOneEm.get(c)?.w && sizedOneEm.get(c)?.h;
+
     for (const file of tsxFiles) {
-      const src = await readFile(join(root, file), 'utf8');
-      const lines = src.split('\n');
-      // Which components come from lucide? Only those are icons — next/image
-      // also carries width/height and must not be flagged.
+      const raw = await readFile(join(root, file), 'utf8');
+      const src = blankComments(raw);
       const icons = new Set();
       for (const im of src.matchAll(/import\s*\{([^}]+)\}\s*from\s*['"]lucide-react['"]/g))
         for (const n of im[1].split(',')) { const t = n.trim().split(/\s+as\s+/).pop(); if (t) icons.add(t); }
       if (!icons.size) continue;
+
+      // Every className in the file, in source order, so an icon's ANCESTORS can
+      // be resolved: --icon-stroke is set on the container, not on the icon.
+      const classAt = [...src.matchAll(/className\s*=\s*(?:"([^"]*)"|'([^']*)'|\{`([^`]*)`\}|\{\[([^\]]*)\])/gs)]
+        .map((c) => ({ index: c.index, classes: (c[1] ?? c[2] ?? c[3] ?? c[4] ?? '').split(/[\s'"`,]+/).filter(Boolean) }));
+
       const tagRe = new RegExp(`<(${[...icons].join('|')})\\b([^>]*)>`, 'gs');
       let m;
       while ((m = tagRe.exec(src)) !== null) {
         const line = src.slice(0, m.index).split('\n').length;
         const [, name, attrs] = m;
+        const own = (/className\s*=\s*["'`]([^"'`]*)/.exec(attrs)?.[1] ?? '').split(/\s+/).filter(Boolean);
+        // ancestors: every className appearing BEFORE this node in the file
+        const ancestors = classAt.filter((c) => c.index < m.index).flatMap((c) => c.classes);
+        const scope = [...new Set([...own, ...ancestors])];
+
+        // ── check 5 ──
         const px = /\b(size|width|height)\s*=\s*\{?\s*(\d+(?:\.\d+)?)\s*\}?/g;
-        let a, sized = false;
+        let a, sizedInline = false;
         while ((a = px.exec(attrs)) !== null) {
-          sized = true;
+          sizedInline = true;
           f5.push({ where: `${file}:${line}`, detail: `<${name} ${a[1]}={${a[2]}}> — R2 says icons are sized in em, never px` });
         }
-        if (!sized) ex5.push({ where: `${file}:${line}`, detail: `<${name}> carries no px size`, reason: 'no-px-size' });
+        const badUnit = own.find((c) => sizedOther.has(c));
+        const oneEm = own.find((c) => isOneEm(c));
+        if (badUnit) {
+          f5.push({ where: `${file}:${line}`, detail: `<${name} className="${badUnit}"> is sized ${sizedOther.get(badUnit)} — not 1em` });
+        } else if (oneEm) {
+          ex5.push({ where: `${file}:${line}`, detail: `.${oneEm} sizes it 1em in both axes`, reason: 'sized-1em' });
+        } else if (!sizedInline) {
+          // THE HALF THAT WAS MISSING. No inline px and no governing class means
+          // lucide's own 24px attributes win.
+          f5.push({ where: `${file}:${line}`, detail: `<${name}> has no class sizing it to 1em — lucide defaults to 24px width/height attributes (§2.3 wants .icon { width: 1em; height: 1em })` });
+        }
 
+        // ── check 6 ──
         const sw = /\bstrokeWidth\s*=\s*\{?\s*(\d+(?:\.\d+)?)\s*\}?/.exec(attrs);
         if (sw) {
           const v = parseFloat(sw[1]).toFixed(2);
           if (STROKE_TABLE.includes(v)) ex6.push({ where: `${file}:${line}`, detail: `strokeWidth ${sw[1]} is in the §2.1 table`, reason: 'in-table' });
           else f6.push({ where: `${file}:${line}`, detail: `<${name} strokeWidth={${sw[1]}}> — not in the §2.1 table (${STROKE_TABLE.join(', ')})` });
         } else {
-          f6.push({ where: `${file}:${line}`, detail: `<${name}> has no governed stroke — no strokeWidth and no --icon-stroke container (§2.3)` });
+          // THE CONTAINMENT HALF. Governed when the icon, or any ancestor in the
+          // same file, carries a class whose CSS sets --icon-stroke.
+          const gov = scope.find((c) => strokeClasses.has(c));
+          if (gov) ex6.push({ where: `${file}:${line}`, detail: `.${gov} sets --icon-stroke`, reason: 'governed-by-container' });
+          else f6.push({ where: `${file}:${line}`, detail: `<${name}> has no governed stroke — no strokeWidth, and no class on it or an ancestor sets --icon-stroke (§2.3)` });
         }
-        void lines;
       }
     }
+
     // every authored --icon-stroke value must be in the table
     for (const s of sheets) {
       s.root.walkDecls((d) => {
@@ -268,7 +341,7 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
         else f6.push({ where: `${s.file}:${line}`, detail: `--icon-stroke: ${d.value} is not in the §2.1 table` });
       });
     }
-    add(5, 'Every icon is 1em square — no px width or height on an icon node', f5, ex5);
+    add(5, 'Every icon is 1em square — sized by a class, not by px/rem or lucide defaults', f5, ex5);
     add(6, 'Every --icon-stroke is in the §2.1 table, and every icon has one', f6, ex6);
   }
 

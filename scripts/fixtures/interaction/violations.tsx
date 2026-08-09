@@ -19,3 +19,11 @@ export const BadStroke = () => <ArrowRight strokeWidth={2} />;
 export const Variants = () => (
   <div className="hover:underline focus:outline active:translate-y-px group-hover:scale-105" />
 );
+
+// check 5 — the half that was missing: NO px prop and NO governing class, so
+// lucide's own 24px width/height attributes win. The first version of check 5
+// called this clean. (1)
+export const Ungoverned = () => <ChevronDown />;
+
+// check 5 — governed by a class, but sized in rem rather than em (1)
+export const RemSized = () => <ArrowRight className="v-icon-rem" />;

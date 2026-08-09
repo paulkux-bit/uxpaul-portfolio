@@ -116,8 +116,17 @@ describe('check 5 — icons sized in em', () => {
     expect(c().failures.some((f) => f.detail.includes('1600'))).toBe(false);
     expect(failFiles(c())).not.toContain('clean.tsx');
   });
-  it('reports an unsized icon as an exclusion, not silence', () => {
-    expect(excReasons(c())).toContain('no-px-size');
+  it('excludes an icon sized 1em in BOTH axes by its class', () => {
+    expect(excReasons(c())).toContain('sized-1em');
+  });
+  // The half that was missing at I0. lucide-react 1.28.0 defaults width/height
+  // to 24 and writes them as px ATTRIBUTES, so "no size prop" is 24px, not 1em.
+  // The first version of check 5 called this clean.
+  it('catches an icon with no px prop AND no governing class', () => {
+    expect(c().failures.some((f) => f.detail.includes('lucide defaults to 24px'))).toBe(true);
+  });
+  it('rejects rem as firmly as px — 1.125rem is not 1em', () => {
+    expect(c().failures.some((f) => f.detail.includes('1.125rem'))).toBe(true);
   });
 });
 
@@ -131,6 +140,14 @@ describe('check 6 — stroke table', () => {
   });
   it('accepts a table value from either surface', () => {
     expect(excReasons(c()).filter((r) => r === 'in-table').length).toBeGreaterThanOrEqual(2);
+  });
+  // §2.3's containment half, unimplemented at I0 and printed as UNCHECKED:
+  // --icon-stroke sits on the CONTAINER, not on the icon.
+  it('accepts an icon whose stroke is governed by an ancestor class', () => {
+    expect(excReasons(c())).toContain('governed-by-container');
+  });
+  it('catches an icon governed by neither a prop nor an ancestor', () => {
+    expect(c().failures.some((f) => f.detail.includes('no class on it or an ancestor'))).toBe(true);
   });
 });
 

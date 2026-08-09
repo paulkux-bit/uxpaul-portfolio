@@ -42,3 +42,11 @@
 .v-hover-only:hover {
   color: var(--text-primary);
 }
+
+/* check 5 — sized in rem, which is NOT 1em. 1.125rem does not track adjacent
+   type, so it fails exactly as px does. This unit was the gap in the first
+   version of check 5. */
+.v-icon-rem {
+  width: 1.125rem;
+  height: 1.125rem;
+}
