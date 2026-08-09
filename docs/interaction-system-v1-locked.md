@@ -540,6 +540,20 @@ migration is the wrong place to make that call.
 
 **`--qh-*`** brand tokens are unaffected and remain the open colour question.
 
+**Dark mode has no stated position on optical weight gain for icons.** Geometry
+is proven identical across modes on all five icon nodes — computed width, height
+and stroke-width match exactly in light and dark, and the toggle's hidden glyph
+differs only in `display`. But an identical stroke *reads* heavier as
+light-on-dark, because light bleeds outward against a dark ground. §2.1's table
+is keyed to adjacent **weight** only, so a per-mode stroke step would be a new
+ruling rather than an adjustment.
+
+This is the same open item `type-system-v3-locked.md` §9 already records for
+text — "dark mode has no stated position on optical weight gain against a dark
+ground" — which was never extended to icons. One question, two surfaces;
+whoever answers it should answer both, since a stroke and a stem are the same
+optical problem.
+
 ---
 
 ### Three findings this document owns, or half owns
