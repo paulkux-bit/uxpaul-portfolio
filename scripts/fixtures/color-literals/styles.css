@@ -1,0 +1,45 @@
+/* FIXTURE — the stylesheet channel, both directions.
+ * A comment naming #ff0000 and oklch(0.5 0.02 55): excluded as `comment`. */
+
+:root {
+  /* a hex authored as a token value is still a literal (1) */
+  --fixture-token: #ff0000;
+}
+
+/* POSITIVES — 8 literals */
+.three-digit { color: #f00; }
+.six-digit { color: #ff0000; }
+.eight-digit { color: #ff000080; }
+.fn-rgb { background: rgb(1, 2, 3); }
+.fn-rgba { background: rgba(1, 2, 3, 0.5); }
+.fn-hsl { background: hsl(1, 2%, 3%); }
+.fn-oklch { color: oklch(0.5 0.02 55); }
+.named-shorthand { border: 1px solid rebeccapurple; }
+
+/* NEGATIVES — each must be reported excluded, with its reason */
+
+/* `white-space` is a property name, not the colour white: `property-name`.
+   \b does not help here, because '-' is itself a word boundary. */
+.property-name-trap {
+  white-space: nowrap;
+  color: var(--text-primary);
+}
+
+/* a colour-space keyword inside color-mix, not a call: `not-a-call` */
+.keyword-not-call {
+  border-color: color-mix(in oklch, currentColor 12%, transparent);
+}
+
+/* An SVG fragment reference: `fragment-ref`. The ids must be hex-SHAPED, or the
+   control tests nothing — #some-clip and #grad never even become candidates, so
+   an earlier version of this fixture passed without exercising the rule. */
+.fragment-ref {
+  clip-path: url(#abc);
+  fill: url(#facade);
+}
+
+/* keywords that are never candidates */
+.keywords {
+  background: transparent;
+  fill: currentColor;
+}

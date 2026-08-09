@@ -18,6 +18,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import postcss from 'postcss';
+import { scanTree } from './color-literals.mjs';
 
 const CSS_FILE = 'app/globals.css';
 const JSX_ROOTS = ['app', 'components'];
@@ -66,6 +67,25 @@ const ALLOWLIST = {
     { selector: '.bento-theme__placeholder--light .bento-theme__plabel', prop: 'color', reason: 'STALE pinned specimen: label on a pinned tone. Deferred.' },
     { selector: '.bento-theme__placeholder--dark', prop: 'background', reason: 'STALE pinned specimen: 0.22 0.012 60, drifting off --bg-surface. Renders only when a manifest sets tone.' },
     { selector: '.bento-theme__placeholder--dark .bento-theme__plabel', prop: 'color', reason: 'STALE pinned specimen: label on a pinned tone. Deferred.' },
+  ],
+
+  // Pattern-definition constructs. A colour detector is necessarily built out of
+  // colour literals, so these files are among the largest literal sources in the
+  // repo. Scoped to the exact construct by source snippet — NOT a blanket
+  // "skip scripts/", which would be the one allowlist entry nobody re-examines
+  // and would silently absolve a real literal written anywhere in these files.
+  // Proved: a literal added on any other line of the same file is still caught.
+  patterns: [
+    { file: 'scripts/lint-color.mjs', snippet: 'detail: `rgb()', reason: "check 1's own failure message names the form it detects" },
+    { file: 'scripts/lint-color.mjs', snippet: 'detail: `hsl()', reason: "check 1's own failure message names the form it detects" },
+    { file: 'scripts/lint-color.mjs', snippet: "add(1, 'Every colour is oklch", reason: "check 1's title enumerates the forms it bans" },
+    // snippet deliberately stops before the hex: spelling the value out here
+    // would make this entry a literal in its own right, and check 7 flagged it.
+    { file: 'scripts/reframe-fdte-svg.mjs', snippet: 'replace(/fill="(black|', reason: 'the regex that REPLACES black fills with currentColor — a tool for removing literals' },
+    // The fixture assertions state the expected values, so they are literals by
+    // necessity. Scoped to assertion lines, not to the file: a literal written
+    // outside an expect() here is still caught.
+    { file: '__tests__/color-literals.test.mjs', construct: /expect\(|toEqual|toContain/, reason: 'expected values in the check-7 fixture assertions' },
   ],
 };
 const inList = (l, p) => l.some(p);
@@ -335,6 +355,69 @@ const add = (id, title, failures) =>
     if (!allDefs.has(tok))
       f.push({ where, detail: `${tok} is referenced but never defined — it resolves to nothing` });
   add(6, 'Every referenced colour token resolves to a definition (§7.6)', f);
+}
+
+// 7 — no colour literal anywhere in the repo. R4 is about DEPENDENCE: a literal
+// that happens to equal a token's current value is still a literal, because it
+// stops following the primitive the moment the primitive moves. That is how the
+// pre-v2 palette drifted into muddiness, one hand-tuned value at a time.
+//
+// Scanning lives in ./color-literals.mjs, whose value is its NEGATIVE cases:
+// the K4 census first reported 67 literals when the true figure was 21, and all
+// 46 phantoms came from four classes that look like colours and are not. Both
+// directions are proved by real fixture files under scripts/fixtures/, asserted
+// in __tests__/color-literals.test.mjs.
+{
+  const f = [];
+  const results = await scanTree(process.cwd(), { skip: ['scripts/fixtures'] });
+
+  // Token DEFINITIONS in globals.css are the source of truth, not literals to
+  // sweep; checks 1, 2 and 3 already govern them. Only literals at the point of
+  // USE belong to check 7.
+  const defLines = new Set();
+  postcss.parse(await readFile(CSS_FILE, 'utf8'), { from: CSS_FILE }).walkDecls((d) => {
+    if (!d.prop.startsWith('--')) return;
+    for (let i = d.source?.start?.line ?? 0; i <= (d.source?.end?.line ?? 0); i++) defLines.add(i);
+  });
+  // line → { selector, prop }, so a specimen can be allowlisted by what it IS
+  // rather than by where it happens to sit.
+  const declAt = new Map();
+  postcss.parse(await readFile(CSS_FILE, 'utf8'), { from: CSS_FILE }).walkDecls((d) => {
+    const sel = d.parent?.selector?.replace(/\s+/g, ' ').trim() ?? '';
+    for (let i = d.source?.start?.line ?? 0; i <= (d.source?.end?.line ?? 0); i++)
+      declAt.set(i, { selector: sel, prop: d.prop });
+  });
+
+  for (const r of results) {
+    for (const h of r.accepted) {
+      if (r.file === CSS_FILE) {
+        if (defLines.has(h.line)) continue; // owned by checks 1–3
+        const d = declAt.get(h.line);
+        // THE DEFERRAL RECORD. Each of the eight is excluded by its own entry,
+        // carrying its own reason, so the lint keeps surfacing them rather than
+        // absolving them. Delete an entry and this check goes red naming it.
+        if (d && inList(ALLOWLIST.specimens, (a) => a.selector === d.selector && a.prop === d.prop))
+          continue;
+      }
+      // Pattern-definition constructs: a colour detector is necessarily MADE of
+      // colour literals. Scoped to the exact construct by source snippet, never
+      // by skipping scripts/ wholesale — a blanket directory exclusion is the
+      // one allowlist entry nobody re-examines, and it would silently absolve a
+      // real literal written anywhere in these files. A new literal on any other
+      // line of the same file is still caught.
+      if (
+        inList(ALLOWLIST.patterns, (a) =>
+          a.file === r.file &&
+          (a.snippet ? h.source.includes(a.snippet) : a.construct.test(h.source)))
+      )
+        continue;
+      f.push({
+        where: `${r.file}:${h.line}`,
+        detail: `${h.form} literal ${h.match} — ${h.source.slice(0, 72)}`,
+      });
+    }
+  }
+  add(7, 'No colour literal outside the token definitions (R4, §7.7)', f);
 }
 
 // ── Report ─────────────────────────────────────────────────────────────────
