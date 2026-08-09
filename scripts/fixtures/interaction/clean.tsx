@@ -58,6 +58,13 @@ export const Interpolated = ({ x }: { x: string }) => <div className={`c-authore
 // the distinction the whole of check 9's completion turns on.
 export const OddShape = () => <div className="[&>*]:mt-4 c-authored-only" />;
 
+// A deliberately unstyled structural wrapper, allowlisted BY THE REAL ENTRY —
+// the class name here is the shipped one, so if ALLOWLIST.danglingClasses ever
+// loses it this fixture goes red. Same coupling as components/oku/artwork.tsx,
+// whose path is matched by the real ARTWORK_DIRS rather than a list written for
+// tests.
+export const UnstyledWrapper = () => <div className="friction-beat__text" />;
+
 // a className EXPRESSION. Not a literal class list, so it is counted and printed
 // rather than guessed at: harvesting string literals out of an expression reads
 // comparison operands as class names.

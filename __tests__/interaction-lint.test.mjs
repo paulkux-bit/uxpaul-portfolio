@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { run } from '../scripts/lint-interaction.mjs';
+import { ALLOWLIST, run } from '../scripts/lint-interaction.mjs';
+
+const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
+const postcss = createRequire(join(REPO, 'package.json'))('postcss');
 
 // NOT `new URL('…', import.meta.url)`: Vite statically rewrites that pattern as
 // an asset reference. It resolved to a root-relative path that did not exist,
@@ -216,6 +221,64 @@ describe('check 9 — dangling classNames', () => {
   });
   it('excludes marker classes and counts interpolation', () => {
     expect(excReasons(c())).toEqual(expect.arrayContaining(['marker-class', 'interpolated']));
+  });
+  it('excludes a deliberately unstyled wrapper via the REAL allowlist entry', () => {
+    const hit = c().excluded.filter((x) => x.reason === 'allowlisted-unstyled-wrapper');
+    expect(hit.length).toBeGreaterThan(0);
+    expect(hit.some((x) => x.detail.startsWith('friction-beat__text'))).toBe(true);
+  });
+});
+
+// ── The allowlist entries' premises, guarded ───────────────────────────────
+//
+// ALLOWLIST.danglingClasses excuses two classes on the grounds of what the
+// structure around them IS. Those grounds can stop being true without anyone
+// touching the allowlist, and a stale exception reads exactly like a live one —
+// which is how the pinned specimen tones ended up describing a palette that no
+// longer existed. So the reason is coupled to the fact.
+//
+// Static, over the real app/globals.css: no dev server, no build, milliseconds.
+// The rendered proof (Playwright, both case studies and the sandbox route, 1440
+// and 900, light and dark) was a one-shot; this is what carries it forward.
+describe('the unstyled-wrapper allowlist still rests on a true premise', () => {
+  const css = postcss.parse(readFileSync(join(REPO, 'app', 'globals.css'), 'utf8'));
+  const declsFor = (selector, inMedia = null) => {
+    const out = [];
+    css.walkRules((r) => {
+      if (r.selector.split(',').map((s) => s.trim()).every((s) => s !== selector)) return;
+      const media = r.parent?.type === 'atrule' ? `@${r.parent.name} ${r.parent.params}` : null;
+      if (inMedia && media !== inMedia) return;
+      if (!inMedia && media) return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl') out.push([d.prop, d.value.trim()]);
+    });
+    return out;
+  };
+
+  it('names exactly the two wrappers this suite guards', () => {
+    expect(ALLOWLIST.danglingClasses.map((a) => a.class).sort()).toEqual([
+      'friction-beat__text', 'resolution-block__framing',
+    ]);
+  });
+
+  // "the grid track carries the sizing" is only a reason while there IS a grid
+  // with the wrapper as its first column.
+  it('.friction-beat is still a two-column grid above 1024', () => {
+    const decls = new Map(declsFor('.friction-beat', '@media (min-width: 1024px)'));
+    expect(decls.get('display')).toBe('grid');
+    const cols = decls.get('grid-template-columns');
+    expect(cols).toBeDefined();
+    // two tracks, the second capped — the 300px the text column is measured against
+    expect(cols.match(/minmax\(/g) ?? []).toHaveLength(2);
+    expect(cols).toContain('300px');
+  });
+
+  // The mirror premise: .resolution-block__framing inherits its measure because
+  // it sits in plain block flow. The moment its parent becomes a container it is
+  // a track item and the reason no longer holds.
+  it('.resolution-block is still NOT a grid or flex container', () => {
+    for (const [prop, value] of declsFor('.resolution-block')) {
+      if (prop === 'display') expect(['grid', 'flex', 'inline-grid', 'inline-flex']).not.toContain(value);
+    }
   });
 });
 

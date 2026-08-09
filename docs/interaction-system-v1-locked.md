@@ -206,7 +206,7 @@ the stem of the text beside them. Under this spec all four become 65%.
 
 ## 8. Enforcement
 
-`lint:interaction`, eight assertions:
+`lint:interaction`, nine assertions:
 
 1. No literal duration in any `transition` — every one resolves to a token.
 2. Every interactive `transition` uses `--ease-out-soft` or `--ease-out-quint`;
@@ -221,6 +221,20 @@ the stem of the text beside them. Under this spec all four become 65%.
    allowlisted reason why it does not (text links, disclosure rows).
 8. No `hover:` / `focus:` / `active:` / `group-hover:` utilities in `.tsx` —
    R4, enforced.
+9. Every class token in a `className` resolves to a Tailwind utility present in
+   the built CSS or to an authored rule in `globals.css`. A class that
+   deliberately has no rule is an allowlisted entry with a written reason.
+
+Assertion 9 was added after R4's move, because nothing above it could see the
+failure that move produced: Tailwind silently dropped rules authored inside the
+`@utility` cluster, so a class existed in `.tsx` with no rule anywhere while
+check 8 went green *truthfully* — the utilities really had left the `.tsx`. It
+catches that by its **consequence**, which is also its limit: a deliberately
+unstyled structural wrapper and a rule that vanished are both a class with no
+rule, and nothing mechanical tells them apart. The difference is intent, so
+intent is declared, and each declaration is coupled by a test to the structural
+premise its reason rests on — an exception whose reason can quietly stop being
+true is a stale exception that still reads as a live one.
 
 Each assertion must be proven in both directions before it is trusted: plant a
 violation and confirm it is caught, remove one and confirm the count drops.
@@ -228,6 +242,18 @@ Fixtures assert a positive result — "scanned, N found, M excluded" — never t
 absence of output. A negative control that stops appearing is indistinguishable
 from a file that was never opened, which is how the `.mdx` gap hid during the
 colour migration.
+
+**Four of the nine shipped testing something other than their stated rule**, and
+not one was caught by the check itself. Checks 5, 6 and 8 each implemented half:
+5 flagged an explicit px size but called an ungoverned icon clean, 6 declared
+§2.3's containment half uncheckable, and 8 went green on a move whose destination
+did not exist. Check 9 went the other way — it read a JavaScript array body as a
+class list, and separately dropped tokens it could not shape-match and never read
+`className={…}` expressions at all, so it tested slightly more than its rule in
+one place and less in two others. Same root in every case: the stated rule and the
+implemented rule were never diffed. Reading a new check against this section, line
+by line, before trusting its first green is the cheapest defence, and it is now
+part of writing one.
 
 ---
 

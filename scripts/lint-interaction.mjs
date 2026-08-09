@@ -55,6 +55,35 @@ export const ALLOWLIST = {
     { match: '.take-card:hover', reason: 'non-interactive tint; the takes wall is a typographic wall, not a control' },
     { match: '.about-row__summary:hover', reason: 'disclosure row — the chevron rotation is the feedback (spec §5)' },
   ],
+  // check 9: classes that deliberately have no rule.
+  //
+  // Check 9 catches a dangling class by its CONSEQUENCE, and a wrapper nobody
+  // styled on purpose has the same consequence as a rule Tailwind silently
+  // dropped. Finding #11 was exactly that shape and WAS a bug. Nothing
+  // mechanical separates the two: the difference is intent, and intent has to
+  // be declared. That is what this list is for — not a weakness in the check.
+  //
+  // Each entry is coupled to the structural premise its reason rests on, and
+  // __tests__/interaction-lint.test.mjs asserts that premise against the real
+  // globals.css. An exception whose reason can quietly stop being true is how
+  // the pinned specimen tones ended up describing a palette that no longer
+  // existed.
+  //
+  // PROVEN BEFORE BEING WRITTEN, not asserted. Playwright over both published
+  // case studies and the sandbox route, at 1440 and 900, light and dark: 12
+  // passes, zero CSSOM rules matching either class out of 849 walked per pass,
+  // and the geometry exact — text column 756 = 1088 − 300 − 32 at 1440, full
+  // width and figure stacked at 900.
+  danglingClasses: [
+    {
+      class: 'friction-beat__text',
+      reason: 'structural wrapper / grid child, deliberately unstyled — .friction-beat is the grid and minmax(0, 1fr) carries both the column sizing and the min-width: 0; its three children each style themselves',
+    },
+    {
+      class: 'resolution-block__framing',
+      reason: 'structural wrapper / grid child, deliberately unstyled — a semantic wrapper around prose sitting in plain block flow, inheriting its measure. Its only render site today is app/sandbox/show-the-work; the component itself is product code, which is why it gates',
+    },
+  ],
   // checks 4 and 8: pattern-definition constructs. A linter that detects a
   // string necessarily CONTAINS that string. Scoped to the construct, never by
   // skipping scripts/ wholesale — a blanket directory exclusion is the one
@@ -446,6 +475,23 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
   // by its CONSEQUENCE rather than its cause, which matters because I2-I5 all
   // add authored rules to the same file and the next occurrence need not look
   // the same.
+  //
+  // WHAT IT CANNOT DO, AND WHY THAT IS THE DESIGN. Catching by consequence
+  // means it cannot distinguish a deliberately unstyled structural wrapper from
+  // a rule Tailwind silently dropped — both are a class with no rule. Finding
+  // #11 was the second of those and was a bug; the two wrappers in
+  // ALLOWLIST.danglingClasses are the first and are not. Nothing mechanical
+  // separates them. The difference is intent, so intent gets declared, and each
+  // declaration is coupled by a test to the structural premise its reason rests
+  // on. That is what the check is for, not a weakness in it.
+  //
+  // FOURTH IN A ROW, RECORDED. Checks 5, 6 and 8 each shipped testing HALF
+  // their stated rule. Check 9 shipped testing slightly MORE than its rule in
+  // one place (it read a JS array body as a class list) and less in two others
+  // (silent token drops, unread expression attributes). Same root — the stated
+  // rule and the implemented rule were never diffed — in the opposite
+  // direction. Four for four in this system, and not one of them was caught by
+  // the check itself.
   {
     const f = [], ex = [];
     const { readdirSync, readFileSync } = await import('node:fs');
@@ -498,6 +544,8 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
             }
             if (MARKERS[t]) { ex.push({ where: `${file}:${line}`, detail: `${t} — ${MARKERS[t]}`, reason: 'marker-class' }); continue; }
             if (known.has(t)) { ex.push({ where: `${file}:${line}`, detail: `${t} resolves`, reason: 'resolves' }); continue; }
+            const unstyled = ALLOWLIST.danglingClasses.find((a) => a.class === t);
+            if (unstyled) { ex.push({ where: `${file}:${line}`, detail: `${t} — ${unstyled.reason}`, reason: 'allowlisted-unstyled-wrapper' }); continue; }
             f.push({ where: `${file}:${line}`, detail: `"${t}" resolves to no utility and no authored rule — dangling` });
           }
         }
@@ -566,7 +614,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('    unparsed-className-expression, never tokenised. Harvesting every');
   console.log('    string literal inside an expression was measured and rejected: it');
   console.log('    reads comparison operands as classes (`top-left`) and template');
-  console.log('    fragments as classes (`framed-image--`), 2 false positives in 3.\n');
+  console.log('    fragments as classes (`framed-image--`), 2 false positives in 3.');
+  console.log('  - Check 9 cannot tell a deliberately unstyled wrapper from a rule');
+  console.log('    Tailwind silently dropped — both are a class with no rule, and');
+  console.log('    finding #11 was the second kind. The difference is intent, declared');
+  console.log('    in ALLOWLIST.danglingClasses and coupled by a test to the structural');
+  console.log('    premise each reason rests on.\n');
   const passing = checks.filter((c) => c.pass).length;
   console.log(
     `Result: ${passing} of ${checks.length} passing, ${checks.length - passing} failing` +
