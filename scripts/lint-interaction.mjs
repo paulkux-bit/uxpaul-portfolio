@@ -9,14 +9,21 @@
 // Fourth in the family, after lint-type, lint-space and lint-color. Same house
 // style, same postcss dependency, same allowlist-with-a-reason discipline.
 //
-// Not wired into `npm run build` until I6, mirroring lint:color, which entered
-// the build script in df70f8f — the FINAL commit of the colour migration — and
-// carried this same note until then. A checklist that gates the build blocks
-// preview deploys for the whole migration.
+// GATES `npm run build` as of I6 — and runs AFTER `next build`, not before it
+// like its three siblings. That is a deliberate deviation, not an oversight.
 //
-// THIS SCRIPT IS THE MIGRATION CHECKLIST. It is red on purpose at I0. Each
-// later commit turns assertions green by changing the CODE. The rules are
-// written once, at full strength, here, and are not softened afterwards: a rule
+// Check 9 reads the built CSS out of `.next` to decide whether a className
+// resolves. On a fresh checkout there is no `.next`, so ordering this the way
+// lint:color entered at df70f8f — ahead of `next build` — fails check 9 on
+// every clean CI run and every Vercel deploy, for the one reason the check was
+// written to refuse: it cannot see. Measured before wiring by moving `.next`
+// aside: 8 of 9, check 9 red. Running it after the build hands it exactly the
+// CSS that build produced, and a non-zero exit still fails the whole command,
+// so the gate is no weaker for coming last.
+//
+// THIS SCRIPT WAS THE MIGRATION CHECKLIST. It was red on purpose at I0, and
+// each later commit turned assertions green by changing the CODE. The rules
+// were written once, at full strength, and were not softened afterwards: a rule
 // that has to bend to make a commit look clean means the commit is wrong.
 //
 // Every candidate is REPORTED — as a failure, or as excluded with a named
