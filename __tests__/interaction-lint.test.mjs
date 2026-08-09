@@ -282,6 +282,79 @@ describe('the unstyled-wrapper allowlist still rests on a true premise', () => {
   });
 });
 
+// ── The motion mapping, guarded ────────────────────────────────────────────
+//
+// Check 1 proves a duration is TOKENISED. It does not prove the token is the
+// RIGHT one — put --duration-card on the nav link and check 1 still passes.
+// §3's whole content is which surface moves at which speed, so that is what
+// gets asserted, statically, against the real globals.css.
+//
+// The rendered timing proof (computed transitionDuration under Playwright) was
+// a one-shot for I2. This is what carries the claim forward.
+describe('§3 motion mapping — the right token, not merely a token', () => {
+  const css = postcss.parse(readFileSync(join(REPO, 'app', 'globals.css'), 'utf8'));
+  const transitionsFor = (selector) => {
+    const out = [];
+    css.walkRules((r) => {
+      if (!r.selector.split(',').some((s) => s.trim() === selector)) return;
+      for (const d of r.nodes ?? []) {
+        if (d.type === 'decl' && /^transition(-duration)?$/.test(d.prop)) out.push(d.value);
+      }
+    });
+    return out;
+  };
+
+  const CONTROL = [
+    'a', '.site-header', '.skip-link', '.nav-link', '.theme-toggle',
+    '.about-row__mark', '.about-row::details-content',
+    '.about-btn', '.about-work-band__arrow',
+  ];
+  for (const sel of CONTROL) {
+    it(`${sel} moves at --duration-control`, () => {
+      const t = transitionsFor(sel);
+      expect(t, `${sel} has no transition declaration`).not.toHaveLength(0);
+      for (const v of t) {
+        expect(v).toContain('--duration-control');
+        expect(v, `${sel} still carries a literal duration`).not.toMatch(/\d+m?s(?![\w-])/);
+      }
+    });
+  }
+
+  it('body and body::before move at --duration-theme — one mode transition, one speed', () => {
+    for (const sel of ['body', 'body::before']) {
+      const t = transitionsFor(sel);
+      expect(t, `${sel} has no transition`).not.toHaveLength(0);
+      for (const v of t) expect(v).toContain('--duration-theme');
+    }
+  });
+
+  it('the card lift moves at --duration-card', () => {
+    // @utility lift is an at-rule, not a selector rule — walk it by name.
+    let value = null;
+    css.walkAtRules('utility', (r) => {
+      if (r.params.trim() !== 'lift') return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl' && d.prop === 'transition') value = d.value;
+    });
+    expect(value, '@utility lift has no transition').not.toBeNull();
+    expect(value).toContain('--duration-card');
+    expect(value).not.toContain('--duration-control');
+  });
+
+  it('--duration-hover is retired — defined nowhere, consumed nowhere', () => {
+    const src = readFileSync(join(REPO, 'app', 'globals.css'), 'utf8');
+    expect(src).not.toContain('--duration-hover');
+  });
+
+  it('entrance motion is NOT swept into an interaction token', () => {
+    for (const sel of ALLOWLIST.entranceMotion.selectors) {
+      for (const v of transitionsFor(sel)) {
+        expect(v, `${sel} was migrated; §9 leaves entrance open on purpose`)
+          .not.toMatch(/--duration-(control|card|theme)/);
+      }
+    }
+  });
+});
+
 // ── Forward references, scheduled rather than excused ──────────────────────
 //
 // PENDING_RULES names a class authored ahead of the rules meant to target it,

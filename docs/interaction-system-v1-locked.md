@@ -100,6 +100,7 @@ its own `@supports` alt-text handling and is not an icon.
 ```css
 --duration-control: 180ms;   /* hover, focus, press, rotation, colour */
 --duration-card:    300ms;   /* lift, shadow, media scale */
+--duration-theme:   450ms;   /* mode transition */
 --duration-reveal:  560ms;   /* entrance — unchanged */
 ```
 
@@ -107,8 +108,29 @@ Easing is unchanged: `--ease-out-soft` for state changes, `--ease-out-quint`
 where it is already in use. The reveal stagger (70 / 140 / 210 / 280ms) is a
 sequence of **delays**, not durations, and is unaffected.
 
-Replaces: 160ms (×2), 200ms, 240ms, 320ms. The 450ms paper-grain fade is an
-entrance, not an interaction — allowlisted with that reason.
+`--duration-theme` is a **name for a speed that already ships**, not a new speed.
+This section was written from an interaction audit and inherited its blind spot:
+a mode transition is neither an interaction nor an entrance, so it had no
+category and its two sites had no destination. Defined at the value `body` was
+already using, so nothing renders differently.
+
+**Replaces, corrected against the tree** — the original line here said "160ms
+(×2), 200ms, 240ms, 320ms" and was wrong about its own subject on three counts:
+
+| value | sites | where |
+|---|---|---|
+| 160ms | **4** | `.site-header`, `.skip-link`, `.nav-link`, `.theme-toggle` |
+| 200ms | 2 | `.about-btn`, `.about-work-band__arrow` (via the retired `--duration-hover`) |
+| 220ms | 1 | `a` — the link-hover underline, **unlisted originally** |
+| 240ms | 2 | `.about-row__mark`, `.about-row::details-content` |
+| 320ms | 1 | `@utility lift` → `--duration-card` |
+| 450ms | 2 | `body`, `body::before` → `--duration-theme` |
+
+The paper-grain fade at 450ms was described here as "an entrance, not an
+interaction". **That was false.** The grain's opacity is 0.55 in light and 0 in
+dark and nothing else changes it, so the transition fires only on a mode swap —
+the same mode transition as `body`'s, at the same duration. It takes
+`--duration-theme` and its allowlist entry is deleted.
 
 ---
 
@@ -265,6 +287,24 @@ part that needs both other systems.
 
 **Card meta** is half closed. Its hover, motion and elevation are specified
 here; its type rung and internal density are not.
+
+**Entrance motion is unspecified in v1.** §3 governs interaction; entrance was
+never in its scope, and the tree has **three groups and six live speeds**:
+
+| group | speeds | surface |
+|---|---|---|
+| tokenised | 560ms | `--duration-reveal` — `.about-reveal` |
+| reveal containers | 360ms | `.reveal-grid`, `.reveal-list` — **live on the home page** |
+| takes wall | 250 / 600 / 700 / 900ms | `.take-card`, `.mark`, `.take-content` — rendered on no route |
+
+`lint:interaction` check 1 excludes all three as **one category** with that
+reason, not as eight item entries: eight would pretend each was weighed on its
+merits, and nobody re-reads them.
+
+Reconciling them is a design decision with visible consequences, which is why it
+is here and not in the lint. Specifically, **360ms → 560ms is not the answer by
+default**: it is a 55% slowdown of the home page's entrance stagger, and a
+migration is the wrong place to make that call.
 
 **Pinned specimen tones** are untouched and stay on that list.
 

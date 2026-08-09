@@ -37,10 +37,41 @@ const postcss = createRequire(join(process.cwd(), 'package.json'))('postcss');
 // ── Allowlists — every entry carries a reason ──────────────────────────────
 export const ALLOWLIST = {
   // check 1: literal durations that are not interaction durations
+  //
+  // body::before's 450ms used to sit here as "paper-grain fade is an entrance,
+  // not an interaction". That reason was FALSE: the grain's opacity is 0.55 in
+  // light and 0 in dark and nothing else touches it, so that transition fires
+  // only on a mode swap — the same mode transition as body's, at the same
+  // 450ms. I2 gave it --duration-theme and the entry went with it. An exception
+  // whose justification no longer holds is the stale-exception problem.
   durations: [
-    { value: '450ms', selector: 'body::before', reason: 'paper-grain fade is an entrance, not an interaction (spec §3)' },
     { value: '0.01ms', selector: null, reason: 'prefers-reduced-motion kill switch — the point is that it is not a token' },
   ],
+  // check 1: entrance motion, excluded as ONE CATEGORY rather than as eight
+  // item entries.
+  //
+  // §3 covers interaction. Entrance is out of its scope and turns out to have
+  // three groups and six live speeds — --duration-reveal 560ms, both reveal
+  // containers at 360ms, and the takes wall at 250/600/700/900ms. Reconciling
+  // those is a design decision with visible consequences, not a lint chore, and
+  // it is recorded in §9 rather than parked here.
+  //
+  // Eight item entries would pretend each was weighed on its merits, and nobody
+  // re-reads them. One category with a stated reason is the honest shape.
+  //
+  // 360ms -> 560ms was REJECTED outright: a 55% slowdown of the homepage
+  // entrance stagger is a design change, and smuggling one into a token
+  // migration breaks the do-not-fix-while-moving rule held since I1.
+  entranceMotion: {
+    selectors: [
+      '.reveal-grid > [data-reveal-shown]',
+      '.reveal-list > [data-reveal-shown]',
+      '.take-card',
+      '.mark',
+      '.take-content',
+    ],
+    reason: 'entrance motion — unspecified in interaction v1 (spec §9); §3 governs interaction, and entrance has three groups and six live speeds still to reconcile',
+  },
   // check 3: radii that are deliberately off the scale
   radii: [],
   // check 7: :hover with no :active, by design
@@ -223,6 +254,13 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
             (a) => a.value === value && (a.selector === null || sel.includes(a.selector)),
           );
           if (hit) { ex.push({ where: `${s.file}:${line}`, detail: `${value} in ${sel} — ${hit.reason}`, reason: 'allowlisted-duration' }); continue; }
+          // One category, matched on the selector rather than the value: the
+          // point is the surface, not the number, and the numbers are exactly
+          // what §9 leaves open.
+          if (ALLOWLIST.entranceMotion.selectors.includes(sel)) {
+            ex.push({ where: `${s.file}:${line}`, detail: `${value} in ${sel} — ${ALLOWLIST.entranceMotion.reason}`, reason: 'entrance-motion-unspecified' });
+            continue;
+          }
           const n = (d.value.match(new RegExp(value.replace('.', '\\.'), 'g')) ?? []).length;
           f.push({ where: `${s.file}:${line}`, detail: `literal ${value}${n > 1 ? ` (×${n})` : ''} in ${d.prop} — ${sel}` });
         }

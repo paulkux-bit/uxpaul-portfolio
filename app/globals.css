@@ -259,8 +259,17 @@
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
-  --duration-hover: 200ms;
-  --duration-reveal: 560ms;
+
+  /* Motion — interaction system v1 §3. Two speeds for interaction, not four:
+     controls move at one duration, cards at another. */
+  --duration-control: 180ms;  /* hover, focus, press, rotation, colour */
+  --duration-card: 300ms;     /* lift, shadow, media scale */
+  /* A mode transition is neither an interaction nor an entrance. §3 was written
+     from an interaction audit and named no category for one, so this is a NAME
+     for a speed that already ships — defined at the value body was already
+     using, so nothing renders differently. */
+  --duration-theme: 450ms;
+  --duration-reveal: 560ms;   /* entrance — unchanged */
 }
 
 /* ============================================================
@@ -442,8 +451,8 @@
     color: var(--text-primary);
     position: relative;
     transition:
-      background-color 450ms var(--ease-out-soft),
-      color 450ms var(--ease-out-soft);
+      background-color var(--duration-theme) var(--ease-out-soft),
+      color var(--duration-theme) var(--ease-out-soft);
   }
 
   /* Paper grain overlay — light mode only. Fixed, non-interactive,
@@ -457,7 +466,7 @@
     opacity: 0.55;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    transition: opacity 450ms var(--ease-out-soft);
+    transition: opacity var(--duration-theme) var(--ease-out-soft);
   }
   html.dark body::before { opacity: 0; }
 
@@ -504,8 +513,8 @@
     text-underline-offset: 0.22em;
     text-decoration-color: var(--border-strong);
     transition:
-      text-decoration-color 220ms var(--ease-out-soft),
-      text-decoration-thickness 220ms var(--ease-out-soft);
+      text-decoration-color var(--duration-control) var(--ease-out-soft),
+      text-decoration-thickness var(--duration-control) var(--ease-out-soft);
   }
   a:hover {
     text-decoration-color: var(--link-hover);
@@ -730,9 +739,9 @@
 @utility lift {
   box-shadow: var(--shadow-rest);
   transition:
-    transform 320ms var(--ease-out-soft),
-    box-shadow 320ms var(--ease-out-soft),
-    border-color 320ms var(--ease-out-soft);
+    transform var(--duration-card) var(--ease-out-soft),
+    box-shadow var(--duration-card) var(--ease-out-soft),
+    border-color var(--duration-card) var(--ease-out-soft);
 }
 @utility lift-hover {
   transform: translateY(-3px);
@@ -774,8 +783,8 @@
   background-color: transparent;
   border-bottom: 1px solid transparent;
   transition:
-    background-color 160ms var(--ease-out-soft),
-    border-color 160ms var(--ease-out-soft);
+    background-color var(--duration-control) var(--ease-out-soft),
+    border-color var(--duration-control) var(--ease-out-soft);
 }
 
 /* Scroll-elevation sentinel — a real, non-zero target pinned to the document
@@ -808,7 +817,7 @@
   color: var(--text-primary);
   text-decoration: none;
   transform: translateY(-160%);
-  transition: transform 160ms var(--ease-out-soft);
+  transition: transform var(--duration-control) var(--ease-out-soft);
 }
 .skip-link:focus-visible {
   transform: translateY(0);
@@ -877,7 +886,7 @@
   color: var(--text-secondary);
   text-decoration-line: none;
   text-underline-offset: 0.22em;
-  transition: color 160ms var(--ease-out-soft);
+  transition: color var(--duration-control) var(--ease-out-soft);
 }
 .nav-link:hover {
   color: var(--text-primary);
@@ -906,8 +915,8 @@
   color: var(--text-secondary);
   cursor: pointer;
   transition:
-    color 160ms var(--ease-out-soft),
-    border-color 160ms var(--ease-out-soft);
+    color var(--duration-control) var(--ease-out-soft),
+    border-color var(--duration-control) var(--ease-out-soft);
 }
 .theme-toggle:hover {
   color: var(--text-primary);
@@ -3088,7 +3097,7 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-btn {
-    transition: background-color var(--duration-hover) var(--ease-out-quint);
+    transition: background-color var(--duration-control) var(--ease-out-quint);
   }
 }
 
@@ -3333,7 +3342,7 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-row__mark {
-    transition: transform 240ms var(--ease-out-quint);
+    transition: transform var(--duration-control) var(--ease-out-quint);
   }
   .about-row {
     interpolate-size: allow-keywords;
@@ -3342,8 +3351,8 @@ html.dark .figure-placeholder {
     block-size: 0;
     overflow: hidden;
     transition:
-      block-size 240ms var(--ease-out-quint),
-      content-visibility 240ms allow-discrete;
+      block-size var(--duration-control) var(--ease-out-quint),
+      content-visibility var(--duration-control) allow-discrete;
   }
   .about-row[open]::details-content {
     block-size: auto;
@@ -3487,7 +3496,7 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-work-band__arrow {
-    transition: transform var(--duration-hover) var(--ease-out-quint);
+    transition: transform var(--duration-control) var(--ease-out-quint);
   }
   .about-work-band:hover .about-work-band__arrow {
     transform: translateX(3px);
