@@ -378,6 +378,63 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
   });
 });
 
+// ── The radius mapping, guarded ────────────────────────────────────────────
+//
+// Check 3 proves a radius is TOKENISED. It does not prove the token is the
+// RIGHT one — put --radius-l on the button and check 3 still passes. §4's whole
+// content is which surface gets which step, so that is what gets asserted.
+//
+// Same shape as the §3 motion guard above, and the same reason: the pixel proof
+// was a one-shot, this is what carries the claim forward.
+describe('§4 radius mapping — the right step, not merely a token', () => {
+  const css = postcss.parse(readFileSync(join(REPO, 'app', 'globals.css'), 'utf8'));
+  const radiusFor = (selector) => {
+    const out = [];
+    css.walkRules((r) => {
+      if (!r.selector.split(',').some((s) => s.trim() === selector)) return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl' && d.prop === 'border-radius') out.push(d.value.trim());
+    });
+    return out;
+  };
+
+  const EXPECT = [
+    [':focus-visible', '--radius-xs'],   // the widest blast radius in §4
+    ['.skip-link', '--radius-xs'],
+    ['.mode-pair__label', '--radius-xs'],
+    ['.bento-theme__media', '--radius-xs'],
+    ['.theme-toggle', '--radius-s'],
+    ['.milestone', '--radius-s'],
+    ['.figure__image', '--radius-s'],
+    ['.mode-pair__cell', '--radius-s'],
+    ['.hero-block__callout', '--radius-s'],
+    ['.about-btn', '--radius-m'],        // the button
+    ['.quick-hit', '--radius-m'],
+    ['.case-card', '--radius-l'],        // the card sits a step above the button
+    ['.about-roles__step::before', '--radius-full'],
+  ];
+  for (const [sel, token] of EXPECT) {
+    it(`${sel} → ${token}`, () => {
+      const got = radiusFor(sel);
+      expect(got, `${sel} declares no border-radius`).not.toHaveLength(0);
+      for (const v of got) {
+        expect(v).toContain(token);
+        expect(v, `${sel} still carries a literal radius`).not.toMatch(/\d+px/);
+      }
+    });
+  }
+
+  it('the card and the button are different steps — that is why l exists', () => {
+    expect(radiusFor('.case-card')[0]).not.toBe(radiusFor('.about-btn')[0]);
+  });
+
+  it('all five steps are defined', () => {
+    const src = readFileSync(join(REPO, 'app', 'globals.css'), 'utf8');
+    for (const t of ['--radius-xs:', '--radius-s:', '--radius-m:', '--radius-l:', '--radius-full:']) {
+      expect(src).toContain(t);
+    }
+  });
+});
+
 // ── Forward references, scheduled rather than excused ──────────────────────
 //
 // PENDING_RULES names a class authored ahead of the rules meant to target it,
@@ -394,8 +451,11 @@ describe('pending forward references have not silently resolved', () => {
   const css = readFileSync(join(REPO, 'app', 'globals.css'), 'utf8');
   const rules = postcss.parse(css);
 
+  // Empty as of I3, and asserted as empty rather than deleted along with its
+  // last entry: the list is the mechanism, and a future forward reference gets
+  // its coupled test for free by being added here.
   it('names exactly the forward references this suite tracks', () => {
-    expect(PENDING_RULES.map((p) => p.class)).toEqual(['case-card']);
+    expect(PENDING_RULES.map((p) => p.class)).toEqual([]);
   });
 
   for (const p of PENDING_RULES) {

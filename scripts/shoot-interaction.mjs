@@ -63,7 +63,7 @@ const ROUTES = [
     path: '/',
     targets: [
       { name: 'page', sel: null, states: ['rest'] },
-      { name: 'pub', sel: PUB, states: ['rest', 'hover', 'focus'], focusOn: 'a[href^="/case-studies"]' },
+      { name: 'pub', sel: PUB, states: ['rest', 'hover', 'focus'], focusOn: 'a[href^="/case-studies"]', inflate: HALO },
       { name: 'unpub', sel: UNPUB, states: ['rest', 'hover'] },
       { name: 'mail', sel: MAIL, states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'theme-toggle', sel: '.theme-toggle', states: ['rest', 'hover', 'focus'], inflate: HALO },
@@ -151,7 +151,12 @@ for (const scheme of ['light', 'dark']) {
 
         let clip;
         if (el) {
-          const b = await el.boundingBox();
+          // A focus capture frames the FOCUSED element, not its container.
+          // Otherwise the ring's corners land mid-frame and any corner-based
+          // analysis of the diff is measuring the wrong rectangle — which is
+          // exactly what happened to the card's focus capture during I3.
+          const box = state === 'focus' && t.focusOn ? el.locator(t.focusOn).first() : el;
+          const b = await box.boundingBox();
           if (!b) { missing.push(`${tag} ${route.path} ${t.name}:${state} (no box)`); continue; }
           const g = t.inflate ?? 0;
           clip = {

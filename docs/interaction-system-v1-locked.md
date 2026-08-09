@@ -187,13 +187,31 @@ wrong, and the corrected list is:
    move authoring surface without moving a pixel, which is the point of adding
    `l`.
 
-**Four of those sites render on no route** — `.mode-pair__cell`,
-`.mode-pair__label`, `.figure-placeholder` and `.figure--framed` were probed on
-`/`, `/about` and both case studies and returned zero instances. Their changes
-are real in the stylesheet, invisible to any reader, and unprovable by pixel.
-`ModePair` is already recorded as live-capable dead code in
-`unspecified-surfaces.md`; the figure surfaces are a new instance of the same
-thing.
+### Of those eight, exactly two are visible to a reader
+
+Measured from the render, not reasoned from the stylesheet — which is the
+mistake this section has now made twice.
+
+| site | change | reaches a reader? |
+|---|---|---|
+| `:focus-visible` | 2 → 4 | **yes** — every focusable element with no radius of its own |
+| `.about-btn` | 10 → 12 | **yes** |
+| `.figure__image` | 6 → 8 | **no** — every rendered instance is overridden to `--radius-image` (12px) by the more specific `.cs-section--problem .framed-pair__cell .figure__image`, which was already tokenised |
+| `.mode-pair__cell`, `.mode-pair__label` | 6 → 8, 3 → 4 | **no** — render on no route |
+| `.figure--constrained-bleed .figure__image` | 6 → 8 | **no** — renders on no route |
+| `.figure-placeholder`, `.hero-block__image-frame .figure-placeholder` | 6 → 8 | **no** — render on no route |
+
+Probed on `/`, `/about` and both case studies: zero instances of
+`.mode-pair__cell`, `.mode-pair__label`, `.figure-placeholder`,
+`.figure--framed` and `.figure--constrained-bleed`. `ModePair` is already
+recorded as live-capable dead code in `unspecified-surfaces.md`; the figure
+surfaces are a new instance of the same thing.
+
+`.figure__image` is the more interesting one, because it *does* render and still
+changes nothing: a more specific selector wins on every instance. A rule can be
+live, correct, migrated, and reach no pixel. Enumerating what a stylesheet says
+is not the same as enumerating what a reader sees, and only the second one is
+what "changes shipped appearance" means.
 
 ### Why the first map was wrong
 

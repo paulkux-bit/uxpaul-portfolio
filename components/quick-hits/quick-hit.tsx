@@ -19,7 +19,7 @@ export function QuickHit({ hit }: { hit: QuickHitData }) {
   return (
     <article
       data-brand={hit.brand}
-      className="quick-hit rounded-[12px] border-[1.5px] border-[var(--base)] bg-[var(--fill)] px-6 py-5 md:min-h-[6rem] md:px-8"
+      className="quick-hit border-[1.5px] border-[var(--base)] bg-[var(--fill)] px-6 py-5 md:min-h-[6rem] md:px-8"
     >
       <p className="qh-brand text-eyebrow text-secondary">{hit.wordmark}</p>
       {/* Parallel to Selected Work card titles → <h2> element. The wdth move. */}

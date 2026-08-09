@@ -148,14 +148,14 @@ const inList = (l, p) => l.some(p);
 // Printed every run, and each entry is coupled to a test asserting the class has
 // NO rule today. When the named step gives it one, that test reddens and forces
 // the entry's deletion, so this list cannot quietly outlive its own contents.
-export const PENDING_RULES = [
-  {
-    class: 'case-card',
-    expectedAt: 'I3',
-    reason:
-      'base-class hook added by I1 ("I2, I3 and I4 all target this element"). I2 was not it — I2 edits @utility lift, a sibling class on the same <article>, never .case-card. I3 is: §4 puts the card box on --radius-l (16px, the step Paul added so the card keeps its size rather than dropping to the button\'s 12). NO LONGER CONDITIONAL: this entry used to warn that the card\'s rounded-2xl was invisible to check 3, so an I3 scoped to the count would skip it. Check 3 now reads JSX, so that site is a gated failure and I3 cannot reach 0 without moving it into .case-card.',
-  },
-];
+// EMPTY, and that is the mechanism working rather than an oversight.
+//
+// It held one entry: `case-card`, the base class I1 added as a hook with "I2, I3
+// and I4 all target this element". I3 gave it `border-radius: var(--radius-l)`
+// and the coupled test reddened on the spot, naming the selector it had found —
+// which is what forced this deletion instead of leaving a note describing a
+// forward reference that had already resolved.
+export const PENDING_RULES = [];
 
 const SKIP_DIRS = new Set(['node_modules', '.next', '.git', '_to_delete', 'dist', 'out', 'coverage', '.vercel']);
 

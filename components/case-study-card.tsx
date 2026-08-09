@@ -74,7 +74,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <article
       className={[
-        'case-card relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift',
+        'case-card relative isolate flex h-full flex-col overflow-hidden border border-subtle bg-surface lift',
         // Hover/focus response is a promise of a click target. An unpublished
         // card has none, so it rests: same border, same elevation, no lift.
         // The states themselves live in globals.css (R4); this modifier is the

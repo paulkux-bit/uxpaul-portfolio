@@ -342,9 +342,19 @@
      because heavy weight reads heavier on the espresso canvas. */
   --mark-weight:            700;
 
+  /* Radius — interaction system v1 §4. Five steps, so radius scales with
+     surface size: --radius-l exists to let the card keep 16px and sit a step
+     above the button rather than being pulled down to 12 to fit a shorter
+     ladder. */
+  --radius-xs:               4px;  /* inline marks, small media, focus-ring rounding */
+  --radius-s:                8px;  /* compact controls — theme toggle, nav */
+  --radius-m:               12px;  /* buttons */
+  --radius-l:               16px;  /* cards */
+  --radius-full:           999px;
+
   /* Containment radius for bright UI-capture images on the warm canvas (hero
      dashboard, PROBLEM legacy screenshots) — one value so they read as one system.
-     Mode-independent. */
+     Mode-independent. Coincides in value with --radius-m; distinct in meaning. */
   --radius-image:           12px;
 
   /* Portrait sibling to --radius-image. Deliberately tighter: a person is not a
@@ -500,7 +510,7 @@
   :focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: var(--radius-xs);
     box-shadow: 0 0 0 6px var(--focus-glow);
   }
   :focus:not(:focus-visible) { outline: none; box-shadow: none; }
@@ -812,7 +822,7 @@
   left: 0.75rem;
   z-index: 60;
   padding: var(--spacing-2xs) var(--spacing-xs);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background-color: var(--bg-surface-elevated);
   color: var(--text-primary);
   text-decoration: none;
@@ -858,6 +868,18 @@
    `.case-card--linked` as awaiting an `:active`. The two text links below are
    exempt under spec §5 — a text link has no surface to move.
    ============================================================ */
+
+/* The card box. Moved out of JSX (`rounded-2xl`) so the radius comes from this
+   system's scale rather than Tailwind's — 16px either way, so nothing moves.
+   --radius-l exists for exactly this: the card keeps its size and sits a step
+   above the button instead of being pulled down to 12.
+
+   This also closes the base class's forward reference. `.case-card` was added by
+   I1 as a hook with "I2, I3 and I4 all target this element" and had no rule of
+   its own until now. */
+.case-card {
+  border-radius: var(--radius-l);
+}
 
 /* Quiet links: no underline at rest, underline on hover. The colour and
    thickness shift still comes from the global a / a:hover pair. */
@@ -910,7 +932,7 @@
   min-height: 44px;
   min-width: 44px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background-color: transparent;
   color: var(--text-secondary);
   cursor: pointer;
@@ -986,6 +1008,9 @@
    (Option B). Desktop: fixed side columns (12rem fits "AMERICAN RED CROSS",
    8rem fits "Entertainment") so all four blocks align; title centers in 1fr. */
 .quick-hit {
+  /* Moved out of JSX (`rounded-[12px]`, an arbitrary value pinned to the same
+     number). 12px either way — the change is where it is authored. */
+  border-radius: var(--radius-m);
   display: grid;
   align-items: center;
   column-gap: var(--spacing-s);
@@ -1605,7 +1630,7 @@
   margin-top: var(--spacing-l);
   padding: var(--spacing-crescendo) var(--spacing-m);
   background: var(--bg-surface-elevated); /* warm lift, distinct from the --bg-canvas field; AA verified */
-  border-radius: 8px;                     /* soft panel, no border — not a card */
+  border-radius: var(--radius-s);                     /* soft panel, no border — not a card */
 }
 .milestone__frame {
   margin: 0;
@@ -2066,7 +2091,7 @@ html.dark .oku-figure {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 6px;
+  border-radius: var(--radius-s);
   border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
 }
 
@@ -2124,7 +2149,7 @@ html.dark .oku-figure {
 
 .mode-pair__cell {
   position: relative;
-  border-radius: 6px;
+  border-radius: var(--radius-s);
   overflow: hidden;
   border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
 }
@@ -2158,7 +2183,7 @@ html.dark .oku-figure {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: var(--spacing-3xs) var(--spacing-2xs);
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   background: color-mix(in oklch, currentColor 8%, transparent);
   z-index: 2;
 }
@@ -2235,7 +2260,7 @@ html.dark .oku-figure {
 }
 
 .figure--constrained-bleed .figure__image {
-  border-radius: 6px;
+  border-radius: var(--radius-s);
 }
 
 /* ── Asymmetric pair ─────────────────────────────────────────────────────
@@ -2467,7 +2492,7 @@ html.dark .oku-figure {
   position: relative;
   aspect-ratio: var(--bento-aspect, 3 / 4); /* slot aspect; reserves the box pre-paint (CLS) */
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Image-edge parity hairline as an OVERLAY above the next/image fill child — a
@@ -2481,7 +2506,7 @@ html.dark .oku-figure {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   box-shadow: inset 0 0 0 1px var(--border-subtle);
   pointer-events: none;
 }
@@ -2604,7 +2629,7 @@ html.dark .oku-figure {
   width: 100%;
   aspect-ratio: var(--band-aspect, 4.9 / 1); /* reserves the box pre-paint (CLS) */
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Band scroll track (opt-in via BentoBand's `scrollFloor`, e.g. the dense product form
@@ -2647,7 +2672,7 @@ html.dark .oku-figure {
   width: 100%;
   aspect-ratio: var(--ribbon-aspect, 13 / 1);
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* The ribbon + band scroll tracks are keyboard-focusable (tabIndex/role on the element) so a
@@ -2657,7 +2682,7 @@ html.dark .oku-figure {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
   box-shadow: var(--focus-glow);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Ribbon — mobile (<md): fixed-height horizontal-scroll track. The canvas keeps
@@ -2706,7 +2731,7 @@ html.dark .oku-figure {
   background: color-mix(in oklch, currentColor 4%, transparent);
   padding: var(--spacing-l);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   box-sizing: border-box;
 }
 
@@ -2768,7 +2793,7 @@ html.dark .oku-figure {
 .figure-placeholder {
   width: 100%;
   background: color-mix(in oklch, currentColor 5%, transparent);
-  border-radius: 6px;
+  border-radius: var(--radius-s);
 }
 
 html.dark .figure-placeholder {
@@ -2902,7 +2927,7 @@ html.dark .figure-placeholder {
 .hero-block__image-frame .figure-placeholder {
   display: block;
   width: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius-s);
 }
 
 /* ── Callout ─────────────────────────────────────────────────────────── */
@@ -2919,7 +2944,7 @@ html.dark .figure-placeholder {
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-hover);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: var(--spacing-m); /* single even token — tight, no baggy margins */
 }
 
@@ -3088,7 +3113,7 @@ html.dark .figure-placeholder {
   gap: var(--spacing-2xs); /* the trailing ArrowDown */
   min-height: 44px;
   padding: var(--spacing-2xs) var(--spacing-m);
-  border-radius: 10px;
+  border-radius: var(--radius-m);
   background: var(--text-primary);
   color: var(--bg-canvas);
   font-weight: 500;
@@ -3436,7 +3461,7 @@ html.dark .figure-placeholder {
   top: 0.34em;
   width: 7px;
   height: 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--text-muted);
 }
 
