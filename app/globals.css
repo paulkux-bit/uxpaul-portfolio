@@ -775,6 +775,28 @@
 }
 
 /* ============================================================
+   ICONS — interaction system v1 §2
+   Authored HERE, not inside the @utility cluster above: Tailwind
+   silently drops ordinary rules placed in that block (finding #11),
+   and every check went green while the CSS did not exist.
+
+   Size is 1em and stroke comes from the container, so a placement
+   needs no numbers of its own. §2.2: font size cancels out of the
+   stroke calculation, which is why four constants replace a
+   per-placement measurement.
+
+   1.70 is the default because weight 500 is the site's commonest
+   adjacent weight; a container at another weight overrides it.
+   ============================================================ */
+
+.icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  stroke-width: var(--icon-stroke, 1.70);
+}
+
+/* ============================================================
    SITE HEADER
    Transparent at rest; a hairline border + canvas fill fade in
    once scrolled (data-scrolled). Appearance-only, 160ms — the
@@ -946,6 +968,18 @@
    focus moment, inherited from the global :focus-visible halo). Sun/moon
    visibility is driven by the .dark class, set pre-paint by next-themes. */
 .theme-toggle {
+  /* §2 has no position on an icon with NO adjacent text, and this button has
+     none. Recorded judgment: its adjacent type is the wordmark — the only other
+     type in the header chrome, sitting beside it — at 1rem weight 600, so the
+     stroke is 1.95 and the box is 1rem.
+
+     font-size and font-weight are declared rather than inherited, and the weight
+     is inert here (no text). It exists to state the type context, which is what
+     makes §2.3's containment rule resolvable on a button with nothing to be
+     adjacent to. */
+  font-size: 1rem;
+  font-weight: 600;
+  --icon-stroke: 1.95;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -968,10 +1002,11 @@
 .theme-toggle:active {
   transform: translateY(1px);
 }
-.theme-toggle svg {
-  width: 1.125rem;
-  height: 1.125rem;
-}
+/* `.theme-toggle svg { width: 1.125rem }` used to live here and is deliberately
+   gone. At (0,1,1) it outranks `.icon` at (0,1,0), so leaving it would have
+   pinned the converted icons to 18px while every check still passed — the
+   geometry silently wrong and nothing to catch it. Size now comes from .icon
+   against this button's declared 1rem. */
 .theme-toggle .icon-sun { display: none; }
 .dark .theme-toggle .icon-sun { display: inline; }
 .dark .theme-toggle .icon-moon { display: none; }
@@ -3132,6 +3167,11 @@ html.dark .figure-placeholder {
 /* Squared, not a pill. The shape carries the affordance, so the underline the
    base layer puts on every <a> is removed here and nowhere else. */
 .about-btn {
+  /* §2.1: the label is weight 500, so the icon beside it strokes at 1.70.
+     This is the ONE surface where §2.3's "1em inherits" works as written —
+     the ArrowDown is a descendant of the element carrying the type, so it
+     picks up the label's font-size with no help. */
+  --icon-stroke: 1.70;
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2xs); /* the trailing ArrowDown */
@@ -3219,11 +3259,20 @@ html.dark .figure-placeholder {
 }
 
 .about-row__summary {
+  /* §2.1: the row has THREE text siblings at two rungs — company (text-h3,
+     weight 500), role and year (text-small, weight 400). §2 has no position on
+     which is "adjacent", so this is a recorded judgment: the company is the
+     row's subject, and the mark is already optically centred against its first
+     line (see .about-row__mark's margin). Weight 500 → 1.70. */
+  --icon-stroke: 1.70;
   display: grid;
   /* Mobile: company spans the full width on row 1 with the chevron far right,
      then role left and year RIGHT-ALIGNED on row 2. Right-aligning the year is
      what gives every row a shared right edge. */
-  grid-template-columns: minmax(0, 1fr) 1.25rem;
+  /* The mark track is `auto` rather than a fixed 1.25rem: under §2 the mark is
+     1em of text-h3 (25.2px at 1440), which outgrows the 20px the track used to
+     hard-code. The track follows the mark instead of asserting its size. */
+  grid-template-columns: minmax(0, 1fr) auto;
   column-gap: var(--spacing-s);
   row-gap: var(--spacing-3xs);
   align-items: baseline;
@@ -3279,21 +3328,27 @@ html.dark .figure-placeholder {
   justify-self: end;
   flex: none;
   color: var(--text-muted);
-  /* The icon ships as size={20}, which lucide writes as px width/height
-     attributes. Overriding them in rem makes the chevron scale with the
-     reader's root setting like everything around it — at a 32px root the px
-     version stayed 20px while the line box it centres against doubled, so the
-     mark drifted upward exactly when accessibility scaling was in use. 1.25rem
-     is the same 20px at the default root, and it matches the grid track this
-     mark sits in, which is already authored as 1.25rem. */
-  width: 1.25rem;
-  height: 1.25rem;
-  /* NOT a spacing value and deliberately not on the scale: this is
-     (line-height − mark height) / 2, an optical centring against the company
-     name's first line. Its rem terms are the text-h3 font-size clamp and the
-     mark's own box, neither of which belongs to the spacing scale. Allowlisted
-     in scripts/lint-space.mjs with that reason. */
-  margin-block-start: calc((clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 1.25 - 1.25rem) / 2);
+  /* Size comes from .icon (1em) against the text-h3 the node now carries, so
+     there is nothing to declare here. The rem override this rule used to hold
+     existed because lucide writes px width/height attributes; §2's em sizing
+     solves that at the source, and it keeps the scaling behaviour the rem
+     version was reaching for. */
+  /* Optical centring against the company name's first line: (line-height −
+     mark height) / 2. Now that the mark is 1em of the same rung, both terms are
+     the SAME font-size and the expression collapses to fs × 0.125 — one clamp
+     instead of a clamp minus a separate box.
+
+     IT WOULD BE `0.125em`, AND IT CANNOT BE. Spacing v1 ruling 1 bans `em` on
+     block-level spacing, and lint:space check 2 does not consult the allowlist
+     that check 1 uses for this very declaration — so the em form fails a gate
+     that the rem form passes, for the same number. §2 sizes icons in em by
+     rule; spacing v1 bans em on block spacing by rule; this one declaration is
+     governed by both and neither owns the outcome. Reported as finding #19,
+     unfixed here: changing either gate means changing a locked system that is
+     not I5's to change.
+
+     Allowlisted in scripts/lint-space.mjs under check 1 with this reason. */
+  margin-block-start: calc(clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 0.125);
   transform: rotate(0deg);
 }
 
@@ -3529,6 +3584,13 @@ html.dark .figure-placeholder {
    button: the hairlines are the shape. */
 
 .about-work-band {
+  /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
+     The band itself sets no font-weight — the weight lives on the sibling's
+     utility — so §2.3's "every container that sets font-weight" never fires
+     here. Declared explicitly instead. The arrow carries text-h3 in JSX to
+     get the label's font-size, since it is a SIBLING of the type and would
+     otherwise inherit the band's. */
+  --icon-stroke: 1.70;
   display: flex;
   align-items: center;
   justify-content: space-between;

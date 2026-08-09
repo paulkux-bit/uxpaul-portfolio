@@ -1,6 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
+import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 // Returns false during SSR and the hydration commit, true thereafter — without
@@ -21,6 +22,13 @@ function useHydrated(): boolean {
  * markup is identical (both glyphs always rendered) — no hydration mismatch.
  * Only the accessible label depends on the resolved theme, so it's gated behind
  * `hydrated` and reads a neutral action until the client knows the real state.
+ *
+ * I5 CONVERTED THE GEOMETRY, NOT THE MECHANISM. The glyphs are Lucide now (R3),
+ * but BOTH are still rendered on every request and CSS still picks one. The
+ * obvious Lucide conversion is `resolvedTheme === 'dark' ? <Sun/> : <Moon/>`:
+ * shorter, passes checks 4, 5 and 6, passes tsc and eslint, and reintroduces
+ * both the flash and a hydration mismatch, because the server has no resolved
+ * theme to render from. Do not "simplify" this into a conditional.
  */
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -38,32 +46,10 @@ export function ThemeToggle() {
       className="theme-toggle"
     >
       {/* Moon — shown in light mode (the action is "go dark"). */}
-      <svg
-        className="icon-moon"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" />
-      </svg>
-      {/* Sun — shown in dark mode (the action is "go light"). */}
-      <svg
-        className="icon-sun"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="4" />
-        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-      </svg>
+      <Moon className="icon icon-moon" aria-hidden="true" focusable="false" />
+      {/* Sun — shown in dark mode (the action is "go light"). BOTH render,
+          always; `.dark` decides which one is displayed. */}
+      <Sun className="icon icon-sun" aria-hidden="true" focusable="false" />
     </button>
   );
 }

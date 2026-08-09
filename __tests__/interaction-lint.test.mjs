@@ -4,6 +4,13 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ALLOWLIST, PENDING_RULES, run } from '../scripts/lint-interaction.mjs';
+// THE SELF-REFERENCE TRAP, AGAIN — fourth time in this project. Both guards
+// below first failed on clean code because their regexes matched the COMMENTS
+// that explain them: globals.css documents the `.theme-toggle svg` rule it
+// deliberately removed, and theme-toggle.tsx spells out the conditional render
+// it warns against. Sharing the linter's own comment-blanker rather than
+// writing a second one.
+import { blankComments } from '../scripts/color-literals.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 const postcss = createRequire(join(REPO, 'package.json'))('postcss');
@@ -385,6 +392,81 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
           .not.toMatch(/--duration-(control|card|theme)/);
       }
     }
+  });
+});
+
+// ── §2's icon contexts, guarded ────────────────────────────────────────────
+//
+// Checks 5 and 6 prove an icon is SIZED and GOVERNED. They do not prove it is
+// governed by the right value, or that it sits in the right type context —
+// --icon-stroke: 2.25 on the button would pass both. §2's content is which
+// adjacent type each icon belongs to, so that is what gets asserted.
+describe('§2 icon contexts — the right stroke, from the right adjacent type', () => {
+  const css = readFileSync(join(REPO, 'app', 'globals.css'), 'utf8');
+  const rules = postcss.parse(css);
+  const declFor = (selector, prop) => {
+    let v = null;
+    rules.walkRules((r) => {
+      if (!r.selector.split(',').some((s) => s.trim() === selector)) return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl' && d.prop === prop) v = d.value.trim();
+    });
+    return v;
+  };
+
+  it('.icon sizes 1em in both axes and takes its stroke from the container', () => {
+    expect(declFor('.icon', 'width')).toBe('1em');
+    expect(declFor('.icon', 'height')).toBe('1em');
+    expect(declFor('.icon', 'stroke-width')).toContain('--icon-stroke');
+  });
+
+  // The stroke each container declares, and why it is that number.
+  for (const [sel, stroke, why] of [
+    ['.about-btn', '1.70', 'label weight 500'],
+    ['.about-work-band', '1.70', 'sibling label text-h3, weight 500'],
+    ['.about-row__summary', '1.70', 'sibling company text-h3, weight 500'],
+    ['.theme-toggle', '1.95', 'no adjacent text — judged against the wordmark, weight 600'],
+  ]) {
+    it(`${sel} declares --icon-stroke: ${stroke} (${why})`, () => {
+      expect(declFor(sel, '--icon-stroke')).toBe(stroke);
+    });
+  }
+
+  // The toggle has no text, so its type context only exists because it is
+  // declared. If these go, the icon silently falls back to inherited size and
+  // the default 1.70 — with every check still green.
+  it('.theme-toggle declares the type context its icons resolve against', () => {
+    expect(declFor('.theme-toggle', 'font-size')).toBe('1rem');
+    expect(declFor('.theme-toggle', 'font-weight')).toBe('600');
+  });
+
+  // (0,1,1) outranks .icon at (0,1,0): this rule would pin the icons to 18px
+  // while checks 4, 5 and 6 all stayed green.
+  it('no descendant rule outranks .icon on size', () => {
+    expect(blankComments(css)).not.toMatch(/\.theme-toggle\s+svg\s*\{[^}]*width/);
+  });
+
+  // A sibling icon cannot inherit its neighbour's font-size, so the rung comes
+  // to the icon. If someone "cleans up" the utility off these nodes, 1em
+  // silently resolves against the container instead.
+  for (const [file, node] of [
+    ['app/about/page.tsx', 'about-work-band__arrow'],
+    ['components/about/drawer.tsx', 'about-row__mark'],
+  ]) {
+    it(`${node} carries text-h3 for its font-size`, () => {
+      const src = readFileSync(join(REPO, file), 'utf8');
+      expect(src).toMatch(new RegExp(`className="icon text-h3 ${node}"`));
+    });
+  }
+
+  // THE MECHANISM, not the geometry. A conditional render here passes checks 4,
+  // 5 and 6, tsc and eslint, and reintroduces the theme flash plus a hydration
+  // mismatch, because the server has no resolved theme.
+  it('the theme toggle renders BOTH glyphs unconditionally', () => {
+    const src = readFileSync(join(REPO, 'components', 'theme-toggle.tsx'), 'utf8');
+    expect(src).toContain('<Moon className="icon icon-moon"');
+    expect(src).toContain('<Sun className="icon icon-sun"');
+    expect(blankComments(src), 'a conditional glyph reintroduces the flash and a hydration mismatch')
+      .not.toMatch(/resolvedTheme[^\n]*\?[^\n]*<(Sun|Moon)/);
   });
 });
 
