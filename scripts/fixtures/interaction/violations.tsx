@@ -31,3 +31,7 @@ export const RemSized = () => <ArrowRight className="v-icon-rem" />;
 // check 9 — a class that resolves to no utility in the built stub and no
 // authored rule in either fixture stylesheet: dangling. (1)
 export const Dangling = () => <div className="v-dangling-wrapper" />;
+
+// check 3, JSX half — a Tailwind radius utility. R7 says radius is a scale, so
+// it is authored in CSS against a token wherever it is written. (1)
+export const JsxRadius = () => <div className="rounded-lg" />;

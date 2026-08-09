@@ -1,4 +1,4 @@
-// Pixel-identity harness for the interaction migration.
+// Pixel harness for the interaction migration.
 //   node scripts/shoot-interaction.mjs <outdir> [--reduced]
 //
 // Committed rather than improvised so a future reader can rerun a proof instead
@@ -19,6 +19,19 @@
 //   clip                      the element box only, so the sticky header is
 //                             outside the frame entirely
 //   reducedMotion             the media emulation the extension cannot reach
+//
+// ── I3: THREE ROUTES, NOT ONE ──────────────────────────────────────────────
+//
+// Through I1 and I2 this shot the home page only, which left .about-btn,
+// .about-row, .about-work-band and .skip-link outside the frame — stated at the
+// time as a coverage caveat rather than discovered later. I3 changes the button,
+// the focus ring and five figure surfaces, most of them on routes never
+// captured, so the harness is extended BEFORE the migration that needs it. The
+// before/after baseline has to come from the same instrument.
+//
+// EVERY TARGET IS REPORTED as found or missing. A target that silently produces
+// no capture is indistinguishable from one that passed, which is the failure
+// mode this project keeps finding.
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -32,9 +45,76 @@ const PUB = 'article:has(a[href^="/case-studies"])';
 const UNPUB = 'article:not(:has(a[href^="/case-studies"]))';
 const MAIL = 'a[href^="mailto:"]';
 
+// The two-layer focus halo draws OUTSIDE the box: 2px ring + 3px offset + 6px
+// glow = 11px, so a clip tight to the element would crop the very thing a
+// focus capture is for. 16 leaves slack for the radius change itself.
+const HALO = 16;
+
+/**
+ * name    file suffix; `<mode>-<name>.png`
+ * sel     element to clip to; null means the viewport
+ * states  rest | hover | focus
+ * inflate px to grow the clip by, for anything drawing outside its box
+ * prep    optional async (page) => void, run once before this target
+ * focusOn optional descendant selector to focus instead of the element
+ */
+const ROUTES = [
+  {
+    path: '/',
+    targets: [
+      { name: 'page', sel: null, states: ['rest'] },
+      { name: 'pub', sel: PUB, states: ['rest', 'hover', 'focus'], focusOn: 'a[href^="/case-studies"]' },
+      { name: 'unpub', sel: UNPUB, states: ['rest', 'hover'] },
+      { name: 'mail', sel: MAIL, states: ['rest', 'hover', 'focus'], inflate: HALO },
+      { name: 'theme-toggle', sel: '.theme-toggle', states: ['rest', 'hover', 'focus'], inflate: HALO },
+      { name: 'nav-link', sel: '.nav-link', states: ['rest', 'hover', 'focus'], inflate: HALO },
+      { name: 'quick-hit', sel: '.quick-hit', states: ['rest'] },
+      // The skip link sits at translateY(-160%) until focused. Tab from the top
+      // of the document is the only way to see it.
+      { name: 'skip-link', sel: '.skip-link', states: ['focus'], inflate: HALO,
+        prep: async (page) => { await page.evaluate(() => window.scrollTo(0, 0)); await page.keyboard.press('Tab'); } },
+    ],
+  },
+  {
+    path: '/about',
+    targets: [
+      { name: 'about-btn', sel: '.about-btn', states: ['rest', 'hover', 'focus'], inflate: HALO },
+      { name: 'about-work-band', sel: '.about-work-band', states: ['rest', 'hover'] },
+      { name: 'about-row-closed', sel: '.about-row', states: ['rest'] },
+      { name: 'about-row-open', sel: '.about-row', states: ['rest'],
+        prep: async (page) => { await page.locator('.about-row__summary').first().click(); await page.waitForTimeout(500); } },
+      // inside the open drawer, so it follows the row above
+      { name: 'about-roles-step', sel: '.about-roles__step', states: ['rest'] },
+    ],
+  },
+  {
+    path: '/case-studies/uscg-bard',
+    targets: [
+      { name: 'figure-image', sel: '.figure__image', states: ['rest'] },
+      { name: 'hero-callout', sel: '.hero-block__callout', states: ['rest'] },
+      { name: 'milestone', sel: '.milestone', states: ['rest'] },
+      { name: 'bento-theme-media', sel: '.bento-theme__media', states: ['rest'] },
+      { name: 'bento-band-media', sel: '.bento-band__media', states: ['rest'] },
+      { name: 'bento-ribbon', sel: '.bento-ribbon__canvas', states: ['rest'] },
+      // KNOWN TO RENDER NOWHERE, and kept on purpose so the gap stays printed
+      // every run rather than becoming a target nobody remembers was dropped.
+      // Probed on /, /about and both case studies: zero instances of each.
+      // ModePair is already recorded as live-capable dead code in
+      // docs/unspecified-surfaces.md; the three figure surfaces were not.
+      { name: 'figure-framed', sel: '.figure--framed', states: ['rest'] },
+      { name: 'figure-placeholder', sel: '.figure-placeholder', states: ['rest'] },
+      { name: 'mode-pair-cell', sel: '.mode-pair__cell', states: ['rest'] },
+      { name: 'mode-pair-label', sel: '.mode-pair__label', states: ['rest'] },
+      { name: 'cs-link', sel: 'a[href^="https://www.linkedin.com"]', states: ['rest', 'focus'], inflate: HALO },
+    ],
+  },
+];
+
 await mkdir(OUT, { recursive: true });
 const browser = await chromium.launch();
 const notes = [];
+const found = [];
+const missing = [];
 
 for (const scheme of ['light', 'dark']) {
   const ctx = await browser.newContext({
@@ -44,51 +124,51 @@ for (const scheme of ['light', 'dark']) {
     reducedMotion: REDUCED ? 'reduce' : 'no-preference',
   });
   const page = await ctx.newPage();
-  await page.goto(BASE, { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.fonts.ready);
-
   const tag = `${scheme}${REDUCED ? '-reduced' : ''}`;
-  const shot = async (name, opts = {}) => {
-    const buf = await page.screenshot({ animations: 'disabled', caret: 'hide', type: 'png', ...opts });
-    await writeFile(join(OUT, `${tag}-${name}.png`), buf);
-  };
-  const el = (sel, n = 0) => page.locator(sel).nth(n);
 
-  // full page at rest — commit 3's proof surface
-  await shot('page-rest', { fullPage: false });
+  for (const route of ROUTES) {
+    await page.goto(BASE + route.path, { waitUntil: 'networkidle' });
+    await page.evaluate(() => document.fonts.ready);
+    await page.waitForTimeout(500);
 
-  // published card: rest, hovered, focus-within
-  await el(PUB).scrollIntoViewIfNeeded();
-  await page.waitForTimeout(400);
-  await shot('pub-rest', { clip: await el(PUB).boundingBox() });
-  await el(PUB).hover();
-  await page.waitForTimeout(600);
-  await shot('pub-hover', { clip: await el(PUB).boundingBox() });
-  await page.mouse.move(0, 0);
-  await page.waitForTimeout(600);
-  await el(PUB).locator('a[href^="/case-studies"]').focus();
-  await page.waitForTimeout(600);
-  await shot('pub-focus', { clip: await el(PUB).boundingBox() });
-  await page.locator('body').evaluate((b) => b.ownerDocument.activeElement?.blur());
+    for (const t of route.targets) {
+      const el = t.sel ? page.locator(t.sel).first() : null;
+      if (t.prep) await t.prep(page);
 
-  // unpublished card: rest and hovered. The modifier must NOT lift it, and
-  // before the media tier was deleted its media well scaled on hover while the
-  // card did not — the scoping trap this pair exists to catch.
-  await el(UNPUB).first().scrollIntoViewIfNeeded();
-  await page.waitForTimeout(400);
-  await shot('unpub-rest', { clip: await el(UNPUB).boundingBox() });
-  await el(UNPUB).hover();
-  await page.waitForTimeout(600);
-  await shot('unpub-hover', { clip: await el(UNPUB).boundingBox() });
-  await page.mouse.move(0, 0);
+      if (el && (await el.count()) === 0) {
+        missing.push(`${tag} ${route.path} ${t.name} (${t.sel})`);
+        continue;
+      }
+      if (el) { await el.scrollIntoViewIfNeeded(); await page.waitForTimeout(300); }
 
-  // the quiet mailto link
-  await el(MAIL).scrollIntoViewIfNeeded();
-  await page.waitForTimeout(400);
-  await shot('mail-rest', { clip: await el(MAIL).boundingBox() });
-  await el(MAIL).hover();
-  await page.waitForTimeout(600);
-  await shot('mail-hover', { clip: await el(MAIL).boundingBox() });
+      for (const state of t.states) {
+        if (state === 'hover') { await el.hover(); await page.waitForTimeout(600); }
+        if (state === 'focus') {
+          if (t.focusOn) await el.locator(t.focusOn).focus();
+          else if (!t.prep) await el.focus().catch(() => {});
+          await page.waitForTimeout(600);
+        }
+
+        let clip;
+        if (el) {
+          const b = await el.boundingBox();
+          if (!b) { missing.push(`${tag} ${route.path} ${t.name}:${state} (no box)`); continue; }
+          const g = t.inflate ?? 0;
+          clip = {
+            x: Math.max(0, b.x - g), y: Math.max(0, b.y - g),
+            width: b.width + g * 2, height: b.height + g * 2,
+          };
+        }
+        const buf = await page.screenshot({ animations: 'disabled', caret: 'hide', type: 'png', ...(clip ? { clip } : {}) });
+        await writeFile(join(OUT, `${tag}-${t.name}-${state}.png`), buf);
+        found.push(`${tag}-${t.name}-${state}`);
+
+        if (state === 'hover') await page.mouse.move(0, 0);
+        if (state === 'focus') await page.locator('body').evaluate((b2) => b2.ownerDocument.activeElement?.blur());
+        await page.waitForTimeout(200);
+      }
+    }
+  }
 
   notes.push(`${tag}: html.dark=${await page.evaluate(() => document.documentElement.classList.contains('dark'))}`);
   await ctx.close();
@@ -96,4 +176,9 @@ for (const scheme of ['light', 'dark']) {
 
 await browser.close();
 console.log(notes.join('\n'));
+console.log(`captured ${found.length}`);
+if (missing.length) {
+  console.log(`MISSING ${missing.length} — reported, not skipped:`);
+  for (const m of missing) console.log(`  ${m}`);
+}
 console.log(`wrote ${OUT}`);

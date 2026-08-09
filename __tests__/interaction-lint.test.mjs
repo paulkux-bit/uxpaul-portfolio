@@ -71,6 +71,17 @@ describe('check 1 — literal durations', () => {
   it('excludes the reduced-motion kill switch BY NAME', () => {
     expect(excReasons(c())).toContain('allowlisted-duration');
   });
+  // Finding #14. The transition-delay PROPERTY was skipped while a delay in the
+  // shorthand was read as a duration — one rule, two answers, decided by how
+  // the author spelled it.
+  it('reads the second time in a shorthand as a DELAY, not a duration', () => {
+    expect(excReasons(c())).toContain('shorthand-delay');
+    expect(c().excluded.some((x) => x.reason === 'shorthand-delay' && x.detail.includes('100ms'))).toBe(true);
+  });
+  it('never flags a shorthand delay as a literal duration', () => {
+    expect(c().failures.some((f) => f.detail.includes('100ms'))).toBe(false);
+    expect(failFiles(c())).not.toContain('clean.css');
+  });
 });
 
 describe('check 2 — easing tokens', () => {
@@ -95,6 +106,18 @@ describe('check 3 — radius scale', () => {
     expect(excReasons(c())).toEqual(expect.arrayContaining([
       'uses-radius-token', 'zero-or-keyword', 'token-definition',
     ]));
+  });
+  // The JSX half. §4's map was wrong because the audit that wrote it and the
+  // check that enforced it shared this exact gap.
+  it('catches a Tailwind radius utility in .tsx', () => {
+    expect(c().failures.some((f) => f.detail.startsWith('rounded-lg'))).toBe(true);
+    expect(failFiles(c())).toContain('violations.tsx');
+  });
+  it('does NOT flag a class that merely starts with "rounded"', () => {
+    // `rounded-m` is not a Tailwind size. A className-shaped string is not
+    // automatically a radius utility, and check 9 owns the dangling case.
+    expect(c().failures.some((f) => f.detail.startsWith('rounded-m'))).toBe(false);
+    expect(failFiles(c())).not.toContain('clean.tsx');
   });
 });
 

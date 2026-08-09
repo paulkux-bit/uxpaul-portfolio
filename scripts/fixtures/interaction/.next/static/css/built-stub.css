@@ -35,3 +35,6 @@
 .text-primary { color: #000 }
 .bg-surface { background: #fff }
 .rounded-m { border-radius: 12px }
+/* check 3's JSX violation fixture — it must fail check 3 for BEING a radius
+   utility, not fail check 9 for resolving to nothing */
+.rounded-lg { border-radius: 8px }

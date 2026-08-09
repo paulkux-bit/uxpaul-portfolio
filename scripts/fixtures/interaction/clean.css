@@ -18,6 +18,15 @@
   transition-delay: 140ms;
 }
 
+/* check 1 — the SAME rule, spelled the other way. Finding #14: a delay written
+   in the transition shorthand is still a delay, and this used to be counted as
+   a duration while the declaration above was correctly skipped. One rule, two
+   answers, depending on how the author spelled it. The 100ms must appear as
+   excluded/shorthand-delay and never as a failure. */
+.c-shorthand-delay {
+  transition: opacity var(--duration-card) var(--ease-out-soft) 100ms;
+}
+
 /* check 1 — the reduced-motion kill switch, allowlisted by value */
 @media (prefers-reduced-motion: reduce) {
   .c-reduced-motion {
@@ -39,6 +48,17 @@
 :root {
   --radius-xs: 4px;
   --radius-s: 8px;
+}
+
+/* The duration tokens this fixture CONSUMES, defined here so they resolve.
+   Not decoration: check 1 tells a duration from a delay by position among
+   <time> values, and it can only know var(--duration-card) occupies a time slot
+   if it can see that the token holds a time. Without these, .c-shorthand-delay
+   below reads its 100ms delay as the first time value — which is exactly the
+   misclassification finding #14 is about. */
+:root {
+  --duration-control: 180ms;
+  --duration-card: 300ms;
 }
 
 /* check 4 — the paper grain is a generated texture, not a drawn icon (§2.4).

@@ -14,7 +14,10 @@ export const Photo = () => (
   <Image src="/case-studies/x.jpg" alt="A photograph, not an icon" width={1600} height={900} />
 );
 
-// check 8 — a className with no state variants
+// check 8 — a className with no state variants.
+// Doubles as check 3's negative control: `rounded-m` is NOT a Tailwind radius
+// utility (no such size in Tailwind's scale), so check 3's JSX half must leave
+// it alone. A class like that is check 9's business, not check 3's.
 export const Plain = () => <div className="text-primary bg-surface rounded-m" />;
 
 // check 8 — the words appear in PROSE, not as utilities. A reader hovers; that

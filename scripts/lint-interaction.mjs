@@ -74,6 +74,12 @@ export const ALLOWLIST = {
   },
   // check 3: radii that are deliberately off the scale
   radii: [],
+  // check 3, JSX half: a Tailwind radius utility kept in .tsx on purpose.
+  // EMPTY, and stated rather than left ambiguous: every JSX radius site in the
+  // tree moves to CSS against a token at I3, so nothing needs excusing. Like
+  // `radii` above, an empty list has no fixture — there is no allowlisted case
+  // to control for until a real one exists.
+  radiusUtilities: [],
   // check 7: :hover with no :active, by design
   hoverWithoutActive: [
     { match: 'a:hover', reason: 'text link — no surface to move (spec §5)' },
@@ -147,7 +153,7 @@ export const PENDING_RULES = [
     class: 'case-card',
     expectedAt: 'I3',
     reason:
-      'base-class hook added by I1 ("I2, I3 and I4 all target this element"). I2 is not it — I2 edits @utility lift, a sibling class on the same <article>, never .case-card. §4 puts the card box on --radius-m, which is what should give it declarations. CONDITIONAL: the card\'s radius is rounded-2xl in JSX, which check 3 cannot see, so an I3 scoped to "check 3 → 0" would never touch it and this would still be dangling.',
+      'base-class hook added by I1 ("I2, I3 and I4 all target this element"). I2 was not it — I2 edits @utility lift, a sibling class on the same <article>, never .case-card. I3 is: §4 puts the card box on --radius-l (16px, the step Paul added so the card keeps its size rather than dropping to the button\'s 12). NO LONGER CONDITIONAL: this entry used to warn that the card\'s rounded-2xl was invisible to check 3, so an I3 scoped to the count would skip it. Check 3 now reads JSX, so that site is a gated failure and I3 cannot reach 0 without moving it into .case-card.',
   },
 ];
 
@@ -185,7 +191,17 @@ const CLASSNAME_LITERAL = /className\s*=\s*(?:"([^"]*)"|'([^']*)'|\{`([^`]*)`\})
 // That is the one thing §8 forbids, and it hid the very case the tokenizer had
 // just been fixed to keep whole.
 const CLASS_TOKEN = /^[A-Za-z0-9_:[\]().,%#/\\!'"-]+$/;
-const RADIUS_SCALE = ['--radius-xs', '--radius-s', '--radius-m', '--radius-full', '--radius-image', '--radius-portrait'];
+const RADIUS_SCALE = ['--radius-xs', '--radius-s', '--radius-m', '--radius-l', '--radius-full', '--radius-image', '--radius-portrait'];
+// check 3, JSX half. A Tailwind radius utility, matched by its exact shape:
+// optional variants, optional side, optional size from Tailwind's own scale or
+// an arbitrary value. Precision is what makes this safe to run over every quoted
+// string rather than over className attributes only — and scanning every string
+// is required, because a className-only scan misses the array-expression form,
+// which is where the case card's radius lives.
+//
+// `rounded-m` does NOT match, correctly: it is not a Tailwind radius utility.
+// A class like that is caught by check 9 instead, as a dangling className.
+const RADIUS_UTILITY = /^(?:[\w-]+:)*rounded(?:-(?:t|r|b|l|s|e|tl|tr|br|bl|ss|se|ee|es))?(?:-(?:none|xs|sm|md|lg|xl|2xl|3xl|4xl|full|\[[^\]]*\]))?$/;
 const STROKE_TABLE = ['1.43', '1.70', '1.95', '2.25'];
 const EASE_TOKENS = ['--ease-out-soft', '--ease-out-quint'];
 
@@ -231,6 +247,22 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
     sheets.push({ file: f, src, root: root_ });
   }
 
+  // Which custom properties hold a <time>. Needed to tell a duration from a
+  // delay by POSITION in a transition shorthand: `opacity var(--duration-card)
+  // var(--ease-out-soft) 100ms` puts the delay in the first LITERAL slot but the
+  // second TIME slot, and only resolving the tokens distinguishes them.
+  const timeValued = new Set();
+  for (const s of sheets) {
+    s.root.walkDecls((d) => {
+      if (d.prop.startsWith('--') && /^\d*\.?\d+(ms|s)$/.test(d.value.trim())) timeValued.add(d.prop);
+    });
+  }
+  const isTimeToken = (tok) => {
+    if (/^\d*\.?\d+(ms|s)$/.test(tok)) return true;
+    const v = /^var\(\s*(--[\w-]+)/.exec(tok);
+    return !!v && timeValued.has(v[1]);
+  };
+
   // ── check 1 — no literal duration in a transition ───────────────────────
   {
     const f = [], ex = [];
@@ -239,15 +271,47 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
         if (!/^transition(-duration)?$/.test(d.prop)) return; // delays are a sequence, not a duration (§3)
         const line = d.source?.start?.line ?? 0;
         const sel = (d.parent?.selector ?? d.parent?.name ?? '?').replace(/\s+/g, ' ').trim();
-        TIME.lastIndex = 0;
+        // FINDING #14. This check skipped the transition-delay PROPERTY on the
+        // grounds that "delays are a sequence, not a duration" (§3), then read
+        // every time value inside a `transition` SHORTHAND — where the second
+        // time is a delay by definition. `.take-card`'s
+        // `border-color 0.6s var(--ease-out-soft) 0.7s` had its 0.7s delay
+        // counted as one of check 1's findings. Same rule, two answers,
+        // depending on how the author spelled it.
+        //
+        // Split at TOP-LEVEL commas only: a cubic-bezier() carries commas of its
+        // own, and splitting naively would cut a sub-transition in half.
+        // Per CSS, within one sub-transition the first <time> is the duration
+        // and the second is the delay.
+        //
+        // Position is counted among <time> VALUES, not among literals. The
+        // first version indexed literals, so `opacity var(--duration-card)
+        // var(--ease-out-soft) 100ms` made the delay the first literal and
+        // therefore a "duration". The clean fixture caught it — which is what a
+        // fixture written for the whole rule is for.
+        const parts = d.value.split(/,(?![^(]*\))/);
         // One shorthand can repeat the same literal per sub-transition
         // (`transform 320ms, box-shadow 320ms, border-color 320ms`). That is one
         // decision to make, not three, so report the declaration once per
         // distinct value.
         const seen = new Set();
-        let m;
-        while ((m = TIME.exec(d.value)) !== null) {
-          const value = m[0];
+        const candidates = [];
+        for (const part of parts) {
+          // whitespace tokens, keeping var(...) and cubic-bezier(...) whole
+          const toks = part.trim().match(/(?:[\w-]+\([^()]*(?:\([^()]*\)[^()]*)*\)|[^\s]+)/g) ?? [];
+          let timeSlot = 0;
+          for (const tok of toks) {
+            if (!isTimeToken(tok)) continue;
+            const slot = timeSlot++;
+            if (!TIME.test(tok)) { TIME.lastIndex = 0; continue; } // a token, nothing to flag
+            TIME.lastIndex = 0;
+            if (slot === 0) candidates.push(tok);
+            // Reported, not dropped: a delay leaving this loop unrecorded is
+            // indistinguishable from one that was checked and passed.
+            else ex.push({ where: `${s.file}:${line}`, detail: `${tok} in ${sel} — delay position in a transition shorthand, not a duration (§3)`, reason: 'shorthand-delay' });
+          }
+        }
+        for (const value of candidates) {
           if (seen.has(value)) continue;
           seen.add(value);
           const hit = ALLOWLIST.durations.find(
@@ -261,7 +325,7 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
             ex.push({ where: `${s.file}:${line}`, detail: `${value} in ${sel} — ${ALLOWLIST.entranceMotion.reason}`, reason: 'entrance-motion-unspecified' });
             continue;
           }
-          const n = (d.value.match(new RegExp(value.replace('.', '\\.'), 'g')) ?? []).length;
+          const n = candidates.filter((v) => v === value).length;
           f.push({ where: `${s.file}:${line}`, detail: `literal ${value}${n > 1 ? ` (×${n})` : ''} in ${d.prop} — ${sel}` });
         }
       });
@@ -315,7 +379,31 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
         if (d.prop.startsWith('--radius')) ex.push({ where: `${s.file}:${d.source?.start?.line ?? 0}`, detail: `${d.prop} defines the scale`, reason: 'token-definition' });
       });
     }
-    add(3, 'No literal border-radius outside the radius tokens', f, ex);
+    // ── the JSX half ──
+    //
+    // A radius authored as a Tailwind utility is a radius from Tailwind's scale,
+    // not from this one, so R7 rules it out wherever it is written. This half
+    // used to be a printed blind spot; it is a gate now, and the print is gone
+    // with it — a "cannot see" note beside a check that sees is the stale-note
+    // problem.
+    //
+    // It is also why §4's map was wrong: the audit that wrote the rule grepped
+    // border-radius: in CSS and never read JSX, and the check enforcing that
+    // rule had the identical gap. Neither could catch the other.
+    for (const file of tsxFiles) {
+      const src = blankComments(await readFile(join(root, file), 'utf8'));
+      for (const str of src.matchAll(/"([^"]*)"|'([^']*)'|`([^`]*)`/g)) {
+        const line = src.slice(0, str.index).split('\n').length;
+        for (const tok of (str[1] ?? str[2] ?? str[3] ?? '').split(/\s+/)) {
+          const t = tok.trim();
+          if (!RADIUS_UTILITY.test(t)) continue;
+          const hit = ALLOWLIST.radiusUtilities.find((a) => a.file === file && a.token === t);
+          if (hit) { ex.push({ where: `${file}:${line}`, detail: `${t} — ${hit.reason}`, reason: 'allowlisted-radius-utility' }); continue; }
+          f.push({ where: `${file}:${line}`, detail: `${t} — a Tailwind radius utility. R7 says radius is a scale; author it in CSS against a token` });
+        }
+      }
+    }
+    add(3, 'No literal border-radius outside the radius tokens, and none authored as a Tailwind utility in JSX', f, ex);
   }
 
   // ── check 4 — no hand-authored <svg> icons ──────────────────────────────
@@ -622,43 +710,12 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
     }
   }
 
-  // ── Blind spot, measured rather than described ──────────────────────────
-  //
-  // Check 3 reads stylesheets. A radius authored as a Tailwind utility in JSX is
-  // invisible to it, so check 3 can reach 0 while a radius off the §4 scale is
-  // still shipping. lint:type prints its equivalent (arbitrary width/weight
-  // utilities in JSX); this one was not printed at all.
-  //
-  // It matters for I3 specifically: the case card's radius lives here, so an I3
-  // scoped to check 3's count would never touch .case-card — which is also the
-  // PENDING_RULES entry above.
-  // Scanned from every quoted string, NOT from className attributes. The first
-  // version read className the way check 9 does and therefore inherited check
-  // 9's blind spot — it missed components/case-study-card.tsx's `rounded-2xl`,
-  // which sits in an array-expression className and is the single site this
-  // whole report exists for. A blind-spot report that shares the blind spot is
-  // worse than none. This is a report and not a gate, so a false positive costs
-  // a printed line while a miss costs the finding.
-  const radiusInJsx = [];
-  for (const file of tsxFiles) {
-    const src = blankComments(await readFile(join(root, file), 'utf8'));
-    for (const s of src.matchAll(/"([^"]*)"|'([^']*)'|`([^`]*)`/g)) {
-      const line = src.slice(0, s.index).split('\n').length;
-      for (const tok of (s[1] ?? s[2] ?? s[3] ?? '').split(/\s+/)) {
-        const t = tok.trim();
-        if (/^(?:[a-z-]+:)*rounded(?:-|$)/.test(t)) {
-          radiusInJsx.push({ where: `${file}:${line}`, token: t, sandbox: isSandboxPath(file) });
-        }
-      }
-    }
-  }
-
-  return { checks, scanned: { css: cssFiles, tsx: tsxFiles }, blindSpots: { radiusInJsx }, pending: PENDING_RULES };
+  return { checks, scanned: { css: cssFiles, tsx: tsxFiles }, pending: PENDING_RULES };
 }
 
 // ── CLI ────────────────────────────────────────────────────────────────────
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { checks, scanned, blindSpots, pending } = await run();
+  const { checks, scanned, pending } = await run();
   console.log(`interaction-lint: ${scanned.css.length} stylesheets, ${scanned.tsx.length} .tsx/.mdx files\n`);
   for (const c of checks) {
     console.log(`${c.pass ? '✓' : '✗'} check ${c.id}. ${c.title}`);
@@ -704,6 +761,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('  - Cross-file class composition: check 6 resolves an icon\'s ancestors');
   console.log('    within one file, not a class applied by a parent component elsewhere.');
   console.log('  - Runtime stroke is not measured. Check 6 reads authored values only.');
+  console.log('  - Check 1 tells a duration from a delay by position among <time>');
+  console.log('    values, resolving custom properties to see which occupy a slot. A');
+  console.log('    var() it cannot resolve — defined in another sheet, or computed — is');
+  console.log('    treated as NOT a time, so a delay after one would be misread as a');
+  console.log('    duration. Every duration token in this tree is defined in globals.css,');
+  console.log('    so the gap is currently empty rather than merely unlikely.');
   console.log('  - Check 9 reads the four literal className forms. A `className={…}`');
   console.log('    EXPRESSION — a bare identifier, a concatenation, an array with a');
   console.log('    trailing .filter().join() — is counted and printed as');
@@ -716,12 +779,6 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('    finding #11 was the second kind. The difference is intent, declared');
   console.log('    in ALLOWLIST.danglingClasses and coupled by a test to the structural');
   console.log('    premise each reason rests on.');
-  console.log('  - Check 3 reads stylesheets, so a radius authored as a Tailwind utility');
-  console.log('    in JSX is invisible to it — check 3 can reach 0 with a radius off the');
-  console.log(`    §4 scale still shipping. ${blindSpots.radiusInJsx.length} in the tree:`);
-  for (const r of blindSpots.radiusInJsx) {
-    console.log(`      ${r.where}  ${r.token}${r.sandbox ? '  (sandbox)' : ''}`);
-  }
   console.log('');
   const passing = checks.filter((c) => c.pass).length;
   console.log(
