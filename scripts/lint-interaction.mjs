@@ -416,6 +416,66 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
     add(8, 'No hover:/focus:/active:/group-hover: utilities in .tsx', f, ex);
   }
 
+  // ── check 9 — no dangling className ─────────────────────────────────────
+  //
+  // Finding #11 was invisible to every gate: Tailwind silently dropped rules
+  // authored inside the @utility cluster, so a class existed in .tsx with no
+  // rule anywhere. Check 8 went green TRUTHFULLY — the utilities really had
+  // left the .tsx — while the replacement CSS did not exist. This catches that
+  // by its CONSEQUENCE rather than its cause, which matters because I2-I5 all
+  // add authored rules to the same file and the next occurrence need not look
+  // the same.
+  {
+    const f = [], ex = [];
+    const { readdirSync, readFileSync } = await import('node:fs');
+    let builtCss = '';
+    const dirs = ['.next/static/chunks', '.next/static/css'];
+    for (const d of dirs) {
+      try {
+        for (const n of readdirSync(join(root, d))) if (n.endsWith('.css')) builtCss += readFileSync(join(root, d, n), 'utf8');
+      } catch { /* absent */ }
+    }
+    if (!builtCss) {
+      // NEVER green when it cannot see. A check that passes because its input
+      // was missing is the exact shape this migration keeps finding.
+      f.push({ where: '.next', detail: 'no built CSS found — run `npm run build` first. Check 9 cannot verify and will not pass silently.' });
+      add(9, 'Every className token resolves to a utility or an authored rule', f, ex);
+    } else {
+      const unescape = (x) => x.replace(/\\/g, '');
+      const known = new Set();
+      for (const m of builtCss.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)/g)) known.add(unescape(m[1]));
+      for (const s2 of sheets) s2.root.walkRules((r) => {
+        for (const m of r.selector.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)/g)) known.add(unescape(m[1]));
+      });
+      // Tailwind marker classes emit no CSS by design; verified .group has zero
+      // rules in the built output.
+      const MARKERS = { group: 'Tailwind marker class — emits no CSS by design', peer: 'Tailwind marker class — emits no CSS by design' };
+      let interpolated = 0;
+      for (const file of tsxFiles) {
+        const raw = await readFile(join(root, file), 'utf8');
+        const src = blankComments(raw);
+        for (const m of src.matchAll(/className\s*=\s*(?:"([^"]*)"|'([^']*)'|\{`([^`]*)`\}|\{\[([\s\S]*?)\]\})/g)) {
+          const body = m[1] ?? m[2] ?? m[3] ?? m[4] ?? '';
+          const line = src.slice(0, m.index).split('\n').length;
+          if (/\$\{/.test(body)) interpolated++;
+          // split on whitespace only: an arbitrary value can contain quotes
+          // and commas (after:content-['']), and splitting on those shreds it
+          // into tokens that resolve to nothing.
+          for (const tok of body.replace(/\$\{[^}]*\}/g, ' ').split(/\s+/)) {
+            const t = tok.trim();
+            if (!t || t.startsWith('$') || t.includes('${') || /^[?:]/.test(t)) continue;
+            if (!/^[A-Za-z0-9_:[\]().,%#/\\-]+$/.test(t)) continue;
+            if (MARKERS[t]) { ex.push({ where: `${file}:${line}`, detail: `${t} — ${MARKERS[t]}`, reason: 'marker-class' }); continue; }
+            if (known.has(t)) { ex.push({ where: `${file}:${line}`, detail: `${t} resolves`, reason: 'resolves' }); continue; }
+            f.push({ where: `${file}:${line}`, detail: `"${t}" resolves to no utility and no authored rule — dangling` });
+          }
+        }
+      }
+      if (interpolated) ex.push({ where: '(various)', detail: `${interpolated} interpolated className(s) skipped — counted, not dropped silently`, reason: 'interpolated' });
+      add(9, 'Every className token resolves to a utility or an authored rule', f, ex);
+    }
+  }
+
   return { checks, scanned: { css: cssFiles, tsx: tsxFiles } };
 }
 
