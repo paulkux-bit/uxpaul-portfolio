@@ -197,6 +197,16 @@ describe('check 7 — hover implies active', () => {
   it('excludes a text link by its written reason', () => {
     expect(excReasons(c())).toContain('allowlisted-no-active');
   });
+  // R5 governs the SURFACE, not the selector string. A hover expressed on a
+  // descendant is satisfied by an :active on the ancestor being pressed.
+  it('accepts an :active on the ancestor of a descendant hover', () => {
+    expect(excReasons(c())).toContain('ancestor-active');
+    expect(c().excluded.some((x) => x.reason === 'ancestor-active' && x.detail.includes('.c-band:active'))).toBe(true);
+  });
+  // A matching :active that cannot apply is not a matching :active.
+  it('catches a pair authored in the WRONG ORDER', () => {
+    expect(c().failures.some((f) => f.detail.includes('.v-wrong-order:active is authored BEFORE'))).toBe(true);
+  });
 });
 
 describe('check 8 — no state variants in .tsx', () => {

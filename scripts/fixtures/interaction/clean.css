@@ -72,11 +72,25 @@
   --icon-stroke: 1.70;
 }
 
-/* check 7 — :hover WITH the matching :active is the complete pair */
+/* check 7 — :hover WITH the matching :active is the complete pair.
+   ORDER IS LOAD-BEARING: :active comes after :hover, because equal specificity
+   means source order decides which one applies while the pointer is down. */
 .c-complete:hover {
   color: var(--text-secondary);
 }
 .c-complete:active {
+  transform: translateY(1px);
+}
+
+/* check 7 — the surface expresses its HOVER on a descendant and its PRESS on
+   itself, which is the shape .about-work-band has: the <Link> is the surface,
+   the arrow and label are what the hover moves. An :active on the ancestor
+   satisfies R5 — a tap produces something — and demanding an identically-based
+   :active would force sinking the descendants independently instead. */
+.c-band:hover .c-band__arrow {
+  transform: translateX(3px);
+}
+.c-band:active {
   transform: translateY(1px);
 }
 

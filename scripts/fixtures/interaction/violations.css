@@ -43,6 +43,17 @@
   color: var(--text-primary);
 }
 
+/* check 7 — the pair EXISTS but is authored in the wrong order (1).
+   Equal specificity, so :hover wins while the pointer is down and the press
+   never applies. Every rest and hover pixel is identical to a correct build,
+   which is exactly why this needs a check rather than an eye. */
+.v-wrong-order:active {
+  transform: translateY(1px);
+}
+.v-wrong-order:hover {
+  color: var(--text-primary);
+}
+
 /* check 5 — sized in rem, which is NOT 1em. 1.125rem does not track adjacent
    type, so it fails exactly as px does. This unit was the gap in the first
    version of check 5. */

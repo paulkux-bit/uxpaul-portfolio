@@ -563,29 +563,79 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
   }
 
   // ── check 7 — :hover implies :active ────────────────────────────────────
+  //
+  // TWO WAYS THIS TESTED SOMETHING NARROWER THAN R5, both fixed here.
+  //
+  // 1. IT DEMANDED AN IDENTICAL BASE SELECTOR. R5 says every interactive
+  //    SURFACE has three states; this required every `:hover` selector STRING to
+  //    have a twin `:active` selector string. Those differ whenever a surface
+  //    expresses its hover on descendants: `.about-work-band` is the <Link>, and
+  //    its hover moves `.about-work-band__arrow` and underlines
+  //    `.about-work-band__label`. Satisfying the literal rule would mean sinking
+  //    the arrow and the label independently instead of sinking the band — a
+  //    worse interface, written to please a linter. An `:active` on an ANCESTOR
+  //    of the hover base now satisfies it, which is R5's actual intent: a tap
+  //    has to produce something.
+  //
+  // 2. IT IGNORED SOURCE ORDER, WHICH DECIDES WHETHER THE RULE APPLIES AT ALL.
+  //    `:hover` and `:active` on the same element have equal specificity, so an
+  //    `:active` authored BEFORE its `:hover` never wins while the pointer is
+  //    down. Rest pixels identical, hover pixels identical, every check green,
+  //    and pressing does nothing — on desktop, which is where it gets tested.
+  //    A matching `:active` that cannot apply is not a matching `:active`.
+  //
+  //    The card is the sharpest case: hover is translateY(-3px) and pressed is
+  //    +1px, so a press from hover is a 4px move that vanishes entirely if the
+  //    cascade is wrong.
   {
     const f = [], ex = [];
     for (const s of sheets) {
       const hovers = new Map();
-      const actives = new Set();
+      const actives = new Map(); // base -> first line
       s.root.walkRules((r) => {
         const sels = r.selector.split(',').map((x) => x.trim());
+        const line = r.source?.start?.line ?? 0;
         for (const sel of sels) {
-          if (sel.includes(':active')) actives.add(sel.replace(/:active/g, '').trim());
+          if (sel.includes(':active')) {
+            const base = sel.replace(/:active/g, '').trim();
+            if (!actives.has(base)) actives.set(base, line);
+          }
           if (sel.includes(':hover')) {
             const base = sel.replace(/:hover/g, '').trim();
-            if (!hovers.has(base)) hovers.set(base, { sel, line: r.source?.start?.line ?? 0 });
+            if (!hovers.has(base)) hovers.set(base, { sel, line });
           }
         }
       });
+      // `.a` covers `.a .b`: the ancestor is the surface being pressed.
+      const coveringActive = (base) => {
+        if (actives.has(base)) return { base, line: actives.get(base), kind: 'has-active' };
+        for (const [aBase, aLine] of actives) {
+          if (base.startsWith(`${aBase} `)) return { base: aBase, line: aLine, kind: 'ancestor-active' };
+        }
+        return null;
+      };
       for (const [base, info] of hovers) {
         const hit = ALLOWLIST.hoverWithoutActive.find((a) => info.sel.includes(a.match) || base === a.match.replace(':hover', ''));
         if (hit) { ex.push({ where: `${s.file}:${info.line}`, detail: `${info.sel} — ${hit.reason}`, reason: 'allowlisted-no-active' }); continue; }
-        if (actives.has(base)) { ex.push({ where: `${s.file}:${info.line}`, detail: `${info.sel} has a matching :active`, reason: 'has-active' }); continue; }
+        const cover = coveringActive(base);
+        if (cover) {
+          if (cover.line < info.line) {
+            f.push({ where: `${s.file}:${cover.line}`, detail: `${cover.base}:active is authored BEFORE ${info.sel} (line ${info.line}). Equal specificity means source order decides, so the press never applies` });
+            continue;
+          }
+          ex.push({
+            where: `${s.file}:${info.line}`,
+            detail: cover.kind === 'ancestor-active'
+              ? `${info.sel} is covered by ${cover.base}:active on the ancestor — the pressed surface`
+              : `${info.sel} has a matching :active`,
+            reason: cover.kind,
+          });
+          continue;
+        }
         f.push({ where: `${s.file}:${info.line}`, detail: `${info.sel} has no :active — R5 says three states, not one` });
       }
     }
-    add(7, 'Every :hover has a matching :active, or an allowlisted reason', f, ex);
+    add(7, 'Every :hover has a matching :active authored after it, or an allowlisted reason', f, ex);
   }
 
   // ── check 8 — no state variants in .tsx ─────────────────────────────────
