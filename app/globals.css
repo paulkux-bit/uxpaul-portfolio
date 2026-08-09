@@ -837,6 +837,39 @@
   text-decoration: none;
 }
 
+/* ============================================================
+   INTERACTION — states, authored here rather than in .tsx (R4)
+
+   Moved from Tailwind state variants with no change in value. The transition
+   still comes from the `.lift` utility above, which stays a class on the
+   article, so nothing here declares one.
+
+   These are hover/focus only. The pressed state (`translateY(1px)` + a drop to
+   `--shadow-rest`) is I4's, which is why lint:interaction check 7 counts
+   `.case-card--linked` as awaiting an `:active`. The two text links below are
+   exempt under spec §5 — a text link has no surface to move.
+   ============================================================ */
+
+/* Quiet links: no underline at rest, underline on hover. The colour and
+   thickness shift still comes from the global a / a:hover pair. */
+.quiet-link,
+.case-card__title-link {
+  text-decoration-line: none;
+}
+.quiet-link:hover,
+.case-card__title-link:hover {
+  text-decoration-line: underline;
+}
+
+/* A hover response is a promise of a click target, so it is scoped to a card
+   that has one. An unpublished card keeps its resting border and elevation. */
+.case-card--linked:hover,
+.case-card--linked:focus-within {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-strong);
+}
+
 /* Nav links — chromatic restraint at rest; weight + neutral underline
    carry the active route. Color shift is the only chromatic moment,
    on hover (inherited from the base `a` rule). */

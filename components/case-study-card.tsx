@@ -48,7 +48,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const title = published ? (
     <Link
       href={`/case-studies/${study.slug}`}
-      className="text-primary no-underline hover:underline after:absolute after:inset-0 after:content-['']"
+      className="case-card__title-link text-primary after:absolute after:inset-0 after:content-['']"
     >
       {study.problemFraming}
       <span className="sr-only">
@@ -74,12 +74,12 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <article
       className={[
-        'relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift',
+        'case-card relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift',
         // Hover/focus response is a promise of a click target. An unpublished
         // card has none, so it rests: same border, same elevation, no lift.
-        published
-          ? 'hover:lift-hover focus-within:lift-hover hover:border-strong focus-within:border-strong'
-          : '',
+        // The states themselves live in globals.css (R4); this modifier is the
+        // hook that scopes them to a card that actually links somewhere.
+        published ? 'case-card--linked' : '',
       ]
         .filter(Boolean)
         .join(' ')}

@@ -46,6 +46,12 @@ export const ALLOWLIST = {
   // check 7: :hover with no :active, by design
   hoverWithoutActive: [
     { match: 'a:hover', reason: 'text link — no surface to move (spec §5)' },
+    // The same §5 exemption, for the two named links I1 moved out of .tsx. This
+    // is the spec applying itself, not a rule parked until later: §5 states that
+    // a text link HAS no pressed state by design. Contrast .case-card--linked,
+    // which is genuinely awaiting :active in I4 and stays a failure.
+    { match: '.quiet-link:hover', reason: 'text link — no surface to move (spec §5)' },
+    { match: '.case-card__title-link:hover', reason: 'text link inside a card — no surface to move (spec §5)' },
     { match: '.take-card:hover', reason: 'non-interactive tint; the takes wall is a typographic wall, not a control' },
     { match: '.about-row__summary:hover', reason: 'disclosure row — the chevron rotation is the feedback (spec §5)' },
   ],
