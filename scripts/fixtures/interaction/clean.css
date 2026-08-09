@@ -1,0 +1,120 @@
+/* FIXTURE — NEGATIVE CONTROLS. Nothing here may be reported as a failure, and
+ * every item must appear in the EXCLUDED list with a named reason.
+ *
+ * "Produced no output" is not the passing condition (§8). A control that stops
+ * appearing is indistinguishable from a file that was never opened, which is
+ * exactly how the .mdx gap hid during the colour migration. The test asserts
+ * this file was scanned, then asserts the exclusion classes by name. */
+
+/* check 1 — tokenised duration: excluded, not flagged */
+.c-duration-token {
+  transition: color var(--duration-control) var(--ease-out-soft);
+}
+
+/* check 1 — transition-DELAY is a sequence, not a duration (spec §3). A literal
+   here is correct and must never be flagged. */
+.c-delay-literal {
+  transition: opacity var(--duration-card) var(--ease-out-soft);
+  transition-delay: 140ms;
+}
+
+/* check 1 — the SAME rule, spelled the other way. Finding #14: a delay written
+   in the transition shorthand is still a delay, and this used to be counted as
+   a duration while the declaration above was correctly skipped. One rule, two
+   answers, depending on how the author spelled it. The 100ms must appear as
+   excluded/shorthand-delay and never as a failure. */
+.c-shorthand-delay {
+  transition: opacity var(--duration-card) var(--ease-out-soft) 100ms;
+}
+
+/* check 1 — the reduced-motion kill switch, allowlisted by value */
+@media (prefers-reduced-motion: reduce) {
+  .c-reduced-motion {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* check 3 — radius from the scale: excluded as uses-radius-token */
+.c-radius-token {
+  border-radius: var(--radius-m);
+}
+
+/* check 3 — a radius RESET is a keyword, not a value off the scale */
+.c-radius-reset {
+  border-radius: 0;
+}
+
+/* check 3 — the token definitions ARE the scale, not consumers of it */
+:root {
+  --radius-xs: 4px;
+  --radius-s: 8px;
+}
+
+/* The duration tokens this fixture CONSUMES, defined here so they resolve.
+   Not decoration: check 1 tells a duration from a delay by position among
+   <time> values, and it can only know var(--duration-card) occupies a time slot
+   if it can see that the token holds a time. Without these, .c-shorthand-delay
+   below reads its 100ms delay as the first time value — which is exactly the
+   misclassification finding #14 is about. */
+:root {
+  --duration-control: 180ms;
+  --duration-card: 300ms;
+}
+
+/* check 4 — the paper grain is a generated texture, not a drawn icon (§2.4).
+   Matched by feTurbulence through the shared artwork allowlist. */
+.c-paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3C/svg%3E");
+}
+
+/* check 6 — a value from the §2.1 table */
+.c-icon-stroke {
+  --icon-stroke: 1.70;
+}
+
+/* check 7 — :hover WITH the matching :active is the complete pair.
+   ORDER IS LOAD-BEARING: :active comes after :hover, because equal specificity
+   means source order decides which one applies while the pointer is down. */
+.c-complete:hover {
+  color: var(--text-secondary);
+}
+.c-complete:active {
+  transform: translateY(1px);
+}
+
+/* check 7 — the surface expresses its HOVER on a descendant and its PRESS on
+   itself, which is the shape .about-work-band has: the <Link> is the surface,
+   the arrow and label are what the hover moves. An :active on the ancestor
+   satisfies R5 — a tap produces something — and demanding an identically-based
+   :active would force sinking the descendants independently instead. */
+.c-band:hover .c-band__arrow {
+  transform: translateX(3px);
+}
+.c-band:active {
+  transform: translateY(1px);
+}
+
+/* check 7 — allowlisted by design: a text link has no surface to move */
+a:hover {
+  color: var(--link-hover);
+}
+
+/* check 5 — a class that sizes an icon to 1em in BOTH axes: excluded as sized-1em */
+.fx-icon {
+  width: 1em;
+  height: 1em;
+}
+
+/* check 6 — a CONTAINER that governs stroke for the icons inside it. The icon
+   itself carries no strokeWidth; §2.3 puts --icon-stroke on the container. */
+.fx-governed {
+  font-weight: 600;
+  --icon-stroke: 1.95;
+}
+
+/* check 9 — an AUTHORED rule is the second resolution source, alongside the
+   built CSS. Deliberately absent from .next/static/css/built-stub.css so the two
+   paths are told apart: this one can only resolve by being parsed from here. */
+.c-authored-only {
+  color: var(--text-primary);
+}

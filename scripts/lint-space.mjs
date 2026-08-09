@@ -77,7 +77,7 @@ const ALLOWLIST = {
       selector: '.about-row__mark',
       prop: 'margin-block-start',
       reason:
-        'S1 — optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Its rem terms are the text-h3 font-size clamp and the mark’s own 1.25rem box, neither of which is on the spacing scale.',
+        'S1 — optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Since I5 the mark is 1em of the same rung, so both terms are one font-size and this is text-h3’s clamp × 0.125 — still the type system’s number, still not on the spacing scale. It reads as `em` arithmetic because it is; it is written in rem because check 2 bans em on block-level spacing and does not consult this list (finding #19).',
     },
   ], // literals that may stay: { selector, prop, value, reason }
   media: [

@@ -59,10 +59,11 @@ export function AboutDrawer({ company, year, roles, children }: AboutDrawerProps
         <span className="about-row__company text-h3">{company}</span>
         <span className="about-row__role text-small">{roles[0].title}</span>
         <span className="about-row__year text-small">{year}</span>
+        {/* text-h3 matches the company span beside it — the row's subject, and
+            the line this mark is optically centred against. Same reason as the
+            work band: a sibling icon cannot inherit its neighbour's size. */}
         <ChevronDown
-          className="about-row__mark"
-          size={20}
-          strokeWidth={2}
+          className="icon text-h3 about-row__mark"
           aria-hidden="true"
           focusable="false"
         />

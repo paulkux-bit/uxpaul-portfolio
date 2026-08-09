@@ -58,7 +58,9 @@ export default function AboutPage() {
               download
             >
               Résumé (PDF)
-              <ArrowDown className="about-btn__icon" size={16} aria-hidden="true" focusable="false" />
+              {/* §2: no size, no strokeWidth. 1em against the button's own
+                  label, stroke from the button's --icon-stroke. */}
+              <ArrowDown className="icon about-btn__icon" aria-hidden="true" focusable="false" />
             </a>
             <a
               className="about-link text-body"
@@ -200,9 +202,13 @@ export default function AboutPage() {
       <RevealSection aria-label="Selected work">
         <Link className="about-work-band" href="/#selected-work">
           <span className="about-work-band__label text-h3">See selected work</span>
+          {/* text-h3 is here to set FONT-SIZE, not to style the node: the arrow
+              is a sibling of the label, so 1em would otherwise resolve against
+              the band. Weight, tracking and line-height come with it and are
+              inert on a replaced element — which is why the utility goes here
+              rather than on the band, where they would leak into text. */}
           <ArrowRight
-            className="about-work-band__arrow"
-            size={24}
+            className="icon text-h3 about-work-band__arrow"
             aria-hidden="true"
             focusable="false"
           />

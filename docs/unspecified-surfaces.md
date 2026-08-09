@@ -78,11 +78,67 @@ live-capable dead CSS today:
   BARD and FDT-E case studies both use — it is not sandbox-scoped, whatever the
   old comment claimed.
 
+**This is now a property of the repo, not a run of bad luck: five kinds.**
+`ModePair`, the bento tones, `CardMediaSlot` (resolved by deletion in
+`099a172`), the takes wall (`components/takes/*`, rendered on no route), and —
+found while migrating radius in I3 — five styled surfaces that return zero
+instances on every route: `.mode-pair__cell`, `.mode-pair__label`,
+`.figure-placeholder`, `.hero-block__image-frame .figure-placeholder` and
+`.figure--constrained-bleed .figure__image`.
+
+Every migration so far has paid to move CSS that reaches no reader, and twice a
+spec has claimed a visible change that could not be seen. Recorded so the next
+person weighs deletion against migration; **not** an invitation to go hunting for
+a sixth.
+
 Setting `tone` on a manifest, or dropping a `ModePair` into a case study, ships
 a widget that misrepresents the site's own colour — on a portfolio whose thesis
 is colour judgement. All eight are allowlisted in `scripts/lint-color.mjs`
 under `ALLOWLIST.specimens`, with the reason attached to each, so the lint
 keeps surfacing them rather than absolving them.
+
+---
+
+## What interaction v1 closed — reconciled 9 Aug 2026
+
+A fourth system locked and shipped between this file's creation and now, so
+every entry was re-checked against it. **Checked against this file's own
+criterion below** — a type rung or a written exception, a spacing step for
+internal padding, and a stated position on the boundary above and below.
+
+**No entry is fully closed, so nothing leaves and the file stays.** Interaction
+v1 governs states, motion, radius and icons; this list is almost entirely type
+rungs and spacing steps, which is the half it does not touch.
+
+| entry | what interaction v1 closed | what remains |
+|---|---|---|
+| **Nav** | hover, pressed (§5) | type sizes, weights, spacing between items — all of it |
+| **Footer** | its links get the text-link states (§5), by inheritance rather than by a footer rule | type, spacing, and the top-boundary relationship |
+| **Buttons** | internal padding (`--spacing-2xs / --spacing-m`), radius, gap, min-height, pressed, icon stroke (§6) | **the label's type rung** |
+| **Card meta** | the **card's** hover, pressed, elevation and radius — the container, not the strip | density, the strip's type rung, the gap to the headline |
+| **Pinned specimen tones** | nothing | all of it |
+
+**Buttons came closest and did not get there.** §6 specifies the button
+properly, but it assigns the label a *weight* (500) and never a *rung*.
+`.about-btn` sets no `font-size` at all: it inherits, and computes **16px**,
+while `.about-link` sitting immediately beside it is `text-body` at **18px**.
+Two adjacent controls at different sizes, neither assigned by a locked rule.
+That is exactly the "label type" this entry was opened for, so the entry
+narrows to one line rather than closing.
+
+**And §6 answered this entry's prediction in the negative, which is a decision
+worth recording.** The entry anticipated that "a button's padding is a function
+of its label size rather than of the page rhythm". §6 put the padding on the
+spacing scale — `--spacing-2xs / --spacing-m` — so padding follows page rhythm
+after all. Not a gap; a resolved question with the opposite answer, and it
+should not be reopened by someone reading only the original entry.
+
+**Card meta's half is the container.** What is specified belongs to the card:
+hover, pressed, elevation, `--radius-l`. The `project · client` strip has no
+interaction of its own to specify. It renders at `text-caption`, which
+`CLAUDE.md`'s scale table names for this exact use, but no locked §-rule assigns
+it — so the rung is conventional rather than governed, which is the distinction
+this file exists to make.
 
 ---
 
@@ -105,6 +161,11 @@ Each surface gets: a type rung (or a written exception with a reason), a
 spacing step for its internal padding, and a stated position on its boundary
 with whatever sits above and below it. Then both §9s lose these entries and
 this file is deleted rather than becoming a third place where the answer lives.
+
+**An entry leaves when it is fully closed, and its content moves into the owning
+spec.** The file is deleted when it is empty — not before, and not because it
+has grown short. As of the interaction reconciliation above, five entries remain
+and one (buttons) is down to a single line.
 
 ---
 

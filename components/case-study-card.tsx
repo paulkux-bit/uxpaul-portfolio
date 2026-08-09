@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import Image from 'next/image';
-import { coverTier, type CaseStudy, type CoverTier } from '@/app/data/case-studies';
+import { type CaseStudy } from '@/app/data/case-studies';
 import { isPublished } from '@/app/data/case-study-routes';
 
 // Per-card cover illustration, keyed by slug -> asset basename in
@@ -17,14 +16,12 @@ const COVER_ART: Record<string, string> = {
 };
 
 /**
- * One entry in the case-study index. The cover resolves through three tiers
- * (motion > image > typographic; see `coverTier`):
+ * One entry in the case-study index. There is one cover: **typographic**. The
+ * framing IS the cover, set large, with project·client beneath it. A deliberate
+ * cover, never an empty state — no "placeholder" text anywhere.
  *
- * - **motion / image** — a 16:9 media well leads; the problem framing (the
- *   card's title) and project·client sit in a strip beneath it.
- * - **typographic** — the content-less fallback. The framing IS the cover,
- *   set large in a recessed well; only project·client sits beneath. This is a
- *   deliberate cover, never an empty state — no "placeholder" text anywhere.
+ * The motion and image tiers were removed by decision, not by accident: video
+ * cards are not happening. What went with them is recorded in the commit.
  *
  * The whole card is one click target via a stretched link: a single `<a>` on
  * the title with an `::after` overlay covering the `<article>`. Accessible name
@@ -43,7 +40,6 @@ const COVER_ART: Record<string, string> = {
  * (motion-safe only). Server Component.
  */
 export function CaseStudyCard({ study }: { study: CaseStudy }) {
-  const tier = coverTier(study);
   const art = COVER_ART[study.slug];
   const published = isPublished(study.slug);
 
@@ -52,7 +48,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const title = published ? (
     <Link
       href={`/case-studies/${study.slug}`}
-      className="text-primary no-underline hover:underline after:absolute after:inset-0 after:content-['']"
+      className="case-card__title-link text-primary after:absolute after:inset-0 after:content-['']"
     >
       {study.problemFraming}
       <span className="sr-only">
@@ -78,24 +74,23 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <article
       className={[
-        'group relative isolate flex h-full flex-col overflow-hidden rounded-2xl border border-subtle bg-surface lift',
+        'case-card relative isolate flex h-full flex-col overflow-hidden border border-subtle bg-surface lift',
         // Hover/focus response is a promise of a click target. An unpublished
         // card has none, so it rests: same border, same elevation, no lift.
-        published
-          ? 'hover:lift-hover focus-within:lift-hover hover:border-strong focus-within:border-strong'
-          : '',
+        // The states themselves live in globals.css (R4); this modifier is the
+        // hook that scopes them to a card that actually links somewhere.
+        published ? 'case-card--linked' : '',
       ]
         .filter(Boolean)
         .join(' ')}
     >
-      {tier === 'typographic' ? (
-        // One cream surface: a floating centered illustration over the question
-        // (left) and the muted meta. flex-col + the mt-auto text block pin the
-        // question/meta to the bottom so the cards equalize height (grid-auto-rows:1fr
-        // on the grid) with the illustration floating above.
-        <div className="flex flex-1 flex-col px-6 py-8 md:px-8 md:py-12">
-          {art ? (
-            /* Decorative, pre-sized, mix-blended asset served directly via
+      {/* One cream surface: a floating centered illustration over the question
+          (left) and the muted meta. flex-col + the mt-auto text block pin the
+          question/meta to the bottom so the cards equalize height (grid-auto-rows:1fr
+          on the grid) with the illustration floating above. */}
+      <div className="flex flex-1 flex-col px-6 py-8 md:px-8 md:py-12">
+        {art ? (
+          /* Decorative, pre-sized, mix-blended asset served directly via
                <picture> (webp + png). next/image would re-encode and strip the
                fixed dimensions the blend relies on. The <picture> is the block
                sizing box (percentage width on an inline picture's <img> misresolves);
@@ -111,68 +106,12 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
                 className="cover-art w-full"
               />
             </picture>
-          ) : null}
-          <div className="mt-auto">
-            <h2 className="text-cover">{title}</h2>
-            <div className="mt-3">{meta}</div>
-          </div>
+        ) : null}
+        <div className="mt-auto">
+          <h2 className="text-cover">{title}</h2>
+          <div className="mt-3">{meta}</div>
         </div>
-      ) : (
-        <>
-          <CardMediaSlot tier={tier} study={study} />
-          <div className="p-6 md:p-8">
-            {/* v3 §3.1: 90 -> 94, the display band. text-h2's ceiling is 40px,
-                which is rung 4. The old card-scoped "Major register" is retired
-                by R2 — width follows the rung, never a per-module choice.
-                Authored through the token so this cannot drift from globals.css.
-                NOTE: this is the media tier, currently rendered by no card, and
-                a width in JSX is invisible to lint:type, which parses
-                app/globals.css only. The linter now prints it as a known blind
-                spot rather than passing over it in silence. */}
-            <h2 className="text-h2 [font-stretch:calc(var(--wdth-display)*1%)]">{title}</h2>
-            <div className="mt-2">{meta}</div>
-          </div>
-        </>
-      )}
-    </article>
-  );
-}
-
-/**
- * Aspect-ratio media well for the motion + image tiers. The inner wrapper is
- * positioned (so `next/image` `fill` resolves to it) and scales on hover/focus
- * of the card within the clipped frame — a restrained ken-burns hint.
- * motion-safe only; the global reduced-motion block collapses it to instant.
- */
-function CardMediaSlot({
-  tier,
-  study,
-}: {
-  tier: Exclude<CoverTier, 'typographic'>;
-  study: CaseStudy;
-}) {
-  return (
-    <div className="aspect-video overflow-hidden bg-sunken">
-      <div className="relative grid h-full w-full place-items-center motion-safe:transition-transform motion-safe:duration-[320ms] motion-safe:ease-[var(--ease-out-soft)] motion-safe:group-hover:scale-[1.03] motion-safe:group-focus-within:scale-[1.03]">
-        {tier === 'motion' ? (
-          <video
-            className="h-full w-full object-cover"
-            src={study.motionVideo}
-            muted
-            loop
-            playsInline
-            preload="metadata"
-          />
-        ) : (
-          <Image
-            src={study.coverImage}
-            alt={study.coverImageAlt}
-            fill
-            sizes="(min-width: 1024px) 48vw, 100vw"
-            className="object-cover"
-          />
-        )}
       </div>
-    </div>
+    </article>
   );
 }

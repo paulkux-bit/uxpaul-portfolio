@@ -53,8 +53,11 @@ const CANDIDATES = [
   ['named', new RegExp(`\\b(?:${NAMED.join('|')})\\b`, 'gi')],
 ];
 
-/** Blank comments, preserving every byte offset so positions stay true. */
-function blankComments(src) {
+/** Blank comments, preserving every byte offset so positions stay true.
+ *  Exported because lint:interaction needs exactly this and a second copy would
+ *  drift: a `hover:` written inside a code comment is documentation, not a
+ *  utility, and check 8 flagged one in its own fixture before this was shared. */
+export function blankComments(src) {
   const blank = (s) => s.replace(/[^\n]/g, ' ');
   return src
     .replace(/\/\*[\s\S]*?\*\//g, blank)

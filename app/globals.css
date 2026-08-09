@@ -259,8 +259,17 @@
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
-  --duration-hover: 200ms;
-  --duration-reveal: 560ms;
+
+  /* Motion — interaction system v1 §3. Two speeds for interaction, not four:
+     controls move at one duration, cards at another. */
+  --duration-control: 180ms;  /* hover, focus, press, rotation, colour */
+  --duration-card: 300ms;     /* lift, shadow, media scale */
+  /* A mode transition is neither an interaction nor an entrance. §3 was written
+     from an interaction audit and named no category for one, so this is a NAME
+     for a speed that already ships — defined at the value body was already
+     using, so nothing renders differently. */
+  --duration-theme: 450ms;
+  --duration-reveal: 560ms;   /* entrance — unchanged */
 }
 
 /* ============================================================
@@ -333,9 +342,19 @@
      because heavy weight reads heavier on the espresso canvas. */
   --mark-weight:            700;
 
+  /* Radius — interaction system v1 §4. Five steps, so radius scales with
+     surface size: --radius-l exists to let the card keep 16px and sit a step
+     above the button rather than being pulled down to 12 to fit a shorter
+     ladder. */
+  --radius-xs:               4px;  /* inline marks, small media, focus-ring rounding */
+  --radius-s:                8px;  /* compact controls — theme toggle, nav */
+  --radius-m:               12px;  /* buttons */
+  --radius-l:               16px;  /* cards */
+  --radius-full:           999px;
+
   /* Containment radius for bright UI-capture images on the warm canvas (hero
      dashboard, PROBLEM legacy screenshots) — one value so they read as one system.
-     Mode-independent. */
+     Mode-independent. Coincides in value with --radius-m; distinct in meaning. */
   --radius-image:           12px;
 
   /* Portrait sibling to --radius-image. Deliberately tighter: a person is not a
@@ -442,8 +461,8 @@
     color: var(--text-primary);
     position: relative;
     transition:
-      background-color 450ms var(--ease-out-soft),
-      color 450ms var(--ease-out-soft);
+      background-color var(--duration-theme) var(--ease-out-soft),
+      color var(--duration-theme) var(--ease-out-soft);
   }
 
   /* Paper grain overlay — light mode only. Fixed, non-interactive,
@@ -457,7 +476,7 @@
     opacity: 0.55;
     mix-blend-mode: multiply;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    transition: opacity 450ms var(--ease-out-soft);
+    transition: opacity var(--duration-theme) var(--ease-out-soft);
   }
   html.dark body::before { opacity: 0; }
 
@@ -491,7 +510,7 @@
   :focus-visible {
     outline: 2px solid var(--focus-ring);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: var(--radius-xs);
     box-shadow: 0 0 0 6px var(--focus-glow);
   }
   :focus:not(:focus-visible) { outline: none; box-shadow: none; }
@@ -504,8 +523,8 @@
     text-underline-offset: 0.22em;
     text-decoration-color: var(--border-strong);
     transition:
-      text-decoration-color 220ms var(--ease-out-soft),
-      text-decoration-thickness 220ms var(--ease-out-soft);
+      text-decoration-color var(--duration-control) var(--ease-out-soft),
+      text-decoration-thickness var(--duration-control) var(--ease-out-soft);
   }
   a:hover {
     text-decoration-color: var(--link-hover);
@@ -730,9 +749,9 @@
 @utility lift {
   box-shadow: var(--shadow-rest);
   transition:
-    transform 320ms var(--ease-out-soft),
-    box-shadow 320ms var(--ease-out-soft),
-    border-color 320ms var(--ease-out-soft);
+    transform var(--duration-card) var(--ease-out-soft),
+    box-shadow var(--duration-card) var(--ease-out-soft),
+    border-color var(--duration-card) var(--ease-out-soft);
 }
 @utility lift-hover {
   transform: translateY(-3px);
@@ -756,6 +775,28 @@
 }
 
 /* ============================================================
+   ICONS — interaction system v1 §2
+   Authored HERE, not inside the @utility cluster above: Tailwind
+   silently drops ordinary rules placed in that block (finding #11),
+   and every check went green while the CSS did not exist.
+
+   Size is 1em and stroke comes from the container, so a placement
+   needs no numbers of its own. §2.2: font size cancels out of the
+   stroke calculation, which is why four constants replace a
+   per-placement measurement.
+
+   1.70 is the default because weight 500 is the site's commonest
+   adjacent weight; a container at another weight overrides it.
+   ============================================================ */
+
+.icon {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  stroke-width: var(--icon-stroke, 1.70);
+}
+
+/* ============================================================
    SITE HEADER
    Transparent at rest; a hairline border + canvas fill fade in
    once scrolled (data-scrolled). Appearance-only, 160ms — the
@@ -774,8 +815,8 @@
   background-color: transparent;
   border-bottom: 1px solid transparent;
   transition:
-    background-color 160ms var(--ease-out-soft),
-    border-color 160ms var(--ease-out-soft);
+    background-color var(--duration-control) var(--ease-out-soft),
+    border-color var(--duration-control) var(--ease-out-soft);
 }
 
 /* Scroll-elevation sentinel — a real, non-zero target pinned to the document
@@ -803,12 +844,12 @@
   left: 0.75rem;
   z-index: 60;
   padding: var(--spacing-2xs) var(--spacing-xs);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   background-color: var(--bg-surface-elevated);
   color: var(--text-primary);
   text-decoration: none;
   transform: translateY(-160%);
-  transition: transform 160ms var(--ease-out-soft);
+  transition: transform var(--duration-control) var(--ease-out-soft);
 }
 .skip-link:focus-visible {
   transform: translateY(0);
@@ -837,6 +878,67 @@
   text-decoration: none;
 }
 
+/* ============================================================
+   INTERACTION — states, authored here rather than in .tsx (R4)
+
+   Moved from Tailwind state variants with no change in value. The transition
+   still comes from the `.lift` utility above, which stays a class on the
+   article, so nothing here declares one.
+
+   These are hover/focus only. The pressed state (`translateY(1px)` + a drop to
+   `--shadow-rest`) is I4's, which is why lint:interaction check 7 counts
+   `.case-card--linked` as awaiting an `:active`. The two text links below are
+   exempt under spec §5 — a text link has no surface to move.
+   ============================================================ */
+
+/* The card box. Moved out of JSX (`rounded-2xl`) so the radius comes from this
+   system's scale rather than Tailwind's — 16px either way, so nothing moves.
+   --radius-l exists for exactly this: the card keeps its size and sits a step
+   above the button instead of being pulled down to 12.
+
+   This also closes the base class's forward reference. `.case-card` was added by
+   I1 as a hook with "I2, I3 and I4 all target this element" and had no rule of
+   its own until now. */
+.case-card {
+  border-radius: var(--radius-l);
+}
+
+/* Quiet links: no underline at rest, underline on hover. The colour and
+   thickness shift still comes from the global a / a:hover pair. */
+.quiet-link,
+.case-card__title-link {
+  text-decoration-line: none;
+}
+.quiet-link:hover,
+.case-card__title-link:hover {
+  text-decoration-line: underline;
+}
+
+/* A hover response is a promise of a click target, so it is scoped to a card
+   that has one. An unpublished card keeps its resting border and elevation. */
+.case-card--linked:hover,
+.case-card--linked:focus-within {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: var(--border-strong);
+}
+
+/* Pressed (§5). AUTHORED AFTER THE HOVER ON PURPOSE — equal specificity means
+   source order decides, and an :active written above would never apply while
+   the pointer is down. This is the sharpest case on the site: hover is -3px and
+   pressed is +1px, so a press from a hovered card is a 4px move that would
+   vanish completely if these two rules swapped places, with every rest and
+   hover pixel still identical.
+
+   :active lands on the <article> rather than the stretched title link because
+   the browser applies it up the activation chain — verified in the browser, not
+   assumed. Border stays --border-strong: the surface is still hovered, and §5
+   changes only the offset and the shadow. */
+.case-card--linked:active {
+  transform: translateY(1px);
+  box-shadow: var(--shadow-rest);
+}
+
 /* Nav links — chromatic restraint at rest; weight + neutral underline
    carry the active route. Color shift is the only chromatic moment,
    on hover (inherited from the base `a` rule). */
@@ -844,11 +946,15 @@
   color: var(--text-secondary);
   text-decoration-line: none;
   text-underline-offset: 0.22em;
-  transition: color 160ms var(--ease-out-soft);
+  transition: color var(--duration-control) var(--ease-out-soft);
 }
 .nav-link:hover {
   color: var(--text-primary);
   text-decoration-line: underline;
+}
+/* Pressed (§5): sink 1px. After the hover, per the cascade note on the card. */
+.nav-link:active {
+  transform: translateY(1px);
 }
 .nav-link[data-active] {
   color: var(--text-primary);
@@ -862,28 +968,45 @@
    focus moment, inherited from the global :focus-visible halo). Sun/moon
    visibility is driven by the .dark class, set pre-paint by next-themes. */
 .theme-toggle {
+  /* §2 has no position on an icon with NO adjacent text, and this button has
+     none. Recorded judgment: its adjacent type is the wordmark — the only other
+     type in the header chrome, sitting beside it — at 1rem weight 600, so the
+     stroke is 1.95 and the box is 1rem.
+
+     font-size and font-weight are declared rather than inherited, and the weight
+     is inert here (no text). It exists to state the type context, which is what
+     makes §2.3's containment rule resolvable on a button with nothing to be
+     adjacent to. */
+  font-size: 1rem;
+  font-weight: 600;
+  --icon-stroke: 1.95;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: 44px;
   min-width: 44px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background-color: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   transition:
-    color 160ms var(--ease-out-soft),
-    border-color 160ms var(--ease-out-soft);
+    color var(--duration-control) var(--ease-out-soft),
+    border-color var(--duration-control) var(--ease-out-soft);
 }
 .theme-toggle:hover {
   color: var(--text-primary);
   border-color: var(--border-strong);
 }
-.theme-toggle svg {
-  width: 1.125rem;
-  height: 1.125rem;
+/* Pressed (§5): sink 1px. */
+.theme-toggle:active {
+  transform: translateY(1px);
 }
+/* `.theme-toggle svg { width: 1.125rem }` used to live here and is deliberately
+   gone. At (0,1,1) it outranks `.icon` at (0,1,0), so leaving it would have
+   pinned the converted icons to 18px while every check still passed — the
+   geometry silently wrong and nothing to catch it. Size now comes from .icon
+   against this button's declared 1rem. */
 .theme-toggle .icon-sun { display: none; }
 .dark .theme-toggle .icon-sun { display: inline; }
 .dark .theme-toggle .icon-moon { display: none; }
@@ -944,6 +1067,9 @@
    (Option B). Desktop: fixed side columns (12rem fits "AMERICAN RED CROSS",
    8rem fits "Entertainment") so all four blocks align; title centers in 1fr. */
 .quick-hit {
+  /* Moved out of JSX (`rounded-[12px]`, an arbitrary value pinned to the same
+     number). 12px either way — the change is where it is authored. */
+  border-radius: var(--radius-m);
   display: grid;
   align-items: center;
   column-gap: var(--spacing-s);
@@ -1563,7 +1689,7 @@
   margin-top: var(--spacing-l);
   padding: var(--spacing-crescendo) var(--spacing-m);
   background: var(--bg-surface-elevated); /* warm lift, distinct from the --bg-canvas field; AA verified */
-  border-radius: 8px;                     /* soft panel, no border — not a card */
+  border-radius: var(--radius-s);                     /* soft panel, no border — not a card */
 }
 .milestone__frame {
   margin: 0;
@@ -2024,7 +2150,7 @@ html.dark .oku-figure {
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 6px;
+  border-radius: var(--radius-s);
   border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
 }
 
@@ -2082,7 +2208,7 @@ html.dark .oku-figure {
 
 .mode-pair__cell {
   position: relative;
-  border-radius: 6px;
+  border-radius: var(--radius-s);
   overflow: hidden;
   border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
 }
@@ -2116,7 +2242,7 @@ html.dark .oku-figure {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: var(--spacing-3xs) var(--spacing-2xs);
-  border-radius: 3px;
+  border-radius: var(--radius-xs);
   background: color-mix(in oklch, currentColor 8%, transparent);
   z-index: 2;
 }
@@ -2193,7 +2319,7 @@ html.dark .oku-figure {
 }
 
 .figure--constrained-bleed .figure__image {
-  border-radius: 6px;
+  border-radius: var(--radius-s);
 }
 
 /* ── Asymmetric pair ─────────────────────────────────────────────────────
@@ -2425,7 +2551,7 @@ html.dark .oku-figure {
   position: relative;
   aspect-ratio: var(--bento-aspect, 3 / 4); /* slot aspect; reserves the box pre-paint (CLS) */
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Image-edge parity hairline as an OVERLAY above the next/image fill child — a
@@ -2439,7 +2565,7 @@ html.dark .oku-figure {
   content: '';
   position: absolute;
   inset: 0;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
   box-shadow: inset 0 0 0 1px var(--border-subtle);
   pointer-events: none;
 }
@@ -2562,7 +2688,7 @@ html.dark .oku-figure {
   width: 100%;
   aspect-ratio: var(--band-aspect, 4.9 / 1); /* reserves the box pre-paint (CLS) */
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Band scroll track (opt-in via BentoBand's `scrollFloor`, e.g. the dense product form
@@ -2605,7 +2731,7 @@ html.dark .oku-figure {
   width: 100%;
   aspect-ratio: var(--ribbon-aspect, 13 / 1);
   overflow: hidden;
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* The ribbon + band scroll tracks are keyboard-focusable (tabIndex/role on the element) so a
@@ -2615,7 +2741,7 @@ html.dark .oku-figure {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
   box-shadow: var(--focus-glow);
-  border-radius: 4px;
+  border-radius: var(--radius-xs);
 }
 
 /* Ribbon — mobile (<md): fixed-height horizontal-scroll track. The canvas keeps
@@ -2664,7 +2790,7 @@ html.dark .oku-figure {
   background: color-mix(in oklch, currentColor 4%, transparent);
   padding: var(--spacing-l);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   box-sizing: border-box;
 }
 
@@ -2726,7 +2852,7 @@ html.dark .oku-figure {
 .figure-placeholder {
   width: 100%;
   background: color-mix(in oklch, currentColor 5%, transparent);
-  border-radius: 6px;
+  border-radius: var(--radius-s);
 }
 
 html.dark .figure-placeholder {
@@ -2860,7 +2986,7 @@ html.dark .figure-placeholder {
 .hero-block__image-frame .figure-placeholder {
   display: block;
   width: 100%;
-  border-radius: 6px;
+  border-radius: var(--radius-s);
 }
 
 /* ── Callout ─────────────────────────────────────────────────────────── */
@@ -2877,7 +3003,7 @@ html.dark .figure-placeholder {
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
   box-shadow: var(--shadow-hover);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: var(--spacing-m); /* single even token — tight, no baggy margins */
 }
 
@@ -3041,12 +3167,17 @@ html.dark .figure-placeholder {
 /* Squared, not a pill. The shape carries the affordance, so the underline the
    base layer puts on every <a> is removed here and nowhere else. */
 .about-btn {
+  /* §2.1: the label is weight 500, so the icon beside it strokes at 1.70.
+     This is the ONE surface where §2.3's "1em inherits" works as written —
+     the ArrowDown is a descendant of the element carrying the type, so it
+     picks up the label's font-size with no help. */
+  --icon-stroke: 1.70;
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2xs); /* the trailing ArrowDown */
   min-height: 44px;
   padding: var(--spacing-2xs) var(--spacing-m);
-  border-radius: 10px;
+  border-radius: var(--radius-m);
   background: var(--text-primary);
   color: var(--bg-canvas);
   font-weight: 500;
@@ -3055,7 +3186,7 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-btn {
-    transition: background-color var(--duration-hover) var(--ease-out-quint);
+    transition: background-color var(--duration-control) var(--ease-out-quint);
   }
 }
 
@@ -3064,6 +3195,15 @@ html.dark .figure-placeholder {
    the surface opaque: 10.4:1 light and 11.2:1 dark against --bg-canvas. */
 .about-btn:hover {
   background: var(--text-secondary);
+}
+
+/* Pressed (§5): sink 1px, and NOTHING ELSE. §5's row also said "drop to
+   --shadow-rest", which is vacuous here — .about-btn has no box-shadow at rest,
+   so there is nothing to drop. Only the card carries a resting shadow, via
+   @utility lift. The row is corrected in this commit rather than implemented
+   as written. */
+.about-btn:active {
+  transform: translateY(1px);
 }
 
 /* Text links beside the button. --border-interactive rather than
@@ -3119,11 +3259,20 @@ html.dark .figure-placeholder {
 }
 
 .about-row__summary {
+  /* §2.1: the row has THREE text siblings at two rungs — company (text-h3,
+     weight 500), role and year (text-small, weight 400). §2 has no position on
+     which is "adjacent", so this is a recorded judgment: the company is the
+     row's subject, and the mark is already optically centred against its first
+     line (see .about-row__mark's margin). Weight 500 → 1.70. */
+  --icon-stroke: 1.70;
   display: grid;
   /* Mobile: company spans the full width on row 1 with the chevron far right,
      then role left and year RIGHT-ALIGNED on row 2. Right-aligning the year is
      what gives every row a shared right edge. */
-  grid-template-columns: minmax(0, 1fr) 1.25rem;
+  /* The mark track is `auto` rather than a fixed 1.25rem: under §2 the mark is
+     1em of text-h3 (25.2px at 1440), which outgrows the 20px the track used to
+     hard-code. The track follows the mark instead of asserting its size. */
+  grid-template-columns: minmax(0, 1fr) auto;
   column-gap: var(--spacing-s);
   row-gap: var(--spacing-3xs);
   align-items: baseline;
@@ -3179,21 +3328,27 @@ html.dark .figure-placeholder {
   justify-self: end;
   flex: none;
   color: var(--text-muted);
-  /* The icon ships as size={20}, which lucide writes as px width/height
-     attributes. Overriding them in rem makes the chevron scale with the
-     reader's root setting like everything around it — at a 32px root the px
-     version stayed 20px while the line box it centres against doubled, so the
-     mark drifted upward exactly when accessibility scaling was in use. 1.25rem
-     is the same 20px at the default root, and it matches the grid track this
-     mark sits in, which is already authored as 1.25rem. */
-  width: 1.25rem;
-  height: 1.25rem;
-  /* NOT a spacing value and deliberately not on the scale: this is
-     (line-height − mark height) / 2, an optical centring against the company
-     name's first line. Its rem terms are the text-h3 font-size clamp and the
-     mark's own box, neither of which belongs to the spacing scale. Allowlisted
-     in scripts/lint-space.mjs with that reason. */
-  margin-block-start: calc((clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 1.25 - 1.25rem) / 2);
+  /* Size comes from .icon (1em) against the text-h3 the node now carries, so
+     there is nothing to declare here. The rem override this rule used to hold
+     existed because lucide writes px width/height attributes; §2's em sizing
+     solves that at the source, and it keeps the scaling behaviour the rem
+     version was reaching for. */
+  /* Optical centring against the company name's first line: (line-height −
+     mark height) / 2. Now that the mark is 1em of the same rung, both terms are
+     the SAME font-size and the expression collapses to fs × 0.125 — one clamp
+     instead of a clamp minus a separate box.
+
+     IT WOULD BE `0.125em`, AND IT CANNOT BE. Spacing v1 ruling 1 bans `em` on
+     block-level spacing, and lint:space check 2 does not consult the allowlist
+     that check 1 uses for this very declaration — so the em form fails a gate
+     that the rem form passes, for the same number. §2 sizes icons in em by
+     rule; spacing v1 bans em on block spacing by rule; this one declaration is
+     governed by both and neither owns the outcome. Reported as finding #19,
+     unfixed here: changing either gate means changing a locked system that is
+     not I5's to change.
+
+     Allowlisted in scripts/lint-space.mjs under check 1 with this reason. */
+  margin-block-start: calc(clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 0.125);
   transform: rotate(0deg);
 }
 
@@ -3300,7 +3455,7 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-row__mark {
-    transition: transform 240ms var(--ease-out-quint);
+    transition: transform var(--duration-control) var(--ease-out-quint);
   }
   .about-row {
     interpolate-size: allow-keywords;
@@ -3309,8 +3464,8 @@ html.dark .figure-placeholder {
     block-size: 0;
     overflow: hidden;
     transition:
-      block-size 240ms var(--ease-out-quint),
-      content-visibility 240ms allow-discrete;
+      block-size var(--duration-control) var(--ease-out-quint),
+      content-visibility var(--duration-control) allow-discrete;
   }
   .about-row[open]::details-content {
     block-size: auto;
@@ -3394,7 +3549,7 @@ html.dark .figure-placeholder {
   top: 0.34em;
   width: 7px;
   height: 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-full);
   background: var(--text-muted);
 }
 
@@ -3429,6 +3584,13 @@ html.dark .figure-placeholder {
    button: the hairlines are the shape. */
 
 .about-work-band {
+  /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
+     The band itself sets no font-weight — the weight lives on the sibling's
+     utility — so §2.3's "every container that sets font-weight" never fires
+     here. Declared explicitly instead. The arrow carries text-h3 in JSX to
+     get the label's font-size, since it is a SIBLING of the type and would
+     otherwise inherit the band's. */
+  --icon-stroke: 1.70;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3454,7 +3616,7 @@ html.dark .figure-placeholder {
 
 @media (prefers-reduced-motion: no-preference) {
   .about-work-band__arrow {
-    transition: transform var(--duration-hover) var(--ease-out-quint);
+    transition: transform var(--duration-control) var(--ease-out-quint);
   }
   .about-work-band:hover .about-work-band__arrow {
     transform: translateX(3px);
@@ -3466,6 +3628,16 @@ html.dark .figure-placeholder {
   text-decoration-thickness: 1px;
   text-underline-offset: 0.18em;
   text-decoration-color: var(--border-interactive);
+}
+
+/* Pressed (§5): the BAND sinks, not the arrow and the label separately.
+   .about-work-band is the <Link> — the interactive surface — and its hover is
+   expressed on two descendants, which is why check 7 reported it twice. An
+   :active on the ancestor covers both, and sinking the two children
+   independently to satisfy a selector-string rule would have been a worse
+   interface. Authored after both hover rules. */
+.about-work-band:active {
+  transform: translateY(1px);
 }
 
 /* ── Credentials ──────────────────────────────────────────────────────────
