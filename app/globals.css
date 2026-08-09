@@ -192,6 +192,40 @@
 }
 
 /* ============================================================
+   THEME — Colour tuning primitives (colour system v2, §3)
+   Layer 1. The palette's temperature lives here and nowhere else.
+
+   CHROMA IS A UNIT AND INTEGER MULTIPLIERS. All 24 chroma values in
+   both modes are exact multiples of 0.002 — multipliers 2, 3, 6, 7, 8,
+   9, 10, 11, 13, 14, 15, 17, 20, no remainders — so the whole palette
+   expresses against one unit with no arithmetic beyond multiplication,
+   and without changing a single shipped value.
+
+   HUE IS A BAND PLUS A SIGNED OFFSET, because the bands carry real
+   internal variance: light grounds span 66-76, dark grounds 55-60.
+
+   SAME NAMES IN BOTH MODES, redefined in .dark, rather than -light and
+   -dark vocabularies. The bands SWAP between modes — light text sits at
+   55 while light grounds run 66-76; dark text is 68-78 while dark
+   grounds run 55-60. One vocabulary makes that inversion legible as a
+   per-mode setting of the same role; two would hide it and let the
+   modes drift apart with nothing noticing.
+
+   R4 is about DEPENDENCE, not about literals. A literal value makes a
+   token independent — it stops moving when its primitive moves, which
+   is how the last palette drifted one hand-tuned token at a time. A
+   multiplier or a degree offset preserves dependence. Lightness is
+   authored directly: it carries no temperature and belongs to no band.
+   ============================================================ */
+
+@theme static {
+  --chroma-unit:  0.002;   /* warmth INTENSITY — one knob, both modes */
+  --hue-ground:   70;      /* grounds and their borders */
+  --hue-surface:  68;      /* raised surfaces */
+  --hue-text:     55;      /* the text ramp */
+}
+
+/* ============================================================
    THEME — Color
    `inline` preserves var() references so .dark swaps at runtime.
    ============================================================ */
@@ -234,23 +268,31 @@
    ============================================================ */
 
 :root {
-  --bg-canvas:              oklch(0.975 0.018 78);
-  --bg-surface:             oklch(0.952 0.022 73);
-  --bg-surface-elevated:    oklch(0.930 0.024 70);
-  --bg-sunken:              oklch(0.915 0.026 68);
+  /* Canvas is held at the top and the three surfaces below it drop, so a card
+     reads as an object rather than as a slightly different patch of page —
+     without the page itself getting heavier. Separation goes 0.023 / 0.022 /
+     0.015 -> 0.030 / 0.030 / 0.018. Unlike the dark side, lightness moves
+     here: that is the point of the commit. */
+  --bg-canvas:              oklch(0.978 calc(var(--chroma-unit) * 8) calc(var(--hue-ground) + 6));
+  --bg-surface:             oklch(0.948 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+  --bg-surface-elevated:    oklch(0.918 calc(var(--chroma-unit) * 13) var(--hue-surface));
+  --bg-sunken:              oklch(0.900 calc(var(--chroma-unit) * 14) calc(var(--hue-ground) - 4));
 
-  --text-primary:           oklch(0.215 0.018 55);
-  --text-secondary:         oklch(0.355 0.020 55);
-  --text-muted:             oklch(0.485 0.022 55);
-  --text-subtle:            oklch(0.625 0.020 60);
+  --text-primary:           oklch(0.215 calc(var(--chroma-unit) * 9) var(--hue-text));
+  --text-secondary:         oklch(0.355 calc(var(--chroma-unit) * 10) var(--hue-text));
+  --text-muted:             oklch(0.485 calc(var(--chroma-unit) * 11) var(--hue-text));
+  /* 0.625 -> 0.590 repairs a live WCAG failure, not a side effect of the
+     surfaces moving: at 0.625 this measured 2.91 on elevated and 2.78 on
+     sunken, both under the 3.0 AA-large floor, and both shipped. */
+  --text-subtle:            oklch(0.590 calc(var(--chroma-unit) * 10) calc(var(--hue-text) + 5));
 
-  --border-subtle:          oklch(0.915 0.028 68);
-  --border-default:         oklch(0.870 0.032 62);
-  --border-strong:          oklch(0.760 0.040 55);
+  --border-subtle:          oklch(0.905 calc(var(--chroma-unit) * 15) calc(var(--hue-ground) - 4));
+  --border-default:         oklch(0.855 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 10));
+  --border-strong:          oklch(0.760 calc(var(--chroma-unit) * 20) calc(var(--hue-ground) - 15));
   /* Non-text contrast carrier for underlines and interactive edges.
      --border-default (0.360 chroma-light) sits under 3:1 against the cream
      canvas, so it cannot legally carry an affordance on its own. */
-  --border-interactive:     oklch(0.500 0.018 50);
+  --border-interactive:     oklch(0.500 calc(var(--chroma-unit) * 9) calc(var(--hue-ground) - 20));
 
   --focus-ring:             oklch(0.220 0.018 55 / 0.55);
   --focus-glow:             oklch(0.700 0.140 60 / 0.22);
@@ -308,22 +350,37 @@
    ============================================================ */
 
 .dark {
-  --bg-canvas:              oklch(0.165 0.020 50);
-  --bg-surface:             oklch(0.205 0.024 50);
-  --bg-surface-elevated:    oklch(0.255 0.028 50);
-  --bg-sunken:              oklch(0.130 0.016 48);
+  /* Layer 1, per-mode. The bands SWAP: light text is 55 against grounds at
+     66-76; dark text is 68-78 against grounds at 55-60. Same names, inverted
+     settings — that is the point of one vocabulary. --chroma-unit is not
+     redefined; warmth intensity is one knob for both modes. */
+  --hue-ground:   55;
+  --hue-surface:  60;
+  --hue-text:     74;
 
-  --text-primary:           oklch(0.945 0.012 78);
-  --text-secondary:         oklch(0.825 0.014 76);
-  --text-muted:             oklch(0.705 0.016 72);
-  --text-subtle:            oklch(0.565 0.018 68);
+  /* Ruling 3: the ground goes quiet so the raised surface can carry warmth.
+     Lightness is untouched from v1 — every change here is chroma and hue.
+     The canvas drops to 3 units and the sunken to 2, which is what pulls
+     channel bias down to 1.33x; the elevated surface holds 13, so chroma
+     now climbs 4.33x from canvas to card instead of 1.40x. */
+  --bg-canvas:              oklch(0.165 calc(var(--chroma-unit) * 3) var(--hue-ground));
+  --bg-surface:             oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+  --bg-surface-elevated:    oklch(0.255 calc(var(--chroma-unit) * 13) var(--hue-surface));
+  --bg-sunken:              oklch(0.130 calc(var(--chroma-unit) * 2) var(--hue-ground));
 
-  --border-subtle:          oklch(0.245 0.024 52);
-  --border-default:         oklch(0.310 0.028 50);
-  --border-strong:          oklch(0.430 0.034 50);
+  --text-primary:           oklch(0.945 calc(var(--chroma-unit) * 6) calc(var(--hue-text) + 4));
+  --text-secondary:         oklch(0.825 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 2));
+  --text-muted:             oklch(0.705 calc(var(--chroma-unit) * 8) calc(var(--hue-text) - 2));
+  --text-subtle:            oklch(0.565 calc(var(--chroma-unit) * 9) calc(var(--hue-text) - 6));
+
+  /* The borders follow the grounds down, or they read as warm lines drawn on a
+     neutral page. Subtle tracks --bg-surface exactly, at 7 units and +2. */
+  --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+  --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
+  --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
-  --border-interactive:     oklch(0.620 0.020 60);
+  --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
 
   --focus-ring:             oklch(0.945 0.012 78 / 0.55);
   --focus-glow:             oklch(0.720 0.150 60 / 0.30);
@@ -2030,6 +2087,23 @@ html.dark .oku-figure {
   border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
 }
 
+/* STALE: depicts the pre-v2 palette. Do not render until the pinned-specimen
+   surface is resolved (docs/unspecified-surfaces.md, entry 5).
+
+   These are pinned specimens: a light/dark comparison pair must NOT swap with
+   the theme, so they cannot take a semantic token. They are also already wrong.
+   Measured against v2, the light cell carries a QUARTER of the canvas chroma
+   (0.004 vs 0.016) and the dark cell TWICE it (0.012 vs 0.006), while lightness
+   is nearly right — so they depict a light mode that is almost neutral and a
+   dark mode warmer than its own ground. That is the palette v2 replaced,
+   inverted. It has never shipped as a visible lie only because ModePair is
+   used in zero .mdx files.
+
+   Not fixed here on purpose: hand-correcting them writes the palette down a
+   second place, and it goes stale again the moment layer 1 moves. The real
+   answer is a specimen that references the other mode's actual value, which
+   needs the token layer to expose light and dark by name rather than only
+   through the cascade. That is a layer-1 restructure. */
 .mode-pair__cell--light { background: oklch(0.985 0.004 75); }
 .mode-pair__cell--dark  { background: oklch(0.17 0.012 55); }
 
@@ -2047,6 +2121,10 @@ html.dark .oku-figure {
   z-index: 2;
 }
 
+/* STALE: same pinned-specimen deferral as the cells above. The alpha here is
+   legitimate under R1 — a label plate is a state layer, not a named surface —
+   but the mix's BASE is one of the stale values, so this must come back as a
+   token plus alpha rather than surviving the cleanup by looking considered. */
 .mode-pair__cell--dark .mode-pair__label {
   color: oklch(0.94 0.006 80);
   background: color-mix(in oklch, oklch(0.94 0.006 80) 10%, transparent);
@@ -2393,10 +2471,24 @@ html.dark .oku-figure {
   padding: 0 var(--spacing-2xs);
 }
 
-/* Fixed warm-oklch placeholder tones — sandbox stand-ins for fixed-pixel
-   screenshots that do NOT swap with the theme. Sandbox-only exception to the
-   tokens-only rule (real images are theme-independent pixels too). These omit
-   `.figure-placeholder`, so its mode-aware background can't override the tone. */
+/* STALE: depicts the pre-v2 palette. Do not render until the pinned-specimen
+   surface is resolved (docs/unspecified-surfaces.md, entry 5).
+
+   Fixed placeholder tones standing in for fixed-pixel screenshots, which do not
+   swap with the theme. They omit `.figure-placeholder` so its mode-aware
+   background cannot override the tone.
+
+   This comment previously called them a "sandbox-only exception to the
+   tokens-only rule". That was false: the class is emitted by
+   components/bento.tsx, which the BARD and FDT-E case studies both use. It
+   renders nowhere today only because no manifest sets `tone` — live-capable
+   dead CSS, not sandbox-scoped. Setting `tone` on a manifest enables this; it
+   does not fix it.
+
+   Already wrong against v2: the light tone carries HALF the canvas chroma
+   (0.008 vs 0.016) and the dark tone is drifting off --bg-surface (0.012 at
+   L 0.220 vs 0.014 at L 0.205). Left as literals deliberately — see the
+   ModePair note above for why hand-correcting is the wrong repair. */
 .bento-theme__placeholder--light {
   background: oklch(0.97 0.008 80);
 }

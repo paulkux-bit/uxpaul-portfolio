@@ -1,0 +1,23 @@
+{/* FIXTURE — every literal here MUST be found by scripts/color-literals.mjs.
+
+    This file is the one that matters most. The K4 census planted positives in
+    .tsx and .css but planted only NEGATIVE controls in .mdx, so the .mdx
+    channel was never actually proven. It then dropped out of the report, which
+    is indistinguishable from never having been opened. Four positives here,
+    one per authoring channel an MDX case study can reach for. */}
+
+Prose above a component, mentioning no colour at all.
+
+{/* 1. className with a prefab Tailwind palette utility (1) */}
+<Figure className="bg-emerald-500" />
+
+{/* 2. inline style object, six-digit hex (1) */}
+<Callout style={{ color: '#ff8800' }} />
+
+{/* 3. inline style object, named colour (1) */}
+<Swatch style={{ background: 'rebeccapurple' }} />
+
+{/* 4. plain JSX attribute, three-digit hex (1) */}
+<Rule color="#abc" />
+
+Prose below, closing the file.

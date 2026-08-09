@@ -1,5 +1,26 @@
 # UX Paul Portfolio — Claude Code Context
 
+## The three locked specs are canonical
+
+Type, spacing and colour are each governed by one locked document and one lint
+that gates `npm run build`. Where anything else disagrees with these — this
+file, an older doc, a code comment — **the locked spec wins**, and the
+disagreement is a bug to fix in the other place.
+
+| System | Spec | Gate |
+|---|---|---|
+| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 9 checks |
+| Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
+| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 7 checks |
+
+Superseded or scoped, kept for their history and their non-value material, and
+**never** to be implemented from: `docs/typography-system.md` (superseded in
+full) and `docs/color-system.md` (palette superseded; still owns the `--qh-*`
+brand shelf, paper grain, the swap protocol and the role map).
+
+Cross-cutting gaps neither type nor spacing nor colour claims live in
+`docs/unspecified-surfaces.md` — five entries as of 8 Aug 2026.
+
 ## Strategic direction
 Strategic direction (audience, brand personality, references, anti-references, 
 design principles, accessibility floor) lives in `PRODUCT.md` at the repo root. 
@@ -369,8 +390,9 @@ undershoots, every time.
 **Alpha is still correct** for state layers (hover, press), scrims, shadows and
 focus rings. Those are surfaces and effects, not type colour.
 
-The palette itself lives in `docs/color-system.md`, which is **not** superseded
-by v3 and owns the values.
+The palette itself lives in `docs/color-system-v2-locked.md`, which owns every
+token value. `docs/color-system.md` no longer specifies values: it was scoped on
+8 Aug 2026 to implementation and usage notes.
 
 ## Color & illustration conventions
 
@@ -438,7 +460,12 @@ lint:prose -> detector (visual, external)**.
 ## Color system — locked (v2)
 
 **Name:** Paper & Low Light
-**Spec:** `docs/color-system.md`
+**Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
+architecture, the rules and every measured ratio. Enforced by
+`npm run lint:color` (7 checks), which gates `npm run build`.
+**Implementation and usage notes:** `docs/color-system.md` — the `--qh-*` brand
+shelf, paper grain, the theme-swap protocol, the role map. Its token tables are
+superseded; do not read values from it.
 **Implementation:** `app/globals.css`
 **Toggle:** `next-themes`, class-based (`.dark` on `<html>`)
 
@@ -501,8 +528,8 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
   the actual WCAG large-text definition. It clears roughly 3:1 and nothing more, so any
   normal-size text that carries meaning takes `--text-muted` or stronger. (An earlier
   line here said "18px, or 14px bold"; that was too permissive and disagreed with this
-  file's own contrast-floor bullet. `docs/color-system.md` still carries the looser
-  figure and is the remaining place to reconcile.)
+  file's own contrast-floor bullet. Reconciled 8 Aug 2026: `docs/color-system.md`
+  now records the measured range, 3.04-3.86 in light and 3.46-4.41 in dark.)
 - Focus uses `outline` + `box-shadow` (never `border-color`). Layout never shifts.
 - Link affordance is multi-channel — underline at rest, thicker + warmer on hover. Color alone is never the only signal.
 - `color-scheme` set per mode so native controls theme correctly.
@@ -518,7 +545,7 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
   persimmon is not an accent.
 - ❌ Don't extend `--focus-glow`, `--selection-bg`, or `--link-hover` to resting roles.
 - ❌ No paper grain in dark mode.
-- ❌ Don't add tokens inline. Extend `docs/color-system.md` first.
+- ❌ Don't add tokens inline. Extend `docs/color-system-v2-locked.md` first.
 
 ### Theming wiring
 
