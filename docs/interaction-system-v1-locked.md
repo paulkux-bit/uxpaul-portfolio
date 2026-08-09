@@ -510,8 +510,13 @@ part of writing one.
 states and motion but not their type rungs or internal spacing, which is the
 part that needs both other systems.
 
-**Card meta** is half closed. Its hover, motion and elevation are specified
-here; its type rung and internal density are not.
+**Card meta** is half closed, and the half is the container rather than the
+strip. What this document specifies belongs to the **card**: its hover, pressed
+state, elevation and radius (`--radius-l`). The `project · client` strip itself
+has no interaction to specify, and its three open questions — internal density,
+its type rung, and the gap between it and the headline above — are untouched
+here. `text-caption` is what it renders at today, named in `CLAUDE.md`'s scale
+table but not assigned to this surface by any locked §-rule.
 
 **Entrance motion is unspecified in v1.** §3 governs interaction; entrance was
 never in its scope, and the tree has **three groups and six live speeds**:
@@ -534,6 +539,61 @@ migration is the wrong place to make that call.
 **Pinned specimen tones** are untouched and stay on that list.
 
 **`--qh-*`** brand tokens are unaffected and remain the open colour question.
+
+---
+
+### Three findings this document owns, or half owns
+
+Written down rather than resolved. I6 turned the gate on; deciding these inside
+the commit that makes the gate mandatory would be scope creep at the exact
+moment the gate stops being optional.
+
+**#18 — a transitioned press cannot finish inside a tap.** §3 gives the card
+`--duration-card` (300ms) for `transform`; §5 gives it a pressed offset of
+`translateY(1px)`. Measured on an emulated device with a real tap: the press
+reaches **0.53px** and eases back, because a ~43ms touch is shorter than a 300ms
+transition. Held with a mouse it reaches 1px exactly, and the four controls —
+which do not transition `transform` — snap to the full 1px and hold it for
+~150ms.
+
+**The value is correct. The unresolved thing is the interaction between §3 and
+§5**, and both sections are in this document, so it is this document's to
+settle. Neither section is wrong on its own terms; neither looks at the other.
+The open question is whether the press should run at `--duration-control` on
+every surface, which would make the card's press legible on touch at the cost of
+decoupling its press from its lift. That is a motion decision with a visible
+consequence, so it belongs in its own pass.
+
+**#19 — the correct expression cannot ship, and neither spec is at fault.**
+`.about-row__mark`'s optical centring is `(line-height − mark height) / 2`. Now
+that §2 sizes the mark at `1em` of its rung, both terms are the same font-size
+and it collapses to **`0.125em`** — one number, no borrowed clamp.
+
+It is written as `calc(clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem) * 0.125)`
+instead, which is the same computed value and a copy of the type system's source
+in a component rule.
+
+**The diagnosis is a defect in `lint:space` check 2, not in either spec.** Check
+1 already allowlists this exact declaration, by selector and property, with its
+reason written. Check 2 — "no `em` on block-level spacing" — does not consult
+that allowlist, so the `em` form fails a gate the `rem` form passes **for an
+identical rendered result**. Spacing v1's ruling is about rhythm depending on
+local font-size; this is optical centring of an icon against its own line box,
+which is why check 1 exempted it in the first place.
+
+**The `em` form is the correct expression and should ship once check 2 consults
+the allowlist check 1 already uses.** Until then the `rem` form stands, and the
+duplication it reintroduces is a known cost, not an oversight. This one is not
+this document's to fix: it is `lint:space`'s.
+
+**#20 — the gate could not enter where its siblings did.** Check 9 reads built
+CSS from `.next`, so ordering `lint:interaction` ahead of `next build` — the way
+`lint:color` entered at `df70f8f` — fails it on every fresh checkout, for the
+one reason it exists to refuse: it cannot see. It runs after `next build`
+instead. Recorded because the next system to be locked will face the same
+question the moment any of its checks reads build output.
+
+---
 
 None of these block the migration. All of them block calling the system
 complete.
