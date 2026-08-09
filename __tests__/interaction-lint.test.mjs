@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ALLOWLIST, run } from '../scripts/lint-interaction.mjs';
+import { ALLOWLIST, PENDING_RULES, run } from '../scripts/lint-interaction.mjs';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
 const postcss = createRequire(join(REPO, 'package.json'))('postcss');
@@ -280,6 +280,40 @@ describe('the unstyled-wrapper allowlist still rests on a true premise', () => {
       if (prop === 'display') expect(['grid', 'flex', 'inline-grid', 'inline-flex']).not.toContain(value);
     }
   });
+});
+
+// ── Forward references, scheduled rather than excused ──────────────────────
+//
+// PENDING_RULES names a class authored ahead of the rules meant to target it,
+// and the step expected to deliver them. The risk is not that the entry is
+// wrong — it is that it silently outlives its own subject, which is a typo with
+// a comment on it.
+//
+// So it is self-clearing: each entry asserts the class still has NO rule. The
+// moment the named step gives it one, this reddens and forces the entry out.
+// It does NOT catch the opposite case — a step that lands without resolving —
+// because no lint knows which step it is standing in. That one is caught by the
+// note being printed on every run and read when the step is planned.
+describe('pending forward references have not silently resolved', () => {
+  const css = readFileSync(join(REPO, 'app', 'globals.css'), 'utf8');
+  const rules = postcss.parse(css);
+
+  it('names exactly the forward references this suite tracks', () => {
+    expect(PENDING_RULES.map((p) => p.class)).toEqual(['case-card']);
+  });
+
+  for (const p of PENDING_RULES) {
+    it(`.${p.class} still has no rule — delete this entry when ${p.expectedAt} gives it one`, () => {
+      const matched = [];
+      rules.walkRules((r) => {
+        for (const sel of r.selector.split(',')) {
+          // the bare class, not .case-card--linked or .case-card__title-link
+          if (new RegExp(`\\.${p.class}(?![\\w-])`).test(sel.trim())) matched.push(sel.trim());
+        }
+      });
+      expect(matched, `.${p.class} now has rules: ${matched.join(', ')}`).toEqual([]);
+    });
+  }
 });
 
 // A check that passes because its input was missing is the shape this migration

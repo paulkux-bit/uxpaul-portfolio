@@ -101,6 +101,25 @@ export const ALLOWLIST = {
 };
 const inList = (l, p) => l.some(p);
 
+// ── Pending, not excused ───────────────────────────────────────────────────
+//
+// A forward reference: a class authored ahead of the rules that will target it.
+// NOT an allowlist — it is not excused, it is scheduled, and the difference
+// matters because a forward reference that outlives the step meant to resolve it
+// is a typo with a comment on it.
+//
+// Printed every run, and each entry is coupled to a test asserting the class has
+// NO rule today. When the named step gives it one, that test reddens and forces
+// the entry's deletion, so this list cannot quietly outlive its own contents.
+export const PENDING_RULES = [
+  {
+    class: 'case-card',
+    expectedAt: 'I3',
+    reason:
+      'base-class hook added by I1 ("I2, I3 and I4 all target this element"). I2 is not it — I2 edits @utility lift, a sibling class on the same <article>, never .case-card. §4 puts the card box on --radius-m, which is what should give it declarations. CONDITIONAL: the card\'s radius is rounded-2xl in JSX, which check 3 cannot see, so an I3 scoped to "check 3 → 0" would never touch it and this would still be dangling.',
+  },
+];
+
 const SKIP_DIRS = new Set(['node_modules', '.next', '.git', '_to_delete', 'dist', 'out', 'coverage', '.vercel']);
 
 // Sandbox is scratch space under a standing do-not-touch instruction, so it
@@ -565,12 +584,43 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
     }
   }
 
-  return { checks, scanned: { css: cssFiles, tsx: tsxFiles } };
+  // ── Blind spot, measured rather than described ──────────────────────────
+  //
+  // Check 3 reads stylesheets. A radius authored as a Tailwind utility in JSX is
+  // invisible to it, so check 3 can reach 0 while a radius off the §4 scale is
+  // still shipping. lint:type prints its equivalent (arbitrary width/weight
+  // utilities in JSX); this one was not printed at all.
+  //
+  // It matters for I3 specifically: the case card's radius lives here, so an I3
+  // scoped to check 3's count would never touch .case-card — which is also the
+  // PENDING_RULES entry above.
+  // Scanned from every quoted string, NOT from className attributes. The first
+  // version read className the way check 9 does and therefore inherited check
+  // 9's blind spot — it missed components/case-study-card.tsx's `rounded-2xl`,
+  // which sits in an array-expression className and is the single site this
+  // whole report exists for. A blind-spot report that shares the blind spot is
+  // worse than none. This is a report and not a gate, so a false positive costs
+  // a printed line while a miss costs the finding.
+  const radiusInJsx = [];
+  for (const file of tsxFiles) {
+    const src = blankComments(await readFile(join(root, file), 'utf8'));
+    for (const s of src.matchAll(/"([^"]*)"|'([^']*)'|`([^`]*)`/g)) {
+      const line = src.slice(0, s.index).split('\n').length;
+      for (const tok of (s[1] ?? s[2] ?? s[3] ?? '').split(/\s+/)) {
+        const t = tok.trim();
+        if (/^(?:[a-z-]+:)*rounded(?:-|$)/.test(t)) {
+          radiusInJsx.push({ where: `${file}:${line}`, token: t, sandbox: isSandboxPath(file) });
+        }
+      }
+    }
+  }
+
+  return { checks, scanned: { css: cssFiles, tsx: tsxFiles }, blindSpots: { radiusInJsx }, pending: PENDING_RULES };
 }
 
 // ── CLI ────────────────────────────────────────────────────────────────────
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const { checks, scanned } = await run();
+  const { checks, scanned, blindSpots, pending } = await run();
   console.log(`interaction-lint: ${scanned.css.length} stylesheets, ${scanned.tsx.length} .tsx/.mdx files\n`);
   for (const c of checks) {
     console.log(`${c.pass ? '✓' : '✗'} check ${c.id}. ${c.title}`);
@@ -600,6 +650,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(`SANDBOX — ${sandboxTotal} finding${sandboxTotal === 1 ? '' : 's'} under a standing do-not-touch`);
   console.log('  instruction. Counted and printed, never silently skipped, so the');
   console.log('  exclusion stays visible. Excluded from pass/fail by ruling 2.\n');
+  console.log('PENDING — forward references, scheduled rather than excused. Each is');
+  console.log('  coupled to a test asserting it has NO rule today, so the entry cannot');
+  console.log('  outlive what it describes.');
+  for (const p of pending) {
+    console.log(`  - .${p.class} — expected to resolve at ${p.expectedAt}`);
+    console.log(`    ${p.reason}`);
+  }
+  console.log('');
   console.log('UNCHECKED — stated rather than implied:');
   console.log('  - §2.3 "every container that sets font-weight and holds an icon sets');
   console.log('    --icon-stroke" is only half mechanical. Check 6 validates every value');
@@ -619,7 +677,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('    Tailwind silently dropped — both are a class with no rule, and');
   console.log('    finding #11 was the second kind. The difference is intent, declared');
   console.log('    in ALLOWLIST.danglingClasses and coupled by a test to the structural');
-  console.log('    premise each reason rests on.\n');
+  console.log('    premise each reason rests on.');
+  console.log('  - Check 3 reads stylesheets, so a radius authored as a Tailwind utility');
+  console.log('    in JSX is invisible to it — check 3 can reach 0 with a radius off the');
+  console.log(`    §4 scale still shipping. ${blindSpots.radiusInJsx.length} in the tree:`);
+  for (const r of blindSpots.radiusInJsx) {
+    console.log(`      ${r.where}  ${r.token}${r.sandbox ? '  (sandbox)' : ''}`);
+  }
+  console.log('');
   const passing = checks.filter((c) => c.pass).length;
   console.log(
     `Result: ${passing} of ${checks.length} passing, ${checks.length - passing} failing` +
