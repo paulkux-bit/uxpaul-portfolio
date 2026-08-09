@@ -13,35 +13,8 @@ export interface CaseStudy {
   headline: string;
   /** 1–2 sentence summary — placeholder. */
   summary: string;
-  /** Path to the card's motion preview. Empty until motion files land. */
-  motionVideo: string;
-  /**
-   * Static cover image from the case study's own UI — the default card cover
-   * once content lands. Empty string until the content pass populates it.
-   */
-  coverImage: string;
-  /**
-   * Voice-quality alt for `coverImage` ("Navigation prototype showing
-   * four-brand cross-shopping," not "screenshot of design"). Required whenever
-   * `coverImage` is set — enforced by the data test, not the type system.
-   */
-  coverImageAlt: string;
   role: string;
   timeframe: string;
-}
-
-/** Which cover a card renders. Resolved by {@link coverTier}. */
-export type CoverTier = 'motion' | 'image' | 'typographic';
-
-/**
- * Resolve a study's cover tier by asset priority: motion > image >
- * typographic fallback. The typographic tier is the deliberate, content-less
- * cover (the problem framing set large), not an empty state.
- */
-export function coverTier(study: CaseStudy): CoverTier {
-  if (study.motionVideo) return 'motion';
-  if (study.coverImage) return 'image';
-  return 'typographic';
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -52,9 +25,6 @@ export const caseStudies: CaseStudy[] = [
     client: 'U.S. Coast Guard',
     headline: '[OUTCOME METRIC]',
     summary: '[1–2 sentence summary placeholder]',
-    motionVideo: '',
-    coverImage: '',
-    coverImageAlt: '',
     role: '[ROLE]',
     timeframe: '[TIMEFRAME]',
   },
@@ -65,9 +35,6 @@ export const caseStudies: CaseStudy[] = [
     client: 'U.S. Navy',
     headline: '[OUTCOME METRIC]',
     summary: '[1–2 sentence summary placeholder]',
-    motionVideo: '',
-    coverImage: '',
-    coverImageAlt: '',
     role: '[ROLE]',
     timeframe: '[TIMEFRAME]',
   },
@@ -78,9 +45,6 @@ export const caseStudies: CaseStudy[] = [
     client: 'U.S. Navy',
     headline: '[OUTCOME METRIC]',
     summary: '[1–2 sentence summary placeholder]',
-    motionVideo: '',
-    coverImage: '',
-    coverImageAlt: '',
     role: '[ROLE]',
     timeframe: '[TIMEFRAME]',
   },
@@ -91,9 +55,6 @@ export const caseStudies: CaseStudy[] = [
     client: 'URBN',
     headline: '[OUTCOME METRIC]',
     summary: '[1–2 sentence summary placeholder]',
-    motionVideo: '',
-    coverImage: '',
-    coverImageAlt: '',
     role: '[ROLE]',
     timeframe: '[TIMEFRAME]',
   },
@@ -104,9 +65,6 @@ export const caseStudies: CaseStudy[] = [
     client: 'Nuuly',
     headline: '[OUTCOME METRIC]',
     summary: '[1–2 sentence summary placeholder]',
-    motionVideo: '',
-    coverImage: '',
-    coverImageAlt: '',
     role: '[ROLE]',
     timeframe: '[TIMEFRAME]',
   },
