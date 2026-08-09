@@ -31,8 +31,15 @@ describe('the fixtures were actually scanned', () => {
       'clean.tsx', 'components/oku/artwork.tsx', 'violations.tsx',
     ]);
   });
-  it('runs all eight checks', () => {
-    expect(checks.map((c) => c.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+  it('runs all nine checks', () => {
+    expect(checks.map((c) => c.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  });
+  // Check 9 reads `.next/static/css` relative to the tree it is given. The
+  // fixture tree carries its own; if it ever goes missing this assertion is what
+  // says so, instead of check 9 quietly finding nothing to complain about.
+  it('check 9 read the fixture tree\'s built CSS', () => {
+    expect(check(9).failures.map((x) => x.detail).join(' ')).not.toContain('no built CSS');
+    expect(excReasons(check(9))).toContain('resolves');
   });
   it('every clean fixture is represented in the output, as exclusions', () => {
     // positive result, not absence of output
@@ -172,5 +179,55 @@ describe('check 8 — no state variants in .tsx', () => {
   });
   it('does not flag the same words used as prose', () => {
     expect(failFiles(c())).not.toContain('clean.tsx');
+  });
+});
+
+describe('check 9 — dangling classNames', () => {
+  const c = () => check(9);
+  it('catches a class with no utility and no authored rule', () => {
+    expect(c().failures.some((f) => f.detail.includes('v-dangling-wrapper'))).toBe(true);
+  });
+  it('never fails a clean fixture — every token there resolves or is excluded', () => {
+    expect(failFiles(c())).not.toContain('clean.tsx');
+  });
+  it('resolves against BOTH sources — the built CSS and an authored rule', () => {
+    const d = c().excluded.filter((x) => x.reason === 'resolves').map((x) => x.detail).join(' ');
+    expect(d).toContain('md:px-8');        // only in .next/static/css/built-stub.css
+    expect(d).toContain('c-authored-only'); // only in clean.css
+  });
+  // The two halves of finding #12. Both used to leave the loop with no record,
+  // which is indistinguishable from having resolved.
+  it('resolves the important modifier rather than discarding it', () => {
+    const d = c().excluded.filter((x) => x.reason === 'resolves').map((x) => x.detail).join(' ');
+    expect(d).toContain('mt-24!');
+  });
+  it('treats an arbitrary value carrying quotes as ONE token, and resolves it', () => {
+    const d = c().excluded.filter((x) => x.reason === 'resolves').map((x) => x.detail).join(' ');
+    expect(d).toContain("after:content-['']");
+    // the shredded fragments the whitespace-only split exists to prevent
+    expect(c().failures.some((f) => f.detail.includes("content-['"))).toBe(false);
+  });
+  it('reports a token shape it cannot resolve, rather than dropping it', () => {
+    expect(excReasons(c())).toContain('unrecognized-token-shape');
+    expect(c().excluded.some((x) => x.reason === 'unrecognized-token-shape' && x.detail.includes('[&>*]:mt-4'))).toBe(true);
+  });
+  it('counts a className EXPRESSION it cannot read as a literal class list', () => {
+    expect(excReasons(c())).toContain('unparsed-className-expression');
+  });
+  it('excludes marker classes and counts interpolation', () => {
+    expect(excReasons(c())).toEqual(expect.arrayContaining(['marker-class', 'interpolated']));
+  });
+});
+
+// A check that passes because its input was missing is the shape this migration
+// keeps finding — the .mdx gap in the colour migration, and finding #11 here.
+// Check 9 is the only check with an external input, so it is the only one that
+// can fail this way, and until now nothing asserted that it does not.
+describe('check 9 is never green when it cannot see', () => {
+  it('fails loudly on a tree with no built CSS', async () => {
+    const blind = await run(join(FIXTURES, 'components'), { includeFixtures: true });
+    const c9 = blind.checks.find((x) => x.id === 9);
+    expect(c9.pass).toBe(false);
+    expect(c9.failures.map((x) => x.detail).join(' ')).toContain('no built CSS found');
   });
 });

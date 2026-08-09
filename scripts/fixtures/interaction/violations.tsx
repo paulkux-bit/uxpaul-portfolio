@@ -27,3 +27,7 @@ export const Ungoverned = () => <ChevronDown />;
 
 // check 5 — governed by a class, but sized in rem rather than em (1)
 export const RemSized = () => <ArrowRight className="v-icon-rem" />;
+
+// check 9 — a class that resolves to no utility in the built stub and no
+// authored rule in either fixture stylesheet: dangling. (1)
+export const Dangling = () => <div className="v-dangling-wrapper" />;

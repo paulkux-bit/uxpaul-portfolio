@@ -77,3 +77,10 @@ a:hover {
   font-weight: 600;
   --icon-stroke: 1.95;
 }
+
+/* check 9 — an AUTHORED rule is the second resolution source, alongside the
+   built CSS. Deliberately absent from .next/static/css/built-stub.css so the two
+   paths are told apart: this one can only resolve by being parsed from here. */
+.c-authored-only {
+  color: var(--text-primary);
+}

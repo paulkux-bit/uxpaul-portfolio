@@ -85,6 +85,27 @@ const TSX_EXTS = new Set(['.tsx', '.mdx']);
 const TSX_STATE_VARIANTS = /\b(?:group-)?(?:hover|focus|active|focus-within|focus-visible|group-focus-within):/g;
 const SVG_OPEN = /<svg[\s>]/g;
 const TIME = /(?<![\w-])(\d*\.?\d+)(ms|s)\b/g;
+// check 9. The three className forms that are readable as a literal class list.
+// Anything else is an expression, reported as such rather than passed over.
+//
+// The `{[ … ]}` array form used to be a fourth. It is NOT a class list — its body
+// is JavaScript, so whitespace-splitting it yields `'a',` and `cond` and `?`.
+// Those used to vanish into the shape test; with the shape test widened below to
+// admit quotes they would have read as dangling classes instead, turning one
+// silent drop into a false positive. It also risked running away: `[\s\S]*?`
+// hunting a `]}` can swallow the rest of a file. Measured first — all three array
+// classNames in the repo end `.filter(Boolean).join(' ')}` and never matched it
+// anyway — so dropping the branch costs no coverage and they are now reported as
+// the expressions they are.
+const CLASSNAME_LITERAL = /className\s*=\s*(?:"([^"]*)"|'([^']*)'|\{`([^`]*)`\})/g;
+// What a class token may contain. `!` is Tailwind's important modifier (`mt-24!`)
+// and an arbitrary value can carry quotes (`after:content-['']`) — both are real
+// utilities that resolve, and both were being dropped SILENTLY by a narrower
+// shape test: no failure, no exclusion, no count. Seven of them, in files
+// including a published case study whose own comment calls the `!` load-bearing.
+// That is the one thing §8 forbids, and it hid the very case the tokenizer had
+// just been fixed to keep whole.
+const CLASS_TOKEN = /^[A-Za-z0-9_:[\]().,%#/\\!'"-]+$/;
 const RADIUS_SCALE = ['--radius-xs', '--radius-s', '--radius-m', '--radius-full', '--radius-image', '--radius-portrait'];
 const STROKE_TABLE = ['1.43', '1.70', '1.95', '2.25'];
 const EASE_TOKENS = ['--ease-out-soft', '--ease-out-quint'];
@@ -454,8 +475,12 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
       for (const file of tsxFiles) {
         const raw = await readFile(join(root, file), 'utf8');
         const src = blankComments(raw);
-        for (const m of src.matchAll(/className\s*=\s*(?:"([^"]*)"|'([^']*)'|\{`([^`]*)`\}|\{\[([\s\S]*?)\]\})/g)) {
-          const body = m[1] ?? m[2] ?? m[3] ?? m[4] ?? '';
+        // Spans the literal forms below actually read, so the expression forms
+        // they cannot read can be found and REPORTED rather than passed over.
+        const covered = [];
+        for (const m of src.matchAll(CLASSNAME_LITERAL)) {
+          covered.push([m.index, m.index + m[0].length]);
+          const body = m[1] ?? m[2] ?? m[3] ?? '';
           const line = src.slice(0, m.index).split('\n').length;
           if (/\$\{/.test(body)) interpolated++;
           // split on whitespace only: an arbitrary value can contain quotes
@@ -463,12 +488,28 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
           // into tokens that resolve to nothing.
           for (const tok of body.replace(/\$\{[^}]*\}/g, ' ').split(/\s+/)) {
             const t = tok.trim();
-            if (!t || t.startsWith('$') || t.includes('${') || /^[?:]/.test(t)) continue;
-            if (!/^[A-Za-z0-9_:[\]().,%#/\\-]+$/.test(t)) continue;
+            if (!t) continue;
+            if (!CLASS_TOKEN.test(t)) {
+              // WAS A SILENT DROP. See CLASS_TOKEN above: whatever still fails
+              // the shape test is reported, because a token that leaves this
+              // loop unrecorded is indistinguishable from one that resolved.
+              ex.push({ where: `${file}:${line}`, detail: `"${t}" is not a shape this check can resolve to a selector`, reason: 'unrecognized-token-shape' });
+              continue;
+            }
             if (MARKERS[t]) { ex.push({ where: `${file}:${line}`, detail: `${t} — ${MARKERS[t]}`, reason: 'marker-class' }); continue; }
             if (known.has(t)) { ex.push({ where: `${file}:${line}`, detail: `${t} resolves`, reason: 'resolves' }); continue; }
             f.push({ where: `${file}:${line}`, detail: `"${t}" resolves to no utility and no authored rule — dangling` });
           }
+        }
+        // `className={…}` expressions none of the literal forms match — a bare
+        // identifier (`{cls}`), a concatenation, an array with a trailing
+        // `.filter().join()`. These were read by NOTHING: not tokenised, not
+        // counted, not printed. Reported here so the blind spot is visible; see
+        // the UNCHECKED block for what it costs.
+        for (const m of src.matchAll(/className\s*=\s*\{/g)) {
+          if (covered.some(([a, b]) => m.index >= a && m.index < b)) continue;
+          const line = src.slice(0, m.index).split('\n').length;
+          ex.push({ where: `${file}:${line}`, detail: 'className={…} expression — not readable as a literal class list', reason: 'unparsed-className-expression' });
         }
       }
       if (interpolated) ex.push({ where: '(various)', detail: `${interpolated} interpolated className(s) skipped — counted, not dropped silently`, reason: 'interpolated' });
@@ -518,7 +559,14 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log('    selector wraps a given JSX node. The containment half is manual.');
   console.log('  - Cross-file class composition: check 6 resolves an icon\'s ancestors');
   console.log('    within one file, not a class applied by a parent component elsewhere.');
-  console.log('  - Runtime stroke is not measured. Check 6 reads authored values only.\n');
+  console.log('  - Runtime stroke is not measured. Check 6 reads authored values only.');
+  console.log('  - Check 9 reads the four literal className forms. A `className={…}`');
+  console.log('    EXPRESSION — a bare identifier, a concatenation, an array with a');
+  console.log('    trailing .filter().join() — is counted and printed as');
+  console.log('    unparsed-className-expression, never tokenised. Harvesting every');
+  console.log('    string literal inside an expression was measured and rejected: it');
+  console.log('    reads comparison operands as classes (`top-left`) and template');
+  console.log('    fragments as classes (`framed-image--`), 2 false positives in 3.\n');
   const passing = checks.filter((c) => c.pass).length;
   console.log(
     `Result: ${passing} of ${checks.length} passing, ${checks.length - passing} failing` +

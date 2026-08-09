@@ -31,3 +31,34 @@ export const Governed = () => (
     <ArrowRight className="fx-icon" />
   </span>
 );
+
+// ── check 9 — every one of these must land as a NAMED exclusion ─────────────
+
+// resolves against the BUILT css, via the escaped selector `.md\:px-8`
+export const Built = () => <div className="md:px-8" />;
+
+// resolves against an AUTHORED rule in clean.css — the other source
+export const Authored = () => <div className="c-authored-only" />;
+
+// Tailwind's important modifier. `.mt-24\!` is in the built stub; the token
+// `mt-24!` used to be discarded by the shape test with no record at all.
+export const Important = () => <div className="mt-24! c-authored-only" />;
+
+// One token, not five. An arbitrary value carries quotes and brackets, which is
+// why the split is on whitespace only — and why the shape test has to admit them.
+export const Arbitrary = () => <div className="after:content-[''] c-authored-only" />;
+
+// marker classes: they emit no CSS by design, so "resolves to nothing" is correct
+export const Markers = () => <div className="group peer c-authored-only" />;
+
+// interpolation is counted, never dropped silently
+export const Interpolated = ({ x }: { x: string }) => <div className={`c-authored-only ${x}`} />;
+
+// a token shape this check cannot resolve to a selector. Reported, not dropped —
+// the distinction the whole of check 9's completion turns on.
+export const OddShape = () => <div className="[&>*]:mt-4 c-authored-only" />;
+
+// a className EXPRESSION. Not a literal class list, so it is counted and printed
+// rather than guessed at: harvesting string literals out of an expression reads
+// comparison operands as class names.
+export const FromVariable = ({ cls }: { cls: string }) => <div className={cls} />;

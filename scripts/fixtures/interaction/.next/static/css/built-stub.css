@@ -1,0 +1,37 @@
+/* FIXTURE — a stand-in for Tailwind's BUILT output, read by check 9.
+ *
+ * Committed on purpose, and the path is the point: check 9 reads
+ * `.next/static/css` and `.next/static/chunks` relative to the tree it is given,
+ * so a fixture tree needs its own. That exercises the real readdirSync path with
+ * no test-only seam added to run() — a rule that bends to make itself testable
+ * is a rule that has been softened.
+ *
+ * It survives `.gitignore` because that file anchors `/.next/` to the repo root;
+ * a nested one is tracked. `walk()` skips dot-prefixed entries, so this file is
+ * never parsed as a fixture stylesheet and `scanned.css` stays two files. If it
+ * ever does go missing, check 9 fails LOUDLY in the fixture run ("no built CSS
+ * found") rather than passing on an empty set.
+ *
+ * Selectors are written the way Tailwind escapes them, because unescaping them
+ * is the behaviour under test: `.md\:px-8` must resolve the token `md:px-8`.
+ * Declarations are irrelevant — only the selectors are read. */
+
+/* the escaped forms — the reason unescape() exists */
+.md\:px-8 { padding-inline: 2rem }
+.hover\:underline:hover { text-decoration-line: underline }
+.focus\:outline:focus { outline-style: solid }
+.active\:translate-y-px:active { translate: 0 1px }
+.group-hover\:scale-105 { scale: 1.05 }
+
+/* the important modifier — `!` was dropped by the old shape test */
+.mt-24\! { margin-top: 6rem }
+
+/* an arbitrary value carrying quotes and brackets — ONE token, not five.
+   The other half of the same silent drop. */
+.after\:content-\[\'\'\]:after { content: "" }
+
+/* plain utilities used by the pre-existing fixtures, so their classNames
+   resolve and no fixture fails check 9 for a reason no check intended */
+.text-primary { color: #000 }
+.bg-surface { background: #fff }
+.rounded-m { border-radius: 12px }
