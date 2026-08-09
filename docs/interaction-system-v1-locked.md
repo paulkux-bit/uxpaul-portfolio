@@ -139,18 +139,77 @@ the same mode transition as `body`'s, at the same duration. It takes
 ```css
 --radius-xs:   4px;   /* inline marks, small media, focus-ring rounding */
 --radius-s:    8px;   /* compact controls — theme toggle, nav */
---radius-m:   12px;   /* buttons, cards */
+--radius-m:   12px;   /* buttons */
+--radius-l:   16px;   /* cards */
 --radius-full: 999px;
 ```
 
-`--radius-image` and `--radius-portrait` stay as media tokens.
+**Five steps, not four.** `--radius-l` exists so the card keeps 16px and gets its
+own step above the button, rather than being pulled down to 12 to fit a scale
+that had no room for it. Radius scales with surface size: a button is not a card,
+and the ladder should say so.
 
-Mapping from what ships: 2px and 3px → `xs`; 4px → `xs`; 6px → `s`; 8px → `s`;
-10px → `m`; 999px → `full`.
+`--radius-image` (12px) and `--radius-portrait` (4px) stay as media tokens. They
+now coincide in value with `m` and `xs` while remaining distinct in meaning —
+that is a coincidence, not a duplication to collapse, and the note above still
+stands that portrait is not to be "corrected" to image.
 
-**This is the one section that changes shipped appearance.** 6px surfaces
-become 8px and the button goes 10px → 12px. Everything else in this document is
-either invisible or additive. Look at it before adopting.
+### Mapping from what ships
+
+| ships | → | sites |
+|---|---|---|
+| 2px | `xs` | `:focus-visible` |
+| 3px | `xs` | `.mode-pair__label` |
+| 4px | `xs` | `.skip-link`, four bento media surfaces, the two bento `__track:focus-visible` |
+| 6px | `s` | `.figure__image`, `.mode-pair__cell`, `.figure--constrained-bleed .figure__image`, `.figure-placeholder`, `.hero-block__image-frame .figure-placeholder` |
+| 8px | `s` | `.theme-toggle`, `.milestone`, `.figure--framed`, `.hero-block__callout` |
+| 10px | `m` | `.about-btn` |
+| **16px** | **`l`** | **the case-study card** — authored in JSX as `rounded-2xl`, which is why it was missing from the first version of this table |
+| 999px | `full` | `.about-roles__step::before` |
+
+### What actually changes on screen — nine sites
+
+The earlier version of this section said "6px surfaces become 8px and the button
+goes 10px → 12px. Everything else is either invisible or additive." That was
+wrong, and the corrected list is:
+
+1. **`:focus-visible` 2px → 4px.** Called out first because it has the widest
+   blast radius in the whole document. It is a real `border-radius` sitting
+   beside `outline: 2px solid` in the same rule, so it rounds the focus ring on
+   **every focusable element that has no radius of its own**. A focus ring is not
+   a place for a surprise.
+2. `.mode-pair__label` 3px → 4px.
+3–7. `.figure__image`, `.mode-pair__cell`,
+   `.figure--constrained-bleed .figure__image`, `.figure-placeholder`,
+   `.hero-block__image-frame .figure-placeholder` — all 6px → 8px.
+8. `.about-btn` 10px → 12px.
+9. Nothing else. The card is 16 → 16 and the quick-hit shelf is 12 → 12: both
+   move authoring surface without moving a pixel, which is the point of adding
+   `l`.
+
+**Four of those sites render on no route** — `.mode-pair__cell`,
+`.mode-pair__label`, `.figure-placeholder` and `.figure--framed` were probed on
+`/`, `/about` and both case studies and returned zero instances. Their changes
+are real in the stylesheet, invisible to any reader, and unprovable by pixel.
+`ModePair` is already recorded as live-capable dead code in
+`unspecified-surfaces.md`; the figure surfaces are a new instance of the same
+thing.
+
+### Why the first map was wrong
+
+The audit behind it grepped `border-radius:` in CSS and never read Tailwind
+radius utilities in JSX. `lint:interaction` check 3 had **the identical gap from
+the identical cause** — it also read stylesheets only.
+
+A rule and the check that enforces it sharing a blind spot means neither can
+catch the other. That is how this section could assert "the only visible changes
+are 6→8 and the button" while a 16px card and a 2px focus ring sat outside its
+view, and why the failure survived being written down, reviewed and gated.
+
+It belongs in §8's tally: the sixth case in this system where a stated rule and
+an implemented rule disagreed, and the first where the **spec** was the half that
+was untested. Check 3 reads JSX as of I3-A, so the two can now contradict each
+other loudly instead of agreeing by shared omission.
 
 ---
 
@@ -264,6 +323,13 @@ Fixtures assert a positive result — "scanned, N found, M excluded" — never t
 absence of output. A negative control that stops appearing is indistinguishable
 from a file that was never opened, which is how the `.mdx` gap hid during the
 colour migration.
+
+**A rule can be the untested half too.** §4's radius map was written by an audit
+that grepped CSS and never read JSX, and check 3 enforced it with the identical
+gap. Neither could catch the other, so a 16px card and a 2px focus ring stayed
+outside a section whose whole job was to enumerate them. When a check and the
+rule it enforces are derived the same way, agreement between them is not
+evidence. Sixth case, and the only one so far on the spec's side of the line.
 
 **Four of the nine shipped testing something other than their stated rule**, and
 not one was caught by the check itself. Checks 5, 6 and 8 each implemented half:
