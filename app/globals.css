@@ -2966,12 +2966,27 @@ html.dark .figure-placeholder {
 }
 
 /* 4:5 wrapper: the screenshot fills it edge-to-edge (cover), clipped to the radius.
-   border-radius is on-scale raw px — there is no radius token in the system. */
+   Radius comes from --radius-image, the media token §4 keeps alongside the
+   xs/s/m/l/full scale. (This comment used to claim "on-scale raw px — there is
+   no radius token in the system", directly above a line reading
+   `var(--radius-image)`. Wrong twice, and wronger since I3 added the scale.) */
 .hero-block__image-frame {
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius-image);
+  /* The well the screenshot arrives into. Without a fill this box paints as an
+     empty outlined rectangle on first paint — the src is a plain string from MDX
+     frontmatter, so next/image generates no blur placeholder, and the callout
+     that overlaps this frame renders on time over nothing.
+     --bg-sunken by the role map: "inset against bg-canvas". It is the only
+     surface token darker than the canvas in BOTH modes (0.900 vs 0.978 light,
+     0.130 vs 0.165 dark), so it recedes either way and reads as a well waiting
+     to be filled rather than as a finished panel that then swaps — which is what
+     --bg-surface, "default panel: cards, content modules, footer", would do.
+     Invisible once the image lands: both heroes are fully opaque (no alpha, no
+     tRNS) and object-fit: cover leaves no letterbox. */
+  background-color: var(--bg-sunken);
   /* Hairline defines the screenshot's edge in BOTH modes (parity): the light panel
      against cream (Paper) and against espresso (Low Light). Mode-aware via
      --border-subtle; inset → no layout shift, follows the radius. */
