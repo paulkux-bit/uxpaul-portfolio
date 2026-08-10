@@ -903,6 +903,39 @@
   border-radius: var(--radius-l);
 }
 
+/* Footer links: standalone destinations in a row, not text in a sentence, so
+   they get a real hit area. Measured 54.9 x 20.3 and 35.4 x 20.3 — under 44 on
+   height, and "Email" under on WIDTH too, which is why the pseudo expands both
+   axes rather than only the vertical.
+
+   THE VISUAL BOX DOES NOT MOVE. An earlier version of this used inline-flex +
+   min-height + padding and shipped a regression: the global `a` rule's
+   text-decoration underlines the whole padded box, so the rule ran ~8px past
+   each end of "LinkedIn" and "Email" and read as a stray line. min-height also
+   grew the footer row and opened the gap under the byline. A hit area is not a
+   visual box, and conflating them is what caused both.
+
+   height: 44px rather than a symmetric inset. The anchor is 20.3 tall, so a
+   symmetric inset needs 11.85 each side; --spacing-xs (12px) lands at 44.3,
+   which is 0.3px of headroom and would silently drop under if the caption
+   rung's line-height moved. An explicit 44 centred on the text is exact by
+   construction, and 44px is the same touch-target constant .about-btn,
+   .theme-toggle, .about-work-band and .about-row__summary already use.
+
+   NOT applied to .quiet-link: WCAG 2.5.8 exempts a target inside a sentence or
+   block of text. Colour, hover and focus still come from the global `a` rules. */
+.footer-link {
+  position: relative;
+}
+.footer-link::after {
+  content: '';
+  position: absolute;
+  inset-inline: calc(var(--spacing-2xs) * -1);
+  top: 50%;
+  height: 44px;
+  transform: translateY(-50%);
+}
+
 /* Quiet links: no underline at rest, underline on hover. The colour and
    thickness shift still comes from the global a / a:hover pair. */
 .quiet-link,
@@ -946,7 +979,30 @@
   color: var(--text-secondary);
   text-decoration-line: none;
   text-underline-offset: 0.22em;
+  /* Anchor for the hit-area pseudo below. The visual box is untouched. */
+  position: relative;
   transition: color var(--duration-control) var(--ease-out-soft);
+}
+
+/* Hit area, not a visual box. "Work" measures 39.3 x 44 — min-h-11 in the JSX
+   gives the height, but a four-letter label cannot reach 44 across on its own,
+   and nav items are not prose, so WCAG 2.5.8's inline-text exemption does not
+   apply (that exemption is why .quiet-link is left alone).
+
+   PADDING WOULD BE THE OBVIOUS FIX AND IT IS WRONG HERE: text-decoration spans
+   the whole padded box, so the hover and [data-active] underlines would run
+   past each end of the word. Expanding a pseudo-element leaves the anchor's own
+   box — and therefore its underline — exactly where it was. Same pattern
+   .case-card__title-link already uses for its stretched click target.
+
+   8px each side: 39.3 + 16 = 55.3. --spacing-3xs would clear at 47.3, but by
+   only 3.3px, and a font-metric change would put it back under. The list keeps
+   gap-6, so the dead zone between the two expanded targets is 24 − 8 − 8. */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(var(--spacing-2xs) * -1);
 }
 .nav-link:hover {
   color: var(--text-primary);
@@ -2966,12 +3022,27 @@ html.dark .figure-placeholder {
 }
 
 /* 4:5 wrapper: the screenshot fills it edge-to-edge (cover), clipped to the radius.
-   border-radius is on-scale raw px — there is no radius token in the system. */
+   Radius comes from --radius-image, the media token §4 keeps alongside the
+   xs/s/m/l/full scale. (This comment used to claim "on-scale raw px — there is
+   no radius token in the system", directly above a line reading
+   `var(--radius-image)`. Wrong twice, and wronger since I3 added the scale.) */
 .hero-block__image-frame {
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   border-radius: var(--radius-image);
+  /* The well the screenshot arrives into. Without a fill this box paints as an
+     empty outlined rectangle on first paint — the src is a plain string from MDX
+     frontmatter, so next/image generates no blur placeholder, and the callout
+     that overlaps this frame renders on time over nothing.
+     --bg-sunken by the role map: "inset against bg-canvas". It is the only
+     surface token darker than the canvas in BOTH modes (0.900 vs 0.978 light,
+     0.130 vs 0.165 dark), so it recedes either way and reads as a well waiting
+     to be filled rather than as a finished panel that then swaps — which is what
+     --bg-surface, "default panel: cards, content modules, footer", would do.
+     Invisible once the image lands: both heroes are fully opaque (no alpha, no
+     tRNS) and object-fit: cover leaves no letterbox. */
+  background-color: var(--bg-sunken);
   /* Hairline defines the screenshot's edge in BOTH modes (parity): the light panel
      against cream (Paper) and against espresso (Low Light). Mode-aware via
      --border-subtle; inset → no layout shift, follows the radius. */
