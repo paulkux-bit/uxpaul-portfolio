@@ -15,7 +15,7 @@ export const caseStudyRoutes = {
   // Uncomment as each lands. That single line publishes the route and the card.
   // 'us-navy-dagr':  () => import('@/app/content/case-studies/us-navy-dagr.mdx'),
   // 'urbn-shipping': () => import('@/app/content/case-studies/urbn-shipping.mdx'),
-  // 'nuuly':         () => import('@/app/content/case-studies/nuuly.mdx'),
+  'nuuly': () => import('@/app/content/case-studies/nuuly.mdx'),
 } as const;
 
 export type PublishedSlug = keyof typeof caseStudyRoutes;

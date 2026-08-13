@@ -1,0 +1,95 @@
+{
+  "images": [
+    {
+      "src": "/case-studies/nuuly/apps/apps-01-menu.png",
+      "alt": "The app launcher: six circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns and Packing, with Returns marked offline.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "feature",
+      "caption": {
+        "lead": "One surface, seven jobs.",
+        "tail": "An eighth tile advertises work that had not been built yet."
+      }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-02-receiving.png",
+      "alt": "Receiving: a purchase order grid tracking scanned SKUs, with the current garment card showing two of ten units received.",
+      "focalPoint": {
+        "x": 0.62,
+        "y": 0.45
+      },
+      "breakout": "band",
+      "aspect": 1.778,
+      "caption": {
+        "lead": "It arrives.",
+        "tail": "Net-new inventory scanned in, unit by unit, against the order."
+      }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-03-returning.png",
+      "alt": "Returning: a prompt naming two handling steps set for this style when it was test washed, over the row of garments waiting to be sorted.",
+      "focalPoint": {
+        "x": 0.3,
+        "y": 0.5
+      },
+      "breakout": "band",
+      "aspect": 1.778,
+      "caption": {
+        "lead": "It comes back.",
+        "tail": "Handling set when the style was test washed, surfaced at the moment it matters."
+      }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-04-inspection.png",
+      "alt": "Inspection: a returned garment beside a grid of damage types, stain selected, with pass and fail as the two verdicts.",
+      "focalPoint": {
+        "x": 0.45,
+        "y": 0.5
+      },
+      "breakout": "band",
+      "aspect": 1.778,
+      "caption": {
+        "lead": "It gets judged.",
+        "tail": "Damage named from a fixed vocabulary, then passed or failed."
+      }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-05-packing.png",
+      "alt": "Packing: three garment bag sizes offered for the order, the large bag chosen.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "breakout": "band",
+      "aspect": 1.778,
+      "caption": {
+        "lead": "It goes back out.",
+        "tail": "The packaging decided from the order, not from memory."
+      }
+    }
+  ],
+  "composition": [
+    {
+      "name": "apps-01-menu",
+      "mode": "light"
+    },
+    {
+      "name": "apps-02-receiving",
+      "mode": "light"
+    },
+    {
+      "name": "apps-03-returning",
+      "mode": "light"
+    },
+    {
+      "name": "apps-04-inspection",
+      "mode": "light"
+    },
+    {
+      "name": "apps-05-packing",
+      "mode": "light"
+    }
+  ]
+}
