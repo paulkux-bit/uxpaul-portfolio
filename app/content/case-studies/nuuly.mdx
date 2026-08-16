@@ -20,6 +20,8 @@ nda: false
 
 import { BentoBand } from '@/components/bento';
 import AppsBento from '@/components/case-studies/nuuly/AppsBento';
+import { NuulyFigure } from '@/components/nuuly-figure';
+import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 {/* ─────────────────────────────────────────────────────────────
     Nuuly – Template A. Content draft v1, images first pass.
@@ -37,46 +39,91 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
 <HeroBlock
   eyebrow="NUULY · URBN"
   title={['A building, a business model,', 'and no process.']}
-  role="I designed the warehouse tools behind Nuuly, URBN's clothing rental subscription. Seven apps move each garment from the return tote to the next customer's box. Sole designer on all seven, from idea to launch on the warehouse floor."
+  role="At Nuuly, URBN's clothing rental subscription, I designed the seven warehouse apps that get a returned garment back out to the next customer: sole designer, idea to launch."
   image={{
     src: '/case-studies/nuuly/hero.png',
     alt: 'Sort to wash bins, six of six scanned: three returned garments in a row, coded D2, W1 and D3, above the workstation dock.',
   }}
   callout={{
-    label: 'The premise',
-    body: 'The specialist scans. The system knows the steps from here.',
+    label: 'THE SCAN',
+    body: 'Usually it records what you did. This one tells you what to do next.',
   }}
 />
 
 <section className="cs-section cs-section--problem">
 
-## Every dress comes back
+## Somebody is already waiting for the dress you just sent back.
 
-Nuuly rents clothes by subscription. Six items a month, wear them, send them back, choose six more. URBN launched it in 2019 as a startup inside itself.
+<p className="section-lede">Nuuly rents clothes by subscription: six garments a month, then six more.</p>
 
-**A retailer sells a garment once. A rental service has to send the same garment out dozens of times.** That inverts where the difficulty sits. Getting a dress to a customer is a solved problem. Getting it back, cleaned, judged, repaired and into somebody else's box is the business.
+**Her next box ships on a date she picked.** The dress is still in a return tote.
 
-All of that is physical, and none of it is forgiving. Every turn is two shipping legs, an industrial cleaning cycle, a manual inspection and a probable repair, paid for out of one fixed monthly subscription. Do it wrong and you either ruin the garment or ship something the next customer opens and does not want.
+**Each turn costs two shipping legs, a wash, an inspection, and a repair.** Wash it wrong, and the dress is gone. Move it slowly, and her box ships short.
 
-**In 2018 none of it existed.** No building running, no process, no software, no precedent inside URBN to copy. Data capture was a founding principle rather than a later ambition: every action on the floor, every garment, every order was to be recorded from day one.
+**In 2018, none of this existed.** No process, no software, nothing at URBN to copy.
+
+{/* PLACEHOLDER ART. Both SVGs are stand-ins so the module can be judged at
+    real scale; Paul draws the finished line work. The .svg beside each .tsx in
+    components/nuuly/ is the source of truth: edit the .svg, then run
+    `npm run regen:nuuly`. Do not hand-edit the .tsx.
+
+    Placed AFTER the prose, not between beats (Paul, 14 Aug): the three beats
+    run as one uninterrupted argument, and the figures land as evidence under
+    it. Moving them back between beats breaks the beat rhythm. */}
+<div className="nuuly-figure-pair">
+  <NuulyFigure
+    variant="economics"
+    alt="Six garments hanging on a rail, marked eight hundred dollars of retail, above a shipping box marked eighty-eight dollars a month."
+    caption={<><strong>$88 a month.</strong> Six garments, around $800 of retail, out and back every cycle.</>}
+  />
+  <NuulyFigure
+    variant="range"
+    alt="A rail of garments widening steadily from left to right, labelled size double zero at one end and twenty-six at the other."
+    caption={<><strong>1,000+ styles, sizes 00 to 26.</strong> Every one of them has to survive the same loop.</>}
+  />
+</div>
 
 </section>
 
-<section className="cs-section">
+<section className="cs-section cs-section--frictions">
 
-## Seven apps, one screen, one free hand
+## I came in expecting a screen problem. It is a physical job.
 
-The floor runs on a touchscreen mounted to a rolling workstation whose height the specialist sets. Around it: a scanner, a scale, bins, and garments carrying RFID tags, so the system knows the individual item rather than the style and size.
+<p className="section-lede">I spent time on the floor with the warehouse logistics managers and the garment specialists who would use the tools.</p>
 
-**One hand holds the garment. The other does everything else.** It also holds the scanner, and which hand does which varies by person. The workstation doubles as a staging surface, so the specialist has laid out their work the way training taught them and the screen is competing with a dress for attention. Several flows never get touched at all: the specialist reads a confirmation and moves.
+{/* FIGURE SLOTS x3. Paul is drawing these. NOT the monochrome line treatment
+    BARD and FDT-E use: this is the third study to run the friction-beats
+    module, and the art is the only thing differentiating it. See
+    claude/nuuly-arc-locked.md, "Module repetition". Subject is the SPECIALIST
+    doing the thing the beat describes, never an abstraction. */}
+<ol className="friction-beats">
+  <li className="friction-beat" data-thread="1">
+    <div className="friction-beat__text">
+      <span className="thread-index">01</span>
+      <h3 className="friction-beat__headline">The station never sits still</h3>
+      <p className="friction-beat__scene">Rolled to where the work is. Height reset for whoever is on it. The furniture is part of the job, and it moves all shift.</p>
+    </div>
+    <NuulyBeatFigure variant="station" alt="A specialist leaning into a wheeled workstation to push it, the cart it just left ghosted behind." />
+  </li>
+  <li className="friction-beat" data-thread="2">
+    <div className="friction-beat__text">
+      <span className="thread-index">02</span>
+      <h3 className="friction-beat__headline">The surface is the work</h3>
+      <p className="friction-beat__scene">The workstation doubles as a staging table. Every specialist lays their work out their own way, and the screen shares the surface with it.</p>
+    </div>
+    <NuulyBeatFigure variant="surface" alt="The same workstation, its surface buried under laid-out garments, the monitor swung aside on its arm." />
+  </li>
+  <li className="friction-beat" data-thread="3">
+    <div className="friction-beat__text">
+      <span className="thread-index">03</span>
+      <h3 className="friction-beat__headline">One hand is always full</h3>
+      <p className="friction-beat__scene">A garment in one hand, a scanner in the other. Which hand does which varies by person, and nobody puts the garment down to tap.</p>
+    </div>
+    <NuulyBeatFigure variant="hands" alt="A specialist holding a garment up off the rack in one hand and bringing a scanner to its tag with the other." />
+  </li>
+</ol>
 
-Seven apps cover the cycle. Receiving brings net-new inventory in. Fingerprint confirms a garment is registered. Test Wash and Measure characterize a new style. Inspection judges damage. Returning closes a customer's rental and sorts the garment onward. Packing builds the next order and picks its packaging.
-
-{/* The garment's journey, not the org chart: launcher, arrive, come back,
-    get judged, go back out. Four of the five are full-frame bands because
-    these screens run content edge to edge and a 16:10 region crop clips it.
-    See the shape note in AppsBento.tsx before changing any slot. */}
-<AppsBento />
+All of it comes back to the clothes. A silk slip and a structured coat do not move the same way, and the catalog is a thousand styles wide.
 
 </section>
 
@@ -84,11 +131,18 @@ Seven apps cover the cycle. Receiving brings net-new inventory in. Fingerprint c
 
 ## The menu is for the station, not the person
 
-<p className="section-lede">Nobody browses seven apps. A Return Specialist works Returning.</p>
+<p className="section-lede">A Return Specialist works Returning. A Merchandise Specialist works Receiving. Nobody browses.</p>
 
-Seven apps behind one menu looks like a navigation problem, and it would be if a person were choosing. They are not. A Return Specialist works Returning. A Merchandise Specialist works Receiving.
+**So the seven apps are not a menu a person shops.** They are a list of jobs a station can be given.
 
-The list exists because the workstations are portable and operations were going to grow. Roll a cart somewhere else, give the station a different job, pick the app that matches. The flexibility lives in the furniture and the software follows it. That let each app stay narrow and specific to one task instead of becoming a general tool that asks its user which mode they are in.
+**The flexibility lives in the furniture. The software follows it.** Roll a cart to another part of the floor, give it different work, pick the app that matches. That let every app stay narrow and specific to one task instead of becoming one general tool that asks its user which mode they are in.
+
+Receiving, Fingerprint, Test Wash, Measure, Inspection, Returning, Packing.
+
+{/* Bento merged into this section 14 Aug: the framing explains why there are
+    seven apps behind one menu, and the gallery is the evidence for it. Split
+    across two sections, one argues and the other shows, with nothing between. */}
+<AppsBento />
 
 </section>
 
@@ -118,11 +172,28 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
   aspect={1.6}
 />
 
-{/* TODO (blocks two images): tw-wet and tw-done render the wash cycle names
-    and their fiber mappings. Paul flagged the wash-type taxonomy as URBN
-    proprietary in interview Q11. Either the proprietary part is the model
-    rather than the names, or those frames need their values obscured.
-    Not cropped, not committed, until he rules. */}
+{/* WASH TAXONOMY — RULED 15 Aug 2026 (Paul). Option B.
+
+    PUBLISHABLE:  tw-form  (Wet clean / Dry clean, both "not set" — the choice,
+                            no taxonomy at all)
+                  tw-done  (resolved to "W3 - Delicate lights" — one cycle
+                            label, no fibre routing)
+
+    NOT PUBLISHABLE: tw-wet. It renders the full picker: every wet-clean
+                  cycle code with its label and its fibre list. That mapping
+                  is the output of the discovery project this section
+                  describes, it is the most useful thing in the study to a
+                  competitor, and it cannot be unpublished later.
+                  Do not crop it, do not add it to a manifest, do not "just
+                  for the local build" it.
+
+                  This comment deliberately does not enumerate the codes. An
+                  annotation that restates what it protects is not a
+                  protection.
+
+    Context for anyone revisiting: the hero (rt-6) already shows six bare codes
+    (W1 W4 W5 W6 D2 D3), so the existence and rough size of the coded system is
+    already public. The ruling is only about what the codes MEAN. */}
 
 {/* TODO (blocks a number): tightest defensible version of "months" and
     "thousands of machine washes" above. Paul's own figures, unverifiable
@@ -220,7 +291,7 @@ I left URBN that November. What Nuuly became afterwards is not mine to claim, bu
 
 ## Role
 
-Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer product and brand; the operator tooling was mine. The work ran alongside Nuuly product, the data science team, warehouse operations subject-matter experts, and the garment specialists who would use the tools. The wash-cycle discovery project the sorting model rests on was a team effort across design, operations and data science. Designed 2018 to 2019, from nothing to the floor. The screens on this page are recreations of the original designs.
+Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer product and brand; the operator tooling was mine. The work ran alongside Nuuly product, the data science team, warehouse operations subject-matter experts, and the garment specialists who would use the tools. The wash-cycle discovery project the sorting model rests on was a team effort across design, operations and data science. Designed 2018 to 2019, from nothing to the floor.
 
 {/* Credit resolved 12 Aug 2026: Paul was the sole designer on the seven
     operator apps. The claim is scoped to the apps deliberately. Unqualified
