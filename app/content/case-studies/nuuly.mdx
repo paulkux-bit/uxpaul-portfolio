@@ -20,7 +20,6 @@ nda: false
 
 import { BentoBand } from '@/components/bento';
 import AppsBento from '@/components/case-studies/nuuly/AppsBento';
-import { NuulyFigure } from '@/components/nuuly-figure';
 import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 {/* ─────────────────────────────────────────────────────────────
@@ -58,38 +57,86 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 **Her next box ships on a date she picked.** The dress is still in a return tote.
 
-**Each turn costs two shipping legs, a wash, an inspection, and a repair.** Wash it wrong, and the dress is gone. Move it slowly, and her box ships short.
+**Each turn costs two shipping legs, a wash, an inspection, and a repair.** All of it out of one monthly fee. Wash it wrong and the dress is gone. Move it slowly and her box ships short.
 
-**In 2018, none of this existed.** No process, no software, nothing at URBN to copy.
+{/* House pattern, taken from FDT-E's problem pair (us-navy-fdt-e.mdx): one real
+    artifact beside one authored illustration, both 16:10 so the two caption
+    baselines lock. Order is promise then reality (what she signs up for, then
+    what has to survive the loop), which hands off to section 3's "The physical
+    space was the spec."
 
-{/* PLACEHOLDER ART. Both SVGs are stand-ins so the module can be judged at
-    real scale; Paul draws the finished line work. The .svg beside each .tsx in
-    components/nuuly/ is the source of truth: edit the .svg, then run
-    `npm run regen:nuuly`. Do not hand-edit the .tsx.
+    BOTH TILES ARE FINAL (17 Aug).
 
-    Placed AFTER the prose, not between beats (Paul, 14 Aug): the three beats
-    run as one uninterrupted argument, and the figures land as evidence under
-    it. Moving them back between beats breaks the beat rhythm. */}
-<div className="nuuly-figure-pair">
-  <NuulyFigure
-    variant="economics"
-    alt="Six garments hanging on a rail, marked eight hundred dollars of retail, above a shipping box marked eighty-eight dollars a month."
-    caption={<><strong>$88 a month.</strong> Six garments, around $800 of retail, out and back every cycle.</>}
-  />
-  <NuulyFigure
-    variant="range"
-    alt="A rail of garments widening steadily from left to right, labelled size double zero at one end and twenty-six at the other."
-    caption={<><strong>1,000+ styles, sizes 00 to 26.</strong> Every one of them has to survive the same loop.</>}
-  />
-</div>
+    · promise-nuuly-site--wide.png: capture of nuuly.com/rent/the-edit, taken
+      17 Aug. Laid out at 1440 CSS px, stitched from three scroll positions,
+      cropped 16:10 and resized to 2320x1450. Shows the promo bar, the nav with
+      the wordmark, "The Fall Edit", the editorial hero, and the Fall Essentials
+      rail. A lower crop carrying brand names and retail prices was rendered and
+      rejected: at the 520px the tile actually renders, that type is illegible,
+      and without the nav the capture stops reading as somebody else's website,
+      which is the one thing this tile has to say. The caption names it as
+      Nuuly's consumer site on purpose: the page is URBN's, not Paul's design
+      work, and an uncaptioned brand asset inside a case study reads as the
+      author's. Resolution is settled, do not "fix" it: the tile renders at
+      520 CSS px, so a 2x display rasterises 1040 device px and a 3x display
+      1560. The native capture is 1568px wide, so it clears both; the 2320
+      stored size is only there to match the illustration's dimensions, and
+      the browser downsamples past it. An earlier note here called 1568 short
+      of a 2400px floor and recommended a native DevTools recapture. That was
+      wrong arithmetic, checked at device resolution 17 Aug: the nav type is
+      clean at 1:1. No upscale, no recapture.
+
+    · range-variety--feature.png: FINAL. Paul's Firefly illustration, gouache
+      and coloured pencil, generated 17 Aug. Source 2688x1536; the gradient was
+      extended vertically (not cropped) to reach 16:10, then resized to
+      2320x1450, so no artwork was lost. Opaque, no alpha, and no .cover-art
+      invert: `.cs-section--problem .framed-pair__cell .figure__image` adds a
+      hairline in both modes and does no recolor, so the warm ground IS the
+      dark-mode answer. This corrects the transparent-background plan in the
+      briefs doc. An alternate take (finer pencil, more catalog-like) is kept
+      at range-variety--plate.png; it lost the 520px comparison because its
+      garments sit smaller in frame and its painted wash edge reads as artwork
+      inside a card once the tile's radius and hairline are applied.
+
+    Supersedes the NuulyFigure / .nuuly-figure-pair SVG pair. The finished
+    illustration shipped raster, so components/nuuly/, components/nuuly-figure.tsx,
+    the regen:nuuly script and the .nuuly-figure-pair rules were removed in this
+    commit. */}
+<FramedPair
+  framed={false}
+  left={{
+    src: '/case-studies/nuuly/promise-nuuly-site--wide.png',
+    width: 2320,
+    height: 1450,
+    alt: "Nuuly's consumer site explaining the rental subscription: choose six garments, wear them, send them back for six more.",
+    caption: (
+      <>
+        <strong>Nuuly's consumer site.</strong> The front end of the loop.
+        Everything behind it is warehouse.
+      </>
+    ),
+  }}
+  right={{
+    src: '/case-studies/nuuly/range-variety--feature.png',
+    width: 2320,
+    height: 1450,
+    alt: 'A densely packed clothing rail seen straight on, no two garments alike in kind, weight or drape: silk slips beside denim beside structured tailoring.',
+    caption: (
+      <>
+        <strong>1,000+ styles, sizes 00 to 26.</strong> Every one of them has to
+        survive the same loop.
+      </>
+    ),
+  }}
+/>
 
 </section>
 
 <section className="cs-section cs-section--frictions">
 
-## I came in expecting a screen problem. It is a physical job.
+## The physical space was the spec.
 
-<p className="section-lede">I spent time on the floor with the warehouse logistics managers and the garment specialists who would use the tools.</p>
+<p className="section-lede">I interviewed fourteen garment specialists and operations experts, and watched them work, before there was a screen to design.</p>
 
 {/* FIGURE SLOTS x3. Paul is drawing these. NOT the monochrome line treatment
     BARD and FDT-E use: this is the third study to run the friction-beats
@@ -123,7 +170,7 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
   </li>
 </ol>
 
-All of it comes back to the clothes. A silk slip and a structured coat do not move the same way, and the catalog is a thousand styles wide.
+All of it comes back to the clothes. A silk slip and a structured coat do not move the same way.
 
 </section>
 
@@ -172,11 +219,11 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
   aspect={1.6}
 />
 
-{/* WASH TAXONOMY — RULED 15 Aug 2026 (Paul). Option B.
+{/* WASH TAXONOMY - RULED 15 Aug 2026 (Paul). Option B.
 
-    PUBLISHABLE:  tw-form  (Wet clean / Dry clean, both "not set" — the choice,
+    PUBLISHABLE:  tw-form  (Wet clean / Dry clean, both "not set" - the choice,
                             no taxonomy at all)
-                  tw-done  (resolved to "W3 - Delicate lights" — one cycle
+                  tw-done  (resolved to "W3 - Delicate lights" - one cycle
                             label, no fibre routing)
 
     NOT PUBLISHABLE: tw-wet. It renders the full picker: every wet-clean

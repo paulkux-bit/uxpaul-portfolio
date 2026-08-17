@@ -25,10 +25,6 @@ export const ARTWORK_DIRS = [
     reason: 'OKU case-study illustrations — same pipeline (scripts/regen-oku-tsx.mjs), artwork with its own viewBox',
   },
   {
-    path: 'components/nuuly',
-    reason: 'Nuuly case-study illustrations — the problem-section figure pair, regenerated from .svg by scripts/regen-nuuly-tsx.mjs, artwork with its own viewBox',
-  },
-  {
     path: 'components/nuuly-beats',
     reason: 'Nuuly friction-beat illustrations — same pipeline (scripts/regen-nuuly-beats-tsx.mjs), sized by layout not by adjacent type',
   },

@@ -2046,52 +2046,6 @@ html.dark .oku-figure {
   vector-effect: non-scaling-stroke;
 }
 
-/* ── Nuuly problem-section figure pair ─────────────────────────────────
-   Two co-equal NuulyFigure line drawings side by side in prose. FramedPair
-   cannot serve here: it takes `src` strings for next/image, not children, so
-   it can hold rasters but not inline SVG. Stacks below md, matching
-   FramedPair's own stackMobile default so the two modules agree on mobile.
-   Wider gutter than the beat gap because these read as two separate claims,
-   not one figure with two halves. */
-.nuuly-figure-pair {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--spacing-xl);
-  margin: var(--spacing-xl) 0;
-}
-
-/* Gap is declared once, outside the media query: check 4 (§7.4) forbids spacing
-   steps at a breakpoint, so the value has to hold in both stacked and side-by-side
-   layouts. --spacing-xl is set by the stacked case, which needs the separation more. */
-@media (min-width: 768px) {
-  .nuuly-figure-pair {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    align-items: end; /* caption baselines line up regardless of drawing height */
-  }
-}
-
-/* Zero the .oku-figure top margin: that margin exists to keep a friction-beat
-   figure attached to its scene text. In the pair, the grid gap owns the spacing. */
-.nuuly-figure-pair .nuuly-figure {
-  margin: 0;
-}
-
-/* Caption register matches .figure__caption (the terse evidence voice used under
-   FramedPair panels), not the bento captions, which sit above their image. */
-.nuuly-figure__caption {
-  margin-top: var(--spacing-s);
-  font-size: 0.875rem;
-  line-height: 1.5;
-  color: var(--text-muted);
-  text-wrap: pretty;
-  max-width: 56ch;
-}
-
-.nuuly-figure__caption strong {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
 /* A pull quote INSIDE a friction beat: the display-scale 3.5rem block margins are
    for quotes standing alone in prose; inside a beat's text cell they blow a
    beat-gap-sized hole after the scene. Step down to the beat's own internal

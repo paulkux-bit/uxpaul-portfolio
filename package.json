@@ -15,7 +15,6 @@
     "test": "vitest",
     "regen:oku": "node scripts/regen-oku-tsx.mjs",
     "regen:fdte": "node scripts/regen-fdte-tsx.mjs",
-    "regen:nuuly": "node scripts/regen-nuuly-tsx.mjs",
     "regen:nuuly-beats": "node scripts/regen-nuuly-beats-tsx.mjs"
   },
   "dependencies": {
