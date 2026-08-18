@@ -8,13 +8,15 @@
 //   node scripts/regen-nuuly-beats-tsx.mjs      (or: npm run regen:nuuly-beats)
 //
 // The wrapper <svg> keeps only viewBox (no width/height) so `.oku-figure svg { width:100% }`
-// scales it to the wrapper cap; currentColor in the path data drives the theme flip.
+// scales it to the wrapper cap; currentColor INSIDE the inner markup (on the <g>, as
+// components/oku/*.svg do) drives the theme flip. It cannot live on the source <svg>
+// root: that tag is stripped here and not re-emitted. Guarded below.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 
 const FIGURES = [
   ['beat-01-station', 'BeatStation'],
-  ['beat-02-surface', 'BeatSurface'],
+  ['beat-02-handoff', 'BeatHandoff'],
   ['beat-03-hands', 'BeatHands'],
 ];
 
@@ -31,6 +33,27 @@ for (const [base, comp] of FIGURES) {
     .replace(/<\/svg>\s*$/, '')
     .trim();
   if (!inner) throw new Error(`${base}.svg: empty inner markup`);
+
+  // The emitted root below carries viewBox and NOTHING else, so any presentation
+  // attribute left on the SOURCE root is silently dropped. That shipped once: the
+  // traced beat art arrived with fill and fill-rule on <svg>, and the .svg rendered
+  // correctly standalone while the generated .tsx rendered pure black with its
+  // compound-path holes filled solid. Nothing else catches it — no linter reads
+  // fill, and no CSS in this repo declares one, so the figure inherits SVG's
+  // initial black/nonzero. Assert both are inside the markup that survives.
+  // Presence, not value: fill="none" is legitimate for stroke-based art.
+  const missing = [
+    ['fill', /\sfill="/],
+    ['fill-rule', /\sfill-rule="/],
+  ].filter(([, re]) => !re.test(inner)).map(([name]) => name);
+  if (missing.length) {
+    throw new Error(
+      `${base}.svg: no ${missing.join(' or ')} in the inner markup. The generated ` +
+        `.tsx root emits viewBox only, so anything on the <svg> root is dropped: a ` +
+        `missing fill renders the figure black, a missing fill-rule fills its ` +
+        `interior counters solid. Put both on the inner <g>, as components/oku/*.svg do.`,
+    );
+  }
 
   const tsx = `/* eslint-disable */
 // Generated from ${base}.svg by scripts/regen-nuuly-beats-tsx.mjs — do not edit by hand; rerun the script if the SVG changes.
