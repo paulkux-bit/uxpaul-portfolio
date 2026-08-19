@@ -2032,15 +2032,43 @@ html.dark .oku-figure {
   height: auto; /* scales to the SVG's own ~16:9 viewBox */
 }
 
-/* The FDT-E drawings are single hand-drawn FILLED paths whose hairline linework
-   collapses at the rendered size (muddy in dark). Add constant weight via stroke:
-   non-scaling-stroke pins it to a fixed 0.75px of SCREEN, not of the drawing's own
-   coordinate space, so the weight holds wherever the figure is scaled. Stroke follows
-   currentColor, so the per-mode wrapper ink stays the single color source. 0.75px
-   tested clean on figure 03's dense map grid. FDT-E-scoped one-off exception (Paul,
-   July 2026) to the "fix line weight in the source art" convention — Bard's Oku
-   figures have native weight and stay stroke-free. */
+/* ── Hairline stroke floor, two consumers ────────────────────────────────
+   Some figures are single FILLED paths whose hairline linework collapses at the
+   rendered size: the drawn lines go sub-pixel and antialias to grey. Add constant
+   weight via stroke. non-scaling-stroke pins it to a fixed 0.75px of SCREEN, not of
+   the drawing's own coordinate space, so the weight holds wherever the figure is
+   scaled and whatever transform the tracer emitted. Stroke follows currentColor, so
+   the per-mode wrapper ink stays the single color source.
+
+   0.75px IS NEAR ITS CEILING, NOT MID-RANGE. Do not round it up. These are merged
+   compound paths of OUTLINED linework: every drawn line is a closed contour, so the
+   stroke lands on BOTH sides of it and effective weight is roughly double a
+   single-edge stroke. At 1px the sketch quality fattens away and the densest passages
+   (Nuuly beat 03's hands) begin closing up. 0.5px still reads thin. Measured at true
+   size in both modes, twice, by two people who arrived at the same number.
+
+   TWO CLASSES, ONE VALUE, DELIBERATELY NOT MERGED. The trigger is a property of the
+   ART, not of the study: hairline source linework needs the floor, chunky art does
+   not. .oku-figure stays stroke-free because Bard's Oku figures have native weight,
+   and it is the shared wrapper, so a floor there would hit every figure on the site.
+   Whether the floor should instead live on .oku-figure with an opt-out is recorded as
+   an open question in docs/unspecified-surfaces.md rather than guessed at here.
+   FDT-E's was the original one-off (Paul, July 2026), an exception to the "fix line
+   weight in the source art" convention; Nuuly's traced beat art is the second case. */
 .fdte-figure svg path {
+  stroke: currentColor;
+  stroke-width: 0.75px;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Nuuly's traced beat figures, the second case. Same declarations, kept as a SEPARATE
+   rule rather than added to the selector list above: the two are scoped independently
+   on purpose, so retuning one study's art never silently retunes the other's.
+   IN DEVTOOLS THEY WILL LOOK MERGED. Lightning CSS folds byte-identical blocks into a
+   single selector list at minify time, so the built sheet shows one rule reading
+   .fdte-figure svg path, .nuuly-beat-figure svg path. That is the minifier, not the
+   source: change either value here and the output splits back into two rules. */
+.nuuly-beat-figure svg path {
   stroke: currentColor;
   stroke-width: 0.75px;
   vector-effect: non-scaling-stroke;
