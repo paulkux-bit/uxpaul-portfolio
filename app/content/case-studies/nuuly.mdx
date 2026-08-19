@@ -245,31 +245,22 @@ Two of the seven apps are that project made permanent: Test Wash runs a new styl
     the ticked state exists, so care-set.png is the moment before the ticks and
     care-surfaced.png is where they come back. Captions are written to that. */}
 
-<FramedPair
-  framed={false}
-  left={{
-    src: '/case-studies/nuuly/care-set.png',
-    width: 2176,
-    height: 1360,
-    alt: 'Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked.',
-    caption: (
-      <>
-        <strong>Care instructions.</strong> Set in Test Wash, for the style.
-      </>
-    ),
-  }}
-  right={{
-    src: '/case-studies/nuuly/care-surfaced.png',
-    width: 2176,
-    height: 1360,
-    alt: 'Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed.',
-    caption: (
-      <>
-        <strong>Back at the bin.</strong> Returning shows only the steps that were set.
-      </>
-    ),
-  }}
-/>
+<BentoTheme>
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/care-set.png"
+    alt="Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked."
+    caption="Care instructions."
+    gloss="Set in Test Wash, for the style."
+  />
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/care-surfaced.png"
+    alt="Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed."
+    caption="Back at the bin."
+    gloss="Returning shows only the steps that were set."
+  />
+</BentoTheme>
 
 {/* WASH TAXONOMY - RULED 15 Aug 2026 (Paul). Option B.
 
@@ -349,31 +340,22 @@ So the primary action never moves. Same corner, same place, on every screen that
 
 It can be acquired without looking, which matters because the specialist is looking at a dress.
 
-<FramedPair
-  framed={false}
-  left={{
-    src: '/case-studies/nuuly/move-to-bin.png',
-    width: 2176,
-    height: 1360,
-    alt: 'Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action.',
-    caption: (
-      <>
-        <strong>Move to bin.</strong> The destination size, at reading distance.
-      </>
-    ),
-  }}
-  right={{
-    src: '/case-studies/nuuly/verdict-repair.png',
-    width: 2176,
-    height: 1360,
-    alt: 'The same Move garment screen for a failed inspection, reading send for repair in place of a bin size, with the same single confirm action.',
-    caption: (
-      <>
-        <strong>Send for repair.</strong> The same screen, the other verdict.
-      </>
-    ),
-  }}
-/>
+<BentoTheme>
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/move-to-bin.png"
+    alt="Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action."
+    caption="Move to bin."
+    gloss="The destination size, at reading distance."
+  />
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/verdict-repair.png"
+    alt="The same Move garment screen for a failed inspection, reading send for repair in place of a bin size, with the same single confirm action."
+    caption="Send for repair."
+    gloss="The same screen, the other verdict."
+  />
+</BentoTheme>
 
 The cost is that the best part of it is invisible. Somebody looking at the screen sees an ordinary button in an ordinary place. And it depends on a rule holding: nothing else may live in that margin, on any screen, or the most important action starts collecting mis-taps.
 

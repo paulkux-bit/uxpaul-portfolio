@@ -148,6 +148,32 @@ when a composite is legitimate rather than a montage, and a decision on whether
 the compose step belongs in the crop pipeline. Raised 19 Aug 2026 by the Nuuly
 §6 consistency evidence.
 
+**Bento theme block, outer boundary.** `.figure--bento-theme` ships
+`margin: var(--spacing-l) 0 0` — 2rem top, zero bottom. The asymmetry was never
+a decision: every consumer until 19 Aug 2026 was the last child of its section
+(Bard's three Resolutions themes, FDT-E's gate walk), where
+`.cs-section > :last-child` zeros the bottom anyway, so the value was never
+exercised. Nuuly §5 and §6 are the first to place prose after one, and
+`:where(.case-study-prose) p` carries bottom margin only, so the pair resolved
+to a zero gap.
+
+The **value** is governed: `--spacing-l` is the evidence step, "prose to
+screenshots" (`spacing-system-v1-locked.md` §3). What is not governed is the
+**boundary rule** — which block-level media components own a gap on which side,
+and whether the owner is the media or the prose. Three different answers ship
+today: `.cs-section > .bento-band` takes `margin-block`, `.framed-pair` takes
+`margin: var(--spacing-l) 0` **plus** a `p:has(+ .framed-pair)` rule that zeros
+the preceding paragraph so the top gap is single-owned, and
+`.figure--bento-theme` now takes a `:not(:last-child)` bottom. Same token, three
+mechanisms.
+
+The spacing system's own §9 lists "the bento and small-multiples grid gaps" as
+open, but that is about the bento's **internal** gaps. This is the outer edge,
+and it is adjacent to that entry rather than covered by it. Needs: one statement
+of who owns a media block's vertical boundary, applied to all three components,
+so the next one added does not invent a fourth mechanism. Raised 19 Aug 2026 by
+the Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026

@@ -2754,6 +2754,27 @@ html.dark .oku-figure {
   margin-block: var(--spacing-l);
 }
 
+/* The theme block's counterpart, and the reason it is a separate rule.
+   .figure--bento-theme is `margin: var(--spacing-l) 0 0` — 2rem top, ZERO
+   bottom. That asymmetry was never a decision: every consumer until now was the
+   last child of its section (Bard's three Resolutions themes, FDT-E's gate
+   walk), where .cs-section > :last-child zeros the bottom anyway, so the value
+   was never exercised. Nuuly §5 and §6 are the first to put prose after one,
+   and :where(.case-study-prose) p carries bottom margin only — so theme + p
+   resolved to a ZERO gap. This SPECIFIES the bottom rather than changing it.
+
+   :not(:last-child) is load-bearing, not tidiness. Without it this selector
+   ties .cs-section > :last-child at (0,2,0) and wins on source order, silently
+   adding 2rem to all four of the older bentos. With it, they cannot match.
+
+   --spacing-l is the evidence step, "prose to screenshots"
+   (spacing-system-v1-locked.md §3). The VALUE is governed; the boundary rule
+   for a theme block is not, which is why it is also in
+   docs/unspecified-surfaces.md rather than only here. */
+.cs-section > .figure--bento-theme:not(:last-child) {
+  margin-bottom: var(--spacing-l);
+}
+
 /* Breakouts are block-flow (no flex `gap`), so the caption→media bind that
    .bento-theme__item gets from `gap: var(--bento-caption-gap)` is applied here
    explicitly — the SAME token, so every tile type shares one caption→media gap
