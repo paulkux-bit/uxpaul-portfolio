@@ -189,9 +189,7 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 <p className="section-lede">A Return Specialist works Returning. A Merchandise Specialist works Receiving. Nobody browses.</p>
 
-**So the seven apps are not a menu a person shops.** They are a list of jobs a station can be given.
-
-**The flexibility lives in the furniture. The software follows it.** Roll a cart to another part of the floor, give it different work, pick the app that matches. That let every app stay narrow and specific to one task instead of becoming one general tool that asks its user which mode they are in.
+**The flexibility lives in the furniture. The software follows it.** Roll a cart to another part of the floor, give it different work, pick the app that matches.
 
 Receiving, Fingerprint, Test Wash, Measure, Inspection, Returning, Packing.
 
@@ -217,8 +215,8 @@ received stays open, at the count it reached, for whoever picks it up next.
 <BentoBand
   src="/case-studies/nuuly/pause-handoff.png"
   alt="Pausing a purchase order: a dialog asking why, with the count reading seventy-one of a hundred units received and a note that anyone can pick it back up."
-  caption="Paused, not lost."
-  gloss="Seventy-one of a hundred units in. The next person picks it up where it stands."
+  caption="Pause the order."
+  gloss="It stays open at the count it reached."
   aspect={1.778}
 />
 
@@ -226,40 +224,40 @@ received stays open, at the count it reached, for whoever picks it up next.
 
 <section className="cs-section">
 
-## The hard part wasn't the screen
+## The hard part wasn't the screen. It was knowing which bin.
 
 <h3 className="mt-l mb-10 flex items-baseline gap-2xs text-resolution-headline">
   <span className="thread-index">02</span>
   <span>The next step travels with the garment</span>
 </h3>
 
-**It was knowing which bin.** A returned garment has to go into the right cleaning process, and the interface for that is one screen: scan the item, and it tells you which colored bin at your station to drop it in. There is nothing to learn and nothing to decide.
+A returned garment has to go into the right cleaning process, and the interface for that is one screen: scan the item, and it tells you which colored bin at your station to drop it in. There is nothing to learn and nothing to decide.
 
 <BentoBand
   src="/case-studies/nuuly/bins-first.png"
   alt="Sort to wash bins, scanned one of six: the first garment has a bin code, the other five are still unread."
-  caption="One garment in."
-  gloss="Five still unread. The tote is worked one scan at a time."
+  caption="Sort to bins."
+  gloss="One garment read, five still unread."
   aspect={2.531}
 />
 
 <BentoBand
   src="/case-studies/nuuly/bin-answer.png"
   alt="The sorting answer: the row of garments dims and a single large code fills the middle of the screen, naming the wash bin the scanned garment goes to."
-  caption="The answer, from across the station."
-  gloss="One code, one bin. Everything else goes quiet."
+  caption="Wash bin assigned."
+  gloss="The row dims, the code fills the screen."
   aspect={1.778}
 />
 
-Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of actual machine washes, measuring garments before and after, learning how different materials behaved in the industrial machines commissioned for the building. The data science team built a model from the results. The model is what answers when the scanner fires.
+Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The data science team built a model from the results. The model is what answers when the scanner fires.
 
-Two of the seven apps are that project, made permanent. Test Wash runs a new style through a cycle and records what happened. Measure compares a garment before and after washing so the team can tell how many wears it has left before it stops being worth renting. The research did not end in a document. It ended in software that keeps doing the research.
+Two of the seven apps are that project, made permanent. Test Wash runs a new style through a cycle and records what happened. Measure compares a garment before and after washing. The research did not end in a document. It ended in software that keeps doing the research.
 
 <BentoBand
   src="/case-studies/nuuly/measure-table.png"
   alt="The Measure table for a pair of jeans: length, in seam, rise, waist and hem, each with a pre wash and post wash figure and the difference between them."
-  caption="A hem down a quarter inch."
-  gloss="Measured before and after, on every new style, to learn how many wears it has."
+  caption="Wear measurement."
+  gloss="Five points, before and after a wash."
   aspect={1.6}
 />
 
@@ -277,7 +275,7 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
     alt: 'Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked.',
     caption: (
       <>
-        <strong>Where it gets set.</strong> In Test Wash, for the style, not the garment.
+        <strong>Care instructions.</strong> Set in Test Wash, for the style.
       </>
     ),
   }}
@@ -288,7 +286,7 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
     alt: 'Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed.',
     caption: (
       <>
-        <strong>Where it comes back.</strong> Months later, at the bin, and only what applies.
+        <strong>Back at the bin.</strong> Returning shows only the steps that were set.
       </>
     ),
   }}
@@ -334,10 +332,16 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
 
 The instinct in a tool nobody has used before is to make it teachable. I went the other way and designed for recall instead of discovery, because the warehouse manager had built a training environment that already taught the shift: how the stations interlock, what the process is, where a garment goes next. The app did not have to explain the operation. It only had to handle the task in front of it. That was somebody else's investment paying for my decision, and it is the reason the decision was available at all.
 
-So the primary action never moves. Same corner, same place, every app, every screen, so the hand learns it and stops looking.
+{/* TODO(copy): Paul. Narrowed 19 Aug from "every app, every screen", which the
+    evidence does not carry: Receiving has no bottom-right primary at all, and
+    mode-dim.png shows that two sections below. "Every screen that ends a task"
+    is the checkable version. Rephrase freely, but keep it to what the 62 frames
+    support. */}
+So the primary action never moves. Same corner, same place, on every screen that ends a task, so the hand learns it and stops looking.
 
 {/* Composite, not a crop, and the one image in this study that is not a whole
-    frame. Six identical strips from six apps at identical geometry: the
+    frame. Six identical strips from five apps at identical geometry, two of
+    them Packing: the
     argument is repetition, and repetition is only legible when the instances
     are adjacent at the same scale. Measured before cutting: every primary
     action in these frames has its right edge at 1872 and its bottom at 896 on
@@ -347,12 +351,17 @@ So the primary action never moves. Same corner, same place, every app, every scr
 
     Sits here, under the sentence it proves, rather than after the hit-area
     paragraph below: that paragraph then separates it from the pair, so two
-    media blocks do not abut. */}
+    media blocks do not abut.
+
+    THE COUNT IS MEASURED, not sampled. Across all 62 dim frames every non-modal
+    primary sits at right 1872 / bottom 896; modals place their own. Receiving
+    and Fingerprint have no bottom-right primary at all, so five apps is the
+    ceiling, not a selection. The prose above was narrowed to match. */}
 <BentoBand
   src="/case-studies/nuuly/corner-consistency.png"
-  alt="The same primary action in six of the seven apps, each in the lower right of its screen, in the same place: done next return, done next garment, save measurements, weigh this package, save cycle, done next order."
-  caption="Six apps. One place."
-  gloss="The label changes. The corner never does."
+  alt="The same primary action in the lower right of six screens across five apps: done next return, done next garment, save measurements, weigh this package, save cycle, done next order."
+  caption="The same corner."
+  gloss="Six screens, five apps, one position."
   aspect={1.6}
 />
 
@@ -367,7 +376,7 @@ So the primary action never moves. Same corner, same place, every app, every scr
     alt: 'Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action.',
     caption: (
       <>
-        <strong>XXS.</strong> The bin it goes to.
+        <strong>Move to bin.</strong> The destination size, at reading distance.
       </>
     ),
   }}
@@ -378,7 +387,7 @@ So the primary action never moves. Same corner, same place, every app, every scr
     alt: 'The same Move garment screen for a failed inspection, reading send for repair in place of a bin size, with the same single confirm action.',
     caption: (
       <>
-        <strong>Repair.</strong> The same screen, the other answer. Read, not operated.
+        <strong>Send for repair.</strong> The same screen, the other verdict.
       </>
     ),
   }}
