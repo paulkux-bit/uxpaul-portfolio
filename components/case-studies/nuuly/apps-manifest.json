@@ -38,7 +38,7 @@
       "aspect": 1.778,
       "caption": {
         "lead": "It comes back.",
-        "tail": "One tote, six garments, worked one scan at a time."
+        "tail": "Six garments from one customer's order."
       }
     },
     {
@@ -68,28 +68,57 @@
         "lead": "It goes back out.",
         "tail": "The packaging decided from the order, not from memory."
       }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-06-fingerprint.png",
+      "alt": "Fingerprint: a garment's card with a large confirmation mark over the photo, the style name and colourway below it.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "compact",
+      "caption": {
+        "lead": "It gets a name.",
+        "tail": "The garment is registered to Nuuly."
+      }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-07-test-wash.png",
+      "alt": "Test Wash: the wash cycle for a new style set to W3, delicate lights, applying to every size of the style, with the dry clean alternative unset.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "compact",
+      "caption": {
+        "lead": "It gets a recipe.",
+        "tail": "One cycle, set for every size of the style."
+      }
+    },
+    {
+      "src": "/case-studies/nuuly/apps/apps-08-measure.png",
+      "alt": "Measure: a numeric keypad with a fraction key, for entering imperial measurements without a keyboard.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "compact",
+      "caption": {
+        "lead": "It gets measured.",
+        "tail": "Imperial fractions, entered without a keyboard."
+      }
     }
   ],
   "composition": [
-    {
-      "name": "apps-01-menu",
-      "mode": "light"
-    },
-    {
-      "name": "apps-02-receiving",
-      "mode": "light"
-    },
-    {
-      "name": "apps-03-returning",
-      "mode": "light"
-    },
-    {
-      "name": "apps-04-inspection",
-      "mode": "light"
-    },
-    {
-      "name": "apps-05-packing",
-      "mode": "light"
-    }
+    { "name": "apps-01-menu", "mode": "light" },
+    { "name": "apps-02-receiving", "mode": "light" },
+    [
+      { "name": "apps-06-fingerprint", "mode": "light" },
+      { "name": "apps-07-test-wash", "mode": "light" },
+      { "name": "apps-08-measure", "mode": "light" }
+    ],
+    { "name": "apps-03-returning", "mode": "light" },
+    { "name": "apps-04-inspection", "mode": "light" },
+    { "name": "apps-05-packing", "mode": "light" }
   ]
 }
