@@ -180,35 +180,21 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 <section className="cs-section">
 
-{/* TODO(copy): Paul. Question-shaped H2, the one per study, at the solution
-    pivot. Bard and FDT-E each have exactly one. Budget is 22ch ≈ 31 chars a
-    line at text-h2, so two lines is about 60 characters. Also verify the
-    "any workstation" claim is one you would state cold in an interview:
-    Marcus cannot check it and Jordan extrapolates from imprecision. */}
 ## How do you give one cart seven jobs?
 
-<p className="section-lede">A Return Specialist works Returning. A Merchandise Specialist works Receiving. Nobody browses.</p>
+<p className="section-lede">Seven narrow apps, not one general tool. Any cart can be given any job, and a new station needs no new software.</p>
 
 **The flexibility lives in the furniture. The software follows it.** Roll a cart to another part of the floor, give it different work, pick the app that matches.
 
-{/* Bento merged into this section 14 Aug: the framing explains why there are
-    seven apps behind one menu, and the gallery is the evidence for it. Split
-    across two sections, one argues and the other shows, with nothing between. */}
 <AppsBento />
 
-{/* Resolution 01 echoes friction beat 01 ("The station moves"). Placement is
-    provisional: this block is self-contained so Paul can move it into its own
-    section if §4 reads long. Keep the head and the band together. */}
-<h3 className="mt-2xl mb-10 flex items-baseline gap-2xs text-resolution-headline">
-  <span className="thread-index">01</span>
-  <span>Work outlives the shift</span>
-</h3>
+</section>
 
-{/* TODO(copy): Paul. One short paragraph. The point available here is that a
-    part-finished purchase order is a state the system holds, not a thing a
-    person carries in their head to the end of their shift. */}
-**A station can be handed over mid-job.** A purchase order that is part
-received stays open, at the count it reached, for whoever picks it up next.
+<section className="cs-section">
+
+## Work outlives the shift
+
+A purchase order that is part received stays open, at the count it reached, for whoever picks it up next.
 
 <BentoBand
   src="/case-studies/nuuly/pause-handoff.png"
@@ -224,12 +210,7 @@ received stays open, at the count it reached, for whoever picks it up next.
 
 ## The hard part wasn't the screen. It was knowing which bin.
 
-<h3 className="mt-l mb-10 flex items-baseline gap-2xs text-resolution-headline">
-  <span className="thread-index">02</span>
-  <span>The next step travels with the garment</span>
-</h3>
-
-A returned garment has to go into the right cleaning process, and the interface for that is one screen: scan the item, and it tells you which colored bin at your station to drop it in. There is nothing to learn and nothing to decide.
+Scan the item, and it tells you which colored bin to drop it in. There is nothing to learn and nothing to decide.
 
 <BentoBand
   src="/case-studies/nuuly/bins-first.png"
@@ -247,9 +228,9 @@ A returned garment has to go into the right cleaning process, and the interface 
   aspect={1.778}
 />
 
-Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The data science team built a model from the results. The model is what answers when the scanner fires.
+Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The results became a model. That model is what answers when the scanner fires.
 
-Two of the seven apps are that project, made permanent. Test Wash runs a new style through a cycle and records what happened. Measure compares a garment before and after washing. The research did not end in a document. It ended in software that keeps doing the research.
+Two of the seven apps are that project made permanent: Test Wash runs a new style through a cycle, Measure compares it before and after. The research did not end in a document. It ended in software that keeps doing it.
 
 <BentoBand
   src="/case-studies/nuuly/measure-table.png"
@@ -323,12 +304,9 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
 
 ## I designed for the hundredth garment
 
-<h3 className="mt-l mb-10 flex items-baseline gap-2xs text-resolution-headline">
-  <span className="thread-index">03</span>
-  <span>The same corner, every app</span>
-</h3>
+I designed for recall, not discovery. The warehouse manager had already built a training environment that taught the shift, so the app did not have to explain the operation. It only had to handle the task in front of it.
 
-The instinct in a tool nobody has used before is to make it teachable. I went the other way and designed for recall instead of discovery, because the warehouse manager had built a training environment that already taught the shift: how the stations interlock, what the process is, where a garment goes next. The app did not have to explain the operation. It only had to handle the task in front of it. That was somebody else's investment paying for my decision, and it is the reason the decision was available at all.
+That was somebody else's investment paying for my decision, and it is the reason the decision was available at all.
 
 {/* TODO(copy): Paul. Narrowed 19 Aug from "every app, every screen", which the
     evidence does not carry: Receiving has no bottom-right primary at all, and
@@ -367,7 +345,9 @@ So the primary action never moves. Same corner, same place, on every screen that
   aspect={1.6}
 />
 
-**The hit area runs past the paint, out to the bezel.** The button you see respects the same margin as everything else on the screen. The button you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot, and the target becomes effectively unmissable in the direction of travel. It can be acquired without looking, which matters because the specialist is looking at a dress. Whether they hold the scanner left or right stops mattering too.
+**The hit area runs past the paint, out to the bezel.** The button you see respects the same margin as everything else. The button you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot.
+
+It can be acquired without looking, which matters because the specialist is looking at a dress.
 
 <FramedPair
   framed={false}
@@ -395,7 +375,7 @@ So the primary action never moves. Same corner, same place, on every screen that
   }}
 />
 
-The cost is that the best part of it is invisible. Somebody who looks at the screen sees an ordinary button in an ordinary place. And the whole thing depends on a rule holding: nothing else may live in that margin, on any screen, in any of the seven apps, or the most important action in the app starts collecting mis-taps.
+The cost is that the best part of it is invisible. Somebody looking at the screen sees an ordinary button in an ordinary place. And it depends on a rule holding: nothing else may live in that margin, on any screen, or the most important action starts collecting mis-taps.
 
 {/* TODO (blocks the sentence above): Paul to confirm the wording of the rule.
     That sentence is my reconstruction from the interview and he has not
