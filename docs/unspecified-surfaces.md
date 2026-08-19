@@ -3,21 +3,24 @@
 Both design systems — `type-system-v3-locked.md` and `spacing-system-v1-locked.md`
 — end with a §9 listing what they deliberately do not govern. Four entries
 appeared on **both** lists, which means they are one piece of work rather than
-two. This file is that list, and both §9s point here. A fifth entry has since
-arrived from the colour system, and a sixth from the case-study figures.
+two. This file is that list, and both §9s point here. Entries have since arrived
+from the colour system and from the case-study figures, and the set is open: a
+surface joins whenever one is found that no locked spec governs.
 
 Created 8 Aug 2026.
 
 ---
 
-## The six
+## The open set
 
-*Four entries at creation; **pinned specimen tones** joined them on 8 Aug 2026,
-found by the K4 colour-literal census. It is the only one that comes from the
-colour system rather than from type and spacing, and the only one already
-shipping wrong values. **Illustration line weight** joined on 18 Aug 2026, the
-first entry that arrived from neither a system's §9 nor a census, but from a
-rendering defect found in review.*
+*Nav, footer, buttons and card meta were here at creation, from the two §9s.
+**Pinned specimen tones** joined on 8 Aug 2026, found by the K4 colour-literal
+census: the only entry that comes from the colour system rather than from type
+and spacing, and the only one already shipping wrong values. **Illustration line
+weight** joined on 18 Aug 2026, the first to arrive from neither a system's §9
+nor a census, but from a rendering defect found in review. **Composite evidence
+grid** joined on 19 Aug 2026, the first to come from a surface the crop pipeline
+cannot produce at all.*
 
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
@@ -134,6 +137,17 @@ Three things to settle:
    principle flag art that needs the floor and has not got it, rather than
    waiting for someone to notice mud.
 
+**Composite evidence grid.** `corner-consistency.png` is not a crop of one
+frame: it is six strips from six frames, at identical geometry, assembled into
+one 16:10 image and shown through `BentoBand`. No locked spec says how a
+composite is built — what the inter-strip gutter should be, whether the strips
+may come from different apps, whether the seams need to be declared to the
+reader, or whether the caption carries that job. It also cannot be produced by
+the bento-crop executor, which crops one source per output. Needs: a rule for
+when a composite is legitimate rather than a montage, and a decision on whether
+the compose step belongs in the crop pipeline. Raised 19 Aug 2026 by the Nuuly
+§6 consistency evidence.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026
@@ -201,8 +215,8 @@ this file is deleted rather than becoming a third place where the answer lives.
 
 **An entry leaves when it is fully closed, and its content moves into the owning
 spec.** The file is deleted when it is empty — not before, and not because it
-has grown short. As of the interaction reconciliation above, six entries remain
-and one (buttons) is down to a single line.
+has grown short. As of the interaction reconciliation above, every entry still
+has something open, and one (buttons) is down to a single line.
 
 ---
 
@@ -212,8 +226,8 @@ and one (buttons) is down to a single line.
 prints a portfolio. It stays in both §9s as an acknowledged gap, not a task.
 
 **Type states** (hover, focus, visited, disabled, `forced-colors`,
-`prefers-contrast`) are type-system-only and larger than these six. They stay
-in the type §9.
+`prefers-contrast`) are type-system-only and larger than anything on this list.
+They stay in the type §9.
 
 **Bento and small-multiples grid gaps** are spacing-only and may want their own
 module rules, the way the takes wall does in the type system. They stay in the
