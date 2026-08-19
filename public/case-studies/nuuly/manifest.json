@@ -65,30 +65,6 @@
       "height": 2160,
       "slot": "feature",
       "lens": "ux"
-    },
-    {
-      "src": "/case-studies/nuuly/mode-dim.png",
-      "alt": "The Receiving app in dim mode, prompting the specialist to scan the poly bag as step one of new SKU setup.",
-      "focalPoint": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "track": "bento",
-      "width": 3456,
-      "height": 2160,
-      "slot": "feature"
-    },
-    {
-      "src": "/case-studies/nuuly/mode-bright.png",
-      "alt": "The same Receiving step in bright mode, the higher luminance option built for well lit parts of the floor.",
-      "focalPoint": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "track": "bento",
-      "width": 3456,
-      "height": 2160,
-      "slot": "feature"
     }
   ]
 }
