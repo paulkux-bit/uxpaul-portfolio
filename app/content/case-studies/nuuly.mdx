@@ -180,7 +180,12 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 <section className="cs-section">
 
-## The menu is for the station, not the person
+{/* TODO(copy): Paul. Question-shaped H2, the one per study, at the solution
+    pivot. Bard and FDT-E each have exactly one. Budget is 22ch ≈ 31 chars a
+    line at text-h2, so two lines is about 60 characters. Also verify the
+    "any workstation" claim is one you would state cold in an interview:
+    Marcus cannot check it and Jordan extrapolates from imprecision. */}
+## How do you give one cart seven jobs?
 
 <p className="section-lede">A Return Specialist works Returning. A Merchandise Specialist works Receiving. Nobody browses.</p>
 
@@ -195,11 +200,38 @@ Receiving, Fingerprint, Test Wash, Measure, Inspection, Returning, Packing.
     across two sections, one argues and the other shows, with nothing between. */}
 <AppsBento />
 
+{/* Resolution 01 echoes friction beat 01 ("The station moves"). Placement is
+    provisional: this block is self-contained so Paul can move it into its own
+    section if §4 reads long. Keep the head and the band together. */}
+<h3 className="mt-2xl mb-10 flex items-baseline gap-2xs text-resolution-headline">
+  <span className="thread-index">01</span>
+  <span>Work outlives the shift</span>
+</h3>
+
+{/* TODO(copy): Paul. One short paragraph. The point available here is that a
+    part-finished purchase order is a state the system holds, not a thing a
+    person carries in their head to the end of their shift. */}
+**A station can be handed over mid-job.** A purchase order that is part
+received stays open, at the count it reached, for whoever picks it up next.
+
+<BentoBand
+  src="/case-studies/nuuly/pause-handoff.png"
+  alt="Pausing a purchase order: a dialog asking why, with the count reading seventy-one of a hundred units received and a note that anyone can pick it back up."
+  caption="Paused, not lost."
+  gloss="Seventy-one of a hundred units in. The next person picks it up where it stands."
+  aspect={1.778}
+/>
+
 </section>
 
 <section className="cs-section">
 
 ## The hard part wasn't the screen
+
+<h3 className="mt-l mb-10 flex items-baseline gap-2xs text-resolution-headline">
+  <span className="thread-index">02</span>
+  <span>The next step travels with the garment</span>
+</h3>
 
 **It was knowing which bin.** A returned garment has to go into the right cleaning process, and the interface for that is one screen: scan the item, and it tells you which colored bin at your station to drop it in. There is nothing to learn and nothing to decide.
 
@@ -209,6 +241,14 @@ Receiving, Fingerprint, Test Wash, Measure, Inspection, Returning, Packing.
   caption="One garment in."
   gloss="Five still unread. The tote is worked one scan at a time."
   aspect={2.531}
+/>
+
+<BentoBand
+  src="/case-studies/nuuly/bin-answer.png"
+  alt="The sorting answer: the row of garments dims and a single large code fills the middle of the screen, naming the wash bin the scanned garment goes to."
+  caption="The answer, from across the station."
+  gloss="One code, one bin. Everything else goes quiet."
+  aspect={1.778}
 />
 
 Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of actual machine washes, measuring garments before and after, learning how different materials behaved in the industrial machines commissioned for the building. The data science team built a model from the results. The model is what answers when the scanner fires.
@@ -221,6 +261,37 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
   caption="A hem down a quarter inch."
   gloss="Measured before and after, on every new style, to learn how many wears it has."
   aspect={1.6}
+/>
+
+{/* TODO(copy): Paul. One or two sentences setting up the pair. What it shows
+    is the two ends of one decision, NOT the decision being made: no frame of
+    the ticked state exists, so care-set.png is the moment before the ticks and
+    care-surfaced.png is where they come back. Captions are written to that. */}
+
+<FramedPair
+  framed={false}
+  left={{
+    src: '/case-studies/nuuly/care-set.png',
+    width: 2176,
+    height: 1224,
+    alt: 'Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked.',
+    caption: (
+      <>
+        <strong>Where it gets set.</strong> In Test Wash, for the style, not the garment.
+      </>
+    ),
+  }}
+  right={{
+    src: '/case-studies/nuuly/care-surfaced.png',
+    width: 2176,
+    height: 1224,
+    alt: 'Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed.',
+    caption: (
+      <>
+        <strong>Where it comes back.</strong> Months later, at the bin, and only what applies.
+      </>
+    ),
+  }}
 />
 
 {/* WASH TAXONOMY - RULED 15 Aug 2026 (Paul). Option B.
@@ -256,18 +327,61 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
 
 ## I designed for the hundredth garment
 
+<h3 className="mt-l mb-10 flex items-baseline gap-2xs text-resolution-headline">
+  <span className="thread-index">03</span>
+  <span>The same corner, every app</span>
+</h3>
+
 The instinct in a tool nobody has used before is to make it teachable. I went the other way and designed for recall instead of discovery, because the warehouse manager had built a training environment that already taught the shift: how the stations interlock, what the process is, where a garment goes next. The app did not have to explain the operation. It only had to handle the task in front of it. That was somebody else's investment paying for my decision, and it is the reason the decision was available at all.
 
 So the primary action never moves. Same corner, same place, every app, every screen, so the hand learns it and stops looking.
 
+{/* Composite, not a crop, and the one image in this study that is not a whole
+    frame. Six identical strips from six apps at identical geometry: the
+    argument is repetition, and repetition is only legible when the instances
+    are adjacent at the same scale. Measured before cutting: every primary
+    action in these frames has its right edge at 1872 and its bottom at 896 on
+    a 1920×1080 viewport, and the widest label is 441px, so the strip is
+    right-flush with its left edge at 1344 and nothing clips. Recorded in
+    docs/unspecified-surfaces.md.
+
+    Sits here, under the sentence it proves, rather than after the hit-area
+    paragraph below: that paragraph then separates it from the pair, so two
+    media blocks do not abut. */}
+<BentoBand
+  src="/case-studies/nuuly/corner-consistency.png"
+  alt="The same primary action in six of the seven apps, each in the lower right of its screen, in the same place: done next return, done next garment, save measurements, weigh this package, save cycle, done next order."
+  caption="Six apps. One place."
+  gloss="The label changes. The corner never does."
+  aspect={1.6}
+/>
+
 **The hit area runs past the paint, out to the bezel.** The button you see respects the same margin as everything else on the screen. The button you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot, and the target becomes effectively unmissable in the direction of travel. It can be acquired without looking, which matters because the specialist is looking at a dress. Whether they hold the scanner left or right stops mattering too.
 
-<BentoBand
-  src="/case-studies/nuuly/move-to-bin.png"
-  alt="Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action."
-  caption="Read, not operated."
-  gloss="Some steps never get touched. The specialist looks, confirms, and moves."
-  aspect={1.778}
+<FramedPair
+  framed={false}
+  left={{
+    src: '/case-studies/nuuly/move-to-bin.png',
+    width: 2176,
+    height: 1224,
+    alt: 'Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action.',
+    caption: (
+      <>
+        <strong>XXS.</strong> The bin it goes to.
+      </>
+    ),
+  }}
+  right={{
+    src: '/case-studies/nuuly/verdict-repair.png',
+    width: 2176,
+    height: 1224,
+    alt: 'The same Move garment screen for a failed inspection, reading send for repair in place of a bin size, with the same single confirm action.',
+    caption: (
+      <>
+        <strong>Repair.</strong> The same screen, the other answer. Read, not operated.
+      </>
+    ),
+  }}
 />
 
 The cost is that the best part of it is invisible. Somebody who looks at the screen sees an ordinary button in an ordinary place. And the whole thing depends on a rule holding: nothing else may live in that margin, on any screen, in any of the seven apps, or the most important action in the app starts collecting mis-taps.
@@ -276,11 +390,6 @@ The cost is that the best part of it is invisible. Somebody who looks at the scr
     That sentence is my reconstruction from the interview and he has not
     signed off on it. It is the sharpest line available in the reflection
     and it has to be his. */}
-
-{/* NEXT CROP PASS: a consistency set showing the same primary action in the
-    same corner across six apps. Cut and rejected this pass because every
-    box landed its left edge mid-element (one read "lack" where "Black"
-    should be). Needs gutter-aware boxes judged per image. */}
 
 </section>
 
@@ -296,8 +405,8 @@ Hardly anyone used it. They stayed on dim.
   framed={false}
   left={{
     src: '/case-studies/nuuly/mode-dim.png',
-    width: 3840,
-    height: 2160,
+    width: 2176,
+    height: 1224,
     alt: 'The Receiving app in dim mode, prompting the specialist to scan the poly bag as step one of new SKU setup.',
     caption: (
       <>
@@ -307,8 +416,8 @@ Hardly anyone used it. They stayed on dim.
   }}
   right={{
     src: '/case-studies/nuuly/mode-bright.png',
-    width: 3840,
-    height: 2160,
+    width: 2176,
+    height: 1224,
     alt: 'The same Receiving step in bright mode, the higher luminance option built for well lit parts of the floor.',
     caption: (
       <>

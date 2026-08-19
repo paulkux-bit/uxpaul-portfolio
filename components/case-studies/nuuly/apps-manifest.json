@@ -29,16 +29,16 @@
     },
     {
       "src": "/case-studies/nuuly/apps/apps-03-returning.png",
-      "alt": "Returning: a prompt naming two handling steps set for this style when it was test washed, over the row of garments waiting to be sorted.",
+      "alt": "Returning: six garments from one customer's tote in a row, two of them scanned and carrying a wash code, the other four still unread.",
       "focalPoint": {
-        "x": 0.3,
-        "y": 0.5
+        "x": 0.5,
+        "y": 0.45
       },
       "breakout": "band",
       "aspect": 1.778,
       "caption": {
         "lead": "It comes back.",
-        "tail": "Handling set when the style was test washed, surfaced at the moment it matters."
+        "tail": "One tote, six garments, worked one scan at a time."
       }
     },
     {
