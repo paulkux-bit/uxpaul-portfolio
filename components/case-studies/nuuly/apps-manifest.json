@@ -1,27 +1,27 @@
 {
+  "$todo": "TODO(copy): Paul. Every alt in this file was rewritten 19 Aug when the tiles became padded 16:10 whole frames rather than region crops, and three captions changed with their source frame (apps-01-menu, apps-08-measure, apps-03-returning). Placeholder until Paul edits. apps-07's alt names the W3 cycle deliberately: the 15 Aug Option B ruling makes tw-done's resolved label publishable and bars only tw-wet's fibre mapping, so withholding it would give a screen-reader user less than a sighted one for no protection.",
   "images": [
     {
       "src": "/case-studies/nuuly/apps/apps-01-menu.png",
-      "alt": "The app launcher: six circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns and Packing, with Returns marked offline.",
+      "alt": "The launcher: six circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns and Packing, with Returns marked offline and a second page below.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "feature",
       "caption": {
-        "lead": "One surface, seven jobs.",
-        "tail": "An eighth tile advertises work that had not been built yet."
+        "lead": "The default menu.",
+        "tail": "Six apps here, Receiving and Triage on page two."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-02-receiving.png",
-      "alt": "Receiving: a purchase order grid tracking scanned SKUs, with the current garment card showing two of ten units received.",
+      "alt": "Receiving: a purchase order grid with one slot filled, beside a garment card reading two received of ten ordered.",
       "focalPoint": {
         "x": 0.62,
         "y": 0.45
       },
-      "breakout": "band",
-      "aspect": 1.778,
+      "slot": "wide",
       "caption": {
         "lead": "It arrives.",
         "tail": "Net-new inventory scanned in, unit by unit, against the order."
@@ -29,27 +29,25 @@
     },
     {
       "src": "/case-studies/nuuly/apps/apps-03-returning.png",
-      "alt": "Returning: six garments from one customer's tote in a row, two of them scanned and carrying a wash code, the other four still unread.",
+      "alt": "Returning: a prompt to scan any garment from the bag, noting that the first tag read pulls up the whole return.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.45
       },
-      "breakout": "band",
-      "aspect": 1.778,
+      "slot": "wide",
       "caption": {
         "lead": "It comes back.",
-        "tail": "Six garments from one customer's order."
+        "tail": "The first tag read opens the whole return."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-04-inspection.png",
-      "alt": "Inspection: a returned garment beside a grid of damage types, stain selected, with pass and fail as the two verdicts.",
+      "alt": "Inspection: a returned garment beside a grid of damage types with stain selected, and pass and fail as the two verdicts.",
       "focalPoint": {
         "x": 0.45,
         "y": 0.5
       },
-      "breakout": "band",
-      "aspect": 1.778,
+      "slot": "wide",
       "caption": {
         "lead": "It gets judged.",
         "tail": "Damage named from a fixed vocabulary, then passed or failed."
@@ -62,24 +60,10 @@
         "x": 0.5,
         "y": 0.5
       },
-      "breakout": "band",
-      "aspect": 1.778,
+      "slot": "wide",
       "caption": {
         "lead": "It goes back out.",
         "tail": "The packaging decided from the order, not from memory."
-      }
-    },
-    {
-      "src": "/case-studies/nuuly/apps/apps-06-fingerprint.png",
-      "alt": "Fingerprint: a garment's card with a large confirmation mark over the photo, the style name and colourway below it.",
-      "focalPoint": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "slot": "compact",
-      "caption": {
-        "lead": "It gets a name.",
-        "tail": "The garment is registered to Nuuly."
       }
     },
     {
@@ -89,7 +73,7 @@
         "x": 0.5,
         "y": 0.5
       },
-      "slot": "compact",
+      "slot": "wide",
       "caption": {
         "lead": "It gets a recipe.",
         "tail": "One cycle, set for every size of the style."
@@ -97,28 +81,31 @@
     },
     {
       "src": "/case-studies/nuuly/apps/apps-08-measure.png",
-      "alt": "Measure: a numeric keypad with a fraction key, for entering imperial measurements without a keyboard.",
+      "alt": "Measure: the garment type list open, grouped into tops and bottoms, which decides which sections get measured.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
-      "slot": "compact",
+      "slot": "wide",
       "caption": {
         "lead": "It gets measured.",
-        "tail": "Imperial fractions, entered without a keyboard."
+        "tail": "The garment type decides which sections are measured."
       }
     }
   ],
   "composition": [
     { "name": "apps-01-menu", "mode": "light" },
-    { "name": "apps-02-receiving", "mode": "light" },
     [
-      { "name": "apps-06-fingerprint", "mode": "light" },
-      { "name": "apps-07-test-wash", "mode": "light" },
-      { "name": "apps-08-measure", "mode": "light" }
+      { "name": "apps-02-receiving", "mode": "light" },
+      { "name": "apps-07-test-wash", "mode": "light" }
     ],
-    { "name": "apps-03-returning", "mode": "light" },
-    { "name": "apps-04-inspection", "mode": "light" },
-    { "name": "apps-05-packing", "mode": "light" }
+    [
+      { "name": "apps-08-measure", "mode": "light" },
+      { "name": "apps-03-returning", "mode": "light" }
+    ],
+    [
+      { "name": "apps-04-inspection", "mode": "light" },
+      { "name": "apps-05-packing", "mode": "light" }
+    ]
   ]
 }
