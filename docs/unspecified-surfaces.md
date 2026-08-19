@@ -4,18 +4,20 @@ Both design systems — `type-system-v3-locked.md` and `spacing-system-v1-locked
 — end with a §9 listing what they deliberately do not govern. Four entries
 appeared on **both** lists, which means they are one piece of work rather than
 two. This file is that list, and both §9s point here. A fifth entry has since
-arrived from the colour system.
+arrived from the colour system, and a sixth from the case-study figures.
 
 Created 8 Aug 2026.
 
 ---
 
-## The five
+## The six
 
 *Four entries at creation; **pinned specimen tones** joined them on 8 Aug 2026,
 found by the K4 colour-literal census. It is the only one that comes from the
 colour system rather than from type and spacing, and the only one already
-shipping wrong values.*
+shipping wrong values. **Illustration line weight** joined on 18 Aug 2026, the
+first entry that arrived from neither a system's §9 nor a census, but from a
+rendering defect found in review.*
 
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
@@ -97,6 +99,41 @@ is colour judgement. All eight are allowlisted in `scripts/lint-color.mjs`
 under `ALLOWLIST.specimens`, with the reason attached to each, so the lint
 keeps surfacing them rather than absolving them.
 
+**Illustration line weight.** What minimum rendered stroke a case-study figure
+needs, and where the rule lives. No locked spec governs it. Type v3 covers text.
+Interaction v1 §2 covers *icon* stroke through `--icon-stroke`, which is a
+different surface answering a different question.
+
+**The trigger is a property of the ART, not of the study.** A figure whose source
+linework is hairline collapses at the 300px friction-beat column (set by
+`.friction-beat`'s `grid-template-columns`): the lines go sub-pixel and antialias
+to grey. Chunky art does not. That is why Bard's Oku figures need no floor while
+FDT-E's and Nuuly's both do, and it is the condition any rule has to be written
+against. Stating it as "Nuuly needed what FDT-E needed" would encode the wrong
+variable and guarantee a third ad hoc fix.
+
+Solved twice, independently, at the same value: `.fdte-figure svg path` (July
+2026) and `.nuuly-beat-figure svg path` (18 Aug 2026), each carrying
+`stroke: currentColor; stroke-width: 0.75px; vector-effect: non-scaling-stroke`.
+Two classes with identical declarations is the shape of a missing rule.
+
+Three things to settle:
+
+1. **Where the floor lives.** Probably on `.oku-figure` with an opt-out for
+   chunky art, rather than a per-study class per study. `.oku-figure` is the
+   shared wrapper, so as it stands a third hairline study means a third
+   identical rule.
+2. **Whether 0.75px is a token.** It is authored as a literal in two places. It
+   is also near its ceiling rather than mid-range, which any token would have to
+   carry with it: these are merged compound paths of *outlined* linework, so
+   every drawn line is a closed contour, the stroke lands on both sides of it,
+   and effective weight is roughly double a single-edge stroke. 1px fattens the
+   sketch quality away and starts closing dense passages; 0.5px still reads thin.
+3. **Whether the trigger can be stated mechanically.** "Hairline" is a judgement
+   made by looking. Source stroke geometry is measurable, so a check could in
+   principle flag art that needs the floor and has not got it, rather than
+   waiting for someone to notice mud.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026
@@ -164,7 +201,7 @@ this file is deleted rather than becoming a third place where the answer lives.
 
 **An entry leaves when it is fully closed, and its content moves into the owning
 spec.** The file is deleted when it is empty — not before, and not because it
-has grown short. As of the interaction reconciliation above, five entries remain
+has grown short. As of the interaction reconciliation above, six entries remain
 and one (buttons) is down to a single line.
 
 ---
@@ -175,7 +212,7 @@ and one (buttons) is down to a single line.
 prints a portfolio. It stays in both §9s as an acknowledged gap, not a task.
 
 **Type states** (hover, focus, visited, disabled, `forced-colors`,
-`prefers-contrast`) are type-system-only and larger than these five. They stay
+`prefers-contrast`) are type-system-only and larger than these six. They stay
 in the type §9.
 
 **Bento and small-multiples grid gaps** are spacing-only and may want their own
