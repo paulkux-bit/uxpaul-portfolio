@@ -15,9 +15,9 @@ import { notFound } from 'next/navigation';
  * THIS IS NOT A LAUNCH FLAG, and must not become one. It keys on VERCEL_ENV,
  * which Vercel sets, and has no relationship to BLOCK_INDEXING in
  * seo.config.mjs. Sandbox should 404 in production forever, not until launch,
- * so this never needs touching and launch stays the ONE edit that file
- * promises. If you find yourself editing this on launch day, something has gone
- * wrong upstream.
+ * so this never needs touching. If you find yourself editing this on launch
+ * day, something has gone wrong upstream. (BLOCK_INDEXING is permanent too, and
+ * also not a launch switch - that file no longer promises a one-edit launch.)
  *
  * THIS LAYOUT IS NOT THE SAFETY NET. __tests__/sandbox-guard.test.mjs is.
  *
