@@ -1741,6 +1741,22 @@
    560/1280. See v3 §3.3 — sharing crossovers is the mechanism R5 asks for,
    and the old value pinched the 6/5 pair to 1.1418 at 560px. A and C are
    comparison options only and are NOT on the ladder. */
+/* The bottom half of .milestone's boundary, and the FOURTH component to need
+   one specified. Same story as .figure--bento-theme: margin-top only, and that
+   asymmetry was never a decision - BARD's milestone and FDT-E's are both the
+   last child of their section, so .cs-section > :last-child zeroed the bottom
+   and the value was never exercised. Nuuly §8 is the first page anywhere to put
+   prose after a milestone, and it resolved to a zero gap.
+
+   :not(:last-child) so BARD and FDT-E cannot match. --spacing-l for symmetry
+   with the top margin above - but note that token is the EVIDENCE STEP, and
+   milestone-to-prose is a section-internal break, which is exactly the question
+   docs/unspecified-surfaces.md entry eight says is ungoverned. The mechanism
+   now matches the other three; the token is still an open choice. */
+.milestone:not(:last-child) {
+  margin-bottom: var(--spacing-l);
+}
+
 .milestone {
   margin-top: var(--spacing-l);
   padding: var(--spacing-crescendo) var(--spacing-m);

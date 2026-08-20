@@ -166,15 +166,31 @@ and whether the owner is the media or the prose. Three different answers ship
 today: `.cs-section > .bento-band` takes `margin-block`, `.framed-pair` takes
 `margin: var(--spacing-l) 0` **plus** a `p:has(+ .framed-pair)` rule that zeros
 the preceding paragraph so the top gap is single-owned, and
-`.figure--bento-theme` now takes a `:not(:last-child)` bottom. Same token, three
-mechanisms.
+`.figure--bento-theme` takes a `:not(:last-child)` bottom, and `.milestone` now
+takes the same. Same token, **four** mechanisms.
+
+**The prediction below came true the next day, and not the way it was written.**
+This entry closed by asking for one rule "so the next one added does not invent
+a fourth mechanism." The fourth was not added. `.milestone` was already in the
+codebase with `margin-top` and no bottom, unexercised, because BARD's milestone
+and FDT-E's are both the last child of their section. Nuuly §8 became the first
+page anywhere to put prose after a milestone and the gap resolved to zero, found
+on the preview on 20 Aug 2026 — one day after this entry was written.
+
+That sharpens what the entry is for. The risk is not new components inventing new
+mechanisms; it is **existing components whose boundary was never exercised**,
+each of which fails the first time a page puts content after it. There is no way
+to tell from the CSS which ones are still waiting, because a `margin-top`-only
+rule looks identical whether the bottom was decided or never tested.
 
 The spacing system's own §9 lists "the bento and small-multiples grid gaps" as
 open, but that is about the bento's **internal** gaps. This is the outer edge,
 and it is adjacent to that entry rather than covered by it. Needs: one statement
-of who owns a media block's vertical boundary, applied to all three components,
-so the next one added does not invent a fourth mechanism. Raised 19 Aug 2026 by
-the Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`.
+of who owns a block's vertical boundary, applied to all four components — and an
+audit of every remaining `margin-top`-only block-level rule, since the failure
+mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
+Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
+by `.milestone` in Nuuly §8.
 
 ---
 
