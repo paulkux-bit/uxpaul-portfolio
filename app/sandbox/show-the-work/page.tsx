@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { ResolutionBlock } from '@/components/show-work';
 import { BentoTheme, BentoItem, BentoBand, BentoRibbon } from '@/components/bento';
@@ -25,6 +26,8 @@ const GLOSS = ' dolor sit';
 const GLOSS_2 = ' dolor sit amet consectetur adipiscing elit sed';
 
 export default function ShowTheWorkSandbox() {
+  if (process.env.VERCEL_ENV === 'production') notFound();
+
   return (
     <article className="case-study-article">
       <div className="case-study-prose">

@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import MDXContent from '@/app/content/case-studies/uscg-bard.mdx';
 import './type-exp.css';
 
@@ -36,6 +37,8 @@ export const metadata = {
  * <main id="main"> landmark, and <main> cannot nest inside <main>.
  */
 export default function TypeBardSandbox() {
+  if (process.env.VERCEL_ENV === 'production') notFound();
+
   return (
     <div className="case-study-page">
       <article className="case-study-article type-exp" id="type-exp-root">
