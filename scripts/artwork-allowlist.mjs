@@ -24,6 +24,10 @@ export const ARTWORK_DIRS = [
     path: 'components/oku',
     reason: 'OKU case-study illustrations — same pipeline (scripts/regen-oku-tsx.mjs), artwork with its own viewBox',
   },
+  {
+    path: 'components/nuuly-beats',
+    reason: 'Nuuly friction-beat illustrations — same pipeline (scripts/regen-nuuly-beats-tsx.mjs), sized by layout not by adjacent type',
+  },
 ];
 
 /** Individual non-icon SVG payloads, matched by a distinctive substring. */

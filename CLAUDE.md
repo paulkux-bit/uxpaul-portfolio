@@ -66,7 +66,7 @@ commit has already landed in this repo with a red test and a report that did not
 mention it — the only thing that catches that is saying the number out loud.
 
 Cross-cutting gaps neither type nor spacing nor colour claims live in
-`docs/unspecified-surfaces.md` — five entries as of 8 Aug 2026.
+`docs/unspecified-surfaces.md` — eight entries as of 19 Aug 2026.
 
 ## Strategic direction
 Strategic direction (audience, brand personality, references, anti-references, 

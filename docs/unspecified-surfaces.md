@@ -3,19 +3,26 @@
 Both design systems — `type-system-v3-locked.md` and `spacing-system-v1-locked.md`
 — end with a §9 listing what they deliberately do not govern. Four entries
 appeared on **both** lists, which means they are one piece of work rather than
-two. This file is that list, and both §9s point here. A fifth entry has since
-arrived from the colour system.
+two. This file is that list, and both §9s point here. Entries have since arrived
+from the colour system and from the case-study figures, and the set is open: a
+surface joins whenever one is found that no locked spec governs.
 
 Created 8 Aug 2026.
 
 ---
 
-## The five
+## The open set
 
-*Four entries at creation; **pinned specimen tones** joined them on 8 Aug 2026,
-found by the K4 colour-literal census. It is the only one that comes from the
-colour system rather than from type and spacing, and the only one already
-shipping wrong values.*
+*Nav, footer, buttons and card meta were here at creation, from the two §9s.
+**Pinned specimen tones** joined on 8 Aug 2026, found by the K4 colour-literal
+census: the only entry that comes from the colour system rather than from type
+and spacing, and the only one already shipping wrong values. **Illustration line
+weight** joined on 18 Aug 2026, the first to arrive from neither a system's §9
+nor a census, but from a rendering defect found in review. **Composite evidence
+grid** joined on 19 Aug 2026, the first to come from a surface the crop pipeline
+cannot produce at all. **Bento theme block, outer boundary** joined on 19 Aug
+2026, the first found by swapping one component for another, which is what
+exposed three shipped components answering the same question three ways.*
 
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
@@ -97,6 +104,94 @@ is colour judgement. All eight are allowlisted in `scripts/lint-color.mjs`
 under `ALLOWLIST.specimens`, with the reason attached to each, so the lint
 keeps surfacing them rather than absolving them.
 
+**Illustration line weight.** What minimum rendered stroke a case-study figure
+needs, and where the rule lives. No locked spec governs it. Type v3 covers text.
+Interaction v1 §2 covers *icon* stroke through `--icon-stroke`, which is a
+different surface answering a different question.
+
+**The trigger is a property of the ART, not of the study.** A figure whose source
+linework is hairline collapses at the 300px friction-beat column (set by
+`.friction-beat`'s `grid-template-columns`): the lines go sub-pixel and antialias
+to grey. Chunky art does not. That is why Bard's Oku figures need no floor while
+FDT-E's and Nuuly's both do, and it is the condition any rule has to be written
+against. Stating it as "Nuuly needed what FDT-E needed" would encode the wrong
+variable and guarantee a third ad hoc fix.
+
+Solved twice, independently, at the same value: `.fdte-figure svg path` (July
+2026) and `.nuuly-beat-figure svg path` (18 Aug 2026), each carrying
+`stroke: currentColor; stroke-width: 0.75px; vector-effect: non-scaling-stroke`.
+Two classes with identical declarations is the shape of a missing rule.
+
+Three things to settle:
+
+1. **Where the floor lives.** Probably on `.oku-figure` with an opt-out for
+   chunky art, rather than a per-study class per study. `.oku-figure` is the
+   shared wrapper, so as it stands a third hairline study means a third
+   identical rule.
+2. **Whether 0.75px is a token.** It is authored as a literal in two places. It
+   is also near its ceiling rather than mid-range, which any token would have to
+   carry with it: these are merged compound paths of *outlined* linework, so
+   every drawn line is a closed contour, the stroke lands on both sides of it,
+   and effective weight is roughly double a single-edge stroke. 1px fattens the
+   sketch quality away and starts closing dense passages; 0.5px still reads thin.
+3. **Whether the trigger can be stated mechanically.** "Hairline" is a judgement
+   made by looking. Source stroke geometry is measurable, so a check could in
+   principle flag art that needs the floor and has not got it, rather than
+   waiting for someone to notice mud.
+
+**Composite evidence grid.** `corner-consistency.png` is not a crop of one
+frame: it is six strips from six frames, at identical geometry, assembled into
+one 16:10 image and shown through `BentoBand`. No locked spec says how a
+composite is built — what the inter-strip gutter should be, whether the strips
+may come from different apps, whether the seams need to be declared to the
+reader, or whether the caption carries that job. It also cannot be produced by
+the bento-crop executor, which crops one source per output. Needs: a rule for
+when a composite is legitimate rather than a montage, and a decision on whether
+the compose step belongs in the crop pipeline. Raised 19 Aug 2026 by the Nuuly
+§6 consistency evidence.
+
+**Bento theme block, outer boundary.** `.figure--bento-theme` ships
+`margin: var(--spacing-l) 0 0` — 2rem top, zero bottom. The asymmetry was never
+a decision: every consumer until 19 Aug 2026 was the last child of its section
+(Bard's three Resolutions themes, FDT-E's gate walk), where
+`.cs-section > :last-child` zeros the bottom anyway, so the value was never
+exercised. Nuuly §5 and §6 are the first to place prose after one, and
+`:where(.case-study-prose) p` carries bottom margin only, so the pair resolved
+to a zero gap.
+
+The **value** is governed: `--spacing-l` is the evidence step, "prose to
+screenshots" (`spacing-system-v1-locked.md` §3). What is not governed is the
+**boundary rule** — which block-level media components own a gap on which side,
+and whether the owner is the media or the prose. Three different answers ship
+today: `.cs-section > .bento-band` takes `margin-block`, `.framed-pair` takes
+`margin: var(--spacing-l) 0` **plus** a `p:has(+ .framed-pair)` rule that zeros
+the preceding paragraph so the top gap is single-owned, and
+`.figure--bento-theme` takes a `:not(:last-child)` bottom, and `.milestone` now
+takes the same. Same token, **four** mechanisms.
+
+**The prediction below came true the next day, and not the way it was written.**
+This entry closed by asking for one rule "so the next one added does not invent
+a fourth mechanism." The fourth was not added. `.milestone` was already in the
+codebase with `margin-top` and no bottom, unexercised, because BARD's milestone
+and FDT-E's are both the last child of their section. Nuuly §8 became the first
+page anywhere to put prose after a milestone and the gap resolved to zero, found
+on the preview on 20 Aug 2026 — one day after this entry was written.
+
+That sharpens what the entry is for. The risk is not new components inventing new
+mechanisms; it is **existing components whose boundary was never exercised**,
+each of which fails the first time a page puts content after it. There is no way
+to tell from the CSS which ones are still waiting, because a `margin-top`-only
+rule looks identical whether the bottom was decided or never tested.
+
+The spacing system's own §9 lists "the bento and small-multiples grid gaps" as
+open, but that is about the bento's **internal** gaps. This is the outer edge,
+and it is adjacent to that entry rather than covered by it. Needs: one statement
+of who owns a block's vertical boundary, applied to all four components — and an
+audit of every remaining `margin-top`-only block-level rule, since the failure
+mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
+Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
+by `.milestone` in Nuuly §8.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026
@@ -164,8 +259,8 @@ this file is deleted rather than becoming a third place where the answer lives.
 
 **An entry leaves when it is fully closed, and its content moves into the owning
 spec.** The file is deleted when it is empty — not before, and not because it
-has grown short. As of the interaction reconciliation above, five entries remain
-and one (buttons) is down to a single line.
+has grown short. As of the interaction reconciliation above, every entry still
+has something open, and one (buttons) is down to a single line.
 
 ---
 
@@ -175,8 +270,8 @@ and one (buttons) is down to a single line.
 prints a portfolio. It stays in both §9s as an acknowledged gap, not a task.
 
 **Type states** (hover, focus, visited, disabled, `forced-colors`,
-`prefers-contrast`) are type-system-only and larger than these five. They stay
-in the type §9.
+`prefers-contrast`) are type-system-only and larger than anything on this list.
+They stay in the type §9.
 
 **Bento and small-multiples grid gaps** are spacing-only and may want their own
 module rules, the way the takes wall does in the type system. They stay in the

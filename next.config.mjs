@@ -7,7 +7,8 @@ const nextConfig = {
   // Enforcing counterpart to app/robots.ts. robots.txt is only advisory, so
   // while the launch flag is set we also send X-Robots-Tag: noindex, nofollow
   // on every route, which Google honors even for disallowed-but-linked URLs.
-  // Gated by the single BLOCK_INDEXING flag (seo.config.mjs) -> flip it to launch.
+  // Gated by BLOCK_INDEXING (seo.config.mjs), which is permanent and is NOT a
+  // launch switch. Launch is the DNS cutover with noindex still on.
   async headers() {
     if (!BLOCK_INDEXING) return [];
     return [

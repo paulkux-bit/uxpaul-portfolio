@@ -1,3 +1,4 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { CaseStudyCard } from '@/components/case-study-card';
 import { RevealGrid } from '@/components/reveal-grid';
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 export default function HomeVideoSandbox() {
+  if (process.env.VERCEL_ENV === 'production') notFound();
+
   return (
     <div className="page-container pt-16 md:pt-20 xl:pt-16 2xl:pt-28 pb-32 space-y-24 xl:space-y-20 2xl:space-y-32">
       <section className="space-y-12">

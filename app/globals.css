@@ -1741,6 +1741,22 @@
    560/1280. See v3 §3.3 — sharing crossovers is the mechanism R5 asks for,
    and the old value pinched the 6/5 pair to 1.1418 at 560px. A and C are
    comparison options only and are NOT on the ladder. */
+/* The bottom half of .milestone's boundary, and the FOURTH component to need
+   one specified. Same story as .figure--bento-theme: margin-top only, and that
+   asymmetry was never a decision - BARD's milestone and FDT-E's are both the
+   last child of their section, so .cs-section > :last-child zeroed the bottom
+   and the value was never exercised. Nuuly §8 is the first page anywhere to put
+   prose after a milestone, and it resolved to a zero gap.
+
+   :not(:last-child) so BARD and FDT-E cannot match. --spacing-l for symmetry
+   with the top margin above - but note that token is the EVIDENCE STEP, and
+   milestone-to-prose is a section-internal break, which is exactly the question
+   docs/unspecified-surfaces.md entry eight says is ungoverned. The mechanism
+   now matches the other three; the token is still an open choice. */
+.milestone:not(:last-child) {
+  margin-bottom: var(--spacing-l);
+}
+
 .milestone {
   margin-top: var(--spacing-l);
   padding: var(--spacing-crescendo) var(--spacing-m);
@@ -2032,15 +2048,43 @@ html.dark .oku-figure {
   height: auto; /* scales to the SVG's own ~16:9 viewBox */
 }
 
-/* The FDT-E drawings are single hand-drawn FILLED paths whose hairline linework
-   collapses at the rendered size (muddy in dark). Add constant weight via stroke:
-   non-scaling-stroke pins it to a fixed 0.75px of SCREEN, not of the drawing's own
-   coordinate space, so the weight holds wherever the figure is scaled. Stroke follows
-   currentColor, so the per-mode wrapper ink stays the single color source. 0.75px
-   tested clean on figure 03's dense map grid. FDT-E-scoped one-off exception (Paul,
-   July 2026) to the "fix line weight in the source art" convention — Bard's Oku
-   figures have native weight and stay stroke-free. */
+/* ── Hairline stroke floor, two consumers ────────────────────────────────
+   Some figures are single FILLED paths whose hairline linework collapses at the
+   rendered size: the drawn lines go sub-pixel and antialias to grey. Add constant
+   weight via stroke. non-scaling-stroke pins it to a fixed 0.75px of SCREEN, not of
+   the drawing's own coordinate space, so the weight holds wherever the figure is
+   scaled and whatever transform the tracer emitted. Stroke follows currentColor, so
+   the per-mode wrapper ink stays the single color source.
+
+   0.75px IS NEAR ITS CEILING, NOT MID-RANGE. Do not round it up. These are merged
+   compound paths of OUTLINED linework: every drawn line is a closed contour, so the
+   stroke lands on BOTH sides of it and effective weight is roughly double a
+   single-edge stroke. At 1px the sketch quality fattens away and the densest passages
+   (Nuuly beat 03's hands) begin closing up. 0.5px still reads thin. Measured at true
+   size in both modes, twice, by two people who arrived at the same number.
+
+   TWO CLASSES, ONE VALUE, DELIBERATELY NOT MERGED. The trigger is a property of the
+   ART, not of the study: hairline source linework needs the floor, chunky art does
+   not. .oku-figure stays stroke-free because Bard's Oku figures have native weight,
+   and it is the shared wrapper, so a floor there would hit every figure on the site.
+   Whether the floor should instead live on .oku-figure with an opt-out is recorded as
+   an open question in docs/unspecified-surfaces.md rather than guessed at here.
+   FDT-E's was the original one-off (Paul, July 2026), an exception to the "fix line
+   weight in the source art" convention; Nuuly's traced beat art is the second case. */
 .fdte-figure svg path {
+  stroke: currentColor;
+  stroke-width: 0.75px;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Nuuly's traced beat figures, the second case. Same declarations, kept as a SEPARATE
+   rule rather than added to the selector list above: the two are scoped independently
+   on purpose, so retuning one study's art never silently retunes the other's.
+   IN DEVTOOLS THEY WILL LOOK MERGED. Lightning CSS folds byte-identical blocks into a
+   single selector list at minify time, so the built sheet shows one rule reading
+   .fdte-figure svg path, .nuuly-beat-figure svg path. That is the minifier, not the
+   source: change either value here and the output splits back into two rules. */
+.nuuly-beat-figure svg path {
   stroke: currentColor;
   stroke-width: 0.75px;
   vector-effect: non-scaling-stroke;
@@ -2724,6 +2768,27 @@ html.dark .oku-figure {
    --bento-row-gap. Child combinator so it never touches theme-nested bands. */
 .cs-section > .bento-band {
   margin-block: var(--spacing-l);
+}
+
+/* The theme block's counterpart, and the reason it is a separate rule.
+   .figure--bento-theme is `margin: var(--spacing-l) 0 0` — 2rem top, ZERO
+   bottom. That asymmetry was never a decision: every consumer until now was the
+   last child of its section (Bard's three Resolutions themes, FDT-E's gate
+   walk), where .cs-section > :last-child zeros the bottom anyway, so the value
+   was never exercised. Nuuly §5 and §6 are the first to put prose after one,
+   and :where(.case-study-prose) p carries bottom margin only — so theme + p
+   resolved to a ZERO gap. This SPECIFIES the bottom rather than changing it.
+
+   :not(:last-child) is load-bearing, not tidiness. Without it this selector
+   ties .cs-section > :last-child at (0,2,0) and wins on source order, silently
+   adding 2rem to all four of the older bentos. With it, they cannot match.
+
+   --spacing-l is the evidence step, "prose to screenshots"
+   (spacing-system-v1-locked.md §3). The VALUE is governed; the boundary rule
+   for a theme block is not, which is why it is also in
+   docs/unspecified-surfaces.md rather than only here. */
+.cs-section > .figure--bento-theme:not(:last-child) {
+  margin-bottom: var(--spacing-l);
 }
 
 /* Breakouts are block-flow (no flex `gap`), so the caption→media bind that

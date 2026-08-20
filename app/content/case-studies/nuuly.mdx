@@ -20,6 +20,7 @@ nda: false
 
 import { BentoBand } from '@/components/bento';
 import AppsBento from '@/components/case-studies/nuuly/AppsBento';
+import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 {/* ─────────────────────────────────────────────────────────────
     Nuuly – Template A. Content draft v1, images first pass.
@@ -31,102 +32,273 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
     in captions. No em-dashes (lint:prose hard-fails).
 
     Paul is rewriting each section by hand. Do not regenerate.
-    Four TODOs below block ship. Each blocks one specific thing.
+
+    NOTHING BELOW BLOCKS SHIP. Paul ruled on all six markers on 20 Aug 2026:
+    the care-pair setup was never a real gap and its marker is deleted, the
+    wash figures are confirmed, the margin-rule sentence is cut along with the
+    paragraph that carried it, and section 7's captions plus section 8's
+    milestone are approved as written.
+
+    ONE TODO token remains and it is a rationale note, not a blocker: the
+    narrowed corner claim, which records why that sentence was scoped to what
+    the 62 frames support. It invites a rephrase rather than requiring one.
+
+    Re-enumerated 20 Aug 2026 after the ruling, not carried forward. Every
+    earlier count in this header was stale within a pass or two, so if you
+    change a marker, recount here rather than adjusting the number.
    ───────────────────────────────────────────────────────────── */}
 
 <HeroBlock
   eyebrow="NUULY · URBN"
   title={['A building, a business model,', 'and no process.']}
-  role="I designed the warehouse tools behind Nuuly, URBN's clothing rental subscription. Seven apps move each garment from the return tote to the next customer's box. Sole designer on all seven, from idea to launch on the warehouse floor."
+  role="At Nuuly, URBN's clothing rental subscription, I designed the seven warehouse apps that get a returned garment back out to the next customer: sole designer, idea to launch."
   image={{
     src: '/case-studies/nuuly/hero.png',
     alt: 'Sort to wash bins, six of six scanned: three returned garments in a row, coded D2, W1 and D3, above the workstation dock.',
   }}
   callout={{
-    label: 'The premise',
-    body: 'The specialist scans. The system knows the steps from here.',
+    label: 'THE SCAN',
+    body: 'Usually it records what you did. This one tells you what to do next.',
   }}
 />
 
 <section className="cs-section cs-section--problem">
 
-## Every dress comes back
+## Somebody is already waiting for the dress you just sent back.
 
-Nuuly rents clothes by subscription. Six items a month, wear them, send them back, choose six more. URBN launched it in 2019 as a startup inside itself.
+<p className="section-lede">Nuuly rents clothes by subscription: six garments a month, then six more.</p>
 
-**A retailer sells a garment once. A rental service has to send the same garment out dozens of times.** That inverts where the difficulty sits. Getting a dress to a customer is a solved problem. Getting it back, cleaned, judged, repaired and into somebody else's box is the business.
+**Her next box ships on a date she picked.** The dress is still in a return tote.
 
-All of that is physical, and none of it is forgiving. Every turn is two shipping legs, an industrial cleaning cycle, a manual inspection and a probable repair, paid for out of one fixed monthly subscription. Do it wrong and you either ruin the garment or ship something the next customer opens and does not want.
+**Each turn costs two shipping legs, a wash, an inspection, and a repair.** All of it out of one monthly fee. Wash it wrong and the dress is gone. Move it slowly and her box ships short.
 
-**In 2018 none of it existed.** No building running, no process, no software, no precedent inside URBN to copy. Data capture was a founding principle rather than a later ambition: every action on the floor, every garment, every order was to be recorded from day one.
+{/* House pattern, taken from FDT-E's problem pair (us-navy-fdt-e.mdx): one real
+    artifact beside one authored illustration, both 16:10 so the two caption
+    baselines lock. Order is promise then reality (what she signs up for, then
+    what has to survive the loop), which hands off to section 3's "The physical
+    space was the spec."
+
+    BOTH TILES ARE FINAL (17 Aug).
+
+    · promise-nuuly-site--wide.png: capture of nuuly.com/rent/the-edit, taken
+      17 Aug. Laid out at 1440 CSS px, stitched from three scroll positions,
+      cropped 16:10 and resized to 2320x1450. Shows the promo bar, the nav with
+      the wordmark, "The Fall Edit", the editorial hero, and the Fall Essentials
+      rail. A lower crop carrying brand names and retail prices was rendered and
+      rejected: at the 520px the tile actually renders, that type is illegible,
+      and without the nav the capture stops reading as somebody else's website,
+      which is the one thing this tile has to say. The caption names it as
+      Nuuly's consumer site on purpose: the page is URBN's, not Paul's design
+      work, and an uncaptioned brand asset inside a case study reads as the
+      author's. Resolution is settled, do not "fix" it: the tile renders at
+      520 CSS px, so a 2x display rasterises 1040 device px and a 3x display
+      1560. The native capture is 1568px wide, so it clears both; the 2320
+      stored size is only there to match the illustration's dimensions, and
+      the browser downsamples past it. An earlier note here called 1568 short
+      of a 2400px floor and recommended a native DevTools recapture. That was
+      wrong arithmetic, checked at device resolution 17 Aug: the nav type is
+      clean at 1:1. No upscale, no recapture.
+
+    · range-variety--feature.png: FINAL. Paul's Firefly illustration, gouache
+      and coloured pencil, generated 17 Aug. Source 2688x1536; the gradient was
+      extended vertically (not cropped) to reach 16:10, then resized to
+      2320x1450, so no artwork was lost. Opaque, no alpha, and no .cover-art
+      invert: `.cs-section--problem .framed-pair__cell .figure__image` adds a
+      hairline in both modes and does no recolor, so the warm ground IS the
+      dark-mode answer. This corrects the transparent-background plan in the
+      briefs doc. An alternate take (finer pencil, more catalog-like) is kept
+      at range-variety--plate.png; it lost the 520px comparison because its
+      garments sit smaller in frame and its painted wash edge reads as artwork
+      inside a card once the tile's radius and hairline are applied.
+
+    Supersedes the NuulyFigure / .nuuly-figure-pair SVG pair. The finished
+    illustration shipped raster, so components/nuuly/, components/nuuly-figure.tsx,
+    the regen:nuuly script and the .nuuly-figure-pair rules were removed in this
+    commit. */}
+<FramedPair
+  framed={false}
+  left={{
+    src: '/case-studies/nuuly/promise-nuuly-site--wide.png',
+    width: 2320,
+    height: 1450,
+    alt: "Nuuly's consumer site explaining the rental subscription: choose six garments, wear them, send them back for six more.",
+    caption: (
+      <>
+        <strong>Nuuly's consumer site.</strong> The front end of the loop.
+        Everything behind it is warehouse.
+      </>
+    ),
+  }}
+  right={{
+    src: '/case-studies/nuuly/range-variety--feature.png',
+    width: 2320,
+    height: 1450,
+    alt: 'A densely packed clothing rail seen straight on, no two garments alike in kind, weight or drape: silk slips beside denim beside structured tailoring.',
+    caption: (
+      <>
+        <strong>1,000+ styles, sizes 00 to 26.</strong> Every one of them has to
+        survive the same loop.
+      </>
+    ),
+  }}
+/>
+
+</section>
+
+<section className="cs-section cs-section--frictions">
+
+## The physical space was the spec.
+
+<p className="section-lede">I interviewed fourteen garment specialists and operations managers, and watched them work, before there was a screen to design.</p>
+
+{/* FIGURE SLOTS x3. Paul is drawing these. NOT the monochrome line treatment
+    BARD and FDT-E use: this is the third study to run the friction-beats
+    module, and the art is the only thing differentiating it. See
+    claude/nuuly-arc-locked.md, "Module repetition". Subject is the SPECIALIST
+    doing the thing the beat describes, never an abstraction. */}
+<ol className="friction-beats">
+  <li className="friction-beat" data-thread="1">
+    <div className="friction-beat__text">
+      <span className="thread-index">01</span>
+      <h3 className="friction-beat__headline">The station moves</h3>
+      <p className="friction-beat__scene">Rolled to wherever the work is. Reset for whoever is on it. Nobody owns a station for a whole shift.</p>
+      <blockquote className="pull-quote pull-quote--quiet">
+        <p>“I need to move my staff and stations around as I try to balance the amount of orders.”</p>
+        <cite>Operations manager, interview</cite>
+      </blockquote>
+    </div>
+    <NuulyBeatFigure variant="station" alt="A specialist leaning into a wheeled workstation to push it, the cart it just left ghosted behind." />
+  </li>
+  <li className="friction-beat" data-thread="2">
+    <div className="friction-beat__text">
+      <span className="thread-index">02</span>
+      <h3 className="friction-beat__headline">Everything is a handoff</h3>
+      <p className="friction-beat__scene">Each garment has a next step, and the specialist is the one who sets it. Get it wrong and a station downstream stalls. Get it late and the box ships short.</p>
+    </div>
+    <NuulyBeatFigure variant="handoff" alt="A specialist beneath an overhead rail, hand still raised, a garment travelling away from them along it." />
+  </li>
+  <li className="friction-beat" data-thread="3">
+    <div className="friction-beat__text">
+      <span className="thread-index">03</span>
+      <h3 className="friction-beat__headline">One hand is always full</h3>
+      <p className="friction-beat__scene">A garment in one hand, a scanner in the other. The surface is already covered in laid-out work. Nobody puts a garment down to tap.</p>
+    </div>
+    <NuulyBeatFigure variant="hands" alt="A specialist holding a garment up off the rack in one hand and bringing a scanner to its tag with the other." />
+  </li>
+</ol>
+
+<p className="mt-14!">**The screen had to work on a station that moves, in a hand that is already full, against a clock.**</p>
 
 </section>
 
 <section className="cs-section">
 
-## Seven apps, one screen, one free hand
+## How do you give one cart seven jobs?
 
-The floor runs on a touchscreen mounted to a rolling workstation whose height the specialist sets. Around it: a scanner, a scale, bins, and garments carrying RFID tags, so the system knows the individual item rather than the style and size.
+<p className="section-lede">Seven narrow apps, not one general tool. Any cart can be given any job, and a new station needs no new software.</p>
 
-**One hand holds the garment. The other does everything else.** It also holds the scanner, and which hand does which varies by person. The workstation doubles as a staging surface, so the specialist has laid out their work the way training taught them and the screen is competing with a dress for attention. Several flows never get touched at all: the specialist reads a confirmation and moves.
+**The flexibility lives in the furniture. The software follows it.** Roll a cart to another part of the floor, give it different work, pick the app that matches.
 
-Seven apps cover the cycle. Receiving brings net-new inventory in. Fingerprint confirms a garment is registered. Test Wash and Measure characterize a new style. Inspection judges damage. Returning closes a customer's rental and sorts the garment onward. Packing builds the next order and picks its packaging.
-
-{/* The garment's journey, not the org chart: launcher, arrive, come back,
-    get judged, go back out. Four of the five are full-frame bands because
-    these screens run content edge to edge and a 16:10 region crop clips it.
-    See the shape note in AppsBento.tsx before changing any slot. */}
 <AppsBento />
 
 </section>
 
 <section className="cs-section">
 
-## The menu is for the station, not the person
+## Work outlives the shift
 
-<p className="section-lede">Nobody browses seven apps. A Return Specialist works Returning.</p>
+A purchase order that is part received stays open, at the count it reached, for whoever picks it up next.
 
-Seven apps behind one menu looks like a navigation problem, and it would be if a person were choosing. They are not. A Return Specialist works Returning. A Merchandise Specialist works Receiving.
-
-The list exists because the workstations are portable and operations were going to grow. Roll a cart somewhere else, give the station a different job, pick the app that matches. The flexibility lives in the furniture and the software follows it. That let each app stay narrow and specific to one task instead of becoming a general tool that asks its user which mode they are in.
+<BentoBand
+  src="/case-studies/nuuly/pause-handoff.png"
+  alt="Pausing a purchase order: a dialog asking why, with the count reading seventy-one of a hundred units received and a note that anyone can pick it back up."
+  caption="Pause the order."
+  gloss="It stays open at the count it reached."
+  aspect={1.778}
+/>
 
 </section>
 
 <section className="cs-section">
 
-## The hard part wasn't the screen
+## The hard part wasn't the screen. It was knowing which bin.
 
-**It was knowing which bin.** A returned garment has to go into the right cleaning process, and the interface for that is one screen: scan the item, and it tells you which colored bin at your station to drop it in. There is nothing to learn and nothing to decide.
+Scan the item, and it tells you which colored bin to drop it in. There is nothing to learn and nothing to decide.
 
 <BentoBand
   src="/case-studies/nuuly/bins-first.png"
   alt="Sort to wash bins, scanned one of six: the first garment has a bin code, the other five are still unread."
-  caption="One garment in."
-  gloss="Five still unread. The tote is worked one scan at a time."
-  aspect={2.531}
+  caption="Sort to bins."
+  gloss="One garment read, five still unread."
+  aspect={1.778}
 />
 
-Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of actual machine washes, measuring garments before and after, learning how different materials behaved in the industrial machines commissioned for the building. The data science team built a model from the results. The model is what answers when the scanner fires.
+<BentoBand
+  src="/case-studies/nuuly/bin-answer.png"
+  alt="The sorting answer: the row of garments dims and a single large code fills the middle of the screen, naming the wash bin the scanned garment goes to."
+  caption="Wash bin assigned."
+  gloss="The row dims, the code fills the screen."
+  aspect={1.778}
+/>
 
-Two of the seven apps are that project, made permanent. Test Wash runs a new style through a cycle and records what happened. Measure compares a garment before and after washing so the team can tell how many wears it has left before it stops being worth renting. The research did not end in a document. It ended in software that keeps doing the research.
+Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The results became a model. That model is what answers when the scanner fires.
+
+Two of the seven apps are that project made permanent: Test Wash runs a new style through a cycle, Measure compares it before and after. The research did not end in a document. It ended in software that keeps doing it.
 
 <BentoBand
   src="/case-studies/nuuly/measure-table.png"
   alt="The Measure table for a pair of jeans: length, in seam, rise, waist and hem, each with a pre wash and post wash figure and the difference between them."
-  caption="A hem down a quarter inch."
-  gloss="Measured before and after, on every new style, to learn how many wears it has."
-  aspect={1.6}
+  caption="Wear measurement."
+  gloss="Five points, before and after a wash."
+  aspect={1.778}
 />
 
-{/* TODO (blocks two images): tw-wet and tw-done render the wash cycle names
-    and their fiber mappings. Paul flagged the wash-type taxonomy as URBN
-    proprietary in interview Q11. Either the proprietary part is the model
-    rather than the names, or those frames need their values obscured.
-    Not cropped, not committed, until he rules. */}
+<BentoTheme>
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/care-set.png"
+    alt="Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked."
+    caption="Care instructions."
+    gloss="Set in Test Wash, for the style."
+  />
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/care-surfaced.png"
+    alt="Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed."
+    caption="Back at the bin."
+    gloss="Returning shows only the steps that were set."
+  />
+</BentoTheme>
 
-{/* TODO (blocks a number): tightest defensible version of "months" and
-    "thousands of machine washes" above. Paul's own figures, unverifiable
-    externally, so they must be numbers he will state cold in an interview. */}
+{/* WASH TAXONOMY - RULED 15 Aug 2026 (Paul). Option B.
+
+    PUBLISHABLE:  tw-form  (Wet clean / Dry clean, both "not set" - the choice,
+                            no taxonomy at all)
+                  tw-done  (resolved to "W3 - Delicate lights" - one cycle
+                            label, no fibre routing)
+
+    NOT PUBLISHABLE: tw-wet. It renders the full picker: every wet-clean
+                  cycle code with its label and its fibre list. That mapping
+                  is the output of the discovery project this section
+                  describes, it is the most useful thing in the study to a
+                  competitor, and it cannot be unpublished later.
+                  Do not crop it, do not add it to a manifest, do not "just
+                  for the local build" it.
+
+                  This comment deliberately does not enumerate the codes. An
+                  annotation that restates what it protects is not a
+                  protection.
+
+    Context for anyone revisiting: the hero (rt-6) already shows six bare codes
+    (W1 W4 W5 W6 D2 D3), so the existence and rough size of the coded system is
+    already public. The ruling is only about what the codes MEAN. */}
+
+{/* Figures confirmed by Paul, 20 Aug 2026: it was thousands of machine washes,
+    and months. Both are his own numbers and unverifiable externally, so they
+    stand as stated. Do not re-flag this as open. Worth knowing if it is ever
+    revisited: this is the study's only quantified claim and it is the softest
+    thing on a page that measures the corner position across 62 frames. That
+    asymmetry is accepted, not overlooked. */}
 
 </section>
 
@@ -134,31 +306,72 @@ Two of the seven apps are that project, made permanent. Test Wash runs a new sty
 
 ## I designed for the hundredth garment
 
-The instinct in a tool nobody has used before is to make it teachable. I went the other way and designed for recall instead of discovery, because the warehouse manager had built a training environment that already taught the shift: how the stations interlock, what the process is, where a garment goes next. The app did not have to explain the operation. It only had to handle the task in front of it. That was somebody else's investment paying for my decision, and it is the reason the decision was available at all.
+I designed for recall, not discovery. The warehouse manager had already built a training environment that taught the shift, so the app did not have to explain the operation. It only had to handle the task in front of it.
 
-So the primary action never moves. Same corner, same place, every app, every screen, so the hand learns it and stops looking.
+That was somebody else's investment paying for my decision.
 
-**The hit area runs past the paint, out to the bezel.** The button you see respects the same margin as everything else on the screen. The button you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot, and the target becomes effectively unmissable in the direction of travel. It can be acquired without looking, which matters because the specialist is looking at a dress. Whether they hold the scanner left or right stops mattering too.
+{/* TODO(copy): Paul. Narrowed 19 Aug from "every app, every screen", which the
+    evidence does not carry: Receiving has no bottom-right primary at all,
+    measured across all 62 dim frames. "Every screen that ends a task"
+    is the checkable version. Rephrase freely, but keep it to what the 62 frames
+    support. */}
+So the primary action never moves. Same corner, same place, on every screen that ends a task, so the hand learns it and stops looking.
 
+{/* Composite, not a crop, and the one image in this study that is not a whole
+    frame. Six identical strips from five apps at identical geometry, two of
+    them Packing: the argument is repetition, and repetition is only legible
+    when the instances are adjacent at the same scale.
+
+    IT IS 16:10 FOR THE OPPOSITE REASON THE GALLERY TILES ARE. They are whole
+    16:9 screens PADDED to 16:10 so a slot crops nothing. This was composed at
+    16:10 from the start, because it is not a screen and has no frame edge to
+    preserve. Same ratio, arrived at from two different directions. Measured before cutting: every primary
+    action in these frames has its right edge at 1872 and its bottom at 896 on
+    a 1920×1080 viewport, and the widest label is 441px, so the strip is
+    right-flush with its left edge at 1344 and nothing clips. Recorded in
+    docs/unspecified-surfaces.md.
+
+    Sits here, under the sentence it proves, rather than after the hit-area
+    paragraph below: that paragraph then separates it from the pair, so two
+    media blocks do not abut.
+
+    THE COUNT IS MEASURED, not sampled. Across all 62 dim frames every non-modal
+    primary sits at right 1872 / bottom 896; modals place their own. Receiving
+    and Fingerprint have no bottom-right primary at all, so five apps is the
+    ceiling, not a selection. The prose above was narrowed to match. */}
 <BentoBand
-  src="/case-studies/nuuly/move-to-bin.png"
-  alt="Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action."
-  caption="Read, not operated."
-  gloss="Some steps never get touched. The specialist looks, confirms, and moves."
-  aspect={1.778}
+  src="/case-studies/nuuly/corner-consistency.png"
+  alt="The same primary action in the lower right of six screens across five apps: done next return, done next garment, save measurements, weigh this package, save cycle, done next order."
+  caption="The same corner."
+  gloss="Six screens, five apps, one position."
+  aspect={1.6}
 />
 
-The cost is that the best part of it is invisible. Somebody who looks at the screen sees an ordinary button in an ordinary place. And the whole thing depends on a rule holding: nothing else may live in that margin, on any screen, in any of the seven apps, or the most important action in the app starts collecting mis-taps.
+**The hit area runs past the paint, out to the bezel.** The button you see keeps the same margin as everything else. The one you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot.
 
-{/* TODO (blocks the sentence above): Paul to confirm the wording of the rule.
-    That sentence is my reconstruction from the interview and he has not
-    signed off on it. It is the sharpest line available in the reflection
-    and it has to be his. */}
+It can be hit without looking, which matters because the specialist is looking at a dress.
 
-{/* NEXT CROP PASS: a consistency set showing the same primary action in the
-    same corner across six apps. Cut and rejected this pass because every
-    box landed its left edge mid-element (one read "lack" where "Black"
-    should be). Needs gutter-aware boxes judged per image. */}
+<BentoTheme>
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/move-to-bin.png"
+    alt="Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action."
+    caption="Move to bin."
+    gloss="The destination size, at reading distance."
+  />
+  <BentoItem
+    slot="wide"
+    src="/case-studies/nuuly/verdict-repair.png"
+    alt="The same Move garment screen for a failed inspection, reading send for repair in place of a bin size, with the same single confirm action."
+    caption="Send for repair."
+    gloss="The same screen, the other verdict."
+  />
+</BentoTheme>
+
+{/* §6 deliberately ends on the verdict pair with no closing paragraph, ruled
+    20 Aug 2026. The cut paragraph restated the corner decision and the hit-area
+    mechanic, both already stated above in Paul's voice, and carried a rule
+    clause he had not signed. Do not add a closer back. */}
 
 </section>
 
@@ -170,47 +383,80 @@ Warehouse lighting is not one thing. It changes by bay, by hour, by season. So I
 
 Hardly anyone used it. They stayed on dim.
 
-<FramedPair
-  framed={false}
-  left={{
-    src: '/case-studies/nuuly/mode-dim.png',
-    width: 3840,
-    height: 2160,
-    alt: 'The Receiving app in dim mode, prompting the specialist to scan the poly bag as step one of new SKU setup.',
-    caption: (
-      <>
-        <strong>Dim.</strong> What the floor ran on.
-      </>
-    ),
-  }}
-  right={{
-    src: '/case-studies/nuuly/mode-bright.png',
-    width: 3840,
-    height: 2160,
-    alt: 'The same Receiving step in bright mode, the higher luminance option built for well lit parts of the floor.',
-    caption: (
-      <>
-        <strong>Bright.</strong> Built, shipped, and largely left alone.
-      </>
-    ),
-  }}
-/>
+I still do not know why. It might be what they were trained on. It might be that bright was not bright enough to be worth the switch.
 
-I still do not know why. It might be what they were trained on. It might be that bright was not bright enough to be worth the switch. It might be that dim was simply the nicer thing to look at in that room, and that was enough. What I am fairly sure of is that I solved for a variable I had assumed was the problem, and the people doing the work had already settled it another way.
+{/* Approved by Paul, 20 Aug 2026: all eight captions and glosses stand as
+    written. Two dim/bright pairs rather than one, so the two modes read as a
+    designed system instead of a filter: the accent token re-tunes rather than
+    being filtered, and the primary inverts while its position holds. Measured
+    mean luminance dim to bright: confirm 42 to 185, drawer 39 to 197.
+
+    A THIRD PAIR WAS CUT ON PURPOSE, 19 Aug. Do not read "two pairs" as an
+    accident of what happened to be on disk, and do not add a third back.
+
+    This section is a confession: I built bright mode, they stayed on dim. Its
+    whole move is that I did a lot of work and it did not matter. Image count
+    argues against that. Six frames made it look like a feature showcase, which
+    is the exact opposite of what the prose is admitting, and the launcher row
+    was the weakest of the three anyway: its dim frame WAS the gallery's feature
+    tile, so it re-showed an image the reader passed a screen earlier. Two pairs
+    is the evidence the confession can carry without contradicting itself.
+
+    THE BENTO IS DELIBERATELY LAST, moved here 20 Aug. Do not move it back above
+    the closer on a "prose should close a section" instinct. With it in the
+    middle, the landing ("Hardly anyone used it. They stayed on dim.") had gone
+    cold by the time the reader reached the coda, and two "It might be" clauses
+    with nothing after them read as truncation rather than refusal. Last, the
+    admission and the coda are one thought and the frames are the punchline:
+    the prose is what I admit, the images are what I admit to. §4 already ends
+    on <AppsBento />, so a section closing on evidence has precedent. */}
+<BentoTheme>
+  <BentoItem slot="wide" src="/case-studies/nuuly/mode-confirm-dim.png"
+    alt="A registered garment in dim mode, with a yellow confirmation disc over the photo."
+    caption="Dim." gloss="The accent disc at full yellow." />
+  <BentoItem slot="wide" src="/case-studies/nuuly/mode-confirm-bright.png"
+    alt="The same confirmation in bright mode, the disc darkened to hold its contrast against a pale ground."
+    caption="Bright." gloss="The same token, darkened to hold contrast." />
+  <BentoItem slot="wide" src="/case-studies/nuuly/mode-drawer-dim.png"
+    alt="The Receiving action drawer in dim mode, its confirm button light on dark chrome."
+    caption="Dim." gloss="A light button on dark chrome." />
+  <BentoItem slot="wide" src="/case-studies/nuuly/mode-drawer-bright.png"
+    alt="The same drawer in bright mode, the confirm button inverted to dark on light, in the same position."
+    caption="Bright." gloss="Inverted, and in the same place." />
+</BentoTheme>
 
 </section>
 
 <section className="cs-section">
 
-## All seven. Live at launch.
+## Where Nuuly stands.
 
+{/* Approved by Paul, 20 Aug 2026.
+
+    The frame is a fact he confirmed: Receiving, Test Wash and Measure had to be
+    live before Nuuly could rent a single garment. A logical dependency rather
+    than a metric, so there is nothing in it to dispute. An earlier draft named
+    the three apps and ran to 80 characters; he cut it as verbose.
+
+    JULY 2019 IS NUULY'S PUBLIC LAUNCH DATE, not the tools' ship date. That is
+    why the sub explains the date rather than restating the frame. An earlier
+    sub read "All seven were live by then", which repeated the frame's idea and
+    the word "live". Do not reintroduce a sub that competes with the frame. */}
 <div className="milestone">
-  <p className="milestone__frame">All seven apps built and running the floor through beta and into launch.</p>
-  <p className="milestone__date">30 July 2019</p>
-  <p className="milestone__sub">No phased rollout. There was no earlier system to phase out.</p>
+  <p className="milestone__frame">Nuuly could not open until the operator tools worked.</p>
+  <p className="milestone__date">July 2019</p>
+  <p className="milestone__sub">Nuuly went live to the public.</p>
 </div>
 
-I left URBN that November. What Nuuly became afterwards is not mine to claim, but the loop those apps describe is still the loop, and a garment still gets its cleaning recipe by being washed and measured first.
+{/* §8 keeps a paragraph after the milestone, which BARD and FDT-E do not.
+    Deliberate, ruled 20 Aug 2026. Nuuly shipped seven years ago and Paul left
+    URBN four months after launch, so a reader arrives at this section with a
+    question the other two studies never raise: is this still his? The
+    paragraph answers it and scopes the claim. It is also what makes the
+    "Where Nuuly stands" heading honest, since the milestone alone answers a
+    past-tense question with a past-tense fact. Do not "fix" this back to the
+    milestone-terminal pattern. */}
+I left URBN that November. What Nuuly became afterwards is not mine to claim, but the loop these apps describe is still the loop, and a garment still gets its cleaning recipe by being washed and measured first.
 
 </section>
 
@@ -220,11 +466,23 @@ I left URBN that November. What Nuuly became afterwards is not mine to claim, bu
 
 ## Role
 
-Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer product and brand; the operator tooling was mine. The work ran alongside Nuuly product, the data science team, warehouse operations subject-matter experts, and the garment specialists who would use the tools. The wash-cycle discovery project the sorting model rests on was a team effort across design, operations and data science. Designed 2018 to 2019, from nothing to the floor. The screens on this page are recreations of the original designs.
+Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer, shipping and branding experience.
+
+The work ran alongside product management, the data science team, warehouse operations subject-matter experts, and the garment specialists who would use the tools.
+
+Designed 2018 to 2019.
 
 {/* Credit resolved 12 Aug 2026: Paul was the sole designer on the seven
     operator apps. The claim is scoped to the apps deliberately. Unqualified
     "sole designer on Nuuly" would be false, since Nuuly's consumer product
-    and brand had their own designers. Do not drop the scoping clause. */}
+    and brand had their own designers. Do not drop the scoping clause.
+
+    Cut 20 Aug 2026: "The wash-cycle discovery project the sorting model rests
+    on was a team effort across design, operations and data science." Singling
+    out one project as a team effort implies the rest was not, and §5's own
+    verbs are already modest ("I worked on", "the results became a model"), so
+    it defended against an overclaim the study does not make. The data science
+    team stays credited in the collaborator list above. Not a missing credit;
+    do not restore it as one. */}
 
 </section>
