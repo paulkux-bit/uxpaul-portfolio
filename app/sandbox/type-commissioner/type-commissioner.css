@@ -1,0 +1,407 @@
+/* ================================================================
+   SANDBOX ONLY — /sandbox/type-commissioner — voice experiment layer
+   ================================================================
+   Scope: everything is under `.cmsr`, set on this route's own wrapper.
+   Nothing here ships. Adopted decisions graduate into globals.css with
+   their own comments and their own lint assertions; rejected ones die
+   with this file. `npm run lint:type` parses app/globals.css only, so
+   this file is deliberately outside the gate — the same licence
+   type-exp.css has.
+
+   WHAT IS BEING TESTED, in one line: Bricolage assigns WIDTH by rung
+   and lets `opsz` run itself; Commissioner has neither axis, so the
+   question is whether FLAR/VOLM can take the width slot — three voices,
+   assigned by rung, never a per-module choice — and whether the ladder
+   still holds when the drawing underneath it changes.
+
+   THE ONE MECHANICAL RULE THIS FILE OBEYS, and the reason it is written
+   the way it is (study R8'): an FVS string may name only FLAR, VOLM and
+   slnt. Never `wght`. FVS inherits as a string and overrides the
+   matching high-level property per axis, so a string carrying 'wght'
+   pins the weight of every descendant and weight stops composing with
+   voice. Weight stays a standard `font-weight` property throughout this
+   file. That is not a style preference — it is the difference between a
+   system where voice and weight are independent and one where they
+   fight. The current `.milestone__date` pattern in globals.css, which
+   carries 600 and 88 inside its FVS string, is illegal under this rule.
+
+   ALSO NOT TESTED HERE, on purpose: no viewport-driven voice. FLAR is
+   authored, so it *could* be clamped against the viewport. R11 bans
+   axis animation and a viewport-interpolated axis is animation during
+   resize by another name — plus it is unjudgeable, since you would
+   never see two states side by side. Voice is assigned by rung, exactly
+   as width was.
+   ================================================================ */
+
+/* ── Face ─────────────────────────────────────────────────────────
+   The A/B. `bricolage` inherits --font-sans from globals.css untouched,
+   so the comparison is against production, not against a reconstruction
+   of it. Note that under Commissioner every `font-stretch` declaration
+   inherited from globals.css goes inert rather than wrong — the browser
+   ignores a width request on a font with no wdth axis. That silence is
+   the whole reason the study wants assertion 10 (no font-stretch
+   anywhere) rather than a value check. */
+
+.cmsr[data-face='commissioner'] {
+  font-family: var(--font-commissioner), system-ui, sans-serif;
+}
+
+/* ── The three voices ─────────────────────────────────────────────
+   Placeholders. Landing these numbers from render, in both modes, is
+   the entire job of this page — do not read them as a proposal.
+
+   VOLM is inert without FLAR: `'VOLM' 60, 'FLAR' 0` renders identically
+   to no declaration and throws nothing. Every pair below therefore
+   carries both halves, and the reading band carries VOLM 0 explicitly
+   rather than omitting it, so the silent-no-op case never appears in
+   the file at all. */
+
+.cmsr {
+  --v-read-flar: 0;
+  --v-read-volm: 0;
+  --v-display-flar: 40;
+  --v-display-volm: 0;
+  --v-large-flar: 70;
+  --v-large-volm: 40;
+}
+
+/* Display-voice presets. `flare` and `loud` are the designer's OWN two
+   named locations — the STAT table names exactly these, both at the
+   axis extremes, and all 18 named instances sit at FLAR 0 / VOLM 0.
+   So the three-band scheme maps onto designer-named stops rather than
+   values invented here, and the intermediates are honest: FLAR and VOLM
+   are linear in `avar`, so FLAR 40 really is the visual midpoint
+   between drawn masters. (`wght` is the axis that is NOT linear — see
+   the signature panel.) */
+
+.cmsr[data-voice='off']   { --v-display-flar: 0;   --v-display-volm: 0;  --v-large-flar: 0;   --v-large-volm: 0; }
+.cmsr[data-voice='soft']  { --v-display-flar: 40;  --v-display-volm: 0;  --v-large-flar: 70;  --v-large-volm: 40; }
+.cmsr[data-voice='flare'] { --v-display-flar: 100; --v-display-volm: 0;  --v-large-flar: 100; --v-large-volm: 0; }
+.cmsr[data-voice='loud']  { --v-display-flar: 100; --v-display-volm: 0;  --v-large-flar: 100; --v-large-volm: 100; }
+
+/* Reading voice. Zero is the safe default, but the flare is still
+   perceptible in body text, and a low value keeps family character in
+   prose rather than making rungs 0-2 look like a different typeface
+   from rungs 5-6. This toggle is the whole argument. */
+
+.cmsr[data-read='10'] { --v-read-flar: 10; }
+.cmsr[data-read='20'] { --v-read-flar: 20; }
+
+/* ── Voice by rung ────────────────────────────────────────────────
+   Reading voice is the base and inherits everywhere; the two display
+   bands override it. This is ruling 2 with a different axis in the
+   slot: three values, assigned by rung, no per-module choice. */
+
+.cmsr[data-face='commissioner'] {
+  font-variation-settings: 'FLAR' var(--v-read-flar), 'VOLM' var(--v-read-volm);
+}
+
+/* Rungs 3-4 — numbered headline, section heading. */
+.cmsr[data-face='commissioner'] :is(
+  .case-study-prose h2,
+  .case-study-prose > h3,
+  .friction-beat__headline,
+  .resolution-block__headline
+) {
+  font-variation-settings: 'FLAR' var(--v-display-flar), 'VOLM' var(--v-display-volm);
+}
+
+/* Rungs 5-6 — case-study hero, arrival crescendo. VOLM lives only here:
+   the designer's guidance is that the effect is clearest at large sizes
+   and heavy weights, and "the smaller the text, the noisier it might
+   look with the Volume turned up." */
+.cmsr[data-face='commissioner'] :is(
+  .case-study-prose > h1,
+  .milestone__date,
+  .text-hero
+) {
+  font-variation-settings: 'FLAR' var(--v-large-flar), 'VOLM' var(--v-large-volm);
+}
+
+/* ── Body size (study §6) ─────────────────────────────────────────
+   Commissioner's lowercase is ~4% smaller relative to em than
+   Bricolage's and its capitals ~8% larger. Matching x-height puts body
+   at 18.76px. Whether 19 reads as "the same size" or as "bigger" is the
+   eye's call, and matching x-height is only ONE of the three defensible
+   goals — cap-height and "match neither, re-judge from render" are the
+   other two. This toggle exists so the premise gets tested, not just
+   the arithmetic. */
+
+.cmsr[data-body='19'] .case-study-prose p,
+.cmsr[data-body='19'] .spec-body p {
+  font-size: 1.1875rem;
+}
+
+/* ── Rung 0 split (study §6) ──────────────────────────────────────
+   The sharpest finding in the study and the clearest case of the
+   typeface forcing a system change rather than a value change: captions
+   are lowercase and eyebrows are all-caps, so under Commissioner they
+   move in OPPOSITE directions. Holding lowercase legibility pushes the
+   floor to ~15px, which pushes eyebrow cap-height up ~16% on the
+   loudest small element on the page. Holding eyebrow caps constant
+   instead wants ~13px, below any floor. One rung cannot serve both. */
+
+.cmsr[data-r0='split'] :is(.figure__caption, .bento-theme__caption) { font-size: 0.9375rem; }
+.cmsr[data-r0='split'] :is(.eyebrow, .hero-block__eyebrow)          { font-size: 0.8125rem; }
+.cmsr[data-r0='split14'] :is(.figure__caption, .bento-theme__caption) { font-size: 0.9375rem; }
+.cmsr[data-r0='split14'] :is(.eyebrow, .hero-block__eyebrow)          { font-size: 0.875rem; }
+
+/* ================================================================
+   SPECIMEN PANEL
+   ================================================================
+   The case study below answers "does the site still look like the
+   site." It cannot answer the signature question, because the 340/720
+   pair lives on the home hero and the about opener, neither of which is
+   a case study. So the panel carries the three judgments that need
+   controlled specimens rather than real pages. */
+
+.cmsr .spec {
+  max-width: var(--page-max-width, 1088px);
+  margin: 0 auto;
+  padding: 3rem 1.5rem 0;
+}
+
+.cmsr .spec + .spec { padding-top: 2rem; }
+
+.cmsr .spec__label {
+  font-size: 0.8125rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 0.75rem;
+  font-weight: 600;
+  /* The panel's own chrome always reads in the plain voice, whatever
+     the toggles say, so the specimen is never confused with its label. */
+  font-variation-settings: 'FLAR' 0, 'VOLM' 0;
+}
+
+.cmsr .spec__note {
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  max-width: 64ch;
+  margin: 0.75rem 0 0;
+  font-variation-settings: 'FLAR' 0, 'VOLM' 0;
+}
+
+.cmsr .spec__row {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .cmsr .spec__row--pair { grid-template-columns: 1fr 1fr; }
+}
+
+.cmsr .spec__cell {
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 1rem;
+  min-width: 0;
+}
+
+.cmsr .spec__cellLabel {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 0 0 0.5rem;
+  font-variation-settings: 'FLAR' 0, 'VOLM' 0;
+}
+
+/* ── The signature (study §7, §10.5) ──────────────────────────────
+   Two failure modes, independent, and both live here.
+
+   THE PAIR IS MEASURABLY QUIETER. Bricolage has no `avar`, so 340 and
+   720 sit at normalized 0.233 and 0.867 of its 200-800 range: a span of
+   0.633. Commissioner's `wght` IS non-linear — confirmed in the binary,
+   a 10-point avar map on wght alone while slnt/FLAR/VOLM are all linear
+   — and after applying that map the same two numbers land at 0.217 and
+   0.660: a span of 0.443. The identical pair covers barely two thirds
+   as much of the available contrast. Solving for an equivalent span
+   puts the heavy end near 820, which is legal: the designer marks
+   ExtraBold and Black display-only, and the signature is >=40px by rule.
+
+   THE LIGHT HALF HAS NO HELP. Bricolage's light weights flare their
+   stems by design to hold visual weight against the ink traps.
+   Commissioner has no such compensation, and flare needs weight as well
+   as size to register — so the 340 half sits in the one cell of the
+   grid where voice cannot rescue it: light weight, large size, plain
+   voice, with flared display all around it.
+
+   Design-space position is a proxy for perceived weight, not a proof.
+   The number below is a starting point for the eye, not an answer. */
+
+.cmsr .sig {
+  --sig-loud: 720;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  font-weight: 340;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+
+.cmsr[data-sig='820'] .sig { --sig-loud: 820; }
+
+.cmsr .sig b {
+  font-weight: var(--sig-loud);
+}
+
+/* The three sizes the signature actually ships at. 40 is the rule's
+   floor, 72 is rung 5's ceiling, 88 is rung 6's. */
+.cmsr .sig--40 { font-size: 2.5rem; }
+.cmsr .sig--72 { font-size: 4.5rem; }
+.cmsr .sig--88 { font-size: 5.5rem; }
+
+/* Both specimen strings carry a lowercase `g` on purpose. The heavy
+   counters — the `g` above all — are the drawing weakness a specialist
+   named in this font, and the signature is used at 40px and up, which
+   is where a clumsy counter is most visible rather than least. Judging
+   it off a specimen without a `g` would miss the one thing worth
+   looking for. Moving the heavy half to 820 makes this worse, not
+   better, so the two toggles have to be read together. */
+
+/* ── Body-size comparison (study §10.3) ───────────────────────────
+   Bricolage on the left, Commissioner on the right, same copy, so the
+   x-height question is answered by comparison rather than by memory. */
+
+.cmsr .spec-body p {
+  font-size: 1.125rem;
+  line-height: 1.65;
+  max-width: 64ch;
+  color: var(--text-primary);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.cmsr .spec-body--bricolage {
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  /* Pinned to the plain voice so the left column is genuinely today's
+     production rendering and not Commissioner metrics in disguise. */
+  font-variation-settings: normal;
+}
+
+.cmsr .spec-body--commissioner p {
+  font-variation-settings: 'FLAR' var(--v-read-flar), 'VOLM' var(--v-read-volm);
+}
+
+/* ── Rung 0 specimen (study §10.4) ────────────────────────────────
+   Caption and eyebrow beside each other at the candidate sizes, which
+   is the only way to see that one value cannot serve both. */
+
+.cmsr .spec-r0 .spec__cell > * + * { margin-top: 0.75rem; }
+
+.cmsr .r0-caption {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  max-width: 56ch;
+  margin: 0;
+}
+.cmsr[data-r0='split'] .r0-caption,
+.cmsr[data-r0='split14'] .r0-caption { font-size: 0.9375rem; }
+
+.cmsr .r0-eyebrow {
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin: 0;
+}
+.cmsr[data-r0='split'] .r0-eyebrow   { font-size: 0.8125rem; }
+.cmsr[data-r0='split14'] .r0-eyebrow { font-size: 0.875rem; }
+
+/* ── Slant (study §7) ─────────────────────────────────────────────
+   Loaded, shown once, and not offered as an emphasis mechanism. The
+   oblique is a pure shear — contour and point counts are identical
+   between roman and italic for every letter tested, so `g` and `a` stay
+   double-storey where a humanist sans wants single-storey shapes. R9'
+   keeps `em` on weight: three of four axes vanish in the Arial-based
+   fallback, and weight is the only one that survives. The question this
+   specimen answers is narrower — whether slant earns a place anywhere
+   at all, in a standfirst or a pull quote. */
+
+.cmsr .spec-slnt-slanted { font-variation-settings: 'slnt' -8, 'FLAR' var(--v-read-flar), 'VOLM' var(--v-read-volm); }
+
+/* ================================================================
+   CONTROL BAR + PROBE
+   ================================================================ */
+
+.cmsr-controls {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-surface-elevated);
+  border-top: 1px solid var(--border-default);
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-variation-settings: normal;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+.cmsr-controls fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.cmsr-controls legend,
+.cmsr-controls .lg {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-right: 0.25rem;
+}
+
+.cmsr-controls button {
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1;
+  padding: 0.5rem 0.625rem;
+  min-height: 44px;
+  border: 1px solid var(--border-default);
+  border-radius: 0.375rem;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.cmsr-controls button[aria-pressed='true'] {
+  background: var(--text-primary);
+  color: var(--bg-canvas);
+  border-color: var(--text-primary);
+}
+
+/* Runtime axis probe — this page's local copy of assertion 8b, and the
+   reason it is not optional. Checking that the family loaded is no
+   longer sufficient, because a weight-only file would render a
+   perfectly competent plain grotesque with every voice missing and
+   nothing would throw. The probe measures a reference string at FLAR 0
+   against FLAR 100 and compares advance width; identical widths mean
+   the axis is not present. Hidden unless it fails. */
+.cmsr-probe {
+  display: none;
+  margin: 1rem 1.5rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.375rem;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+}
+.cmsr-probe[data-failed='true'] { display: block; }
+
+/* The fixed bar overlaps the end of the article on short viewports. */
+.cmsr { padding-bottom: 12rem; }
