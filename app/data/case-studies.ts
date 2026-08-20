@@ -62,7 +62,7 @@ export const caseStudies: CaseStudy[] = [
     slug: 'nuuly',
     problemFraming: 'How does a rented dress get back out in time?',
     projectName: 'Nuuly',
-    client: 'Nuuly',
+    client: 'URBN',
     headline: '[OUTCOME METRIC]',
     summary: '[1–2 sentence summary placeholder]',
     role: '[ROLE]',
