@@ -4,9 +4,16 @@ import { notFound } from 'next/navigation';
  * Sandbox subtree gate. These are scratch pages — a bento stress test, a type
  * specimen, a card experiment — and they were reaching the production
  * deployment. The repo is public, so app/sandbox/ shipping alongside the case
- * studies showed no separation between scratch work and finished work, and
- * /sandbox/type-bard was the single heaviest route on the site at 374 KB,
- * larger than either published case study.
+ * studies showed no separation between scratch work and finished work. The
+ * three sandbox routes prerender 506 KB of HTML that production was serving and
+ * nobody outside this repo was meant to read; /sandbox/type-bard is 374 KB of
+ * that on its own.
+ *
+ * An earlier version of this comment called type-bard "the single heaviest
+ * route on the site, larger than either published case study." That was false
+ * when it was written - FDT-E was already 398 KB - and it is now doubly false,
+ * with Nuuly at 475 KB putting type-bard third. Corrected 20 Aug 2026. The size
+ * argument holds; the superlative never did.
  *
  * PRODUCTION ONLY. Renders normally under `next dev` AND on Vercel preview
  * deployments, because reviewing a stress page from a phone via a preview link
