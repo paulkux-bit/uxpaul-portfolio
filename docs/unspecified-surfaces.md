@@ -20,7 +20,9 @@ and spacing, and the only one already shipping wrong values. **Illustration line
 weight** joined on 18 Aug 2026, the first to arrive from neither a system's §9
 nor a census, but from a rendering defect found in review. **Composite evidence
 grid** joined on 19 Aug 2026, the first to come from a surface the crop pipeline
-cannot produce at all.*
+cannot produce at all. **Bento theme block, outer boundary** joined on 19 Aug
+2026, the first found by swapping one component for another, which is what
+exposed three shipped components answering the same question three ways.*
 
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
