@@ -336,7 +336,9 @@ So the primary action never moves. Same corner, same place, on every screen that
   aspect={1.6}
 />
 
-**The hit area runs past the paint, out to the bezel.** The button you see keeps the same margin as everything else. The one you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot, and it can be hit without looking, which matters because the specialist is looking at a dress.
+**The hit area runs past the paint, out to the bezel.** The button you see keeps the same margin as everything else. The one you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot.
+
+It can be hit without looking, which matters because the specialist is looking at a dress.
 
 <BentoTheme>
   <BentoItem
@@ -372,25 +374,23 @@ Warehouse lighting is not one thing. It changes by bay, by hour, by season. So I
 
 Hardly anyone used it. They stayed on dim.
 
-{/* TODO(copy): Paul. Twelve new strings below, all placeholder. Three dim/bright
+{/* TODO(copy): Paul. Eight new strings below, all placeholder. Two dim/bright
     pairs rather than one, so the two modes read as a designed system instead of
-    a filter: the ground inverts, the accent token re-tunes rather than being
-    filtered, and the primary inverts while its position holds. Measured mean
-    luminance dim to bright: launcher 47 to 192, confirm 42 to 185, drawer 39 to
-    197. The launcher is deliberately the same screen as the gallery's feature
-    tile: a rhyme, not a duplication, because a reader who knows the screen sees
-    the mode difference harder. */}
+    a filter: the accent token re-tunes rather than being filtered, and the
+    primary inverts while its position holds. Measured mean luminance dim to
+    bright: confirm 42 to 185, drawer 39 to 197.
+
+    A THIRD PAIR WAS CUT ON PURPOSE, 19 Aug. Do not read "two pairs" as an
+    accident of what happened to be on disk, and do not add a third back.
+
+    This section is a confession: I built bright mode, they stayed on dim. Its
+    whole move is that I did a lot of work and it did not matter. Image count
+    argues against that. Six frames made it look like a feature showcase, which
+    is the exact opposite of what the prose is admitting, and the launcher row
+    was the weakest of the three anyway: its dim frame WAS the gallery's feature
+    tile, so it re-showed an image the reader passed a screen earlier. Two pairs
+    is the evidence the confession can carry without contradicting itself. */}
 <BentoTheme>
-  {/* Sources the GALLERY's own feature tile rather than a second copy of it. The dim
-      launcher shipped as its own file was byte-identical to apps-01-menu.png, so the
-      rhyme this pair depends on is now literally the same asset instead of a duplicate
-      that could silently diverge. */}
-  <BentoItem slot="wide" src="/case-studies/nuuly/apps/apps-01-menu.png"
-    alt="The app launcher in dim mode: six saturated circular tiles on a dark, mottled ground."
-    caption="Dim." gloss="The launcher, as the floor ran it." />
-  <BentoItem slot="wide" src="/case-studies/nuuly/mode-launcher-bright.png"
-    alt="The same launcher in bright mode: the ground goes pale and the six tiles re-tune to lighter fills."
-    caption="Bright." gloss="The same palette, re-tuned for a lit bay." />
   <BentoItem slot="wide" src="/case-studies/nuuly/mode-confirm-dim.png"
     alt="A registered garment in dim mode, with a yellow confirmation disc over the photo."
     caption="Dim." gloss="The accent disc at full yellow." />
