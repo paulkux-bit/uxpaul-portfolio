@@ -206,6 +206,22 @@ Five things to settle by eye, in this order:
 
 Merge once, after 3 passes. Not before.
 
+### Merge-time items
+
+Things that are correct on the branch as written and need one touch when it lands, by
+someone who can see both sides. Not defects, and not to be fixed early — this list exists
+because fixing them early is what causes the collision.
+
+- **The `.gitignore` previews block.** On `commissioner-preview` it reads *"Neither the
+  capture script nor `docs/previews/README.md` is on main yet; both arrive with
+  commissioner-preview."* That is true on both sides today and reads as past tense once the
+  branch lands. Reword it at merge, in the merge commit.
+
+  It is on this list rather than fixed because re-wording that exact block unilaterally, on
+  main during Phase 0 step 0, is what produced the `eab107a` rebase conflict — main's
+  reworded version colliding with its own ancestor. Doing it again from the branch side
+  would be the same mistake with a smaller blast radius. One edit, once, at merge.
+
 ---
 
 ## 3. The A+ moves, consolidated

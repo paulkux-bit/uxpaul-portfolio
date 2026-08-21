@@ -20,6 +20,18 @@ const LABEL = process.argv[2] ?? 'run';
 const VARIANT = process.argv[3] ?? 'none';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 
+/* FALLBACK=1 aborts the woff2 so the size-adjusted Arial fallback renders.
+   That is R9's control, and it is NOT the same question as the `nowdth`
+   variant: neutralising width compares Bricolage-at-88 with Bricolage-at-100,
+   whereas the fallback is a DIFFERENT FACE at size-adjust 105.43%, wider than
+   either. Scoping an R9 question against the width control is what let
+   "The data was there." be excluded from Phase 0a as already-short-enough
+   while it still reflowed at 1440.
+
+   An env var rather than a third positional: argv[2] and argv[3] are already
+   LABEL and VARIANT, and the two compose — a run can be fallback AND varied. */
+const FALLBACK = process.env.FALLBACK === '1';
+
 const ROUTES = [
   '/',
   '/about',
@@ -79,6 +91,17 @@ const VARIANTS = {
   /* Commissioner with only the 19px body, no voice and no rung-0 split. */
   body19: `
     .case-study-prose p { font-size: 1.1875rem; }
+  `,
+
+  /* WIDTH ONLY. `nowdth` above also sets font-variation-settings: normal,
+     which additionally strips the §6-sanctioned opsz pin on .milestone__date
+     and all four .text-qh-title axis sets — fine for the Commissioner
+     comparison it was written for, wrong for isolating the width axis, because
+     it conflates "no wdth" with "no optical pins" across 5 elements.
+     Matches NO_WIDTH in sweep-candidates.mjs. `nowdth` is left untouched so the
+     earlier Commissioner runs stay comparable. */
+  nowdthonly: `
+    *, *::before, *::after { font-stretch: 100% !important; }
   `,
 };
 
@@ -159,6 +182,12 @@ const collect = () => {
       fvs: cs.fontVariationSettings,
       boxWidth: Math.round(rect.width * 10) / 10,
       boxHeight: Math.round(rect.height * 10) / 10,
+      // Document-absolute, not viewport-relative: + scrollY so the value holds
+      // whether or not the page happens to be at scroll 0. This is what makes
+      // an above-the-fold tier possible — without it there is no way to tell an
+      // element a visitor sees from one 1200px down, and that tier is the only
+      // one a visitor actually feels.
+      boxTop: Math.round(rect.top + window.scrollY),
       lineCount: lines.length,
       lines: lines.map((l) => ({
         text: l.words.join(' '),
@@ -185,10 +214,21 @@ const run = async () => {
     });
     const page = await ctx.newPage();
 
+    // Registered BEFORE any goto, or the first route loads the real font.
+    if (FALLBACK) await page.route('**/*.woff2', (r) => r.abort());
+
     for (const route of ROUTES) {
       await page.goto(BASE + route, { waitUntil: 'networkidle' });
       if (VARIANTS[VARIANT]) await page.addStyleTag({ content: VARIANTS[VARIANT] });
-      await page.evaluate(() => document.fonts.ready);
+      // fonts.ready resolves on load FAILURE too, so this is correct under
+      // FALLBACK — but a stall here would hang a 15-route run silently rather
+      // than erroring, so it degrades to the settle below instead of blocking.
+      // measure-fallback-shift.mjs sidesteps this with a bare timeout; this
+      // keeps the guarantee when it is available and gives it up when it is not.
+      await Promise.race([
+        page.evaluate(() => document.fonts.ready),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
       // settle any entrance animation that could displace boxes
       await page.waitForTimeout(600);
       await page.evaluate(() => {
