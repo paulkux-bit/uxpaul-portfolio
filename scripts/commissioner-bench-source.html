@@ -1,0 +1,658 @@
+<title>Commissioner Bench</title>
+<style>
+  /* ── Fonts, embedded ────────────────────────────────────────────
+     Both faces are inlined as data URIs rather than linked. A linked
+     stylesheet that fails leaves you comparing Commissioner against
+     Arial and looking like it is Bricolage's fault — the exact silent
+     failure the type system's assertion 8b exists to catch. */
+  @font-face {
+    font-family: 'Commissioner Bench';
+    src: url(data:font/woff2;base64,__COMMISSIONER__) format('woff2-variations');
+    font-weight: 100 900;
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Bricolage Bench';
+    src: url(data:font/woff2;base64,__BRICOLAGE__) format('woff2-variations');
+    font-weight: 200 800;
+    font-stretch: 75% 100%;
+    font-display: block;
+  }
+
+  /* ── Palette — Paper & Low Light, lifted from globals.css ───────
+     Same three knobs the site uses: one chroma unit, three hues. Not
+     an approximation of the palette; the values themselves. */
+  :root {
+    --chroma-unit: 0.002;
+    --hue-ground: 70;
+    --hue-surface: 68;
+    --hue-text: 55;
+
+    --bg-canvas:           oklch(0.978 calc(var(--chroma-unit) * 8) calc(var(--hue-ground) + 6));
+    --bg-surface:          oklch(0.948 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+    --bg-elevated:         oklch(0.918 calc(var(--chroma-unit) * 13) var(--hue-surface));
+    --text-primary:        oklch(0.215 calc(var(--chroma-unit) * 9) var(--hue-text));
+    --text-secondary:      oklch(0.355 calc(var(--chroma-unit) * 10) var(--hue-text));
+    --text-muted:          oklch(0.485 calc(var(--chroma-unit) * 11) var(--hue-text));
+    --border-subtle:       oklch(0.905 calc(var(--chroma-unit) * 15) calc(var(--hue-ground) - 4));
+    --border-default:      oklch(0.855 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 10));
+    --border-strong:       oklch(0.760 calc(var(--chroma-unit) * 20) calc(var(--hue-ground) - 15));
+    --selection-bg:        oklch(0.860 0.100 65);
+    --selection-text:      oklch(0.180 0.020 50);
+    --focus-ring:          oklch(0.220 0.018 55 / 0.55);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --hue-ground: 55;
+      --hue-surface: 60;
+      --hue-text: 74;
+      --bg-canvas:      oklch(0.165 calc(var(--chroma-unit) * 3) var(--hue-ground));
+      --bg-surface:     oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+      --bg-elevated:    oklch(0.255 calc(var(--chroma-unit) * 13) var(--hue-surface));
+      --text-primary:   oklch(0.945 calc(var(--chroma-unit) * 6) calc(var(--hue-text) + 4));
+      --text-secondary: oklch(0.825 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 2));
+      --text-muted:     oklch(0.705 calc(var(--chroma-unit) * 8) calc(var(--hue-text) - 2));
+      --border-subtle:  oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+      --border-default: oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
+      --border-strong:  oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
+      --selection-bg:   oklch(0.380 0.090 55);
+      --selection-text: oklch(0.970 0.012 78);
+      --focus-ring:     oklch(0.945 0.012 78 / 0.55);
+    }
+  }
+
+  :root[data-theme='dark'] {
+    --hue-ground: 55;
+    --hue-surface: 60;
+    --hue-text: 74;
+    --bg-canvas:      oklch(0.165 calc(var(--chroma-unit) * 3) var(--hue-ground));
+    --bg-surface:     oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+    --bg-elevated:    oklch(0.255 calc(var(--chroma-unit) * 13) var(--hue-surface));
+    --text-primary:   oklch(0.945 calc(var(--chroma-unit) * 6) calc(var(--hue-text) + 4));
+    --text-secondary: oklch(0.825 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 2));
+    --text-muted:     oklch(0.705 calc(var(--chroma-unit) * 8) calc(var(--hue-text) - 2));
+    --border-subtle:  oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
+    --border-default: oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
+    --border-strong:  oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
+    --selection-bg:   oklch(0.380 0.090 55);
+    --selection-text: oklch(0.970 0.012 78);
+    --focus-ring:     oklch(0.945 0.012 78 / 0.55);
+  }
+
+  /* ── Frame vs subject ──────────────────────────────────────────
+     Every piece of page chrome is set in Bricolage; every specimen is
+     set in Commissioner. The frame is the incumbent, the content is
+     the candidate, and nothing in between is ambiguous. */
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: 'Bricolage Bench', system-ui, sans-serif;
+    font-optical-sizing: auto;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  ::selection { background: var(--selection-bg); color: var(--selection-text); }
+  :focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+  .wrap {
+    max-width: 68rem;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 15rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3.5rem;
+  }
+
+  /* ── Masthead ─────────────────────────────────────────────────── */
+  .masthead { display: flex; flex-direction: column; gap: 0.75rem; }
+
+  .masthead h1 {
+    margin: 0;
+    font-size: clamp(1.75rem, 5vw + 0.5rem, 2.75rem);
+    font-weight: 600;
+    font-stretch: 94%;
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+
+  .masthead p {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    font-stretch: 100%;
+  }
+
+  .probe {
+    display: none;
+    padding: 0.875rem 1rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 0.5rem;
+    background: var(--bg-elevated);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+  .probe[data-failed='true'] { display: block; }
+
+  /* ── Sections ─────────────────────────────────────────────────── */
+  section { display: flex; flex-direction: column; gap: 1.25rem; }
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.4vw + 0.6rem, 1.625rem);
+    font-weight: 600;
+    font-stretch: 94%;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+    max-width: 42ch;
+    text-wrap: balance;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .note {
+    margin: 0;
+    max-width: 66ch;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+    font-stretch: 100%;
+    text-wrap: pretty;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-stretch: 100%;
+  }
+
+  .pair { display: grid; gap: 1.5rem; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .pair { grid-template-columns: 1fr 1fr; } }
+
+  .cell {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 0.875rem;
+    min-width: 0;
+  }
+
+  .stack { display: flex; flex-direction: column; gap: 1.75rem; }
+
+  /* ── Specimens — all Commissioner ───────────────────────────────
+     The one mechanical rule the whole page obeys: an FVS string names
+     only FLAR, VOLM and slnt. Never wght. FVS inherits as a string and
+     overrides the matching property per axis, so a string carrying
+     'wght' pins every descendant and weight stops composing with
+     voice. Weight stays a standard font-weight property throughout. */
+  .spec {
+    font-family: 'Commissioner Bench', system-ui, sans-serif;
+    font-variation-settings: 'FLAR' var(--read-flar), 'VOLM' 0;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  :root {
+    --read-flar: 0;
+    --disp-flar: 40;  --disp-volm: 0;
+    --large-flar: 70; --large-volm: 40;
+    --sig-loud: 720;
+    --body-size: 1.125rem;
+    --cap-size: 0.875rem;
+    --eyebrow-size: 0.875rem;
+  }
+
+  [data-voice='off']   { --disp-flar: 0;   --disp-volm: 0;   --large-flar: 0;   --large-volm: 0; }
+  [data-voice='soft']  { --disp-flar: 40;  --disp-volm: 0;   --large-flar: 70;  --large-volm: 40; }
+  [data-voice='flare'] { --disp-flar: 100; --disp-volm: 0;   --large-flar: 100; --large-volm: 0; }
+  [data-voice='loud']  { --disp-flar: 100; --disp-volm: 0;   --large-flar: 100; --large-volm: 100; }
+
+  [data-read='0']  { --read-flar: 0; }
+  [data-read='10'] { --read-flar: 10; }
+  [data-read='20'] { --read-flar: 20; }
+
+  [data-body='18'] { --body-size: 1.125rem; }
+  [data-body='19'] { --body-size: 1.1875rem; }
+
+  [data-r0='unified'] { --cap-size: 0.875rem;  --eyebrow-size: 0.875rem; }
+  [data-r0='split']   { --cap-size: 0.9375rem; --eyebrow-size: 0.8125rem; }
+  [data-r0='split14'] { --cap-size: 0.9375rem; --eyebrow-size: 0.875rem; }
+
+  [data-sig='720'] { --sig-loud: 720; }
+  [data-sig='820'] { --sig-loud: 820; }
+
+  /* Face A/B. Bricolage keeps its own width band so the comparison is
+     against production, not against a flattened reconstruction. */
+  [data-face='bricolage'] .spec {
+    font-family: 'Bricolage Bench', system-ui, sans-serif;
+    font-variation-settings: normal;
+  }
+  [data-face='bricolage'] .spec-display { font-stretch: 94%; }
+  [data-face='bricolage'] .spec-large   { font-stretch: 88%; }
+
+  /* The signature */
+  .sig {
+    font-weight: 340;
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .sig b { font-weight: var(--sig-loud); }
+  .sig-40 { font-size: clamp(1.75rem, 7vw, 2.5rem); }
+  .sig-72 { font-size: clamp(2.5rem, 11vw, 4.5rem); }
+  .sig-88 { font-size: clamp(3rem, 13.5vw, 5.5rem); }
+
+  /* Display rungs */
+  .spec-display {
+    font-variation-settings: 'FLAR' var(--disp-flar), 'VOLM' var(--disp-volm);
+    font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
+    font-weight: 600;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    max-width: 22ch;
+    text-wrap: balance;
+  }
+
+  .spec-large {
+    font-variation-settings: 'FLAR' var(--large-flar), 'VOLM' var(--large-volm);
+    font-size: clamp(2.5rem, 4.267vw + 1.353rem, 4.5rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+  }
+
+  /* Reading rungs */
+  .spec-body {
+    font-size: var(--body-size);
+    line-height: 1.65;
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+  .spec-body strong { font-weight: 600; }
+
+  .spec-caption {
+    font-size: var(--cap-size);
+    line-height: 1.5;
+    color: var(--text-muted);
+    max-width: 56ch;
+  }
+
+  .spec-eyebrow {
+    font-size: var(--eyebrow-size);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  .spec-slant { font-variation-settings: 'slnt' -8, 'FLAR' var(--read-flar), 'VOLM' 0; }
+
+  /* Fixed comparison column — always Bricolage, never toggled, so
+     there is a constant in the experiment. */
+  .fixed-bric {
+    font-family: 'Bricolage Bench', system-ui, sans-serif;
+    font-variation-settings: normal;
+    font-stretch: 100%;
+    font-size: 1.125rem;
+    line-height: 1.65;
+    max-width: 64ch;
+    color: var(--text-primary);
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .fixed-bric strong { font-weight: 600; }
+
+  /* ── Controls ─────────────────────────────────────────────────── */
+  .controls {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 20;
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border-default);
+    padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    max-height: 42vh;
+    overflow-y: auto;
+  }
+
+  .group { display: flex; align-items: center; gap: 0.375rem; flex-wrap: wrap; }
+
+  .group > .lg {
+    font-size: 0.6875rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-right: 0.125rem;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1;
+    min-height: 40px;
+    padding: 0.5rem 0.6875rem;
+    border: 1px solid var(--border-default);
+    border-radius: 0.375rem;
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  button[aria-pressed='true'] {
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    color: var(--bg-canvas);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    button { transition: background-color 120ms ease, color 120ms ease, border-color 120ms ease; }
+  }
+</style>
+
+<div class="wrap" id="root" data-face="commissioner" data-voice="soft" data-read="0" data-body="18" data-r0="unified" data-sig="720">
+
+  <header class="masthead">
+    <h1>Commissioner, judged against the rungs it would have to hold</h1>
+    <p>
+      The feasibility study answered everything the binaries can answer: the axes, the non-linear
+      weight map, the metrics, the payload. What is left needs eyes. Six controls at the bottom of
+      the screen; real BARD copy throughout; both themes. Nothing here is a decision.
+    </p>
+    <div class="probe" id="probe"></div>
+  </header>
+
+  <section>
+    <h2>The signature has two failure modes and they are independent</h2>
+    <div class="stack">
+      <div class="cell">
+        <span class="tag">40px, the rule floor</span>
+        <p class="spec sig sig-40">The engine <b>argues</b> with the shape of the thing</p>
+      </div>
+      <div class="cell">
+        <span class="tag">72px, rung 5 ceiling</span>
+        <p class="spec sig sig-72">The engine <b>argues</b> with the shape of the thing</p>
+      </div>
+      <div class="cell">
+        <span class="tag">88px, rung 6 ceiling</span>
+        <p class="spec sig sig-88">The engine <b>argues</b> with the shape of the thing</p>
+      </div>
+    </div>
+    <p class="note">
+      The light half has no help. Bricolage flares its light stems by design to hold visual weight
+      against the ink traps; Commissioner has no such compensation, and flare needs weight as well
+      as size to register, so 340 sits in the one cell of the grid where voice cannot rescue it.
+      The heavy half has a documented drawing weakness in exactly this range, which is why there is
+      a lowercase <em>g</em> in the string. Switch the signature to 820: it restores the contrast
+      span the pair loses to the non-linear weight axis, and makes the counters worse while doing it.
+    </p>
+  </section>
+
+  <section>
+    <h2>Body size, against a Bricolage column that never moves</h2>
+    <div class="pair">
+      <div class="cell">
+        <span class="tag">Bricolage, 18px, production today</span>
+        <p class="fixed-bric">
+          <strong>Boating accident cases are rising</strong>, and each one becomes a federal record,
+          filed against a statutory deadline. This isn&rsquo;t just paperwork. Any case could end up
+          as evidence. The old system made required data easy to skip, so cases went out breaking
+          federal compliance rules.
+        </p>
+      </div>
+      <div class="cell">
+        <span class="tag">Commissioner, at the toggled size</span>
+        <p class="spec spec-body">
+          <strong>Boating accident cases are rising</strong>, and each one becomes a federal record,
+          filed against a statutory deadline. This isn&rsquo;t just paperwork. Any case could end up
+          as evidence. The old system made required data easy to skip, so cases went out breaking
+          federal compliance rules.
+        </p>
+      </div>
+    </div>
+    <p class="note">
+      Matching x-height puts body at 18.76px, which rounds to 19. That is arithmetic, not a ruling.
+      Cap-height moves the other way, roughly 8% larger, so matching lowercase makes capitals
+      bigger still. Matching x-height, matching cap-height, and re-judging from render are three
+      defensible answers, and this is the comparison that picks between them.
+    </p>
+  </section>
+
+  <section>
+    <h2>Rung 0 is where one value stops serving two roles</h2>
+    <div class="pair">
+      <div class="cell">
+        <span class="tag">Caption, lowercase</span>
+        <p class="spec spec-caption">
+          No case rose to the top. Every case is just another row; the one closest to breaching the
+          clock looks like all the others.
+        </p>
+      </div>
+      <div class="cell">
+        <span class="tag">Eyebrow, all caps</span>
+        <p class="spec spec-eyebrow">What it took</p>
+        <p class="spec spec-caption">
+          The same rung, set in capitals. Commissioner&rsquo;s caps run about 8% larger relative to
+          em, so the size that rescues the caption inflates this one.
+        </p>
+      </div>
+    </div>
+    <p class="note">
+      If the split reads as correct, rung 0 stops being one rung and the 14px floor becomes a
+      lowercase rule with a stated caps exception. That is a ruling change, not a value change, and
+      it is the cleanest case of the typeface forcing one.
+    </p>
+  </section>
+
+  <section>
+    <h2>Can flare do what width used to do</h2>
+    <div class="stack">
+      <div class="cell">
+        <span class="tag">Rungs 5&ndash;6: case-study hero, arrival crescendo</span>
+        <p class="spec spec-large">I helped rebuild the system fifty-six jurisdictions report into.</p>
+      </div>
+      <div class="cell">
+        <span class="tag">Rung 4: section heading</span>
+        <p class="spec spec-display">How do you unify fifty-six jurisdictions without changing one?</p>
+      </div>
+      <div class="cell">
+        <span class="tag">Rung 4: a second heading, for co-visibility</span>
+        <p class="spec spec-display">The form bends. The record underneath does not.</p>
+      </div>
+    </div>
+    <p class="note">
+      Flare and Loud are the designer&rsquo;s own two named locations. The font&rsquo;s STAT table
+      names exactly these, both at the axis extremes, and all eighteen named instances sit at flare
+      zero. The intermediate setting is honest rather than invented: flare and volume are linear in
+      the font&rsquo;s <em>avar</em> table, so 40 really is the visual midpoint between drawn
+      masters. Weight is the axis that is not linear, which is why the signature needs re-numbering
+      and this does not.
+    </p>
+  </section>
+
+  <section>
+    <h2>Whether prose keeps family character, or reads as a second typeface</h2>
+    <p class="spec spec-body">
+      Fifty-six jurisdictions filed the same report and none of them agreed on what a boating
+      accident was. The data was there. The system couldn&rsquo;t speak it. Reading a paragraph at
+      length is the only test that matters for a body face, because the eye forgives a specimen and
+      does not forgive a page. Move the reading voice off zero and watch whether this warms toward
+      the display rungs or starts to look noisy at 18px.
+    </p>
+    <p class="note">
+      Zero is the safe default. The argument for ten or twenty is that flare is still perceptible in
+      body text, and that a small amount keeps rungs 0&ndash;2 in the same family as rungs 5&ndash;6
+      rather than looking like a different typeface wearing the same name.
+    </p>
+  </section>
+
+  <section>
+    <h2>Slant, shown once and not proposed</h2>
+    <div class="pair">
+      <div class="cell">
+        <span class="tag">Upright</span>
+        <p class="spec spec-body">a single gauge, and a good agreement</p>
+      </div>
+      <div class="cell">
+        <span class="tag">slnt &minus;8</span>
+        <p class="spec spec-body spec-slant">a single gauge, and a good agreement</p>
+      </div>
+    </div>
+    <p class="note">
+      A pure shear. Contour and point counts are identical between the roman and the oblique for
+      every letter tested, so <em>g</em> and <em>a</em> stay double-storey where a humanist sans
+      wants single-storey shapes. Emphasis stays on weight regardless: three of four axes vanish in
+      the Arial fallback and weight is the only survivor. The open question is narrower: whether
+      slant earns a place in a standfirst or a pull quote, not whether it solves italics.
+    </p>
+  </section>
+
+  <section>
+    <h2>What this page cannot tell you</h2>
+    <p class="note">
+      It renders one case study&rsquo;s copy, so it cannot say what five shipped studies look like
+      when two of them are still unwritten. The signature specimen is a controlled proxy for the
+      home hero and the about opener, not those pages. And a specimen bench flatters every typeface
+      a little, because nothing here has to survive a scroll. Read a good result as
+      <em>worth continuing</em>, never as <em>decided</em>.
+    </p>
+  </section>
+
+</div>
+
+<div class="controls" id="controls">
+  <div class="group" data-key="face">
+    <span class="lg">face</span>
+    <button type="button" data-val="commissioner" aria-pressed="true">Commissioner</button>
+    <button type="button" data-val="bricolage" aria-pressed="false">Bricolage</button>
+  </div>
+  <div class="group" data-key="voice">
+    <span class="lg">display voice</span>
+    <button type="button" data-val="off" aria-pressed="false">off</button>
+    <button type="button" data-val="soft" aria-pressed="true">40 / 70</button>
+    <button type="button" data-val="flare" aria-pressed="false">Flare</button>
+    <button type="button" data-val="loud" aria-pressed="false">Loud</button>
+  </div>
+  <div class="group" data-key="read">
+    <span class="lg">reading voice</span>
+    <button type="button" data-val="0" aria-pressed="true">0</button>
+    <button type="button" data-val="10" aria-pressed="false">10</button>
+    <button type="button" data-val="20" aria-pressed="false">20</button>
+  </div>
+  <div class="group" data-key="body">
+    <span class="lg">body</span>
+    <button type="button" data-val="18" aria-pressed="true">18px</button>
+    <button type="button" data-val="19" aria-pressed="false">19px</button>
+  </div>
+  <div class="group" data-key="r0">
+    <span class="lg">rung 0</span>
+    <button type="button" data-val="unified" aria-pressed="true">14 / 14</button>
+    <button type="button" data-val="split" aria-pressed="false">15 / 13</button>
+    <button type="button" data-val="split14" aria-pressed="false">15 / 14</button>
+  </div>
+  <div class="group" data-key="sig">
+    <span class="lg">signature</span>
+    <button type="button" data-val="720" aria-pressed="true">340 / 720</button>
+    <button type="button" data-val="820" aria-pressed="false">340 / 820</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('root');
+    var bar = document.getElementById('controls');
+
+    bar.addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-val]');
+      if (!b) return;
+      var g = b.closest('.group[data-key]');
+      if (!g) return;
+      Array.prototype.forEach.call(g.querySelectorAll('button[data-val]'), function (o) {
+        o.setAttribute('aria-pressed', String(o === b));
+      });
+      root.setAttribute('data-' + g.getAttribute('data-key'), b.getAttribute('data-val'));
+      try { localStorage.setItem('cmsr-' + g.getAttribute('data-key'), b.getAttribute('data-val')); } catch (err) {}
+    });
+
+    /* Restore the last set of toggles, so re-opening the page on another
+       device does not start the judgment over. Guarded both ways: a
+       private window throws on read, and a stored value that no longer
+       matches a button is ignored rather than applied blind. */
+    try {
+      Array.prototype.forEach.call(bar.querySelectorAll('.group[data-key]'), function (g) {
+        var key = g.getAttribute('data-key');
+        var val = localStorage.getItem('cmsr-' + key);
+        if (!val) return;
+        var target = g.querySelector('button[data-val="' + val + '"]');
+        if (!target) return;
+        Array.prototype.forEach.call(g.querySelectorAll('button[data-val]'), function (o) {
+          o.setAttribute('aria-pressed', String(o === target));
+        });
+        root.setAttribute('data-' + key, val);
+      });
+    } catch (err) {}
+
+    /* The type system's assertion 8b, ported, with two corrections that
+       came out of running it rather than reasoning about it.
+
+       THE STRING MATTERS BY 7x. Flare deforms terminals, so the probe
+       string must be full of them. Measured here in Chromium at FLAR 0
+       against 100: 'HAMBURGEFONTSIV' moves 0.20%, because it is
+       caps-heavy and caps carry few terminals; a run of lowercase n
+       moves 1.48%. The pangram is the intuitive choice and the wrong
+       one: at 64px it gives a 1.3px delta, close enough to noise that a
+       half-pixel threshold is luck rather than a test.
+
+       VOLM CANNOT BE PROBED THIS WAY AT ALL. Volume changes serif
+       shape, not advance width. The delta between VOLM 0 and VOLM 100
+       is exactly 0.00px at every size and string tried, so a width
+       check would pass a file carrying FLAR and no VOLM and report
+       success. Stated rather than solved: VOLM is inert without FLAR
+       and both arrive in the same file from the same axes list, so
+       FLAR rendering is strong evidence the multi-axis build was
+       served. Evidence, not proof. */
+    function widthAt(fvs) {
+      var s = document.createElement('span');
+      s.textContent = 'nnnnnnnnnnnnnnnn';
+      s.setAttribute('aria-hidden', 'true');
+      s.style.cssText =
+        'position:absolute;left:-9999px;top:0;white-space:nowrap;font-size:200px;font-weight:400;' +
+        "font-family:'Commissioner Bench';font-variation-settings:" + fvs;
+      document.body.appendChild(s);
+      var w = s.getBoundingClientRect().width;
+      s.remove();
+      return w;
+    }
+
+    function probe() {
+      var flat = widthAt("'FLAR' 0");
+      var flared = widthAt("'FLAR' 100");
+      if (Math.abs(flat - flared) > 2) return;
+      var el = document.getElementById('probe');
+      el.setAttribute('data-failed', 'true');
+      el.textContent =
+        'The flare axis is not rendering (' + flat.toFixed(1) + 'px against ' +
+        flared.toFixed(1) + 'px at flare 0 and 100, 200px type). Every voice control on this ' +
+        'page is inert in this state. Judge nothing until it clears.';
+    }
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(probe).catch(function () {});
+    } else {
+      setTimeout(probe, 1500);
+    }
+  })();
+</script>

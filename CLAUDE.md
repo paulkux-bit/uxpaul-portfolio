@@ -416,6 +416,14 @@ wins on every one. Do not implement from it.
 `docs/type-system-v3-migration-plan.md` records how the adoption was sequenced
 (C0–C8) and what each lint check maps to.
 
+**The Commissioner spike** is exploratory and governs nothing.
+`docs/commissioner-feasibility.md` is the complexity study, preserved as
+written; `docs/commissioner-spike-findings.md` carries the corrections that came
+out of building against it and is the one to read before implementing anything
+from the study's §5 or §8. Two sandbox routes and two preview pages are the
+instruments — see `docs/previews/README.md`, which also explains why they live
+in `docs/` rather than `public/`. **No locked spec defers to any of it.**
+
 ### Swap protocol
 If Bricolage is ever replaced (e.g. with a purchased Stornoway or 
 Tofino license), only two surfaces change:
