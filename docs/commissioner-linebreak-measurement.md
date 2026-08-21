@@ -378,3 +378,32 @@ one. That is worth writing down whether or not the font changes.
 - **The tracking retune at rungs 4–6.** Not touched here. `opsz` tightened fit
   as size grew and there is no replacement; line breaks were measured at the
   current tracking, so every display number above shifts if tracking changes.
+
+---
+
+## Addendum, same day — the hero sentences already reflow, in Bricolage
+
+Finding 1 above says the hero sentences depend on the 88% width band for their
+one-line fit. R9 of the locked type system says the system must degrade when
+the axes are absent, because the `next/font` fallback is Arial-based with no
+`wdth` and no `opsz`, and that *"anything that matters must also be carried by
+size, weight, or colour."*
+
+`scripts/measure-fallback-shift.mjs` aborts the woff2 request and reads what
+the size-adjusted fallback renders, against the loaded font, on the shipped
+Bricolage build:
+
+| Viewport | Sentences measured | Reflow between fallback and loaded |
+|---|---|---|
+| 768px | 6 | **4** |
+| 1440px | 6 | **6** |
+
+At 1440px **every hero sentence on every case study changes line count** during
+the swap, today. `display: swap` means that window is real on any cold load,
+and the hero block is the LCP element on the three most important pages.
+
+So the width-band dependency is not a Commissioner cost. It is a **live R9
+violation that the Commissioner measurement exposed**, and the fix is owed
+whether or not the typeface changes. Under Commissioner the fallback and the
+loaded font agree, because neither has a width axis — which makes the swap a
+*fix* for this surface rather than a regression.
