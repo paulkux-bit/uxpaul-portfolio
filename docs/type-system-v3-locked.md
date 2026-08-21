@@ -12,7 +12,7 @@ Decided 5 Aug 2026 from rendered options. This document supersedes v1 and v2. Wh
 | 2 | Width vocabulary | **Three bands, assigned by rung.** 100 reading, 94 display, 88 large display |
 | 3 | The signature | **The 340/720 weight contrast, three reserved uses sitewide** |
 | 4 | Step ratio floor | **1.15**, numbered-headline floor raised to 26px |
-| 5 | Milestone date | **600 at width 88**, carried in the FVS string |
+| 5 | Milestone date | **600 at width 88**, on the standard properties. One axis, exactly one place |
 | 6 | Case-study close | **`## Role` stays a heading** |
 | 7 | Also Shipped and takes wall | **Named exception surfaces** with their own written rules |
 | 8 | Enforcement | **`npm run lint:type`** |
@@ -183,6 +183,8 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 
 **R8** `font-variation-settings` overrides the high-level properties **per axis, regardless of source order**. An axis not named in the string still obeys its standard property. FVS inherits as a string, so any descendant of an FVS rule is pinned and cannot be re-weighted — prefer standard properties for anything with children. Delete the "FVS LAST, do not reorder" comments; they encode a superstition.
 
+**R8 states the invariant: one axis, exactly one place.** Naming an axis in the string *and* setting its standard property is not belt-and-braces, it is a dead token — the string wins, so the property reaches no pixel and any variable feeding it can be changed without effect. The string carries only what no standard property can express, which today means `opsz` and nothing else: `font-optical-sizing` is `auto | none` and cannot pin a value, which is the whole reason §6 sanctions the `.milestone__date` pin. `wght` belongs on `font-weight` and `wdth` on `font-stretch`. The one place a width legitimately stays inside a string is a §6 exception surface that already needs the string for `opsz` and whose widths are deliberately outside the three bands — `.text-qh-title`, where moving them to `font-stretch` would misreport them to check 1 as ordinary type. Amended 21 Aug 2026, when ruling 5's own selector was found carrying both `wght` and `wdth` twice over.
+
 **R9** The system must degrade when the axes are absent. The `next/font` fallback is Arial-based with no `wdth` and no `opsz`, so during the swap period and permanently on a blocked CDN every width distinction collapses. Anything that matters must also be carried by size, weight, or colour. This is a second reason the signature is a weight contrast.
 
 **R10** No compression at reading size. The 12pt master exists to open counters; compression closes them.
@@ -199,7 +201,7 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 | `.case-study-prose h2` | 96 | **94** | Rung 4 display band |
 | `.friction-beat__headline` | 94 | 94 | No change |
 | `.resolution-block__headline` | 94 | 94 | No change |
-| `.milestone__date` | 520 / 100 | **600 / 88** | Ruling 5, carried in the FVS string |
+| `.milestone__date` | 520 / 100 | **600 / 88** | Ruling 5, on `font-weight` and `font-stretch` |
 | `.bento-theme__lead` | 92 | **100** | 18px is a reading rung |
 | `.text-cover` | 90 | **94** | Rung 3/4 display band. Card covers loosen by 4% |
 | `.text-statement` (home) | 96 | **88** | Large display band |

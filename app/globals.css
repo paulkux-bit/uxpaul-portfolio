@@ -646,13 +646,23 @@
    typographically-curated SET in one family — width (84-100), weight (500-650),
    and optical size (14-48, forced for effect) all vary. Driven through
    font-variation-settings (typography doc §7's sanctioned manual-axis case —
-   per-module multi-axis variation), which guarantees all three axes render and
-   is DevTools-inspectable. Size stays uniform so the rows align. */
+   per-module multi-axis variation), which guarantees the axes render together
+   and is DevTools-inspectable. Size stays uniform so the rows align.
+
+   One axis, exactly one place (v3 ruling 5). `wght` moved out to font-weight:
+   inside the string it pinned the weight of every descendant, because FVS
+   inherits as a string and overrides the property per axis (R8). `wdth` STAYS
+   in the string, and that is the same rule rather than an exception to it —
+   `opsz` forces a string to exist here anyway, and this is a §6 exception
+   surface whose per-brand widths (84-100) are deliberately outside the three
+   bands. Moving them onto font-stretch would present them to lint:type check 1
+   as ordinary type that had broken the band rule. */
 @utility text-qh-title {
   font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
-  font-variation-settings: 'opsz' var(--qh-opsz, 28), 'wght' var(--qh-wght, 550), 'wdth' var(--qh-wdth, 100);
+  font-weight: var(--qh-wght, 550);
+  font-variation-settings: 'opsz' var(--qh-opsz, 28), 'wdth' var(--qh-wdth, 100);
 }
 
 /* Resolutions numbered-block headline (uscg-bard "How you file/see/count"). Type only —
@@ -1784,18 +1794,23 @@
      at 52-88px that is a real 44-unit push and the one place the drawn display
      cut actually shows.
 
-     v3 ruling 5: 520/100 -> 600/88. 520 was an off-ladder weight nobody chose;
-     600 is --wght-display. 88 is the large-display band, which rung 6 sits in.
-     Both have to be carried in the FVS string as well as the standard
-     properties: per R8, font-variation-settings overrides the high-level
-     property PER AXIS, REGARDLESS OF SOURCE ORDER, so leaving 'wght' 520 in
-     the string would have made the font-weight change a no-op. The old note
-     here claimed the FVS had to come LAST for opsz to win; R8 retires that as
-     superstition. Order does not matter, the axis list does. */
-  font-weight: 600;
+     v3 ruling 5: 600 at width 88. THE INVARIANT IS ONE AXIS, EXACTLY ONE PLACE.
+     The FVS string carries only what no standard property can express: `wght`
+     has font-weight, `wdth` has font-stretch, and `opsz` has font-optical-sizing
+     — but that property is `auto | none` only and cannot say "pin at 96", which
+     is precisely why §6 sanctions this one pin and nothing else.
+
+     This rule used to name all three axes in the string AND set two of them as
+     properties. Per R8 the string wins per axis regardless of source order, so
+     the two properties reached no pixel: the tokens were decorative, and
+     changing --wdth-large would have left this surface silently at 88. The old
+     note here reasoned correctly that a stale 'wght' 520 in the string had made
+     the font-weight change a no-op, then resolved it by duplicating the value
+     rather than by removing it. Removing it is the fix. */
+  font-weight: var(--wght-display);
   font-stretch: calc(var(--wdth-large) * 1%);
   font-optical-sizing: none;
-  font-variation-settings: 'opsz' 96, 'wdth' 88, 'wght' 600;
+  font-variation-settings: 'opsz' 96;
 }
 .milestone__sub {
   margin: var(--spacing-s) 0 0;
