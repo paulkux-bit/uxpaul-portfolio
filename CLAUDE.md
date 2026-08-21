@@ -76,7 +76,26 @@ Read it before making design decisions. Defer to it on every judgment call.
 ## Project
 Personal portfolio site for Paul Kali (Senior Product Designer with 8 years 
 of leadership experience). Goal: land a senior IC, design lead, or director 
-role by Aug 31, 2026.
+role.
+
+### Schedule — there is no hard deadline
+
+Revised 21 Aug 2026, and the ruling is the absence of a gate, not a new date.
+
+- **Applications are open now**, against the site as it stands.
+- **Target for a complete site: 30 September 2026.**
+
+That target is Paul's own, not a gate. Nothing is measured against it, and a
+slip costs a later completion rather than a missed window. The single date of
+31 August 2026 was retired on 7 Aug; do not let the successor inherit its
+enforcement framing, and do not reintroduce "out of scope for v1 because of the
+deadline" as an argument. Scope arguments have to stand on their own merits.
+
+**What the absence of a gate does NOT mean is that sequence is free.** It
+reorders work rather than relaxing it: **anything a recruiter sees this week
+outranks anything that improves the finished artifact.** That is why the live
+hero-reflow defect outranks a type-system migration, and it is the tie-breaker
+whenever two pieces of work look equally worthy.
 
 ## Stack (don't suggest changing)
 - Next.js 16 (App Router) with Turbopack dev
