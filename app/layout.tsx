@@ -1,4 +1,4 @@
-import { bricolage } from './fonts';
+import { commissioner } from './fonts';
 import { ThemeProvider } from '@/components/theme-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={bricolage.variable} suppressHydrationWarning>
+    <html lang="en" className={commissioner.variable} suppressHydrationWarning>
       <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {/* Renders nothing; asserts at runtime that the variable font and its

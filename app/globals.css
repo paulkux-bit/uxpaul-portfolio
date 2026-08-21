@@ -14,7 +14,7 @@
    ============================================================ */
 
 @theme {
-  --font-sans: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans: var(--font-commissioner), system-ui, sans-serif;
 
   /* Breakpoints — wired to the project's documented design targets (CLAUDE.md).
      Without these, Tailwind's defaults were active (sm 640 / xl 1280 / 2xl 1536).

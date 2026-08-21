@@ -23,6 +23,7 @@
 // inside comments, and a font-size clamp expression embedded in a calc() on
 // margin-block-start. Regex gets several of those wrong.
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import postcss from 'postcss';
 
@@ -435,11 +436,20 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
   add(7, 'font-variation-settings only where allowlisted (§6)', f);
 }
 
-// 8a — STATIC: the variable font is configured with all three axes.
-// next/font/google ships ONLY the default wght axis unless `axes` names the
-// others. Without it every font-stretch and optical-sizing rule in the system
-// is silently inert in production — a bug this repo actually shipped once.
-// Green today; kept as a regression guard.
+// 8a — STATIC: the self-hosted font is wired to a file that exists.
+//
+// This used to assert that next/font/google's `axes` array named opsz and wdth,
+// because omitting it served a weight-only file and made every font-stretch and
+// optical-sizing rule silently inert — a bug this repo actually shipped. Under
+// next/font/local there IS no axes array: the axes come from the binary. So the
+// failure mode moved rather than went away, and the guard moves with it.
+//
+// THREE LAYERS, AND NONE OF THEM CLAIMS THE OTHERS' COVERAGE:
+//   scripts/build-commissioner-font.sh  asserts the BINARY's axes and ranges
+//   this check (8a)                     asserts the WIRING is intact
+//   components/font-load-probe.tsx (8b) asserts FLAR actually RENDERS
+// Checking the binary's axes from here would mean parsing woff2 in a CSS linter;
+// the build script already does it at the point the bytes are produced.
 {
   const f = [];
   let src = '';
@@ -449,18 +459,43 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
     f.push({ selector: FONTS_FILE, line: 0, detail: 'file not found' });
   }
   if (src) {
-    const m = /axes\s*:\s*\[([^\]]*)\]/.exec(src);
-    const declared = m ? [...m[1].matchAll(/['"](\w+)['"]/g)].map((x) => x[1]) : [];
-    for (const axis of ['opsz', 'wdth']) {
-      if (!declared.includes(axis))
-        f.push({
-          selector: FONTS_FILE,
-          line: 0,
-          detail: `axes: [...] does not load '${axis}' — every ${axis === 'wdth' ? 'font-stretch' : 'font-optical-sizing'} rule is inert`,
-        });
+    if (!/next\/font\/local/.test(src))
+      f.push({ selector: FONTS_FILE, line: 0, detail: 'does not use next/font/local' });
+
+    // src path must RESOLVE. This is the one member of the family that fails
+    // closed at build; asserting it here names it rather than leaving it to a
+    // stack trace.
+    const srcM = /src\s*:\s*['"]([^'"]+)['"]/.exec(src);
+    if (!srcM) f.push({ selector: FONTS_FILE, line: 0, detail: 'no src: path found' });
+    else {
+      const rel = srcM[1].replace(/^\.\//, '');
+      if (!existsSync(join('app', rel)))
+        f.push({ selector: FONTS_FILE, line: 0, detail: `src points at app/${rel}, which does not exist` });
     }
+
+    // The variable name must match what globals.css consumes. A mismatch FAILS
+    // OPEN: the font simply never applies and the page renders in fallback.
+    const varM = /variable\s*:\s*['"]([^'"]+)['"]/.exec(src);
+    const varName = varM ? varM[1] : null;
+    if (!varName) f.push({ selector: FONTS_FILE, line: 0, detail: 'no variable: name found' });
+    else if (!css.includes(`var(${varName})`))
+      f.push({
+        selector: FONTS_FILE,
+        line: 0,
+        detail: `variable is ${varName} but ${CSS_FILE} never reads var(${varName}) — the font would silently not apply`,
+      });
+
+    // Declared range must match the instanced binary, so the browser and the
+    // file give the same answer to a request above 720.
+    const wM = /weight\s*:\s*['"]([^'"]+)['"]/.exec(src);
+    if (!wM || wM[1].trim() !== '340 720')
+      f.push({
+        selector: FONTS_FILE,
+        line: 0,
+        detail: `weight is ${wM ? `'${wM[1]}'` : 'unset'}, expected '340 720' to match the instanced binary`,
+      });
   }
-  add('8a', 'app/fonts.ts loads the opsz + wdth axes (§2)', f);
+  add('8a', 'app/fonts.ts is wired to an existing local font file (§2)', f);
 }
 
 // 8b — RUNTIME: a client-side probe that the variable font actually loaded.
