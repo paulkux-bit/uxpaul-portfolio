@@ -407,3 +407,24 @@ violation that the Commissioner measurement exposed**, and the fix is owed
 whether or not the typeface changes. Under Commissioner the fallback and the
 loaded font agree, because neither has a width axis — which makes the swap a
 *fix* for this surface rather than a regression.
+
+---
+
+## Addendum, 21 Aug 2026 — the three clauses were rewritten
+
+Phase 0a ("Rewrite the three hero clauses to hold one line at width 100") shortened the
+three sentences Finding 1's table names as losing their band. **The strings quoted
+throughout this document are the ones that were measured, and they are left as they
+were** — editing them to match the new copy would destroy the evidence the change rests
+on. Read them as a record of August 2026, not as current copy.
+
+The clauses now shipping, and the single-line band each holds at width 100:
+
+| Study | Was | Now | Band at wdth 100 |
+|---|---|---|---|
+| BARD | "The system couldn't speak it." | "The system never spoke." | 544–928px |
+| FDT-E | "An anomaly isn't intelligence" | "An anomaly isn't intel" | 432–1008px |
+| Nuuly | "A building, a business model," | "A building, a promise," | 432–1008px |
+
+All three now hold a band at least as wide as the one they held at 88, so the mid-viewport
+single-line moment Finding 1 describes as disappearing is preserved rather than lost.

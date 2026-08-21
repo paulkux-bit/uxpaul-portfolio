@@ -23,7 +23,7 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
       <span
         class="hero-block__sentence hero-block__sentence--anxious"
       >
-        The system couldn't speak it.
+        The system never spoke.
       </span>
     </h1>
     <p

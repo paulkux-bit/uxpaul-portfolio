@@ -29,13 +29,13 @@ describe('<HeroBlock />', () => {
     render(
       <HeroBlock
         eyebrow="EYEBROW"
-        title={['The data was there.', "The system couldn't speak it."]}
+        title={['The data was there.', 'The system never spoke.']}
         role="Role line."
         image={baseImage}
       />,
     );
     expect(screen.getByText('The data was there.')).toBeInTheDocument();
-    expect(screen.getByText("The system couldn't speak it.")).toBeInTheDocument();
+    expect(screen.getByText('The system never spoke.')).toBeInTheDocument();
 
     const h1 = screen.getByRole('heading', { level: 1 });
     expect(h1.querySelectorAll('span.hero-block__sentence')).toHaveLength(2);
@@ -153,7 +153,7 @@ describe('<HeroBlock />', () => {
     const { container } = render(
       <HeroBlock
         eyebrow="BARD · U.S. COAST GUARD"
-        title={['The data was there.', "The system couldn't speak it."]}
+        title={['The data was there.', 'The system never spoke.']}
         role="Sole designer on the first ground-up replacement of BARD in twenty years."
         image={{
           src: '/case-studies/uscg-bard/hero-dashboard-fl.png',

@@ -20,6 +20,13 @@
  * reasons the number did not predict. A character count is reported beside the
  * px, explicitly as a drafting heuristic and not as the gate.
  *
+ * EVERY NUMBER THIS PRINTS IS WIDTH-NEUTRALISED. The injected rule sets wdth 100
+ * before anything is read, so the "sets @wdth 100" column is the SHIPPED STRING AT
+ * WIDTH 100 and never its as-shipped width at 88. That column was briefly labelled
+ * "shipped sets", which reads as as-shipped and cost a round of reconciliation
+ * against another rig. Room is unaffected either way: it is the parent <h1>'s
+ * content box, which is layout-derived and independent of font-stretch.
+ *
  * Method: the real page, at the real rung-5 clamp, in the real container, with
  * width neutralised to 100 by an injected rule. Set width is read with
  * `white-space: nowrap` applied, so it is the string's intrinsic width whether
@@ -147,6 +154,17 @@ for (const c of CLAUSES) {
   await page.evaluate(() => document.fonts.ready);
   await page.addStyleTag({ content: NO_WIDTH });
 
+  // WARMUP. NO_WIDTH is a font-variation change, and the wdth-100 instance is
+  // not necessarily resolved by the time the next measurement runs — awaiting
+  // fonts.ready ONCE at setup does not cover an instance requested afterwards.
+  // Without this the FIRST measurement of each clause renders against the
+  // previous instance and reads wide, which is a defect that looks like data
+  // rather than like an error. One throwaway read, then re-await, costs ~50ms
+  // and removes the whole class. Found 21 Aug 2026 when two independent rigs
+  // disagreed by 60px on exactly one number: each rig's first.
+  await measure(page, c.sel, null);
+  await page.evaluate(() => document.fonts.ready);
+
   const shipped = await page.evaluate(
     (sel) => document.querySelector(sel).textContent.trim(),
     c.sel
@@ -171,7 +189,7 @@ for (const c of CLAUSES) {
     const over = m.set - m.avail;
     console.log(
       `  @${String(edge).padStart(4)}px  font ${m.fontSize.toFixed(1)}px` +
-        `  room ${fmt(m.avail)}px  shipped sets ${fmt(m.set)}px` +
+        `  room ${fmt(m.avail)}px  sets @wdth 100 ${fmt(m.set)}px` +
         `  ${over > 0 ? `OVER by ${over.toFixed(1)}px (${((over / m.set) * 100).toFixed(1)}% must come out)` : `fits, ${(-over).toFixed(1)}px spare`}`
     );
   }

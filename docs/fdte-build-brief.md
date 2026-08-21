@@ -14,7 +14,9 @@ From now, `app/content/case-studies/us-navy-fdt-e.mdx` in the repo is the ONE ca
 
 1. **Hero** → `<HeroBlock eyebrow title={[...]} role image callout />` (see Bard's usage).
    - eyebrow: `FDT-E · U.S. NAVY`
-   - title: split the H1 across two lines: `['An anomaly isn't intelligence', 'until someone works it.']`
+   - title: split the H1 across two lines: `["An anomaly isn't intel", 'until someone works it.']`
+     (shortened from "intelligence" in Phase 0a so the clause holds one line at
+     width 100; the frontmatter title deliberately keeps "intelligence")
    - role: the lede line from the MDX ("I designed FDT-E, the system Naval Intelligence uses to track enemy air, ground, and maritime forces. Lead designer, start to fielded.")
    - image: `/case-studies/us-navy-fdt-e/hero.png` (this is the `anomaly--modal` crop). alt from frontmatter `heroImageAlt`.
    - callout: label `WHAT CHANGED`, body "The AI used to hand over an answer. Now it opens a case a person has to work."

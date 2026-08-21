@@ -233,13 +233,13 @@ The prose should sound like one person wrote it, in plain, considered English. D
 
 1. **Plain words over domain-formal — except terms that thread the spine or carry teeth.** "I talked to twenty people who do the work," not "conducted twenty stakeholder interviews." But keep "jurisdiction" (it threads the 56) and "shadow IT" (the one technical term the Jordan reader values). Plain by default; reach for the technical word only when it earns its place.
 
-2. **POV follows the section's job.** Declarative for the system ("The data was there. The system couldn't speak it."). Third-person for the user ("Florida's data coordinator moves cases, not forms… she runs…"). First-person for my own work ("I talked to…", "I argued for the live score instead"). Never marketing third-person about myself ("Paul designed…").
+2. **POV follows the section's job.** Declarative for the system ("The data was there. The system never spoke."). Third-person for the user ("Florida's data coordinator moves cases, not forms… she runs…"). First-person for my own work ("I talked to…", "I argued for the live score instead"). Never marketing third-person about myself ("Paul designed…").
 
 3. **Short and declarative.** Let two short sentences do what one long one would. Cut the throat-clearing — no "In order to," "It's worth noting that," "This allowed us to."
 
 4. **Concrete over constructed.** Name the specific thing: "cases look complete and bounce," "a sixty-day federal clock," "an Access dump," "a dozen tabs." Specifics are the senior signal; abstraction ("workflow inefficiencies") is the AI tell.
 
-5. **One turn per passage.** The rare device lands *because* it's rare — the personification ("couldn't speak it," "spoke two languages"), the define-by-negation ("moves cases, not forms"; "not resistance, but rational adaptations"). One per passage, not one per sentence. If everything's clever, nothing is.
+5. **One turn per passage.** The rare device lands *because* it's rare — the personification ("never spoke," "spoke two languages"), the define-by-negation ("moves cases, not forms"; "not resistance, but rational adaptations"). One per passage, not one per sentence. If everything's clever, nothing is.
 
 6. **Earn the conclusion; don't restate it.** Prose is the evidence; the headline is the claim. The opener describes what I found and stops — the H2 carries "the verdict is already in." Don't write the punchline twice.
 
@@ -251,7 +251,7 @@ Banned words (case-study prose): no *craft, leverage, robust, delve, seamless, s
 
 - "cases look complete and bounce" — not "users experienced submission friction"
 
-- "The data was there. The system couldn't speak it." — not "The data existed but was not effectively surfaced"
+- "The data was there. The system never spoke." — not "The data existed but was not effectively surfaced"
 
 ## Typography
 
