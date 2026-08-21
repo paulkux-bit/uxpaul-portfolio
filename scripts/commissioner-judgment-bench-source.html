@@ -1,0 +1,223 @@
+<meta charset="utf-8">
+<title>Commissioner Judgment Bench</title>
+<style>
+@font-face{font-family:Bri;src:url(data:font/woff2;base64,__BRICOLAGE_WOFF2_BASE64__) format('woff2');font-weight:200 800;font-display:block}
+@font-face{font-family:Cms;src:url(data:font/woff2;base64,__COMMISSIONER_WOFF2_BASE64__) format('woff2');font-weight:100 900;font-display:block}
+
+:root{
+  --bg:#faf8f5; --fg:#1b1a18; --dim:#6b6862; --line:#e2ddd4; --card:#fff;
+  --accent:#8a4b2a;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
+  --bg:#131211; --fg:#efece6; --dim:#98938a; --line:#2c2a27; --card:#1b1a18; --accent:#d99a6c;}}
+:root[data-theme=dark]{--bg:#131211;--fg:#efece6;--dim:#98938a;--line:#2c2a27;--card:#1b1a18;--accent:#d99a6c;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:Cms,system-ui,sans-serif;
+  font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1180px;margin:0 auto;padding:4rem 1.5rem 6rem}
+h1{font-size:clamp(2rem,4vw,3rem);line-height:1.05;letter-spacing:-.02em;font-weight:600;margin:0 0 .6rem;
+  font-variation-settings:'FLAR' 70,'VOLM' 40}
+.lede{color:var(--dim);max-width:62ch;margin:0 0 1rem;font-size:1.05rem}
+h2{font-size:clamp(1.4rem,2.4vw,1.9rem);letter-spacing:-.015em;font-weight:600;margin:4.5rem 0 .4rem;
+  font-variation-settings:'FLAR' 40,'VOLM' 0}
+h2 .n{color:var(--accent);font-weight:500;margin-right:.5rem}
+.note{color:var(--dim);max-width:66ch;margin:0 0 1.6rem}
+.rule{height:1px;background:var(--line);border:0;margin:0}
+
+.bar{position:sticky;top:0;z-index:5;background:color-mix(in oklab,var(--bg) 88%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:.6rem 1.5rem;
+  display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}
+.bar b{font-weight:600;margin-right:auto;font-size:.9rem}
+button{font:inherit;font-size:.82rem;padding:.3rem .7rem;border:1px solid var(--line);
+  background:var(--card);color:var(--fg);border-radius:99px;cursor:pointer}
+button[aria-pressed=true]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+
+figcaption{font-size:.74rem;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);
+  margin:0 0 .55rem;font-weight:600;font-variation-settings:'FLAR' 0,'VOLM' 0}
+figcaption em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:400;margin-left:.5rem;opacity:.75}
+figure{margin:0}
+
+.bri{font-family:Bri,system-ui,sans-serif;font-optical-sizing:auto}
+.cms{font-family:Cms,system-ui,sans-serif}
+.w88{font-stretch:88%}
+
+.sent{padding:2rem 0;border-bottom:1px solid var(--line)}
+.sent__meta{display:flex;gap:.75rem;align-items:baseline;flex-wrap:wrap;color:var(--dim);
+  font-size:.8rem;margin-bottom:1.1rem}
+.tag{font-weight:600;color:var(--fg);letter-spacing:.06em;text-transform:uppercase;font-size:.72rem}
+.sent__grid{display:flex;flex-direction:column;gap:1.5rem;overflow-x:auto;padding-bottom:.5rem}
+.stage{width:704px;flex:none;border-left:2px solid var(--line);padding-left:.9rem}
+.sent__grid figure{flex:none;width:704px}
+.hero{font-size:54.4px;line-height:1.0;letter-spacing:-.025em;margin:0;font-weight:600}
+.hero .anx{color:var(--dim)}
+
+.sigwrap{display:grid;gap:2.25rem;padding-top:.5rem}
+.sig{border-left:2px solid var(--line);padding-left:1rem}
+.sigline{font-size:clamp(2rem,5.2vw,60px);line-height:1.05;letter-spacing:-.02em;margin:0}
+.ink{margin-top:.5rem;font-size:.78rem;color:var(--dim);font-variation-settings:'FLAR' 0}
+.ink b{color:var(--fg);font-weight:600}
+
+.voice{display:grid;gap:1.75rem}
+@media(min-width:820px){.voice{grid-template-columns:repeat(2,1fr)}}
+.voice p{font-size:18px;line-height:1.65;max-width:64ch;margin:0}
+.v0{font-variation-settings:'FLAR' 0,'VOLM' 0}
+.v10{font-variation-settings:'FLAR' 10,'VOLM' 0}
+.v15{font-variation-settings:'FLAR' 15,'VOLM' 0}
+.v20{font-variation-settings:'FLAR' 20,'VOLM' 0}
+
+.sizes{display:grid;gap:1.75rem}
+@media(min-width:820px){.sizes{grid-template-columns:repeat(3,1fr)}}
+.sizes p{line-height:1.65;margin:0}
+
+.ladder{display:grid;gap:1.5rem;margin-top:.5rem}
+.ladder div{border-left:2px solid var(--line);padding-left:1rem}
+.ladder span{display:block;font-size:.72rem;letter-spacing:.07em;text-transform:uppercase;color:var(--dim);
+  font-weight:600;margin-bottom:.3rem;font-variation-settings:'FLAR' 0}
+.ladder p{margin:0;line-height:1.06;letter-spacing:-.022em;font-weight:600}
+.r5{font-size:56px;font-variation-settings:'FLAR' 70,'VOLM' 40}
+.r4{font-size:40px;font-variation-settings:'FLAR' 40,'VOLM' 0}
+.r2{font-size:24px;font-weight:400;line-height:1.4;font-variation-settings:'FLAR' 0,'VOLM' 0}
+
+.foot{color:var(--dim);font-size:.85rem;margin-top:4rem;max-width:70ch}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.85em;
+  background:color-mix(in oklab,var(--fg) 8%,transparent);padding:.1em .35em;border-radius:4px}
+</style>
+
+<div class="bar">
+  <b>Commissioner — judgment bench</b>
+  <button id="t-light" aria-pressed="false">Light</button>
+  <button id="t-dark" aria-pressed="false">Dark</button>
+</div>
+
+<div class="wrap">
+<h1>What the measurement can't decide</h1>
+<p class="lede">Companion to <code>docs/commissioner-linebreak-measurement.md</code>. Every number there is settled;
+these four things are not, because they are eye calls. Both faces are embedded — this file works offline.</p>
+
+<h2><span class="n">01</span>The hero sentence, and where its width band went</h2>
+<p class="note">Three sentences lose their single-line window. The middle column is the control: Bricolage with
+width neutralised. It is nearly identical to Commissioner, which is the whole finding — the break is the missing
+<code>wdth</code> axis, not the new typeface. The question for you is whether the two-line setting on the right
+is a loss worth trimming copy to avoid, given that every one of these is already two lines above 1000px today.</p>
+
+  <div class="sent">
+    <div class="sent__meta">
+      <span class="tag">BARD</span>
+      <span>“The system couldn't speak it.” holds one line: Bricolage 560–928px · Commissioner 688–720px. Shown at 704px, inside that band for Bricolage and outside it for the other two.</span>
+    </div>
+    <div class="sent__grid">
+      <figure><figcaption>Bricolage · wdth 88 <em>(shipping)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero bri w88"><span class="open">The data was there.</span> <span class="anx">The system couldn't speak it.</span></p></div></figure>
+      <figure><figcaption>Bricolage · wdth 100 <em>(the control)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero bri"><span class="open">The data was there.</span> <span class="anx">The system couldn't speak it.</span></p></div></figure>
+      <figure><figcaption>Commissioner <em>(no width axis)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero cms"><span class="open">The data was there.</span> <span class="anx">The system couldn't speak it.</span></p></div></figure>
+    </div>
+  </div>
+
+  <div class="sent">
+    <div class="sent__meta">
+      <span class="tag">FDT-E</span>
+      <span>“An anomaly isn't intelligence” holds one line: Bricolage 528–976px · Commissioner 656–752px. Shown at 704px, inside that band for Bricolage and outside it for the other two.</span>
+    </div>
+    <div class="sent__grid">
+      <figure><figcaption>Bricolage · wdth 88 <em>(shipping)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero bri w88"><span class="open">An anomaly isn't intelligence</span> <span class="anx">until someone works it.</span></p></div></figure>
+      <figure><figcaption>Bricolage · wdth 100 <em>(the control)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero bri"><span class="open">An anomaly isn't intelligence</span> <span class="anx">until someone works it.</span></p></div></figure>
+      <figure><figcaption>Commissioner <em>(no width axis)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero cms"><span class="open">An anomaly isn't intelligence</span> <span class="anx">until someone works it.</span></p></div></figure>
+    </div>
+  </div>
+
+  <div class="sent">
+    <div class="sent__meta">
+      <span class="tag">Nuuly</span>
+      <span>“A building, a business model,” holds one line: Bricolage 544–960px · Commissioner 656–752px. Shown at 704px, inside that band for Bricolage and outside it for the other two.</span>
+    </div>
+    <div class="sent__grid">
+      <figure><figcaption>Bricolage · wdth 88 <em>(shipping)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero bri w88"><span class="open">A building, a business model,</span> <span class="anx">and no process.</span></p></div></figure>
+      <figure><figcaption>Bricolage · wdth 100 <em>(the control)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero bri"><span class="open">A building, a business model,</span> <span class="anx">and no process.</span></p></div></figure>
+      <figure><figcaption>Commissioner <em>(no width axis)</em></figcaption>
+        <div class="stage" style="width:704px"><p class="hero cms"><span class="open">A building, a business model,</span> <span class="anx">and no process.</span></p></div></figure>
+    </div>
+  </div>
+
+<h2><span class="n">02</span>The signature</h2>
+<p class="note">The one place the 340/720 pair actually renders on the shipped site: the home hero at 60px.
+Note that the heavy half — <em>consumer, enterprise, defense</em> — contains no <code>g</code>, so the clumsy
+heavy-weight counter §7 worries about does not appear here. Measured ink says Commissioner 340/720 is
+<b>13% more</b> weight contrast than Bricolage's, not less; 360 is the Commissioner weight whose ink matches
+Bricolage 340 almost exactly.</p>
+<div class="sigwrap">
+
+  <figure class="sig">
+    <figcaption>Bricolage 340 / 720<em>shipping today · ink ratio 1.634</em></figcaption>
+    <p class="sigline bri w88" style="font-weight:340">I design across <b style="font-weight:720">consumer</b>, <b style="font-weight:720">enterprise</b>, and <b style="font-weight:720">defense</b>.</p>
+  </figure>
+
+  <figure class="sig">
+    <figcaption>Commissioner 340 / 720<em>ruling 3 unchanged · ink ratio 1.851</em></figcaption>
+    <p class="sigline cms" style="font-weight:340">I design across <b style="font-weight:720">consumer</b>, <b style="font-weight:720">enterprise</b>, and <b style="font-weight:720">defense</b>.</p>
+  </figure>
+
+  <figure class="sig">
+    <figcaption>Commissioner 360 / 720<em>light end matched to Bricolage 340 · ink ratio 1.769</em></figcaption>
+    <p class="sigline cms" style="font-weight:360">I design across <b style="font-weight:720">consumer</b>, <b style="font-weight:720">enterprise</b>, and <b style="font-weight:720">defense</b>.</p>
+  </figure>
+
+  <figure class="sig">
+    <figcaption>Commissioner 340 / 820<em>the study's proposal · ink ratio 2.160</em></figcaption>
+    <p class="sigline cms" style="font-weight:340">I design across <b style="font-weight:820">consumer</b>, <b style="font-weight:820">enterprise</b>, and <b style="font-weight:820">defense</b>.</p>
+  </figure>
+</div>
+
+<h2><span class="n">03</span>The reading voice</h2>
+<p class="note">Applying flare to body copy costs <b>3 of 1,209 measured line-sets</b> — 0.2%. On re-fitting grounds
+the answer is free either way, so this is purely whether rungs 0–2 should look like the same family as rungs 5–6.</p>
+<div class="voice">
+  <figure><figcaption>FLAR 0<em>the safe default</em></figcaption><p class="cms v0">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+  <figure><figcaption>FLAR 10</figcaption><p class="cms v10">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+  <figure><figcaption>FLAR 15</figcaption><p class="cms v15">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+  <figure><figcaption>FLAR 20<em>§3.3's upper suggestion</em></figcaption><p class="cms v20">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+</div>
+
+<h2><span class="n">04</span>Body size — 18 against 19</h2>
+<p class="note">19px is derived from x-height matching in §6, and independently it is the measure-preserving size:
+Commissioner sets 4.3% narrower at 18px, and 19px cancels it, dropping new widows from 21 to 5.
+Two arguments, one number. Whether it reads as "the same size" or as "bigger" is the eye's call.</p>
+<div class="sizes">
+  <figure><figcaption>Bricolage 18px<em>shipping</em></figcaption><p class="bri" style="font-size:18px">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+  <figure><figcaption>Commissioner 18px<em>naive swap</em></figcaption><p class="cms v0" style="font-size:18px">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+  <figure><figcaption>Commissioner 19px<em>proposed</em></figcaption><p class="cms v0" style="font-size:19px">Investigators enter local details; the Coast Guard's view is one toggle away. Standardized picklists keep local terms aligned, and inputs like tidal data appear only when relevant. The screen a duty officer sees at two in the morning is the screen that decides whether the record is usable a year later.</p></figure>
+</div>
+
+<h2><span class="n">05</span>Voice by rung, in one column</h2>
+<p class="note">The whole proposition in one place: flare taking the slot width used to hold. Rung 5 at FLAR 70 /
+VOLM 40, rung 4 at FLAR 40, reading rungs plain. This is the <code>soft</code> preset from the sandbox route —
+the designer's own named stops are Flare (100/0) and Loud (100/100), both further out than this.</p>
+<div class="ladder">
+  <div><span>Rung 5 · FLAR 70 · VOLM 40</span><p class="cms r5">The data was there.</p></div>
+  <div><span>Rung 4 · FLAR 40 · VOLM 0</span><p class="cms r4">On site, the blocker wasn't data volume.</p></div>
+  <div><span>Rung 2 · plain</span><p class="cms r2">Fifty-six jurisdictions, one record, and no shared vocabulary between them.</p></div>
+</div>
+
+<p class="foot">Bricolage Grotesque and Commissioner are both embedded from the Fontsource Latin builds — the same
+files Google serves. Commissioner is v1.001, the version actually shipping, not the v1.012 the changelog describes.
+Generated by <code>scripts/build-linebreak-bench.mjs</code>.</p>
+</div>
+
+<script>
+(function(){
+  var r=document.documentElement, L=document.getElementById('t-light'), D=document.getElementById('t-dark');
+  function set(v){ try{ if(v){r.setAttribute('data-theme',v);}else{r.removeAttribute('data-theme');} }catch(e){}
+    L.setAttribute('aria-pressed', v==='light'); D.setAttribute('aria-pressed', v==='dark'); }
+  var saved=null; try{ saved=localStorage.getItem('cmsr-bench-theme'); }catch(e){}
+  if(saved) set(saved);
+  L.onclick=function(){ var v = r.getAttribute('data-theme')==='light'?null:'light'; set(v); try{v?localStorage.setItem('cmsr-bench-theme',v):localStorage.removeItem('cmsr-bench-theme');}catch(e){} };
+  D.onclick=function(){ var v = r.getAttribute('data-theme')==='dark'?null:'dark'; set(v); try{v?localStorage.setItem('cmsr-bench-theme',v):localStorage.removeItem('cmsr-bench-theme');}catch(e){} };
+})();
+</script>

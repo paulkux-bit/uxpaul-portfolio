@@ -66,3 +66,16 @@ public/sandbox/figure-framing.*
 # weaknesses by name — which is useful to write and wrong to publish next to
 # the portfolio it critiques. The files stay on disk; they just never ship.
 docs/reviews/
+
+# Generated previews. uxpaul-commissioner.html is a ~1 MB capture of a BUILD,
+# not a source file: it goes stale the moment app/page.tsx changes, and it goes
+# stale silently, because a stale capture still renders perfectly. Regenerate
+# with `node scripts/capture-commissioner-preview.mjs`. The bench beside it IS
+# committed - it is hand-authored and depends on nothing. Neither the capture
+# script nor docs/previews/README.md is on main yet; both arrive with
+# commissioner-preview, and this rule is kept ahead of them deliberately, so
+# that merge cannot land the 1 MB file while the ignore is still missing.
+/docs/previews/uxpaul-commissioner.html
+
+# line-break measurement output
+measurements/
