@@ -32,7 +32,6 @@ const FONTS_FILE = 'app/fonts.ts';
 const JSX_ROOTS = ['app', 'components'];
 
 // ── The system's fixed values (locked doc §3.1, §3.2, §4) ──────────────────
-const WIDTH_BANDS = [100, 94, 88]; // §3.1 — there is no fourth value
 const SIGNATURE_WEIGHTS = [340, 720]; // §3.2 — the reserved pair
 const SIGNATURE_MIN_CEILING_PX = 40; // §3.2 — illegal below this
 const MIN_FONT_PX = 14; // §2 — hard floor everywhere
@@ -50,30 +49,6 @@ const ROOT_PX = 16;
 //   signature[] — the three placements allowed to use 340/720 (§3.2). C4.
 // Match on exact selector string as written in globals.css.
 const ALLOWLIST = {
-  // The takes wall (§6): slot-driven display marks, currently mounted on no
-  // route. Added in C1 so check 1 measures the shipped pages. The FVS half of
-  // these same rules is still enforced by check 7 until C6 allowlists it.
-  //
-  // §6 records two unreconciled discrepancies, and these entries are where they
-  // stay visible: four values reach wider than the 78-82 the section states,
-  // and `.take-thought` sets running prose on a surface §6 says is display-only.
-  // Allowlisting marks them KNOWN, not resolved — both are to be settled before
-  // the wall is ever mounted.
-  widths: [
-    { selector: '.slot-large .mark', reason: '§6 takes wall — slot mark, 78' },
-    { selector: '.slot-medium6 .mark', reason: '§6 takes wall — slot mark, 80' },
-    { selector: '.slot-medium5 .mark', reason: '§6 takes wall — slot mark, 80' },
-    { selector: '.slot-medium .mark', reason: '§6 takes wall — slot mark, 80' },
-    { selector: '.slot-small4 .mark', reason: '§6 takes wall — slot mark, 82' },
-    { selector: '.slot-small3 .mark', reason: '§6 takes wall — slot mark, 82' },
-    { selector: '.mark', reason: '§6 takes wall — <768px slot-mark override, 80' },
-    { selector: '.take-thought', reason: '§6 takes wall — 96, ABOVE the stated 78-82; and it is running prose on a display-only surface. Both unreconciled, see §6' },
-    { selector: '.comp-mark-dominant .mark', reason: '§6 takes wall — per-take composition, 78' },
-    { selector: '.comp-mark-cropped .mark', reason: '§6 takes wall — per-take composition, 78' },
-    { selector: '.comp-mark-watermark .mark', reason: '§6 takes wall — 90, ABOVE the stated 78-82, unreconciled' },
-    { selector: '.comp-word-swap .mark', reason: '§6 takes wall — 92, ABOVE the stated 78-82, unreconciled' },
-    { selector: '.comp-statement .take-thought', reason: '§6 takes wall — 98, ABOVE the stated 78-82, unreconciled' },
-  ],
   // The FVS half of the split that put widths above. Two categories:
   // the two pins §6 sanctions by name, and the takes-wall compositions, whose
   // per-take three-axis variation IS the content of that exception surface.
@@ -263,41 +238,31 @@ const checks = [];
 const add = (id, title, failures, note) =>
   checks.push({ id, title, failures, note, pass: failures.length === 0 });
 
-// 1 — width: font-stretch and FVS 'wdth' must be one of the three bands.
-// Widths driven through a CSS variable are unresolvable at parse time. Those
-// are collected into `varWidths` and PRINTED, never silently skipped: a blind
-// spot that reports is a known limit, one that stays quiet is a false pass
-// (§7). `calc(var(--wdth-*) * 1%)` is the sanctioned token form and resolves
-// to a band by construction, so it is not a blind spot.
-const varWidths = [];
-const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
+// 10 — NO font-stretch, anywhere, at any value. Replaces check 1.
+//
+// Check 1 policed font-stretch against three bands {100, 94, 88}. Commissioner
+// has no wdth axis, so there is no band to be in and no correct value: every
+// font-stretch declaration is inert. 49 of them sat in this file for a day
+// after the swap looking exactly as correct as they had the week before, which
+// is the whole argument for this check existing rather than the range simply
+// being deleted. INERT-BUT-PLAUSIBLE CSS IS THE CLASS 8a EXISTS TO CATCH, and
+// this is its CSS-side twin: a property the renderer ignores is worse than a
+// wrong value, because a wrong value shows.
+//
+// Scoped to shipped CSS. font-optical-sizing goes the same way and for the same
+// reason (no opsz axis), so both are checked here.
 {
   const f = [];
-  for (const d of byProp('font-stretch')) {
-    if (allowed(ALLOWLIST.widths, d.selector)) continue;
-    const raw = d.value.replace(/!important/g, '').trim();
-    if (TOKEN_WIDTH.test(raw)) continue; // token form — a band by construction
-    if (raw.includes('var(')) {
-      varWidths.push({ selector: d.selector, line: d.line, detail: `font-stretch: ${raw}` });
-      continue;
-    }
-    const n = parseFloat(raw);
-    if (Number.isNaN(n) || !WIDTH_BANDS.includes(n))
-      f.push({ selector: d.selector, line: d.line, detail: `font-stretch: ${raw}` });
-  }
-  for (const d of byProp('font-variation-settings')) {
-    if (allowed(ALLOWLIST.widths, d.selector)) continue;
-    for (const a of fvsAxes(d.value)) {
-      if (a.axis !== 'wdth') continue;
-      if (a.value === null) {
-        varWidths.push({ selector: d.selector, line: d.line, detail: `FVS 'wdth' ${a.raw}` });
-        continue;
-      }
-      if (!WIDTH_BANDS.includes(a.value))
-        f.push({ selector: d.selector, line: d.line, detail: `FVS 'wdth' ${a.value}` });
+  for (const prop of ['font-stretch', 'font-optical-sizing']) {
+    for (const d of byProp(prop)) {
+      f.push({
+        selector: d.selector,
+        line: d.line,
+        detail: `${prop}: ${d.value} — Commissioner has no ${prop === 'font-stretch' ? 'wdth' : 'opsz'} axis; this declaration is inert`,
+      });
     }
   }
-  add(1, `Width is one of {${WIDTH_BANDS.join(', ')}} (§3.1)`, f);
+  add(10, 'No font-stretch or font-optical-sizing: the axes do not exist (§3.1)', f);
 }
 
 // 2 — the 14px floor.
@@ -538,7 +503,6 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
 // (font-[720]), which a globals.css-only parser cannot see. C4 adds the JSX
 // scan alongside the allowlist. Reported, not asserted.
 const jsxWeights = [];
-const jsxWidths = [];
 {
   async function walk(dir) {
     let entries;
@@ -555,11 +519,6 @@ const jsxWidths = [];
         const s = await readFile(p, 'utf8');
         for (const m of s.matchAll(/\bfont-\[(\d{2,3})\]/g))
           jsxWeights.push({ file: p, weight: parseInt(m[1], 10) });
-        // Arbitrary width utilities authored in JSX. Same blind spot as the
-        // weights: a shipped width this parser cannot see. Found by hand in C1
-        // (a stray 90% on the media-tier card h2), so it is reported by name.
-        for (const m of s.matchAll(/\[font-stretch:([^\]]+)\]/g))
-          jsxWidths.push({ file: p, value: m[1], token: TOKEN_WIDTH.test(m[1]) });
       }
     }
   }
@@ -584,26 +543,6 @@ for (const c of checks) {
   console.log('');
 }
 
-if (varWidths.length) {
-  console.log(
-    `⚠ UNCHECKED: ${varWidths.length} width${varWidths.length === 1 ? '' : 's'} driven through a CSS variable, ` +
-      `unresolvable at parse time. Check 1 cannot see ${varWidths.length === 1 ? 'it' : 'them'} — ` +
-      `this is a blind spot, not an exemption (§7).`,
-  );
-  for (const w of varWidths) console.log(`    ${w.selector}  (${CSS_FILE}:${w.line})  ${w.detail}`);
-  console.log('');
-}
-
-if (jsxWidths.length) {
-  const loose = jsxWidths.filter((w) => !w.token);
-  console.log(
-    `⚠ UNCHECKED: ${jsxWidths.length} arbitrary font-stretch utilit${jsxWidths.length === 1 ? 'y' : 'ies'} in JSX ` +
-      `(${loose.length} not token-driven). Check 1 parses ${CSS_FILE} only and cannot see ${jsxWidths.length === 1 ? 'it' : 'them'}.`,
-  );
-  for (const w of jsxWidths)
-    console.log(`    ${w.token ? 'token ' : 'LOOSE '} [font-stretch:${w.value}]  ${w.file}`);
-  console.log('');
-}
 
 if (jsxWeights.length) {
   const sig = jsxWeights.filter((w) => SIGNATURE_WEIGHTS.includes(w.weight));
