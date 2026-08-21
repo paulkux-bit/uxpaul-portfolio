@@ -523,6 +523,23 @@ The named gates are three different tools; two are external and do NOT read pros
 Full chain: **tsc -> eslint -> build (runs lint:type first, and fails on it) ->
 lint:prose -> detector (visual, external)**.
 
+**Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
+behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
+`npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build` and
+`lint:interaction` — it does NOT run vitest, so no vitest assertion can be described as
+"green in the deploy". `__tests__/noindex.test.mjs` is the case that matters: it asserts
+`BLOCK_INDEXING`, `app/robots.ts` and the `next.config.mjs` header rule, all from source.
+A green suite here with a missing header on the live site is the failure that would
+actually cost something, and only a request to the deployed URL can see it:
+
+```
+curl -sI https://uxpaul-portfolio.vercel.app/ | grep -i x-robots-tag
+curl -s  https://uxpaul-portfolio.vercel.app/robots.txt
+```
+
+Verify the behaviour where it ships. Recorded 21 Aug 2026, after a verification request
+asked for a vitest result "in the deploy", which cannot exist.
+
 ## Color system — locked (v2)
 
 **Name:** Paper & Low Light
