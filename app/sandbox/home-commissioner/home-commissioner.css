@@ -1,0 +1,102 @@
+/* ================================================================
+   SANDBOX ONLY — /sandbox/home-commissioner
+   ================================================================
+   Scoped under `.cmsr-home`. Nothing here ships, nothing in
+   globals.css is touched, and the same DOM renders in either face.
+
+   This file is deliberately SHORT. The type sandbox needs a voice
+   layer because a case study exercises every rung; the home page
+   exercises four roles, one of which is the only thing anyone is
+   here to look at. Adding a full band system to this route would
+   make it a second implementation of the same idea, and the two
+   would disagree within a week.
+   ================================================================ */
+
+.cmsr-home[data-face='commissioner'] {
+  font-family: var(--font-commissioner), system-ui, sans-serif;
+  /* Reading voice for the page as a whole. The display roles below
+     override it; everything else inherits. */
+  font-variation-settings: 'FLAR' 0, 'VOLM' 0;
+}
+
+/* Rungs 3-4 on this page: the card cover headlines and the Also
+   Shipped titles. `.text-qh-title` is the interesting one - under
+   Bricolage that surface runs per-brand three-axis variation with
+   wdth 84-100, and the width third of that premise does not survive
+   the swap. Left at the reading voice on purpose so the loss is
+   visible rather than papered over with a flare substitute nobody
+   has agreed to. */
+.cmsr-home[data-face='commissioner'] :is(.text-cover, .case-study-card h2) {
+  font-variation-settings: 'FLAR' 40, 'VOLM' 0;
+}
+
+/* The signature. `.text-lede` carries the 340; the three noun phrases
+   inside it are font-[720] utilities in app/page.tsx, which is why
+   the 820 toggle has to reach them through the utility class rather
+   than through a token - the JSX literal is the thing under test. */
+.cmsr-home[data-sig='820'] .text-lede .font-\[720\] {
+  font-weight: 820;
+}
+
+/* ── The bar ─────────────────────────────────────────────────────
+   Always Bricolage, so the control never reads as part of the
+   specimen. */
+.cmsr-home__bar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  background: var(--bg-surface-elevated);
+  border-top: 1px solid var(--border-default);
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-variation-settings: normal;
+}
+
+.cmsr-home__lg {
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.cmsr-home__lg:not(:first-child) { margin-left: 0.75rem; }
+
+.cmsr-home__bar button {
+  font: inherit;
+  font-size: 0.8125rem;
+  line-height: 1;
+  min-height: 44px;
+  padding: 0.5rem 0.6875rem;
+  border: 1px solid var(--border-default);
+  border-radius: 0.375rem;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.cmsr-home__bar button[aria-pressed='true'] {
+  background: var(--text-primary);
+  border-color: var(--text-primary);
+  color: var(--bg-canvas);
+}
+
+.cmsr-home__probe {
+  display: none;
+  margin: 1rem 1.5rem 0;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 0.375rem;
+  font-family: var(--font-bricolage), system-ui, sans-serif;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+.cmsr-home__probe[data-failed='true'] { display: block; }
+
+/* The fixed bar overlaps the shelf at the end of the page. */
+.cmsr-home { padding-bottom: 7rem; }
