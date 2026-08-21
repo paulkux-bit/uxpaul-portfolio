@@ -192,6 +192,31 @@ mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
 Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
 by `.milestone` in Nuuly §8.
 
+**`.transformation`'s weight.** `.transformation` ships `font-weight: 700`, which
+is not one of the five weights `type-system-v3-locked.md` §3.2 defines
+(340 / 400 / 500 / 600 / 720). It is the only weight literal left in
+`globals.css` outside the takes wall, and it survived the tokenisation pass
+because there is no token to give it.
+
+Three readings, and the spec supports none of them over the others. It is
+`--wght-display` that drifted up by 100. Or it is a **third signature
+placement**: its 76px ceiling clears §3.2's "≥ 40px" bar, so 720 would be legal
+there, and 700 looks like a 720 that was typed from muscle memory. Or the ladder
+genuinely wants a sixth weight between display and loud, in which case §3.2 is
+short a token rather than this rule being wrong.
+
+Nothing decides between them, and the failure mode is the one CLAUDE.md rule 3
+describes: rounding it to `--wght-display` lints clean, changes the render, and
+encodes an answer nobody gave. Note that check 4 would not object either way —
+it gates 340 and 720 specifically, so an off-system 700 passes the signature
+assertion by not being the signature.
+
+Not urgent: the rule is unused in production today. That is also why it is
+worth closing now rather than after a page starts depending on it. Needs: a
+ruling on which of the three it is, then either a token, an allowlist entry, or
+a sixth row in §3.2. Raised 21 Aug 2026 by the weight-tokenisation pass, which
+is what made it the only one left.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026

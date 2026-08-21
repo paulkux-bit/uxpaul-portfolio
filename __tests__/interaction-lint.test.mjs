@@ -413,6 +413,45 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
     return v;
   };
 
+  // THE COST OF TOKENISING, PAID HERE FIRST.
+  //
+  // This test caught the weight-tokenisation pass, which is the point of it
+  // existing. `.theme-toggle` asserted `font-weight: 600` as a literal string,
+  // because §2's whole derivation runs through that number: stroke is
+  // `0.65 x the stem width of the adjacent text`, stem is `size / 8 at weight
+  // 600` and `size / 11 at weight 400`, and `--icon-stroke: 1.95` is what those
+  // measurements produce. The weight is not incidental to the icon; it is the
+  // input.
+  //
+  // Routing it through `--wght-display` turned the source text into
+  // `var(--wght-display)` and the assertion went red on a change that altered
+  // no rendered pixel. The wrong fix is to relax the assertion to "contains
+  // --wght-display": that proves the declaration mentions a token and stops
+  // proving the icon's stem context is 600, which is the only thing anyone
+  // cares about here.
+  //
+  // So resolve instead of relax. One level of `var()` against the `@theme`
+  // blocks, which is all this file's tokens ever need — the same two-pass
+  // approach `scripts/lint-space.mjs` already uses, and the reason a tokenised
+  // type system and a CSS-parser gate are not actually in conflict. The
+  // assertion below still reads `600` and still fails if anyone moves it.
+  const themeVars = (() => {
+    const map = new Map();
+    rules.walkAtRules('theme', (at) => {
+      at.walkDecls((d) => {
+        if (d.prop.startsWith('--')) map.set(d.prop, d.value.trim());
+      });
+    });
+    return map;
+  })();
+
+  const resolvedDeclFor = (selector, prop) => {
+    const raw = declFor(selector, prop);
+    if (raw == null) return raw;
+    const m = /^var\(\s*(--[\w-]+)\s*\)$/.exec(raw);
+    return m ? (themeVars.get(m[1]) ?? raw) : raw;
+  };
+
   it('.icon sizes 1em in both axes and takes its stroke from the container', () => {
     expect(declFor('.icon', 'width')).toBe('1em');
     expect(declFor('.icon', 'height')).toBe('1em');
@@ -436,7 +475,9 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
   // the default 1.70 — with every check still green.
   it('.theme-toggle declares the type context its icons resolve against', () => {
     expect(declFor('.theme-toggle', 'font-size')).toBe('1rem');
-    expect(declFor('.theme-toggle', 'font-weight')).toBe('600');
+    // Resolved, not raw: the source now says var(--wght-display) and the
+    // assertion still has to be about 600. See the resolver above.
+    expect(resolvedDeclFor('.theme-toggle', 'font-weight')).toBe('600');
   });
 
   // (0,1,1) outranks .icon at (0,1,0): this rule would pin the icons to 18px

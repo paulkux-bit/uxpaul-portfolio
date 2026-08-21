@@ -486,7 +486,7 @@
   /* Bricolage has no italics — map em/i to weight emphasis instead. */
   em, i {
     font-style: normal;
-    font-weight: 600;
+    font-weight: var(--wght-display);
   }
 
   /* v3 R4: emphasis is AUTHORED. Tailwind preflight ships
@@ -498,7 +498,7 @@
      .figure__caption) are unaffected; they now agree with the base instead of
      each patching it locally. */
   b, strong {
-    font-weight: 600;
+    font-weight: var(--wght-display);
   }
 
   ::selection {
@@ -549,7 +549,7 @@
   font-size: clamp(2.5rem, 4vw + 1.75rem, 6rem);
   line-height: 1;
   letter-spacing: -0.025em;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* v3 §5: 96 -> 88. Large-display band. Its 96px ceiling sits above rung 6's
      88px, so it is off-ladder by size (§9) — the width is settled, the size
      is not. Currently unused in production. */
@@ -566,7 +566,7 @@
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
   letter-spacing: -0.02em;
-  font-weight: 340;
+  font-weight: var(--wght-thin);
   /* NOT tokenised, deliberately. v3 §9: this role's 60px ceiling sits in the
      53-71px gap between the display and large-display bands, so §3.1 returns
      no band for it. 100 is already legal so check 1 is satisfied and no edit
@@ -596,7 +596,7 @@
   font-size: clamp(3rem, 3vw + 2rem, 5rem);
   line-height: 0.95;
   letter-spacing: -0.025em;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* v3 §5: 97 -> 88. Large-display band (80px ceiling). Unused in production. */
   font-stretch: calc(var(--wdth-large) * 1%);
 }
@@ -605,21 +605,21 @@
   font-size: clamp(2.25rem, 1.75vw + 1.625rem, 3.5rem);
   line-height: 1.05;
   letter-spacing: -0.02em;
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 @utility text-h2 {
   font-size: clamp(1.75rem, 1vw + 1.375rem, 2.5rem);
   line-height: 1.15;
   letter-spacing: -0.015em;
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 @utility text-h3 {
   font-size: clamp(1.375rem, 0.5vw + 1.125rem, 1.75rem);
   line-height: 1.25;
   letter-spacing: -0.01em;
-  font-weight: 500;
+  font-weight: var(--wght-credit);
 }
 
 /* Case-study card cover headline. Sized between h3 and h2 and capped lower
@@ -630,7 +630,7 @@
   font-size: clamp(1.375rem, 1.4vw + 1rem, 2rem);
   line-height: 1.12;
   letter-spacing: -0.015em;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* v3 §5: 90 -> 94. Display band (32px ceiling). Card covers loosen by 4%.
      The old note here claimed a per-module "Major register" that rhymed with
      Also Shipped at ~90% — v3 R2 retires mood registers: width follows the
@@ -671,7 +671,7 @@
    maps straight to Bricolage's wdth axis. */
 @utility text-resolution-headline {
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
   letter-spacing: 0;
   line-height: 1.15;
@@ -690,32 +690,32 @@
   font-size: 1.375rem;
   line-height: 1.5;
   letter-spacing: -0.005em;
-  font-weight: 400;
+  font-weight: var(--wght-body);
 }
 
 @utility text-body {
   font-size: 1.125rem;
   line-height: 1.65;
-  font-weight: 400;
+  font-weight: var(--wght-body);
 }
 
 @utility text-small {
   font-size: 1rem;
   line-height: 1.55;
-  font-weight: 400;
+  font-weight: var(--wght-body);
 }
 
 @utility text-caption {
   font-size: 0.875rem;
   line-height: 1.45;
-  font-weight: 400;
+  font-weight: var(--wght-body);
 }
 
 @utility text-eyebrow {
   font-size: 0.875rem;
   line-height: 1.4;
   letter-spacing: 0.08em;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   text-transform: uppercase;
 }
 
@@ -726,7 +726,7 @@
    replacement for <em>. Product/ship names (Bard, Dagr) are NOT emphasized —
    they're normal-weight proper nouns. */
 @utility emphasis-quiet {
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   color: var(--text-secondary);
 }
 
@@ -878,7 +878,7 @@
    signalled semantically via aria-current on the wordmark, not visually. */
 .wordmark {
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* v3 §5: 88 -> 100. 16px is a reading rung, and R10 bans compression at
      reading size — the 12pt master opens counters, compression closes them.
      Site chrome, so this one ships on every page. */
@@ -1024,7 +1024,7 @@
 }
 .nav-link[data-active] {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   text-decoration-line: underline;
   text-decoration-thickness: 2px;
   text-decoration-color: var(--border-strong);
@@ -1044,7 +1044,7 @@
      makes §2.3's containment rule resolvable on a button with nothing to be
      adjacent to. */
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   --icon-stroke: 1.95;
   display: inline-flex;
   align-items: center;
@@ -1457,7 +1457,7 @@
 
 .case-study-prose > h1 {
   font-size: clamp(2.25rem, 5.5vw + 1rem, 4.75rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* 92 -> 88. Not a §5 row; derived. Its 76px ceiling falls inside rung 5/6's
      72-88 large-display span, so §3.1 answers directly. Logged in §9. */
   font-stretch: calc(var(--wdth-large) * 1%);
@@ -1472,7 +1472,7 @@
   font-size: clamp(1.375rem, 1.4vw + 1rem, 1.875rem);
   line-height: 1.45;
   margin: 0 0 var(--spacing-xl);
-  font-weight: 400;
+  font-weight: var(--wght-body);
   color: var(--text-secondary); /* standfirst role; was a currentColor 75% weight-fake */
   text-wrap: pretty;
   max-width: 38ch;
@@ -1485,7 +1485,7 @@
    .case-study-numbers h3. */
 .case-study-prose h2 {
   font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   font-stretch: calc(var(--wdth-display) * 1%); /* v3 §5: 96 -> 94. Rung 4. */
   line-height: 1.08;
   letter-spacing: -0.02em;
@@ -1498,7 +1498,7 @@
 
 .case-study-prose > h3 {
   font-size: clamp(1.375rem, 1vw + 0.95rem, 1.625rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: -0.005em;
   line-height: 1.2;
   margin: var(--spacing-xl) 0 var(--spacing-s);
@@ -1530,7 +1530,7 @@
    its context and separates on weight, which is what R4 asks of it. */
 .case-study-prose em {
   font-style: normal;
-  font-weight: 500;
+  font-weight: var(--wght-credit);
 }
 
 /* ── Eyebrow labels ───────────────────────────────────────────────────── */
@@ -1541,7 +1541,7 @@
    on <HeroBlock />) and stays. Do not reintroduce these on case-study routes. */
 .eyebrow {
   font-size: 0.875rem; /* 14px — meets the system floor; gains presence over the old 12px */
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: 0.08em;          /* canonical text-eyebrow tracking (docs §490) — matches the hero eyebrow */
   line-height: 1.4;
   text-transform: uppercase;
@@ -1586,7 +1586,7 @@
 }
 
 .case-study-meta strong {
-  font-weight: 600;
+  font-weight: var(--wght-display);
   margin-right: 0.4em;
 }
 
@@ -1610,7 +1610,7 @@
 
 .case-study-numbers h3 {
   font-size: clamp(4rem, 9vw + 1rem, 7.5rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   font-stretch: calc(var(--wdth-large) * 1%); /* 88, unchanged. Unused in prod. */
   line-height: 0.92;
   letter-spacing: -0.04em;
@@ -1621,7 +1621,7 @@
 .case-study-numbers strong {
   display: block;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   margin-bottom: var(--spacing-3xs);
   letter-spacing: -0.005em;
 }
@@ -1653,7 +1653,7 @@
 
 .problem-list__index {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: 0.04em;
   /* --text-muted, not --text-subtle: this is a 14px/600 marker, and 600 at 14px
      is not "large" for WCAG, so subtle would undershoot. Same reasoning already
@@ -1666,7 +1666,7 @@
 
 .problem-list__text {
   font-size: clamp(1.25rem, 1.5vw + 0.75rem, 1.625rem);
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   line-height: 1.35;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -1717,7 +1717,7 @@
      converging on rung 3, which met it at 1.030x at 572px (v3 §3.3). */
   font-size: clamp(1.375rem, 0.932vw + 0.959rem, 1.625rem);
   line-height: 1.45;
-  font-weight: 400;
+  font-weight: var(--wght-body);
   color: var(--text-secondary); /* standfirst: dimmed-from-primary (≈ the old currentColor 82% mix), now a token */
   max-width: 52ch;
   margin: var(--spacing-m) 0 var(--spacing-s); /* subtle air before the felt-pain shift; the lede pair stays tight */
@@ -1778,7 +1778,7 @@
   max-width: 40ch;
   font-size: clamp(1rem, 1.6vw + 0.6rem, 1.375rem); /* 16 -> 22px: text-lead tier, supporting. Scales down on mobile so the date:frame ratio holds (date clamps to its 52px floor). */
   line-height: 1.4;
-  font-weight: 400;
+  font-weight: var(--wght-body);
   letter-spacing: -0.005em;
   color: var(--text-secondary);
   text-wrap: balance;
@@ -1816,7 +1816,7 @@
   margin: var(--spacing-s) 0 0;
   font-size: 1rem;          /* text-small — quiet */
   line-height: 1.5;
-  font-weight: 400;
+  font-weight: var(--wght-body);
   color: var(--text-muted);
 }
 
@@ -1896,7 +1896,7 @@
 
 .thread-index {
   font-size: clamp(1rem, 0.4vw + 0.85rem, 1.25rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* R6, one mark one rendering. Declares its own width so the 01/02/03 marker
      cannot inherit whatever the heading around it happens to set — it appears
      inside .friction-beat (94) and .thread-cols, and rendered two ways it
@@ -1915,7 +1915,7 @@
 .thread-cols__label {
   display: block;
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem); /* rung 3, 26 → 32px */
-  font-weight: 600; /* match the hero spine — boldness carries down the page */
+  font-weight: var(--wght-display); /* match the hero spine — boldness carries down the page */
   /* 90 -> 94. Not a §5 row; derived from its 32px ceiling (rung 3, display).
      The old "spine identity via compression" note is retired by R2 — width
      follows the rung, and the tie back to the hero is carried by weight.
@@ -2011,7 +2011,7 @@
 
 .friction-beat__headline {
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
-  font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off; rhymes the resolutions header) */
+  font-weight: var(--wght-display); /* unified numbered-item headline weight (killed the 550 one-off; rhymes the resolutions header) */
   /* 94, unchanged — rung 3. Both this and h2 are now token-driven, so the old
      "a subtle step below the H2's 96%" no longer describes it: h2 is 94 too,
      and the two rungs separate on size, not width. */
@@ -2139,7 +2139,7 @@ html.dark .oku-figure {
 
 .pull-quote p {
   font-size: clamp(1.75rem, 3vw + 0.8rem, 3.5rem);
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* NOT tokenised, deliberately. v3 §9: the 56px ceiling sits in the 53-71px
      gap between the display and large-display bands, so §3.1 returns no band.
      94 is already legal, so nothing is forced; tokenising would encode a
@@ -2168,7 +2168,7 @@ html.dark .oku-figure {
   display: block;
   font-style: normal;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   letter-spacing: 0.02em;
   color: var(--text-muted); /* AA-normal at 14px (the 55% mix risked sub-AA) */
 }
@@ -2202,6 +2202,16 @@ html.dark .oku-figure {
   gap: var(--spacing-s);
   text-align: center;
   font-size: clamp(1.75rem, 4.5vw + 0.5rem, 4.75rem);
+  /* NOT tokenised, and this one is a finding rather than a deferral. 700 is
+     not one of the five weights §3.2 defines: it sits 20 units under the
+     signature's 720, on a role whose 76px ceiling would qualify it for the
+     signature under §3.2's ">= 40px" rule. So it is either --wght-display
+     that drifted, a third signature placement that was never allowlisted, or
+     a sixth token the system does not have. Nothing in the locked docs says
+     which, and picking the nearest token would lint clean while encoding an
+     answer nobody gave — CLAUDE.md rule 3. Logged in
+     docs/unspecified-surfaces.md; the literal stays until it is decided.
+     (Unused in production today, which is why it is not urgent.) */
   font-weight: 700;
   /* 90 -> 88. Not a §5 row; derived from its 76px ceiling (large display).
      Unused in production. */
@@ -2238,7 +2248,7 @@ html.dark .oku-figure {
 
 .transformation__arrow {
   font-size: 0.85em;
-  font-weight: 400;
+  font-weight: var(--wght-body);
   /* --text-muted, not --text-subtle: 0.85em of the 1.625rem mobile floor is
      23.8px at weight 400, just under the 24px AA-large threshold. */
   color: var(--text-muted);
@@ -2285,7 +2295,7 @@ html.dark .oku-figure {
    supplying. Size stays 14px; the gloss stays muted. */
 .figure__caption strong {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 .figure--full-bleed {
@@ -2353,7 +2363,7 @@ html.dark .oku-figure {
   top: 0.625rem;
   left: 0.75rem;
   font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding: var(--spacing-3xs) var(--spacing-2xs);
@@ -2399,7 +2409,7 @@ html.dark .oku-figure {
 
 .compare__label {
   font-size: 0.875rem; /* v3 §2: was 0.75rem/12px, under the 14px floor */
-  font-weight: 600;
+  font-weight: var(--wght-display);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-muted); /* was a currentColor 65% weight-fake */
@@ -2473,7 +2483,7 @@ html.dark .oku-figure {
 
 .asymmetric-pair__label {
   font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-muted); /* was a currentColor 55% weight-fake */
@@ -2521,7 +2531,7 @@ html.dark .oku-figure {
 
 .bento__label {
   font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted); /* was a currentColor 55% weight-fake */
@@ -2557,7 +2567,7 @@ html.dark .oku-figure {
    headline, not marker-only. */
 .resolution-block__headline {
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem); /* rung 3, 26 → 32px */
-  font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */
+  font-weight: var(--wght-display); /* unified numbered-item headline weight (killed the 550 one-off) */
   font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
   line-height: 1.15;
   letter-spacing: 0;
@@ -2648,7 +2658,7 @@ html.dark .oku-figure {
 }
 
 .bento-theme__lead {
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* v3 §5: 92 -> 100. It inherits 18px from .bento-theme__caption, and 18px is
      a reading rung — R10 bans compression there. The "compressed-bold display
      register" it used to join is retired by R2; the lead still separates from
@@ -2658,7 +2668,7 @@ html.dark .oku-figure {
 }
 
 .bento-theme__gloss {
-  font-weight: 400;
+  font-weight: var(--wght-body);
   color: var(--text-muted);
 }
 
@@ -2702,7 +2712,7 @@ html.dark .oku-figure {
 /* Sandbox geometry label inside a placeholder ("NN · slot · ratio"). 14px floor. */
 .bento-theme__plabel {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: var(--wght-display);
   /* 92 -> 100. Not a §5 row; derived. 14px is the floor rung — reading band,
      and R10 bans compression at reading size. */
   font-stretch: calc(var(--wdth-read) * 1%);
@@ -2977,7 +2987,7 @@ html.dark .oku-figure {
 
 .small-multiples__label {
   font-size: 0.875rem; /* v3 §2: was 0.7rem/11.2px, under the 14px floor */
-  font-weight: 600;
+  font-weight: var(--wght-display);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted); /* was a currentColor 55% weight-fake */
@@ -3046,7 +3056,7 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
   margin: 0;
   font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 14px, rung 0 */
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 .hero-block__title {
@@ -3074,13 +3084,13 @@ html.dark .figure-placeholder {
 .hero-block__sentence--open {
   letter-spacing: -0.025em;
   font-stretch: calc(var(--wdth-large) * 1%); /* 100 -> 88 */
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 .hero-block__sentence--anxious {
   letter-spacing: -0.02em;
   font-stretch: calc(var(--wdth-large) * 1%); /* 88, unchanged */
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 .hero-block__role {
@@ -3091,7 +3101,7 @@ html.dark .figure-placeholder {
   margin: 0;
   font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — authored credit register, not body prose */
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   text-wrap: pretty;               /* credit line: no one-word last line at 38ch (body→pretty register) */
 }
 
@@ -3181,7 +3191,7 @@ html.dark .figure-placeholder {
      14px role is exactly what font-optical-sizing: auto already resolves, so
      the pin reproduced the default and bought nothing. */
   font-stretch: calc(var(--wdth-read) * 1%);
-  font-weight: 600;
+  font-weight: var(--wght-display);
 }
 
 .hero-block__callout .hero-block__callout-body {
@@ -3196,7 +3206,7 @@ html.dark .figure-placeholder {
      the callout body and nothing inside it could be re-weighted. */
   font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — featured insight, not body prose */
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   text-wrap: pretty;               /* fills the measure with a tidy rag (no widow); balance evened lines short → right-side band */
 }
 
@@ -3331,7 +3341,7 @@ html.dark .figure-placeholder {
   border-radius: var(--radius-m);
   background: var(--text-primary);
   color: var(--bg-canvas);
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   text-decoration: none;
 }
 

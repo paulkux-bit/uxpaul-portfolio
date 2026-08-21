@@ -352,14 +352,77 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
   add(3, `Adjacent rungs >= ${MIN_STEP_RATIO}x across ${VIEWPORT_MIN}-${VIEWPORT_MAX}px (§4 R5)`, f);
 }
 
+// ── Theme-variable resolution, and why check 4 needs it ────────────────────
+//
+// THIS EXISTS BECAUSE THE CHECK BELOW WENT BLIND, SILENTLY, AND STILL PASSED.
+//
+// Check 4 found the signature by `parseFloat(d.value)` on every font-weight.
+// That worked while every weight in globals.css was a literal. The weight
+// tokenisation pass routed 57 of them through the `--wght-*` tokens §3.2
+// already defined, `.text-lede`'s 340 among them — and `parseFloat` of
+// `var(--wght-thin)` is NaN, so `hits` emptied, the loop ran zero times, and
+// the check reported PASS. Not a regression in the assertion: a regression in
+// what the assertion could see, which is worse, because the output looks
+// identical either way.
+//
+// So resolve one level of `var()` against the `@theme` blocks before matching.
+// This is the two-pass resolver `scripts/lint-space.mjs` already uses, and it
+// is the general answer to a tokenised system versus a CSS-parser gate: the
+// gate has to read the same indirection the authoring layer writes. Tokens
+// that resolve to a literal are checked as that literal; anything else stays a
+// blind spot and gets printed, exactly like `varWidths` above.
+//
+// The negative control is cheap and worth stating: set `--wght-thin: 340` in
+// the theme block and delete `.text-lede` from `ALLOWLIST.signature`, and
+// check 4 must go red. If it stays green the resolver is not wired in.
+// Same shape as `varWidths`: collected, then printed with the other UNCHECKED
+// blocks at the end of the run.
+const varWeights = [];
+
+const THEME_VARS = (() => {
+  const map = new Map();
+  root.walkAtRules('theme', (at) => {
+    at.walkDecls((d) => {
+      if (d.prop.startsWith('--')) map.set(d.prop, d.value.trim());
+    });
+  });
+  return map;
+})();
+
+// One level only. A token whose value is itself a var() is left unresolved and
+// falls through to the blind-spot path rather than being chased, because a
+// resolver that follows chains needs cycle detection and this system has no
+// chained tokens to justify it.
+function resolveThemeVar(raw) {
+  const m = /^var\(\s*(--[\w-]+)\s*(?:,[^)]*)?\)$/.exec(String(raw).trim());
+  if (!m) return raw;
+  return THEME_VARS.get(m[1]) ?? raw;
+}
+
 // 4 — the 340/720 signature pair: >=40px ceiling AND an allowlisted placement.
 {
   const f = [];
   const hits = [];
+  const unresolvedWeights = [];
   for (const d of byProp('font-weight')) {
-    const n = parseFloat(d.value);
+    const raw = d.value.replace(/!important/g, '').trim();
+    const resolved = resolveThemeVar(raw);
+    const n = parseFloat(resolved);
+    if (Number.isNaN(n)) {
+      // Still var()-driven after one pass, or a keyword. Neither is a failure;
+      // both are things this check cannot see, and an unseen value that stays
+      // quiet is how the blindness above happened in the first place.
+      if (raw.includes('var('))
+        unresolvedWeights.push({
+          selector: d.selector,
+          line: d.line,
+          detail: `font-weight: ${raw}`,
+        });
+      continue;
+    }
     if (SIGNATURE_WEIGHTS.includes(n)) hits.push({ ...d, weight: n });
   }
+  varWeights.push(...unresolvedWeights);
   for (const d of byProp('font-variation-settings')) {
     for (const a of fvsAxes(d.value))
       if (a.axis === 'wght' && SIGNATURE_WEIGHTS.includes(a.value))
@@ -556,6 +619,15 @@ if (varWidths.length) {
       `this is a blind spot, not an exemption (§7).`,
   );
   for (const w of varWidths) console.log(`    ${w.selector}  (${CSS_FILE}:${w.line})  ${w.detail}`);
+}
+
+if (varWeights.length) {
+  console.log(
+    `⚠ UNCHECKED: ${varWeights.length} font-weight value${varWeights.length === 1 ? '' : 's'} still ` +
+      `var()-driven after theme resolution. Check 4 cannot see ${varWeights.length === 1 ? 'it' : 'them'} — ` +
+      `a blind spot, not an exemption (§7).`,
+  );
+  for (const w of varWeights) console.log(`    ${w.selector}  (${CSS_FILE}:${w.line})  ${w.detail}`);
   console.log('');
 }
 
