@@ -20,7 +20,7 @@ export interface CaseStudy {
 export const caseStudies: CaseStudy[] = [
   {
     slug: 'uscg-bard',
-    problemFraming: 'How do you unify 56 jurisdictions without changing one?',
+    problemFraming: 'How do 56 jurisdictions align without changing?',
     projectName: 'Bard',
     client: 'U.S. Coast Guard',
   },

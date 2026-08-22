@@ -76,6 +76,26 @@ const CLAUSES = [
   },
 ];
 
+/* ── Card titles: a different question from the hero clauses ──────────────
+   The hero clauses ask "does this hold ONE line inside a band". The home card
+   titles ask "do these two cards AGREE", which is a position question a line
+   count cannot answer: in the current render BARD's title starts HIGHER than
+   FDT-E's precisely because it has more lines. So this pair is measured on
+   line count AND on the title's top edge.
+
+   .case-card__title-link was the noisiest element in the whole earlier sweep,
+   oscillating 3/4/5 lines across the viewport range in BOTH faces, so a
+   single-viewport check would miss the failure mode it actually has. */
+const CARD_PAIR = {
+  route: '/',
+  // Indexed, not nth-of-type: the titles are .case-card__title-link inside
+  // <h2 class="text-cover">, and the card WRAPPER carries no stable class to
+  // key off. There are three cards; the top row is 0 and 1.
+  sel: '.case-card__title-link',
+  a: { label: 'BARD', i: 0 },
+  b: { label: 'FDT-E', i: 1 },
+};
+
 const SWEEP_MIN = 320;
 const SWEEP_MAX = 1600;
 const SWEEP_STEP = 16;
@@ -236,6 +256,58 @@ for (const c of CLAUSES) {
     }
   }
 
+  await ctx.close();
+}
+
+/* ── The card pair ────────────────────────────────────────────────────── */
+if (process.env.CARDS === '1') {
+  const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 }, colorScheme: 'light' });
+  const page = await ctx.newPage();
+  await page.goto(BASE + CARD_PAIR.route, { waitUntil: 'networkidle' });
+  await page.evaluate(() => document.fonts.ready);
+
+  console.log(`\n${'='.repeat(78)}\nCARD PAIR — line count and TOP EDGE alignment`);
+  const rows = [];
+  for (let w = SWEEP_MIN; w <= SWEEP_MAX; w += SWEEP_STEP) {
+    await page.setViewportSize({ width: w, height: 1000 });
+    const r = await page.evaluate(({ sel, a, b }) => {
+      const els = [...document.querySelectorAll(sel)];
+      const read = (i) => {
+        const el = els[i];
+        if (!el) return null;
+        // THE sr-only SPAN MUST BE EXCLUDED. These links carry a visually-hidden
+        // ". BARD, U.S. Coast Guard case study" for screen readers. It is
+        // clipped to 1px but still generates client rects, so selectNodeContents
+        // on the link counted it as extra LINES — inflating every card title by
+        // two. The earlier sweep that recorded this element as "3/4/5 lines
+        // oscillating" was measuring that artifact, not the headline.
+        const hidden = [...el.querySelectorAll('.sr-only')];
+        const prev = hidden.map((h) => h.style.display);
+        hidden.forEach((h) => { h.style.display = 'none'; });
+        const rg = document.createRange();
+        rg.selectNodeContents(el);
+        const rects = [...rg.getClientRects()].filter((x) => x.width > 0.5);
+        const out = { lines: new Set(rects.map((x) => Math.round(x.top))).size,
+                      top: Math.round(el.getBoundingClientRect().top) };
+        hidden.forEach((h, k) => { h.style.display = prev[k]; });
+        return out;
+      };
+      return { a: read(a.i), b: read(b.i) };
+    }, CARD_PAIR);
+    if (r.a && r.b) rows.push({ w, aL: r.a.lines, bL: r.b.lines, dTop: r.a.top - r.b.top });
+  }
+  // compress to bands of identical (aL,bL,aligned)
+  const bands = [];
+  for (const x of rows) {
+    const aligned = Math.abs(x.dTop) <= 1;
+    const last = bands.at(-1);
+    if (last && last.aL === x.aL && last.bL === x.bL && last.aligned === aligned) last.to = x.w;
+    else bands.push({ from: x.w, to: x.w, aL: x.aL, bL: x.bL, aligned, dTop: x.dTop });
+  }
+  for (const bd of bands)
+    console.log(`  ${String(bd.from).padStart(4)}-${String(bd.to).padStart(4)}px   ` +
+      `${CARD_PAIR.a.label} ${bd.aL}L / ${CARD_PAIR.b.label} ${bd.bL}L   ` +
+      `top edges ${bd.aligned ? 'ALIGNED' : `off by ${bd.dTop}px`}`);
   await ctx.close();
 }
 
