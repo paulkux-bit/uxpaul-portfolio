@@ -29,9 +29,16 @@ export default function Home() {
             <span className="font-[720] text-primary">defense</span>.
           </h1>
 
-          {/* Signature — name present but quiet; the role recedes. */}
+          {/* Signature — name present but quiet; the role recedes.
+              The name's WEIGHT lives in globals.css (.hero-credit-name), not in a
+              utility here. It was `font-semibold` — a raw 600 — where v3 §3.2
+              assigns --wght-credit (500) to "Credit lines, quiet emphasis, h3",
+              and this is a credit line rendered at text-h3. A `font-[500]` would
+              have fixed the number and kept the value invisible to the CSS
+              parser, which is worse: the next reader would assume it had been
+              considered. */}
           <p className="hero-beat text-h3" style={{ ['--beat' as string]: 1 }}>
-            <span className="font-semibold text-primary">Paul Kali</span>
+            <span className="hero-credit-name text-primary">Paul Kali</span>
             <span className="text-secondary"> · Senior Product Designer</span>
           </p>
         </div>

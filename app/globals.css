@@ -3105,6 +3105,28 @@ html.dark .figure-placeholder {
 
 /* ── Typographic register ────────────────────────────────────────────── */
 
+/* The home hero's credit line, name half. v3 §3.2 assigns --wght-credit to
+   "Credit lines, quiet emphasis, h3" and this element is a credit line AT
+   text-h3 — two of the three documented uses. It shipped `font-semibold` (600),
+   the DISPLAY weight, which is specified for "headings, headlines, eyebrows,
+   prose emphasis" and not for this.
+
+   The consequence was visible: at 390 the h1's light half (32px / 340) sits
+   directly above this line (22px / 600), and the credit read heavier than the
+   headline it sits under. Options that raised the HEADLINE were rendered and
+   rejected — v3 §3.2 cleared 340 at the 32px floor with device evidence, and
+   moving a sanctioned value to compensate for an unsanctioned one is fixing the
+   wrong end.
+
+   THE WEIGHT IS HERE RATHER THAN IN A UTILITY ON PURPOSE. The span previously
+   carried no semantic class at all, so this element could not be referred to
+   from CSS. What that buys is precise: the value is now VISIBLE TO THE PARSER,
+   which is the precondition for the weight-vocabulary check the backlog asks
+   for. It does not make it CHECKED — no check enforces the vocabulary today. */
+.hero-credit-name {
+  font-weight: var(--wght-credit);
+}
+
 .hero-block__eyebrow {
   font-size: 0.875rem;
   line-height: 1.4;
