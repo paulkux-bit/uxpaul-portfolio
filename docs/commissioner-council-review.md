@@ -1,5 +1,32 @@
 # Council review: the Commissioner swap
 
+> **STATUS: closed 22 Aug 2026. This is a record of a decision being made, not a
+> plan. Do not implement from it.**
+>
+> **What it was:** a seven-seat review of whether to swap Bricolage Grotesque for
+> Commissioner, written 21 Aug 2026 against the line-break measurement.
+> **How it closed:** GO, with conditions. The migration ran as C1–C6 on
+> `type-system-v4` and merged to `main` at `c2c8500`.
+> **Where the outcome lives:** `docs/type-system-v3-locked.md`, amended in place
+> (there is no v4). §10 holds the voice, the rulings verbatim and the 52px cut.
+>
+> **SIX RECOMMENDATIONS HERE WERE SUBSEQUENTLY OVERTURNED.** Bodies below are
+> unedited; each is flagged here rather than corrected in place, because the
+> reasoning that produced them is the point of keeping the file.
+>
+> | § | claim | outcome |
+> |---|---|---|
+> | Item 1, and the closing list | "The date is still unruled" | Ruled 21 Aug: **no hard gate**, 30 Sept target. `CLAUDE.md` corrected in Phase 0d. |
+> | Item 2's 10× move; Conditions 3 | **give VOLM to rung 6 alone** — argued here as the single most distinctive move available | **VOLM DOES NOT SHIP.** Ruling 4c: Paul could not see its difference at the crescendo. It is absent from the binary, not pinned. |
+> | Front-end §2 | "`next/font/google` accepts `axes: ['FLAR','VOLM','slnt']` … no self-host" | The migration **self-hosts**. Google serves v1.001, which lacks the `case` feature that fixes the eyebrow middot and FDT-E's hyphen. |
+> | QA §1 and its proposed fix | 8b cannot see VOLM; rewrite it as a two-part check naming its own blind spot | **Moot, and closed by subtraction.** An axis you do not ship cannot fail silently. The two-part rewrite was not needed. |
+> | Content §, the `h2` budget | `.case-study-prose h2` 22ch ≈ 30 → **32** characters | **Wrong twice over.** Measured ≈ **33.0** — and `22ch` **never wins**: `.cs-section h2`'s 30ch beats it on all 8 `h2`s, so the live budget is ≈ **44.9**. The "column 13.5% wider" figure in that same row is correct. |
+> | Systems §, R8 | "R8 tightens to R8'. FVS may name only FLAR, VOLM, slnt" | R8' shipped **stronger than proposed**: exactly ONE `font-variation-settings` declaration in shipped CSS, on the universal selector. An invariant rather than an allowlist. |
+>
+> One recommendation it got exactly right, worth naming beside the six:
+> **Condition 1, rewrite the hero clauses before any font decision.** It closed a
+> live R9 violation and was owed regardless of the typeface.
+
 Seven seats. Back-End Dev sits this one out; there is no data model in scope.
 
 The council skill is written against the BARD product's design system. This review runs the same framework against uxpaul.com's four locked systems and the three portfolio personas (Dana, Marcus, Jordan), because that is what is actually under review.

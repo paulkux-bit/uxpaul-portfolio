@@ -1,8 +1,16 @@
 /**
  * Hero-clause candidate harness.
  *
- * The three case-study hero clauses below hold one line only because
- * `font-stretch: 88%` buys them ~12% more characters per line. The next/font
+ * STATUS: the question this was built for is CLOSED. Phase 0a rewrote the three
+ * clauses, and the width axis it measured against no longer exists. It stays
+ * because the general shape — how many characters must come out for a string to
+ * hold one line across a viewport band — is the question any copy fit asks, and
+ * the CARDS=1 block below measures card-title line counts and top edges, which
+ * is a layout question with no font premise at all.
+ *
+ * The original premise, for the record: the three case-study hero clauses below
+ * held one line only because `font-stretch: 88%` bought them ~12% more
+ * characters per line. The next/font
  * fallback is Arial-based with no `wdth` axis, so during the swap window they
  * set at 100 and reflow — a live R9 violation on the LCP element of the three
  * most important pages (see docs/commissioner-linebreak-measurement.md,
@@ -47,10 +55,14 @@ import { readFileSync } from 'node:fs';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 const CANDIDATE_FILE = process.argv[2] ?? null;
 
-/* Width neutralised the same way the `bricolage-nowdth` control does it: the
-   state every one of these clauses is in during the swap window, and the state
-   Commissioner would put them in permanently. */
-const NO_WIDTH = '*, *::before, *::after { font-stretch: 100% !important; }';
+/* NO_WIDTH was DELETED 22 Aug 2026, with the two matching variants in
+   measure-linebreaks.mjs. It injected `font-stretch: 100% !important` to put
+   these clauses in the state Commissioner would put them in permanently.
+   Commissioner now IS the shipped face, so the injection was INERT — and an
+   inert neutraliser is worse than none, because a clean diff from it reads as
+   "width is neutral" when the truth is that width is absent. Same class as the
+   49 declarations C3 deleted from globals.css, in the one place lint:type
+   cannot reach. This script now measures the shipped state directly. */
 
 /* The three that lose their single-line band. The other three hero clauses
    ("until someone works it.", "The data was there.", "and no process.") keep
@@ -172,16 +184,21 @@ for (const c of CLAUSES) {
   const page = await ctx.newPage();
   await page.goto(BASE + c.route, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
-  await page.addStyleTag({ content: NO_WIDTH });
 
-  // WARMUP. NO_WIDTH is a font-variation change, and the wdth-100 instance is
-  // not necessarily resolved by the time the next measurement runs — awaiting
-  // fonts.ready ONCE at setup does not cover an instance requested afterwards.
-  // Without this the FIRST measurement of each clause renders against the
-  // previous instance and reads wide, which is a defect that looks like data
-  // rather than like an error. One throwaway read, then re-await, costs ~50ms
-  // and removes the whole class. Found 21 Aug 2026 when two independent rigs
-  // disagreed by 60px on exactly one number: each rig's first.
+  // WARMUP — AND ITS STATED PREMISE JUST EXPIRED, SO HERE IS THE ONE THAT
+  // REPLACES IT. This existed because NO_WIDTH was a font-variation change and
+  // awaiting fonts.ready ONCE at setup does not cover an instance requested
+  // afterwards. NO_WIDTH is now deleted, so that reason is gone.
+  //
+  // It stays because the DEFECT it was bought with is not specific to the
+  // injection: the FIRST measurement after a page load can render against an
+  // unresolved instance and read wide, which is a defect that looks like data
+  // rather than like an error. Found 21 Aug 2026 when two independent rigs
+  // disagreed by 60px on exactly one number — each rig's first. One throwaway
+  // read then a re-await costs ~50ms and removes the class.
+  //
+  // Keeping a guard whose stated reason expired, without restating it, is how
+  // an assertion turns into decoration.
   await measure(page, c.sel, null);
   await page.evaluate(() => document.fonts.ready);
 
@@ -193,7 +210,10 @@ for (const c of CLAUSES) {
   console.log(`\n${'='.repeat(78)}`);
   console.log(`${c.key}   ${c.route}  ${c.sel}`);
   console.log(`shipped: "${shipped}"  (${shipped.length} chars)`);
-  console.log(`band held at wdth 88: ${c.band[0]}-${c.band[1]}px\n`);
+  // Historical: the band each clause held in BRICOLAGE at wdth 88, which is the
+  // target the rewrite had to reproduce. Kept as the yardstick it was; it is not
+  // a property of anything the site renders now.
+  console.log(`band held in Bricolage at wdth 88 (historical): ${c.band[0]}-${c.band[1]}px\n`);
 
   // Targets: the two edges of the band it must reproduce at width 100. Both
   // the container and the font-size grow with the viewport and they do not

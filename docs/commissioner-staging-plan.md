@@ -1,5 +1,34 @@
 # Commissioner: the staging plan
 
+> **STATUS: every phase in this document is COMPLETE. Closed 22 Aug 2026.**
+> **A finished plan reads as a live one, which is the defect this banner exists
+> to prevent. Do not implement from it.**
+>
+> **What it was:** the sequencing plan for the swap, written 21 Aug 2026 after the
+> line-break measurement, the council review and a research pass.
+> **How it closed:** Phase 0 landed on `main`; Phases 1–3 ran as C1–C6 on
+> `type-system-v4`; merged at `c2c8500`.
+> **Where the outcome lives:** `docs/type-system-v3-locked.md` (amended in place,
+> no v4) and the twelve commit messages, which carry the measurements.
+>
+> **FOUR CLAIMS HERE WERE OVERTURNED BY THE WORK THIS DOCUMENT PLANNED.** Bodies
+> unedited; flagged here.
+>
+> | § | claim | outcome |
+> |---|---|---|
+> | §, the wiring sketch | `:root { font-variation-settings: "FLAR" var(--flar) … }` | **Proved wrong, and it is the sharpest correction in the migration.** Custom properties substitute at computed-value time *on the element whose declaration matched*, so `:root` resolves the string before inheritance and descendants inherit `"FLAR" 0` with no `var()` left. Measured: **0.00px on `:root` against 27.20px on `*`.** The declaration must be on `*`. |
+> | §, the `ch` finding | "every `ch`-based measure jumps **roughly 17%** at swap time" | **Not uniform, and the asymmetry is the story.** Measured at 1440: display `30ch` **+13.5%**, body `64ch` **+0.6%**, `52ch` +1.5%, `56ch` +0.2%. |
+> | §, the same finding | "`ch` is **completely invariant** under FLAR and VOLM" | **`ch` is** — the "0" advance genuinely does not move. **The general reading is wrong**: FLAR moves set width **0.30–0.62%** across every selector measured. One glyph is not the font. |
+> | Phase 3, item 1 | on record: "about **11%** of line-sets re-break, no headline gains a line, five widows" | C2 measured **181 / 1209 ≈ 15%**. Kept visible beside the outcome, because a prediction is only worth writing down if it is later scored. |
+>
+> **And every element count in Phase 3's plan inherits the sr-only contamination**
+> — see the correction header on `docs/commissioner-linebreak-measurement.md`.
+> The pure population is 1,200, not 1,209.
+>
+> One instrument this plan names, `scripts/measure-fallback-shift.mjs`, was
+> **deleted 22 Aug 2026**: its question cannot recur without a width axis, and
+> `measure-linebreaks.mjs FALLBACK=1` subsumes it.
+
 Written 21 Aug 2026, after the line-break measurement, the council review, and a deep research pass on the typeface and on shipping custom axes.
 
 Two things in this document correct earlier work of mine. Both are flagged where they appear.

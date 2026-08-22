@@ -4,6 +4,13 @@
 // Committed rather than improvised so a future reader can rerun a proof instead
 // of reconstructing one, the same principle as the lint fixtures.
 //
+// DO NOT SWEEP THIS AS ORPHANED. Nothing in the repo references it by name, so a
+// string-grep census reports it as dead. That census is wrong: line ~71 below is
+// one of four places recording the Also Shipped shelf's NON-INTERACTIVE decision,
+// alongside app/data/quick-hits.ts:7, components/quick-hits/quick-hit.tsx:5 and
+// app/page.tsx:84. It is a decision record that happens to be executable, and
+// grep cannot tell those apart from dead code. Checked 22 Aug 2026.
+//
 // It exists because the extension-screenshot route was not trustworthy. Its null
 // test — two captures with no change between — found two independent sources of
 // nondeterminism: the mix-blend-mode cover art settling into one of two stable
@@ -68,6 +75,9 @@ const ROUTES = [
       { name: 'mail', sel: MAIL, states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'theme-toggle', sel: '.theme-toggle', states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'nav-link', sel: '.nav-link', states: ['rest', 'hover', 'focus'], inflate: HALO },
+      // DECISION RECORD, not an oversight: 'rest' ONLY, no hover and no focus,
+      // because the Also Shipped shelf is non-interactive in v1. The ABSENCE of
+      // the other two states is the thing being recorded. See the header.
       { name: 'quick-hit', sel: '.quick-hit', states: ['rest'] },
       // The skip link sits at translateY(-160%) until focused. Tab from the top
       // of the document is the only way to see it.

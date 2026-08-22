@@ -1,4 +1,20 @@
 /**
+ * UNMAINTAINED — single-use, kept because a shipped document cites its output.
+ *
+ * Answered ruling 3 of the Commissioner migration (confirm the 340/720 pair
+ * survives the typeface change). CLOSED 21 Aug 2026: it does, and louder —
+ * docs/type-system-v3-locked.md's rulings table cites 1.634 Bricolage against
+ * 1.851 Commissioner. It is kept so a reader who wants to check that number has
+ * the tool that produced it, NOT because it is expected to run again.
+ *
+ * IT WILL NOT RUN AS CHECKED OUT. It needs @fontsource-variable/bricolage-
+ * grotesque and @fontsource-variable/commissioner, which are NOT in package.json
+ * and NOT installed. Install them first (below) or point BRICOLAGE_WOFF2 /
+ * COMMISSIONER_WOFF2 at your own copies. Said out loud because an instrument
+ * that fails to start is only honest if the reader is told before they lean on
+ * it — and it also hardcodes those two faces, so a third typeface would need it
+ * changed rather than merely run.
+ *
  * Perceived-weight proxy for the 340/720 signature.
  *
  * The feasibility study's §7 argues the pair from design-space position after

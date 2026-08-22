@@ -29,6 +29,17 @@
  * `--exclude-hidden`, valid only when BOTH sides of a diff were captured under
  * it. Never applied across that boundary.
  *
+ * BASELINES ARE LOCAL AND GITIGNORED (`measurements/`, .gitignore:81). Nothing
+ * in there is committed, deliberately: a current baseline is ~2 minutes from any
+ * build, so committing 550 KB to save that is a bad trade.
+ *
+ * THE PRE-MIGRATION BASELINES ARE NOT REGENERABLE, AND THAT IS PERMANENT.
+ * bricolage.json, after-0a, after-0b, c2-commissioner, c3-baseline, r9-* and
+ * sweep-bricolage* were captured against a Bricolage build that no longer exists
+ * on main. If they are gone from your working copy they are gone. Do not spend an
+ * afternoon trying to reproduce them — their conclusions are recorded in
+ * docs/commissioner-linebreak-measurement.md.
+ *
  * Found 22 Aug 2026, after the same artifact had already been fixed in
  * sweep-candidates.mjs and not here — where it had inflated a card title's line
  * count by two and produced the claim that .case-card__title-link was "the
@@ -45,12 +56,18 @@ const VARIANT = POSITIONAL[1] ?? 'none';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 
 /* FALLBACK=1 aborts the woff2 so the size-adjusted Arial fallback renders.
-   That is R9's control, and it is NOT the same question as the `nowdth`
-   variant: neutralising width compares Bricolage-at-88 with Bricolage-at-100,
-   whereas the fallback is a DIFFERENT FACE at size-adjust 105.43%, wider than
-   either. Scoping an R9 question against the width control is what let
-   "The data was there." be excluded from Phase 0a as already-short-enough
-   while it still reflowed at 1440.
+   That is R9's control: the fallback is a DIFFERENT FACE at size-adjust
+   105.43%, and R9 says anything that matters must survive it.
+
+   It used to be contrasted here with a `nowdth` width control, and scoping an
+   R9 question against that control is what let "The data was there." be
+   excluded from Phase 0a as already-short-enough while it still reflowed at
+   1440. The width control is now deleted (see VARIANTS); the lesson is that
+   the fallback and any same-face variant are different questions, which is
+   still true of every variant below.
+
+   It also SUBSUMES scripts/measure-fallback-shift.mjs, deleted 22 Aug 2026:
+   that script asked the same question about three hero selectors only.
 
    An env var rather than a third positional: argv[2] and argv[3] are already
    LABEL and VARIANT, and the two compose — a run can be fallback AND varied. */
@@ -107,16 +124,6 @@ const VARIANTS = {
     :root { font-variation-settings: 'FLAR' 15, 'VOLM' 0; }
   `,
 
-  /* Control, run against the BRICOLAGE build. Neutralises every width
-     declaration so Bricolage sets at wdth 100 everywhere — the same state
-     Commissioner is permanently in, since it has no wdth axis. Comparing
-     bricolage → bricolage-nowdth isolates how much of the Commissioner
-     re-break is "the width band was doing fitting work" rather than "the new
-     face is a different width". */
-  nowdth: `
-    * { font-stretch: 100% !important; font-variation-settings: normal !important; }
-  `,
-
   /* Commissioner with only the 19px body, no voice and no rung-0 split. */
   body19: `
     .case-study-prose p { font-size: 1.1875rem; }
@@ -140,17 +147,39 @@ const VARIANTS = {
     .milestone__date               { letter-spacing: -0.010em; }
   `,
 
-  /* WIDTH ONLY. `nowdth` above also sets font-variation-settings: normal,
-     which additionally strips the §6-sanctioned opsz pin on .milestone__date
-     and all four .text-qh-title axis sets — fine for the Commissioner
-     comparison it was written for, wrong for isolating the width axis, because
-     it conflates "no wdth" with "no optical pins" across 5 elements.
-     Matches NO_WIDTH in sweep-candidates.mjs. `nowdth` is left untouched so the
-     earlier Commissioner runs stay comparable. */
-  nowdthonly: `
-    *, *::before, *::after { font-stretch: 100% !important; }
-  `,
+  /* `nowdth` and `nowdthonly` were DELETED 22 Aug 2026, after the migration.
+     Both injected `font-stretch: 100% !important` to neutralise the width axis.
+     Commissioner has no wdth axis, so both were INERT — they would have
+     reported a clean diff and let a reader conclude that width is neutral. It
+     is not neutral, it is absent, and a tool that returns a confident wrong
+     answer is the worst category in this project's fault tally.
+
+     This is the same defect C3 deleted 49 instances of from globals.css and
+     that lint:type check 10 now fails the build on. No lint reaches scripts/,
+     which is the only reason these survived it.
+
+     The runs that used them (r9-nowdth, sweep-bricolage-nowdth) are not
+     reproducible either way: they were captured against a Bricolage build that
+     no longer exists on main. Their conclusions are in
+     docs/commissioner-linebreak-measurement.md, which is where a conclusion
+     belongs. */
 };
+
+/* THE DELETION ABOVE CREATED THIS, SO IT IS PART OF THE DELETION.
+   An unknown variant name used to be impossible to notice: the run does
+   `if (VARIANTS[VARIANT]) addStyleTag(...)`, so a typo — or a command copied
+   from a doc that still says `nowdth` — SILENTLY injected nothing and produced a
+   normal run under a variant label. That is the same confident-wrong-answer
+   class the deleted variants were removed for, and removing them without this
+   would have moved the defect rather than fixed it. */
+const KNOWN = new Set(Object.keys(VARIANTS));
+const RETIRED = { nowdth: 'deleted 22 Aug 2026 — inert, Commissioner has no wdth axis',
+                  nowdthonly: 'deleted 22 Aug 2026 — inert, Commissioner has no wdth axis' };
+if (!KNOWN.has(VARIANT)) {
+  const why = RETIRED[VARIANT] ? `\n  '${VARIANT}' was ${RETIRED[VARIANT]}.` : '';
+  console.error(`unknown variant '${VARIANT}'.${why}\n  known: ${[...KNOWN].join(', ')}`);
+  process.exit(1);
+}
 
 const collect = (excludeHidden) => {
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG', 'PATH', 'HEAD', 'META', 'LINK']);

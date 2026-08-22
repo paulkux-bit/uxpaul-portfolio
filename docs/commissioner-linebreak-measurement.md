@@ -1,5 +1,17 @@
 # Commissioner — the line-break measurement
 
+> **STATUS: closed 22 Aug 2026.** **What it was:** the cost measurement that
+> turned "re-verification will be expensive" into a number, written 21 Aug 2026.
+> **How it closed:** the swap shipped; C2 measured 181 / 1209 against this
+> document's ~11% prediction. **Where the outcome lives:**
+> `docs/type-system-v3-locked.md`, amended in place.
+>
+> Its instruments survive and are maintained — `measure-linebreaks.mjs` and
+> `diff-linebreaks.mjs` are the site's standing regression detector. Two it names
+> do not: `measure-fallback-shift.mjs` was **deleted** 22 Aug 2026 (subsumed by
+> `FALLBACK=1`), and `sig-ink.mjs` is kept but **unmaintained**, with a header
+> saying so.
+>
 > **CORRECTION, 22 Aug 2026 — every element count in this document is impure.
 > The body below is unedited on purpose; it is a measurement record.**
 >

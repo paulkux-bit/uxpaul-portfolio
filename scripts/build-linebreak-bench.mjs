@@ -1,4 +1,17 @@
 /**
+ * UNMAINTAINED — single-use, kept because it is the only thing that can
+ * regenerate a COMMITTED artifact.
+ *
+ * Built the bench Paul judged Phase 1 from. CLOSED 21 Aug 2026 with the rulings
+ * recorded verbatim in docs/type-system-v3-locked.md §10.1. Deleting it while
+ * keeping docs/previews/commissioner-judgment-bench.html would leave a generated
+ * file in the repo with no way to regenerate it, which is the worse of the two
+ * states.
+ *
+ * IT WILL NOT RUN AS CHECKED OUT — same missing @fontsource-variable/* devDeps
+ * as sig-ink.mjs. The COMMITTED OUTPUT is unaffected: it is self-contained, with
+ * both woff2 binaries inlined as base64, and opens with no server and no network.
+ *
  * Builds docs/previews/commissioner-judgment-bench.html — the eye-call companion
  * to docs/commissioner-linebreak-measurement.md.
  *
