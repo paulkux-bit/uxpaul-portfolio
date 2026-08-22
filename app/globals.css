@@ -137,14 +137,33 @@
   font-variation-settings: 'FLAR' var(--flar, 0);
 }
 
-/* THE DISPLAY BAND. Derived from RUNGS in scripts/lint-type.mjs, and
+/* THE FLARED VOICE. Derived from RUNGS in scripts/lint-type.mjs, and
    lint:type check 11 fails the build if this list stops matching the
-   `band: 'display'` entries there. One list, two consumers: the bench
+   `voice: 'flared'` entries there. One list, two consumers: the bench
    kept its own hand-written copy of this, which named a class that does
    not exist and omitted .hero-block__title, so rung 5 rendered no flare
    for an entire judgment session while every gate stayed green.
 
-   .text-lede is banded ahead of its RUNG, which v3 §9 leaves open on
+   NOT THE DISPLAY BAND ANY MORE, AND THE DIFFERENCE IS THE POINT.
+   `band` says what the type IS. `voice` says what it GETS. .text-cover,
+   .friction-beat__headline and .about-phase__title are display type and
+   stay display type in RUNGS; they are simply below the size at which
+   flare carries anything. Moving them out of the band to take the flare
+   off them would have put a lie in the map.
+
+   THE CUT IS AT 52px AND IT IS A JUDGMENT, NOT A CONSTANT. It was taken
+   on a render at five sizes — 88, 72, 52, 32 and 18px. Nothing was ever
+   tested at 51 or at 40, so a selector within a few pixels of the line
+   is a judgment call and not a lookup:
+
+     .about-hero__pov     51.2px @1440   flared — functionally 52
+     .about-phase__title  36.4px @1440   plain  — inside the 32-40 range
+                                                  measured indistinct
+
+   Reading it as a number is what would send .about-hero__pov plain over
+   one pixel and leave the about page flat. Do not do that.
+
+   .text-lede is flared ahead of its RUNG, which v3 §9 leaves open on
    purpose. Flare asks a narrower question than the ladder does — display
    type or reading type — and a 60px lede is display by any reading.
 
@@ -154,14 +173,16 @@
    no element on any route. scripts/assert-bands.mjs found them on its
    first run. Giving a voice value to a selector that renders nowhere is
    the same inert-but-plausible CSS C3 deleted 49 declarations of.
-   See docs/unspecified-surfaces.md. */
+   See docs/unspecified-surfaces.md.
+
+   THE PLAIN SELECTORS TAKE NO DECLARATION. @property above already sets
+   initial-value: 0, so authoring `--flar: 0` beside them would be a
+   second statement of the same fact and a place for the two to disagree.
+   They are asserted at 0 by scripts/assert-bands.mjs, not by CSS. */
 .milestone__date,
 .hero-block__title,
 .case-study-prose h2,
-.friction-beat__headline,
-.text-cover,
 .text-lede,
-.about-phase__title,
 .about-hero__pov {
   --flar: 100;
 }

@@ -5,7 +5,7 @@
  *   node scripts/assert-bands.mjs        (needs `next start` on :3000)
  *
  * WHY THIS EXISTS AND WHY IT IS NOT lint:type. lint:type check 11 asserts the
- * CSS band list matches RUNGS' `band: 'display'` set. That is a comparison of
+ * CSS flared list matches RUNGS' `voice: 'flared'` set. That is a comparison of
  * two lists. It cannot tell you whether either list matches a real element,
  * which is exactly how the Commissioner bench's rung-5 band rendered nothing
  * for an entire judgment session while every gate stayed green.
@@ -17,16 +17,23 @@
  * so getComputedStyle returns a resolved value and the real question is
  * answerable: does this element actually compute to 100?
  *
- * Two directions, because a leak and a gap are different failures:
+ * Three directions, because a leak, a gap and a stowaway are different failures:
  *
- *   1. Every display-band selector matches >= 1 element, and every matched
- *      element computes --flar: 100. Catches a band that matches but is
- *      overridden downstream.
- *   2. Known body-rung elements compute --flar: 0. `--flar` inherits, so a
- *      band value set on a CONTAINER leaks into every descendant, including
- *      prose. THIS IS THE ACTUAL LEAK DETECTOR: the line-break diff only sees
- *      a leak that happens to change a line break, and a leak into a short
- *      paragraph that does not re-break is invisible to it.
+ *   1. Every FLARED selector matches >= 1 element, and every matched element
+ *      computes --flar: 100. Catches a voice that matches but is overridden
+ *      downstream.
+ *   2. Every PLAIN selector matches >= 1 element and computes --flar: 0.
+ *      NEW IN C5, AND THE POINT OF THE COMMIT. .text-cover and
+ *      .friction-beat__headline were previously flared; they are now display
+ *      type that must NOT be flared, which is a claim nothing checked before.
+ *      An unasserted zero is indistinguishable from a value nobody set. The
+ *      >= 1 requirement stays: a plain selector matching nothing is the same
+ *      rung-5 blindness with a different value.
+ *   3. Known body-rung elements compute --flar: 0. `--flar` inherits, so a
+ *      value set on a CONTAINER leaks into every descendant, including prose.
+ *      THIS IS THE ACTUAL LEAK DETECTOR: the line-break diff only sees a leak
+ *      that happens to change a line break, and a leak into a short paragraph
+ *      that does not re-break is invisible to it.
  *
  * Route coverage is reported per selector, because a selector whose only home
  * is a route outside the five would fail here for the wrong reason.
@@ -37,20 +44,32 @@ import { chromium } from 'playwright';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 const ROUTES = ['/', '/about', '/case-studies/uscg-bard', '/case-studies/us-navy-fdt-e', '/case-studies/nuuly'];
 
-/** Mirrors RUNGS' `band: 'display'` set. lint:type check 11 keeps them equal. */
-const DISPLAY_BAND = [
-  '.milestone__date',
-  '.hero-block__title',
-  '.case-study-prose h2',
-  '.friction-beat__headline',
-  '.text-cover',
-  '.text-lede',
-  '.about-phase__title',
-  '.about-hero__pov',
+/** Mirrors RUNGS' `voice: 'flared'` set. lint:type check 11 keeps them equal. */
+const FLARED = [
+  '.milestone__date',     //  88px
+  '.hero-block__title',   //  72px
+  '.text-lede',           //  60px
+  '.about-hero__pov',     //  51.2px @1440 — judgment, see RUNGS
+  '.case-study-prose h2', //  52px — the boundary the cut was taken at
 ];
 
 /**
- * In globals.css, banded nowhere, rendering nowhere. Carried here so a reader
+ * Display type that the 52px cut leaves plain. `band: 'display'` in RUNGS,
+ * `voice: 'plain'` — the two keys disagreeing here is the whole reason they
+ * were split, so this list is where the split is proved to render.
+ *
+ * No CSS declares --flar: 0 on these. @property's initial-value does, which is
+ * exactly why they need asserting: there is no declaration to read, so the only
+ * way to know the value arrived is to ask the element.
+ */
+const PLAIN = [
+  '.about-phase__title',      // 36.4px @1440, 40px ceiling
+  '.text-cover',              // 32px
+  '.friction-beat__headline', // 32px
+];
+
+/**
+ * In globals.css, given no voice, rendering nowhere. Carried here so a reader
  * can see they were considered and excluded rather than forgotten — the same
  * reason they keep their RUNGS entries with `dead: true`.
  *   .resolution-block__headline, .text-statement, .transformation
@@ -62,10 +81,13 @@ const READING = [
   '.case-study-prose p',
   '.case-study-prose .section-lede',
   '.about-row__body',
-  // C4a: the phase titles are flared and these two sit right beside them.
-  // .about-phase__note follows a flared <h2> as a SIBLING, and
-  // .about-contact__body follows another - if either ever became a child, the
-  // flare would reach prose and only this check would notice.
+  // Added in C4a when the phase titles above them were flared. C5 made those
+  // titles plain, so the ADJACENCY these two were guarding is gone — and they
+  // stay, because the reason they stay is different from the reason they came:
+  // /about is the one route whose h1 is flared while everything under it is
+  // not, so it is where an inherited 100 would be least expected and least
+  // visible. Keeping a check whose stated premise expired without restating it
+  // is how an assertion turns into decoration.
   '.about-phase__note',
   '.about-contact__body',
   '.hero-block__role',
@@ -73,11 +95,12 @@ const READING = [
 ];
 
 /**
- * `exclude` drops elements that also match a display-band selector. A reading
- * selector like `.case-study-prose p` legitimately matches `.milestone__date`,
- * which is a <p> at rung 6 and correctly carries 100 — counting that as a leak
- * is the checker's bug, not the CSS's. Excluding the band generically means
- * this stays honest as the band grows, rather than needing a :not() per member.
+ * `exclude` drops elements that also match a MAPPED selector — flared or plain,
+ * not just flared. A reading selector like `.case-study-prose p` legitimately
+ * matches `.milestone__date`, which is a <p> at rung 6 and correctly carries
+ * 100 — counting that as a leak is the checker's bug, not the CSS's. Excluding
+ * the whole map generically means this stays honest as the map grows or splits
+ * again, rather than needing a :not() per member.
  */
 const read = (page, selectors, exclude = []) =>
   page.evaluate(({ sels, exclude }) =>
@@ -92,17 +115,19 @@ const browser = await chromium.launch(
   process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}
 );
 
-const band = {}, reading = {};
+const MAPPED = [...FLARED, ...PLAIN];
+
+const voiced = {}, reading = {};
 for (const route of ROUTES) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   await page.goto(BASE + route, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
-  for (const r of await read(page, DISPLAY_BAND)) {
-    band[r.sel] ??= { total: 0, routes: [], values: new Set() };
-    if (r.count) { band[r.sel].total += r.count; band[r.sel].routes.push(route); }
-    r.values.forEach((v) => band[r.sel].values.add(v));
+  for (const r of await read(page, MAPPED)) {
+    voiced[r.sel] ??= { total: 0, routes: [], values: new Set() };
+    if (r.count) { voiced[r.sel].total += r.count; voiced[r.sel].routes.push(route); }
+    r.values.forEach((v) => voiced[r.sel].values.add(v));
   }
-  for (const r of await read(page, READING, DISPLAY_BAND)) {
+  for (const r of await read(page, READING, MAPPED)) {
     reading[r.sel] ??= { total: 0, values: new Set() };
     reading[r.sel].total += r.count;
     r.values.forEach((v) => reading[r.sel].values.add(v));
@@ -112,18 +137,26 @@ for (const route of ROUTES) {
 await browser.close();
 
 const fails = [];
-console.log('\nDISPLAY BAND — must match >= 1 element and compute --flar: 100');
-for (const sel of DISPLAY_BAND) {
-  const b = band[sel];
-  const vals = [...b.values].filter(Boolean);
-  const ok = b.total > 0 && vals.length === 1 && vals[0] === '100';
-  if (b.total === 0) fails.push(`${sel} matches ZERO elements on all five routes`);
-  else if (!(vals.length === 1 && vals[0] === '100'))
-    fails.push(`${sel} computes --flar ${JSON.stringify(vals)}, expected ["100"]`);
-  console.log(
-    `  ${ok ? 'ok  ' : 'FAIL'} ${sel.padEnd(32)} ${String(b.total).padStart(3)} el  --flar ${JSON.stringify(vals).padEnd(9)} on ${b.routes.map((r) => r === '/' ? '/' : r.split('/').pop()).join(', ') || '(nowhere)'}`,
-  );
-}
+
+/* One function, two expectations. A separate pass for plain would be a second
+   place for the same rule to live, and one of them would drift. */
+const assertVoice = (title, selectors, expected) => {
+  console.log(`\n${title}`);
+  for (const sel of selectors) {
+    const b = voiced[sel];
+    const vals = [...b.values].filter(Boolean);
+    const ok = b.total > 0 && vals.length === 1 && vals[0] === expected;
+    if (b.total === 0) fails.push(`${sel} matches ZERO elements on all five routes`);
+    else if (!(vals.length === 1 && vals[0] === expected))
+      fails.push(`${sel} computes --flar ${JSON.stringify(vals)}, expected ["${expected}"]`);
+    console.log(
+      `  ${ok ? 'ok  ' : 'FAIL'} ${sel.padEnd(32)} ${String(b.total).padStart(3)} el  --flar ${JSON.stringify(vals).padEnd(9)} on ${b.routes.map((r) => r === '/' ? '/' : r.split('/').pop()).join(', ') || '(nowhere)'}`,
+    );
+  }
+};
+
+assertVoice("FLARED — must match >= 1 element and compute --flar: 100", FLARED, '100');
+assertVoice("PLAIN — display type below the 52px cut; must match >= 1 element and compute --flar: 0", PLAIN, '0');
 
 console.log('\nREADING SURFACES — must compute --flar: 0 (the leak detector)');
 for (const sel of READING) {
@@ -141,4 +174,4 @@ if (fails.length) {
   console.log(`\nFAILED: ${fails.length}`);
   process.exit(1);
 }
-console.log('OK — every band selector renders its value, no reading surface carries flare.');
+console.log('OK — every mapped selector renders its voice, no reading surface carries flare.');

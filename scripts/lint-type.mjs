@@ -58,10 +58,40 @@ const ALLOWLIST = {
   ],
 };
 
-// ── The type map: one list, two consumers ──────────────────────────────────
+// ── The type map: one list, three keys ─────────────────────────────────────
 // `ladder: true`  -> check 3 walks these pairwise for the 1.15 ratio.
-// `band`          -> the C4 flare derivation reads this. 'display' takes FLAR
-//                    100; everything else takes 0.
+// `band`          -> what the type IS: display or reading. Assigned by the
+//                    rung's ceiling, per v3 §5's width table, which is where
+//                    this key came from and why it survives the split below.
+// `voice`         -> what the type GETS: 'flared' (FLAR 100) or 'plain' (0).
+//                    Check 11 reads THIS, not `band`.
+//
+// BAND AND VOICE WERE ONE KEY UNTIL C5 AND THAT WAS A LATENT BUG. C4 used
+// `band: 'display'` to mean both, which held only while every display selector
+// wanted flare. The 52px cut broke it: .text-cover and .friction-beat__headline
+// are 32px display type by size, weight and rung, and the only way to take the
+// flare off them through one key was to relabel them reading — a lie in the map,
+// which is the thing this branch has spent six commits removing.
+//
+// Same failure as check 3 conflating rung with selector. When one key answers
+// two questions, the second question eventually gets the wrong answer.
+//
+// `band` IS STILL READ, by a human and by §5. Do not delete it as unused
+// because check 11 stopped consuming it; it is the record of what each selector
+// is, and it is what a future width system would key off if the typeface ever
+// regains a wdth axis.
+//
+// THE 52px CUT IS A JUDGMENT AND CARRIES ITS PROVENANCE. It was taken on a
+// render at five sizes — 88, 72, 52, 32, 18px — after a UI review found flare
+// illegible at 32. Nothing was ever tested at 51 or at 40. Selectors within a
+// few pixels of the line are ruled on, not looked up, and the ruling is written
+// on the entry. Read as a number, 51.2px would send .about-hero__pov plain and
+// leave the whole about page flat.
+//
+// Measured against it, ceiling first:
+//   88 .milestone__date        72 .hero-block__title      60 .text-lede
+//   56 .about-hero__pov        52 .case-study-prose h2    <- flared
+//   40 .about-phase__title     32 .text-cover             32 .friction-beat__headline
 //
 // TWO CONSUMERS, ONE LIST, AND THAT IS THE POINT. The Commissioner bench kept
 // its own hand-written band list beside this one; it named a class that does not
@@ -76,16 +106,16 @@ const ALLOWLIST = {
 // unflagged entry would compute 1.00 and fail a check that is green for good
 // reason. `ladder: false` is what keeps membership and ratio separable.
 const RUNGS = [
-  { rung: 6, role: 'Arrival crescendo', selector: '.milestone__date', band: 'display', ladder: true },
-  { rung: 5, role: 'Case-study hero', selector: '.hero-block__title', band: 'display', ladder: true },
-  { rung: 4, role: 'Section heading', selector: '.case-study-prose h2', band: 'display', ladder: true },
-  { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline', band: 'display', ladder: true },
-  { rung: 2, role: 'Standfirst', selector: '.case-study-prose .section-lede', band: 'read', ladder: true },
+  { rung: 6, role: 'Arrival crescendo', selector: '.milestone__date', band: 'display', voice: 'flared', ladder: true },
+  { rung: 5, role: 'Case-study hero', selector: '.hero-block__title', band: 'display', voice: 'flared', ladder: true },
+  { rung: 4, role: 'Section heading', selector: '.case-study-prose h2', band: 'display', voice: 'flared', ladder: true },
+  { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline', band: 'display', voice: 'plain' /* 32px: tested, cut */, ladder: true },
+  { rung: 2, role: 'Standfirst', selector: '.case-study-prose .section-lede', band: 'read', voice: 'plain' /* reading type */, ladder: true },
 
   // ── Display roles that v3 §5 bands but §3.3 never put on the ladder ──────
   // Mechanical additions: the spec already assigns these a band, and only the
   // linter was missing them.
-  { rung: 3, role: 'Card cover', selector: '.text-cover', band: 'display', ladder: false },
+  { rung: 3, role: 'Card cover', selector: '.text-cover', band: 'display', voice: 'plain' /* 32px: tested, cut */, ladder: false },
 
   // ── `dead: true` — in the CSS, on no page ────────────────────────────────
   // MARKED, NOT DELETED, AND THAT IS THE WHOLE POINT. Removing an entry makes
@@ -102,8 +132,12 @@ const RUNGS = [
   // Found by scripts/assert-bands.mjs on its FIRST RUN. .resolution-block__headline
   // had already appeared in the ch-measure audit's "governs nothing" list days
   // earlier and the two were not connected.
-  { rung: 3, role: 'Resolution headline', selector: '.resolution-block__headline', band: 'display', ladder: false, dead: true },
-  { rung: null, role: 'Transformation', selector: '.transformation', band: 'display', ladder: false, dead: true },
+  { rung: 3, role: 'Resolution headline', selector: '.resolution-block__headline', band: 'display', voice: 'plain' /* 32px, and dead */, ladder: false, dead: true },
+  // .transformation is a grid CONTAINER with no font-size of its own, so it has
+  // no ceiling to measure and the cut cannot be applied to it at all. `plain` is
+  // the safe value rather than a derived one — and having no size is a second,
+  // independent reason it was never display type. Filed as such.
+  { rung: null, role: 'Transformation', selector: '.transformation', band: 'display', voice: 'plain', ladder: false, dead: true },
 
   // SAME CONDITION, ALREADY KNOWN, deliberately left as a comment rather than
   // entries: `.text-hero` is used by no component or MDX, and
@@ -128,7 +162,7 @@ const RUNGS = [
   // `rung: null` is deliberate and load-bearing. An explicit null in the one
   // list is visibly open; ABSENCE from the list is invisible, and invisible
   // absence is what produced the rung-5 blindness. See docs/unspecified-surfaces.md.
-  { rung: null, role: 'Home hero', selector: '.text-lede', band: 'display', ladder: false },
+  { rung: null, role: 'Home hero', selector: '.text-lede', band: 'display', voice: 'flared', ladder: false },
 
   // The about page's two display surfaces. v3 does not mention EITHER of them
   // anywhere - they are not in §3.3's ladder, not in §5's width table, and not
@@ -139,14 +173,20 @@ const RUNGS = [
   // 16px prose, and the POV line at 51px is the largest type on the page. Both
   // are display type by what they do. Neither ruling touches where they sit on
   // the ladder, which stays open. See docs/unspecified-surfaces.md.
-  { rung: null, role: 'About phase title', selector: '.about-phase__title', band: 'display', ladder: false },
-  { rung: null, role: 'About hero POV', selector: '.about-hero__pov', band: 'display', ladder: false },
+  //
+  // C5 SPLIT THE VOICE OFF AND BOTH BANDINGS SURVIVED UNCHANGED. The phase
+  // titles are still display type; they just set at 36-40px, inside the range
+  // the 52px cut found indistinct, so they take the plain voice. The POV line
+  // sets at 51.2px and is flared on the judgment above, not on the number.
+  // This is the pair the split was tested against, and neither C4a ruling moved.
+  { rung: null, role: 'About phase title', selector: '.about-phase__title', band: 'display', voice: 'plain' /* 40px: judgment */, ladder: false },
+  { rung: null, role: 'About hero POV', selector: '.about-hero__pov', band: 'display', voice: 'flared' /* 51.2px: judgment */, ladder: false },
 
   // Banded on 21 Aug and the application WITHDRAWN the same day: it renders on
   // no route, so the ruling was made about an element that does not exist. The
   // reasoning survives and is recorded as a conditional in
   // docs/unspecified-surfaces.md — if this ever renders, it is display band.
-  { rung: null, role: 'Home statement', selector: '.text-statement', band: 'display', ladder: false, dead: true },
+  { rung: null, role: 'Home statement', selector: '.text-statement', band: 'display', voice: 'flared' /* 96px, and dead */, ladder: false, dead: true },
 ];
 
 // ── Value helpers ──────────────────────────────────────────────────────────
@@ -494,7 +534,7 @@ const add = (id, title, failures, note) =>
   add(7, "Exactly one font-variation-settings, on * , reading --flar (R8')", f);
 }
 
-// 11 — the flare band in CSS is exactly the `band: 'display'` set in RUNGS.
+// 11 — the flared set in CSS is exactly the `voice: 'flared'` set in RUNGS.
 //
 // THIS IS THE CHECK THE BENCH NEEDED AND DID NOT HAVE. Its hand-written band
 // list named `.case-study-prose > h1` (matches nothing) and `.text-hero` (used
@@ -503,8 +543,13 @@ const add = (id, title, failures, note) =>
 // session, and every gate stayed green because no gate compared the two lists.
 //
 // So: one list in RUNGS, one rule in CSS, and a build failure the moment they
-// disagree in either direction — a selector in CSS that is not banded, or a
-// banded selector missing from CSS.
+// disagree in either direction — a selector in CSS that is not flared, or a
+// flared selector missing from CSS.
+//
+// IT READS `voice`, NOT `band`, AS OF C5. Those were the same key until the 52px
+// cut needed .text-cover and .friction-beat__headline to keep `band: 'display'`
+// (which is true of them) while losing the flare (which is the ruling). `band`
+// is still on every entry and is deliberately not read here.
 //
 // WHAT THIS CANNOT SEE, stated rather than implied: whether any of these
 // selectors matches a real element. That is a DOM question and this is a CSS
@@ -516,26 +561,26 @@ const add = (id, title, failures, note) =>
   // stays in the map so the fact is visible; it stays out of the band so the
   // band means something.
   const expected = new Set(
-    RUNGS.filter((r) => r.band === 'display' && !r.dead).map((r) => r.selector),
+    RUNGS.filter((r) => r.voice === 'flared' && !r.dead).map((r) => r.selector),
   );
 
   // The rule that sets --flar: 100. Selectors are comma-separated; postcss keeps
   // them as one string.
   const flareRules = decls.filter((d) => d.prop === '--flar' && d.value.trim() === '100');
   if (flareRules.length === 0) {
-    f.push({ selector: '(none)', line: 0, detail: 'no rule sets --flar: 100 — the display band is unwired' });
+    f.push({ selector: '(none)', line: 0, detail: 'no rule sets --flar: 100 — the flared voice is unwired' });
   } else {
     const inCss = new Set(
       flareRules.flatMap((d) => d.selector.split(',').map((x) => x.replace(/\s+/g, ' ').trim())),
     );
     for (const sel of expected)
       if (!inCss.has(sel))
-        f.push({ selector: sel, line: 0, detail: `RUNGS bands it 'display' but no CSS rule gives it --flar: 100` });
+        f.push({ selector: sel, line: 0, detail: `RUNGS gives it voice 'flared' but no CSS rule gives it --flar: 100` });
     for (const sel of inCss)
       if (!expected.has(sel))
-        f.push({ selector: sel, line: flareRules[0].line, detail: `takes --flar: 100 but RUNGS does not band it 'display'` });
+        f.push({ selector: sel, line: flareRules[0].line, detail: `takes --flar: 100 but RUNGS gives it voice 'plain'` });
   }
-  add(11, "The flare band matches RUNGS' display set, both directions (§3.4)", f);
+  add(11, "The flared set in CSS matches RUNGS' voice: 'flared', both ways (§3.4)", f);
 }
 
 // 8a — STATIC: the self-hosted font is wired to a file that exists.
