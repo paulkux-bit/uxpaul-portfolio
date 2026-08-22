@@ -1866,7 +1866,7 @@
   margin: var(--spacing-2xs) 0 0;
   font-size: var(--ms-date-size, clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)); /* rung 6, ratio B */
   line-height: 0.98;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em; /* -0.020 -> -0.015; rung 6, on eye alone */
   color: var(--text-primary);
   /* Rung 6, the arrival crescendo. Weight and nothing else now.
 
@@ -3151,14 +3151,33 @@ html.dark .figure-placeholder {
    "open" clause against one "anxious" one. R2 retires that: width follows the
    rung, never mood, and R9 is the second reason — the Arial fallback has no
    wdth axis, so a meaning carried only by width disappears during font swap
-   and permanently on a blocked CDN. Letter-spacing still differs, which is
-   deliberate and out of scope here. */
+   and permanently on a blocked CDN.
+
+   AND AS OF 21 AUG 2026 THE TRACKING CONVERGES TOO. This comment used to end
+   "letter-spacing still differs, which is deliberate and out of scope here."
+   It no longer differs. --open moves -0.025 -> -0.020 and --anxious stays
+   where it was, so both clauses now track at -0.020.
+
+   The evidence was these two rules themselves, which is why it is worth
+   recording. They shipped different values at the same size in the same
+   headline, and the -0.020 clause read comfortably while the -0.025 one
+   crowded — a controlled comparison nobody set up, on the live page, needing
+   no bench. That certifies -0.020 as rung 5's correct value.
+
+   The two rules stay separate because they are semantically distinct and may
+   diverge again. What they no longer carry is 0.005em of differentiation
+   nobody could name: the split is content and module semantics, and tracking
+   was never the thing expressing it. */
 .hero-block__sentence--open {
-  letter-spacing: -0.025em; /* 100 -> 88 */
+  letter-spacing: -0.020em; /* -0.025 -> -0.020, and now equal to --anxious */
   font-weight: 600;
 }
 
 .hero-block__sentence--anxious {
+  /* Unchanged, and unchanged ON PURPOSE. The benched step preserved a 0.005em
+     offset between the clauses because a comparison moves one variable at a
+     time; carrying that offset into the shipped value would have moved this
+     rule to -0.015 and off the number the evidence had just proved right. */
   letter-spacing: -0.02em; /* 88, unchanged */
   font-weight: 600;
 }

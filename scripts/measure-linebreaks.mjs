@@ -93,6 +93,24 @@ const VARIANTS = {
     .case-study-prose p { font-size: 1.1875rem; }
   `,
 
+  /* Tracking steps for the display-band decision, 21 Aug 2026. Injected as
+     named variants rather than written to globals.css, so the cost of each
+     step is measurable without applying it. Step 1 puts --open on -0.020,
+     which is exactly rung 6's existing value: the eye-derived step and the
+     convention-derived correction of rung 5's anomaly land on the same
+     number. Tracking is monotonic, so step2's changed set must be a SUPERSET
+     of step1's; if it is not, the injection is wrong, not the value. */
+  'track-step1': `
+    .hero-block__sentence--open    { letter-spacing: -0.020em; }
+    .hero-block__sentence--anxious { letter-spacing: -0.015em; }
+    .milestone__date               { letter-spacing: -0.015em; }
+  `,
+  'track-step2': `
+    .hero-block__sentence--open    { letter-spacing: -0.015em; }
+    .hero-block__sentence--anxious { letter-spacing: -0.010em; }
+    .milestone__date               { letter-spacing: -0.010em; }
+  `,
+
   /* WIDTH ONLY. `nowdth` above also sets font-variation-settings: normal,
      which additionally strips the §6-sanctioned opsz pin on .milestone__date
      and all four .text-qh-title axis sets — fine for the Commissioner
