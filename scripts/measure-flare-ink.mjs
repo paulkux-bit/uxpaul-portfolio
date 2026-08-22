@@ -1,7 +1,16 @@
 /**
- * Does FLAR actually render, at the size each selector actually sets?
+ * Does a font-level declaration actually render, at the size the selector sets?
  *
- *   node scripts/measure-flare-ink.mjs        (needs `next start` on :3000)
+ *   node scripts/measure-flare-ink.mjs                 (needs `next start` on :3000)
+ *   ONLY=qh-brand node scripts/measure-flare-ink.mjs   one target
+ *
+ * GENERALISED IN C6a FROM FLARE TO ANY PROPERTY, and the reason is the noise
+ * floor rather than tidiness. C6a needed the same question asked of
+ * `font-feature-settings: 'case'` on the Also Shipped wordmarks. Writing a
+ * second script would have duplicated the toggle, the clip handling and the
+ * self-diff — and a noise floor that exists in two places is a noise floor that
+ * will exist correctly in one of them. Each target names its own `prop`, `on`
+ * and `off`; FLAR is the default.
  *
  * WHY A NEW INSTRUMENT, AND WHY NOT THE TWO THAT LOOK LIKE IT.
  *
@@ -49,9 +58,12 @@ import sharp from 'sharp';
 
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 
-/* `expect` is what the 52px cut predicts, written down BEFORE the run so the
-   numbers can contradict it. 'gone' = flare is being removed here and should be
-   visible in the before state; 'kept' = flare stays and is the control. */
+/* `expect` is written down BEFORE the run so the numbers can contradict it.
+   For the flare rows it is what the 52px cut predicts: 'gone' = flare is being
+   removed here and should be visible in the before state; 'kept' = it stays and
+   is the control. For the C6a row it is 'inert', which is a PREDICTION OF ZERO
+   and the only row where zero is the pass. */
+const FLARE = { prop: '--flar', on: '100', off: '0' };
 const TARGETS = [
   { sel: '.text-cover',               route: '/',                        px: 32, expect: 'gone' },
   { sel: '.friction-beat__headline',  route: '/case-studies/uscg-bard',  px: 32, expect: 'gone' },
@@ -60,6 +72,16 @@ const TARGETS = [
   { sel: '.about-hero__pov',          route: '/about',                   px: 56, expect: 'kept' },
   { sel: '.hero-block__title',        route: '/case-studies/uscg-bard',  px: 72, expect: 'kept' },
   { sel: '.milestone__date',          route: '/case-studies/uscg-bard',  px: 88, expect: 'kept' },
+
+  /* C6a. Commissioner's `case` feature substitutes 18 glyphs in the shipped
+     subset and `period` is not one of them — a full stop is baseline-anchored in
+     both cases, so there is nothing to raise. None of the four wordmarks
+     (LIONSGATE, AMERICAN RED CROSS, BBC, K. HOVNANIAN) contains a glyph the
+     feature touches. This row exists to render that claim rather than read it
+     out of a GSUB table, because a table read is a static claim about a font and
+     the question is about a page. Zero is the pass. */
+  { sel: '[data-brand="k-hovnanian"] .qh-brand', route: '/', px: 14, expect: 'inert',
+    label: 'qh-brand', prop: 'font-feature-settings', on: "'case' 1", off: 'normal' },
 ];
 
 const VIEWPORTS = [1440, 1920];
@@ -77,8 +99,11 @@ const ink = async (buf) => {
 
 const rows = [];
 
+const ONLY = process.env.ONLY;
+
 for (const width of VIEWPORTS) {
-  for (const t of TARGETS) {
+  for (const t of TARGETS.filter((t) => !ONLY || t.label === ONLY || t.sel.includes(ONLY))) {
+    const { prop, on, off } = { ...FLARE, ...t };
     const page = await browser.newPage({
       viewport: { width, height: 1000 }, deviceScaleFactor: 2, colorScheme: 'light',
       reducedMotion: 'reduce',
@@ -113,9 +138,9 @@ for (const width of VIEWPORTS) {
                    width: Math.ceil(box.width), height: Math.ceil(box.height) };
 
     const shot = async (v) => {
-      await page.evaluate((val) => {
-        document.querySelector('[data-flare-probe]').style.setProperty('--flar', val);
-      }, v);
+      await page.evaluate(([p, val]) => {
+        document.querySelector('[data-flare-probe]').style.setProperty(p, val);
+      }, [prop, v]);
       await page.evaluate(() => document.fonts.ready);
       await page.waitForTimeout(80); // warmup: a variation change needs a frame
       const set = await page.evaluate(() => {
@@ -134,9 +159,9 @@ for (const width of VIEWPORTS) {
       return { set, here, ...(await ink(buf)) };
     };
 
-    const a = await shot('100');
-    const b = await shot('0');
-    const a2 = await shot('100'); // noise control: same state, later frame
+    const a = await shot(on);
+    const b = await shot(off);
+    const a2 = await shot(on); // noise control: same state, later frame
 
     let differing = 0, noise = 0;
     for (let i = 0; i < a.data.length; i++) {
@@ -150,7 +175,7 @@ for (const width of VIEWPORTS) {
                || Math.abs(a.here.h - b.here.h) >= 1;
 
     rows.push({
-      ...t, width, size: found.size,
+      ...t, width, size: found.size, prop,
       ink100: a.dark, ink0: b.dark, px: a.px,
       set100: a.set.total, set0: b.set.total, lines: a.set.lines,
       differing, noise, moved, dy: (b.here.y - a.here.y).toFixed(2), dh: (b.here.h - a.here.h).toFixed(2),
@@ -160,7 +185,7 @@ for (const width of VIEWPORTS) {
 }
 await browser.close();
 
-console.log(`\nFLARE INK — light mode, 2x, shipped woff2. --flar toggled 100 -> 0 on the element.\n`);
+console.log(`\nFONT-DECLARATION INK — light mode, 2x, reduced motion, shipped woff2.\nEach row toggles its own property ON -> OFF on the element and diffs the same clip.\n`);
 for (const width of VIEWPORTS) {
   console.log(`  @${width}px`);
   console.log(`    ${'selector'.padEnd(26)} ${'size'.padStart(6)} ${'ink@100'.padStart(8)} ${'ink@0'.padStart(8)} ${'d ink'.padStart(7)} ${'d pixels'.padStart(9)} ${'noise'.padStart(8)} ${'set@100'.padStart(9)} ${'set@0'.padStart(9)} ${'d set'.padStart(8)}`);
@@ -177,7 +202,7 @@ for (const width of VIEWPORTS) {
       ` ${nPx.toFixed(3) + '%'}`.padStart(9) +
       ` ${r.set100.toFixed(3).padStart(9)} ${r.set0.toFixed(3).padStart(9)}` +
       ` ${(dSet >= 0 ? '+' : '') + dSet.toFixed(4) + '%'}`.padStart(9) +
-      `   ${r.expect}`
+      `   ${r.expect}${r.prop === '--flar' ? '' : '  [' + r.prop + ']'}`
     );
   }
   console.log('');
