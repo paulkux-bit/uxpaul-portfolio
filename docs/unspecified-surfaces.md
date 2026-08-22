@@ -217,8 +217,15 @@ band and `--flar: 100` while its rung stays open, recorded in `RUNGS` as
   same conditional. Both are display-ceilinged, both render nowhere.
 
 **`.about-phase__title`** (36px, five on `/about`) and **`.about-hero__pov`**
-(51px, one on `/about`) are the two live display-ish surfaces v3 does not mention
-at all. They ship at `--flar: 0` pending a ruling from the C4 preview.
+(51px, one on `/about`) are the two live display surfaces **v3 does not mention
+anywhere** — not in §3.3's ladder, not in §5's width table, not in §9's list of
+six unbanded selectors. There was no rung to inherit and no band to read.
+
+**Banded 21 Aug 2026 on function, ruled from the C4 preview:** both take
+`band: 'display'` and `--flar: 100`. The five phase titles do structural work at
+36px against 16px prose; the POV line at 51px is the largest type on its page.
+**Their rung stays open** — the band answers a narrower question than the ladder
+does, and answering it does not constrain the ladder answer later.
 
 Needs: a rung for each of the six, which waits on real content; and a band for
 the two about-page roles, which does not. Raised 21 Aug 2026 by the Commissioner

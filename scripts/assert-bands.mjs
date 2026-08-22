@@ -45,6 +45,8 @@ const DISPLAY_BAND = [
   '.friction-beat__headline',
   '.text-cover',
   '.text-lede',
+  '.about-phase__title',
+  '.about-hero__pov',
 ];
 
 /**
@@ -60,6 +62,12 @@ const READING = [
   '.case-study-prose p',
   '.case-study-prose .section-lede',
   '.about-row__body',
+  // C4a: the phase titles are flared and these two sit right beside them.
+  // .about-phase__note follows a flared <h2> as a SIBLING, and
+  // .about-contact__body follows another - if either ever became a child, the
+  // flare would reach prose and only this check would notice.
+  '.about-phase__note',
+  '.about-contact__body',
   '.hero-block__role',
   '.figure__caption',
 ];

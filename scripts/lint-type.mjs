@@ -130,6 +130,18 @@ const RUNGS = [
   // absence is what produced the rung-5 blindness. See docs/unspecified-surfaces.md.
   { rung: null, role: 'Home hero', selector: '.text-lede', band: 'display', ladder: false },
 
+  // The about page's two display surfaces. v3 does not mention EITHER of them
+  // anywhere - they are not in §3.3's ladder, not in §5's width table, and not
+  // in §9's list of six unbanded selectors. So there was no rung to inherit and
+  // no band to read; the band below is a ruling, not a lookup.
+  //
+  // Banded on function: the five phase titles do structural work at 36px against
+  // 16px prose, and the POV line at 51px is the largest type on the page. Both
+  // are display type by what they do. Neither ruling touches where they sit on
+  // the ladder, which stays open. See docs/unspecified-surfaces.md.
+  { rung: null, role: 'About phase title', selector: '.about-phase__title', band: 'display', ladder: false },
+  { rung: null, role: 'About hero POV', selector: '.about-hero__pov', band: 'display', ladder: false },
+
   // Banded on 21 Aug and the application WITHDRAWN the same day: it renders on
   // no route, so the ruling was made about an element that does not exist. The
   // reasoning survives and is recorded as a conditional in

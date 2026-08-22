@@ -160,7 +160,9 @@
 .case-study-prose h2,
 .friction-beat__headline,
 .text-cover,
-.text-lede {
+.text-lede,
+.about-phase__title,
+.about-hero__pov {
   --flar: 100;
 }
 
