@@ -79,3 +79,10 @@ docs/reviews/
 
 # line-break measurement output
 measurements/
+
+# Font build toolchain. scripts/build-commissioner-font.sh creates this on
+# first run and installs scripts/requirements-fonttools.txt into it. The woff2
+# it produces IS committed; the toolchain that produced it is pinned in that
+# requirements file, not vendored here.
+/.venv-fonttools/
+/build-fonts/

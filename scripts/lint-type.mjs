@@ -23,6 +23,7 @@
 // inside comments, and a font-size clamp expression embedded in a calc() on
 // margin-block-start. Regex gets several of those wrong.
 import { readFile, readdir } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import postcss from 'postcss';
 
@@ -31,7 +32,6 @@ const FONTS_FILE = 'app/fonts.ts';
 const JSX_ROOTS = ['app', 'components'];
 
 // ── The system's fixed values (locked doc §3.1, §3.2, §4) ──────────────────
-const WIDTH_BANDS = [100, 94, 88]; // §3.1 — there is no fourth value
 const SIGNATURE_WEIGHTS = [340, 720]; // §3.2 — the reserved pair
 const SIGNATURE_MIN_CEILING_PX = 40; // §3.2 — illegal below this
 const MIN_FONT_PX = 14; // §2 — hard floor everywhere
@@ -49,45 +49,6 @@ const ROOT_PX = 16;
 //   signature[] — the three placements allowed to use 340/720 (§3.2). C4.
 // Match on exact selector string as written in globals.css.
 const ALLOWLIST = {
-  // The takes wall (§6): slot-driven display marks, currently mounted on no
-  // route. Added in C1 so check 1 measures the shipped pages. The FVS half of
-  // these same rules is still enforced by check 7 until C6 allowlists it.
-  //
-  // §6 records two unreconciled discrepancies, and these entries are where they
-  // stay visible: four values reach wider than the 78-82 the section states,
-  // and `.take-thought` sets running prose on a surface §6 says is display-only.
-  // Allowlisting marks them KNOWN, not resolved — both are to be settled before
-  // the wall is ever mounted.
-  widths: [
-    { selector: '.slot-large .mark', reason: '§6 takes wall — slot mark, 78' },
-    { selector: '.slot-medium6 .mark', reason: '§6 takes wall — slot mark, 80' },
-    { selector: '.slot-medium5 .mark', reason: '§6 takes wall — slot mark, 80' },
-    { selector: '.slot-medium .mark', reason: '§6 takes wall — slot mark, 80' },
-    { selector: '.slot-small4 .mark', reason: '§6 takes wall — slot mark, 82' },
-    { selector: '.slot-small3 .mark', reason: '§6 takes wall — slot mark, 82' },
-    { selector: '.mark', reason: '§6 takes wall — <768px slot-mark override, 80' },
-    { selector: '.take-thought', reason: '§6 takes wall — 96, ABOVE the stated 78-82; and it is running prose on a display-only surface. Both unreconciled, see §6' },
-    { selector: '.comp-mark-dominant .mark', reason: '§6 takes wall — per-take composition, 78' },
-    { selector: '.comp-mark-cropped .mark', reason: '§6 takes wall — per-take composition, 78' },
-    { selector: '.comp-mark-watermark .mark', reason: '§6 takes wall — 90, ABOVE the stated 78-82, unreconciled' },
-    { selector: '.comp-word-swap .mark', reason: '§6 takes wall — 92, ABOVE the stated 78-82, unreconciled' },
-    { selector: '.comp-statement .take-thought', reason: '§6 takes wall — 98, ABOVE the stated 78-82, unreconciled' },
-  ],
-  // The FVS half of the split that put widths above. Two categories:
-  // the two pins §6 sanctions by name, and the takes-wall compositions, whose
-  // per-take three-axis variation IS the content of that exception surface.
-  // Every other pin was deleted in C6 rather than allowlisted.
-  fvs: [
-    { selector: '.milestone__date', reason: '§6 sanctioned pin — opsz 96 at 52-88px is a real 44-unit push, the one place the drawn display cut shows' },
-    { selector: '.text-qh-title', reason: '§6 Also Shipped — per-brand three-axis variation driven from data-brand; the axes must render together' },
-    { selector: '.comp-mark-dominant .mark', reason: '§6 takes wall — per-take composition' },
-    { selector: '.comp-mark-watermark .mark', reason: '§6 takes wall — per-take composition' },
-    { selector: '.comp-mark-beside .mark', reason: '§6 takes wall — per-take composition' },
-    { selector: '.comp-mark-cropped .mark', reason: '§6 takes wall — per-take composition' },
-    { selector: '.comp-word-swap .mark', reason: '§6 takes wall — per-take composition' },
-    { selector: '.comp-statement .take-thought', reason: '§6 takes wall — per-take composition' },
-    { selector: '.comp-coords-corner .mark', reason: '§6 takes wall — per-take composition' },
-  ],
   // §3.2 permits three signature placements sitewide. ONE is spent. The home
   // hero is a single placement covering four declarations: .text-lede carries
   // the 340, and the three font-[720] spans in app/page.tsx are noun phrases
@@ -97,20 +58,135 @@ const ALLOWLIST = {
   ],
 };
 
-// ── The ladder (§3.3), mapped to the selectors that carry each rung ────────
-// Not stated in the doc, but provable: rungs 6 and 4 already match v3's clamps
-// character-for-character, and rungs 5 and 2 already match its endpoints.
-// C3 retunes rungs 5, 3 and 2. Check 3 is scoped to the CLAMPED rungs because
-// §7.3 says "computed from the clamps" — the fixed rungs cannot satisfy 1.15 by
-// construction (18/16 = 1.125, 16/14 = 1.143), so including them would make
-// §3.3's "worst adjacent ratio is now 1.15" false as written and check 3
-// unturnable by C3.
+// ── The type map: one list, three keys ─────────────────────────────────────
+// `ladder: true`  -> check 3 walks these pairwise for the 1.15 ratio.
+// `band`          -> what the type IS: display or reading. Assigned by the
+//                    rung's ceiling, per v3 §5's width table, which is where
+//                    this key came from and why it survives the split below.
+// `voice`         -> what the type GETS: 'flared' (FLAR 100) or 'plain' (0).
+//                    Check 11 reads THIS, not `band`.
+//
+// BAND AND VOICE WERE ONE KEY UNTIL C5 AND THAT WAS A LATENT BUG. C4 used
+// `band: 'display'` to mean both, which held only while every display selector
+// wanted flare. The 52px cut broke it: .text-cover and .friction-beat__headline
+// are 32px display type by size, weight and rung, and the only way to take the
+// flare off them through one key was to relabel them reading — a lie in the map,
+// which is the thing this branch has spent six commits removing.
+//
+// Same failure as check 3 conflating rung with selector. When one key answers
+// two questions, the second question eventually gets the wrong answer.
+//
+// `band` IS STILL READ, by a human and by §5. Do not delete it as unused
+// because check 11 stopped consuming it; it is the record of what each selector
+// is, and it is what a future width system would key off if the typeface ever
+// regains a wdth axis.
+//
+// THE 52px CUT IS A JUDGMENT AND CARRIES ITS PROVENANCE. It was taken on a
+// render at five sizes — 88, 72, 52, 32, 18px — after a UI review found flare
+// illegible at 32. Nothing was ever tested at 51 or at 40. Selectors within a
+// few pixels of the line are ruled on, not looked up, and the ruling is written
+// on the entry. Read as a number, 51.2px would send .about-hero__pov plain and
+// leave the whole about page flat.
+//
+// Measured against it, ceiling first:
+//   88 .milestone__date        72 .hero-block__title      60 .text-lede
+//   56 .about-hero__pov        52 .case-study-prose h2    <- flared
+//   40 .about-phase__title     32 .text-cover             32 .friction-beat__headline
+//
+// TWO CONSUMERS, ONE LIST, AND THAT IS THE POINT. The Commissioner bench kept
+// its own hand-written band list beside this one; it named a class that does not
+// exist, omitted .hero-block__title, and therefore rendered no flare at rung 5
+// for an entire judgment session while every gate stayed green. Two lists where
+// one is authoritative is the shape of that failure, so there is now one list.
+//
+// Check 3 stays scoped to the CLAMPED rungs (§7.3: "computed from the clamps").
+// The fixed rungs cannot satisfy 1.15 by construction (18/16 = 1.125,
+// 16/14 = 1.143), and neither can a display role that shares a ceiling with the
+// rung below it — .text-cover ceilings at 32px, exactly rung 3's ceiling, so an
+// unflagged entry would compute 1.00 and fail a check that is green for good
+// reason. `ladder: false` is what keeps membership and ratio separable.
 const RUNGS = [
-  { rung: 6, role: 'Arrival crescendo', selector: '.milestone__date' },
-  { rung: 5, role: 'Case-study hero', selector: '.hero-block__title' },
-  { rung: 4, role: 'Section heading', selector: '.case-study-prose h2' },
-  { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline' },
-  { rung: 2, role: 'Standfirst', selector: '.case-study-prose .section-lede' },
+  { rung: 6, role: 'Arrival crescendo', selector: '.milestone__date', band: 'display', voice: 'flared', ladder: true },
+  { rung: 5, role: 'Case-study hero', selector: '.hero-block__title', band: 'display', voice: 'flared', ladder: true },
+  { rung: 4, role: 'Section heading', selector: '.case-study-prose h2', band: 'display', voice: 'flared', ladder: true },
+  { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline', band: 'display', voice: 'plain' /* 32px: tested, cut */, ladder: true },
+  { rung: 2, role: 'Standfirst', selector: '.case-study-prose .section-lede', band: 'read', voice: 'plain' /* reading type */, ladder: true },
+
+  // ── Display roles that v3 §5 bands but §3.3 never put on the ladder ──────
+  // Mechanical additions: the spec already assigns these a band, and only the
+  // linter was missing them.
+  { rung: 3, role: 'Card cover', selector: '.text-cover', band: 'display', voice: 'plain' /* 32px: tested, cut */, ladder: false },
+
+  // ── `dead: true` — in the CSS, on no page ────────────────────────────────
+  // MARKED, NOT DELETED, AND THAT IS THE WHOLE POINT. Removing an entry makes
+  // the map lie by omission, which is precisely what produced the rung-5
+  // blindness: a band that named a class that does not exist and omitted the
+  // one that does, invisibly, for an entire judgment session. An entry that
+  // says "this selector exists in globals.css, is display-ceilinged, and
+  // matches zero elements on all five routes" is a fact the map should carry.
+  //
+  // The flare derivation and check 11 both filter these out, so the band never
+  // names them and assert-bands.mjs stays green — green because the band is
+  // honest, not because the fact was deleted.
+  //
+  // Found by scripts/assert-bands.mjs on its FIRST RUN. .resolution-block__headline
+  // had already appeared in the ch-measure audit's "governs nothing" list days
+  // earlier and the two were not connected.
+  { rung: 3, role: 'Resolution headline', selector: '.resolution-block__headline', band: 'display', voice: 'plain' /* 32px, and dead */, ladder: false, dead: true },
+  // .transformation is a grid CONTAINER with no font-size of its own, so it has
+  // no ceiling to measure and the cut cannot be applied to it at all. `plain` is
+  // the safe value rather than a derived one — and having no size is a second,
+  // independent reason it was never display type. Filed as such.
+  { rung: null, role: 'Transformation', selector: '.transformation', band: 'display', voice: 'plain', ladder: false, dead: true },
+
+  // SAME CONDITION, ALREADY KNOWN, deliberately left as a comment rather than
+  // entries: `.text-hero` is used by no component or MDX, and
+  // `.case-study-prose > h1` matches no element on any route. Both are still
+  // discussed as live open questions in v3 §9. They are not in this map because
+  // nothing has ever ruled on them, and inventing map membership for them here
+  // would be a different kind of dishonesty from the one above. Five dead
+  // display selectors total; see the backlog.
+
+  // ── Banded ahead of their rung, by ruling, 21 Aug 2026 ───────────────────
+  // v3 §9 lists these under "Six shipped selectors have size ceilings that sit
+  // on no rung" and leaves the rung open on purpose: where a selector sits on
+  // the ladder is a question about size relative to its neighbours and about
+  // tracking, and it needs real content in front of it. Two of the five case
+  // studies do not exist yet.
+  //
+  // FLARE IS A SEPARABLE AND NARROWER QUESTION: display type or reading type.
+  // A 60px lede and a 96px statement are display by any reading, whatever rung
+  // they eventually land on, so the band is answerable now and answering it does
+  // not constrain the ladder answer later.
+  //
+  // `rung: null` is deliberate and load-bearing. An explicit null in the one
+  // list is visibly open; ABSENCE from the list is invisible, and invisible
+  // absence is what produced the rung-5 blindness. See docs/unspecified-surfaces.md.
+  { rung: null, role: 'Home hero', selector: '.text-lede', band: 'display', voice: 'flared', ladder: false },
+
+  // The about page's two display surfaces. v3 does not mention EITHER of them
+  // anywhere - they are not in §3.3's ladder, not in §5's width table, and not
+  // in §9's list of six unbanded selectors. So there was no rung to inherit and
+  // no band to read; the band below is a ruling, not a lookup.
+  //
+  // Banded on function: the five phase titles do structural work at 36px against
+  // 16px prose, and the POV line at 51px is the largest type on the page. Both
+  // are display type by what they do. Neither ruling touches where they sit on
+  // the ladder, which stays open. See docs/unspecified-surfaces.md.
+  //
+  // C5 SPLIT THE VOICE OFF AND BOTH BANDINGS SURVIVED UNCHANGED. The phase
+  // titles are still display type; they just set at 36-40px, inside the range
+  // the 52px cut found indistinct, so they take the plain voice. The POV line
+  // sets at 51.2px and is flared on the judgment above, not on the number.
+  // This is the pair the split was tested against, and neither C4a ruling moved.
+  { rung: null, role: 'About phase title', selector: '.about-phase__title', band: 'display', voice: 'plain' /* 40px: judgment */, ladder: false },
+  { rung: null, role: 'About hero POV', selector: '.about-hero__pov', band: 'display', voice: 'flared' /* 51.2px: judgment */, ladder: false },
+
+  // Banded on 21 Aug and the application WITHDRAWN the same day: it renders on
+  // no route, so the ruling was made about an element that does not exist. The
+  // reasoning survives and is recorded as a conditional in
+  // docs/unspecified-surfaces.md — if this ever renders, it is display band.
+  { rung: null, role: 'Home statement', selector: '.text-statement', band: 'display', voice: 'flared' /* 96px, and dead */, ladder: false, dead: true },
 ];
 
 // ── Value helpers ──────────────────────────────────────────────────────────
@@ -262,41 +338,31 @@ const checks = [];
 const add = (id, title, failures, note) =>
   checks.push({ id, title, failures, note, pass: failures.length === 0 });
 
-// 1 — width: font-stretch and FVS 'wdth' must be one of the three bands.
-// Widths driven through a CSS variable are unresolvable at parse time. Those
-// are collected into `varWidths` and PRINTED, never silently skipped: a blind
-// spot that reports is a known limit, one that stays quiet is a false pass
-// (§7). `calc(var(--wdth-*) * 1%)` is the sanctioned token form and resolves
-// to a band by construction, so it is not a blind spot.
-const varWidths = [];
-const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
+// 10 — NO font-stretch, anywhere, at any value. Replaces check 1.
+//
+// Check 1 policed font-stretch against three bands {100, 94, 88}. Commissioner
+// has no wdth axis, so there is no band to be in and no correct value: every
+// font-stretch declaration is inert. 49 of them sat in this file for a day
+// after the swap looking exactly as correct as they had the week before, which
+// is the whole argument for this check existing rather than the range simply
+// being deleted. INERT-BUT-PLAUSIBLE CSS IS THE CLASS 8a EXISTS TO CATCH, and
+// this is its CSS-side twin: a property the renderer ignores is worse than a
+// wrong value, because a wrong value shows.
+//
+// Scoped to shipped CSS. font-optical-sizing goes the same way and for the same
+// reason (no opsz axis), so both are checked here.
 {
   const f = [];
-  for (const d of byProp('font-stretch')) {
-    if (allowed(ALLOWLIST.widths, d.selector)) continue;
-    const raw = d.value.replace(/!important/g, '').trim();
-    if (TOKEN_WIDTH.test(raw)) continue; // token form — a band by construction
-    if (raw.includes('var(')) {
-      varWidths.push({ selector: d.selector, line: d.line, detail: `font-stretch: ${raw}` });
-      continue;
-    }
-    const n = parseFloat(raw);
-    if (Number.isNaN(n) || !WIDTH_BANDS.includes(n))
-      f.push({ selector: d.selector, line: d.line, detail: `font-stretch: ${raw}` });
-  }
-  for (const d of byProp('font-variation-settings')) {
-    if (allowed(ALLOWLIST.widths, d.selector)) continue;
-    for (const a of fvsAxes(d.value)) {
-      if (a.axis !== 'wdth') continue;
-      if (a.value === null) {
-        varWidths.push({ selector: d.selector, line: d.line, detail: `FVS 'wdth' ${a.raw}` });
-        continue;
-      }
-      if (!WIDTH_BANDS.includes(a.value))
-        f.push({ selector: d.selector, line: d.line, detail: `FVS 'wdth' ${a.value}` });
+  for (const prop of ['font-stretch', 'font-optical-sizing']) {
+    for (const d of byProp(prop)) {
+      f.push({
+        selector: d.selector,
+        line: d.line,
+        detail: `${prop}: ${d.value} — Commissioner has no ${prop === 'font-stretch' ? 'wdth' : 'opsz'} axis; this declaration is inert`,
+      });
     }
   }
-  add(1, `Width is one of {${WIDTH_BANDS.join(', ')}} (§3.1)`, f);
+  add(10, 'No font-stretch or font-optical-sizing: the axes do not exist (§3.1)', f);
 }
 
 // 2 — the 14px floor.
@@ -317,7 +383,10 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
 // 3 — adjacent rungs hold >=1.15x at every viewport in 320..2560.
 {
   const f = [];
-  const resolved = RUNGS.map((r) => ({ ...r, value: sizeOf(r.selector) }));
+  // ladder: true only. The map now also carries display roles that are banded
+  // but not on the ladder; including them here would compare a card cover
+  // against the rung it shares a ceiling with and fail on a 1.00 ratio.
+  const resolved = RUNGS.filter((r) => r.ladder).map((r) => ({ ...r, value: sizeOf(r.selector) }));
   const missing = resolved.filter((r) => !r.value);
   for (const r of missing)
     f.push({
@@ -424,22 +493,110 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
   add(6, 'No color-mix(... currentColor ...) on text colour (§4 R7)', f);
 }
 
-// 7 — font-variation-settings only where allowlisted. FVS inherits as a string,
-// so any descendant of an FVS rule is pinned and cannot be re-weighted (§4 R8).
+// 7 (R8') — EXACTLY ONE font-variation-settings declaration, and it is the
+// universal one. No allowlist: there is nothing left to make an exception for.
+//
+// FVS inherits as a string and overrides the high-level properties per axis
+// regardless of source order, so a second declaration anywhere pins every
+// descendant's whole axis list. The old form of this check policed a
+// nine-entry allowlist; C3 emptied every one of those rules, and C4 replaces
+// the whole arrangement with a single `*` declaration reading var(--flar).
+// That is what makes R8' trivially checkable rather than a matter of judgement,
+// and it is the point of the architecture.
 {
   const f = [];
-  for (const d of byProp('font-variation-settings')) {
-    if (allowed(ALLOWLIST.fvs, d.selector)) continue;
-    f.push({ selector: d.selector, line: d.line, detail: `font-variation-settings: ${d.value}` });
-  }
-  add(7, 'font-variation-settings only where allowlisted (§6)', f);
+  const decls = byProp('font-variation-settings');
+  const universal = decls.filter((d) => d.selector === '*');
+  const others = decls.filter((d) => d.selector !== '*');
+
+  for (const d of others)
+    f.push({
+      selector: d.selector,
+      line: d.line,
+      detail: `font-variation-settings outside the universal rule: ${d.value} — R8' allows exactly one, on *`,
+    });
+
+  if (universal.length === 0)
+    f.push({
+      selector: '*',
+      line: 0,
+      detail: 'no universal font-variation-settings rule — the voice system is not wired at all',
+    });
+  else if (universal.length > 1)
+    f.push({ selector: '*', line: universal[0].line, detail: `${universal.length} universal FVS rules; expected 1` });
+  else if (!/var\(\s*--flar/.test(universal[0].value))
+    f.push({
+      selector: '*',
+      line: universal[0].line,
+      detail: `universal FVS does not read var(--flar): ${universal[0].value}`,
+    });
+
+  add(7, "Exactly one font-variation-settings, on * , reading --flar (R8')", f);
 }
 
-// 8a — STATIC: the variable font is configured with all three axes.
-// next/font/google ships ONLY the default wght axis unless `axes` names the
-// others. Without it every font-stretch and optical-sizing rule in the system
-// is silently inert in production — a bug this repo actually shipped once.
-// Green today; kept as a regression guard.
+// 11 — the flared set in CSS is exactly the `voice: 'flared'` set in RUNGS.
+//
+// THIS IS THE CHECK THE BENCH NEEDED AND DID NOT HAVE. Its hand-written band
+// list named `.case-study-prose > h1` (matches nothing) and `.text-hero` (used
+// by no component), and omitted `.hero-block__title`, which is the only live
+// rung-5 element. Rung 5 therefore rendered no flare for an entire judgment
+// session, and every gate stayed green because no gate compared the two lists.
+//
+// So: one list in RUNGS, one rule in CSS, and a build failure the moment they
+// disagree in either direction — a selector in CSS that is not flared, or a
+// flared selector missing from CSS.
+//
+// IT READS `voice`, NOT `band`, AS OF C5. Those were the same key until the 52px
+// cut needed .text-cover and .friction-beat__headline to keep `band: 'display'`
+// (which is true of them) while losing the flare (which is the ruling). `band`
+// is still on every entry and is deliberately not read here.
+//
+// WHAT THIS CANNOT SEE, stated rather than implied: whether any of these
+// selectors matches a real element. That is a DOM question and this is a CSS
+// parser. scripts/assert-bands.mjs answers it, and it needs a running server,
+// so it gates the commit by being run rather than by npm run build.
+{
+  const f = [];
+  // `!r.dead` — a selector that renders nowhere is not given a voice value. It
+  // stays in the map so the fact is visible; it stays out of the band so the
+  // band means something.
+  const expected = new Set(
+    RUNGS.filter((r) => r.voice === 'flared' && !r.dead).map((r) => r.selector),
+  );
+
+  // The rule that sets --flar: 100. Selectors are comma-separated; postcss keeps
+  // them as one string.
+  const flareRules = decls.filter((d) => d.prop === '--flar' && d.value.trim() === '100');
+  if (flareRules.length === 0) {
+    f.push({ selector: '(none)', line: 0, detail: 'no rule sets --flar: 100 — the flared voice is unwired' });
+  } else {
+    const inCss = new Set(
+      flareRules.flatMap((d) => d.selector.split(',').map((x) => x.replace(/\s+/g, ' ').trim())),
+    );
+    for (const sel of expected)
+      if (!inCss.has(sel))
+        f.push({ selector: sel, line: 0, detail: `RUNGS gives it voice 'flared' but no CSS rule gives it --flar: 100` });
+    for (const sel of inCss)
+      if (!expected.has(sel))
+        f.push({ selector: sel, line: flareRules[0].line, detail: `takes --flar: 100 but RUNGS gives it voice 'plain'` });
+  }
+  add(11, "The flared set in CSS matches RUNGS' voice: 'flared', both ways (§3.4)", f);
+}
+
+// 8a — STATIC: the self-hosted font is wired to a file that exists.
+//
+// This used to assert that next/font/google's `axes` array named opsz and wdth,
+// because omitting it served a weight-only file and made every font-stretch and
+// optical-sizing rule silently inert — a bug this repo actually shipped. Under
+// next/font/local there IS no axes array: the axes come from the binary. So the
+// failure mode moved rather than went away, and the guard moves with it.
+//
+// THREE LAYERS, AND NONE OF THEM CLAIMS THE OTHERS' COVERAGE:
+//   scripts/build-commissioner-font.sh  asserts the BINARY's axes and ranges
+//   this check (8a)                     asserts the WIRING is intact
+//   components/font-load-probe.tsx (8b) asserts FLAR actually RENDERS
+// Checking the binary's axes from here would mean parsing woff2 in a CSS linter;
+// the build script already does it at the point the bytes are produced.
 {
   const f = [];
   let src = '';
@@ -449,18 +606,43 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
     f.push({ selector: FONTS_FILE, line: 0, detail: 'file not found' });
   }
   if (src) {
-    const m = /axes\s*:\s*\[([^\]]*)\]/.exec(src);
-    const declared = m ? [...m[1].matchAll(/['"](\w+)['"]/g)].map((x) => x[1]) : [];
-    for (const axis of ['opsz', 'wdth']) {
-      if (!declared.includes(axis))
-        f.push({
-          selector: FONTS_FILE,
-          line: 0,
-          detail: `axes: [...] does not load '${axis}' — every ${axis === 'wdth' ? 'font-stretch' : 'font-optical-sizing'} rule is inert`,
-        });
+    if (!/next\/font\/local/.test(src))
+      f.push({ selector: FONTS_FILE, line: 0, detail: 'does not use next/font/local' });
+
+    // src path must RESOLVE. This is the one member of the family that fails
+    // closed at build; asserting it here names it rather than leaving it to a
+    // stack trace.
+    const srcM = /src\s*:\s*['"]([^'"]+)['"]/.exec(src);
+    if (!srcM) f.push({ selector: FONTS_FILE, line: 0, detail: 'no src: path found' });
+    else {
+      const rel = srcM[1].replace(/^\.\//, '');
+      if (!existsSync(join('app', rel)))
+        f.push({ selector: FONTS_FILE, line: 0, detail: `src points at app/${rel}, which does not exist` });
     }
+
+    // The variable name must match what globals.css consumes. A mismatch FAILS
+    // OPEN: the font simply never applies and the page renders in fallback.
+    const varM = /variable\s*:\s*['"]([^'"]+)['"]/.exec(src);
+    const varName = varM ? varM[1] : null;
+    if (!varName) f.push({ selector: FONTS_FILE, line: 0, detail: 'no variable: name found' });
+    else if (!css.includes(`var(${varName})`))
+      f.push({
+        selector: FONTS_FILE,
+        line: 0,
+        detail: `variable is ${varName} but ${CSS_FILE} never reads var(${varName}) — the font would silently not apply`,
+      });
+
+    // Declared range must match the instanced binary, so the browser and the
+    // file give the same answer to a request above 720.
+    const wM = /weight\s*:\s*['"]([^'"]+)['"]/.exec(src);
+    if (!wM || wM[1].trim() !== '340 720')
+      f.push({
+        selector: FONTS_FILE,
+        line: 0,
+        detail: `weight is ${wM ? `'${wM[1]}'` : 'unset'}, expected '340 720' to match the instanced binary`,
+      });
   }
-  add('8a', 'app/fonts.ts loads the opsz + wdth axes (§2)', f);
+  add('8a', 'app/fonts.ts is wired to an existing local font file (§2)', f);
 }
 
 // 8b — RUNTIME: a client-side probe that the variable font actually loaded.
@@ -503,7 +685,6 @@ const TOKEN_WIDTH = /var\(\s*--wdth-(read|display|large)\s*\)/;
 // (font-[720]), which a globals.css-only parser cannot see. C4 adds the JSX
 // scan alongside the allowlist. Reported, not asserted.
 const jsxWeights = [];
-const jsxWidths = [];
 {
   async function walk(dir) {
     let entries;
@@ -517,14 +698,14 @@ const jsxWidths = [];
       const p = join(dir, e.name);
       if (e.isDirectory()) await walk(p);
       else if (/\.(tsx|jsx|mdx)$/.test(e.name)) {
-        const s = await readFile(p, 'utf8');
+        // stripComments, because app/page.tsx's own doc-comment says
+        // "three domain nouns jump to font-[720]" and was being counted as a
+        // fourth shipped utility. A blind-spot report that overcounts is a
+        // different lie from one that undercounts, and neither is acceptable
+        // in a message whose whole job is to state a limit accurately.
+        const s = stripComments(await readFile(p, 'utf8'));
         for (const m of s.matchAll(/\bfont-\[(\d{2,3})\]/g))
           jsxWeights.push({ file: p, weight: parseInt(m[1], 10) });
-        // Arbitrary width utilities authored in JSX. Same blind spot as the
-        // weights: a shipped width this parser cannot see. Found by hand in C1
-        // (a stray 90% on the media-tier card h2), so it is reported by name.
-        for (const m of s.matchAll(/\[font-stretch:([^\]]+)\]/g))
-          jsxWidths.push({ file: p, value: m[1], token: TOKEN_WIDTH.test(m[1]) });
       }
     }
   }
@@ -549,34 +730,26 @@ for (const c of checks) {
   console.log('');
 }
 
-if (varWidths.length) {
-  console.log(
-    `⚠ UNCHECKED: ${varWidths.length} width${varWidths.length === 1 ? '' : 's'} driven through a CSS variable, ` +
-      `unresolvable at parse time. Check 1 cannot see ${varWidths.length === 1 ? 'it' : 'them'} — ` +
-      `this is a blind spot, not an exemption (§7).`,
-  );
-  for (const w of varWidths) console.log(`    ${w.selector}  (${CSS_FILE}:${w.line})  ${w.detail}`);
-  console.log('');
-}
-
-if (jsxWidths.length) {
-  const loose = jsxWidths.filter((w) => !w.token);
-  console.log(
-    `⚠ UNCHECKED: ${jsxWidths.length} arbitrary font-stretch utilit${jsxWidths.length === 1 ? 'y' : 'ies'} in JSX ` +
-      `(${loose.length} not token-driven). Check 1 parses ${CSS_FILE} only and cannot see ${jsxWidths.length === 1 ? 'it' : 'them'}.`,
-  );
-  for (const w of jsxWidths)
-    console.log(`    ${w.token ? 'token ' : 'LOOSE '} [font-stretch:${w.value}]  ${w.file}`);
-  console.log('');
-}
 
 if (jsxWeights.length) {
   const sig = jsxWeights.filter((w) => SIGNATURE_WEIGHTS.includes(w.weight));
   console.log(
     `⚠ UNCHECKED: ${jsxWeights.length} arbitrary font-weight utilit${jsxWeights.length === 1 ? 'y' : 'ies'} in JSX ` +
       `(${sig.length} using the ${SIGNATURE_WEIGHTS.join('/')} signature pair). ` +
-      `Check 4 parses ${CSS_FILE} only and cannot see these. The JSX scan lands in C4.`,
+      `Check 4 parses ${CSS_FILE} only and cannot see these.`,
   );
+  {
+    // DO NOT READ THE COUNT AS LIVE SURFACES. It walks app/ and components/,
+    // and app/sandbox/home-video/page.tsx duplicates the home hero verbatim,
+    // so the sandbox copy is counted beside the real one. Measured 21 Aug:
+    // 7 occurrences, 3 of them the live home hero (consumer / enterprise /
+    // defense inside .text-lede), 4 the sandbox duplicate. The blind spot is
+    // real; it is smaller than the number looks.
+    const live = sig.filter((w) => !w.file.includes('/sandbox/'));
+    console.log(
+      `    of which ${live.length} on live routes and ${sig.length - live.length} in app/sandbox/ (duplicated markup, not a second surface)`,
+    );
+  }
   for (const w of sig) console.log(`    font-[${w.weight}]  ${w.file}`);
   console.log('');
 }

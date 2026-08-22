@@ -8,8 +8,9 @@ import type { QuickHit as QuickHitData } from '@/app/data/quick-hits';
  * saturated fill competing with Selected Work); typography does the work. Three
  * columns on desktop (wordmark · centered title · industry), stacking on mobile
  * — the grid lives in `.quick-hit` (globals.css). The title is the moment:
- * `text-qh-title` compresses Bricolage's wdth axis to 90% against the 100%
- * labels — a designed width contrast, not just weight.
+ * `text-qh-title` carries the per-brand weight (`--qh-wght`, 500-650) against
+ * the labels' 600. That contrast used to be width as well; Commissioner has no
+ * wdth axis, so weight and colour carry it alone (v3 §6).
  *
  * Color comes from `data-brand` (aliases --base + --fill). Title/labels use the
  * standard text tokens (AAA on the faint fill, both modes). The border is the
@@ -22,7 +23,7 @@ export function QuickHit({ hit }: { hit: QuickHitData }) {
       className="quick-hit border-[1.5px] border-[var(--base)] bg-[var(--fill)] px-6 py-5 md:min-h-[6rem] md:px-8"
     >
       <p className="qh-brand text-eyebrow text-secondary">{hit.wordmark}</p>
-      {/* Parallel to Selected Work card titles → <h2> element. The wdth move. */}
+      {/* Parallel to Selected Work card titles → <h2> element. The weight move. */}
       <h2 className="qh-title text-qh-title text-primary md:text-center">{hit.title}</h2>
       <p className="qh-industry text-caption text-right text-secondary">{hit.industry}</p>
     </article>

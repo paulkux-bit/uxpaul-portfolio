@@ -14,7 +14,7 @@
    ============================================================ */
 
 @theme {
-  --font-sans: var(--font-bricolage), system-ui, sans-serif;
+  --font-sans: var(--font-commissioner), system-ui, sans-serif;
 
   /* Breakpoints — wired to the project's documented design targets (CLAUDE.md).
      Without these, Tailwind's defaults were active (sm 640 / xl 1280 / 2xl 1536).
@@ -49,14 +49,15 @@
    passes unknown namespaces through verbatim. Proof in this file —
    --color-popup-soft / -soft-dark / -text sit in a plain @theme at
    the case-study block and are absent from the production bundle,
-   while --wdth-* and --wght-* survive with or without `static`.
+   while --wght-* survives with or without `static`. The --wdth-* trio that
+   used to sit beside it is gone with C3: Commissioner has no wdth axis.
 
    So `static` is not currently load-bearing for THESE names, and the
    v3 doc's stated reason for it is wrong as written. Kept anyway: it
    is cheap, it states the requirement instead of leaning on an
    undocumented namespace-matching detail, and it becomes real the
    moment a token is renamed into a recognised namespace. The failure
-   it guards is silent — font-stretch INHERITS, so an undefined token
+   it guarded was silent — font-stretch INHERITED, so an undefined token
    resolves to `inherit` and renders as though it worked.
 
    A separate block rather than `static` on the typography @theme
@@ -66,7 +67,8 @@
 
    Width is stored UNITLESS and converted at the property site:
      font-stretch: calc(var(--wdth-display) * 1%);
-   because a percentage cannot appear inside a font-variation-settings
+   (the historical form; no font-stretch survives C3)
+   because a percentage could not appear inside a font-variation-settings
    string, and one token has to serve both spellings.
 
    Nothing consumes these yet — C1 (width bands) and C4 (weight) do.
@@ -78,9 +80,6 @@
      fourth value: picking a width by eye means you are outside the
      system. Bands: reading (rungs 0-2, 14-26px), display (rungs 3-4,
      32-52px ceiling), large display (rungs 5-6, 72-88px ceiling). */
-  --wdth-read:    100;
-  --wdth-display:  94;
-  --wdth-large:    88;
 
   /* Weight — carries hierarchy and expression. --wght-thin and
      --wght-loud are the signature pair: reserved for three placements
@@ -94,6 +93,98 @@
   --wght-credit:  500;
   --wght-display: 600;
   --wght-loud:    720;
+}
+
+/* ============================================================
+   VOICE — the FLAR axis, by rung (Phase 1 rulings, 21 Aug 2026)
+   ============================================================
+   Commissioner's expressive axis. Ruled from the bench: FLAR 100 (the
+   designer's own Flare stop) on the display band, 0 everywhere else.
+   FLAT VALUES ONLY — 40 and 60 were never judged by anyone and are not
+   decisions that have been made.
+
+   VOLM IS NOT SHIPPED (ruling 4c: the crescendo difference was not
+   visible). It is absent from the binary, not pinned, so it cannot
+   fail silently — which was the one gap assertion 8b could never see.
+
+   THE DECLARATION IS ON `*`, AND THAT IS NOT A STYLE CHOICE. Custom
+   properties substitute at computed-value time on the element whose
+   declaration matched, so `:root { … var(--flar) }` resolves to the
+   literal "FLAR" 0 BEFORE inheritance, and descendants inherit a string
+   with no var() left to re-resolve. Measured, on the C3 build, setting
+   --flar: 100 on a descendant:
+
+       declaration on :root   delta  0.00px   computed "FLAR" 0
+       declaration on *       delta 27.20px   computed "FLAR" 100
+
+   `*` makes every element re-resolve against its own inherited --flar.
+   Cost is style-resolution breadth, the same shape as a universal
+   box-sizing reset; font-variation-settings inherits regardless, so no
+   element gains a value it would not otherwise have had.
+
+   The `, 0` fallback is R9 made explicit rather than assumed: with no
+   @property support an unset --flar is a guaranteed-invalid value, and
+   var(--flar) would be invalid at computed-value time on an inherited
+   property. The fallback degrades to the plain voice instead. */
+
+@property --flar {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+* {
+  font-variation-settings: 'FLAR' var(--flar, 0);
+}
+
+/* THE FLARED VOICE. Derived from RUNGS in scripts/lint-type.mjs, and
+   lint:type check 11 fails the build if this list stops matching the
+   `voice: 'flared'` entries there. One list, two consumers: the bench
+   kept its own hand-written copy of this, which named a class that does
+   not exist and omitted .hero-block__title, so rung 5 rendered no flare
+   for an entire judgment session while every gate stayed green.
+
+   NOT THE DISPLAY BAND ANY MORE, AND THE DIFFERENCE IS THE POINT.
+   `band` says what the type IS. `voice` says what it GETS. .text-cover,
+   .friction-beat__headline and .about-phase__title are display type and
+   stay display type in RUNGS; they are simply below the size at which
+   flare carries anything. Moving them out of the band to take the flare
+   off them would have put a lie in the map.
+
+   THE CUT IS AT 52px AND IT IS A JUDGMENT, NOT A CONSTANT. It was taken
+   on a render at five sizes — 88, 72, 52, 32 and 18px. Nothing was ever
+   tested at 51 or at 40, so a selector within a few pixels of the line
+   is a judgment call and not a lookup:
+
+     .about-hero__pov     51.2px @1440   flared — functionally 52
+     .about-phase__title  36.4px @1440   plain  — inside the 32-40 range
+                                                  measured indistinct
+
+   Reading it as a number is what would send .about-hero__pov plain over
+   one pixel and leave the about page flat. Do not do that.
+
+   .text-lede is flared ahead of its RUNG, which v3 §9 leaves open on
+   purpose. Flare asks a narrower question than the ladder does — display
+   type or reading type — and a 60px lede is display by any reading.
+
+   THREE SELECTORS ARE ABSENT FROM THIS LIST ON PURPOSE and carry
+   `dead: true` in RUNGS instead: .resolution-block__headline,
+   .text-statement and .transformation each exist in this file and match
+   no element on any route. scripts/assert-bands.mjs found them on its
+   first run. Giving a voice value to a selector that renders nowhere is
+   the same inert-but-plausible CSS C3 deleted 49 declarations of.
+   See docs/unspecified-surfaces.md.
+
+   THE PLAIN SELECTORS TAKE NO DECLARATION. @property above already sets
+   initial-value: 0, so authoring `--flar: 0` beside them would be a
+   second statement of the same fact and a place for the two to disagree.
+   They are asserted at 0 by scripts/assert-bands.mjs, not by CSS. */
+.milestone__date,
+.hero-block__title,
+.case-study-prose h2,
+.text-lede,
+.about-hero__pov {
+  --flar: 100;
 }
 
 /* ============================================================
@@ -441,7 +532,6 @@
 @layer base {
   html {
     font-family: var(--font-sans);
-    font-optical-sizing: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -483,10 +573,29 @@
   /* Lift content above the grain layer */
   body > * { position: relative; z-index: 2; }
 
-  /* Bricolage has no italics — map em/i to weight emphasis instead. */
+  /* The shipped face has no italics — map em/i to weight emphasis instead.
+     (True of Bricolage before and of Commissioner now: the designer ships an
+     italic as a SEPARATE binary, and it is not in app/_fonts/.) */
   em, i {
     font-style: normal;
     font-weight: 600;
+  }
+
+  /* NO SYNTHESIS, EITHER AXIS. The em/i remap above is the design decision and
+     it stays; this closes the door beside it. Without this, a future scoped
+     `font-style: italic` anywhere would silently produce sheared roman outlines
+     — mechanically slanted, wrong stem weights on the diagonals, and one of the
+     most legible craft tells there is. With it, that author gets upright text
+     and notices. Audited at C3: zero italic usage on the site today, so this
+     changes nothing rendered and exists to keep it that way.
+
+     Synthetic BOLD is disabled too, and that is safe rather than incidental:
+     @font-face declares font-weight: 340 720, so an out-of-range request clamps
+     to a real instance instead of synthesising, and the Arial fallback carries
+     genuine bold faces. Verified rather than assumed — the only weight outside
+     340-720 in this file is the unmounted takes wall's 800. */
+  html {
+    font-synthesis: none;
   }
 
   /* v3 R4: emphasis is AUTHORED. Tailwind preflight ships
@@ -553,15 +662,16 @@
   /* v3 §5: 96 -> 88. Large-display band. Its 96px ceiling sits above rung 6's
      88px, so it is off-ladder by size (§9) — the width is settled, the size
      is not. Currently unused in production. */
-  font-stretch: calc(var(--wdth-large) * 1%);
   text-wrap: balance;
 }
 
 /* Hero lede — the weighted-sentence statement (Direction D1). The element rides
    the thin connective weight (340) + a recessive tone; the load-bearing noun
    phrases jump to font-[720] + --text-primary inline, so WEIGHT carries the
-   emphasis (Bricolage's signature axis move). No font-variation-settings — plain
-   font-weight maps to the wght axis; opsz stays auto. */
+   emphasis. That is the signature and it is deliberately NOT a width move: v3 R9
+   requires anything meaningful to survive the fallback, and weight does while
+   width does not. Plain font-weight maps to the wght axis; there is no
+   font-variation-settings here and no opsz — the axis does not exist. */
 @utility text-lede {
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
@@ -573,7 +683,6 @@
      is forced; tokenising would encode a banding answer that is being
      deferred. This is the home h1 — decided against real content, not by
      rounding to the nearer band. */
-  font-stretch: 100%;
   text-wrap: balance;
 }
 
@@ -598,7 +707,6 @@
   letter-spacing: -0.025em;
   font-weight: 600;
   /* v3 §5: 97 -> 88. Large-display band (80px ceiling). Unused in production. */
-  font-stretch: calc(var(--wdth-large) * 1%);
 }
 
 @utility text-h1 {
@@ -637,42 +745,42 @@
      rung, and contrast is carried by weight. Also Shipped is now an §6
      exception surface with its own rules, so the rhyme is no longer a
      constraint on this role. */
-  font-stretch: calc(var(--wdth-display) * 1%);
   text-wrap: balance;
 }
 
-/* "Also shipped" brief-block title. Per-module Bricolage character: each block
-   sets --qh-wdth / --qh-wght / --qh-opsz (via data-brand) so the four read as a
-   typographically-curated SET in one family — width (84-100), weight (500-650),
-   and optical size (14-48, forced for effect) all vary. Driven through
-   font-variation-settings (typography doc §7's sanctioned manual-axis case —
-   per-module multi-axis variation), which guarantees the axes render together
-   and is DevTools-inspectable. Size stays uniform so the rows align.
+/* "Also shipped" brief-block title. A §6 exception surface: the four blocks are
+   a curated set and their variation IS the content. Size stays uniform so the
+   rows align.
 
-   One axis, exactly one place (v3 ruling 5). `wght` moved out to font-weight:
-   inside the string it pinned the weight of every descendant, because FVS
-   inherits as a string and overrides the property per axis (R8). `wdth` STAYS
-   in the string, and that is the same rule rather than an exception to it —
-   `opsz` forces a string to exist here anyway, and this is a §6 exception
-   surface whose per-brand widths (84-100) are deliberately outside the three
-   bands. Moving them onto font-stretch would present them to lint:type check 1
-   as ordinary type that had broken the band rule. */
+   WHAT CARRIES THE VARIATION NOW IS WEIGHT AND COLOUR, AND ONLY THOSE. It was
+   three axes per brand via data-brand — wdth 84-100, wght 500-650, opsz 14-48,
+   driven through one font-variation-settings string so they rendered together.
+   Commissioner has neither a wdth nor an opsz axis, and C3 deleted the string.
+   --qh-wght is the only one of the three still reaching a pixel.
+
+   FLARE WAS CONSIDERED AS THE REPLACEMENT AND RULED OUT ON SIZE, not on taste.
+   This role ceilings at 36px, below the 40px the 52px flare cut leaves plain, so
+   per-brand FLAR would have been inert-but-plausible CSS — the class C3 deleted
+   49 declarations of. Paul ruled from the C5 preview that the four still read as
+   four on weight and colour alone.
+
+   --qh-wdth and --qh-opsz are still declared in the four [data-brand] blocks and
+   are consumed by nothing. See docs/unspecified-surfaces.md; removing them is a
+   question about the Also Shipped shelf, not about a typeface. */
 @utility text-qh-title {
   font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
   line-height: 1.1;
   letter-spacing: -0.015em;
   font-weight: var(--qh-wght, 550);
-  font-variation-settings: 'opsz' var(--qh-opsz, 28), 'wdth' var(--qh-wdth, 100);
 }
 
 /* Resolutions numbered-block headline (uscg-bard "How you file/see/count"). Type only —
    margins stay on the authoring markup so this can't drift the block's spacing. Distinct
-   from text-h3 (bigger, heavier, compressed). Standard properties, no FVS: font-stretch
-   maps straight to Bricolage's wdth axis. */
+   from text-h3 (bigger, heavier). Standard properties only; the font-stretch
+   that used to sit here went with the wdth axis in C3. */
 @utility text-resolution-headline {
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
-  font-weight: 600;
-  font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
+  font-weight: 600; /* 94, unchanged — rung 3 */
   letter-spacing: 0;
   line-height: 1.15;
   /* Explicit token, matching .friction-beat__headline. Without it these headings
@@ -719,8 +827,8 @@
   text-transform: uppercase;
 }
 
-/* Quiet emphasis (typography doc §6 Pattern B). Bricolage has no italics, so
-   <em> maps to weight 600 — that's LOUD emphasis. This is the quiet/contrastive
+/* Quiet emphasis (typography doc §6 Pattern B). The shipped face has no
+   italics, so <em> maps to weight 600 — that's LOUD emphasis. This is the quiet/contrastive
    register italic would otherwise carry: a small weight lift + secondary color,
    for longer emphasized passages where bold would shout. Inline span, not a
    replacement for <em>. Product/ship names (Bard, Dagr) are NOT emphasized —
@@ -882,7 +990,6 @@
   /* v3 §5: 88 -> 100. 16px is a reading rung, and R10 bans compression at
      reading size — the 12pt master opens counters, compression closes them.
      Site chrome, so this one ships on every page. */
-  font-stretch: calc(var(--wdth-read) * 1%);
   letter-spacing: -0.01em;
   color: var(--text-primary);
   text-decoration: none;
@@ -1182,7 +1289,9 @@
    count, unlike the demo's hardcoded nth-child). Composed entrance plays off
    .in-view (reveal-wall.tsx, one IO client island) — marks settle in their
    choreographed order, hairlines fade in after, content fades in last. Mark
-   character = per-slot font-stretch (wdth) + --mark-weight + opsz:auto.
+   character = per-slot size + --mark-weight. The wdth and opsz thirds of that
+   premise died with Bricolage (C3); what replaces them is a §6 question the
+   wall must answer before it is ever mounted.
    ============================================================ */
 
 .takes-wall {
@@ -1239,19 +1348,20 @@
 .mark-coords > span { display: block; }
 .mark-play { font-size: 0.95em; line-height: 1; letter-spacing: 0; }
 
-/* Per-slot mark sizing — font-stretch is the wdth axis */
-.slot-large   .mark { font-size: clamp(3.5rem, 6.4vw, 6rem); font-stretch: 78%; }
-.slot-medium6 .mark { font-size: clamp(3rem, 5.2vw, 4.875rem); font-stretch: 80%; }
-.slot-medium5 .mark { font-size: clamp(2.875rem, 5vw, 4.5rem); font-stretch: 80%; }
-.slot-medium  .mark { font-size: clamp(2.5rem, 4.4vw, 3.75rem); font-stretch: 80%; }
-.slot-small4  .mark { font-size: clamp(2.25rem, 4vw, 3.25rem); font-stretch: 82%; }
-.slot-small3  .mark { font-size: clamp(2rem, 3.6vw, 3rem); font-stretch: 82%; }
-.slot-large   .mark-coords { font-size: clamp(2.125rem, 3.6vw, 3.375rem); font-stretch: 88%; }
-.slot-medium6 .mark-coords { font-size: clamp(1.75rem, 3vw, 2.75rem); font-stretch: 88%; }
-.slot-medium5 .mark-coords { font-size: clamp(1.75rem, 3vw, 2.625rem); font-stretch: 88%; }
-.slot-medium  .mark-coords { font-size: clamp(1.5rem, 2.6vw, 2.25rem); font-stretch: 88%; }
-.slot-small4  .mark-coords { font-size: clamp(1.375rem, 2.4vw, 2rem); font-stretch: 88%; }
-.slot-small3  .mark-coords { font-size: clamp(1.25rem, 2.2vw, 1.75rem); font-stretch: 88%; }
+/* Per-slot mark sizing. Each slot also carried a font-stretch (the wdth axis)
+   until C3 deleted it; size is the only per-slot variable left. */
+.slot-large   .mark { font-size: clamp(3.5rem, 6.4vw, 6rem); }
+.slot-medium6 .mark { font-size: clamp(3rem, 5.2vw, 4.875rem); }
+.slot-medium5 .mark { font-size: clamp(2.875rem, 5vw, 4.5rem); }
+.slot-medium  .mark { font-size: clamp(2.5rem, 4.4vw, 3.75rem); }
+.slot-small4  .mark { font-size: clamp(2.25rem, 4vw, 3.25rem); }
+.slot-small3  .mark { font-size: clamp(2rem, 3.6vw, 3rem); }
+.slot-large   .mark-coords { font-size: clamp(2.125rem, 3.6vw, 3.375rem); }
+.slot-medium6 .mark-coords { font-size: clamp(1.75rem, 3vw, 2.75rem); }
+.slot-medium5 .mark-coords { font-size: clamp(1.75rem, 3vw, 2.625rem); }
+.slot-medium  .mark-coords { font-size: clamp(1.5rem, 2.6vw, 2.25rem); }
+.slot-small4  .mark-coords { font-size: clamp(1.375rem, 2.4vw, 2rem); }
+.slot-small3  .mark-coords { font-size: clamp(1.25rem, 2.2vw, 1.75rem); }
 
 /* Entrance pattern pre-states; settle on .in-view */
 .entrance-rise        { transform: translate(-40px, 30px) rotate(-3deg) scale(0.85); }
@@ -1290,7 +1400,6 @@
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.015em;
-  font-stretch: 96%;
   text-wrap: balance;
 }
 .slot-large   .take-thought { font-size: clamp(1.75rem, 3.4vw, 2.75rem); font-weight: 600; }
@@ -1309,8 +1418,8 @@
     border-right-width: 0 !important;
   }
   .takes-wall.in-view .take-card { border-bottom-width: 1px; }
-  .mark { font-size: clamp(2.625rem, 14vw, 4rem) !important; font-stretch: 80% !important; }
-  .mark-coords { font-size: clamp(1.75rem, 8vw, 2.5rem) !important; font-stretch: 88% !important; }
+  .mark { font-size: clamp(2.625rem, 14vw, 4rem) !important; }
+  .mark-coords { font-size: clamp(1.75rem, 8vw, 2.5rem) !important; }
   .take-thought { font-size: clamp(1.25rem, 5vw, 1.625rem) !important; }
 }
 
@@ -1323,13 +1432,14 @@
 
 /* ---- Composition templates (v2) — per-card layout + axis + thought scale.
    Each .comp-* overrides the v1 default (mark-stacked) layout. Axis is set via
-   font-variation-settings (overrides the slot's font-stretch); per-take
+   plain font-weight (C3 reduced these FVS strings, which carried opsz + wght +
+   wdth, to the one axis that still exists); per-take
    axisCharacter still wins over these. Visual values are a first pass — tune live. */
 
 /* mark-dominant: mark fills; thought is a small caption */
-.comp-mark-dominant .mark { font-variation-settings: 'opsz' 60, 'wght' 700, 'wdth' 78; }
+.comp-mark-dominant .mark { font-weight: 700; }
 .comp-mark-dominant .take-thought {
-  font-size: 0.875rem; font-weight: 500; font-stretch: 100%;
+  font-size: 0.875rem; font-weight: 500;
   letter-spacing: 0; color: var(--text-secondary);
 }
 
@@ -1337,7 +1447,7 @@
 .comp-mark-watermark { justify-content: center; }
 .comp-mark-watermark .mark {
   position: absolute; inset: 0; display: flex; align-items: center;
-  font-variation-settings: 'opsz' 96, 'wght' 800, 'wdth' 90;
+  font-weight: 800;
   font-size: clamp(5rem, 12vw, 11rem); opacity: 0.1; z-index: 0; pointer-events: none;
 }
 .comp-mark-watermark .take-content { position: relative; z-index: 1; margin-top: 0; }
@@ -1345,12 +1455,12 @@
 
 /* mark-beside: mark left / content right */
 .comp-mark-beside { flex-direction: row; align-items: center; gap: var(--spacing-m); }
-.comp-mark-beside .mark { flex: 0 0 auto; font-variation-settings: 'opsz' 40, 'wght' 600, 'wdth' 88; }
+.comp-mark-beside .mark { flex: 0 0 auto; font-weight: 600; }
 .comp-mark-beside .take-content { flex: 1; margin-top: 0; }
 
 /* mark-cropped: mark overflows + clipped by the card edge */
 .comp-mark-cropped .mark {
-  font-variation-settings: 'opsz' 96, 'wght' 700, 'wdth' 78;
+  font-weight: 700;
   font-size: clamp(6rem, 13vw, 12rem); line-height: 0.8;
   margin: -0.15em -0.3em -0.25em -0.08em; /* push toward edges; .take-card clips */
 }
@@ -1358,7 +1468,7 @@
 /* word-swap: mark sits inline with the thought */
 .comp-word-swap .mark {
   display: inline-block; margin-right: var(--spacing-3xs); vertical-align: baseline;
-  font-variation-settings: 'opsz' 28, 'wght' 600, 'wdth' 92;
+  font-weight: 600;
   font-size: clamp(1.5rem, 2.4vw, 2rem);
 }
 
@@ -1366,14 +1476,14 @@
 .comp-statement { justify-content: center; }
 .comp-statement .take-content { margin-top: 0; }
 .comp-statement .take-thought {
-  font-variation-settings: 'opsz' 40, 'wght' 550, 'wdth' 98;
+  font-weight: 550;
   font-size: clamp(1.75rem, 3.2vw, 2.75rem); line-height: 1.05;
 }
 
 /* coords-corner: mark in the top-right corner; thought dominant */
 .comp-coords-corner .mark {
   position: absolute; top: 1.75rem; right: 1.75rem; text-align: right;
-  font-variation-settings: 'opsz' 24, 'wght' 600, 'wdth' 88;
+  font-weight: 600;
   font-size: clamp(1.25rem, 2vw, 1.75rem);
 }
 .comp-coords-corner .take-content { margin-top: auto; }
@@ -1460,7 +1570,6 @@
   font-weight: 600;
   /* 92 -> 88. Not a §5 row; derived. Its 76px ceiling falls inside rung 5/6's
      72-88 large-display span, so §3.1 answers directly. Logged in §9. */
-  font-stretch: calc(var(--wdth-large) * 1%);
   line-height: 1.02;
   letter-spacing: -0.025em;
   margin: var(--spacing-2xl) 0 var(--spacing-m);
@@ -1485,8 +1594,7 @@
    .case-study-numbers h3. */
 .case-study-prose h2 {
   font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
-  font-weight: 600;
-  font-stretch: calc(var(--wdth-display) * 1%); /* v3 §5: 96 -> 94. Rung 4. */
+  font-weight: 600; /* v3 §5: 96 -> 94. Rung 4. */
   line-height: 1.08;
   letter-spacing: -0.02em;
   margin: var(--spacing-2xl) 0 var(--spacing-l);
@@ -1610,8 +1718,7 @@
 
 .case-study-numbers h3 {
   font-size: clamp(4rem, 9vw + 1rem, 7.5rem);
-  font-weight: 600;
-  font-stretch: calc(var(--wdth-large) * 1%); /* 88, unchanged. Unused in prod. */
+  font-weight: 600; /* 88, unchanged. Unused in prod. */
   line-height: 0.92;
   letter-spacing: -0.04em;
   margin: 0 0 var(--spacing-s);
@@ -1787,30 +1894,24 @@
   margin: var(--spacing-2xs) 0 0;
   font-size: var(--ms-date-size, clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)); /* rung 6, ratio B */
   line-height: 0.98;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em; /* -0.020 -> -0.015; rung 6, on eye alone */
   color: var(--text-primary);
-  /* Signature display treatment: Bricolage's 96pt optical cut (ink-trapped) for
-     the arrival crescendo. One of the two optical-size pins v3 §6 keeps, because
-     at 52-88px that is a real 44-unit push and the one place the drawn display
-     cut actually shows.
+  /* Rung 6, the arrival crescendo. Weight and nothing else now.
 
-     v3 ruling 5: 600 at width 88. THE INVARIANT IS ONE AXIS, EXACTLY ONE PLACE.
-     The FVS string carries only what no standard property can express: `wght`
-     has font-weight, `wdth` has font-stretch, and `opsz` has font-optical-sizing
-     — but that property is `auto | none` only and cannot say "pin at 96", which
-     is precisely why §6 sanctions this one pin and nothing else.
+     RULING 5'S MECHANISM CHANGED TWICE IN ONE SESSION, and the second change
+     deleted most of what the first one moved to. 0b took `wght` and `wdth` out
+     of the FVS string and onto the standard properties, on the invariant that
+     an axis lives in exactly one place. C3 then deleted two of the three
+     properties it had been moved onto: Commissioner has no wdth axis and no
+     opsz axis, so font-stretch, font-optical-sizing and the 'opsz' 96 pin were
+     all being ignored by the renderer, and are gone.
 
-     This rule used to name all three axes in the string AND set two of them as
-     properties. Per R8 the string wins per axis regardless of source order, so
-     the two properties reached no pixel: the tokens were decorative, and
-     changing --wdth-large would have left this surface silently at 88. The old
-     note here reasoned correctly that a stale 'wght' 520 in the string had made
-     the font-weight change a no-op, then resolved it by duplicating the value
-     rather than by removing it. Removing it is the fix. */
+     §6'S TWO SANCTIONED OPTICAL-SIZE PINS BOTH RETIRE HERE. This was the one
+     the section defended hardest: a real 44-unit push at 52-88px, the single
+     place Bricolage's drawn display cut actually showed. Commissioner has one
+     drawing at every size, so there is nothing to pin and nothing to defend.
+     What replaces the display cut is FLAR, and it arrives in C4. */
   font-weight: var(--wght-display);
-  font-stretch: calc(var(--wdth-large) * 1%);
-  font-optical-sizing: none;
-  font-variation-settings: 'opsz' 96;
 }
 .milestone__sub {
   margin: var(--spacing-s) 0 0;
@@ -1901,7 +2002,6 @@
      cannot inherit whatever the heading around it happens to set — it appears
      inside .friction-beat (94) and .thread-cols, and rendered two ways it
      stops reading as the same mark. 20px ceiling, so reading band. */
-  font-stretch: calc(var(--wdth-read) * 1%);
   letter-spacing: 0.04em;
   color: var(--text-muted); /* quiet 01/02/03 marker — AA-normal at the 16px floor (not large-bold, so subtle undershoots) */
   font-variant-numeric: tabular-nums;
@@ -1920,7 +2020,6 @@
      The old "spine identity via compression" note is retired by R2 — width
      follows the rung, and the tie back to the hero is carried by weight.
      Unused in production. */
-  font-stretch: calc(var(--wdth-display) * 1%);
   line-height: 1.12;
   letter-spacing: -0.01em;
   color: var(--text-primary);
@@ -2015,7 +2114,6 @@
   /* 94, unchanged — rung 3. Both this and h2 are now token-driven, so the old
      "a subtle step below the H2's 96%" no longer describes it: h2 is 94 too,
      and the two rungs separate on size, not width. */
-  font-stretch: calc(var(--wdth-display) * 1%);
   line-height: 1.15;
   letter-spacing: 0; /* airy, not tense */
   color: var(--text-primary); /* canonical token (was the --color-text-primary alias) */
@@ -2144,7 +2242,6 @@ html.dark .oku-figure {
      gap between the display and large-display bands, so §3.1 returns no band.
      94 is already legal, so nothing is forced; tokenising would encode a
      deferred answer. */
-  font-stretch: 94%;
   line-height: 1.2;
   letter-spacing: -0.015em;
   margin: 0 0 var(--spacing-s);
@@ -2205,7 +2302,6 @@ html.dark .oku-figure {
   font-weight: 700;
   /* 90 -> 88. Not a §5 row; derived from its 76px ceiling (large display).
      Unused in production. */
-  font-stretch: calc(var(--wdth-large) * 1%);
   line-height: 1.05;
   letter-spacing: -0.02em;
 }
@@ -2557,8 +2653,7 @@ html.dark .oku-figure {
    headline, not marker-only. */
 .resolution-block__headline {
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem); /* rung 3, 26 → 32px */
-  font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */
-  font-stretch: calc(var(--wdth-display) * 1%); /* 94, unchanged — rung 3 */
+  font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */ /* 94, unchanged — rung 3 */
   line-height: 1.15;
   letter-spacing: 0;
   color: var(--text-primary);
@@ -2653,7 +2748,6 @@ html.dark .oku-figure {
      a reading rung — R10 bans compression there. The "compressed-bold display
      register" it used to join is retired by R2; the lead still separates from
      its gloss on weight and colour. */
-  font-stretch: calc(var(--wdth-read) * 1%);
   color: var(--text-primary);  /* sanctioned exception over --text-secondary — see docs/color-system.md (Text) */
 }
 
@@ -2705,7 +2799,6 @@ html.dark .oku-figure {
   font-weight: 600;
   /* 92 -> 100. Not a §5 row; derived. 14px is the floor rung — reading band,
      and R10 bans compression at reading size. */
-  font-stretch: calc(var(--wdth-read) * 1%);
   letter-spacing: 0.01em;
   color: var(--text-muted);
   text-align: center;
@@ -3002,13 +3095,13 @@ html.dark .figure-placeholder {
    it at <lg.
 
    The type register (eyebrow / title / role) uses the standard axis
-   properties — font-optical-sizing: auto + font-stretch + font-weight —
+   properties — font-weight alone since C3 —
    so optical sizing tracks the rendered size (the display title gets the
    expressive 96pt cut where it's large, a readable cut at the mobile floor)
    and the wdth contrast (100 vs 88) maps straight to the wdth axis. No FVS.
 
    The callout (.hero-block__callout-*) used to pin its axes through
-   font-variation-settings as well. Both pins are gone (v3 C6): they set opsz
+   font-variation-settings as well. Both pins were gone by v3 C6: they set opsz
    to exactly what `auto` already resolved at those sizes, and per R8 the body
    one additionally pinned every descendant, since FVS inherits as a string and
    cannot be re-weighted downstream. The whole block is now on the standard
@@ -3038,15 +3131,54 @@ html.dark .figure-placeholder {
 
 /* ── Typographic register ────────────────────────────────────────────── */
 
+/* The home hero's credit line, name half. v3 §3.2 assigns --wght-credit to
+   "Credit lines, quiet emphasis, h3" and this element is a credit line AT
+   text-h3 — two of the three documented uses. It shipped `font-semibold` (600),
+   the DISPLAY weight, which is specified for "headings, headlines, eyebrows,
+   prose emphasis" and not for this.
+
+   The consequence was visible: at 390 the h1's light half (32px / 340) sits
+   directly above this line (22px / 600), and the credit read heavier than the
+   headline it sits under. Options that raised the HEADLINE were rendered and
+   rejected — v3 §3.2 cleared 340 at the 32px floor with device evidence, and
+   moving a sanctioned value to compensate for an unsanctioned one is fixing the
+   wrong end.
+
+   THE WEIGHT IS HERE RATHER THAN IN A UTILITY ON PURPOSE. The span previously
+   carried no semantic class at all, so this element could not be referred to
+   from CSS. What that buys is precise: the value is now VISIBLE TO THE PARSER,
+   which is the precondition for the weight-vocabulary check the backlog asks
+   for. It does not make it CHECKED — no check enforces the vocabulary today. */
+.hero-credit-name {
+  font-weight: var(--wght-credit);
+}
+
 .hero-block__eyebrow {
   font-size: 0.875rem;
   line-height: 1.4;
   letter-spacing: 0.08em;          /* matches locked text-eyebrow convention */
   text-transform: uppercase;
   color: var(--text-muted);
-  margin: 0;
-  font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 14px, rung 0 */
+  margin: 0; /* 100, unchanged — 14px, rung 0 */
   font-weight: 600;
+  /* `case` raises punctuation to cap height in an all-caps run. These eyebrows
+     read "BARD · U.S. COAST GUARD" and "FDT-E · U.S. NAVY": the middot sits at
+     lowercase centre among capitals and FDT-E's hyphen sits low, because both
+     glyphs are drawn for lowercase. Commissioner v1.012 carries 37 `case`
+     substitutions; Google's v1.001 does not, which is one of the reasons C1
+     self-hosts the designer's build.
+
+     ON THE LEAF, DELIBERATELY. R8's logic is not specific to
+     font-variation-settings: font-feature-settings also inherits AS A STRING
+     and overrides per feature regardless of source order, so on a container it
+     would pin every descendant's feature set. This element owns its text.
+
+     UNGUARDED, AND NAMED AS SUCH. No lint and no runtime assertion covers this
+     declaration. One feature on one leaf does not earn its own instrument, but
+     an unguarded thing gets named rather than left unmentioned — that is how
+     the wdth probe stayed green while structurally guaranteed to fail. If a
+     second surface takes `case`, the guard is owed then. */
+  font-feature-settings: 'case' 1;
 }
 
 .hero-block__title {
@@ -3069,17 +3201,34 @@ html.dark .figure-placeholder {
    "open" clause against one "anxious" one. R2 retires that: width follows the
    rung, never mood, and R9 is the second reason — the Arial fallback has no
    wdth axis, so a meaning carried only by width disappears during font swap
-   and permanently on a blocked CDN. Letter-spacing still differs, which is
-   deliberate and out of scope here. */
+   and permanently on a blocked CDN.
+
+   AND AS OF 21 AUG 2026 THE TRACKING CONVERGES TOO. This comment used to end
+   "letter-spacing still differs, which is deliberate and out of scope here."
+   It no longer differs. --open moves -0.025 -> -0.020 and --anxious stays
+   where it was, so both clauses now track at -0.020.
+
+   The evidence was these two rules themselves, which is why it is worth
+   recording. They shipped different values at the same size in the same
+   headline, and the -0.020 clause read comfortably while the -0.025 one
+   crowded — a controlled comparison nobody set up, on the live page, needing
+   no bench. That certifies -0.020 as rung 5's correct value.
+
+   The two rules stay separate because they are semantically distinct and may
+   diverge again. What they no longer carry is 0.005em of differentiation
+   nobody could name: the split is content and module semantics, and tracking
+   was never the thing expressing it. */
 .hero-block__sentence--open {
-  letter-spacing: -0.025em;
-  font-stretch: calc(var(--wdth-large) * 1%); /* 100 -> 88 */
+  letter-spacing: -0.020em; /* -0.025 -> -0.020, and now equal to --anxious */
   font-weight: 600;
 }
 
 .hero-block__sentence--anxious {
-  letter-spacing: -0.02em;
-  font-stretch: calc(var(--wdth-large) * 1%); /* 88, unchanged */
+  /* Unchanged, and unchanged ON PURPOSE. The benched step preserved a 0.005em
+     offset between the clauses because a comparison moves one variable at a
+     time; carrying that offset into the shipped value would have moved this
+     rule to -0.015 and off the number the evidence had just proved right. */
+  letter-spacing: -0.02em; /* 88, unchanged */
   font-weight: 600;
 }
 
@@ -3088,8 +3237,7 @@ html.dark .figure-placeholder {
   line-height: 1.55;
   max-width: 38ch;
   color: var(--text-primary);
-  margin: 0;
-  font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
+  margin: 0; /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — authored credit register, not body prose */
   font-weight: 500;
   text-wrap: pretty;               /* credit line: no one-word last line at 38ch (body→pretty register) */
@@ -3178,9 +3326,8 @@ html.dark .figure-placeholder {
   margin: 0 0 var(--spacing-2xs);              /* tight single step: eyebrow hugs the body */
   /* v3 §5: width 90 -> 100. 14px is the floor rung and R10 bans compression
      there. The opsz pin and its FVS string are deleted (C6): 'opsz' 14 at a
-     14px role is exactly what font-optical-sizing: auto already resolves, so
+     14px role was exactly what font-optical-sizing: auto already resolved, so
      the pin reproduced the default and bought nothing. */
-  font-stretch: calc(var(--wdth-read) * 1%);
   font-weight: 600;
 }
 
@@ -3193,8 +3340,7 @@ html.dark .figure-placeholder {
   /* The opsz pin and its FVS string are deleted (C6). 'opsz' 18 at an 18px
      role reproduced font-optical-sizing: auto, and this one was the worse of
      the two: FVS inherits as a string, so per R8 it pinned every descendant of
-     the callout body and nothing inside it could be re-weighted. */
-  font-stretch: calc(var(--wdth-read) * 1%); /* 100, unchanged — 18px, rung 1 */
+     the callout body and nothing inside it could be re-weighted. */ /* 100, unchanged — 18px, rung 1 */
   /* wght 500 — featured insight, not body prose */
   font-weight: 500;
   text-wrap: pretty;               /* fills the measure with a tidy rag (no widow); balance evened lines short → right-side band */

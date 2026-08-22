@@ -1,5 +1,36 @@
 # Commissioner — the line-break measurement
 
+> **CORRECTION, 22 Aug 2026 — every element count in this document is impure.
+> The body below is unedited on purpose; it is a measurement record.**
+>
+> `scripts/measure-linebreaks.mjs` filters out `visibility: hidden` and
+> `display: none`. It does **not** catch the clip idiom — `position: absolute`,
+> a 1px box, `clip: rect(0,0,0,0)` — which is how `.sr-only` hides text. Those
+> spans own text, have a non-zero rect, and were counted.
+>
+> **Measured, not inferred: 9 of the 1,209 measurements are visually hidden**
+> (three `.sr-only` spans on `/`, one per card in `case-study-card.tsx`, at three
+> viewports each). **The pure population is 1,200.** Every changed-count in this
+> document and every one this migration produced carries that impurity —
+> including the headline `181 / 1209` — so they should be read as *impure*
+> rather than reused as clean. Nothing concluded here appears to flip: the band
+> decomposition still matches Finding 1 to the element.
+>
+> **One claim in the body is wrong rather than merely impure.** §"the noisiest
+> element in the whole sweep in both faces" describes `.case-card__title-link`
+> oscillating 3/4/5 lines. That was the artifact: the sr-only span inside each
+> card link added two phantom lines to every reading. **The real range is 1–3.**
+>
+> Not fixed silently, and not fixed by default. Ordinals are how runs align, so
+> dropping the spans renumbers the walk — measured, a clean run diffed against a
+> counted one reports **96 phantom misalignments from 9 removed elements**. The
+> harness now prints its hidden count on every run and offers `--exclude-hidden`
+> as an opt-in, valid only when both sides were captured under it.
+>
+> **The tally this belongs to:** an instrument fault, not a code fault — the
+> sixteenth against fifteen code faults, in a project whose most-cited lesson is
+> that ratio.
+
 Open item 1 from `commissioner-handoff.md`: *"Build the site twice, Bricolage and
 Commissioner, and diff rendered line counts across every heading, caption and
 card title on all three studies plus home and about. Turns 're-verification will

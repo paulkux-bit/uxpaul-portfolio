@@ -192,6 +192,108 @@ mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
 Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
 by `.milestone` in Nuuly §8.
 
+**Which rung the six unbanded display roles sit on.** v3 §9 already names six
+shipped selectors whose size ceilings sit on no rung and leaves the question
+open on purpose: the ladder is about size relative to neighbours and about
+tracking, and it needs real content in front of it. Two of the five case studies
+are unwritten, so that content does not exist yet. Nothing here overturns that.
+
+What C4 added is a **narrower question answered separately**: flare asks only
+*display type or reading type*, which is answerable now and does not constrain
+the rung answer later. So `.text-lede` (60px, the home hero) takes the display
+band and `--flar: 100` while its rung stays open, recorded in `RUNGS` as
+`rung: null` rather than by omission.
+
+**C5 split that one question into two, and everything below reads against the
+split.** `band` says what the type is; `voice` says whether it is flared. They
+were one key while every display selector wanted flare, and the 52px cut ended
+that: `.text-cover` and `.friction-beat__headline` are 32px display type that
+takes the plain voice. **Being display band no longer implies `--flar: 100`.**
+
+The 52px cut is a legibility judgment taken on a render at 88, 72, 52, 32 and
+18px. Nothing was tested at 51 or at 40, so a selector within a few pixels of it
+is ruled on rather than looked up.
+
+**Two rulings recorded as conditionals, because the surfaces do not render:**
+
+- **`.text-statement`** (96px) — *if it ever renders, it is display band and
+  flared.* It was banded on 21 Aug 2026 and the application
+  withdrawn the same day: `scripts/assert-bands.mjs` found it matches zero
+  elements on all five routes, so the ruling had been made about an element that
+  does not exist. The reasoning survives — a 96px statement is display type
+  whatever rung it lands on — and is kept here so whoever builds that section
+  gets the answer instead of re-deriving it.
+- **`.resolution-block__headline`** (32px) and **`.transformation`** — same
+  condition, different conditional as of C5. Both are display band and both
+  render nowhere, but neither is flared: the headline ceilings at 32px, below
+  the cut, and `.transformation` is a grid container with **no `font-size` of
+  its own**, so it has no ceiling the cut can even be applied to. That second
+  fact is a small finding in itself — having no size is an independent reason it
+  was never display type.
+
+**`.about-phase__title`** (36px, five on `/about`) and **`.about-hero__pov`**
+(51px, one on `/about`) are the two live display surfaces **v3 does not mention
+anywhere** — not in §3.3's ladder, not in §5's width table, not in §9's list of
+six unbanded selectors. There was no rung to inherit and no band to read.
+
+**Banded 21 Aug 2026 on function, ruled from the C4 preview:** both take
+`band: 'display'`. The five phase titles do structural work at 36px against 16px
+prose; the POV line at 51px is the largest type on its page. **Their rung stays
+open** — the band answers a narrower question than the ladder does, and
+answering it does not constrain the ladder answer later.
+
+**Voiced 22 Aug 2026, and the two rulings diverge — which is the split earning
+itself on its first real case.** `.about-hero__pov` sets at 51.2px at 1440 and
+is **flared**, on the judgment that it is functionally the 52px the cut was
+taken at, not on the number. `.about-phase__title` sets at 36.4px (40px ceiling)
+and is **plain**, sitting inside the 32-40 range the review measured as
+indistinct. Both keep the band C4a gave them. Nothing was overturned: C4a ruled
+on what the type is, C5 ruled on what it can carry, and those were one key when
+C4a landed.
+
+`/about` therefore ships with a flared `<h1>` above five plain `<h2>`s. That
+reads as hierarchy rather than inconsistency, and it is a render question rather
+than a table one.
+
+Needs: a rung for each of the six, which waits on real content. The band and the
+voice for the two about-page roles are both settled. Raised 21 Aug 2026 by the
+Commissioner migration, which forced the band question without forcing the rung
+question.
+
+**Whether Also Shipped still differentiates its four brands.** Not a surface no
+spec governs — v3 §6 governs it explicitly, and says of `.text-qh-title` that
+*"the variation IS the content."* The entry is here because **the mechanism that
+carried that variation no longer exists** and the spec has not caught up. The
+four titles were separated on three per-brand axes via `[data-brand]`:
+
+| | `--qh-wdth` | `--qh-wght` | `--qh-opsz` |
+|---|---|---|---|
+| lionsgate | 90 | 600 | 40 |
+| red-cross | 96 | 500 | 14 |
+| bbc | 84 | 650 | 48 |
+| k-hovnanian | 100 | 540 | 24 |
+
+Commissioner has **neither `wdth` nor `opsz`**. C3 deleted the FVS string that
+drove them, so two of the three axes are gone and `--qh-wdth` / `--qh-opsz` are
+still declared in all four blocks while being consumed by nothing. What is left
+is `--qh-wght` 500-650 and the per-brand colour.
+
+**FLAR was considered as the replacement and ruled out on measurement, not
+taste.** `text-qh-title` is `clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem)` — 28px at
+390, 31.5px at 768, **36px at 1440 and its ceiling**. That is below the 40px
+that was just ruled plain and 16px under the 52px cut. Shipping per-brand FLAR
+onto a 36px surface in the same commit that removed it from a 40px one would be
+inert-but-plausible CSS, the class C3 deleted 49 declarations of.
+
+Needs: a ruling on whether weight and colour alone carry four-ness, **from a
+render**. If they do not, the answer is a question about the Also Shipped shelf
+and not about a typeface — v3 §6's rules and the two dead custom properties
+follow from that ruling rather than preceding it. Do not reach for an
+intermediate FLAR value: 0 and 100 are the only two anyone has judged.
+
+Raised 22 Aug 2026 by C5, which asked what flare could do here and found the
+surface is too small for the question.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026

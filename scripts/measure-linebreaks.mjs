@@ -10,14 +10,38 @@
  * digest is stored per element so misalignment is detected rather than assumed
  * away.
  *
- *   node scripts/measure-linebreaks.mjs <label> [cssVariant]
+ *   node scripts/measure-linebreaks.mjs <label> [cssVariant] [--exclude-hidden]
+ *
+ * IT COUNTS VISUALLY-HIDDEN TEXT BY DEFAULT, AND THE REASON IS THE NON-OBVIOUS
+ * HALF. The filter below drops `visibility: hidden` and `display: none`, but
+ * `.sr-only` uses the CLIP IDIOM — position absolute, a 1px box, clip to nothing
+ * — which is neither. Those spans own text, have a non-zero rect, and are
+ * counted. Three of them ship on `/` (one per card, case-study-card.tsx).
+ *
+ * They are counted ON PURPOSE rather than by oversight. Every baseline this
+ * migration captured includes them, and elements are matched across runs BY
+ * ORDINAL POSITION IN THE WALK. Dropping them by default would renumber the
+ * walk, so a new run diffed against a stored baseline would compare two
+ * different populations and manufacture changes that never happened. The
+ * defect is real and its silent fix would be worse than itself.
+ *
+ * So: the count is PRINTED on every run, and exclusion is OPT-IN via
+ * `--exclude-hidden`, valid only when BOTH sides of a diff were captured under
+ * it. Never applied across that boundary.
+ *
+ * Found 22 Aug 2026, after the same artifact had already been fixed in
+ * sweep-candidates.mjs and not here — where it had inflated a card title's line
+ * count by two and produced the claim that .case-card__title-link was "the
+ * noisiest element in the whole sweep". See the correction header on
+ * docs/commissioner-linebreak-measurement.md.
  */
 
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
-const LABEL = process.argv[2] ?? 'run';
-const VARIANT = process.argv[3] ?? 'none';
+const POSITIONAL = process.argv.slice(2).filter((a) => !a.startsWith('--'));
+const LABEL = POSITIONAL[0] ?? 'run';
+const VARIANT = POSITIONAL[1] ?? 'none';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 
 /* FALLBACK=1 aborts the woff2 so the size-adjusted Arial fallback renders.
@@ -31,6 +55,11 @@ const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
    An env var rather than a third positional: argv[2] and argv[3] are already
    LABEL and VARIANT, and the two compose — a run can be fallback AND varied. */
 const FALLBACK = process.env.FALLBACK === '1';
+
+/* A flag rather than an env var, unlike FALLBACK: this one changes the shape of
+   the recorded population, so it belongs where a reader of the command line
+   sees it. FALLBACK changes what renders; this changes what is counted. */
+const EXCLUDE_HIDDEN = process.argv.includes('--exclude-hidden');
 
 const ROUTES = [
   '/',
@@ -93,6 +122,24 @@ const VARIANTS = {
     .case-study-prose p { font-size: 1.1875rem; }
   `,
 
+  /* Tracking steps for the display-band decision, 21 Aug 2026. Injected as
+     named variants rather than written to globals.css, so the cost of each
+     step is measurable without applying it. Step 1 puts --open on -0.020,
+     which is exactly rung 6's existing value: the eye-derived step and the
+     convention-derived correction of rung 5's anomaly land on the same
+     number. Tracking is monotonic, so step2's changed set must be a SUPERSET
+     of step1's; if it is not, the injection is wrong, not the value. */
+  'track-step1': `
+    .hero-block__sentence--open    { letter-spacing: -0.020em; }
+    .hero-block__sentence--anxious { letter-spacing: -0.015em; }
+    .milestone__date               { letter-spacing: -0.015em; }
+  `,
+  'track-step2': `
+    .hero-block__sentence--open    { letter-spacing: -0.015em; }
+    .hero-block__sentence--anxious { letter-spacing: -0.010em; }
+    .milestone__date               { letter-spacing: -0.010em; }
+  `,
+
   /* WIDTH ONLY. `nowdth` above also sets font-variation-settings: normal,
      which additionally strips the §6-sanctioned opsz pin on .milestone__date
      and all four .text-qh-title axis sets — fine for the Commissioner
@@ -105,9 +152,10 @@ const VARIANTS = {
   `,
 };
 
-const collect = () => {
+const collect = (excludeHidden) => {
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'SVG', 'PATH', 'HEAD', 'META', 'LINK']);
   const out = [];
+  const hidden = [];
   let ordinal = 0;
 
   const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_ELEMENT);
@@ -127,6 +175,17 @@ const collect = () => {
     if (!rect.width || !rect.height) continue;
     const cs = getComputedStyle(el);
     if (cs.visibility === 'hidden' || cs.display === 'none') continue;
+
+    /* Detected by the OBSERVABLE PROPERTY rather than by class name: an element
+       that owns text inside a box one pixel or less in either dimension cannot
+       be read by a sighted visitor, however that was achieved. Matching
+       `.sr-only` would only find the idiom this repo happens to use today. The
+       zero case is already gone above, so this is exactly the 1px clip. */
+    const isHidden = rect.width <= 1 || rect.height <= 1;
+    if (isHidden) {
+      hidden.push({ tag: el.tagName.toLowerCase(), head: ownText.slice(0, 40) });
+      if (excludeHidden) continue;
+    }
 
     ordinal += 1;
 
@@ -196,7 +255,10 @@ const collect = () => {
     });
   } while ((el = walker.nextNode()));
 
-  return out;
+  /* The stored value stays the ARRAY — see the call site. Returning a pair here
+     rather than counting in a second walk keeps ONE predicate: two walks would
+     be two places for "what counts as hidden" to drift apart. */
+  return { items: out, hidden };
 };
 
 const run = async () => {
@@ -204,6 +266,8 @@ const run = async () => {
     process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {}
   );
   const result = { label: LABEL, variant: VARIANT, routes: {} };
+  const hiddenSeen = [];
+  let total = 0;
 
   for (const vp of VIEWPORTS) {
     const ctx = await browser.newContext({
@@ -239,9 +303,15 @@ const run = async () => {
       });
       await page.waitForTimeout(150);
 
-      const data = await page.evaluate(collect);
-      result.routes[`${route}@${vp.name}`] = data;
-      process.stdout.write(`${LABEL} ${route}@${vp.name}: ${data.length} elements\n`);
+      const { items, hidden } = await page.evaluate(collect, EXCLUDE_HIDDEN);
+      result.routes[`${route}@${vp.name}`] = items;
+      hiddenSeen.push(...hidden.map((h) => ({ ...h, where: `${route}@${vp.name}` })));
+      total += items.length;
+      process.stdout.write(
+        `${LABEL} ${route}@${vp.name}: ${items.length} elements` +
+        (hidden.length ? `  (+${hidden.length} visually hidden${EXCLUDE_HIDDEN ? ', EXCLUDED' : ', counted'})` : '') +
+        `\n`,
+      );
     }
     await ctx.close();
   }
@@ -249,6 +319,26 @@ const run = async () => {
   await browser.close();
   mkdirSync('measurements', { recursive: true });
   writeFileSync(`measurements/${LABEL}.json`, JSON.stringify(result, null, 1));
+
+  /* Printed at the point of use, every run, whether or not the flag is set. A
+     defect recorded only in a document is a defect the next person inherits
+     without reading about it. */
+  const n = hiddenSeen.length;
+  console.log(
+    `\n${total} measurements recorded` +
+    (EXCLUDE_HIDDEN
+      ? `, ${n} visually-hidden EXCLUDED (--exclude-hidden).\n` +
+        `  Only comparable against a baseline captured under the same flag.`
+      : `, OF WHICH ${n} are visually hidden and counted.\n` +
+        `  Pure population would be ${total - n}. Run with --exclude-hidden for that,\n` +
+        `  and recapture the other side of the diff under the same flag — ordinals renumber.`),
+  );
+  if (n) {
+    const by = {};
+    for (const h of hiddenSeen) (by[`${h.tag} "${h.head}"`] ??= []).push(h.where);
+    for (const [k, wheres] of Object.entries(by))
+      console.log(`    ${String(wheres.length).padStart(2)}x  ${k}  on ${wheres.map((w) => w.split('@')[1]).join(', ')}`);
+  }
 };
 
 run();
