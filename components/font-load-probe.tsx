@@ -88,7 +88,7 @@ export function FontLoadProbe() {
       //    system-ui and sans-serif, and document.fonts.check reports false if
       //    any listed family is not a registered FontFace, which generic
       //    keywords never are. Passing the whole stack reports false even when
-      //    Bricolage is loaded and rendering.
+      //    the real face is loaded and rendering.
       const primaryFamily = fontFamily.split(',')[0].trim();
       let loaded = false;
       try {

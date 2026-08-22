@@ -668,8 +668,10 @@
 /* Hero lede — the weighted-sentence statement (Direction D1). The element rides
    the thin connective weight (340) + a recessive tone; the load-bearing noun
    phrases jump to font-[720] + --text-primary inline, so WEIGHT carries the
-   emphasis (Bricolage's signature axis move). No font-variation-settings — plain
-   font-weight maps to the wght axis; opsz stays auto. */
+   emphasis. That is the signature and it is deliberately NOT a width move: v3 R9
+   requires anything meaningful to survive the fallback, and weight does while
+   width does not. Plain font-weight maps to the wght axis; there is no
+   font-variation-settings here and no opsz — the axis does not exist. */
 @utility text-lede {
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
@@ -746,22 +748,25 @@
   text-wrap: balance;
 }
 
-/* "Also shipped" brief-block title. Per-module Bricolage character: each block
-   sets --qh-wdth / --qh-wght / --qh-opsz (via data-brand) so the four read as a
-   typographically-curated SET in one family — width (84-100), weight (500-650),
-   and optical size (14-48, forced for effect) all vary. Driven through
-   font-variation-settings (typography doc §7's sanctioned manual-axis case —
-   per-module multi-axis variation), which guarantees the axes render together
-   and is DevTools-inspectable. Size stays uniform so the rows align.
+/* "Also shipped" brief-block title. A §6 exception surface: the four blocks are
+   a curated set and their variation IS the content. Size stays uniform so the
+   rows align.
 
-   One axis, exactly one place (v3 ruling 5). `wght` moved out to font-weight:
-   inside the string it pinned the weight of every descendant, because FVS
-   inherits as a string and overrides the property per axis (R8). `wdth` STAYS
-   in the string, and that is the same rule rather than an exception to it —
-   `opsz` forces a string to exist here anyway, and this is a §6 exception
-   surface whose per-brand widths (84-100) are deliberately outside the three
-   bands. Moving them onto font-stretch would have presented them to check 1
-   as ordinary type that had broken the band rule. */
+   WHAT CARRIES THE VARIATION NOW IS WEIGHT AND COLOUR, AND ONLY THOSE. It was
+   three axes per brand via data-brand — wdth 84-100, wght 500-650, opsz 14-48,
+   driven through one font-variation-settings string so they rendered together.
+   Commissioner has neither a wdth nor an opsz axis, and C3 deleted the string.
+   --qh-wght is the only one of the three still reaching a pixel.
+
+   FLARE WAS CONSIDERED AS THE REPLACEMENT AND RULED OUT ON SIZE, not on taste.
+   This role ceilings at 36px, below the 40px the 52px flare cut leaves plain, so
+   per-brand FLAR would have been inert-but-plausible CSS — the class C3 deleted
+   49 declarations of. Paul ruled from the C5 preview that the four still read as
+   four on weight and colour alone.
+
+   --qh-wdth and --qh-opsz are still declared in the four [data-brand] blocks and
+   are consumed by nothing. See docs/unspecified-surfaces.md; removing them is a
+   question about the Also Shipped shelf, not about a typeface. */
 @utility text-qh-title {
   font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
   line-height: 1.1;
@@ -771,8 +776,8 @@
 
 /* Resolutions numbered-block headline (uscg-bard "How you file/see/count"). Type only —
    margins stay on the authoring markup so this can't drift the block's spacing. Distinct
-   from text-h3 (bigger, heavier). Standard properties only: font-stretch
-   maps straight to Bricolage's wdth axis. */
+   from text-h3 (bigger, heavier). Standard properties only; the font-stretch
+   that used to sit here went with the wdth axis in C3. */
 @utility text-resolution-headline {
   font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
   font-weight: 600; /* 94, unchanged — rung 3 */
@@ -822,8 +827,8 @@
   text-transform: uppercase;
 }
 
-/* Quiet emphasis (typography doc §6 Pattern B). Bricolage has no italics, so
-   <em> maps to weight 600 — that's LOUD emphasis. This is the quiet/contrastive
+/* Quiet emphasis (typography doc §6 Pattern B). The shipped face has no
+   italics, so <em> maps to weight 600 — that's LOUD emphasis. This is the quiet/contrastive
    register italic would otherwise carry: a small weight lift + secondary color,
    for longer emphasized passages where bold would shout. Inline span, not a
    replacement for <em>. Product/ship names (Bard, Dagr) are NOT emphasized —

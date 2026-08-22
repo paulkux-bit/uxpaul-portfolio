@@ -11,7 +11,7 @@ export type QuickHitBrand = 'lionsgate' | 'red-cross' | 'bbc' | 'k-hovnanian';
 export interface QuickHit {
   /** Maps to the --qh-{brand}-* tokens via data-brand; also the list key. */
   brand: QuickHitBrand;
-  /** Brand name set in Bricolage (not logo art). */
+  /** Brand name set in the site face, uppercased by text-eyebrow (not logo art). */
   wordmark: string;
   /** Short editorial title, book-title casing, 2-4 words. */
   title: string;
