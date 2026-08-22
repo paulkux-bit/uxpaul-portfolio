@@ -192,6 +192,38 @@ mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
 Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
 by `.milestone` in Nuuly §8.
 
+**Which rung the six unbanded display roles sit on.** v3 §9 already names six
+shipped selectors whose size ceilings sit on no rung and leaves the question
+open on purpose: the ladder is about size relative to neighbours and about
+tracking, and it needs real content in front of it. Two of the five case studies
+are unwritten, so that content does not exist yet. Nothing here overturns that.
+
+What C4 added is a **narrower question answered separately**: flare asks only
+*display type or reading type*, which is answerable now and does not constrain
+the rung answer later. So `.text-lede` (60px, the home hero) takes the display
+band and `--flar: 100` while its rung stays open, recorded in `RUNGS` as
+`rung: null` rather than by omission.
+
+**Two rulings recorded as conditionals, because the surfaces do not render:**
+
+- **`.text-statement`** (96px) — *if it ever renders, it is display band and
+  takes `--flar: 100`.* It was banded on 21 Aug 2026 and the application
+  withdrawn the same day: `scripts/assert-bands.mjs` found it matches zero
+  elements on all five routes, so the ruling had been made about an element that
+  does not exist. The reasoning survives — a 96px statement is display type
+  whatever rung it lands on — and is kept here so whoever builds that section
+  gets the answer instead of re-deriving it.
+- **`.resolution-block__headline`** and **`.transformation`** — same condition,
+  same conditional. Both are display-ceilinged, both render nowhere.
+
+**`.about-phase__title`** (36px, five on `/about`) and **`.about-hero__pov`**
+(51px, one on `/about`) are the two live display-ish surfaces v3 does not mention
+at all. They ship at `--flar: 0` pending a ruling from the C4 preview.
+
+Needs: a rung for each of the six, which waits on real content; and a band for
+the two about-page roles, which does not. Raised 21 Aug 2026 by the Commissioner
+migration, which forced the band question without forcing the rung question.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026

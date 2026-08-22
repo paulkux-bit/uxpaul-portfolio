@@ -96,6 +96,75 @@
 }
 
 /* ============================================================
+   VOICE — the FLAR axis, by rung (Phase 1 rulings, 21 Aug 2026)
+   ============================================================
+   Commissioner's expressive axis. Ruled from the bench: FLAR 100 (the
+   designer's own Flare stop) on the display band, 0 everywhere else.
+   FLAT VALUES ONLY — 40 and 60 were never judged by anyone and are not
+   decisions that have been made.
+
+   VOLM IS NOT SHIPPED (ruling 4c: the crescendo difference was not
+   visible). It is absent from the binary, not pinned, so it cannot
+   fail silently — which was the one gap assertion 8b could never see.
+
+   THE DECLARATION IS ON `*`, AND THAT IS NOT A STYLE CHOICE. Custom
+   properties substitute at computed-value time on the element whose
+   declaration matched, so `:root { … var(--flar) }` resolves to the
+   literal "FLAR" 0 BEFORE inheritance, and descendants inherit a string
+   with no var() left to re-resolve. Measured, on the C3 build, setting
+   --flar: 100 on a descendant:
+
+       declaration on :root   delta  0.00px   computed "FLAR" 0
+       declaration on *       delta 27.20px   computed "FLAR" 100
+
+   `*` makes every element re-resolve against its own inherited --flar.
+   Cost is style-resolution breadth, the same shape as a universal
+   box-sizing reset; font-variation-settings inherits regardless, so no
+   element gains a value it would not otherwise have had.
+
+   The `, 0` fallback is R9 made explicit rather than assumed: with no
+   @property support an unset --flar is a guaranteed-invalid value, and
+   var(--flar) would be invalid at computed-value time on an inherited
+   property. The fallback degrades to the plain voice instead. */
+
+@property --flar {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0;
+}
+
+* {
+  font-variation-settings: 'FLAR' var(--flar, 0);
+}
+
+/* THE DISPLAY BAND. Derived from RUNGS in scripts/lint-type.mjs, and
+   lint:type check 11 fails the build if this list stops matching the
+   `band: 'display'` entries there. One list, two consumers: the bench
+   kept its own hand-written copy of this, which named a class that does
+   not exist and omitted .hero-block__title, so rung 5 rendered no flare
+   for an entire judgment session while every gate stayed green.
+
+   .text-lede is banded ahead of its RUNG, which v3 §9 leaves open on
+   purpose. Flare asks a narrower question than the ladder does — display
+   type or reading type — and a 60px lede is display by any reading.
+
+   THREE SELECTORS ARE ABSENT FROM THIS LIST ON PURPOSE and carry
+   `dead: true` in RUNGS instead: .resolution-block__headline,
+   .text-statement and .transformation each exist in this file and match
+   no element on any route. scripts/assert-bands.mjs found them on its
+   first run. Giving a voice value to a selector that renders nowhere is
+   the same inert-but-plausible CSS C3 deleted 49 declarations of.
+   See docs/unspecified-surfaces.md. */
+.milestone__date,
+.hero-block__title,
+.case-study-prose h2,
+.friction-beat__headline,
+.text-cover,
+.text-lede {
+  --flar: 100;
+}
+
+/* ============================================================
    THEME — Spacing scale (spacing system v1, §3 + §3.1)
    Registered in Tailwind's `--spacing-*` namespace ON PURPOSE, not in
    a private `--sp-*` one. That namespace generates real utilities, so
@@ -481,10 +550,29 @@
   /* Lift content above the grain layer */
   body > * { position: relative; z-index: 2; }
 
-  /* Bricolage has no italics — map em/i to weight emphasis instead. */
+  /* The shipped face has no italics — map em/i to weight emphasis instead.
+     (True of Bricolage before and of Commissioner now: the designer ships an
+     italic as a SEPARATE binary, and it is not in app/_fonts/.) */
   em, i {
     font-style: normal;
     font-weight: 600;
+  }
+
+  /* NO SYNTHESIS, EITHER AXIS. The em/i remap above is the design decision and
+     it stays; this closes the door beside it. Without this, a future scoped
+     `font-style: italic` anywhere would silently produce sheared roman outlines
+     — mechanically slanted, wrong stem weights on the diagonals, and one of the
+     most legible craft tells there is. With it, that author gets upright text
+     and notices. Audited at C3: zero italic usage on the site today, so this
+     changes nothing rendered and exists to keep it that way.
+
+     Synthetic BOLD is disabled too, and that is safe rather than incidental:
+     @font-face declares font-weight: 340 720, so an out-of-range request clamps
+     to a real instance instead of synthesising, and the Arial fallback carries
+     genuine bold faces. Verified rather than assumed — the only weight outside
+     340-720 in this file is the unmounted takes wall's 800. */
+  html {
+    font-synthesis: none;
   }
 
   /* v3 R4: emphasis is AUTHORED. Tailwind preflight ships
@@ -3023,6 +3111,24 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
   margin: 0; /* 100, unchanged — 14px, rung 0 */
   font-weight: 600;
+  /* `case` raises punctuation to cap height in an all-caps run. These eyebrows
+     read "BARD · U.S. COAST GUARD" and "FDT-E · U.S. NAVY": the middot sits at
+     lowercase centre among capitals and FDT-E's hyphen sits low, because both
+     glyphs are drawn for lowercase. Commissioner v1.012 carries 37 `case`
+     substitutions; Google's v1.001 does not, which is one of the reasons C1
+     self-hosts the designer's build.
+
+     ON THE LEAF, DELIBERATELY. R8's logic is not specific to
+     font-variation-settings: font-feature-settings also inherits AS A STRING
+     and overrides per feature regardless of source order, so on a container it
+     would pin every descendant's feature set. This element owns its text.
+
+     UNGUARDED, AND NAMED AS SUCH. No lint and no runtime assertion covers this
+     declaration. One feature on one leaf does not earn its own instrument, but
+     an unguarded thing gets named rather than left unmentioned — that is how
+     the wdth probe stayed green while structurally guaranteed to fail. If a
+     second surface takes `case`, the guard is owed then. */
+  font-feature-settings: 'case' 1;
 }
 
 .hero-block__title {
