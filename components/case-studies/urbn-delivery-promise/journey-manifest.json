@@ -1,0 +1,71 @@
+{
+  "$doc": "Content AND geometry for <JourneyLine>. Track A of docs/previews/journey-line-prototype.html, the approved shape; Track B was compared and rejected. Every rendered value lives here: move a point, re-anchor a mark, reword a break or retime a stage by editing this file and never JourneyLine.tsx. Coordinates are viewBox units (see geometry.viewBox), NOT pixels.",
+
+  "$splitDoc": "ONLY GEOMETRY AND NUMERALS STAY IN THE SVG. EVERY WORD GOES IN HTML. The prototype kept the stage labels, the reference label and the tail note inside the drawing and they did not survive a real 390px viewport: the prose container is 342px, so the scale is 342/1000 = 0.342 and a 14-unit label renders at 4.79px, a 16-unit note at 5.47px. Scaling the type cannot fix it either — 'POST PURCHASE' at a legible 32 units is ~250 units wide, and five of those need ~1,250 units in a 1,000-unit box. Words structurally do not fit. Numerals stay because two characters do fit, and they get bumped at mobile.",
+
+  "geometry": {
+    "$viewBoxDoc": "Height is 330, not the prototype's 350. The bottom 34 units were the stage/tier label band, and those labels are HTML now — leaving the height at 350 reserves empty space under the axis that reads as a gap between the drawing and its labels.",
+    "viewBox": "0 0 1000 330",
+    "refY": 60,
+    "refX1": 40,
+    "refX2": 960,
+    "axisY": 316,
+    "axisX1": 40,
+    "axisX2": 960,
+    "$dotDoc": "r is geometry and scales with the viewBox, so the mobile pair exists to keep the marker near the 8px floor a reader needs. Stroke width does NOT need a pair: vector-effect pins it to screen px.",
+    "dotR": 4.5,
+    "dotRMobile": 13,
+    "endDotR": 5.5,
+    "endDotRMobile": 16,
+    "$fontSizeDoc": "viewBox units, not px. Reaches the SVG as a CSS custom property so the breakpoint can live in CSS while the numbers stay here. mark x 0.342 = 5.8px at 390, which is why markMobile exists: 44 x 0.342 = 15.0px.",
+    "fontSize": { "mark": 17, "markMobile": 44 }
+  },
+
+  "$refLabelDoc": "ABOVE the drawing: this module's reference rule sits at the top of its plot (y=60 of 350), so a line above the SVG sits beside the rule it names. InversionChart's rule is at the bottom and takes the mirror.",
+  "refLabel": "WHERE SHE STARTED",
+  "refLabelPlacement": "above",
+
+  "points": [
+    { "x": 60,  "y": 60,  "stage": "arrive" },
+    { "x": 215, "y": 60,  "stage": "browse" },
+    { "x": 375, "y": 150, "stage": "decide" },
+    { "x": 520, "y": 60,  "stage": "purchase" },
+    { "x": 600, "y": 238, "stage": "purchase" },
+    { "x": 740, "y": 52,  "stage": "post-purchase" },
+    { "x": 840, "y": 155, "stage": "post-purchase" },
+    { "x": 900, "y": 255, "stage": "post-purchase" }
+  ],
+
+  "$marksDoc": "dx/dy are by-eye offsets from the anchored point, carried explicitly so Track A reproduces exactly and so a nudge is a number here. 03 sits further left than the other two because the stroke descends steeply through it and a centred numeral crossed the line. THE MOBILE PAIR IS NOT OPTIONAL: below md the numeral goes 17 -> 44 units and the dot 4.5 -> 13, so an offset tuned for the desktop pair puts the numeral on top of its own dot. Each mobile value is the desktop one with its deviation from centre scaled by 44/17, then checked against the stroke by eye.",
+  "marks": [
+    { "pointIndex": 2, "index": "01", "dx": -9,  "dy": 26, "dxMobile": -24, "dyMobile": 68 },
+    { "pointIndex": 4, "index": "02", "dx": -9,  "dy": 26, "dxMobile": -24, "dyMobile": 68 },
+    { "pointIndex": 6, "index": "03", "dx": -34, "dy": 23, "dxMobile": -89, "dyMobile": 60 }
+  ],
+
+  "$stagesDoc": "x drives the HTML row's grid columns, so a label stays under its point and moving a point here moves its label. Below 768 the row collapses to an interpunct run and x is ignored.",
+  "stages": [
+    { "label": "Arrive",        "x": 60  },
+    { "label": "Browse",        "x": 200 },
+    { "label": "Decide",        "x": 358 },
+    { "label": "Purchase",      "x": 505 },
+    { "label": "Post purchase", "x": 740 }
+  ],
+
+  "$tailNoteDoc": "Its own line under the stage row rather than an entry in the breaks list: it annotates where the LINE ends, and break 02 already carries 'then by email four days later', so appending it there would say it twice.",
+  "tailNote": "and then cancelled, four days later",
+
+  "breaks": [
+    { "index": "01", "lead": "No date, anywhere.",            "tail": "She is guessing until checkout." },
+    { "index": "02", "lead": "Out of stock, after she paid.", "tail": "Twice: on submit, then by email four days later." },
+    { "index": "03", "lead": "One order, three boxes.",       "tail": "Nothing decided which." }
+  ],
+
+  "$captionDoc": "Moved here from the deleted <BentoBand>. The gloss is the PROTOTYPE's wording, not the content draft's: the draft read 'the drops are not about price' and Paul reconciled to 'none' on 23 Aug, as the stronger claim and a true one.",
+  "caption": {
+    "lead": "One order, mapped.",
+    "gloss": "It ends lower than it started, and none of the drops are about price."
+  },
+
+  "ariaLabel": "One shopper's satisfaction across five stages of a single order. The line starts high, dips when no delivery date is visible, drops sharply when the order goes out of stock after submit, recovers at the order receipt, then falls twice more as the order arrives in three shipments and an item is cancelled. It ends well below where it started."
+}

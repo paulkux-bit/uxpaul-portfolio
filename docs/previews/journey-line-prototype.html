@@ -78,6 +78,29 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:4.5rem 0 2.5rem
 <body>
 <div class="wrap">
 
+<!-- ══════════════════════════════════════════════════════════════════════
+     READ THIS BEFORE PORTING ANYTHING OUT OF THIS FILE. Annotated 23 Aug 2026.
+
+     Track A is still the approved SHAPE, and the shipped component keeps it. What
+     did NOT survive is where this file puts its words. The stage labels, the band
+     label and the tail note are <text> inside the viewBox, and at a real 390px
+     viewport the prose container is 342px: the scale is 342/1000 = 0.342, so the
+     14-unit labels render at 4.79px and the 16-unit note at 5.47px.
+
+     That is the failure the comment inside the SVG below already describes, and it
+     was applied to the three break descriptions only. It applies to every word.
+     The rule is now:
+
+         Only geometry and numerals stay in the SVG. Every word goes in HTML.
+
+     Scaling the type is not an escape: "POST PURCHASE" at a legible 32 units is
+     ~250 units wide, and five of them need ~1,250 units in a 1,000-unit box.
+
+     The corrected port is components/case-studies/urbn-delivery-promise/
+     JourneyLine.tsx. This file is kept as the record of what was compared, not as
+     something to port from again.
+     ══════════════════════════════════════════════════════════════════════ -->
+
 <!-- ══════════ TRACK A ══════════ -->
 <p class="track-label">Track A — the line only (recommended)</p>
 <h2>Her order broke in three places.</h2>

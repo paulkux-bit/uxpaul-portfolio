@@ -1,0 +1,54 @@
+{
+  "$doc": "Content, data and geometry for <InversionChart>. Percentages are URBN operational data cleared by Paul for publication. Edit a number here and the chart moves — y positions are COMPUTED from `scale`, never stored, so values and drawing cannot drift apart. Coordinates are viewBox units, not pixels.",
+
+  "$splitDoc": "Same rule as JourneyLine: only geometry and numerals stay in the SVG, every word goes in HTML. See journey-manifest.json's $splitDoc for the arithmetic. ONE CARVE-OUT: the two direct series labels stay in the SVG at desktop, where they are legible, and are hidden below 768 — the always-present HTML legend carries identity there. The dataviz skill requires a legend at two or more series regardless, with direct labels supplementing it rather than replacing it.",
+
+  "$exclusionsDoc": "DELIBERATELY ABSENT AND NOT AN OVERSIGHT. No third series: the Reno fulfilment centre (3 / 6 / 11) is the proof it was solvable and belongs in the caption as a sentence. No per-brand columns and no absolute miss counts — they exist in the source table and are exactly the confidential figures Paul cleared for exclusion. Do not add either back.",
+
+  "geometry": {
+    "$viewBoxDoc": "Height is 330, not the prototype's 350. The bottom 34 units were the stage/tier label band, and those labels are HTML now — leaving the height at 350 reserves empty space under the axis that reads as a gap between the drawing and its labels.",
+    "viewBox": "0 0 1000 330",
+    "axisY": 316,
+    "axisX1": 40,
+    "$gutterDoc": "axisX2/refX2 stop at 800, not 960, and the direct labels start beyond them at 820. The rules used to run the full width while the data stopped at the last tier (760): at desktop the labels filled that gutter so it read as intentional, but once they are hidden below md the rules visibly overshoot the data into empty space. Ending the rules just past the last point fixes both readings with one number.",
+    "axisX2": 800,
+    "refX1": 40,
+    "refX2": 800,
+    "dotR": 4.5,
+    "dotRMobile": 13,
+    "seriesLabelX": 820,
+    "seriesLabelOffsetY": 5,
+    "$fontSizeDoc": "viewBox units. Only the series labels remain, and only at >=768 where 16 x 1.088 = 17.4px.",
+    "fontSize": { "series": 16 }
+  },
+
+  "$scaleDoc": "yZero is the 0% baseline, yMax the top of the plot. y = yZero - (value / valueMax) * (yZero - yMax).",
+  "scale": { "yZero": 290, "yMax": 60, "valueMax": 45 },
+
+  "$refDoc": "The reference line sits at the standard tier's rate, so both series visibly climb away from what dependable looked like. BELOW the drawing, mirroring JourneyLine: this chart's rule is at the bottom of its plot, so the label goes under the SVG rather than over it.",
+  "refValue": 3,
+  "refLabel": "WHERE STANDARD SAT",
+  "refLabelPlacement": "below",
+
+  "$tiersDoc": "x is ordered BY PRICE, cheapest first, and drives both the plotted points and the axis row's grid columns. The line must visibly rise where a reader expects it to fall. That inversion is the entire module.",
+  "tiers": [
+    { "label": "Standard",         "days": "4 to 7 days", "short": "Standard",  "x": 140 },
+    { "label": "Express",          "days": "2 to 3 days", "short": "Express",   "x": 450 },
+    { "label": "Overnight / rush", "days": "1 to 2 days", "short": "Overnight", "x": 760 }
+  ],
+
+  "series": [
+    { "name": "All nodes",     "style": "solid",  "values": [3, 16, 22] },
+    { "name": "Store network", "style": "dashed", "values": [3, 29, 45] }
+  ],
+
+  "unit": "%",
+
+  "$captionDoc": "AUTHORED IN THE BUILD, NOT DRAFTED — flagged for Paul. No caption for this module exists in docs/urbn-delivery-promise-content-draft.md, and the brief requires the Reno numbers to land here as a sentence. Both strings below, and refLabel above, are placeholders in the draft's register for Paul to rewrite.",
+  "caption": {
+    "lead": "Missed delivery dates, by tier.",
+    "gloss": "Reno missed 3, 6 and 11 percent across the same three tiers. The rest was solvable."
+  },
+
+  "ariaLabel": "A line chart of missed delivery dates across three shipping tiers ordered by price, cheapest first. Both series start together at 3 percent for standard shipping and rise as the tier gets more expensive: across all nodes to 16 percent at express and 22 percent at overnight, and across the store network to 29 percent at express and 45 percent at overnight. The store network line rises roughly twice as steeply."
+}

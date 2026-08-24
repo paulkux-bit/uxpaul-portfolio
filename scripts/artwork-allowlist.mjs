@@ -30,6 +30,28 @@ export const ARTWORK_DIRS = [
   },
 ];
 
+/** Individual artwork FILES, where the surrounding directory is not all artwork.
+ *
+ * ARTWORK_DIRS cannot express these: the two Delivery Promise drawings sit beside
+ * PromiseSequence.tsx, which is layout and must stay checked. Exempting the whole
+ * case-study directory would quietly cover any future icon dropped in there, which
+ * is the failure mode this list exists to prevent. Exact paths instead.
+ *
+ * These are DRAWN DATA, not icons: each has its own viewBox, is sized by layout
+ * rather than by adjacent type, and carries no glyph an icon set could supply.
+ * R3 ("Lucide is the only icon source") is about chrome; a hand-drawn journey line
+ * has no Lucide equivalent to reach for. */
+export const ARTWORK_FILES = [
+  {
+    path: 'components/case-studies/urbn-delivery-promise/JourneyLine.tsx',
+    reason: 'Delivery Promise journey line — one shopper\'s order drawn as a line, ported from the approved Track A prototype; shape in a 1000x350 viewBox, not an icon',
+  },
+  {
+    path: 'components/case-studies/urbn-delivery-promise/InversionChart.tsx',
+    reason: 'Delivery Promise inversion chart — two plotted series in the same viewBox and line vocabulary as JourneyLine; drawn data, not an icon',
+  },
+];
+
 /** Individual non-icon SVG payloads, matched by a distinctive substring. */
 export const ARTWORK_SNIPPETS = [
   {
@@ -43,7 +65,13 @@ export const FIXTURE_DIRS = ['scripts/fixtures'];
 
 /** True when a repo-relative path is artwork or fixture data. */
 export const isArtworkPath = (rel) =>
-  ARTWORK_DIRS.some((d) => rel.startsWith(`${d.path}/`));
+  ARTWORK_DIRS.some((d) => rel.startsWith(`${d.path}/`)) ||
+  ARTWORK_FILES.some((f) => rel === f.path);
+
+/** The reason a path is artwork, whichever list it came from. */
+export const artworkReason = (rel) =>
+  ARTWORK_DIRS.find((d) => rel.startsWith(`${d.path}/`))?.reason ??
+  ARTWORK_FILES.find((f) => rel === f.path)?.reason;
 
 export const isFixturePath = (rel) =>
   FIXTURE_DIRS.some((d) => rel === d || rel.startsWith(`${d}/`));

@@ -2225,6 +2225,22 @@ html.dark .oku-figure {
   .friction-beat .oku-figure {
     margin: 0; /* figure top-aligns with the text block in its column */
   }
+
+  /* A beat with no figure collapses to one column instead of leaving a 300px hole.
+     ADDITIVE ON PURPOSE, and it does not touch the cap above: BARD, FDT-E and Nuuly
+     all pass a figure, so none of them ever matches this selector and none of them
+     moves. It also self-reverses — the moment art is passed, :has(figure) starts
+     matching and the two-column rule takes over again with nothing to remember to
+     undo. A modifier class was the alternative and was rejected as a drift trap.
+     Introduced for Delivery Promise, whose PromiseBeatFigure art does not exist yet.
+
+     Declares NO gap: the rule above already supplies gap: var(--spacing-l), and a
+     second spacing declaration inside this @media is the one thing that would trip
+     lint:space check 4. grid-template-columns is not a spacing property, so it does
+     not (SPACING_PROP, scripts/lint-space.mjs:41). */
+  .friction-beat:not(:has(figure)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ── Pull quote ──────────────────────────────────────────────────────── */
@@ -4025,4 +4041,364 @@ html.dark .figure-placeholder {
 
 .framed-image__img {
   object-fit: cover;
+}
+
+/* ── Delivery Promise (URBN): JourneyLine + InversionChart ────────────────────
+   Two hand-drawn SVG modules sharing ONE line vocabulary on purpose, so they read
+   as one hand: same 1000x350 viewBox, same dotted axis, same dashed reference rule,
+   same stroke, same dot radius.
+
+   THE RULE THEY BOTH OBEY:
+     Only geometry and numerals stay in the SVG. Every word goes in HTML.
+
+   The prototype kept stage labels, a reference label and a tail note inside the
+   drawing. At 390px the prose container is 342px, so the scale is 342/1000 = 0.342
+   and those rendered at 4.79px and 5.47px. Scaling the type is not the fix:
+   "POST PURCHASE" at a legible 32 units is ~250 units wide and five of them want
+   ~1,250 units in a 1,000-unit box. Words structurally do not fit a shared
+   coordinate space. What is left in the SVG is the path, the dots, the rules, the
+   two-character numerals, and (>=768 only) the two direct series labels.
+
+   SIZES COME FROM THE MANIFESTS, through custom properties set on the figure, so the
+   numbers stay in one place and only the breakpoint lives here. */
+
+.journey-line,
+.inversion-chart {
+  margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
+}
+
+.journey-line__svg,
+.inversion-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Shape ─────────────────────────────────────────────────────────────────── */
+
+.journey-line__axis,
+.inversion-chart__axis {
+  stroke: var(--border-default);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+}
+
+.journey-line__ref,
+.inversion-chart__ref {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+  stroke-dasharray: 1 6;
+}
+
+/* non-scaling-stroke pins the weight to SCREEN px, not to the drawing's coordinate
+   space. Without it a 2-unit stroke renders at 0.68px in the 342px mobile container
+   and the whole line goes hairline — the same scale problem the words had, and the
+   established fix here: .fdte-figure and .nuuly-beat-figure already use it. */
+.journey-line__path,
+.inversion-chart__path,
+.journey-line__axis,
+.inversion-chart__axis,
+.journey-line__ref,
+.inversion-chart__ref,
+.journey-line__dot,
+.inversion-chart__dot {
+  vector-effect: non-scaling-stroke;
+}
+
+.journey-line__path,
+.inversion-chart__path {
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* Dash pattern is the ONLY channel separating the two series, which is what keeps the
+   module monochrome. --solid is authored rather than left implicit so both names in
+   SERIES_CLASS resolve to a rule, and so "which one is solid" is answerable here. */
+.inversion-chart__path--solid {
+  stroke-dasharray: none;
+}
+
+.inversion-chart__path--dashed {
+  stroke-dasharray: 7 6;
+}
+
+.journey-line__dot,
+.inversion-chart__dot {
+  fill: var(--bg-canvas);
+  stroke: var(--text-primary);
+  stroke-width: 2;
+}
+
+.journey-line__dot {
+  r: var(--jl-dot-r);
+}
+
+.inversion-chart__dot {
+  r: var(--ic-dot-r);
+}
+
+/* The last point, filled, below the reference rule. This is the argument of the whole
+   module: she ends lower than she started. Do not normalise it away. */
+.journey-line__dot--end {
+  fill: var(--text-primary);
+  r: var(--jl-dot-r-end);
+}
+
+/* The only type left in the drawing ─────────────────────────────────────── */
+
+.journey-line__idx {
+  font-size: var(--jl-mark);
+  /* The offset from the anchored point, in user units. It lives here rather than in
+     the x/y attributes so the breakpoint below can swap it: a numeral that clears its
+     dot at 17 units and r 4.5 sits directly on top of it at 44 units and r 13. */
+  transform: translate(var(--jl-mdx), var(--jl-mdy));
+  fill: var(--text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.inversion-chart__series {
+  font-size: var(--ic-series);
+  fill: var(--text-muted);
+  font-weight: 500;
+}
+
+/* Words, in HTML, at real reading size ──────────────────────────────────── */
+
+.journey-line__ref-label,
+.inversion-chart__ref-label,
+.journey-line__stages,
+.inversion-chart__axis-row {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted); /* NOT --text-subtle: that is AA-large only, and this is 14px */
+}
+
+.journey-line__ref-label {
+  margin-bottom: var(--spacing-2xs);
+}
+
+.inversion-chart__ref-label {
+  margin-top: var(--spacing-2xs);
+}
+
+/* Below md these are a wrapped interpunct run: five aligned columns would be ~68px
+   each at 342px. The interpunct is a ::after, never a text node. */
+.journey-line__stages,
+.inversion-chart__axis-row {
+  display: flex;
+  flex-wrap: wrap;
+  /* NO column gap, deliberately, and this is the load-bearing part. The run's
+     horizontal spacing rides the interpunct's own padding instead, because the grid
+     at md needs column starts to land EXACTLY on the manifest's x values. A container
+     gap survives the switch to grid and pushes every column right of its track by the
+     cumulative gap — measured at 39.9px of drift on the fifth label, which is 5 x 8px.
+     Cancelling it with a zero gap inside the breakpoint is the obvious fix and is the
+     one thing lint:space check 4 forbids, so the gap does not exist to be cancelled.
+     row-gap stays: it only separates wrapped lines, and it is declared out here. */
+  row-gap: var(--spacing-3xs);
+  margin-top: var(--spacing-xs);
+}
+
+.journey-line__stages li:not(:last-child)::after,
+.inversion-chart__axis-row li:not(:last-child)::after {
+  content: '·';
+  padding: 0 var(--spacing-2xs); /* both sides: this IS the run's spacing */
+  color: var(--text-subtle);
+}
+
+.journey-line__endnote {
+  margin: var(--spacing-2xs) 0 0;
+  /* The prose p rule caps this at the reading measure, which would be right for a
+     paragraph and is wrong for a note that has to span the drawing's columns: at 584px
+     the md grid's last column lands at 39% of the figure instead of 74%. */
+  max-width: none;
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.journey-line__breaks,
+.inversion-chart__tiers {
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-s); /* declared ONCE, outside the breakpoint — lint:space check 4 */
+  margin: var(--spacing-m) 0 0;
+  padding: 0;
+}
+
+.journey-line__breaks li {
+  position: relative;
+  margin: 0;
+  padding-left: var(--spacing-l); /* the numeral's column */
+  max-width: 64ch;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.journey-line__breaks-idx {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.journey-line__breaks-lead {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Legend — present at EVERY width, per the dataviz rule for two or more series. The
+   direct labels in the SVG supplement it above md and disappear below; identity never
+   depends on them. The key carries the channel, the name stays in a text token. */
+.inversion-chart__legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-m);
+  margin: var(--spacing-s) 0 0;
+  padding: 0;
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.inversion-chart__legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+}
+
+.inversion-chart__key {
+  display: block;
+  width: var(--spacing-m);
+  height: 0;
+  border-top-width: 2px;
+  border-top-color: var(--text-primary);
+}
+
+.inversion-chart__key--solid {
+  border-top-style: solid;
+}
+
+.inversion-chart__key--dashed {
+  border-top-style: dashed;
+}
+
+.inversion-chart__tiers li {
+  display: grid;
+  gap: var(--spacing-3xs);
+  margin: 0;
+  max-width: 64ch;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.inversion-chart__tier-name {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.inversion-chart__tier-days {
+  font-size: 0.875rem; /* 14px, the system floor */
+  color: var(--text-muted);
+}
+
+.inversion-chart__tier-values {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-s);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.inversion-chart__tier-value {
+  white-space: nowrap; /* "All nodes 3%" is one unit; never break the label off its number */
+}
+
+.inversion-chart__tier-series {
+  color: var(--text-muted);
+  margin-right: var(--spacing-3xs);
+}
+
+@media (min-width: 768px) {
+  /* The axis rows stop being a run and become columns aligned to the manifest's x
+     values, so a label sits under its point. Items are placed from column 2; column 1
+     is the lead-in to the first point. grid-template-columns, grid-column-start and
+     max-width are not spacing properties, so nothing here reaches lint:space check 4. */
+  .journey-line__stages,
+  .inversion-chart__axis-row {
+    display: grid;
+    grid-template-columns: var(--jl-stage-cols, var(--ic-tier-cols));
+  }
+
+  /* :not(:last-child) is repeated here deliberately. Without it this selector is a
+     specificity step BELOW the base rule that sets the interpunct, so the override
+     loses and the separators keep rendering between the aligned columns. */
+  .journey-line__stages li:not(:last-child)::after,
+  .inversion-chart__axis-row li:not(:last-child)::after {
+    content: none; /* the columns carry the sequence now */
+  }
+
+  .journey-line__breaks,
+  .inversion-chart__tiers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .journey-line__breaks li {
+    max-width: none;
+  }
+
+  /* The endnote rides the same columns as the stage row so it lands under the end of
+     the line. grid-template-columns and grid-column-start only — a margin here would
+     be spacing inside a breakpoint, which lint:space check 4 forbids. */
+  .journey-line__endnote {
+    display: grid;
+    grid-template-columns: var(--jl-stage-cols);
+  }
+}
+
+/* Below md the direct labels would render at 5.5px. They go; the legend carries it. */
+@media (max-width: 767px) {
+  .inversion-chart__series {
+    display: none;
+  }
+
+  .journey-line__idx {
+    font-size: var(--jl-mark-sm);
+    transform: translate(var(--jl-mdx-sm), var(--jl-mdy-sm));
+  }
+
+  .journey-line__dot {
+    r: var(--jl-dot-r-sm);
+  }
+
+  .journey-line__dot--end {
+    r: var(--jl-dot-r-end-sm);
+  }
+
+  .inversion-chart__dot {
+    r: var(--ic-dot-r-sm);
+  }
+}
+
+.journey-line > .bento-theme__caption,
+.inversion-chart > .bento-theme__caption {
+  margin-top: var(--spacing-m);
 }

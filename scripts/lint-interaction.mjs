@@ -33,7 +33,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative, extname } from 'node:path';
 import { createRequire } from 'node:module';
-import { isArtworkPath, isFixturePath, isArtworkSnippet, ARTWORK_DIRS } from './artwork-allowlist.mjs';
+import { isArtworkPath, isFixturePath, isArtworkSnippet, artworkReason } from './artwork-allowlist.mjs';
 // Shared with lint:color rather than reimplemented. A `hover:` or an `<svg` in a
 // comment is documentation, not authored markup, and offsets are preserved so
 // reported line numbers stay true.
@@ -428,7 +428,7 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
           ex.push({ where: `${file}:${line}`, detail: '<svg mentioned in a comment', reason: 'comment' });
           continue;
         }
-        if (isArtworkPath(file)) { ex.push({ where: `${file}:${line}`, detail: ARTWORK_DIRS.find((d) => file.startsWith(`${d.path}/`)).reason, reason: 'artwork' }); continue; }
+        if (isArtworkPath(file)) { ex.push({ where: `${file}:${line}`, detail: artworkReason(file), reason: 'artwork' }); continue; }
         if (isArtworkSnippet(raw)) { ex.push({ where: `${file}:${line}`, detail: 'generated texture', reason: 'artwork' }); continue; }
         if (patternExempt(file, lineText)) { ex.push({ where: `${file}:${line}`, detail: 'pattern definition', reason: 'pattern-construct' }); continue; }
         f.push({ where: `${file}:${line}`, detail: `hand-authored <svg> — R3 says Lucide is the only icon source` });

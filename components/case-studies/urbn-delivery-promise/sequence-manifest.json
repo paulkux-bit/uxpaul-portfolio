@@ -1,0 +1,48 @@
+{
+  "$doc": "Content for <PromiseSequence>: one delivery date surviving from ad to arrival, built from Paul's real 2019 screens. Slot names and their retina floors come from lib/bento-slots.json, the single source of truth that bento-crop's crop.py also reads — do not fork those numbers here.",
+
+  "$pendingDoc": "CROPS ARE NOT DONE. `pending: true` makes the stage render as a labelled placeholder box at the correct slot aspect instead of a 404, so the page can be judged before the crops exist. Run bento-crop with Paul against the `source` files, drop the output at `src`, then flip pending to false — one boolean per stage, no code change. `alt` is written and waiting; review it before flipping.",
+
+  "$smsDoc": "THE FOURTH STAGE IS DELIBERATELY ABSENT. The text-message screen is 375x667 and fails every floor. It is NOT to be rebuilt as markup: the physics rule is explicit that rebuilding product UI as markup presents a portfolio graphic as product UI. It is a closing line of prose in the MDX instead.",
+
+  "$captionDoc": "AUTHORED IN THE BUILD, NOT DRAFTED — flagged for Paul. The content draft carries no captions or alt text for this module. Every caption, gloss and alt string below is a placeholder in the draft's register, for Paul to rewrite.",
+
+  "stages": [
+    {
+      "stage": "The ad",
+      "src": "/case-studies/urbn-delivery-promise/ad--wide.png",
+      "source": "_raw/p15-fb-ad.jpeg",
+      "sourcePx": "1900x1414",
+      "slot": "wide",
+      "retinaFloorPx": 1320,
+      "pending": true,
+      "alt": "A social ad for a garment, with a named delivery date printed alongside the price.",
+      "caption": "The ad.",
+      "gloss": "The date is in the offer, before she has clicked anything."
+    },
+    {
+      "stage": "Product page",
+      "src": "/case-studies/urbn-delivery-promise/pdp--standard.png",
+      "source": "_raw/p18-pdp.jpeg",
+      "sourcePx": "1441x1889",
+      "slot": "standard",
+      "retinaFloorPx": 1072,
+      "pending": true,
+      "alt": "A product page showing free two-day shipping to a specific zip code with a named arrival date, above a panel listing three fulfillment options including one that is unavailable and says why.",
+      "caption": "The product page.",
+      "gloss": "The same date, now against her zip code."
+    },
+    {
+      "stage": "Cart",
+      "src": "/case-studies/urbn-delivery-promise/cart--standard.png",
+      "source": "_raw/p19-cart.jpeg",
+      "sourcePx": "1441x2046",
+      "slot": "standard",
+      "retinaFloorPx": 1072,
+      "pending": true,
+      "alt": "A cart with the order summarised and the same named arrival date carried through to checkout.",
+      "caption": "The cart.",
+      "gloss": "Still the same date, with the order in front of her."
+    }
+  ]
+}

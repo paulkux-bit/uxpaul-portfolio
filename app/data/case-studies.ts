@@ -37,7 +37,12 @@ export const caseStudies: CaseStudy[] = [
     client: 'U.S. Navy',
   },
   {
-    slug: 'urbn-shipping',
+    // Slug only, 23 Aug. projectName and problemFraming are deliberately NOT updated to
+    // the MDX frontmatter's "Delivery Promise" / "Why did free shipping stop working?":
+    // the name is still open, the frontmatter's framing is a flagged placeholder, and the
+    // house rule is write the study THEN the card. Bard shipped a card describing a
+    // project that had stopped existing because the card was written first.
+    slug: 'urbn-delivery-promise',
     problemFraming: 'Why were customers not excited by free shipping?',
     projectName: 'Shipping',
     client: 'URBN',
