@@ -8,7 +8,13 @@ import type { Take } from '@/app/data/takes';
  * the four mark types (stacked / coords render line-per-item; inline / play
  * are single). The entrance pattern + stagger delay ride on this element (it's
  * what transitions); an optional per-take axisCharacter overrides the slot's
- * default width/weight via font-variation-settings (carried from the v5 pattern).
+ * default weight via font-variation-settings (carried from the v5 pattern).
+ *
+ * WEIGHT IS THE ONLY AXIS LEFT. This built 'opsz' and 'wdth' into the string too,
+ * carried over from Bricolage; Commissioner has neither, so both were inert strings
+ * asking the renderer for axes the font does not expose. Removed with the migration's
+ * other Bricolage residue. No take sets axisCharacter today, so nothing rendered
+ * changes — this is the dead half of a live component going away.
  */
 export function TakeMark({
   mark,
@@ -22,11 +28,7 @@ export function TakeMark({
   const style: CSSProperties = { ['--take-delay' as string]: `${delaySeconds}s` };
   const a = mark.axisCharacter;
   if (a) {
-    const parts: string[] = [];
-    if (a.opsz != null) parts.push(`'opsz' ${a.opsz}`);
-    if (a.wght != null) parts.push(`'wght' ${a.wght}`);
-    if (a.wdth != null) parts.push(`'wdth' ${a.wdth}`);
-    if (parts.length) style.fontVariationSettings = parts.join(', ');
+    if (a.wght != null) style.fontVariationSettings = `'wght' ${a.wght}`;
   }
 
   const cls = `mark mark-${mark.type} entrance-${entrance}`;

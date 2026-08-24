@@ -17,7 +17,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {/* Renders nothing; asserts at runtime that the variable font and its
-              wdth axis actually arrived. See components/font-load-probe.tsx. */}
+              FLAR axis actually arrived. See components/font-load-probe.tsx —
+              it probed wdth until 21 Aug 2026, an axis Commissioner does not have. */}
           <FontLoadProbe />
           <SiteHeader />
           <main id="main" tabIndex={-1}>

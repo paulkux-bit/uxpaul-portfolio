@@ -18,7 +18,7 @@ the other place.
 
 | System | Spec | Gate |
 |---|---|---|
-| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 9 checks |
+| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 10 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
 | Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 7 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
@@ -255,37 +255,60 @@ Banned words (case-study prose): no *craft, leverage, robust, delve, seamless, s
 
 ## Typography
 
-Locked May 2026. Implemented in `app/fonts.ts` and `app/globals.css`. 
-System designed around Bricolage Grotesque's three variable axes (wght, 
-wdth, opsz) — informed by Mathieu Triay's design notes at 
-https://ateliertriay.github.io/bricolage/#design-notes.
+Locked May 2026 as a system, **retypeset to Commissioner on 22 Aug 2026** (merge
+`c2c8500`). Implemented in `app/fonts.ts` and `app/globals.css`, enforced by
+`npm run lint:type`, which gates `npm run build`.
+
+**Commissioner has two axes: `wght` 340–720 and `FLAR` 0–100. It has no `wdth`
+and no `opsz`.** That is the fact this section used to get wrong in eight places,
+and it is the fact everything below rests on. `VOLM` exists in the family but is
+**not in the shipped binary** — absent rather than pinned, so it cannot fail
+silently.
+
+Everything mechanical here is asserted by `scripts/lint-type.mjs` and by
+`__tests__/claude-md-typography.test.mjs`, which reads this section against the
+code. If you change one, the other reddens. That is deliberate: see
+"Why this section is checkable" at the end.
 
 ### Typefaces
-- **Primary (everything):** Bricolage Grotesque (Google Fonts, variable)
-  - Loaded via `next/font/google` in `app/fonts.ts`
-  - Exposed as `--font-sans` (no separate display family)
-  - `font-optical-sizing: auto` enabled globally — small sizes render 
-    Mathieu's 12pt cut (neutral, readable), large sizes render his 96pt 
-    cut (expressive, ink-trapped)
-- **Mono:** None currently. Add only if a real need appears (code blocks 
-  in case studies). Recursive's `MONO` axis was considered and rejected 
-  for unified family in v1.
+- **Primary (everything): Commissioner, self-hosted.**
+  - Loaded with `next/font/local` in `app/fonts.ts`, from
+    `app/_fonts/commissioner-latin.woff2`. The font is served from this repo,
+    not fetched from a CDN at build time.
+  - The binary is built by `scripts/build-commissioner-font.sh` from the
+    designer's v1.012, not the v1.001 Google serves — that one is five years
+    stale and carries `slnt` but not `tnum`, `case` or `ss01`.
+  - next/font exposes it as `--font-commissioner`; everything consumes it
+    through `--font-sans`, which globals.css defines in terms of that.
+  - Instanced to `weight: '340 720'` in two independent places, the CSS and the
+    binary, so a request outside the range clamps twice and the lint gets the
+    same answer from the stylesheet and from the file.
+  - The binary's **default instance is repositioned to 400**. next/font derives
+    its Arial-fallback metrics from the default instance, and Commissioner's
+    source defaults to Thin; shipping that would have computed every fallback
+    measurement against a hairline.
+- **Mono:** None. Add only if a real need appears (code blocks in case studies).
 
 ### Hard constraints
-- **No italics.** Bricolage ships without italics or obliques. `<em>` 
-  and `<i>` are remapped in globals.css to `font-style: normal; 
-  font-weight: 600`. Never use synthetic browser italic — it looks bad 
-  on a font with no real italic.
-- **14px floor.** Nothing below 14px in the system. If something wants 
-  to be smaller, redesign the layout instead.
-- **No `font-variation-settings` unless absolutely necessary.** Use the 
-  standard CSS properties (`font-weight`, `font-stretch`, 
-  `font-optical-sizing`) — they map directly to Bricolage's axes and 
-  don't break the cascade.
+- **No italics.** Commissioner's italic is a separate binary and is not in
+  `app/_fonts/`. `<em>` and `<i>` are remapped in globals.css to
+  `font-style: normal` plus weight 600, and synthesis is closed off on both axes
+  in the rule beside it. Never use synthetic browser italic.
+- **14px floor.** Nothing below 14px. Check 2 fails the build on it. If
+  something wants to be smaller, redesign the layout instead.
+- **Never author font-stretch or font-optical-sizing.** The axes they drive do
+  not exist, so those declarations are inert rather than subtle — nothing throws
+  and the page looks plausible. **Check 10 fails the build on either.** Commit
+  `25011cc` deleted every one of them along with the three width tokens; any
+  note you find describing width bands predates it and is wrong.
+- **Exactly one `font-variation-settings` declaration exists site-wide**, on `*`,
+  reading `--flar`. **Check 7 fails the build on a second one.** There is no FVS
+  allowlist any more. Do not add per-selector axis pins.
 
 ### The scale (role-based @utility classes)
-Defined in `app/globals.css`. Use semantic role utilities — never raw 
-Tailwind text-size classes like `text-4xl`.
+Defined in `app/globals.css`. Use semantic role utilities — never raw Tailwind
+text-size classes like `text-4xl`. Every row is checked against the utility's
+real clamp, and every type-role utility must have a row.
 
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
@@ -295,7 +318,9 @@ Tailwind text-size classes like `text-4xl`.
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
+| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Also Shipped titles |
 | `text-cover` | 22 → 32px (weight 600) | Case-study card cover headline (typographic tier). Card-only. |
+| `text-resolution-headline` | 26 → 32px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
 | `text-body` | 18px | All body copy, default |
 | `text-small` | 16px | Dense lists, captions, footnotes |
@@ -304,45 +329,52 @@ Tailwind text-size classes like `text-4xl`.
 
 `text-display` was cut (homeless once the home h1 became `text-statement`; the deferred wordmark gets its own `text-wordmark`).
 
-H3 uses weight 500 (not 600) to differentiate from H2 by weight as well 
-as size. There is intentionally no H4 — if a fourth heading level is 
-needed, the case study structure is too deep; flatten it or use 
-`text-eyebrow` as a sub-block label instead.
+H3 uses weight 500 (not 600) to differentiate from H2 by weight as well as size.
+There is intentionally no H4 — if a fourth heading level is needed, the case
+study structure is too deep; flatten it or use `text-eyebrow` as a sub-block
+label instead.
 
-### Width axis usage — three bands, assigned by rung
-Width is a **function of the rung**, never a per-module choice. Three values, no
-fourth. If you are picking a width by eye you are outside the system (v3 R2).
+### Voice — the FLAR axis, by rung
+**This replaced the three width bands.** Width was the expressive axis under
+Bricolage; Commissioner does not have one, and FLAR is what it has instead.
 
-| Token | Value | Band | Rungs |
-|---|---|---|---|
-| `--wdth-read` | `100` | Reading | 14–26px |
-| `--wdth-display` | `94` | Display | 32–52px ceiling |
-| `--wdth-large` | `88` | Large display | 72–88px ceiling |
+Two values only, ruled from the bench on 21 Aug 2026: **FLAR 100 on the display
+band, 0 everywhere else.** 40 and 60 were never judged by anyone and are not
+decisions that have been made.
 
-Bands key to the rung's **desktop ceiling**, so an element never changes width as
-the viewport resizes. Authored at the property site as
-`font-stretch: calc(var(--wdth-display) * 1%)` — the token is unitless because a
-percentage cannot appear inside a `font-variation-settings` string.
+The flared set is five selectors: `.milestone__date`, `.hero-block__title`,
+`.case-study-prose h2`, `.text-lede` and `.about-hero__pov`. **Plain selectors
+take no declaration at all** — `@property --flar` sets `initial-value: 0`, so
+writing `--flar: 0` beside them would be a second statement of the same fact and
+a place for the two to disagree.
 
-Two roles are **off-ladder and deliberately left at a literal value** (v3 §9):
-`text-lede` at 100 and `.pull-quote p` at 94, whose 60px and 56px ceilings fall in
-the 53–71px gap between bands. Both are legal; tokenising them would encode an
-answer that is being deferred.
+Three things about this that are easy to get wrong:
 
-`npm run lint:type` check 1 fails the build on any width outside {100, 94, 88}.
+- **The declaration is on `*`, and that is not a style choice.** Custom
+  properties substitute at computed-value time on the element whose declaration
+  matched, so `:root { … var(--flar) }` resolves to a literal string before
+  inheritance and descendants inherit it with no `var()` left to re-resolve.
+  Measured on the C3 build: declaration on `:root` gave a 0.00px delta,
+  declaration on `*` gave 27.20px.
+- **The cut is at 52px and it is a judgment, not a constant.** It was taken on a
+  render at 88, 72, 52, 32 and 18px. Nothing was tested at 51 or 40, so a
+  selector within a few pixels of the line is a judgment call, not a lookup.
+  `.about-hero__pov` is 51.2px at 1440 and is flared; `.about-phase__title` is
+  36.4px and is plain.
+- **`band` and `voice` are different columns.** `band` says what the type IS;
+  `voice` says what it GETS. `.text-cover` and `.friction-beat__headline` are
+  display type and stay display type in `RUNGS` — they are simply below the size
+  at which flare carries anything.
 
-> **The tonal reading is background, not instruction.** Mathieu Triay draws the
-> axis as geographic: 100 relaxed/French (Antique Olive), compressed
-> anxious/British (Grotesque No. 9). True of the typeface, and worth knowing.
-> It is **not** how this system assigns width. v3 R2 retires mood registers;
-> R9 is why — the `next/font` fallback is Arial-based with no `wdth` axis, so
-> any meaning riding on width vanishes during font swap and on a blocked CDN.
-> Contrast is carried by **weight**, which survives the fallback.
+The CSS list is derived from `RUNGS` in `scripts/lint-type.mjs`, and **check 11
+fails the build if the two stop matching**, in both directions. One list, two
+consumers. The bench once kept its own hand-written copy, which named a class
+that did not exist and omitted `.hero-block__title`, so rung 5 rendered no flare
+for an entire judgment session while every gate stayed green.
 
 ### Page typographic arc + spacing (Phase 2)
-Registers separate on **size, weight and colour**. No register "owns" an axis:
-the width column that used to appear here (Major at `font-stretch: 90%`) is
-retired by R2, and `text-cover` plus the media-tier card `<h2>` are now 94.
+Registers separate on **size, weight and colour**. No register owns an axis, and
+there is no width column here any more: width is gone with the axis.
 1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
 2. **Major** (work titles: Selected Work cards + Also Shipped) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
@@ -378,10 +410,6 @@ registered in Tailwind's `--spacing-*` namespace so one definition serves
 `docs/typography-system.md` §11's spacing notes are superseded along with the
 rest of that file.
 
-The `wdth` (and `opsz`) axes only render because `app/fonts.ts` loads them via
-`axes: ['opsz','wdth']`. Omitting that ships `wght`-only and silently disables
-every `font-stretch` and `font-optical-sizing` rule.
-
 ### Emphasis strategy
 - Inline emphasis: `<em>` → weight 600 (set in globals.css base layer)
 - Longer emphasized passages: the `emphasis-quiet` utility (weight 500 + 
@@ -392,40 +420,64 @@ every `font-stretch` and `font-optical-sizing` rule.
   nouns, never emphasized
 
 ### Signature moves — deferred
-The system as locked is a solid neutral foundation. Distinctive 
-typographic moments (custom wordmark treatment, lead paragraph 
-character) are deferred until real home page and case study content 
-exists. Don't invent them in the abstract — design them against real 
-content. Likely candidates when revisited:
-- Wordmark: push compression to 84–88%, possibly drop weight, possibly 
-  open letter-spacing
-- Lead paragraph: push weight to 500, possibly tighter tracking
+The system as locked is a solid neutral foundation. Distinctive typographic
+moments (custom wordmark treatment, lead paragraph character) are deferred until
+real home page and case study content exists. Don't invent them in the abstract
+— design them against real content.
 
 ### Reference doc — read this order
 **`docs/type-system-v3-locked.md` is the source of truth for typography.**
-Locked 5 Aug 2026, adopted 7 Aug 2026, enforced by `npm run lint:type`, which
-gates `npm run build`. Read it before making any typography change.
+Locked 5 Aug 2026, adopted 7 Aug 2026, **amended 22 Aug 2026 for Commissioner**,
+enforced by `npm run lint:type`, which gates `npm run build`. Read it before
+making any typography change.
 
 `docs/typography-system.md` ("Locked May 2026") is **superseded** and carries a
-banner saying so. It is still worth reading for how Bricolage is drawn and for
-the record of what was tried and rejected, but it is not a spec: its
-`font-stretch` values, its tonal reading of the width axis, its
-"FVS LAST" rule and its `text-wordmark` suggestion all disagree with v3, and v3
-wins on every one. Do not implement from it.
+banner saying so. It is still worth reading for the record of what was tried and
+rejected, but it is not a spec, and it is now two typefaces out of date: it
+describes Bricolage, and its width values, its tonal reading of the width axis,
+its "FVS LAST" rule and its `text-wordmark` suggestion all disagree with v3.
+Do not implement from it.
 
 `docs/type-system-v3-migration-plan.md` records how the adoption was sequenced
-(C0–C8) and what each lint check maps to.
+(C0–C8) and what each lint check maps to. The Commissioner retypeset is C1–C6b
+inside that plan.
 
 ### Swap protocol
-If Bricolage is ever replaced (e.g. with a purchased Stornoway or 
-Tofino license), only two surfaces change:
-1. The `next/font` import in `app/fonts.ts` (including the `axes` array)
-2. The three width tokens in the `@theme static` block (`--wdth-read`,
-   `--wdth-display`, `--wdth-large`). Every `font-stretch` in the system reads
-   from them, so this is one edit, not a sweep. Delete them and their call sites
-   if the new font has no `wdth` axis.
+If Commissioner is ever replaced, four surfaces change. This list is longer than
+the two-step one it replaces, and the third entry is the one that bit us.
+
+1. **`app/fonts.ts`** — the `src` path, the `variable` name and the `weight`
+   range. If the binary changes, `scripts/build-commissioner-font.sh` too;
+   it asserts the axes and ranges it emits.
+2. **The FLAR wiring in `app/globals.css`** — `@property --flar`, the `*` rule,
+   and the five-selector flared list. If the new face has no expressive axis,
+   delete all three, and update the `voice` column in `RUNGS`
+   (`scripts/lint-type.mjs`) in the same commit or check 11 reddens.
+3. **`components/font-load-probe.tsx`** — it measures one live axis to prove the
+   real font arrived. **It probed `wdth` until 21 Aug 2026, months after
+   Commissioner had no such axis**, which made it a permanent false alarm on the
+   one check that can fail in production while passing CI. Check 8b stayed green
+   the whole time, because it asserts a probe *exists*, not that the probe
+   measures a live axis. Repoint it or it lies.
+4. **This section**, and the test that reads it.
 
 The role utilities and component usage stay identical. No find-and-replace.
+
+### Why this section is checkable
+`__tests__/claude-md-typography.test.mjs` couples the claims above to the code,
+the same way `__tests__/canon.test.mjs` couples the locked-spec table to the
+filesystem. It asserts: the typeface and loader named here are the ones
+`app/fonts.ts` actually uses; no retired-axis property is prescribed as a
+declaration; every backticked custom property in this file resolves in
+`app/globals.css` or in `app/fonts.ts`; the scale table and the `@utility` set match in both
+directions, sizes included; and the check counts in the canonical-spec table
+match what the linters actually run.
+
+**What it cannot check is the reasoning** — why the cut is at 52px, why H3 is
+weight 500, why the declaration is on `*`. Those are judgments, and a test that
+tried to pin them would either be vacuous or would freeze a decision that is
+supposed to stay arguable. The rule of thumb the test encodes: **a claim about
+what the code IS gets asserted; a claim about why it is that way does not.**
 
 ## Colour by rung (type system v3 §3.5)
 Every rung has a stated colour. None is left to judgement, and all display rungs
@@ -467,15 +519,13 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
 - Text-role contrast floors: `--text-primary` AAA; `--text-secondary` / `--text-muted`
   AA-normal (4.5:1); `--text-subtle` AA-large only (≥24px or ≥18.66px bold) — never
   normal-size meaningful text.
-- `font-optical-sizing: auto` is global; do NOT hardcode `opsz` via font-variation-settings
-  for ordinary type. Width via the `font-stretch` property, from the three-band tokens.
-  FVS is reserved for the sanctioned multi-axis moments where the axes must render
-  together: the reflection milestone date (`.milestone__date`), the Also Shipped titles
-  (`text-qh-title`), and the takes-wall compositions. **The hero-callout pins are gone** —
-  both reproduced what `auto` already resolved, and the body one pinned every descendant,
-  since FVS inherits as a string (v3 R8). New FVS goes in `ALLOWLIST.fvs` in
-  `scripts/lint-type.mjs` with a one-line reason, and nowhere else; check 7 fails the
-  build otherwise. Source order is irrelevant: FVS overrides per axis regardless of it.
+- **There is exactly one `font-variation-settings` declaration in the system**, on
+  `*`, reading `--flar`, and check 7 fails the build on a second. There is no FVS
+  allowlist: `ALLOWLIST` in `scripts/lint-type.mjs` has one key, `signature`. Never
+  pin an axis per selector. This bullet used to say optical sizing was global, that
+  width came from three band tokens, and that new FVS went in `ALLOWLIST.fvs`;
+  Commissioner has neither axis, `25011cc` deleted both properties, and the
+  allowlist key does not exist. See Typography above for what replaced all of it.
 - Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
   `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
   light-only to `--border-default` — never change the base token.
@@ -657,7 +707,7 @@ Portfolio for Paul Kali, senior product designer, targeting **Senior IC, Staff I
 
 **Locked constraints:**
 - Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**. The PopUp system is retired; `--color-popup`/persimmon is dead legacy — do not use it as an accent.
-- Bricolage Grotesque; **never animate its weight/width axes** (gimmicky). Semantic oklch tokens only; no raw hex/rgb.
+- Commissioner, self-hosted; **never animate its axes** (gimmicky) — `wght` and `FLAR` are the two it has. Semantic oklch tokens only; no raw hex/rgb.
 - **em-dashes (U+2014) are hard-banned** by lint:prose; en-dashes (U+2013) in date ranges are fine.
 - **No company or client logos** anywhere (endorsement risk + palette break).
 - Direct employers (U.S. Navy, URBN, SevOne, Comcast) stay **visibly separate** from agency-era CLIENT work (Abercrombie, Red Cross, DirecTV, Merck, PGA, etc., done via Empathy Lab/Tonic). Never imply a client was an employer.

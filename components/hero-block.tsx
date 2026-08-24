@@ -38,8 +38,12 @@ type HeroBlockProps = {
  *
  * The H1 is two block-level spans, --open then --anxious: the first states the
  * situation, the second turns it. THE SPLIT IS CARRIED BY THE WORDS, and by
- * nothing else in the type. Both spans are rung 5, both set font-stretch 88 from
- * --wdth-large, and only letter-spacing differs (globals.css .hero-block__sentence--*).
+ * nothing else in the type. Both spans are rung 5, and the only properties either
+ * one sets are letter-spacing and font-weight (globals.css .hero-block__sentence--*).
+ *
+ * This used to read "both set font-stretch 88 from --wdth-large". False since C3:
+ * Commissioner has no wdth axis, the --wdth-* trio was deleted, and no font-stretch
+ * survives anywhere in the system. There is no width story here at all any more.
  *
  * An earlier version of this comment claimed the wdth axis carried the voice —
  * one clause relaxed/French at 100, the other anxious/British at 88. Type system
@@ -49,11 +53,12 @@ type HeroBlockProps = {
  * blocked CDN. It also said "explicit font-variation-settings", which was never
  * true of these selectors; they use the font-stretch property.
  *
- * The width the spans DO share is a fitting constraint, not a voice: 88% buys
- * ~12% more characters per line, and the clauses were authored to hold one line.
- * Phase 0a rewrote three of them to hold at width 100 so the fallback and the
- * loaded font agree. Before shortening one, read the commit — the room is 660px
- * at the binding viewport and the gate is set width in px, not a character count.
+ * The FITTING CONSTRAINT outlived the axis, and it is the part still worth knowing:
+ * the clauses were authored to hold one line. Phase 0a rewrote three of them to hold
+ * at width 100 so the fallback and the loaded font agreed, which is why they still
+ * fit now that width is gone for good. Before shortening one, read the commit — the
+ * room is 660px at the binding viewport and the gate is set width in px, not a
+ * character count.
  *
  * Image-pipeline reuse: we share next/image + PlaceholderFrame directly rather
  * than wrapping in <Figure>, because Figure's vertical margins (3rem top /
