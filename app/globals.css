@@ -4595,3 +4595,79 @@ html.dark .figure-placeholder {
 .roadmap-table > .bento-theme__caption {
   margin-top: var(--spacing-m);
 }
+
+/* ── Delivery Promise (URBN): TestimonyPair ───────────────────────────────────
+   Section 01. The FramedPair slot, with voices instead of screens: this study's
+   deck has no before-screens, so its problem evidence is what people said.
+   Ported from the `.tpair` block of docs/previews/quote-pair-locked.html.
+
+   NO GEOMETRY. Two cells, a rule above each, three text nodes per cell.
+
+   THE GAP IS DECLARED ONCE. The locked prototype declares `gap` on the grid
+   outside the breakpoint AND again inside it at the same value; the second one is
+   a lint:space check 4 failure and is not ported. The media query carries
+   grid-template-columns and nothing else.
+
+   ALL 14px LABEL TYPE IS --text-muted. --text-subtle is AA-large only (>=24px),
+   and `.pull-quote cite` already does this correctly at the same size. */
+
+.testimony-pair {
+  margin: var(--spacing-xl) 0 0;
+  max-width: 47rem;
+}
+
+.testimony-pair__grid {
+  display: grid;
+  gap: var(--spacing-l);
+}
+
+.testimony-pair__cell {
+  display: grid;
+  gap: var(--spacing-xs);
+  /* Unequal quote lengths must not stretch the rows: the two leads have to stay
+     level at the top, which is the whole reason the lead sits above the quote. */
+  align-content: start;
+  border-top: 1px solid var(--border-strong);
+  padding-top: var(--spacing-s);
+}
+
+.testimony-pair__lead {
+  margin: 0;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+/* A step below the lead, deliberately. An earlier variant set both to 1.125rem at
+   desktop: the hierarchy flattened, and it pushed the right lead to three lines
+   against the left's two, which breaks the levelness the layout exists for. */
+.testimony-pair__quote {
+  margin: 0;
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.5;
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+/* Editorial marks, not speech. */
+.testimony-pair__elision {
+  color: var(--text-muted);
+}
+
+.testimony-pair__source {
+  font-size: 0.875rem; /* 14px */
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  /* grid-template-columns only. The gap above already applies at both widths. */
+  .testimony-pair__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

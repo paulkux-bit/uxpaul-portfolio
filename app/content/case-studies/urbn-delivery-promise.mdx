@@ -78,6 +78,7 @@ import JourneyLine from '@/components/case-studies/urbn-delivery-promise/Journey
 import InversionChart from '@/components/case-studies/urbn-delivery-promise/InversionChart';
 import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/PromiseSequence';
 import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
+import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
 
 {/* TWO MODULES ARE RETIRED, NOT DEFERRED, and one import is genuinely pending.
 
@@ -115,18 +116,30 @@ import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/Roadma
 
 ## Speed was the wrong thing to measure.
 
-<p className="section-lede">Leadership asked us to surface inventory and location data earlier in the shopping journey. They had half of it.</p>
+<p className="section-lede">Leadership asked us to surface inventory and location data earlier in the shopping journey, because shipping was going wrong. I asked our researcher to start in the customer feedback and the help tickets, then ran what she found against the order data.</p>
 
-**Three sources, and none of them could see the whole thing.** What shoppers told a researcher, what they wrote in public without being asked, and what the order data said about all of them.
+<TestimonyPair />
 
-**Most shoppers could not tell you how long an order took.** They could tell you whether it came when we said it would. That was the part they remembered, and the part they repeated.
+**Most shoppers could not tell you how long an order took. They could tell you whether it came when we said it would.** That was the part they remembered, and the part they repeated.
 
-<blockquote className="pull-quote pull-quote--quiet">
-  <p>“I think it got around here right on time, like the time it said it would... I don't remember complaining about it to my friends... if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, ‘my damn package isn't here.’”</p>
-  <cite>Urban Outfitters customer, primary research</cite>
-</blockquote>
+{/* THREE THINGS WERE DELETED HERE ON 26 AUG AND NONE OF THEM SHOULD COME BACK.
 
-**One shopper bought a wardrobe for a vacation, weeks ahead.** It arrived after she left. She posted about it, then waited a long time for her money back. Every inventory failure came out the other end as a broken date, and that is where a shopper feels it.
+    The pull-quote--quiet blockquote. It is not lost, it moved: the same research
+    quote is now the left cell of TestimonyPair, verbatim off the source rather
+    than the shipped version that mixed straight and curly apostrophes in one
+    sentence.
+
+    "Three sources, and none of them could see the whole thing." Section 03
+    already says "Three sources had already ruled out speed", and the lede above
+    now names the three inputs in the order Paul actually worked them. Saying it
+    twice is why this section read as setup rather than as evidence.
+
+    "One shopper bought a wardrobe for a vacation, weeks ahead." The App Store
+    quote now carries a vacation failure directly, in the shopper's own words,
+    aftermath included. NOTE THAT THESE ARE TWO DIFFERENT PEOPLE: the deleted
+    paragraph was a customer-service case, the quote is a public review. Paul
+    confirmed 26 Aug they are not the same customer, so restoring the paragraph
+    beside the quote would read as one story told twice. */}
 
 </section>
 
@@ -203,12 +216,14 @@ import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/Roadma
 
 **The premium bought a worse chance of arriving on time.** Orders out of stores were the worst of all, and one fulfillment center was proof the rest could be fixed.
 
-Rush shipping is four percent of orders at Urban Outfitters, bought for a graduation or a birthday, for a date that cannot move. Out of stores we missed nearly half of them. The shoppers who needed the date most were the ones we failed most.
+Rush shipping is four percent of orders at Urban Outfitters, bought for a graduation or a birthday, for a date that cannot move. Out of stores we missed nearly half of them. The shoppers who needed the date most were the ones we failed most often.
 
 <blockquote className="pull-quote pull-quote--quiet">
   <p>“I have to be extremely desperate to pay for expedited.”</p>
   <cite>Urban Outfitters customer, primary research</cite>
 </blockquote>
+
+**People had already written this down in public.** URBN's App Store shipping complaints clustered in the tiers a shopper pays for or unlocks: a free express benefit, a paid next-day, a rush order. The tier we charged for was the tier people wrote about.
 
 Three sources had already ruled out speed: what shoppers ranked when asked, what industry research says about abandoned carts, and what four percent says about the price of hurry. **None of them pointed at money either. They pointed at the date.**
 
