@@ -13,8 +13,9 @@ import manifest from './roadmap-manifest.json';
  * drawing was not. Three columns at desktop, stacked below 768, and nothing in
  * between needs to be positioned.
  *
- * ROW ORDER IS THE DECK'S AND IT IS CONTESTED. See $orderDoc in the manifest.
- * Reordering is three `n` values and the array order, nothing here.
+ * ROW ORDER IS THE DECK'S AND IT IS SETTLED, confirmed 25 Aug. See $orderDoc in
+ * the manifest for where the reasoning lives. Reordering is three `n` values and
+ * the array order, nothing here.
  *
  * Every string comes from roadmap-manifest.json. Nothing is hardcoded here.
  */

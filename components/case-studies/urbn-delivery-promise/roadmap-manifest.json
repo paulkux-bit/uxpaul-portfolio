@@ -1,7 +1,7 @@
 {
   "$doc": "Content for <RoadmapTable>. Three rows, three columns, then a coda. Rows are the roadmap's short-term column from deck p23, verbatim. Every feature in `built` is on a real 2019 screen: p16 home, p17 PLP, p18 PDP, p19 cart, p20 SMS. Nothing here is reconstructed.",
 
-  "$orderDoc": "ORDER IS THE DECK'S, AND IT IS CONTESTED. Deck p23 lists inventory sync, then delivery date accuracy, then reduce split shipments, and that is what ships here because it is what the artifact says. Paul has said in conversation that date accuracy came first. Unresolved as of 25 Aug. Reordering means editing three `n` values and the array order, nothing else. Do NOT add a why-this-order clause to the caption: there is not one yet.",
+  "$orderDoc": "ORDER IS THE DECK'S AND IT IS SETTLED. Deck p23 lists inventory sync, then delivery date accuracy, then reduce split shipments; Paul confirmed that sequence on 25 Aug and the reasoning is recorded in claude/delivery-promise-roadmap-order.md. This entry read CONTESTED until 26 Aug, when the disagreement was resolved in the deck's favour. Reordering means editing three `n` values and the array order, nothing else. STILL do NOT add a why-this-order clause to the caption: what was confirmed is the sequence, not the reasoning for it.",
 
   "$replacedDoc": "The `replaced` column is a callback, not new information. Each line is one of the three friction beats from section 02, so a reader who has scrolled this far has already met all three failures. That is what makes section 05 a decision beat rather than a second outcome section.",
 
