@@ -91,7 +91,15 @@ Two-line heading threshold moves from 62 characters to about **66**.
 | stroke attribute | **none** — linework converted to filled outlines |
 | `<text>` | **zero, in all five shipped figures** |
 
-**No figure contains type.** Numbers and labels go in the caption.
+**No DRAWN figure contains type.** Numbers and labels go in the caption, never
+in the art. The subject is the SVG: this whole section is about viewBox, paths,
+fill and stroke. It does NOT bar a text-bearing `<figure>` element — `FramedPair`
+is a `<figure>` whose captions are prose, and so is `TestimonyPair`.
+
+*Wording corrected 26 Aug 2026, ahead of the project-knowledge master.* The old
+line read "No figure contains type," which is unambiguous in context and
+misleading when quoted alone. It was quoted alone twice in one session and read
+as barring a module it does not govern.
 
 **Friction-beat figures render at a 300px cap**, 169px tall. Anything finer than
 ~40px disappears. A figure-less beat uses the additive rule
