@@ -1,3 +1,13 @@
+> **SUPERSEDED ON ONE POINT.** Nuuly was never in scope. This project covered
+> Urban Outfitters, Anthropologie and Free People. The body below still says
+> "four brands" and names Nuuly because it is a record of what was drafted on
+> 24 Aug, not a live spec. The MDX is correct; this file is not. Corrected
+> 25 Aug — see `claude/delivery-promise-read-corrections.md`.
+>
+> This file is cited as required reading in `urbn-delivery-promise-v4-brief.md`
+> §0, which is why the correction is stated here rather than left to the
+> reader to notice.
+
 # Delivery Promise — content draft v3
 
 **Supersedes `docs/urbn-delivery-promise-content-draft.md`.** Named `.md` so the
