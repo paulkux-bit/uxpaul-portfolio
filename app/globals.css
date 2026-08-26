@@ -4402,3 +4402,196 @@ html.dark .figure-placeholder {
 .inversion-chart > .bento-theme__caption {
   margin-top: var(--spacing-m);
 }
+
+/* ── Delivery Promise (URBN): RoadmapTable ────────────────────────────────────
+   Three shipped milestones, what each put on a screen, and what it replaced.
+   Ported from the `.mf` block of docs/previews/roadmap-table-prototype.html.
+
+   NO GEOMETRY, AND THAT IS THE POINT. Seven module forms were prototyped for
+   this section; every one carrying a drawing broke at one width or another. This
+   one is three columns at desktop and a stack below 768, so there is nothing to
+   position and nothing to distort.
+
+   GAPS ARE SPLIT INTO row-gap AND column-gap, DECLARED ONCE, OUTSIDE THE
+   BREAKPOINT. The prototype changes a single `gap` from 0.75rem to 1.5rem inside
+   the media query, which is exactly what lint:space check 4 forbids. Splitting
+   the axes says the same thing without a breakpoint: stacked, a row is one
+   column so only row-gap resolves; at desktop it is one row of three columns so
+   only column-gap does. Same rendering, no spacing inside a query.
+
+   THE HEADER'S LAYOUT ALSO LIVES OUT HERE for the same reason. It is
+   display:none below 768, so its grid and gap are inert until the query flips
+   the display - which means the query needs to carry nothing but that flip. */
+
+.roadmap-table {
+  margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
+}
+
+.roadmap-table__head {
+  display: none;
+  grid-template-columns: 13rem 1fr 1fr;
+  column-gap: var(--spacing-m);
+  margin-bottom: var(--spacing-2xs);
+}
+
+.roadmap-table__head span {
+  /* NOT --text-subtle, which the prototype used. These render at 14px and carry
+     meaning, and --text-subtle is AA-large only (>=24px, or >=18.66px bold).
+     Same correction already applied to JourneyLine's stage labels. */
+  color: var(--text-muted);
+}
+
+.roadmap-table__rows {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border-strong);
+}
+
+.roadmap-table__rows > li {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--spacing-xs);    /* stacked: between the three cells */
+  column-gap: var(--spacing-m);  /* desktop: between the three columns */
+  margin: 0;
+  padding: var(--spacing-m) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.roadmap-table__milestone {
+  /* Finding #6. A two-column grid rather than a text-indent: row 02's label wraps,
+     and a flush-left second line put "accuracy" under the numeral instead of under
+     "Delivery". The numeral gets an auto track, the label the rest, so the wrap
+     aligns by layout and there is no magic indent to re-guess when the numeral's
+     width changes. column-gap replaces the numeral's old margin-right. */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--spacing-2xs);
+  align-items: baseline;
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.roadmap-table__n {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted); /* see the head note: 14px-class meaning, not --text-subtle */
+}
+
+.roadmap-table__features {
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-2xs);
+  margin: 0;
+  padding: 0;
+}
+
+.roadmap-table__features li {
+  position: relative;
+  margin: 0;
+  padding-left: var(--spacing-s);
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+/* A hairline rule as the list marker. width/top are not spacing properties, so
+   the literals here are outside lint:space's scope by construction. */
+.roadmap-table__features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.55rem;
+  height: 1px;
+  background: var(--border-strong);
+}
+
+.roadmap-table__replaced {
+  /* Positions the sr-only label below against its own cell. Without it the
+     absolutely-positioned label resolves against whatever distant ancestor is
+     positioned, which can drop a 1px box somewhere it can scroll. `position` is
+     not a spacing property, so nothing here reaches lint:space check 4. */
+  position: relative;
+  margin: 0;
+  max-width: 44ch;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.roadmap-table__replaced-label {
+  display: block;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-3xs);
+}
+
+.roadmap-table__coda {
+  margin-top: var(--spacing-l);
+  padding-top: var(--spacing-m);
+  border-top: 1px solid var(--text-primary);
+}
+
+.roadmap-table__coda-label {
+  display: block;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-2xs);
+}
+
+.roadmap-table__coda p {
+  margin: 0;
+  max-width: 20ch;
+  font-size: clamp(1.75rem, 1vw + 1.375rem, 2.25rem); /* 28 -> 36px */
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  /* Nothing but display, template and max-width. No spacing declaration reaches
+     lint:space check 4, because every gap and margin was declared above. */
+  .roadmap-table__head {
+    display: grid;
+  }
+
+  .roadmap-table__rows > li {
+    grid-template-columns: 13rem 1fr 1fr;
+    align-items: start;
+  }
+
+  /* FINDING #1, AND IT WAS A SPEC ERROR RATHER THAN A BUILD ONE. This was
+     display:none, which removes the element from the accessibility tree - and
+     .roadmap-table__head is aria-hidden, so at >=768 a screen reader got no label
+     for this column at all. The desktop reading was strictly worse than the
+     mobile one, where the inline label is visible.
+
+     Clipped instead of removed: gone from the page, present to a screen reader,
+     announced exactly once. The head stays aria-hidden, because un-hiding it
+     would announce the label once per row AND once in the header.
+
+     NO `margin: -1px`. The classic sr-only recipe carries one for the legacy
+     `clip: rect()` idiom, where a 1px box could still contribute scroll area.
+     clip-path: inset(50%) clips it outright, so the margin does no work - and
+     lint:space check 4 forbids a margin inside a media query, exempting exactly
+     one selector string, `.sr-only`, which this is not. */
+  .roadmap-table__replaced-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .roadmap-table__coda p {
+    max-width: 22ch;
+  }
+}
+
+.roadmap-table > .bento-theme__caption {
+  margin-top: var(--spacing-m);
+}

@@ -1,0 +1,57 @@
+{
+  "$doc": "Content for <RoadmapTable>. Three rows, three columns, then a coda. Rows are the roadmap's short-term column from deck p23, verbatim. Every feature in `built` is on a real 2019 screen: p16 home, p17 PLP, p18 PDP, p19 cart, p20 SMS. Nothing here is reconstructed.",
+
+  "$orderDoc": "ORDER IS THE DECK'S, AND IT IS CONTESTED. Deck p23 lists inventory sync, then delivery date accuracy, then reduce split shipments, and that is what ships here because it is what the artifact says. Paul has said in conversation that date accuracy came first. Unresolved as of 25 Aug. Reordering means editing three `n` values and the array order, nothing else. Do NOT add a why-this-order clause to the caption: there is not one yet.",
+
+  "$replacedDoc": "The `replaced` column is a callback, not new information. Each line is one of the three friction beats from section 02, so a reader who has scrolled this far has already met all three failures. That is what makes section 05 a decision beat rather than a second outcome section.",
+
+  "$codaDoc": "The coda is the module's conclusion and it absorbed a whole rejected candidate: an earlier form built the entire module around this one sentence. Here the three rows earn it. 'Arrives by Sept 13' is verbatim from p18; 'in one box' is the split-shipment outcome and is NOT on any screen, which is why the label reads 'what all three made possible' rather than presenting it as a product string.",
+
+  "columns": {
+    "milestone": "What shipped",
+    "built": "What it put on the screen",
+    "replaced": "What it replaced"
+  },
+
+  "rows": [
+    {
+      "n": "01",
+      "milestone": "Inventory sync",
+      "built": [
+        "Stock truth at the item level, not the page level",
+        "Pickup offered only at stores that have it, with the nearest one named",
+        "Out of stock caught before the charge"
+      ],
+      "replaced": "An order confirmed, then a cancellation email four days after she paid."
+    },
+    {
+      "n": "02",
+      "milestone": "Delivery date accuracy",
+      "built": [
+        "A named arrival date on the product page",
+        "Delivery-date and pickup filters in browse"
+      ],
+      "replaced": "Cost and timing appearing at checkout, after she had chosen everything."
+    },
+    {
+      "n": "03",
+      "milestone": "Split shipment logic",
+      "built": [
+        "One shipment wherever one was possible",
+        "An options panel that says why a choice is unavailable",
+        "Shipped, arriving today, and delivered, by text"
+      ],
+      "replaced": "One order arriving as three boxes, because nothing decided otherwise."
+    }
+  ],
+
+  "coda": {
+    "label": "What all three made possible",
+    "line": "Arrives by Sept 13, in one box."
+  },
+
+  "caption": {
+    "lead": "The roadmap, and what each fix put on the screen.",
+    "gloss": "Every feature here is on a 2019 screen. None of them could ship until the plumbing under it was true."
+  }
+}
