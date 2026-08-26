@@ -4612,8 +4612,33 @@ html.dark .figure-placeholder {
    and `.pull-quote cite` already does this correctly at the same size. */
 
 .testimony-pair {
-  margin: var(--spacing-xl) 0 0;
+  /* Symmetric evidence step, matching .framed-pair's `margin: var(--spacing-l) 0`
+     at globals.css:1938. The top is single-owned: the preceding paragraph zeros
+     its bottom below, so the gap is 2rem whether margins collapse or add. The
+     bottom separates the pair from the closing paragraph, which otherwise reads
+     as an addendum to the right-hand source line.
+
+     THE BOTTOM HALF HAS NO PRECEDENT TO COPY, only a spec. Measured across the
+     repo, all three .framed-pair instances (Bard, FDT-E, Nuuly) are their
+     section's last child, so .cs-section > :last-child zeros them and that
+     margin-bottom has never rendered on any page. This is the first module of
+     the family with a following sibling. globals.css records the same
+     never-exercised pattern twice already, at the milestone and the bento theme
+     block. The VALUE is the spec's; the confirmation is only for the top. */
+  margin: var(--spacing-l) 0;
   max-width: 47rem;
+}
+
+/* Zero the preceding paragraph's bottom so .testimony-pair's margin-top solely
+   owns the prose->evidence gap. Deliberately `p`, matching the framed-pair rule
+   above rather than narrowing to .section-lede: a narrower selector stops
+   matching the moment a body paragraph is inserted between the lede and the
+   module, and the gap silently doubles with no gate to catch it.
+
+   A SECOND RULE, not merged into the framed-pair selector list. Two modules that
+   happen to share a boundary rule are not one rule. */
+.cs-section p:has(+ .testimony-pair) {
+  margin-bottom: 0;
 }
 
 .testimony-pair__grid {
