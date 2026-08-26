@@ -77,12 +77,19 @@ nda: false
 import JourneyLine from '@/components/case-studies/urbn-delivery-promise/JourneyLine';
 import InversionChart from '@/components/case-studies/urbn-delivery-promise/InversionChart';
 import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/PromiseSequence';
+import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
 
-{/* TWO IMPORTS ARE DELIBERATELY ABSENT, and neither is an oversight.
+{/* TWO MODULES ARE RETIRED, NOT DEFERRED, and one import is genuinely pending.
 
-    FanOut — unspecified on purpose. Which teams and which touchpoints were never
-    pinned down, so section 05 ships without a module rather than with an invented
-    org chart. Build it when the contents are decided, not before.
+    FanOut and DependencyMap are both dead, and both died the same way: each was
+    named for a shape the argument turned out not to have. FanOut assumed the
+    roadmap radiated from a centre. DependencyMap assumed it was a convergence,
+    six surfaces onto three fixes, and got as far as a rendered prototype before
+    the form itself failed - seven variants were built and every one carrying a
+    drawing broke at some width. The roadmap is neither shape. It is an ORDERING,
+    and RoadmapTable is what an ordering actually looks like. Do not restore
+    either. The rejected forms are kept, unbuilt, in docs/previews/
+    dependency-map-*.html so the next person can see what was already tried.
 
     PromiseBeatFigure — three illustrations Paul may draw himself. The beats are
     built to render without art: .friction-beat:not(:has(figure)) drops the figure
@@ -110,16 +117,16 @@ import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/Pro
 
 <p className="section-lede">Leadership asked us to surface inventory and location data earlier in the shopping journey. They had half of it.</p>
 
+**Three sources, and none of them could see the whole thing.** What shoppers told a researcher, what they wrote in public without being asked, and what the order data said about all of them.
+
 **Most shoppers could not tell you how long an order took.** They could tell you whether it came when we said it would. That was the part they remembered, and the part they repeated.
 
-**One shopper bought a wardrobe for a vacation, weeks ahead.** It arrived after she left. She posted about it, then waited a long time for her money back.
-
-**Every inventory failure came out the other end as a broken date.** That is where a shopper feels it, and that is what we were actually losing on.
-
 <blockquote className="pull-quote pull-quote--quiet">
-  <p>“I relied on this and bought $190 in vacation clothes only to have the shipment arrive a day late, after my departure.”</p>
-  <cite>App Store review, July 2019</cite>
+  <p>“I think it got around here right on time, like the time it said it would... I don't remember complaining about it to my friends... if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, ‘my damn package isn't here.’”</p>
+  <cite>Urban Outfitters customer, primary research</cite>
 </blockquote>
+
+**One shopper bought a wardrobe for a vacation, weeks ahead.** It arrived after she left. She posted about it, then waited a long time for her money back. Every inventory failure came out the other end as a broken date, and that is where a shopper feels it.
 
 </section>
 
@@ -194,9 +201,16 @@ import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/Pro
 
 <InversionChart />
 
-**The premium bought a worse chance of arriving on time.** Orders routed out of stores were the worst of all, and one fulfillment center was proof the rest could be fixed.
+**The premium bought a worse chance of arriving on time.** Orders out of stores were the worst of all, and one fulfillment center was proof the rest could be fixed.
 
-Industry research puts the cost of checkout ahead of slow delivery as a reason people abandon carts, so the money was never what we were losing on. We were losing on the date.
+Rush shipping is four percent of orders at Urban Outfitters, bought for a graduation or a birthday, for a date that cannot move. Out of stores we missed nearly half of them. The shoppers who needed the date most were the ones we failed most.
+
+<blockquote className="pull-quote pull-quote--quiet">
+  <p>“I have to be extremely desperate to pay for expedited.”</p>
+  <cite>Urban Outfitters customer, primary research</cite>
+</blockquote>
+
+Three sources had already ruled out speed: what shoppers ranked when asked, what industry research says about abandoned carts, and what four percent says about the price of hurry. **None of them pointed at money either. They pointed at the date.**
 
 </section>
 
@@ -208,26 +222,23 @@ Industry research puts the cost of checkout ahead of slow delivery as a reason p
 
 The date in the ad has to be the date on the product page, the date in the cart, and the date that arrives by text. A promise told four different ways is four guesses.
 
+**Leadership moved when I showed them the horror stories.** The vacation that left without its clothes. The order cancelled four days after it was paid for. After that the argument stopped being about inventory.
+
 <PromiseSequence />
 
 </section>
 
 <section className="cs-section">
 
-## The best thing I designed was a roadmap.
+## The date had to be true before we could show it.
 
-<p className="section-lede">The front-end work was the easy part. Moving four brands and a dozen product teams was the job.</p>
+<p className="section-lede">I set the direction from the shopper's side, then built the sequence with the engineers who would have to make it real.</p>
 
-We had a mature design practice, so screens were never the constraint. What stopped us was that no team could fix this alone, because no team held more than a third of it.
+<RoadmapTable />
 
-**Leadership moved when I showed them the horror stories.** The vacation that left without its clothes. The order cancelled four days after it was paid for. After that the argument stopped being about inventory.
+**Every screen in this study sits in the back half of that roadmap.** The browse filters, the cart, Shop My Store. A filter promising two-day delivery is worse than no filter when the date is a guess.
 
-{/* Section 05 ships WITHOUT a module, deliberately. FanOut was specified only as a
-    name: which teams and which touchpoints were never pinned down, and an invented
-    org chart would be a worse answer than an absent one. The section's prose already
-    carries the argument. Restore <FanOut /> here when its contents are decided.
-
-    FLAGGED FOR PAUL: this is the one section of the seven with no visual. */}
+We had a mature design practice, so screens were never the constraint. What stopped us was that no team held more than a third of the promise, and the thirds had to land in order. **The best thing I designed was a roadmap.**
 
 </section>
 
@@ -237,7 +248,7 @@ We had a mature design practice, so screens were never the constraint. What stop
 
 Anthropologie, Free People, Urban Outfitters and Nuuly run on different seasons and different business models. I set one set of measures across all four, and it flattened the differences that mattered.
 
-**Free shipping bought engagement and cost margin.** Targeted offers in the app replaced it and lifted order value instead. Per-brand measures would have surfaced that sooner, and that is the thing I would do differently.
+Free shipping worked. Nearly everyone we surveyed said it changed what they ordered, which is exactly why one blended number was the wrong instrument to judge it with. **It bought engagement and cost margin, and I could not tell you which brand was paying.** Targeted offers in the app replaced it and lifted order value instead. Per-brand measures would have surfaced that sooner, and that is the thing I would do differently.
 
 </section>
 
