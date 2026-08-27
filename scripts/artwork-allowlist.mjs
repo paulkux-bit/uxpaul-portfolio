@@ -28,6 +28,10 @@ export const ARTWORK_DIRS = [
     path: 'components/nuuly-beats',
     reason: 'Nuuly friction-beat illustrations — same pipeline (scripts/regen-nuuly-beats-tsx.mjs), sized by layout not by adjacent type',
   },
+  {
+    path: 'components/promise-beats',
+    reason: 'Delivery Promise friction-beat illustrations — same pipeline (scripts/regen-promise-beats-tsx.mjs), sized by layout not by adjacent type',
+  },
 ];
 
 /** Individual artwork FILES, where the surrounding directory is not all artwork.
