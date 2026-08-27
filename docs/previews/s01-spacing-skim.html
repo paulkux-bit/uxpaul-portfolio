@@ -43,9 +43,13 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
 .prose .section-lede{font-size:clamp(1.375rem,0.932vw + 0.959rem,1.625rem);line-height:1.45;
   font-weight:400;color:var(--text-secondary);max-width:52ch;
   margin:var(--spacing-m) 0 var(--spacing-s)}
-.prose p{font-size:1.125rem;line-height:1.65;max-width:64ch;margin:0 0 var(--spacing-m)}
+/* DIRECT CHILDREN ONLY. As `.prose p` this is (0,1,1) and silently outranked
+   .testimony-pair__quote (0,1,0), so every render in this session showed the
+   quote at 18px regardless of what the module asked for. Scaffolding must not
+   be able to reach inside the thing being prototyped. */
+.prose > p{font-size:1.125rem;line-height:1.65;max-width:64ch;margin:0 0 var(--spacing-m)}
 .prose p strong{font-weight:600;color:var(--text-primary)}
-.prose p:not(.section-lede){color:var(--text-secondary)}
+.prose > p:not(.section-lede){color:var(--text-secondary)}
 
 /* ── TestimonyPair ── */
 .testimony-pair{max-width:47rem}
