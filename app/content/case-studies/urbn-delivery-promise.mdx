@@ -79,6 +79,7 @@ import InversionChart from '@/components/case-studies/urbn-delivery-promise/Inve
 import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/PromiseSequence';
 import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
+import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 {/* TWO MODULES ARE RETIRED, NOT DEFERRED, and one import is genuinely pending.
 
@@ -92,11 +93,14 @@ import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/Testi
     either. The rejected forms are kept, unbuilt, in docs/previews/
     dependency-map-*.html so the next person can see what was already tried.
 
-    PromiseBeatFigure — three illustrations Paul may draw himself. The beats are
-    built to render without art: .friction-beat:not(:has(figure)) drops the figure
-    column so a beat with no figure goes full width. Add the import and the three
-    <PromiseBeatFigure> calls back when the art exists; the CSS needs no change,
-    because the :has() test starts passing on its own. */}
+    PromiseBeatFigure — the three illustrations, drawn by Paul on 27 Aug. Sources are
+    components/promise-beats/*.svg, normalized and traced by
+    scripts/normalize-beat-figure.py and regenerated into .tsx by
+    npm run regen:promise-beats. THE ART LANDING CHANGED THIS SECTION'S LAYOUT:
+    .friction-beat:not(:has(figure)) had been dropping the figure column so a beat
+    with no art went full width, and it stopped matching the moment the figures were
+    passed, exactly as designed. The beats are two-column from 1024 up now, and no
+    CSS changed to do it. */}
 
 <HeroBlock
   eyebrow="DELIVERY PROMISE · URBN"
@@ -152,7 +156,7 @@ import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/Testi
 {/* FIGURE SLOTS x3. The subject is the SHOPPER at the moment the order breaks,
     never an abstraction and never a system diagram. That is what keeps this set
     distinct from BARD's (system defects) and Nuuly's (a specialist at work).
-    Friction-beat figures render at a 300px cap, 169px tall: one oversized
+    Friction-beat figures render at a 300px cap, 168px tall: one oversized
     object per frame, nothing finer than 40px. That CSS is shared across all
     four studies. Do not touch it. */}
 <ol className="friction-beats">
@@ -162,8 +166,7 @@ import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/Testi
       <h3 className="friction-beat__headline">She could not see the date</h3>
       <p className="friction-beat__scene">Cost and timing showed up at checkout, after she had already chosen everything. Until then she was guessing.</p>
     </div>
-    {/* Art pending — see the import note at the top.
-        <PromiseBeatFigure variant="blind" alt="A shopper holding a garment at arm's length, a calendar behind her with no day marked on it." /> */}
+    <PromiseBeatFigure variant="blind" alt="A shopper holding a dress up at arm's length in front of a large wall calendar whose grid is completely empty, with no day marked." />
   </li>
   <li className="friction-beat" data-thread="2">
     <div className="friction-beat__text">
@@ -175,8 +178,7 @@ import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/Testi
         <cite>Anthropologie customer, review</cite>
       </blockquote>
     </div>
-    {/* Art pending — see the import note at the top.
-        <PromiseBeatFigure variant="phantom" alt="A shopper reaching into an open box that is empty, the receipt still in her other hand." /> */}
+    <PromiseBeatFigure variant="phantom" alt="A shopper leaning over an open cardboard shipping box on a table, reaching into it. The box is empty. A long paper receipt hangs from her other hand." />
   </li>
   <li className="friction-beat" data-thread="3">
     <div className="friction-beat__text">
@@ -184,8 +186,7 @@ import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/Testi
       <h3 className="friction-beat__headline">One order arrived as three</h3>
       <p className="friction-beat__scene">About half of multi-item orders split across shipments, most of them out of stores, and no rules engine decided which.</p>
     </div>
-    {/* Art pending — see the import note at the top.
-        <PromiseBeatFigure variant="split" alt="Three separate parcels on a doorstep at three different times, one shopper opening the last of them." /> */}
+    <PromiseBeatFigure variant="split" alt="Four clothing parcels spread apart on blank ground: three soft mailers, the largest with a t-shirt visible inside, and a flat taped box. A shopper crouches at the right, opening the smallest mailer." />
   </li>
 </ol>
 
