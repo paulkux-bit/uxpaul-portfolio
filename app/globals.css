@@ -4671,7 +4671,35 @@ html.dark .figure-placeholder {
    against the left's two, which breaks the levelness the layout exists for. */
 .testimony-pair__quote {
   margin: 0;
-  font-size: 1.0625rem; /* 17px */
+  /* 18px: the reading rung, and the same size as body prose in .case-study-prose.
+     Was 17px, which was neither - 18/17 is 1.06x against the type system's 1.15x
+     adjacency rule, it sits on no rung, and after this change 17px renders on no
+     live route at all. The module's argument is that quoted matter is body
+     content and takes body treatment, so 17px contradicted the thing it was
+     implementing.
+
+     The 17px existed to hold the quote a step below the 18px/600 lead, on a
+     judgement that 18/18 read flat. That judgement was made in a prototype whose
+     surrounding lede was a 16px stand-in for the real 26px and which had no h2 at
+     all: a hierarchy judged against a truncated hierarchy. Re-rendered in a
+     correct context it did not survive. The lead still separates cleanly on
+     weight alone - 18/600 against 18/400 is 38.5% more ink, the same separation
+     the site uses between a bolded lead-in and its sentence. */
+  font-size: 1.125rem;
+  /* 1.5 DEVIATES FROM BOTH BODY NUMBERS ON PURPOSE, so do not "fix" it to match
+     body. Leading is a property of the MEASURE, not of the role. Measured at
+     1440: this column is 360px = 30.7ch, while body prose is 752px = 64.0ch -
+     exactly the width rung 1's leading is calibrated for. Transplanting body's
+     leading onto a column less than half that measure over-leads it; the eye has
+     half the distance to travel on the return.
+
+     Neither body number is even the same target: type-system-v3 specifies 1.65
+     for rung 1 and .case-study-prose ships 1.7. Size is the role signal and size
+     is what "body treatment" asks for; the quote takes body's 18px and does not
+     take body's leading. At 390 body happens to share this narrow measure, which
+     makes body itself over-led there - a site-wide question, not this module's to
+     copy. Line count is identical at all three values; only block height moves
+     (162px at 1.5, 178 at 1.65, 184 at 1.7). */
   line-height: 1.5;
   color: var(--text-primary);
   text-wrap: pretty;
@@ -4684,9 +4712,18 @@ html.dark .figure-placeholder {
 
 .testimony-pair__source {
   font-size: 0.875rem; /* 14px */
+  /* Uppercase and 0.09em STAY, and that is the deliberate half. .pull-quote cite
+     is 14/500/muted and sentence-case, but it sits under a 28px quote - a 2.0x
+     size drop that separates it on size alone. This sits under an 18px quote, a
+     1.29x drop, so the case change is what carries the differentiation. Copying
+     cite exactly was prototyped and rendered worse: the source blurred into the
+     quote above it and stopped marking where the testimony ends. */
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  font-weight: 600;
+  /* 500, matching cite's weight and colour. At 600 these read as a second bold
+     line and compete with the leads for the same attention. The token does not
+     change, so contrast is unaffected: 6.06:1 light, 7.35:1 dark. */
+  font-weight: 500;
   color: var(--text-muted);
 }
 
