@@ -49,7 +49,11 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
    be able to reach inside the thing being prototyped. */
 .prose > p{font-size:1.125rem;line-height:1.65;max-width:64ch;margin:0 0 var(--spacing-m)}
 .prose p strong{font-weight:600;color:var(--text-primary)}
-.prose > p:not(.section-lede){color:var(--text-secondary)}
+/* COPIED, NOT AUTHORED: globals.css:1556 .case-study-prose { color: var(--text-primary) }.
+   This previously declared --text-secondary, which is a claim about the page that is
+   false. It inverted the colour question: in that context a secondary quote MATCHED
+   the surrounding prose; on the real page it is the only demoted element. */
+.prose > p:not(.section-lede){color:var(--text-primary)}
 
 /* ── TestimonyPair ── */
 .testimony-pair{max-width:47rem}
@@ -75,6 +79,7 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
 .is-fixed .section-lede{margin-bottom:0}
 </style></head>
 <body><div class="wrap">
+<p class="note" style="margin-bottom:var(--spacing-l)"><strong>Record, not current.</strong> These renders were judged when the quote was 17px. Commit <code>c06ce50</code> set it to 18px. The judgment recorded here stands; the size does not.</p>
 
 <p class="tag">Current &middot; as shipped</p>
 <p class="note"><strong>The closer collides with the source line</strong> because

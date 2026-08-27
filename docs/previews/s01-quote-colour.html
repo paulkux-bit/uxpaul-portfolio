@@ -49,7 +49,11 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
    be able to reach inside the thing being prototyped. */
 .prose > p{font-size:1.125rem;line-height:1.65;max-width:64ch;margin:0 0 var(--spacing-m)}
 .prose p strong{font-weight:600;color:var(--text-primary)}
-.prose > p:not(.section-lede){color:var(--text-secondary)}
+/* COPIED, NOT AUTHORED: globals.css:1556 .case-study-prose { color: var(--text-primary) }.
+   This previously declared --text-secondary, which is a claim about the page that is
+   false. It inverted the colour question: in that context a secondary quote MATCHED
+   the surrounding prose; on the real page it is the only demoted element. */
+.prose > p:not(.section-lede){color:var(--text-primary)}
 
 /* ── TestimonyPair ── */
 .testimony-pair{max-width:47rem}
@@ -82,6 +86,7 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
 .opt-c .testimony-pair__lead{color:var(--text-secondary)}
 </style></head>
 <body><div class="wrap">
+<p class="note" style="margin-bottom:var(--spacing-l)"><strong>Record, not current.</strong> These renders were judged when the quote was 17px. Commit <code>c06ce50</code> set it to 18px. The judgment recorded here stands; the size does not.</p>
 <p class="note" style="margin-bottom:var(--spacing-2xl)"><strong>Quote colour, three options.</strong> Surrounding type copied from globals.css. All three pass AA-normal at 17px in both modes, so contrast does not decide this.</p>
 <p class="tag">A &middot; Shipped &mdash; quote at --text-primary</p>
 <p class="note">Quoted matter sits at the same ink as the lead. The distinction is carried by weight, quote marks and the source line. <strong>16.47:1</strong> in light, <strong>16.38:1</strong> in dark.</p>

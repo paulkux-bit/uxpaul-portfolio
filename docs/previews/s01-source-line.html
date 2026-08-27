@@ -49,7 +49,11 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
    be able to reach inside the thing being prototyped. */
 .prose > p{font-size:1.125rem;line-height:1.65;max-width:64ch;margin:0 0 var(--spacing-m)}
 .prose p strong{font-weight:600;color:var(--text-primary)}
-.prose > p:not(.section-lede){color:var(--text-secondary)}
+/* COPIED, NOT AUTHORED: globals.css:1556 .case-study-prose { color: var(--text-primary) }.
+   This previously declared --text-secondary, which is a claim about the page that is
+   false. It inverted the colour question: in that context a secondary quote MATCHED
+   the surrounding prose; on the real page it is the only demoted element. */
+.prose > p:not(.section-lede){color:var(--text-primary)}
 
 /* ── TestimonyPair ── */
 .testimony-pair{max-width:47rem}
@@ -90,6 +94,7 @@ hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2
 .src-c .testimony-pair__source{font-weight:500}
 </style></head>
 <body><div class="wrap">
+<p class="note" style="margin-bottom:var(--spacing-l)"><strong>Record, not current.</strong> These renders were judged when the quote was 17px. Commit <code>c06ce50</code> set it to 18px. The size-drop argument below cites 17&nbsp;&rarr;&nbsp;14 (1.21&times;); it is now 18&nbsp;&rarr;&nbsp;14 (1.29&times;), still far from <code>.pull-quote cite</code>&rsquo;s 2.0&times;, so the conclusion is unchanged. The judgment recorded here stands; the size does not.</p>
 <p class="note" style="margin-bottom:var(--spacing-2xl)"><strong>The source line, three settings.</strong> Quotes and leads unchanged at <code>--text-primary</code> throughout. Heading omitted so the three sit close enough to compare.</p>
 <p class="tag">A &middot; Shipped &mdash; 600, uppercase, 0.09em</p>
 <p class="note">Louder than any other citation on the site.</p>
