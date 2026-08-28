@@ -155,7 +155,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 ## Her order broke in three places.
 
-<p className="section-lede">A researcher ran the interviews and I worked the analysis with her, against the order data and the customer service queue.</p>
+<p className="section-lede">A researcher ran the interviews. I worked through the analysis with her, against order data and customer service tickets.</p>
 
 {/* FIGURE SLOTS x3. The subject is the SHOPPER at the moment the order breaks,
     never an abstraction and never a system diagram. That is what keeps this set
@@ -168,7 +168,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     <div className="friction-beat__text">
       <span className="thread-index">01</span>
       <h3 className="friction-beat__headline">She could not see the date</h3>
-      <p className="friction-beat__scene">Cost and timing showed up at checkout, after she had already chosen everything. Until then she was guessing.</p>
+      <p className="friction-beat__scene">Cost and timing appeared at checkout after she had already chosen everything. Until then, she was guessing.</p>
     </div>
     <PromiseBeatFigure variant="blind" alt="A shopper holding a dress up at arm's length in front of a large wall calendar whose grid is completely empty, with no day marked." />
   </li>
@@ -176,10 +176,23 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">She paid for something we did not have</h3>
-      <p className="friction-beat__scene">Inventory updated slowly, so the out-of-stock message landed on order submit, or as a cancellation days after she had been charged.</p>
+      <p className="friction-beat__scene">Inventory updated slowly. The out-of-stock message landed on order submission, or as a cancellation days after she had been charged.</p>
+      {/* QUOTE PROVENANCE, SETTLED 27 Aug. Deck p12, first speech bubble, attributed
+          on the slide as "-AN Customer". Transcribed from the PDF at 8x, not from
+          memory. The shipped version had cut "And, even worse," from the front of the
+          sentence without a marker and raised "ordering" to "Ordering"; restoring the
+          three words makes it verbatim and removes the need for an ellipsis.
+          THE CITE IS NOT "review". p12 separates speech bubbles (labelled -AN
+          Customer, no username, no date, no stars) from boxed App Store reviews
+          (username, date, star rating). This is a bubble, so the channel is unknown.
+          THE STRAIGHT APOSTROPHE IN "wasn't" IS THE ARTIFACT'S. Do not normalise it;
+          the App Store reviews on the same slide use curly ones.
+          Full derivation: docs/beat-02-quote-provenance.md (repo mirror, reachable by
+          anyone holding only this repository); fuller record, including verbatims
+          deliberately not mirrored, in claude/delivery-promise-beat-02-quote-provenance.md */}
       <blockquote className="pull-quote pull-quote--quiet">
-        <p>“Ordering, paying, and then 3-4 days later getting the email that the item wasn't actually available anymore.”</p>
-        <cite>Anthropologie customer, review</cite>
+        <p>“And, even worse, ordering, paying, and then 3-4 days later getting the email that the item wasn't actually available anymore.”</p>
+        <cite>Anthropologie customer</cite>
       </blockquote>
     </div>
     <PromiseBeatFigure variant="phantom" alt="A shopper leaning over an open cardboard shipping box on a table, reaching into it. The box is empty. A long paper receipt hangs from her other hand." />
@@ -194,7 +207,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
   </li>
 </ol>
 
-<p className="mt-14!">**The promise was made in marketing, kept in a warehouse, and broken in a customer service queue. Nobody owned all three.**</p>
+<p className="mt-14!">**Marketing made the promise, the warehouse tried to keep it, and customer service cleaned up the mess.**</p>
 
 </section>
 
