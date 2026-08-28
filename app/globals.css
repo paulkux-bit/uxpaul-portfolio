@@ -4627,7 +4627,34 @@ html.dark .figure-placeholder {
      never-exercised pattern twice already, at the milestone and the bento theme
      block. The VALUE is the spec's; the confirmation is only for the top. */
   margin: var(--spacing-l) 0;
-  max-width: 47rem;
+
+  /* NO max-width, SINCE 28 AUG. This module fills the .cs-section band.
+     47rem was here and it was a defensible choice, not an accident: 47rem is
+     752px at 1440, which is exactly the body prose measure (64ch), so the pair's
+     right edge landed on the right edge of the paragraphs above it. Measured
+     before the change: module right edge 920.5, body paragraph right edge 920.2.
+     That alignment is the thing being given up.
+
+     TWO REASONS OUTWEIGHED IT.
+
+     .framed-pair fills the band, and it is the same slot in the same
+     .cs-section--problem on Bard, FDT-E and Nuuly. Measured on uscg-bard at
+     1440: .framed-pair is 1088px against body prose at 751.7px, a 336px
+     right-edge delta. The family already breaks prose alignment here; this
+     module was the one that did not.
+
+     The quote's own measure had become too narrow to read. The v2 rebuild put
+     24px of padding on each cell, so the rendered <p> is 312px - 26.6ch,
+     41.5% of body's 64ch - which is below a workable measure for running text.
+     Filling the band takes it to 480px / 40.9ch.
+
+     WHAT IS LOST, NAMED: the pair no longer aligns with the prose column, and
+     nothing else on the page reinstates that edge. Accepted deliberately.
+
+     THE GAP STAYS --spacing-l (32px) and does not follow .framed-pair down to
+     --spacing-m. FramedPair's cells are bright screenshots that self-separate
+     against the ground; these are two --bg-surface boxes one step off canvas,
+     and 24px between low-contrast surfaces reads as one box with a slot. */
 }
 
 /* Zero the preceding paragraph's bottom so .testimony-pair's margin-top solely
@@ -4644,7 +4671,22 @@ html.dark .figure-placeholder {
 
 .testimony-pair__grid {
   display: grid;
-  gap: var(--spacing-l);
+  /* SPLIT BY AXIS, both outside any media query, because `gap` is one
+     declaration serving two different jobs. The gutter between two side-by-side
+     boxes wants more room than the step between two stacked ones, and raising a
+     single `gap` to get the first would add 16px to the stacked module at 390 -
+     on a module whose entire rebuild was about mobile height. lint:space check 4
+     forbids spacing inside a media query, so the query cannot arbitrate it;
+     the axis split can, and needs no query.
+
+     Each is inert where the other applies, and the width is 1024, not 768: at
+     >=1024 grid-template-columns is 1fr 1fr, so there is one row and row-gap does
+     nothing; below it there is one column, so column-gap does nothing. Both
+     confirmed from the render rather than edited by hand - the proof is that the
+     stacked module height is identical at either column-gap value, measured at
+     390 and again at 820 once the breakpoint moved. */
+  row-gap: var(--spacing-l);
+  column-gap: var(--spacing-xl);
 }
 
 /* A BOX, NOT A RULED CELL, since 28 Aug. The rule-topped version ran 606px at
@@ -4696,21 +4738,41 @@ html.dark .figure-placeholder {
      weight alone - 18/600 against 18/400 is 38.5% more ink, the same separation
      the site uses between a bolded lead-in and its sentence. */
   font-size: 1.125rem;
-  /* 1.5 DEVIATES FROM BOTH BODY NUMBERS ON PURPOSE, so do not "fix" it to match
-     body. Leading is a property of the MEASURE, not of the role. Measured at
-     1440: this column is 360px = 30.7ch, while body prose is 752px = 64.0ch -
-     exactly the width rung 1's leading is calibrated for. Transplanting body's
-     leading onto a column less than half that measure over-leads it; the eye has
-     half the distance to travel on the return.
+  /* 1.6 DEVIATES FROM BOTH BODY NUMBERS ON PURPOSE, so do not "fix" it to match
+     body. Leading is a property of the MEASURE, not of the role.
+
+     MEASURE THE PARAGRAPH, NOT THE COLUMN. This comment previously read "this
+     column is 360px = 30.7ch" and was wrong in two ways at once: it measured the
+     grid column rather than the rendered <p>, and it went stale on 27 Aug when
+     the v2 rebuild put 24px of padding on each cell and the paragraph became
+     312px without anyone noticing. Measured at 1440 on the rendered
+     .testimony-pair__quote box, with ch taken from a real 0 glyph at 18px
+     (11.745px): the paragraph is 480px = 40.9ch, against body prose at 752px =
+     64.0ch, the width rung 1's leading is calibrated for.
+
+     WHY 1.6 AND NOT THE 1.5 THIS CARRIED. 1.5 was chosen for a 26.6ch paragraph,
+     41.5% of body's measure, where body's leading would have over-led it badly.
+     Filling the band took the paragraph to 40.9ch, 63.9% of body's. The
+     deviation should shrink with that gap and it should not vanish: 40.9ch is
+     still meaningfully shorter than 64ch, so landing on body's own 1.7 would
+     make the quote read as body prose and contradict this module's argument that
+     it takes body's SIZE and not body's leading. Judged on the render at 1440 in
+     both modes: 1.5 reads tight across the two-line quote at this measure, 1.7
+     reads like a paragraph, 1.6 holds a visible step off body while giving the
+     return enough air.
+
+     THE STAKES ARE SMALL AND THAT IS PART OF THE RECORD. At this width the left
+     quote is one line and the right is two, so exactly one inter-line gap in the
+     module is affected; 1.6 against 1.65 is not resolvable by eye. The value is
+     defensible, not proven, and a longer quote would put it back in question.
 
      Neither body number is even the same target: type-system-v3 specifies 1.65
-     for rung 1 and .case-study-prose ships 1.7. Size is the role signal and size
-     is what "body treatment" asks for; the quote takes body's 18px and does not
-     take body's leading. At 390 body happens to share this narrow measure, which
-     makes body itself over-led there - a site-wide question, not this module's to
-     copy. Line count is identical at all three values; only block height moves
-     (162px at 1.5, 178 at 1.65, 184 at 1.7). */
-  line-height: 1.5;
+     for rung 1 and .case-study-prose ships 1.7. Line count is identical at 1.5,
+     1.6, 1.65 and 1.7 in both modes - only block height moves, 149.8 / 153.4 /
+     155.2 / 157.0px for the module. At 390 body happens to share this narrow
+     measure, which makes body itself over-led there - a site-wide question, not
+     this module's to copy. */
+  line-height: 1.6;
   color: var(--text-primary);
   text-wrap: pretty;
 }
@@ -4721,11 +4783,16 @@ html.dark .figure-placeholder {
 }
 
 .testimony-pair__source {
-  /* PINNED TO THE BOTTOM OF THE CELL. With the leads gone the two quotes are
-     nine words and twenty-two, so an unpinned label would sit at a different
-     height in each cell and the pair would stop reading as a comparison. The
-     slack moves above the label instead, onto empty surface where it is
-     invisible. */
+  /* PINNED TO THE BOTTOM OF THE CELL, ONLY WHERE THE CELLS ARE SIDE BY SIDE,
+     WHICH IS >=1024. With the leads gone the two quotes are nine words and
+     twenty-two, so an unpinned label would sit at a different height in each cell
+     and the pair would stop reading as a comparison. The slack moves above the
+     label instead, onto empty surface where it is invisible.
+
+     THE CONDITION IS THE CORRECTION. This comment used to assert the alignment
+     unconditionally, which was already false below the breakpoint and got worse
+     when the breakpoint moved from 768 to 1024. Stacked, the cells are sequential
+     and there is nothing to align - the same as at 390. */
   align-self: end;
   margin-top: var(--spacing-m);
   font-size: 0.875rem; /* 14px */
@@ -4744,8 +4811,27 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
 }
 
-@media (min-width: 768px) {
-  /* grid-template-columns only. The gap above already applies at both widths. */
+/* 1024, AND IT IS THE BAND'S NUMBER, NOT AN INDEPENDENTLY CHOSEN ONE.
+   The two-column layout exists so the pair can use the .cs-section band, and the
+   band widens at 1024 - globals.css:1806, `.case-study-prose > .cs-section`.
+   IF THAT MOVES, THIS MOVES WITH IT. They are one decision recorded in two
+   places, which is why the line number is cited rather than remembered.
+
+   IT WAS 768 UNTIL 28 AUG, AND 768 WAS THE GENERIC TABLET BREAKPOINT - inherited,
+   never related to this module, and sitting 256px below the number that actually
+   governs it. Across 768-1023 the columns therefore rendered inside the
+   UN-WIDENED 660px prose column: cells at 258px, quote measure 22.0ch. That is
+   below the 26.6ch the max-width comment in this same rule block calls unworkable,
+   and worse than the 52.1ch the module gets at 767 in a single column. The layout
+   was worse at 800px than at 390.
+
+   THE WINDOW WAS NOT CAUSED BY FILLING THE BAND. 47rem is 752px and the band
+   there is 660px, so the cap never bound in that range; the geometry is identical
+   either side of that change. It was 26.7ch until 088815a put 24px of padding on
+   each cell. Filling the band commissioned the review that found it.
+
+   grid-template-columns only - lint:space check 4 forbids spacing here. */
+@media (min-width: 1024px) {
   .testimony-pair__grid {
     grid-template-columns: 1fr 1fr;
   }

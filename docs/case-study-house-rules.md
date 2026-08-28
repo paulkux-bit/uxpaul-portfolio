@@ -391,9 +391,27 @@ Stacked, lead and quote are both 1.125rem and the type has nothing left to say.
 **A module whose hierarchy comes from its columns has no hierarchy at the width
 where the columns collapse.**
 
-- **Measure the narrow width first.** It is where a module is weakest, and where
-  the reader most often is.
+- **Measure at each declared breakpoint and immediately below it, plus the
+  extremes.** 390 and 1440 are not enough: a two-column module that collapses to
+  22ch across 768-1023 renders correctly at both of them. The pair that exposes it
+  is 767/768 - the width where a rule changes, and the width one pixel under it.
+  Every `@media` in the module's own CSS, and every `@media` in the container
+  rules it inherits, is a width that has to be looked at.
 - **A doc that records the width it was measured at is telling you where it was
   not.** Read that as a gap, not as provenance.
 - **Ask what is carrying the hierarchy.** If the answer is the layout, the module
   has no answer at the width the layout stops existing.
+
+**The instance that amended this rule, 28 Aug.** `TestimonyPair` split into two
+columns at 768; the `.cs-section` band it needs in order to hold two columns
+widens at 1024 (`globals.css:1806`). The two numbers were 256px apart and nothing
+tied them together, so a window existed where the module used a layout its
+container could not hold: cells at 258px and a 22.0ch measure across 768-1023,
+against 52.1ch one pixel below. **This rule was written that morning and the first
+change it governed broke it** - 390 and 1440 both render the defect correctly.
+
+**A breakpoint that exists so a module can use its container's width IS the
+container's breakpoint.** Choosing it independently - 768 because that is the
+tablet number - creates a window where the module asks for a layout its container
+cannot hold, and no amount of measuring at the extremes will show it. The
+measurement rule above finds this class of defect; only the coupling prevents it.
