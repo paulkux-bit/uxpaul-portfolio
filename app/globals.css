@@ -2326,6 +2326,34 @@ html.dark .oku-figure {
   content: none;
 }
 
+/* A QUIET QUOTE INSIDE A BEAT SITS ONE STEP FURTHER DOWN, since 28 Aug.
+   .pull-quote--quiet was calibrated for a quote standing alone next to 18px
+   prose. Inside a friction beat it sits directly under .friction-beat__headline
+   at identical weight (600) and identical colour (--text-primary), and the two
+   were below the type system's own 1.15x adjacency floor at every width but 390.
+   Measured headline / quote, that direction: 1.100 at 767 and 768, 1.087 at 900,
+   1.083 at 1023 and 1024, 1.143 at 1440. Only 390 cleared it, at 1.300.
+
+   LINT:TYPE CANNOT SEE THIS AND THAT IS NOT A BUG IN THE CHECK. It computes
+   ratios across the scale; this is an adjacency between two elements whose sizes
+   come from two different rules that never meet in the stylesheet. The breach is
+   a property of the rendered pair, so only a render finds it.
+
+   THREE STUDIES SHARE THIS, NOT ONE. Of the four .pull-quote--quiet instances on
+   the site, three are inside a friction beat - nuuly.mdx:165, us-navy-fdt-e.mdx:112
+   and urbn-delivery-promise.mdx:193 - and because both contributing rules are
+   site-wide the ratio was identical at all three. House rules section 14: a defect
+   found in one file is a defect in every file that shares the pattern. The fourth,
+   urbn-delivery-promise.mdx:246, stands alone in section 03 and is deliberately
+   NOT in scope here: it sits next to body prose, which is what --quiet was
+   calibrated against, and it does not breach.
+
+   One 1.15x step below the value above. Smallest rendered size is 18px at 390,
+   clear of the 14px floor. */
+.friction-beat .pull-quote--quiet p {
+  font-size: clamp(1.125rem, 1.1vw + 0.72rem, 1.5rem);
+}
+
 /* ── Transformation blocks (the Aaron James "8s → 1.8s" moment) ──────── */
 
 .transformations {
