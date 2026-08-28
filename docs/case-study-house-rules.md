@@ -378,3 +378,22 @@ specifying symmetric margins and only ever rendering the top half.
   distinction, is a false report even when every figure in it is accurate.
 - **The first page to exercise a never-rendered value is the test.** Look at it,
   in both modes, because there is no precedent to appeal to if it reads wrong.
+
+## 15. One breakpoint is not a specification
+
+`TestimonyPair` was specified, measured and tested at 1440 and nowhere else -
+`$levelnessDoc` said so in as many words. It rendered **606px at 390**, a full
+phone screen of unbroken text, from its first commit. Nobody had looked.
+
+The failure is structural, not an oversight. The two-column layout was carrying
+all of the hierarchy: side by side, the lead read as a heading over its quote.
+Stacked, lead and quote are both 1.125rem and the type has nothing left to say.
+**A module whose hierarchy comes from its columns has no hierarchy at the width
+where the columns collapse.**
+
+- **Measure the narrow width first.** It is where a module is weakest, and where
+  the reader most often is.
+- **A doc that records the width it was measured at is telling you where it was
+  not.** Read that as a gap, not as provenance.
+- **Ask what is carrying the hierarchy.** If the answer is the layout, the module
+  has no answer at the width the layout stops existing.

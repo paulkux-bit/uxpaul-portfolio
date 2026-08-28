@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import manifest from './testimony-manifest.json';
 
-/** The literal marker sitting in the manifest's quote strings. */
+/** The literal marker a quote span would carry if it elided anything. */
 const ELISION = '[…]';
 
 /**
@@ -12,23 +12,28 @@ const ELISION = '[…]';
  * substitute is testimony: this study's problem evidence is what people said, not
  * what a screen looked like.
  *
- * NO GEOMETRY. Two cells, a rule above each, three text nodes per cell.
+ * NO GEOMETRY. Two cells, two text nodes each: a quote and a source.
  *
- * CAPTION CONTRACT IS FRAMEDPAIR'S, WITH THE ORDER INVERTED, DELIBERATELY.
- * FramedPair puts its caption below the image (uscg-bard.mdx:50-76). Here the
- * lead sits above the quote: an image is legible at a glance and a 45-word quote
- * is not, so the takeaway has to be catchable before the reader commits. It also
- * keeps the two leads level at the top, where they read as a pair. The version
- * with the lead underneath is A1 in docs/previews/quote-pair-A.html and it fails
- * for exactly that reason - the quotes are different lengths, so the takeaways
- * land at different heights and never pair up.
+ * REBUILT 28 AUG, AND THE OLD RATIONALE DOES NOT SETTLE THE NEW CASE. This
+ * component used to put a lead above each quote and defend that against A1
+ * (docs/previews/quote-pair-A.html), where the lead sat underneath. That
+ * rejection was of a BARE quote with a lead below it: nothing framed the quote,
+ * so the takeaway was the only thing catchable at a glance and it had to come
+ * first. A bounded object on a raised surface is legible before it is read -
+ * which is the exact property that licensed caption-below for images in
+ * FramedPair - so the box answers what the lead was answering. A1 is still worth
+ * reading for the history; it is not evidence against this.
+ *
+ * The leads are gone entirely, not moved. Section 01's closer says what they said
+ * sixty words later, in Paul's voice. See the manifest's $leadDoc before
+ * restoring them for any reason.
  *
  * NO OUTER FIGCAPTION. FramedPair has none either. Do not add one.
  *
  * The component supplies the opening and closing curly double quotes; the
- * manifest holds the words, including the curly apostrophes inside them. Every
- * string comes from testimony-manifest.json and neither quote may be reworded -
- * see its $quoteDoc.
+ * manifest holds the words. Every string comes from testimony-manifest.json and
+ * neither quote may be reworded - see its $quoteDoc. The bold spans are
+ * editorial, not the speakers' stress: see $emphasisDoc.
  */
 export default function TestimonyPair() {
   return (
@@ -36,19 +41,40 @@ export default function TestimonyPair() {
       <div className="testimony-pair__grid">
         {manifest.cells.map((cell) => (
           <div className="testimony-pair__cell" key={cell.source}>
-            <p className="testimony-pair__lead">{cell.lead}</p>
             <p className="testimony-pair__quote">
               {'“'}
-              {/* A span, never <i>: globals.css remaps em and i to font-weight 600
-                  because Commissioner ships no italic, so an <i> here would render
-                  the elision marks bold instead of muted. An editorial elision is
-                  not stress emphasis either way. */}
-              {cell.quote.split(ELISION).map((part, i) => (
-                <Fragment key={i}>
-                  {i > 0 ? <span className="testimony-pair__elision">{ELISION}</span> : null}
-                  {part}
-                </Fragment>
-              ))}
+              {cell.quote.map((span, s) => {
+                /* THE SPLIT RENDERS NOTHING TODAY, AND IS NOT DEAD CODE. Both
+                   quotes are continuous runs, so no span carries a marker and
+                   this produces zero elision elements. It is the enforcement of
+                   the transcription rule: the next quote that needs a cut gets
+                   its marker rendered as muted editorial text without anyone
+                   remembering to wire it up. It moved from the whole quote
+                   string to each span's text when the manifest became
+                   structured; the behaviour is unchanged.
+
+                   A span, never <i>: globals.css remaps em and i to
+                   font-weight 600 because Commissioner ships no italic, so an
+                   <i> here would render the elision marks bold instead of
+                   muted. An editorial elision is not stress emphasis either
+                   way. */
+                const parts = span.text.split(ELISION).map((part, i) => (
+                  <Fragment key={i}>
+                    {i > 0 ? <span className="testimony-pair__elision">{ELISION}</span> : null}
+                    {part}
+                  </Fragment>
+                ));
+                /* <b>, never <strong>: this emphasis is the designer's, and <b>
+                   is stylistic offset without added importance. <strong> would
+                   assert the speaker stressed it, which neither did. The weight
+                   comes from the base `b, strong { font-weight: 600 }` rule, so
+                   this module authors none of its own. */
+                return 'em' in span && span.em ? (
+                  <b key={s}>{parts}</b>
+                ) : (
+                  <Fragment key={s}>{parts}</Fragment>
+                );
+              })}
               {'”'}
             </p>
             <span className="testimony-pair__source">{cell.source}</span>

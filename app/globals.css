@@ -4601,7 +4601,8 @@ html.dark .figure-placeholder {
    deck has no before-screens, so its problem evidence is what people said.
    Ported from the `.tpair` block of docs/previews/quote-pair-locked.html.
 
-   NO GEOMETRY. Two cells, a rule above each, three text nodes per cell.
+   NO GEOMETRY. Two cells, two text nodes each: a quote and a source. Each cell
+   is a box on --bg-surface; there is no rule and no border.
 
    THE GAP IS DECLARED ONCE. The locked prototype declares `gap` on the grid
    outside the breakpoint AND again inside it at the same value; the second one is
@@ -4646,24 +4647,33 @@ html.dark .figure-placeholder {
   gap: var(--spacing-l);
 }
 
-.testimony-pair__cell {
-  display: grid;
-  gap: var(--spacing-xs);
-  /* Unequal quote lengths must not stretch the rows: the two leads have to stay
-     level at the top, which is the whole reason the lead sits above the quote. */
-  align-content: start;
-  border-top: 1px solid var(--border-strong);
-  padding-top: var(--spacing-s);
-}
+/* A BOX, NOT A RULED CELL, since 28 Aug. The rule-topped version ran 606px at
+   390 - a full phone screen of unbroken text in a section with no image.
 
-.testimony-pair__lead {
+   REMOVING THE DIVIDER MADE THE MODULE SHORTER, WHICH IS THE COUNTERINTUITIVE
+   PART. A rule needs padding on both sides of itself; spacing needs it on one.
+   The source label is already uppercase, tracked 0.09em, weight 500 and muted -
+   four signals saying "a different kind of text". The rule was a fifth
+   separator doing a job four others had already done.
+
+   NO BORDER AND NO INSET HAIRLINE, DELIBERATELY. --bg-surface sits a step off
+   --bg-canvas in both modes and contains on its own; an outline would be a
+   second containment doing the same job as the tone. Judged in both modes at
+   390 and 1440. The v2 prototype declares the hairline and then switches it off
+   in its own default state (docs/previews/testimony-v2.html) - the shipped
+   answer is the default, not the base rule.
+
+   grid-template-rows: auto 1fr is the pin. The quote takes its own height, the
+   source gets the slack and is pushed to the bottom by align-self: end below,
+   so both labels align across the pair whatever the quote lengths do. That
+   levelness used to be the leads' job; it is now the box's. */
+.testimony-pair__cell {
+  background: var(--bg-surface);
+  border-radius: var(--radius-l); /* the cards step, globals.css:443 */
+  padding: var(--spacing-m);
+  display: grid;
+  grid-template-rows: auto 1fr;
   margin: 0;
-  font-size: 1.125rem; /* 18px */
-  line-height: 1.3;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--text-primary);
-  text-wrap: pretty;
 }
 
 /* A step below the lead, deliberately. An earlier variant set both to 1.125rem at
@@ -4711,6 +4721,13 @@ html.dark .figure-placeholder {
 }
 
 .testimony-pair__source {
+  /* PINNED TO THE BOTTOM OF THE CELL. With the leads gone the two quotes are
+     nine words and twenty-two, so an unpinned label would sit at a different
+     height in each cell and the pair would stop reading as a comparison. The
+     slack moves above the label instead, onto empty surface where it is
+     invisible. */
+  align-self: end;
+  margin-top: var(--spacing-m);
   font-size: 0.875rem; /* 14px */
   /* Uppercase and 0.09em STAY, and that is the deliberate half. .pull-quote cite
      is 14/500/muted and sentence-case, but it sits under a 28px quote - a 2.0x
