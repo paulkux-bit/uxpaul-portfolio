@@ -8,7 +8,8 @@
 > was reconstruction rather than reading.
 >
 > **When they disagree, project knowledge wins.** Edit there, then re-export here.
-> Exported 25 Aug 2026, and the two copies are in sync as of that export.
+> Exported 25 Aug 2026, re-exported 26 Aug with §5's wording corrected and §14
+> added. The two copies are in sync as of the 26 Aug export.
 >
 > **Two conventions settled 25 Aug and now written into §1 and §9:** the section
 > word budget excludes headings and pull quotes (it counts the section lede plus
@@ -303,3 +304,77 @@ study has a key; no two studies share art.
 - **Strict with no opt-out, plus a check that protects the strictness.**
   Declining speculative capability and closing a bypass around a constraint you
   just tightened are different calls, not the same one.
+
+## 14. Evidence that is not evidence
+
+Two shapes, both found on Delivery Promise section 01, both of which produced
+judgments that had to be withdrawn after they had already changed shipped code.
+This is rule 10 one layer up: rule 10 is about instruments that measure wrong,
+this is about evidence that was never measuring the right thing.
+
+### A prototype's chrome must be copied, never authored
+
+Five instances in a single session, on one module:
+
+1. **A duplicate `gap` inside a media query.** Correct in the prototype, a
+   `lint:space` check 4 failure in the repo. The prototype had no way to run the
+   gate that governs it.
+2. **The surrounding lede set at 16px** where the real one is rung 2 at ~26px.
+   The module looked correct in type the page does not have, and section 01's
+   skim problem did not surface until it was built.
+3. **`.prose p` at specificity (0,1,1) outranking `.testimony-pair__quote` at
+   (0,1,0).** Every render in that session showed the quote at 18px regardless of
+   what the module asked for. Nobody saw the shipped 17px until it was measured
+   on the live page.
+4. **Scaffolding declaring body prose `--text-secondary`** where
+   `.case-study-prose` is `--text-primary`. This did not merely distort the
+   comparison, it **inverted** it: in that context a secondary quote *matched*
+   the surrounding prose, where on the real page it would be the only demoted
+   element in a section of primary text. Three colour options were judged against
+   a page that does not exist.
+5. **The fix for (4) was applied to the file being edited and asserted for the
+   other three**, which shipped uncorrected inside a commit whose message said
+   they were corrected.
+
+The rules:
+
+- **Copy chrome out of `globals.css`. Never author it.** Every declaration in
+  scaffolding is a claim about the page, and a claim can be false. Cite the line
+  number in a comment so the next reader can check it.
+- **Scope it so it cannot reach inside the module.** Direct-child selectors, not
+  descendant. Scaffolding must not be able to outrank the thing being
+  prototyped.
+- **Verify computed values against the real page before judging anything.** The
+  lede's size and ink, body's size and ink, the heading's size. All are
+  checkable in one `getComputedStyle` pass.
+- **Prove the variants differ.** Read the property you are varying, per option.
+  Three "different" colour options once rendered identically and the error was
+  invisible in the picture.
+- **A prototype cannot run the gates.** Whatever `lint:space`, `lint:type` and
+  `lint:prose` would catch, catch by hand.
+- **A defect found in one file is a defect in every file that shares the
+  pattern.** Fix by grep, verify by grep, and do not report a fix you have not
+  re-read. Instance (5) is the whole reason this rule needs stating: the failure
+  survived being found once.
+
+### A value that has never rendered is not a precedent
+
+`.framed-pair`'s `margin-bottom` was cited as the precedent for
+`TestimonyPair`'s. **All three `.framed-pair` instances are their section's last
+child**, so `.cs-section > :last-child` zeroes them: that declaration has never
+rendered on any page in the repo. The top gap was confirmed against three
+shipped instances at 32px. The bottom was the spec's own value being exercised
+for the first time, and the comparison table read as a matched pair until someone
+checked.
+
+`globals.css` carries at least three never-exercised bottom margins —
+`.framed-pair`, the milestone, and the bento theme block. The file has a habit of
+specifying symmetric margins and only ever rendering the top half.
+
+- **Before citing a value as precedent, confirm something renders it.** A number
+  that agrees with nothing is not a number that agrees.
+- **Say which half of a claim is confirmed and which is not.** A table with one
+  measured column and one aspirational column, presented without the
+  distinction, is a false report even when every figure in it is accurate.
+- **The first page to exercise a never-rendered value is the test.** Look at it,
+  in both modes, because there is no precedent to appeal to if it reads wrong.
