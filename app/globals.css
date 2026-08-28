@@ -2145,6 +2145,36 @@ html.dark .cover-art {
 .oku-figure {
   margin: var(--spacing-xs) 0 0; /* mobile (stacked): scene → figure, kept tight so the figure stays attached */
   color: var(--text-secondary); /* light/Paper: supporting weight (stepped down from primary so the figure recedes; dark override below wins in Low Light) */
+
+  /* 300 IS THE SAME 300 AS THE >=1024 COLUMN, RESTATED SO IT APPLIES EVERYWHERE.
+     The cap is the `minmax(0, 300px)` grid column on `.friction-beat` inside its
+     own `@media (min-width: 1024px)` rule - cited by SELECTOR, not by line, because
+     this edit alone moved that rule 26 lines and a line citation would already be
+     stale. (The brief that commissioned this fix cited globals.css:2104-2106; that
+     was wrong before the edit too - those lines are `.friction-beat .thread-index`.)
+     A grid column only exists inside the rule that declares it. Below that
+     the beats stack, there is no column, and `.oku-figure svg { width: 100% }`
+     had nothing governing it: the figure filled the band. Measured at 1023,
+     across all four studies that run beats, the figure rendered 660px wide and
+     section 02 was more than twice its height at 1024 (Delivery Promise 2262px
+     against 1095px). The ink fills 54-64% of that box, so it read as a hole
+     rather than as an illustration.
+
+     THIS IS A DIFFERENT SHAPE FROM THE BREAKPOINT DEFECT FIXED THE SAME WEEK,
+     AND THE GREP THAT FOUND THAT ONE CANNOT FIND THIS ONE. TestimonyPair's was a
+     MISMATCHED breakpoint - the module split at 768 inside a band that widens at
+     1024 - and it is findable by grepping `min-width: 768px`. This is a MISSING
+     CONSTRAINT BELOW A CORRECT BREAKPOINT: `.friction-beat`'s query is already at
+     1024 and nothing about it is wrong. Searching for the first shape returns
+     nothing here. House rule 15's measurement rule is what catches it, because
+     1023 is the width one pixel under a declared breakpoint.
+
+     It does not fight the column. At >=1024 the cell is already <=300px, so this
+     agrees with it rather than competing; the figure renders identically above
+     1024 before and after. Every .oku-figure render site is inside a
+     .friction-beat - 12 of 12 across the four studies - so nothing outside the
+     beats is affected. */
+  max-width: 300px;
 }
 
 /* Dark/Low Light: dim the figure ink from primary to muted so the cream-on-espresso

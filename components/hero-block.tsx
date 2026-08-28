@@ -89,7 +89,14 @@ export function HeroBlock({
                 (i === 0 ? 'hero-block__sentence--open' : 'hero-block__sentence--anxious')
               }
             >
-              {s}
+              {/* Trailing space on every sentence but the last. The spans are
+                  display:block, so a block box strips it and the rendered line
+                  break is unchanged - but textContent, the clipboard, and any
+                  accessible-name computation that concatenates text nodes
+                  rather than respecting layout all yielded "wait.Everybody"
+                  without it. Chrome inserts the space itself for block-level
+                  children; that is engine behaviour, not a guarantee. */}
+              {i < sentences.length - 1 ? `${s} ` : s}
             </span>
           ))}
         </h1>
