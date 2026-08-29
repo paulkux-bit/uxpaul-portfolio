@@ -1,129 +1,159 @@
-import type { CSSProperties } from 'react';
 import manifest from './journey-manifest.json';
 
+type Point = { x: number; y: number };
+type Composition = {
+  viewBox: string;
+  dotR: number;
+  points: Point[];
+};
+
+/** Percent along an axis, for positioning an HTML element over a viewBox coordinate. */
+const pct = (value: number, extent: number) => `${((value / extent) * 100).toFixed(3)}%`;
+
+/** viewBox "0 0 W H" → [W, H]. */
+const extent = (viewBox: string) => {
+  const [, , w, h] = viewBox.split(' ').map(Number);
+  return [w, h] as const;
+};
+
+const path = (points: Point[]) =>
+  points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
+
 /**
- * One shopper's order, drawn as a single line. Track A of
- * docs/previews/journey-line-prototype.html — the approved shape, and still the
- * approved shape. Track B (the full map, with a problems inventory) was compared and
- * rejected; none of it is here.
+ * Angela's order, drawn as a line across five stages of sentiment.
  *
- * THE RULE, and it is stronger than the one the prototype encoded:
+ * SHE RECOVERS THREE TIMES AND IS KNOCKED DOWN THREE TIMES. That sawtooth is the
+ * argument: every time the order looks fine again, something else breaks. An earlier
+ * point array had been flattened toward a steady decline, which reads as a customer
+ * who was disappointed once - a bad day rather than a horror story.
  *
- *     Only geometry and numerals stay in the SVG. Every word goes in HTML.
+ * TWO COMPOSITIONS, NOT ONE DRAWING THAT SHRINKS. Horizontal from 768, vertical
+ * below. A phone scrolls down, so the journey runs down and each stage gets a full
+ * label instead of a 65px column. Both are rendered and CSS picks one, because the
+ * choice is a layout question and belongs in the stylesheet.
  *
- * The prototype moved the three break descriptions out and kept the stage labels, the
- * reference label and the tail note in. Measured at a real 390px viewport those render
- * at 4.79px and 5.47px — the prose container is 342px, so the scale is 0.342. Scaling
- * the type is not the fix: "POST PURCHASE" at a legible 32 units is ~250 units wide,
- * and five of those want ~1,250 units in a 1,000-unit box. Words structurally do not
- * fit a shared coordinate space. Numerals stay because two characters do fit, and they
- * are bumped at mobile through --jl-mark-sm.
+ * THE AXIS IS LABELLED, WHICH REPLACED AN APPARATUS. Happy / Fine / Angry comes from
+ * the 2019 deck's three faces. It retired the abstract reference rule, its label, its
+ * placement flag and the caption clause that all existed to explain what the ending
+ * meant. See the manifest's $sentimentDoc; do not reintroduce a reference rule.
  *
- * The last point is a FILLED dot below the reference rule. That is the whole argument
- * of the module: she ends lower than she started. Do not normalise it away.
- *
- * Every number and string comes from journey-manifest.json. Nothing is hardcoded here.
+ * NO TEXT INSIDE THE SVG, at either orientation. The marks are HTML badges positioned
+ * from their own point's coordinates, and there is no SVG dot underneath one - the
+ * badge IS the marker at those three points. Every position here is COMPUTED from the
+ * manifest; edit journey-manifest.json, never this file.
  */
 export default function JourneyLine() {
-  const { geometry: g, points, marks, stages, breaks, caption } = manifest;
+  const { horizontal, vertical, stages, marks, breaks, sentiment, caption } = manifest;
 
-  const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
-  const last = points.length - 1;
-  const vbWidth = Number(g.viewBox.split(' ')[2]);
+  /* The three break points carry badges, so they are excluded from the dot list
+     rather than drawn under one. Derived from `marks` so adding a mark cannot leave
+     a dot stranded beneath it. */
+  const badged = new Set(marks.map((m) => m.pointIndex));
 
-  /* Grid tracks from the stage x values: a leading spacer to the first label, then the
-     gap to each next one, then the remainder. Items are placed explicitly from column 2,
-     so a label sits under its point and moving a point in the manifest moves its label. */
-  const tracks = [
-    stages[0].x,
-    ...stages.slice(1).map((s, i) => s.x - stages[i].x),
-    vbWidth - stages[stages.length - 1].x,
-  ]
-    .map((t) => `${((t / vbWidth) * 100).toFixed(3)}%`)
-    .join(' ');
+  const drawing = (comp: Composition, orientation: 'horizontal' | 'vertical') => {
+    const [w, h] = extent(comp.viewBox);
+    return (
+      <div className="journey-line__plot">
+        <svg className="journey-line__svg" viewBox={comp.viewBox} aria-hidden="true">
+          {orientation === 'horizontal' ? (
+            <>
+              {horizontal.bandY.map((y) => (
+                <line key={y} className="journey-line__band" x1={0} y1={y} x2={w} y2={y} />
+              ))}
+              {horizontal.dividerX.map((x) => (
+                <line key={x} className="journey-line__divider" x1={x} y1={40} x2={x} y2={h} />
+              ))}
+            </>
+          ) : (
+            vertical.bandX.map((x) => (
+              <line key={x} className="journey-line__band" x1={x} y1={10} x2={x} y2={h - 10} />
+            ))
+          )}
 
-  const style = {
-    ['--jl-mark' as string]: `${g.fontSize.mark}px`,
-    ['--jl-mark-sm' as string]: `${g.fontSize.markMobile}px`,
-    ['--jl-dot-r' as string]: `${g.dotR}px`,
-    ['--jl-dot-r-sm' as string]: `${g.dotRMobile}px`,
-    ['--jl-dot-r-end' as string]: `${g.endDotR}px`,
-    ['--jl-dot-r-end-sm' as string]: `${g.endDotRMobile}px`,
-    ['--jl-stage-cols' as string]: tracks,
-  } as CSSProperties;
+          <path className="journey-line__path" d={path(comp.points)} />
 
-  const refLabel = <p className="journey-line__ref-label">{manifest.refLabel}</p>;
+          {comp.points.map((p, i) =>
+            badged.has(i) ? null : (
+              <circle key={i} className="journey-line__dot" cx={p.x} cy={p.y} r={comp.dotR} />
+            ),
+          )}
+        </svg>
+
+        {marks.map((m) => {
+          const p = comp.points[m.pointIndex];
+          return (
+            <span
+              key={m.index}
+              className="journey-line__mark"
+              aria-hidden="true"
+              style={{ left: pct(p.x, w), top: pct(p.y, h) }}
+            >
+              {m.index}
+            </span>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const [, vh] = extent(vertical.viewBox);
+  const [hw] = extent(horizontal.viewBox);
 
   return (
-    <figure className="journey-line" style={style}>
-      {manifest.refLabelPlacement === 'above' ? refLabel : null}
+    <figure className="journey-line" role="img" aria-label={manifest.ariaLabel}>
+      {/* Horizontal, from 768. The sentiment labels are a column beside the drawing,
+          one per band, and the stage labels sit under it at their band centres. */}
+      <div className="journey-line__horizontal">
+        <ul className="journey-line__sentiment" aria-hidden="true">
+          {sentiment.map((s) => (
+            <li key={s}>{s}</li>
+          ))}
+        </ul>
+        <div>
+          {drawing(horizontal, 'horizontal')}
+          <p className="journey-line__stages" aria-hidden="true">
+            {stages.map((s, i) => (
+              <span key={s.label} style={{ left: pct(horizontal.stageX[i], hw) }}>
+                {s.label}
+              </span>
+            ))}
+          </p>
+        </div>
+      </div>
 
-      <svg className="journey-line__svg" viewBox={g.viewBox} role="img" aria-label={manifest.ariaLabel}>
-        <line className="journey-line__ref" x1={g.refX1} y1={g.refY} x2={g.refX2} y2={g.refY} />
-        <path className="journey-line__path" d={d} />
-
-        {points.map((p, i) => (
-          <circle
-            key={`dot-${i}`}
-            className={i === last ? 'journey-line__dot journey-line__dot--end' : 'journey-line__dot'}
-            cx={p.x}
-            cy={p.y}
-            /* The attribute is the fallback. CSS `r` overrides it at mobile where it is
-               supported; where it is not, the dot degrades to this radius, never to none. */
-            r={i === last ? g.endDotR : g.dotR}
-          />
-        ))}
-
-        {/* The only text left in the drawing. Two characters, so they fit.
-
-            x/y anchor the numeral to its POINT and the offset rides a CSS transform,
-            rather than being baked into x/y. That is what lets the offset change at the
-            breakpoint: below md the type goes 17 -> 44 units and the dot 4.5 -> 13, and
-            the desktop offset would sit the numeral on top of its own dot. */}
-        {marks.map((m) => (
-          <text
-            key={`mark-${m.index}`}
-            className="journey-line__idx"
-            x={points[m.pointIndex].x}
-            y={points[m.pointIndex].y}
-            style={{
-              ['--jl-mdx' as string]: `${m.dx}px`,
-              ['--jl-mdy' as string]: `${m.dy}px`,
-              ['--jl-mdx-sm' as string]: `${m.dxMobile}px`,
-              ['--jl-mdy-sm' as string]: `${m.dyMobile}px`,
-            } as CSSProperties}
-          >
-            {m.index}
-          </text>
-        ))}
-
-        <line className="journey-line__axis" x1={g.axisX1} y1={g.axisY} x2={g.axisX2} y2={g.axisY} />
-      </svg>
-
-      {manifest.refLabelPlacement === 'below' ? refLabel : null}
-
-      {/* The x axis, in HTML. Aligned to the stage x values from md up; an interpunct
-          run below that, where five aligned columns would be 68px each. */}
-      <ol className="journey-line__stages">
-        {stages.map((s, i) => (
-          <li key={s.label} style={{ gridColumnStart: i + 2 }}>
-            {s.label}
-          </li>
-        ))}
-      </ol>
-
-      {/* The note annotates where the LINE ends, so at md it is placed in the last stage
-          column rather than left where it would read as a note about "Arrive". Below md
-          the row is a run, the grid is off, and it is simply the next line. */}
-      <p className="journey-line__endnote">
-        <span style={{ gridColumnStart: stages.length + 1 }}>{manifest.tailNote}</span>
-      </p>
+      {/* Vertical, below 768. The same three labels head three columns, and each stage
+          label sits at the y of its own first point - computed, never laid out on an
+          even grid, which is what put every label near but not on its stage before. */}
+      <div className="journey-line__vertical">
+        <div className="journey-line__vertical-head" aria-hidden="true">
+          <span />
+          <ul className="journey-line__sentiment-cols">
+            {sentiment.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="journey-line__vertical-body">
+          <ul className="journey-line__stages-down" aria-hidden="true">
+            {stages.map((s) => (
+              <li key={s.label} style={{ top: pct(vertical.points[s.firstPointIndex].y, vh) }}>
+                {s.label}
+              </li>
+            ))}
+          </ul>
+          {drawing(vertical, 'vertical')}
+        </div>
+      </div>
 
       <ol className="journey-line__breaks">
         {breaks.map((b) => (
           <li key={b.index}>
-            <span className="journey-line__breaks-idx">{b.index}</span>
-            <span className="journey-line__breaks-lead">{b.lead}</span> {b.tail}
+            <span className="journey-line__breaks-idx" aria-hidden="true">
+              {b.index}
+            </span>
+            <span>
+              <span className="journey-line__breaks-lead">{b.lead}</span> {b.tail}
+            </span>
           </li>
         ))}
       </ol>

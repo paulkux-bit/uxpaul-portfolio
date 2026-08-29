@@ -4149,18 +4149,7 @@ html.dark .figure-placeholder {
 
 /* Shape ─────────────────────────────────────────────────────────────────── */
 
-.journey-line__axis,
-.tier-chart__axis {
-  stroke: var(--border-default);
-  stroke-width: 1;
-  stroke-dasharray: 2 5;
-}
-
-.journey-line__ref {
-  stroke: var(--border-strong);
-  stroke-width: 1;
-  stroke-dasharray: 1 6;
-}
+axis
 
 /* Quieter and tighter than JourneyLine's: this rule marks a baseline the eye should
    measure against, not a threshold the line crosses. */
@@ -4176,9 +4165,9 @@ html.dark .figure-placeholder {
    established fix here: .fdte-figure and .nuuly-beat-figure already use it. */
 .journey-line__path,
 .tier-chart__line,
-.journey-line__axis,
+.journey-line__band,
+.journey-line__divider,
 .tier-chart__axis,
-.journey-line__ref,
 .tier-chart__ref,
 .journey-line__dot,
 .tier-chart__dot {
@@ -4211,91 +4200,173 @@ html.dark .figure-placeholder {
   fill: var(--text-primary);
 }
 
-.journey-line__dot {
-  r: var(--jl-dot-r);
-}
-
-
-/* The last point, filled, below the reference rule. This is the argument of the whole
-   module: she ends lower than she started. Do not normalise it away. */
-.journey-line__dot--end {
-  fill: var(--text-primary);
-  r: var(--jl-dot-r-end);
-}
-
-/* The only type left in the drawing ─────────────────────────────────────── */
-
-.journey-line__idx {
-  font-size: var(--jl-mark);
-  /* The offset from the anchored point, in user units. It lives here rather than in
-     the x/y attributes so the breakpoint below can swap it: a numeral that clears its
-     dot at 17 units and r 4.5 sits directly on top of it at 44 units and r 13. */
-  transform: translate(var(--jl-mdx), var(--jl-mdy));
-  fill: var(--text-primary);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-}
 
 /* Words, in HTML, at real reading size ──────────────────────────────────── */
 
-.journey-line__ref-label,
-.tier-chart__ref-label,
-.journey-line__stages {
+/* A sentence naming the dotted rule, not a tracked label: it reads as a caption to
+   the drawing rather than as an axis title, so no uppercase and no tracking. */
+.tier-chart__ref-label {
+  margin: var(--spacing-2xs) 0 0;
+  max-width: none;
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  color: var(--text-subtle);
+}
+
+
+/* ── JourneyLine: two compositions ─────────────────────────────────────────────
+   Horizontal from 768, vertical below. Both are in the DOM and CSS picks one, which
+   is right because the choice is a layout question, not a content one. 768 is the
+   system breakpoint.
+
+   The display swap is the ONLY thing inside the queries. Every gap and margin below
+   is declared once, out here, because spacing inside a media query is exactly what
+   lint:space check 4 forbids. */
+.journey-line__horizontal {
+  display: none;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-m);
+}
+
+.journey-line__vertical {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .journey-line__horizontal {
+    display: grid;
+  }
+
+  .journey-line__vertical {
+    display: none;
+  }
+}
+
+/* min-width: 0 on the cell holding a drawing. A grid item's automatic minimum is
+   min-content, so without it the SVG refuses to shrink and blows the track past the
+   band. Same defect as .chart-pair's cells, same fix, twice more here. */
+.journey-line__horizontal > *,
+.journey-line__vertical-body > * {
+  min-width: 0;
+}
+
+/* The positioning context for the badges. They are placed as percentages of the
+   viewBox, so the box they resolve against has to be the drawing's own box and
+   nothing larger — hence a wrapper around exactly the SVG. */
+.journey-line__plot {
+  position: relative;
+}
+
+.journey-line__sentiment,
+.journey-line__sentiment-cols,
+.journey-line__stages,
+.journey-line__stages-down {
   margin: 0;
   padding: 0;
   list-style: none;
   font-size: 0.875rem; /* 14px, the system floor */
-  line-height: 1.4;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted); /* NOT --text-subtle: that is AA-large only, and this is 14px */
+  line-height: 1.3;
 }
 
-.journey-line__ref-label {
+/* The sentiment axis: the louder of the two small-label registers, because it names
+   the axis while the stage labels only name positions along it. Hierarchy rides
+   weight and token, never size, since below 14px is not available to spend. */
+.journey-line__sentiment,
+.journey-line__sentiment-cols {
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
+/* One row per band, aligned to the three the SVG draws. */
+.journey-line__sentiment {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.journey-line__stages,
+.journey-line__stages-down {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* Absolutely positioned from the manifest's stage x. A five-column grid would only
+   coincide with the data by accident, which is how an earlier attempt put every
+   label near but not on its stage. */
+.journey-line__stages {
+  position: relative;
+  height: var(--spacing-l);
+  margin-top: var(--spacing-xs);
+  max-width: none;
+}
+
+.journey-line__stages span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.journey-line__vertical-head,
+.journey-line__vertical-body {
+  display: grid;
+  grid-template-columns: var(--spacing-2xl) 1fr;
+  gap: var(--spacing-s);
+}
+
+.journey-line__vertical-head {
   margin-bottom: var(--spacing-2xs);
 }
 
-.tier-chart__ref-label {
-  margin-top: var(--spacing-2xs);
-  text-transform: none;   /* a sentence, not a tracked label */
-  letter-spacing: normal;
-  color: var(--text-subtle);
+.journey-line__sentiment-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
 }
 
-/* Below md these are a wrapped interpunct run: five aligned columns would be ~68px
-   each at 342px. The interpunct is a ::after, never a text node. */
-.journey-line__stages {
+/* Each stage name at the y of its own first point, computed in the component. */
+.journey-line__stages-down {
+  position: relative;
+  text-align: right;
+}
+
+.journey-line__stages-down li {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+/* The badges, and the matching numerals in the breaks list below. Centred exactly on
+   their own point, with a canvas-coloured ring so the line passes BEHIND rather than
+   through. There is no SVG dot underneath one: the badge IS the marker at those three
+   points.
+
+   1.625rem is 26px and is deliberately NOT a spacing token. It is a component
+   dimension sized to hold a 14px numeral with even optical padding, not a step in the
+   vertical rhythm, and no step on the scale is 26px. The previous badge was 22px
+   around a 12px numeral, which the type floor does not allow. */
+.journey-line__mark,
+.journey-line__breaks-idx {
   display: flex;
-  flex-wrap: wrap;
-  /* NO column gap, deliberately, and this is the load-bearing part. The run's
-     horizontal spacing rides the interpunct's own padding instead, because the grid
-     at md needs column starts to land EXACTLY on the manifest's x values. A container
-     gap survives the switch to grid and pushes every column right of its track by the
-     cumulative gap — measured at 39.9px of drift on the fifth label, which is 5 x 8px.
-     Cancelling it with a zero gap inside the breakpoint is the obvious fix and is the
-     one thing lint:space check 4 forbids, so the gap does not exist to be cancelled.
-     row-gap stays: it only separates wrapped lines, and it is declared out here. */
-  row-gap: var(--spacing-3xs);
-  margin-top: var(--spacing-xs);
-}
-
-.journey-line__stages li:not(:last-child)::after {
-  content: '·';
-  padding: 0 var(--spacing-2xs); /* both sides: this IS the run's spacing */
-  color: var(--text-subtle);
-}
-
-.journey-line__endnote {
-  margin: var(--spacing-2xs) 0 0;
-  /* The prose p rule caps this at the reading measure, which would be right for a
-     paragraph and is wrong for a note that has to span the drawing's columns: at 584px
-     the md grid's last column lands at 39% of the figure instead of 74%. */
-  max-width: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+  color: var(--bg-canvas);
   font-size: 0.875rem; /* 14px, the system floor */
-  line-height: 1.5;
-  color: var(--text-muted);
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.journey-line__mark {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px var(--bg-canvas);
 }
 
 .journey-line__breaks {
@@ -4306,25 +4377,19 @@ html.dark .figure-placeholder {
   padding: 0;
 }
 
+/* Two columns rather than a padding-left plus an absolutely positioned numeral: the
+   badge is a real box now, so a grid track holds it and the text aligns to the track
+   instead of to a guessed inset. */
 .journey-line__breaks li {
-  position: relative;
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-s);
+  align-items: start;
   margin: 0;
-  padding-left: var(--spacing-l); /* the numeral's column */
   max-width: 64ch;
   font-size: 1rem;
   line-height: 1.5;
   color: var(--text-muted);
-}
-
-.journey-line__breaks-idx {
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-size: 0.875rem; /* 14px, the system floor */
-  font-weight: 600;
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
 }
 
 .journey-line__breaks-lead {
@@ -4348,18 +4413,9 @@ html.dark .figure-placeholder {
      values, so a label sits under its point. Items are placed from column 2; column 1
      is the lead-in to the first point. grid-template-columns, grid-column-start and
      max-width are not spacing properties, so nothing here reaches lint:space check 4. */
-  .journey-line__stages {
-    display: grid;
-    grid-template-columns: var(--jl-stage-cols);
-  }
-
   /* :not(:last-child) is repeated here deliberately. Without it this selector is a
      specificity step BELOW the base rule that sets the interpunct, so the override
      loses and the separators keep rendering between the aligned columns. */
-  .journey-line__stages li:not(:last-child)::after {
-    content: none; /* the columns carry the sequence now */
-  }
-
   .journey-line__breaks {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -4368,31 +4424,12 @@ html.dark .figure-placeholder {
     max-width: none;
   }
 
-  /* The endnote rides the same columns as the stage row so it lands under the end of
-     the line. grid-template-columns and grid-column-start only — a margin here would
-     be spacing inside a breakpoint, which lint:space check 4 forbids. */
-  .journey-line__endnote {
-    display: grid;
-    grid-template-columns: var(--jl-stage-cols);
-  }
 }
 
 /* Below md the dots and marks grow: a 4.5-unit dot is 1.5px in a 342px container. The
    direct series labels used to be hidden here too; they no longer exist at any width,
    because the two-across panels put them under the type floor at every breakpoint. */
 @media (max-width: 767px) {
-  .journey-line__idx {
-    font-size: var(--jl-mark-sm);
-    transform: translate(var(--jl-mdx-sm), var(--jl-mdy-sm));
-  }
-
-  .journey-line__dot {
-    r: var(--jl-dot-r-sm);
-  }
-
-  .journey-line__dot--end {
-    r: var(--jl-dot-r-end-sm);
-  }
 
 }
 
