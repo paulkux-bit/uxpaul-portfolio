@@ -1,0 +1,261 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>s01 skim layer + beat 02 — 28 Aug 2026</title>
+
+<!--
+  DATED SNAPSHOT, 28 Aug 2026, against ce3613f.
+
+  *** THIS PAGE'S 390px MEASUREMENTS ARE WRONG. Corrected against the built page
+  the same day, and left here rather than patched, because the error is the point.
+
+  It omits the page gutter. The real .case-study-prose column at 390 is 327px;
+  this page gave its paragraphs the full 390. Paragraphs therefore wrapped one
+  line short of the real page, and two predictions were wrong:
+
+     paragraph 2, option (b)   predicted 3L -> 4L, +31px    actual 4L -> 4L, 0px
+     paragraph 4, option (d)   predicted 4L -> 2L, -61px    actual 4L -> 3L, -30px
+
+  The >=768 numbers reproduce exactly, because above the gutter's influence the
+  660px .case-study-prose max-width governs and this page copies it.
+
+  House rules section 14 again, in a preview built to comply with section 14: the
+  chrome was copied faithfully and the CONTAINER was not. Copying declarations is
+  not the same as reproducing the box they render into. ***
+
+
+  HOUSE RULES §14: every declaration below is COPIED out of app/globals.css with
+  its line number, never authored. Line references are kept HERE on purpose,
+  unlike in product code where a selector citation is correct: this page's whole
+  job is to be checkable against the file as it stood on this date, and a
+  selector reference would not prove the value was copied rather than invented.
+  If a line has moved since, the snapshot is stale and should be re-derived, not
+  patched.
+
+  DEFAULT STATE IS THE RECOMMENDATION, NOT THE SHIPPED PAGE.
+  No query string  ->  p2=b  p4=d  b2=both
+  ?state=current   ->  everything as it ships today, for comparison
+  ?p2=a|b|c        ?p4=current|d|e       ?b2=none|scene|type|both      ?dark=1
+
+  REAL WIDTHS COME FROM LOADING THIS PAGE AT THAT WIDTH. There are no
+  side-by-side columns: that harness failed on this exact module and made three
+  panels silently render desktop rules against a narrow container.
+-->
+
+<style>
+/* ---- tokens, globals.css:313-316, 376-383, 443, 222-226 ---------------- */
+:root{
+  --chroma-unit:0.002;                                    /* :313 */
+  --hue-ground:70;                                        /* :314 */
+  --hue-text:55;                                          /* :316 */
+  --page-max-width:72rem;                                 /* :35  */
+  --bg-canvas:   oklch(0.978 calc(var(--chroma-unit) * 8) calc(var(--hue-ground) + 6));  /* :376 */
+  --bg-surface:  oklch(0.948 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2)); /* :377 */
+  --text-primary:   oklch(0.215 calc(var(--chroma-unit) * 9) var(--hue-text));  /* :381 */
+  --text-secondary: oklch(0.355 calc(var(--chroma-unit) * 10) var(--hue-text)); /* :382 */
+  --text-muted:     oklch(0.485 calc(var(--chroma-unit) * 11) var(--hue-text)); /* :383 */
+  --radius-l:16px;                                        /* :443 */
+  --spacing-xs:0.75rem;                                   /* :222 */
+  --spacing-s:1rem;                                       /* :223 */
+  --spacing-m:1.5rem;                                     /* :224 */
+  --spacing-l:2rem;                                       /* :225 */
+  --spacing-xl:3rem;                                      /* :226 */
+}
+html.dark{                                                /* .dark block, :462 */
+  --hue-ground:55;                                        /* :467 */
+  --hue-text:74;                                          /* :469 */
+  --bg-canvas:   oklch(0.165 calc(var(--chroma-unit) * 6) calc(var(--hue-ground) + 4));  /* :476 */
+  --bg-surface:  oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));  /* :477 */
+  --text-primary:   oklch(0.945 calc(var(--chroma-unit) * 6) var(--hue-text));  /* :481 */
+  --text-secondary: oklch(0.825 calc(var(--chroma-unit) * 7) var(--hue-text));  /* :482 */
+  --text-muted:     oklch(0.705 calc(var(--chroma-unit) * 8) var(--hue-text));  /* :483 */
+}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-canvas);color:var(--text-primary);
+     font-family:ui-sans-serif,system-ui,sans-serif;padding:24px 0}
+b,strong{font-weight:600}                                 /* :609, v3 R4 */
+
+/* ---- .case-study-prose, globals.css:1550 ------------------------------- */
+.case-study-prose{
+  max-width:660px; margin:0 auto; position:relative;
+  font-size:1.125rem; line-height:1.7; color:var(--text-primary);
+}
+:where(.case-study-prose) p{ margin:0 0 var(--spacing-m); max-width:64ch }  /* :1620 */
+
+/* ---- the band, globals.css:1806-1811 ----------------------------------- */
+@media (min-width:1024px){
+  .case-study-prose > .cs-section{
+    width:min(calc(100vw - 4rem), calc(var(--page-max-width) - 4rem));
+    max-width:none; margin-inline:0;
+  }
+}
+.cs-section{ margin:0 0 64px }   /* section rhythm flattened for the snapshot; the real
+                                    --spacing-section clamp is globals.css:241 and is not
+                                    what this page measures */
+
+/* ---- .section-lede, globals.css:1822-1829 ------------------------------ */
+.case-study-prose .section-lede{
+  font-size:clamp(1.375rem, 0.932vw + 0.959rem, 1.625rem);
+  line-height:1.45; font-weight:400; color:var(--text-secondary);
+  max-width:52ch; margin:var(--spacing-m) 0 var(--spacing-s);
+  text-wrap:balance;
+}
+h2{ font-size:clamp(1.875rem, 3vw + 1rem, 3.25rem); line-height:1.1; font-weight:600;
+    margin:0 0 var(--spacing-m); text-wrap:balance }   /* rung 4, globals.css:1815 area */
+
+/* ---- beats, globals.css:2096-2143 -------------------------------------- */
+.friction-beats{ list-style:none; padding:0; margin:var(--spacing-l) 0 0;
+                 display:flex; flex-direction:column; gap:var(--spacing-xl) }   /* :2096 */
+.friction-beat .thread-index{ display:block; margin-bottom:var(--spacing-xs) }  /* :2106 */
+.thread-index{ font-size:clamp(1rem, 0.4vw + 0.85rem, 1.25rem); font-weight:600;
+               letter-spacing:0.04em; color:var(--text-muted);
+               font-variant-numeric:tabular-nums }                              /* :1998 */
+.friction-beat__headline{
+  font-size:clamp(1.625rem, 1.4vw + 1rem, 2rem);        /* :2112 */
+  font-weight:600; line-height:1.15; letter-spacing:0;
+  color:var(--text-primary); margin:0 0 var(--spacing-m); text-wrap:balance;
+}
+.friction-beat__scene{ margin:0; max-width:64ch }        /* :2124 */
+
+/* ---- pull quote, globals.css:2278-2327 --------------------------------- */
+.pull-quote{ margin:var(--spacing-xl) 0; padding:0; border:none }               /* :2278 */
+.friction-beat .pull-quote{ margin:var(--spacing-m) 0 0 }                       /* :2240 */
+.pull-quote p{
+  font-size:clamp(1.75rem, 3vw + 0.8rem, 3.5rem); font-weight:600;
+  line-height:1.2; letter-spacing:-0.015em; margin:0 0 var(--spacing-s);
+  max-width:22ch; color:var(--text-primary); text-wrap:balance;
+}                                                                               /* :2284 */
+.pull-quote--quiet p{ font-size:clamp(1.25rem, 1.5vw + 0.8rem, 1.75rem); max-width:28ch } /* :2319 */
+.pull-quote--quiet p::before,.pull-quote--quiet p::after{ content:none }         /* :2324 */
+.pull-quote cite{ display:block; font-style:normal; font-size:0.875rem;
+                  font-weight:500; letter-spacing:0.02em; color:var(--text-muted) } /* :2310 */
+
+/* ---- figure, globals.css:2145-2178 + the >=1024 grid at :2246 ----------- */
+.oku-figure{ margin:var(--spacing-xs) 0 0; color:var(--text-secondary); max-width:300px }
+html.dark .oku-figure{ color:var(--text-muted) }          /* :2184 */
+.oku-figure svg{ display:block; width:100%; height:auto }
+@media (min-width:1024px){
+  .friction-beat{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,300px);
+                  gap:var(--spacing-l); align-items:start }    /* :2246 */
+  .friction-beat .oku-figure{ margin:0 }
+}
+.mt-14{ margin-top:3.5rem !important }   /* the literal `mt-14!` in the MDX, three studies */
+
+/* ---- OPTION SWITCHING. Scaffolding only, scoped so it cannot reach in ---- */
+[data-opt]{ display:none }
+body[data-p2="a"] [data-opt="p2-a"],
+body[data-p2="b"] [data-opt="p2-b"],
+body[data-p2="c"] [data-opt="p2-c"],
+body[data-p2="current"] [data-opt="p2-current"],
+body[data-p4="current"] [data-opt="p4-current"],
+body[data-p4="d"] [data-opt="p4-d"],
+body[data-p4="e"] [data-opt="p4-e"],
+body[data-b2scene="full"] [data-opt="scene-full"],
+body[data-b2scene="trim"] [data-opt="scene-trim"]{ display:block }
+
+/* the type remedy: quote one step down. Applied only when b2 includes `type`. */
+body[data-b2type="down"] .friction-beat .pull-quote--quiet p{
+  font-size:clamp(1.125rem, 1.1vw + 0.72rem, 1.5rem);
+}
+
+.slot{ border:1px dashed var(--text-muted); border-radius:var(--radius-l);
+       padding:var(--spacing-m); color:var(--text-muted); font-size:1rem;
+       line-height:1.5; margin:0 0 var(--spacing-m) }
+.slot b{ color:var(--text-primary) }
+#bar{ position:fixed; right:8px; bottom:8px; z-index:99; font:12px ui-monospace,monospace;
+      background:var(--bg-surface); color:var(--text-muted); padding:6px 10px;
+      border-radius:8px; opacity:.85 }
+</style>
+
+<div class="case-study-prose">
+
+  <section class="cs-section cs-section--problem" id="s01">
+    <h2>Speed was the wrong thing to measure.</h2>
+
+    <p class="section-lede">URBN sells clothes online across Urban Outfitters, Anthropologie and Free People. In 2019, that business was growing and missing its targets.</p>
+
+    <p id="p1"><strong>A delivery promise is the date a shopper sees at checkout.</strong> We were asked to get inventory and location data in front of shoppers sooner.</p>
+
+    <!-- PARAGRAPH 2 — four states. No new words in a, b or current. -->
+    <p data-opt="p2-current" id="p2"><strong>Leadership thought this was an inventory problem.</strong> I thought it was speed, and that we had to win a two-day race against Prime.</p>
+    <p data-opt="p2-a" id="p2">Leadership thought this was an inventory problem. <strong>I thought it was speed, and that we had to win a two-day race against Prime.</strong></p>
+    <p data-opt="p2-b" id="p2"><strong>I thought it was speed, and that we had to win a two-day race against Prime.</strong> Leadership thought this was an inventory problem.</p>
+    <div data-opt="p2-c" class="slot" id="p2">
+      <b>SLOT — not drafted, deliberately.</b><br>
+      A new bold lead-in Paul writes. Requirement: it must put <b>Paul's own error before anyone else's</b>,
+      keep the house bold-lead-then-sentence pattern, and stay within the paragraph's current rendered
+      line count at each width (measured: see report). The rest of the paragraph is unchanged.
+      <br><br>No copy is proposed here. AI-voiced prose is detectable and this is the paragraph a hiring
+      manager reads first.
+    </div>
+
+    <div id="tp" style="margin:var(--spacing-l) 0;padding:var(--spacing-m);background:var(--bg-surface);border-radius:var(--radius-l);font-size:.875rem;color:var(--text-muted);letter-spacing:.09em;text-transform:uppercase">
+      TestimonyPair — out of scope, present so the paragraphs either side sit in the right order
+    </div>
+
+    <!-- PARAGRAPH 4 — three states -->
+    <p data-opt="p4-current" id="p4"><strong>But shoppers didn't care about how fast we were.</strong> If we hit the date, they barely noticed. If we missed it, they knew exactly what it cost them.</p>
+    <p data-opt="p4-d" id="p4"><strong>If we hit the date, they barely noticed.</strong> If we missed it, they knew exactly what it cost them.</p>
+    <p data-opt="p4-e" id="p4"><strong>If we hit the date, they barely noticed. If we missed it, they knew exactly what it cost them.</strong></p>
+  </section>
+
+  <section class="cs-section cs-section--frictions" id="s02">
+    <h2>Her order broke in three places.</h2>
+    <p class="section-lede">A researcher ran the interviews. I worked through the analysis with her, against order data and customer service tickets.</p>
+
+    <ol class="friction-beats">
+      <li class="friction-beat">
+        <div class="friction-beat__text">
+          <span class="thread-index">01</span>
+          <h3 class="friction-beat__headline">She could not see the date</h3>
+          <p class="friction-beat__scene">Cost and timing appeared at checkout after she had already chosen everything. Until then, she was guessing.</p>
+        </div>
+        <figure class="oku-figure"><svg viewBox="0 0 2750 1536" aria-hidden="true"><rect width="2750" height="1536" fill="none" stroke="currentColor" stroke-width="8" opacity=".25"/><text x="1375" y="800" text-anchor="middle" font-size="150" fill="currentColor" opacity=".4">figure</text></svg></figure>
+      </li>
+
+      <li class="friction-beat" id="beat02">
+        <div class="friction-beat__text">
+          <span class="thread-index">02</span>
+          <h3 class="friction-beat__headline">She paid for something we did not have</h3>
+          <!-- SCENE — full vs trimmed. Trim is DELETION of the final clause. -->
+          <p class="friction-beat__scene" data-opt="scene-full" id="scene02">Inventory updated slowly. The out-of-stock message landed on order submission, or as a cancellation days after she had been charged.</p>
+          <p class="friction-beat__scene" data-opt="scene-trim" id="scene02">Inventory updated slowly. The out-of-stock message landed on order submission.</p>
+          <!-- QUOTE — verbatim, provenance-settled. Straight apostrophe in wasn't is the artifact's. -->
+          <blockquote class="pull-quote pull-quote--quiet">
+            <p id="q02">“And, even worse, ordering, paying, and then 3-4 days later getting the email that the item wasn't actually available anymore.”</p>
+            <cite>Anthropologie customer</cite>
+          </blockquote>
+        </div>
+        <figure class="oku-figure"><svg viewBox="0 0 2750 1536" aria-hidden="true"><rect width="2750" height="1536" fill="none" stroke="currentColor" stroke-width="8" opacity=".25"/><text x="1375" y="800" text-anchor="middle" font-size="150" fill="currentColor" opacity=".4">figure</text></svg></figure>
+      </li>
+
+      <li class="friction-beat">
+        <div class="friction-beat__text">
+          <span class="thread-index">03</span>
+          <h3 class="friction-beat__headline">One order arrived as three</h3>
+          <p class="friction-beat__scene">About half of multi-item orders split across shipments, most of them out of stores, and no rules engine decided which.</p>
+        </div>
+        <figure class="oku-figure"><svg viewBox="0 0 2750 1536" aria-hidden="true"><rect width="2750" height="1536" fill="none" stroke="currentColor" stroke-width="8" opacity=".25"/><text x="1375" y="800" text-anchor="middle" font-size="150" fill="currentColor" opacity=".4">figure</text></svg></figure>
+      </li>
+    </ol>
+
+    <p class="mt-14" id="closer"><strong>Marketing made the promise, the warehouse tried to keep it, and customer service cleaned up the mess.</strong></p>
+  </section>
+</div>
+
+<div id="bar"></div>
+<script>
+const q = new URLSearchParams(location.search);
+const current = q.get('state') === 'current';
+const b2 = q.get('b2') || (current ? 'none' : 'both');
+const st = {
+  p2: q.get('p2') || (current ? 'current' : 'b'),
+  p4: q.get('p4') || (current ? 'current' : 'd'),
+  b2scene: (b2 === 'scene' || b2 === 'both') ? 'trim' : 'full',
+  b2type:  (b2 === 'type'  || b2 === 'both') ? 'down' : 'as-is',
+};
+for (const k in st) document.body.dataset[k] = st[k];
+if (q.get('dark')) document.documentElement.classList.add('dark');
+document.getElementById('bar').textContent =
+  `p2=${st.p2} p4=${st.p4} scene=${st.b2scene} quote=${st.b2type} · ${innerWidth}px${q.get('dark')?' dark':''}`;
+</script>
