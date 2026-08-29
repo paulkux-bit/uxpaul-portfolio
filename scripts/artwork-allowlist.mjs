@@ -51,8 +51,8 @@ export const ARTWORK_FILES = [
     reason: 'Delivery Promise journey line — one shopper\'s order drawn as a line, ported from the approved Track A prototype; shape in a 1000x350 viewBox, not an icon',
   },
   {
-    path: 'components/case-studies/urbn-delivery-promise/InversionChart.tsx',
-    reason: 'Delivery Promise inversion chart — two plotted series in the same viewBox and line vocabulary as JourneyLine; drawn data, not an icon',
+    path: 'components/case-studies/urbn-delivery-promise/TierChart.tsx',
+    reason: 'Delivery Promise tier chart — one plotted series in the same line vocabulary as JourneyLine; drawn data, not an icon. Replaced InversionChart on 29 Aug, which plotted an aggregate against a series it contained. NodeChart, the other half of that replacement, is deliberately NOT here: it has no SVG at all, because three labelled rows with proportional widths is a CSS grid and a drawing would have put its labels under the type floor.',
   },
 ];
 

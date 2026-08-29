@@ -75,7 +75,8 @@ nda: false
    ───────────────────────────────────────────────────────────── */}
 
 import JourneyLine from '@/components/case-studies/urbn-delivery-promise/JourneyLine';
-import InversionChart from '@/components/case-studies/urbn-delivery-promise/InversionChart';
+import TierChart from '@/components/case-studies/urbn-delivery-promise/TierChart';
+import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart';
 import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/PromiseSequence';
 import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
@@ -284,295 +285,132 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <section className="cs-section">
 
-{/* SLOT 1 - THE H2. FILLED 29 Aug WITH PAUL'S SENTENCE, VERBATIM.
-    Do not reword it. The previous heading was "We failed hardest where we
-    charged the most", which stated the tier claim and stopped there, so a skim
-    reader never arrived at what the section exists to say. This one names the
-    loss rather than the miss, which is the section's actual subject.
+{/* THE SECTION'S JOB is Paul building an evidence case and taking it to executives:
+    evidence, then conversion, then the room. Every sentence below is Paul's and is
+    reproduced verbatim. Do not reword them.
 
-    TRUST NOW LANDS TWICE IN THE SKIM LAYER, here and in SLOT 3, and that is the
-    intended shape rather than a duplication to clean up: the heading opens the
-    claim and the close discharges it. The earlier note here said trust had to
-    land in one place or the other; it landed in both.
+    WHOSE SECTION THIS IS: THE BUSINESS AND THE BRANDS, NOT THE SHOPPER. Section 02
+    was the shopper's section and this one is not, which settles the "person" half of
+    house rule 3 - the person is the company. The heading's "we" is therefore correct
+    rather than a defect, and an earlier note that called out the absence of a shopper
+    was reading the wrong section's brief.
 
-    WHOSE SECTION THIS IS: THE BUSINESS AND THE BRANDS, NOT THE SHOPPER. Paul's
-    ruling. Section 02 was the shopper's section and this one is not, which
-    settles the "person" half of house rule 3 - the person is the company. The
-    current line's "we" is therefore not the defect it looks like, and an earlier
-    note here that called out the absence of a shopper was reading the wrong
-    section's brief. Do not fix this heading by putting a customer in it.
-
-    DO NOT DESCRIBE METHOD IN THE HEADING. No how-might-we, no "connecting the
-    evidence", no naming of the work. Paul wants a hiring manager to come away
-    seeing narrative-building as the skill, and a heading that announces it is a
-    claim about himself rather than a demonstration; the skill is proved by the
-    section working, not by being labelled. This is a constraint on the slot, not
-    a preference. */}
+    DO NOT DESCRIBE METHOD IN THE HEADING. No how-might-we, no naming of the work.
+    A heading that announces narrative-building is a claim about oneself; the skill is
+    proved by the section working. */}
 ## We were losing trust where we charged the most.
 
-<p className="section-lede">Standard shipping was dependable.</p>
+<p className="section-lede">In order to create a narrative for leadership to buy in, I dug into various data threads.</p>
 
-{/* RESOLVED 29 Aug, BY PAUL, AND THIS RECORDS WHAT WAS DECIDED SO THE SENTENCE IS
-    NOT HELPFULLY RESTORED. The tier inversion used to be stated three times before
-    the chart proved it: the H2, this lede's second sentence, and move A below. The
-    lede's second sentence is the one that went.
+**Standard shipping was dependable.** The premium shipping method bought a worse chance of arriving on time. Orders out of stores were the worst of all.
 
-    WHAT THE LEDE STILL HAS TO DO, and the reason it was trimmed rather than cut.
-    The chart's reference rule is labelled WHERE STANDARD SAT, so the prose has to
-    establish that baseline somewhere or the rule labels a fact the reader was never
-    given. "Standard shipping was dependable" is that baseline and nothing else in
-    the section carries it. Do not delete this lede; do not put the inversion back
-    into it. The panels state the inversion now, which is what freed it. */}
-{/* A'S RENO TAIL WAS TRIMMED 29 Aug and should not come back. It used to end
-    "and one fulfillment center was proof the rest could be fixed", which panel 2 of
-    the chart below now plots directly. It also carried the module's one real
-    precision exposure in prose: "the rest" reads as the stores, and Reno is a
-    FULFILMENT CENTRE, so it is proof the NETWORK could hit dates and not proof the
-    STORES could. See inversion-manifest.json's $precisionDoc. The panel and its
-    caption carry the fact with the distinction attached; a subordinate clause could
-    not. */}
-**The premium bought a worse chance of arriving on time.** Orders out of stores were the worst of all.
+{/* THE CHART PAIR, REBUILT 29 Aug. It replaced <InversionChart>, which plotted All
+    nodes against Store network as though they were peers. THEY ARE NOT: All nodes is
+    the aggregate that CONTAINS the store network, along with the Gap and Reno
+    fulfilment centres, and the source table's own totals prove it. Two lines, one
+    inside the other, with nothing saying so. No annotation fixes that, which is why
+    it was retired rather than relabelled. See inversion-manifest.json's $historyDoc.
 
-<InversionChart />
+    The two charts split the job the one chart was failing at. TierChart holds the
+    network constant and varies the tier; NodeChart holds the tier constant and varies
+    the node. Neither compares a thing to the set that contains it.
 
-{/* SLOT 2 - THE CROSS-LINK. FILLED 29 Aug WITH PAUL'S SENTENCES, VERBATIM.
-    Do not reword them.
+    PRECISION, AND IT IS THE ONE THING HERE A READER CANNOT CHECK: Reno and Gap are
+    FULFILMENT CENTRES, the store network is STORES, so Reno's 11 percent is proof the
+    NETWORK could hit the date and not proof STORES could. NodeChart's caption gloss
+    carries that clause and it is not a placeholder. */}
+<div className="chart-pair">
+  <TierChart />
+  <NodeChart />
+</div>
 
-    THE PREVIOUS BRIEF FOR THIS SLOT WAS FACTUALLY WRONG and is replaced. It
-    asked for a sentence showing "Paul going to the warehouse level rather than
-    stopping at the tier". That is not what happened, and a sentence written to
-    that brief would be false. What happened, from Paul:
-
-    His own direction was to connect the evidence to business moments and tell a
-    compelling story. A DATA ANALYTICS SME PROPOSED GOING DEEPER ON THE RATES,
-    and discovery narrowed it to fulfilment nodes. OTHER PEOPLE DID THAT
-    ANALYSIS. The number came back and it was compelling. Paul then went to the
-    STORE OPERATIONS LEADS and asked what they already knew, and they had a
-    commissioned research report of their own: store layout, inventory gaps,
-    staffing efficiency. He CROSS-LINKED their research to the number, so the gap
-    had an explanation and not only a size. Store operations knew this in silos;
-    the digital platform team did not. Paul read that as an opening to influence
-    the operations side of the business through the platform.
-
-    SO THE SLOT'S REQUIREMENT IS: SHOW THE CROSS-LINK. The sentence must credit
-    the analysis to the people who did it, and it must land that the explanation
-    already existed inside another part of the company with nobody joining it to
-    the number. The move being demonstrated is going and asking, then connecting
-    two things neither owner had connected.
-
-    THE SENTENCE MUST NOT CLAIM PAUL FOUND THE NODE GAP HIMSELF. He did not. It
-    is the one way this slot can be got wrong that a reader could not detect and
-    a reference check could. Stated as a rule because the shape of the paragraph
-    invites it.
-
-    BOTH OF THIS COMMENT'S PENDING ITEMS DISSOLVED WHEN THE SLOT WAS FILLED, and
-    they are recorded as void rather than deleted so nobody executes them later
-    from a stale copy. Both were written on the assumption that SLOT 2 would be
-    the Reno sentence. It is not. It is about why STORES failed, and Reno is a
-    different fact.
-
-    VOID 1 WAS ITSELF OVERTAKEN ON 29 Aug, and the correction is left visible
-    rather than tidied away, because this note has now been wrong in both
-    directions. It first said A's tail would become redundant when this slot
-    landed; that was wrong, because this slot carries the store-operations report
-    and not Reno. It then said the tail should therefore be left alone; that is
-    now wrong too, for a different reason. The tail went when Reno became panel 2
-    of the chart, which plots the fact and attaches the fulfilment-centre-versus-
-    stores distinction the clause could not carry. What stands from the original
-    note is only this: THIS SLOT IS NOT ABOUT RENO. It is about why stores
-    failed.
-
-    VOID 2: nothing is owed to inversion-manifest.json. The note said
-    $exclusionsDoc would need a sentence retiring its caption placement, and that
-    the caption would drop its Reno line. Neither is owed. This slot does not
-    carry Reno, so the caption is not repeating anything and $exclusionsDoc
-    remains true exactly as written. Do not amend the manifest. */}
-
-**I asked store operations what happens during a shift.** Why weren't associates getting orders out on time? They already had a report, and it answered why a large chunk of orders were missing their dates.
-
+**I asked store operations what happens during a shift.** Why weren't associates getting orders out on time? They already had a report, and it answered why a large chunk of orders were missing their dates: chaotic shifts, shipping SLAs nobody could hit, and not enough people rostered to send online orders out.
 
 <blockquote className="pull-quote pull-quote--quiet">
   <p>“I have to be extremely desperate to pay for expedited.”</p>
   <cite>Urban Outfitters customer, primary research</cite>
 </blockquote>
 
-{/* SLOT 3 - THE CLOSE. FILLED 29 Aug WITH PAUL'S SENTENCES, VERBATIM, plus the
-    quote below it. Do not reword either. This is the sentence the section exists
-    to reach: trust is expensive and hard to recover, and the cost compounds while
-    nothing is done about it.
-
-    THE TRUST FRAMING IS NARRATION AND NEVER A QUOTATION. "A delivery promise is
-    not a logistics feature, it is a trust system" is Paul's narration of how the
-    organisation's framing shifted. It is NOT a 2019 quotation from anyone and was
-    never said in those words. Never set it in quotation marks and never attribute
-    it. Provenance is settled and lives in project knowledge, which is deliberately
-    outside this public repository - which is why the rule is written out here
-    rather than pointed at, since a pointer would be a dangling reference for
-    anyone holding only the repo.
-
-    PAUL'S OWN FRAMING, FOR THE CLOSE: setting clear expectations is a business
-    principle that drives reputation, it is worth real investment in retail, and
-    it is not confined to the point of sale or the browse journey.
-
-    B IS THE QUOTE THAT SHIPPED, below. Its provenance is in the comment beside
-    it. A SECOND QUOTE FROM THE SAME PAGE IS STILL AVAILABLE AND WAS NOT USED:
-
-      A: "Every time it happens I swear I'll never shop here again...one day I'll
-         follow through!"
-
-    A IS THE SAME SPEECH BUBBLE AS BEAT 02 and that is why it was left. Section 02
-    already uses that bubble's middle; A is its closing line, so shipping it would
-    put one customer in section 02 and again in section 03. That can be a
-    deliberate callback - she describes the failure, then decides to leave - or it
-    can read as thin sourcing, one voice carrying two sections. It stays available
-    on the condition that the choice is made knowingly. B was a different bubble
-    and carried no such cost, which is why it went first.
-
-    A CARRIES APOSTROPHES AND B DID NOT. Before A or any other bubble on that page
-    is set, its apostrophe forms have to be read off the PDF at 8x. The shipped
-    version of an earlier quote mixed straight and curly apostrophes in one
-    sentence, which is the defect this rule exists to stop repeating.
-
-    THE COST EVIDENCE URBN ALREADY HAD, all available and all usable: shipping
-    errors and miscues were a top reason customers called the contact centre;
-    returns were costly; review volume was high.
-
-    THE 69% BAYMARD FIGURE IS NOT TO BE USED. It was considered and dropped, and
-    the reasoning should not have to be rediscovered: it was the only number in
-    this section not produced by Paul's own work, and ending on it read as needing
-    a third party to land his own point.
-
-    A SUBJECT SHIFT TO DECIDE. The p12 quotes sit under out-of-stock, not under
-    missed dates, and this section's case is tiers and dates. Closing on
-    out-of-stock damage is defensible, because the crescendo is trust rather than
-    any one break - but it is a choice, and it should be made rather than fallen
-    into.
-
-    THE TRANSITION THIS NOTE USED TO DESCRIBE IS GONE, 29 Aug. It warned that move
-    C, the four percent who paid extra, sat awkwardly against JourneyLine below,
-    which is Angela, whose stated premise on deck p14 is that she does not want to
-    pay for shipping. Move C was deleted in the same pass that made the chart two
-    panels, so the collision no longer exists. The four percent survives as the
-    annotation on panel 1. Angela is still the figure at the close, and the ending
-    paragraph now stands between them.
-
-    ONE MORE PIECE OF MATERIAL THE CLOSE MAY DRAW ON: the figure below is what
-    moved the room, not only what summarises the section. The reasoning is set out
-    in the JourneyLine placement comment, where the position is defended, and is
-    deliberately not repeated here. */}
-
-{/* THREE PARAGRAPHS WERE DELETED HERE AND NONE SHOULD COME BACK. Two on 28 Aug,
-    one on 29 Aug.
-
-    "People had already written this down in public." plus its App Store
-    clustering sentences. It was a THIRD piece of evidence for the same point the
-    promoted bold lead above now makes, and the "extremely desperate" quote
-    already does that job in the shopper's own words. Three evidences for one
-    claim is why this section read as accumulation rather than as argument.
-
-    "Three sources had already ruled out speed... None of them pointed at money
-    either. They pointed at the date." This is SECTION 01'S CONCLUSION, restated
-    400 words later. Section 01 now reaches it through the TestimonyPair quotes
-    and its own closing paragraph; repeating it here spent the section's ending on
-    a finding the reader already had. NOTE: section 01's own deletion record cited
-    this paragraph as the reason a 26 Aug cut was safe. That clause was corrected
-    in the same commit that removed this one, because a comment a commit is about
-    to falsify gets rewritten inside that commit rather than filed.
-
-    "The shoppers who needed the date most were the ones we failed most often."
-    plus its rush-shipping sentences, cut 29 Aug. It was the section's one real
-    duplication of its own chart: the 45 percent is plotted and is in the tier
-    values list, and the four percent moved to panel 1's annotation, where it now
-    sits under the column it is about. The "extremely desperate" quote directly
-    below it already carried the human half in a customer's own words, which is the
-    half a paragraph of percentages could not. Roughly 35 words out.
-
-    THE MANIFEST NOTE THAT USED TO CLOSE THIS BLOCK HAS BEEN OVERTAKEN TWICE and
-    the history is kept because it is the clearest example in this file of why
-    these notes get rewritten rather than filed. First it pinned an obligation:
-    when SLOT 2 landed, $exclusionsDoc would need a sentence retiring its caption
-    placement for Reno. Then it declared that obligation void, because SLOT 2 turned
-    out to be the store-operations report and not Reno, and it ended "Do not amend
-    the manifest." That instruction is now wrong. Reno became PANEL 2 of the chart
-    on 29 Aug, so $exclusionsDoc was amended after all - not because SLOT 2 carried
-    Reno, but because a two-across slot came into existence and made the caption the
-    weakest available placement for it. The amendment is written into
-    inversion-manifest.json with that reasoning in it. */}
-
 **Miss the date and you lose trust.** Customers remember the failure, and the longer we waited the harder it would be to change.
 
-{/* Deck p12, a speech bubble labelled "-AN Customer". NOT AN APP STORE REVIEW:
-    the boxed items lower on that page, the ones carrying usernames and dates, are
-    the reviews. This is not one of those. Channel unknown, so the cite names the
-    brand and not the channel, exactly as beat 02's does.
+{/* Deck p12, a speech bubble labelled "-AN Customer". NOT AN APP STORE REVIEW: the
+    boxed items lower on that page, the ones carrying usernames and dates, are the
+    reviews. Channel unknown, so the cite names the brand and not the channel, exactly
+    as section 02's does.
 
-    NO TRANSCRIPTION HAZARD IN THIS ONE. The string carries no apostrophes and no
-    special punctuation, so there was nothing to get wrong. That is a property of
-    this sentence and not of the page: its sibling bubbles do carry apostrophes
-    whose form is not established, and each has to be read off the PDF at 8x
-    before it is used. See SLOT 3's comment above.
+    NO ELLIPSIS. This is the closing sentence of its bubble and runs to the end, so
+    nothing is skipped and there is nothing to mark.
 
-    NO ELLIPSIS. This is the closing sentence of its bubble and runs to the end,
-    so nothing is skipped and there is nothing to mark. Same treatment as beat
-    02's quote. */}
+    A SIBLING BUBBLE ON THE SAME PAGE IS STILL UNUSED and carries a hazard worth
+    recording: "Every time it happens I swear I'll never shop here again...one day
+    I'll follow through!" is the SAME bubble section 02 already quotes the middle of,
+    so shipping it would put one customer in two sections. It also carries apostrophes
+    whose form has to be read off the PDF at 8x before it is set. */}
 <blockquote className="pull-quote pull-quote--quiet">
   <p>“I have really reduced my shopping on this site because of this.”</p>
   <cite>Anthropologie customer</cite>
 </blockquote>
 
-{/* THE ENDING, 29 Aug. PAUL'S MATERIAL, NOT YET PAUL'S WORDS - same status as the
-    slot drafts above and the manifest's caption strings. Written from his own account
-    of the section: "Data converted to a journey map with real user frustration moments
-    illustrated the horror story to the execs. My role was building the narrative and
-    presenting to execs." Rewrite it in his voice; do not treat the phrasing as settled.
+{/* PAUL'S MATERIAL, NOT YET PAUL'S FINAL WORDS. From his own account: "Data converted
+    to a journey map with real user frustration moments illustrated the horror story to
+    the execs. My role was building the narrative and presenting to execs."
 
-    IT EXISTS BECAUSE THE SECTION'S JOB WAS THE ONE THING IT DID NOT SHOW. The section
-    had evidence and a conversion and no room: charts, then a journey map, and nobody
-    doing anything with them. The three moves are evidence, conversion, the room, and
-    this is the third.
-
-    CREDIT HONESTY, AND IT IS A HARD CONSTRAINT RATHER THAN A STYLE NOTE. The narrative
-    and the presentation are Paul's. THE NODE-LEVEL ANALYSIS WAS NOT. A data analytics
-    SME proposed going deeper on the rates and that team did the work; Paul's words are
-    "Lot of smart people did the work alongside me." Nothing in this paragraph may claim
-    the analysis, which is why it begins at turning numbers into a journey rather than
-    at producing them. SLOT 2 above carries the same prohibition for the same reason.
-    A reader cannot detect a breach here and a reference check can. */}
+    CREDIT HONESTY, A HARD CONSTRAINT RATHER THAN A STYLE NOTE. The narrative and the
+    presentation are Paul's. THE NODE-LEVEL ANALYSIS WAS NOT: a data analytics SME
+    proposed going deeper on the rates and that team did the work. Paul's words are
+    "Lot of smart people did the work alongside me." Nothing here may claim the
+    analysis, which is why it begins at turning numbers into a journey rather than at
+    producing them. A reader cannot detect a breach and a reference check can. */}
 **I turned the numbers into a journey, with the moments customers got angry marked on it.** That was the version leadership could see. My role through it was building the narrative and presenting it to executives.
 
-{/* Paul's own 2019 journey map, redrawn as a line. It is the evidence for section
-    02's three beats, and it does the one thing they cannot: the beats are three
-    separate breaks, and only a line shows the TRAJECTORY through them. She ends below
-    where she started, and the argument is that shape.
+{/* FIVE THINGS ARE GONE FROM THIS SECTION AND NONE SHOULD COME BACK.
 
-    This replaced a <BentoBand> of the original deck slide on 23 Aug. The raster had
+    DELETED 28 Aug. "People had already written this down in public." plus its App
+    Store clustering sentences - a third piece of evidence for a point the
+    "extremely desperate" quote already made in a shopper's own words. And "Three
+    sources had already ruled out speed... They pointed at the date." - section 01's
+    conclusion, restated 400 words later.
+
+    DELETED 29 Aug. "The shoppers who needed the date most were the ones we failed
+    most often." plus its rush-shipping sentences. Its content is in the charts now:
+    the 45 percent is a bar and the 4 percent was a rate the charts state better. And
+    the lede's old second sentence, "The faster a shopper paid to go, the more likely
+    we were to miss", which Paul's new lede replaces.
+
+    NEVER USED, AND DELIBERATELY. Two sentences Paul wrote that a later pass must not
+    "restore" on the grounds that they exist: "What I found was interesting", which
+    promises a payoff the charts deliver two lines later, and "So now when this was
+    identified - I learned that trust was at stake", which is a run-up to the move
+    that already says it.
+
+    THE MANIFEST NOTE THAT USED TO SIT HERE HAS BEEN OVERTAKEN THREE TIMES and the
+    history is kept, because it is this file's clearest case for why these get
+    rewritten in-commit rather than filed. It first pinned an obligation on
+    $exclusionsDoc; then declared it void and said "Do not amend the manifest"; then
+    the manifest was amended anyway when Reno became a chart panel. All of it is moot
+    now: <InversionChart> and its panels no longer exist, and the manifest was
+    rewritten around TierChart and NodeChart. */}
+{/* Paul's own 2019 journey map, redrawn as a line. Caption and gloss live in
+    journey-manifest.json with the rest of the content.
+
+    THIS COMMENT WAS REWRITTEN 29 Aug BECAUSE THE PASS DELETED WHAT IT USED TO SAY.
+    Its previous version defended the figure's position against a house-rules section
+    8 adjacency risk - two line drawings, InversionChart and JourneyLine, with no
+    prose between them. That risk no longer exists in that form: InversionChart is
+    gone, and the pair that replaced it is separated from this figure by three
+    paragraphs and two quotes.
+
+    WHAT SURVIVES IS THE ARGUMENT FOR ITS POSITION, which is stronger than the
+    adjacency point ever was. Paul recreated the customer reviews as journey-map
+    visualisations, and that recreation is what moved leadership to treat this as a
+    capability theme. So the figure at the close is not only the summary of what the
+    section has argued; it is the artifact that did the work, which is why it sits
+    directly under the paragraph describing him doing it.
+
+    A <BentoBand> of the original deck slide stood here until 23 Aug. The raster had
     two open items - five accent colours on an accent-free site, and 2048px against a
-    2176px band floor, DPR 1.88 - and redrawing it monochrome resolved both at once.
-    journey-angela.png was the old plan and will never exist.
-
-    Caption and gloss live in journey-manifest.json with the rest of the content, and
-    NEITHER THE CONTENT NOR THE COMPONENT CHANGED when this moved. Only the position.
-
-    ITS JOB CHANGED WITH ITS POSITION, WHICH IS WHY THE MOVE IS NOT COSMETIC. At the
-    top of this section, straight after section 02, it restated three breaks the reader
-    had just read - three beats followed immediately by the same three as a line. Here,
-    after the tier claim, the warehouse and the human cost, it summarises rather than
-    repeats: the reader arrives at the trajectory having been given the reasons for it.
-
-    THE ADJACENCY IS RESOLVED BY CONSTRUCTION, NOT PATCHED. The previous comment
-    recorded an open house-rules section 8 risk - InversionChart and JourneyLine as two
-    line drawings with no prose between them. They are now separated by a bold lead, a
-    paragraph, a pull quote and the close. The position is no longer provisional.
-
-    A SECOND ARGUMENT FOR THE POSITION, INDEPENDENT OF THE SUMMATION REASONING
-    ABOVE, and the stronger of the two. Paul recreated the customer reviews as
-    journey-map visualisations, and that recreation is what moved leadership to
-    treat this as a capability theme. So the figure at the close is not only the
-    summary of what the section has just argued; it is the artifact that did the
-    work. The two arguments are independent, and this one survives if the
-    summation reasoning is ever revisited. It is recorded here, beside the
-    position it defends, because that is where a reader deciding whether the
-    position is still right will be standing. */}
+    2176px band floor - and redrawing it monochrome resolved both. journey-angela.png
+    was the old plan and will never exist. */}
 <JourneyLine />
 
 </section>

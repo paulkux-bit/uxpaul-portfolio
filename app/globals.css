@@ -389,6 +389,14 @@
   --border-subtle:          oklch(0.905 calc(var(--chroma-unit) * 15) calc(var(--hue-ground) - 4));
   --border-default:         oklch(0.855 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 10));
   --border-strong:          oklch(0.760 calc(var(--chroma-unit) * 20) calc(var(--hue-ground) - 15));
+
+  /* Quiet fill for NodeChart's bars. AUTHORED AS A TOKEN, not mixed at the point of
+     use: a color-mix that produces a named token in the theme layer is legitimate,
+     while one on a `color:` at the point of use is a weight-fake. It is derived from
+     --text-primary rather than reaching for --border-strong, which was the first
+     attempt and rendered as tan bars on a colourless site. Mixing the text colour
+     into the canvas keeps the bar in the monochrome family in both modes. */
+  --fill-quiet:             color-mix(in oklch, var(--text-primary) 26%, var(--bg-canvas));
   /* Non-text contrast carrier for underlines and interactive edges.
      --border-default (0.360 chroma-light) sits under 3:1 against the cream
      canvas, so it cannot legally carry an affordance on its own. */
@@ -488,6 +496,10 @@
   --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
   --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
   --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
+  /* Dark needs more of the text colour to read at the same weight against a dark
+     canvas: 26% of a near-white into espresso is fainter than 26% of near-black into
+     cream. Tuned per mode, like every other pair here. */
+  --fill-quiet:             color-mix(in oklch, var(--text-primary) 32%, var(--bg-canvas));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
   --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
@@ -4115,18 +4127,20 @@ html.dark .figure-placeholder {
    "POST PURCHASE" at a legible 32 units is ~250 units wide and five of them want
    ~1,250 units in a 1,000-unit box. Words structurally do not fit a shared
    coordinate space. What is left in the SVG is the path, the dots, the rules, the
-   two-character numerals, and (>=768 only) the two direct series labels.
+   two-character numerals. NOTHING ELSE: no text in any SVG in this study, at any
+   width. The old carve-out for two direct series labels is retired along with the
+   module that had them.
 
    SIZES COME FROM THE MANIFESTS, through custom properties set on the figure, so the
    numbers stay in one place and only the breakpoint lives here. */
 
 .journey-line,
-.inversion-chart {
+.tier-chart {
   margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
 }
 
 .journey-line__svg,
-.inversion-chart__svg {
+.tier-chart__svg {
   display: block;
   width: 100%;
   height: auto;
@@ -4136,17 +4150,24 @@ html.dark .figure-placeholder {
 /* Shape ─────────────────────────────────────────────────────────────────── */
 
 .journey-line__axis,
-.inversion-chart__axis {
+.tier-chart__axis {
   stroke: var(--border-default);
   stroke-width: 1;
   stroke-dasharray: 2 5;
 }
 
-.journey-line__ref,
-.inversion-chart__ref {
+.journey-line__ref {
   stroke: var(--border-strong);
   stroke-width: 1;
   stroke-dasharray: 1 6;
+}
+
+/* Quieter and tighter than JourneyLine's: this rule marks a baseline the eye should
+   measure against, not a threshold the line crosses. */
+.tier-chart__ref {
+  stroke: var(--text-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
 }
 
 /* non-scaling-stroke pins the weight to SCREEN px, not to the drawing's coordinate
@@ -4154,18 +4175,18 @@ html.dark .figure-placeholder {
    and the whole line goes hairline — the same scale problem the words had, and the
    established fix here: .fdte-figure and .nuuly-beat-figure already use it. */
 .journey-line__path,
-.inversion-chart__path,
+.tier-chart__line,
 .journey-line__axis,
-.inversion-chart__axis,
+.tier-chart__axis,
 .journey-line__ref,
-.inversion-chart__ref,
+.tier-chart__ref,
 .journey-line__dot,
-.inversion-chart__dot {
+.tier-chart__dot {
   vector-effect: non-scaling-stroke;
 }
 
 .journey-line__path,
-.inversion-chart__path {
+.tier-chart__line {
   fill: none;
   stroke: var(--text-primary);
   stroke-width: 2;
@@ -4173,31 +4194,27 @@ html.dark .figure-placeholder {
   stroke-linecap: round;
 }
 
-/* Dash pattern is the ONLY channel separating the two series, which is what keeps the
-   module monochrome. --solid is authored rather than left implicit so both names in
-   SERIES_CLASS resolve to a rule, and so "which one is solid" is answerable here. */
-.inversion-chart__path--solid {
-  stroke-dasharray: none;
-}
 
-.inversion-chart__path--dashed {
-  stroke-dasharray: 7 6;
-}
 
 .journey-line__dot,
-.inversion-chart__dot {
+.tier-chart__dot {
   fill: var(--bg-canvas);
   stroke: var(--text-primary);
   stroke-width: 2;
+}
+
+/* The last point, filled. It is the argument of the chart, not just the end of the
+   line: the most expensive tier missed most often. Radius comes from the r attribute
+   rather than a token, because unlike JourneyLine this drawing does not swap dot
+   sizes at a breakpoint. */
+.tier-chart__dot--end {
+  fill: var(--text-primary);
 }
 
 .journey-line__dot {
   r: var(--jl-dot-r);
 }
 
-.inversion-chart__dot {
-  r: var(--ic-dot-r);
-}
 
 /* The last point, filled, below the reference rule. This is the argument of the whole
    module: she ends lower than she started. Do not normalise it away. */
@@ -4223,9 +4240,8 @@ html.dark .figure-placeholder {
 /* Words, in HTML, at real reading size ──────────────────────────────────── */
 
 .journey-line__ref-label,
-.inversion-chart__ref-label,
-.journey-line__stages,
-.inversion-chart__axis-row {
+.tier-chart__ref-label,
+.journey-line__stages {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -4241,14 +4257,16 @@ html.dark .figure-placeholder {
   margin-bottom: var(--spacing-2xs);
 }
 
-.inversion-chart__ref-label {
+.tier-chart__ref-label {
   margin-top: var(--spacing-2xs);
+  text-transform: none;   /* a sentence, not a tracked label */
+  letter-spacing: normal;
+  color: var(--text-subtle);
 }
 
 /* Below md these are a wrapped interpunct run: five aligned columns would be ~68px
    each at 342px. The interpunct is a ::after, never a text node. */
-.journey-line__stages,
-.inversion-chart__axis-row {
+.journey-line__stages {
   display: flex;
   flex-wrap: wrap;
   /* NO column gap, deliberately, and this is the load-bearing part. The run's
@@ -4263,15 +4281,13 @@ html.dark .figure-placeholder {
   margin-top: var(--spacing-xs);
 }
 
-.journey-line__stages li:not(:last-child)::after,
-.inversion-chart__axis-row li:not(:last-child)::after {
+.journey-line__stages li:not(:last-child)::after {
   content: '·';
   padding: 0 var(--spacing-2xs); /* both sides: this IS the run's spacing */
   color: var(--text-subtle);
 }
 
-.journey-line__endnote,
-.inversion-chart__endnote {
+.journey-line__endnote {
   margin: var(--spacing-2xs) 0 0;
   /* The prose p rule caps this at the reading measure, which would be right for a
      paragraph and is wrong for a note that has to span the drawing's columns: at 584px
@@ -4282,8 +4298,7 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
 }
 
-.journey-line__breaks,
-.inversion-chart__tiers {
+.journey-line__breaks {
   list-style: none;
   display: grid;
   gap: var(--spacing-s); /* declared ONCE, outside the breakpoint — lint:space check 4 */
@@ -4317,100 +4332,35 @@ html.dark .figure-placeholder {
   font-weight: 600;
 }
 
-/* Legend — present at EVERY width, per the dataviz rule for two or more series. The
-   direct labels in the SVG supplement it above md and disappear below; identity never
-   depends on them. The key carries the channel, the name stays in a text token. */
-.inversion-chart__legend {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-m);
-  margin: var(--spacing-s) 0 0;
-  padding: 0;
-  font-size: 0.875rem; /* 14px, the system floor */
-  line-height: 1.4;
-  color: var(--text-secondary);
-}
 
-.inversion-chart__legend li {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2xs);
-}
 
-.inversion-chart__key {
-  display: block;
-  width: var(--spacing-m);
-  height: 0;
-  border-top-width: 2px;
-  border-top-color: var(--text-primary);
-}
 
-.inversion-chart__key--solid {
-  border-top-style: solid;
-}
 
-.inversion-chart__key--dashed {
-  border-top-style: dashed;
-}
 
-.inversion-chart__tiers li {
-  display: grid;
-  gap: var(--spacing-3xs);
-  margin: 0;
-  max-width: 64ch;
-  font-size: 1rem;
-  line-height: 1.5;
-}
 
-.inversion-chart__tier-name {
-  color: var(--text-primary);
-  font-weight: 600;
-}
 
-.inversion-chart__tier-days {
-  font-size: 0.875rem; /* 14px, the system floor */
-  color: var(--text-muted);
-}
 
-.inversion-chart__tier-values {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-s);
-  color: var(--text-primary);
-  font-variant-numeric: tabular-nums;
-}
 
-.inversion-chart__tier-value {
-  white-space: nowrap; /* "All nodes 3%" is one unit; never break the label off its number */
-}
 
-.inversion-chart__tier-series {
-  color: var(--text-muted);
-  margin-right: var(--spacing-3xs);
-}
 
 @media (min-width: 768px) {
   /* The axis rows stop being a run and become columns aligned to the manifest's x
      values, so a label sits under its point. Items are placed from column 2; column 1
      is the lead-in to the first point. grid-template-columns, grid-column-start and
      max-width are not spacing properties, so nothing here reaches lint:space check 4. */
-  .journey-line__stages,
-  .inversion-chart__axis-row {
+  .journey-line__stages {
     display: grid;
-    grid-template-columns: var(--jl-stage-cols, var(--ic-tier-cols));
+    grid-template-columns: var(--jl-stage-cols);
   }
 
   /* :not(:last-child) is repeated here deliberately. Without it this selector is a
      specificity step BELOW the base rule that sets the interpunct, so the override
      loses and the separators keep rendering between the aligned columns. */
-  .journey-line__stages li:not(:last-child)::after,
-  .inversion-chart__axis-row li:not(:last-child)::after {
+  .journey-line__stages li:not(:last-child)::after {
     content: none; /* the columns carry the sequence now */
   }
 
-  .journey-line__breaks,
-  .inversion-chart__tiers {
+  .journey-line__breaks {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -4421,10 +4371,9 @@ html.dark .figure-placeholder {
   /* The endnote rides the same columns as the stage row so it lands under the end of
      the line. grid-template-columns and grid-column-start only — a margin here would
      be spacing inside a breakpoint, which lint:space check 4 forbids. */
-  .journey-line__endnote,
-  .inversion-chart__endnote {
+  .journey-line__endnote {
     display: grid;
-    grid-template-columns: var(--jl-stage-cols, var(--ic-tier-cols));
+    grid-template-columns: var(--jl-stage-cols);
   }
 }
 
@@ -4445,55 +4394,196 @@ html.dark .figure-placeholder {
     r: var(--jl-dot-r-end-sm);
   }
 
-  .inversion-chart__dot {
-    r: var(--ic-dot-r-sm);
-  }
 }
 
-/* Two-across panels. FOLLOWS .framed-pair's grid mechanics rather than sharing its
-   selector, and the reason is spacing contracts rather than taste: .framed-pair also
-   carries `margin: var(--spacing-l) 0` plus a `.cs-section p:has(+ .framed-pair)` sibling
-   rule that zeroes the preceding paragraph. Both are about how a figure sits in prose.
-   These panels sit INSIDE a figure that already owns its own margin via .inversion-chart,
-   so joining the selector would import a second, conflicting spacing contract to fight
-   the first. Same columns, same 768 stack, same gap token — no third breakpoint.
-
-   The gap is declared once, out here, so the stack below only has to change
-   grid-template-columns. A gap inside the breakpoint is what lint:space check 4 forbids. */
-.inversion-chart__panels {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-l);
-}
 
 @media (max-width: 767px) {
-  .inversion-chart__panels {
-    grid-template-columns: 1fr;
+  
+}
+
+
+
+/* ── Delivery Promise (URBN): the section 03 chart pair ───────────────────────
+   TierChart and NodeChart side by side from 1024, stacked below. 1024 rather than
+   a bespoke width: both figures full-width at 768 read better than two ~344px
+   columns, so the system value costs nothing here. Note this is NOT the same call
+   as the 768 text-measure bug fixed earlier in this branch — that one was about a
+   22ch reading column, and figures degrade gracefully where prose does not.
+
+   The gap is declared once, out here. Changing it inside the query is the one thing
+   lint:space check 4 forbids, so the query changes columns and nothing else. */
+.chart-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: start;
+  margin: var(--spacing-l) 0;
+}
+
+@media (min-width: 1024px) {
+  .chart-pair {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-/* min-width: 0 is the load-bearing declaration, not a formality. A grid item's
-   automatic minimum size is min-content, so without this the SVG refuses to shrink
-   below its intrinsic width and the 1fr track blows out past the band. It is also
-   what check 9 was pointing at: the class was in the markup with no rule behind it. */
-.inversion-chart__panel {
+/* min-width: 0 on both cells. A grid item's automatic minimum is min-content, so
+   without it the SVG refuses to shrink and blows the track past the band. Found the
+   hard way when lint:interaction check 9 surfaced an unstyled wrapper. */
+.chart-pair > * {
   min-width: 0;
+  margin: 0;
 }
 
-/* Names the panel, so "which chart am I looking at" never depends on the caption. Above
-   the 14px floor deliberately: it is a title, not a label, and it is the only type in
-   this module that outranks the axis row. */
-.inversion-chart__panel-title {
+/* ── TierChart ─────────────────────────────────────────────────────────────── */
+
+/* Three equal columns, first left, second centred, third right, so every label sits
+   under its own point without overflowing the drawing at 320px. A grid keyed to the
+   manifest's x values would be more literal and would push the outer two labels off
+   the edge at phone width. */
+.tier-chart__tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  margin: var(--spacing-xs) 0 0;
+  padding: 0;
+}
+
+.tier-chart__tiers li {
+  display: flex;
+  flex-direction: column;
   margin: 0;
-  max-width: none;
-  font-size: 1rem;
+}
+
+.tier-chart__tiers li:nth-child(2) {
+  align-items: center;
+  text-align: center;
+}
+
+.tier-chart__tiers li:nth-child(3) {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* The tier name is the quiet half of the pair: 400 at --text-muted, per the
+   manifest's $typeDoc. Hierarchy among small labels rides weight and token because
+   size below 14px is not available to spend. */
+.tier-chart__tier {
+  font-size: 0.875rem; /* 14px, the system floor */
   line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.tier-chart__value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The end value is the argument: biggest number, primary colour. */
+.tier-chart__value--end {
+  font-size: 1.75rem;
+  color: var(--text-primary);
+}
+
+/* ── NodeChart: no SVG at all ──────────────────────────────────────────────── */
+
+/* max-content / 1fr / max-content. The name and the value never wrap or shrink; the
+   track is the only thing that flexes. At 320px the track is around 150px and the
+   store bar still holds ~135 of it against Reno's ~33, because the ratio lives in
+   the geometry rather than in the available width. */
+.node-chart__rows {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  gap: var(--spacing-s);
+  align-items: center;
+}
+
+.node-chart__name {
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.node-chart__name--hi {
   font-weight: 600;
   color: var(--text-primary);
 }
 
+/* The average marker. A 1px rule at the aggregate's position, drawn on the track so
+   it lands over the bars rather than over the labels, and extended past the bar's
+   height so it reads as a threshold crossing them. */
+.node-chart__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--spacing-l);
+}
+
+.node-chart__track::after {
+  content: '';
+  position: absolute;
+  left: var(--nc-average);
+  top: calc(var(--spacing-3xs) * -1);
+  bottom: calc(var(--spacing-3xs) * -1);
+  width: 1px;
+  background: var(--text-subtle);
+}
+
+.node-chart__fill {
+  height: var(--spacing-l);
+  border-radius: var(--radius-xs);
+  background: var(--fill-quiet);
+}
+
+.node-chart__fill--hi {
+  background: var(--text-primary);
+}
+
+.node-chart__value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.node-chart__value--hi {
+  font-size: 1.75rem;
+  color: var(--text-primary);
+}
+
+/* The marker's label, aligned to the rule it names. It rides the same three-column
+   grid as the rows so the middle cell is the same track, then positions inside it. */
+.node-chart__average {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  gap: var(--spacing-s);
+  max-width: none;
+  margin: 0 0 var(--spacing-2xs);
+}
+
+.node-chart__average-label {
+  grid-column: 2;
+  position: relative;
+  left: var(--nc-average);
+  transform: translateX(-50%);
+  justify-self: start;
+  white-space: nowrap;
+  font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+}
+
 .journey-line > .bento-theme__caption,
-.inversion-chart > .bento-theme__caption {
+.tier-chart > .bento-theme__caption,
+.node-chart > .bento-theme__caption {
   margin-top: var(--spacing-m);
 }
 

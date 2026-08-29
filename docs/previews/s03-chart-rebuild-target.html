@@ -1,0 +1,329 @@
+<title>§03 target: Delivery Promise chart rebuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!--
+  TARGET FOR THE SECTION 03 CHART REBUILD. Approved by Paul, 29 Aug 2026.
+  This file is the specification. It is NOT the implementation and its class
+  names are its own - do not copy them into the app. Copy the GEOMETRY, the
+  ARITHMETIC and the RESPONSIVE BEHAVIOUR.
+
+  THE ONE RULE THIS FILE EXISTS TO ENCODE: no text inside any SVG. A 16-unit
+  label in a 600-unit viewBox computes to 8px at phone width. Drawings carry
+  geometry only; every word is HTML at a real pixel size.
+
+  TYPE FLOOR. Every authored size in this file is >= 14px. An earlier version
+  carried nine values between 11.5 and 13.5 on stage labels, emotion labels, the
+  average marker, .reflabel and the badge numerals; lint:type check 2 hard-fails
+  on any of them. Hierarchy among the small labels is carried by WEIGHT and TOKEN
+  (700 uppercase tracked at --text-subtle vs 400 at --text-muted), never by size,
+  because size below 14 is not available. The badges are 26px to hold a 14px
+  numeral.
+
+  BREAKPOINTS ARE SYSTEM VALUES ONLY. The pair splits at 1024 and the journey
+  changes orientation at 768. An earlier version used 900 and 760, neither of
+  which is in the @theme set (360/390/768/1024/1440/1920).
+
+  DERIVED VALUES ARE WRITTEN OUT HERE FOR READING, NOT FOR PASTING. In the app
+  every one of them is COMPUTED from the manifest, per inversion-manifest.json's
+  $doc: y positions are computed from `scale`, never stored.
+
+    tier line   viewBox 0 0 600 190. scale { yZero: 176, yMax: 20, valueMax: 25 }
+                y = yZero - (v / valueMax) * (yZero - yMax)
+                y(3)=157.3  y(16)=76.2  y(22)=38.7
+                x from tiers[].x = 40 / 300 / 560. axis at y=176.
+                reference rule at y(3).
+
+                CORRECTED 29 Aug. An earlier version of this file drew 150 / 84 / 32
+                against the scale above, which computes 157.3 / 76.2 / 38.7. Those
+                markup values were drawn by eye before the scale was written and
+                were never reconciled - and they are not on ANY linear scale:
+                3->16 covers 66 units for 13 points of value, 16->22 covers 52 for
+                6. That non-linearity exaggerated the express-to-overnight step,
+                which is the exact step the chart argues from. The markup now
+                matches the arithmetic.
+
+    node bars   no SVG at all. width% = value / barMax where barMax = 50.
+                Reno 11 -> 22%   Gap 15 -> 30%   Stores 45 -> 90%
+                average marker at 22 / 50 = 44%.
+
+    journey     desktop viewBox 0 0 960 300, mobile viewBox 0 0 300 640.
+                badge left% = x / viewBoxWidth * 100
+                badge top%  = y / viewBoxHeight * 100
+                stage label positions are computed the same way from the
+                stage centre x (desktop) or the stage's first point y (mobile).
+-->
+<style>
+:root{
+  --cu:0.002; --hue-ground:70; --hue-text:55;
+  --bg-canvas: oklch(0.978 calc(var(--cu)*8) calc(var(--hue-ground) + 6));
+  --bg-surface: oklch(0.948 calc(var(--cu)*11) calc(var(--hue-ground) + 2));
+  --text-primary: oklch(0.215 calc(var(--cu)*9) var(--hue-text));
+  --text-secondary: oklch(0.355 calc(var(--cu)*10) var(--hue-text));
+  --text-muted: oklch(0.485 calc(var(--cu)*11) var(--hue-text));
+  --text-subtle: oklch(0.590 calc(var(--cu)*10) calc(var(--hue-text) + 5));
+  --border-subtle: oklch(0.905 calc(var(--cu)*15) calc(var(--hue-ground) - 4));
+  --border-default: oklch(0.855 calc(var(--cu)*17) calc(var(--hue-ground) - 10));
+  --border-strong: oklch(0.760 calc(var(--cu)*20) calc(var(--hue-ground) - 15));
+  --note-bg: oklch(0.955 0.03 85); --note-br: oklch(0.86 0.06 80);
+  /* Quiet bar fill, derived from the text colour so it stays in the
+     monochrome family instead of drifting to tan. */
+  --fill-quiet: color-mix(in oklch, var(--text-primary) 26%, var(--bg-canvas));
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --hue-ground:55; --hue-text:74;
+  --bg-canvas: oklch(0.165 calc(var(--cu)*3) var(--hue-ground));
+  --bg-surface: oklch(0.205 calc(var(--cu)*7) calc(var(--hue-ground) + 2));
+  --text-primary: oklch(0.945 calc(var(--cu)*6) calc(var(--hue-text) + 4));
+  --text-secondary: oklch(0.825 calc(var(--cu)*7) calc(var(--hue-text) + 2));
+  --text-muted: oklch(0.705 calc(var(--cu)*8) calc(var(--hue-text) - 2));
+  --text-subtle: oklch(0.565 calc(var(--cu)*9) calc(var(--hue-text) - 6));
+  --border-subtle: oklch(0.245 calc(var(--cu)*7) calc(var(--hue-ground) + 2));
+  --border-default: oklch(0.310 calc(var(--cu)*10) calc(var(--hue-ground) + 3));
+  --border-strong: oklch(0.430 calc(var(--cu)*13) var(--hue-ground));
+  --note-bg: oklch(0.235 0.02 85); --note-br: oklch(0.38 0.04 80);
+  --fill-quiet: color-mix(in oklch, var(--text-primary) 32%, var(--bg-canvas));
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-canvas);color:var(--text-primary);
+  font-family:"Commissioner",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased}
+b,strong{font-weight:600}
+.page{max-width:1152px;margin:0 auto;padding:1.5rem 1rem 5rem}
+@media (min-width:768px){.page{padding:2rem 2rem 6rem}}
+.band{max-width:1088px;margin:0 auto}
+
+.rule{border-top:1px solid var(--border-default);margin-top:3.5rem;padding-top:1.25rem}
+.eyebrow{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--text-muted);margin:0 0 .4rem}
+.htitle{font-size:24px;font-weight:600;letter-spacing:-.015em;line-height:1.2;margin:0 0 .5rem}
+.hnote{font-size:15px;line-height:1.6;color:var(--text-secondary);max-width:47rem;margin:0 0 1.5rem}
+.flag{background:var(--note-bg);border:1px solid var(--note-br);border-radius:12px;
+  padding:.95rem 1.15rem;margin:1.5rem 0;max-width:47rem;font-size:14.5px;line-height:1.55}
+.flag p{margin:0 0 .55rem}.flag p:last-child{margin:0}
+
+h2.cs{font-size:clamp(27px,5vw,40px);font-weight:600;letter-spacing:-.02em;line-height:1.15;
+  margin:0 0 1.25rem;max-width:20ch}
+.lede{font-size:clamp(17px,2.2vw,20px);line-height:1.5;color:var(--text-secondary);margin:0 0 2rem;max-width:47rem}
+.prose p{font-size:clamp(16.5px,1.6vw,18px);line-height:1.62;margin:0 0 1.5rem;max-width:47rem}
+.pq{margin:2rem 0;padding-left:1.1rem;border-left:2px solid var(--border-strong);max-width:44rem}
+.pq p{font-size:clamp(19px,2.4vw,22px);line-height:1.45;font-weight:500;margin:0 0 .5rem}
+.pq cite{font-style:normal;font-size:14px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--text-muted)}
+
+figure{margin:2rem 0}
+.cap{margin-top:.95rem;font-size:14.5px;line-height:1.5;max-width:40rem}
+.cap b{font-weight:600}.cap span{color:var(--text-muted)}
+
+/* ---------- the pair ---------- */
+.pair{display:grid;grid-template-columns:1fr;gap:2.75rem;align-items:start}
+@media (min-width:1024px){.pair{grid-template-columns:1fr 1fr;gap:3rem}}
+
+/* ---------- chart 1 : tier line ---------- */
+.tierfig svg{display:block;width:100%;height:auto;overflow:visible}
+.ln{fill:none;stroke:var(--text-primary);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.dot{fill:var(--bg-canvas);stroke:var(--text-primary);stroke-width:2.5}
+.dot--hi{fill:var(--text-primary)}
+.ax{stroke:var(--border-default);stroke-width:1}
+.ref{stroke:var(--text-subtle);stroke-width:1;stroke-dasharray:3 4}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);list-style:none;padding:0;margin:.8rem 0 0}
+.tiers li{display:flex;flex-direction:column;gap:.1rem}
+.tiers li:nth-child(2){align-items:center;text-align:center}
+.tiers li:nth-child(3){align-items:flex-end;text-align:right}
+.tiers .t{font-size:14px;color:var(--text-muted)}
+.tiers .v{font-size:20px;font-weight:600;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.tiers li:nth-child(3) .v{font-size:28px;color:var(--text-primary)}
+.reflabel{font-size:14px;color:var(--text-subtle);margin:.5rem 0 0}
+
+/* ---------- chart 2 : node bars, all HTML ---------- */
+.bars{display:grid;grid-template-columns:max-content 1fr max-content;
+  gap:1.1rem .9rem;align-items:center;margin:0}
+.bars__name{font-size:14.5px;color:var(--text-secondary);white-space:nowrap}
+.bars__name--hi{font-weight:600;color:var(--text-primary)}
+.bars__track{position:relative;height:38px;display:flex;align-items:center}
+.bars__track::after{content:"";position:absolute;left:44%;top:-9px;bottom:-9px;width:1px;
+  background:var(--text-subtle);opacity:.7}
+.bars__fill{height:38px;border-radius:2px;background:var(--fill-quiet)}
+.bars__fill--hi{background:var(--text-primary)}
+.bars__val{font-size:18px;font-weight:600;font-variant-numeric:tabular-nums;
+  color:var(--text-secondary);text-align:right;min-width:2.9em}
+.bars__val--hi{font-size:28px;color:var(--text-primary)}
+.avg{display:flex;margin:0 0 .7rem}
+.avg__spacer{visibility:hidden;font-size:14.5px;white-space:nowrap}
+.avg__spacer--v{font-size:28px;font-weight:600;min-width:2.9em}
+.avg__txt{font-size:14px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--text-subtle);white-space:nowrap}
+
+/* ---------- journey, shared ---------- */
+.jwrap{position:relative}
+.jsvg{display:block;width:100%;height:auto;overflow:visible}
+.jln{fill:none;stroke:var(--text-primary);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round}
+.jdot{fill:var(--bg-canvas);stroke:var(--text-primary);stroke-width:2.5}
+.jband{stroke:var(--border-subtle);stroke-width:1}
+.jdiv{stroke:var(--border-subtle);stroke-width:1;stroke-dasharray:2 6}
+.jmark{position:absolute;transform:translate(-50%,-50%);font-size:14px;font-weight:700;
+  line-height:1;color:var(--bg-canvas);background:var(--text-primary);
+  width:26px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  font-variant-numeric:tabular-nums;box-shadow:0 0 0 3px var(--bg-canvas)}
+.emo{list-style:none;margin:0;padding:0;font-size:14px;font-weight:700;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--text-subtle)}
+.breaks{list-style:none;padding:0;margin:1.5rem 0 0;max-width:47rem}
+.breaks li{display:grid;grid-template-columns:2.2rem 1fr;margin-bottom:.6rem;
+  font-size:15px;line-height:1.55;color:var(--text-secondary)}
+.breaks .idx{font-size:14px;font-weight:700;color:var(--bg-canvas);background:var(--text-primary);
+  width:26px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  margin-top:.15rem}
+.breaks b{color:var(--text-primary)}
+
+.jdesktop{display:none}.jmobile{display:block}
+@media (min-width:768px){.jdesktop{display:block}.jmobile{display:none}}
+
+/* desktop journey */
+.jgrid{display:grid;grid-template-columns:auto 1fr;gap:1.15rem}
+.jgrid .emo{display:grid;grid-template-rows:1fr 1fr 1fr;align-items:center;padding:6px 0}
+.jstages{position:relative;height:1.4rem;margin-top:.8rem;font-size:14px;color:var(--text-muted)}
+.jstages span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+
+/* mobile journey */
+.jm{display:grid;grid-template-columns:5rem 1fr}
+.jm__head{display:grid;grid-template-columns:5rem 1fr;margin-bottom:.5rem}
+.jm__cols{display:grid;grid-template-columns:repeat(3,1fr);margin:0;padding:0;
+  font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-subtle)}
+.jm__cols li{list-style:none;text-align:center}
+.jm__stages{position:relative;margin:0;padding:0;list-style:none;
+  font-size:14px;color:var(--text-muted);line-height:1.25}
+.jm__stages li{position:absolute;transform:translateY(-50%);right:.9rem;text-align:right}
+</style>
+
+<div class="page">
+  <div class="band" style="margin-top:2rem;padding:1.5rem;background:var(--bg-surface);border-radius:16px">
+    <h2 class="cs">We were losing trust where we charged the most.</h2>
+    <p class="lede">In order to create a narrative for leadership to buy in, I dug into various data threads.</p>
+    <div class="prose">
+      <p><b>Standard shipping was dependable.</b> The premium shipping method bought a worse chance of
+      arriving on time. Orders out of stores were the worst of all.</p>
+    </div>
+
+    <div class="pair" style="margin:2.25rem 0">
+      <figure class="tierfig" style="margin:0">
+        <svg viewBox="0 0 600 190" role="img" aria-label="Missed dates rise from 3 to 16 to 22 percent.">
+          <line class="ref" x1="12" y1="157.3" x2="588" y2="157.3"/>
+          <path class="ln" d="M40,157.3 L300,76.2 L560,38.7"/>
+          <circle class="dot" cx="40" cy="157.3" r="6"/><circle class="dot" cx="300" cy="76.2" r="6"/>
+          <circle class="dot dot--hi" cx="560" cy="38.7" r="7.5"/>
+          <line class="ax" x1="12" y1="176" x2="588" y2="176"/>
+        </svg>
+        <ol class="tiers">
+          <li><span class="v">3%</span><span class="t">Standard</span></li>
+          <li><span class="v">16%</span><span class="t">Express</span></li>
+          <li><span class="v">22%</span><span class="t">Overnight</span></li>
+        </ol>
+        <p class="reflabel">Dotted rule: where standard sat</p>
+        <figcaption class="cap"><b>The more a shopper paid, the worse the odds.</b>
+          <span>Across the whole network.</span></figcaption>
+      </figure>
+      <figure style="margin:0">
+        <div class="avg">
+          <span class="avg__spacer">Store network</span>
+          <span style="flex:1;position:relative;margin:0 .9rem"><span class="avg__txt"
+            style="position:absolute;left:44%;transform:translateX(-50%)">Average 22%</span></span>
+          <span class="avg__spacer avg__spacer--v">45%</span>
+        </div>
+        <div class="bars">
+          <span class="bars__name">Reno FC</span>
+          <span class="bars__track"><span class="bars__fill" style="width:22%"></span></span>
+          <span class="bars__val">11%</span>
+          <span class="bars__name">Gap FC</span>
+          <span class="bars__track"><span class="bars__fill" style="width:30%"></span></span>
+          <span class="bars__val">15%</span>
+          <span class="bars__name bars__name--hi">Store network</span>
+          <span class="bars__track"><span class="bars__fill bars__fill--hi" style="width:90%"></span></span>
+          <span class="bars__val bars__val--hi">45%</span>
+        </div>
+        <figcaption class="cap"><b>The average was hiding a four-fold spread.</b>
+          <span>Overnight and rush only. Reno is a fulfillment centre, so it reads against the network
+          rather than against stores.</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="prose">
+      <p><b>I asked store operations what happens during a shift.</b> Why weren't associates getting orders
+      out on time? They already had a report, and it answered why a large chunk of orders were missing their
+      dates: chaotic shifts, shipping SLAs nobody could hit, and not enough people rostered to send online
+      orders out.</p>
+      <div class="pq"><p>“I have to be extremely desperate to pay for expedited.”</p>
+        <cite>Urban Outfitters customer, primary research</cite></div>
+      <p><b>Miss the date and you lose trust.</b> Customers remember the failure, and the longer we waited
+      the harder it would be to change.</p>
+      <div class="pq"><p>“I have really reduced my shopping on this site because of this.”</p>
+        <cite>Anthropologie customer</cite></div>
+      <p><b>I turned the numbers into a journey, with the moments customers got angry marked on it.</b> That
+      was the version leadership could see. My role through it was building the narrative and presenting it
+      to executives.</p>
+    </div>
+
+    <div class="jdesktop">
+      <figure style="margin:2.25rem 0 0">
+        <div class="jgrid">
+          <ul class="emo"><li>Happy</li><li>Fine</li><li>Angry</li></ul>
+          <div>
+            <div class="jwrap">
+              <svg class="jsvg" viewBox="0 0 960 300" role="img" aria-label="Angela's sentiment across five stages, ending angry.">
+                <line class="jband" x1="0" y1="70" x2="958" y2="70"/><line class="jband" x1="0" y1="170" x2="958" y2="170"/>
+                <line class="jband" x1="0" y1="270" x2="958" y2="270"/>
+                <line class="jdiv" x1="160" y1="40" x2="160" y2="300"/><line class="jdiv" x1="320" y1="40" x2="320" y2="300"/>
+                <line class="jdiv" x1="470" y1="40" x2="470" y2="300"/><line class="jdiv" x1="700" y1="40" x2="700" y2="300"/>
+                <path class="jln" d="M80,70 L230,75 L400,170 L540,85 L640,270 L760,80 L850,170 L930,275"/>
+                <circle class="jdot" cx="80" cy="70" r="6.5"/><circle class="jdot" cx="230" cy="75" r="6.5"/>
+                <circle class="jdot" cx="540" cy="85" r="6.5"/><circle class="jdot" cx="760" cy="80" r="6.5"/>
+                <circle class="jdot" cx="930" cy="275" r="6.5"/>
+              </svg>
+              <span class="jmark" style="left:41.667%;top:56.667%">1</span>
+              <span class="jmark" style="left:66.667%;top:90%">2</span>
+              <span class="jmark" style="left:88.542%;top:56.667%">3</span>
+            </div>
+            <div class="jstages">
+              <span style="left:10.4%">Arrive</span><span style="left:25%">Browse</span>
+              <span style="left:41.1%">Decide</span><span style="left:60.9%">Purchase</span>
+              <span style="left:86.5%">Post purchase</span>
+            </div>
+          </div>
+        </div>
+      </figure>
+    </div>
+    <div class="jmobile">
+      <figure style="margin:2.25rem 0 0">
+        <div class="jm__head"><span></span>
+          <ul class="jm__cols"><li>Happy</li><li>Fine</li><li>Angry</li></ul></div>
+        <div class="jm">
+          <ul class="jm__stages">
+            <li style="top:6.25%">Arrive</li><li style="top:18.75%">Browse</li>
+            <li style="top:31.25%">Decide</li><li style="top:43.75%">Purchase</li>
+            <li style="top:68.75%">Post<br>purchase</li>
+          </ul>
+          <div class="jwrap">
+            <svg class="jsvg" viewBox="0 0 300 640" role="img" aria-label="Angela's sentiment down five stages, ending angry.">
+              <line class="jband" x1="50" y1="10" x2="50" y2="630"/><line class="jband" x1="150" y1="10" x2="150" y2="630"/>
+              <line class="jband" x1="250" y1="10" x2="250" y2="630"/>
+              <path class="jln" d="M50,40 L50,120 L150,200 L50,280 L250,360 L50,440 L150,520 L250,600"/>
+              <circle class="jdot" cx="50" cy="40" r="6.5"/><circle class="jdot" cx="50" cy="120" r="6.5"/>
+              <circle class="jdot" cx="50" cy="280" r="6.5"/><circle class="jdot" cx="50" cy="440" r="6.5"/>
+              <circle class="jdot" cx="250" cy="600" r="6.5"/>
+            </svg>
+            <span class="jmark" style="left:50%;top:31.25%">1</span>
+            <span class="jmark" style="left:83.333%;top:56.25%">2</span>
+            <span class="jmark" style="left:50%;top:81.25%">3</span>
+          </div>
+        </div>
+      </figure>
+    </div>
+
+    <ol class="breaks">
+      <li><span class="idx">1</span><span><b>No date, anywhere.</b> She is guessing until checkout.</span></li>
+      <li><span class="idx">2</span><span><b>Out of stock, after she paid.</b> Twice: on submit, then by email four days later.</span></li>
+      <li><span class="idx">3</span><span><b>One order, three boxes.</b> Nothing decided which.</span></li>
+    </ol>
+    <p class="cap"><b>One order, mapped.</b> <span>She recovers three times. None of the drops are about price.</span></p>
+  </div>
+</div>
+</div>
