@@ -14,35 +14,46 @@ const KEY_CLASS: Record<string, string> = {
 };
 
 /**
- * Missed delivery dates against price. Two series, monochrome, one solid and one
- * dashed. No hue, no third series.
+ * Missed delivery dates against price, in TWO PANELS on one shared scale. Monochrome,
+ * one solid stroke and one dashed. No hue.
  *
  * THE MODULE IS THE INVERSION. The x axis is ordered by price, cheapest first, so the
  * line rises exactly where a reader expects it to fall: the premium bought a worse
  * chance of arriving on time. Everything else is in service of that one reading.
  *
+ * PANEL 2 IS THE PROOF IT WAS SOLVABLE, and it is the part that can be got wrong in a
+ * way a reader cannot detect. Reno is a FULFILMENT CENTRE, so it reads against panel 1's
+ * All nodes series, never against the store network. See the manifest's $precisionDoc;
+ * nothing here, in the titles, in the caption or in the aria label may imply Reno solved
+ * the store problem.
+ *
+ * ONE MANIFEST, NOT TWO. geometry, scale, tiers and the reference rule live once at the
+ * top level and every panel is drawn against them, so the panels are provably on the
+ * same scale and cannot drift apart. y is COMPUTED from the percentages via `scale`,
+ * never stored. Edit inversion-manifest.json, never this file.
+ *
+ * NO DIRECT SERIES LABELS IN THE DRAWING. They used to sit in the SVG above 768 and were
+ * justified by desktop legibility at full band; at half band the same 16 units compute
+ * to roughly 8px against a 14px floor, so they are gone rather than shrunk. The
+ * always-present HTML legend carries identity at every width. See $splitDoc.
+ *
  * Same line vocabulary as JourneyLine — same viewBox, same dotted axis, same dashed
  * reference rule, same dot radius — so the two read as one hand, and it obeys the same
- * split: only geometry and numerals in the SVG, every word in HTML. The tier labels are
- * an HTML row aligned to the tier x values; the values are an HTML list that doubles as
- * the table view.
- *
- * THE ONE CARVE-OUT is the direct series labels, which stay in the drawing at >=768
- * where 16 units renders at 17.4px, and are hidden below it rather than left at 5.5px.
- * The HTML legend is present at every width, so identity never depends on them. Per the
- * dataviz skill: a legend is mandatory at two or more series and direct labels
- * supplement it; identity rides a line-key beside the name, never the text colour.
- *
- * y is COMPUTED from the percentages via `scale`, never stored, so a value and its
- * plotted position cannot drift apart. Edit inversion-manifest.json, never this file.
+ * split: only geometry and numerals in the SVG, every word in HTML. The annotation uses
+ * JourneyLine's tailNote mechanism unchanged: an HTML paragraph grid-placed against the
+ * same tier tracks the axis row rides.
  */
 export default function InversionChart() {
-  const { geometry: g, scale, tiers, series, unit, caption } = manifest;
+  const { geometry: g, scale, tiers, panels, unit, caption } = manifest;
 
   const y = (value: number) => scale.yZero - (value / scale.valueMax) * (scale.yZero - scale.yMax);
   const refY = y(manifest.refValue);
   const vbWidth = Number(g.viewBox.split(' ')[2]);
 
+  /* Grid tracks from the tier x values: a leading spacer to the first label, then the
+     gap to each next one, then the remainder. Items are placed explicitly from column 2,
+     so a label sits under its point and moving a point in the manifest moves its label.
+     Shared by both panels, which is why the two axis rows align across the pair. */
   const tracks = [
     tiers[0].x,
     ...tiers.slice(1).map((t, i) => t.x - tiers[i].x),
@@ -52,80 +63,93 @@ export default function InversionChart() {
     .join(' ');
 
   const style = {
-    ['--ic-series' as string]: `${g.fontSize.series}px`,
     ['--ic-dot-r' as string]: `${g.dotR}px`,
     ['--ic-dot-r-sm' as string]: `${g.dotRMobile}px`,
     ['--ic-tier-cols' as string]: tracks,
   } as CSSProperties;
 
-  const refLabel = <p className="inversion-chart__ref-label">{manifest.refLabel}</p>;
-
   return (
     <figure className="inversion-chart" style={style}>
-      {manifest.refLabelPlacement === 'above' ? refLabel : null}
+      {/* One aria-label for the pair, on a group rather than per-SVG: the panels are one
+          argument and a screen reader that met them as two unrelated charts would lose
+          the comparison that is the point. Each panel's own drawing is aria-hidden and
+          the shared values list below carries the numbers once. */}
+      <div className="inversion-chart__panels" role="img" aria-label={manifest.ariaLabel}>
+        {panels.map((panel) => (
+          <div className="inversion-chart__panel" key={panel.id}>
+            <p className="inversion-chart__panel-title">{panel.title}</p>
 
-      <svg className="inversion-chart__svg" viewBox={g.viewBox} role="img" aria-label={manifest.ariaLabel}>
-        <line className="inversion-chart__ref" x1={g.refX1} y1={refY} x2={g.refX2} y2={refY} />
+            <svg className="inversion-chart__svg" viewBox={g.viewBox} aria-hidden="true">
+              <line className="inversion-chart__ref" x1={g.refX1} y1={refY} x2={g.refX2} y2={refY} />
 
-        {series.map((s) => {
-          const d = s.values.map((v, i) => `${i === 0 ? 'M' : 'L'}${tiers[i].x},${y(v)}`).join(' ');
-          return (
-            <g key={s.name}>
-              <path className={`inversion-chart__path ${SERIES_CLASS[s.style]}`} d={d} />
-              {s.values.map((v, i) => (
-                <circle
-                  key={`${s.name}-${i}`}
-                  className="inversion-chart__dot"
-                  cx={tiers[i].x}
-                  cy={y(v)}
-                  r={g.dotR}
-                />
+              {panel.series.map((s) => {
+                const d = s.values.map((v, i) => `${i === 0 ? 'M' : 'L'}${tiers[i].x},${y(v)}`).join(' ');
+                return (
+                  <g key={s.name}>
+                    <path className={`inversion-chart__path ${SERIES_CLASS[s.style]}`} d={d} />
+                    {s.values.map((v, i) => (
+                      <circle
+                        key={`${s.name}-${i}`}
+                        className="inversion-chart__dot"
+                        cx={tiers[i].x}
+                        cy={y(v)}
+                        r={g.dotR}
+                      />
+                    ))}
+                  </g>
+                );
+              })}
+
+              <line className="inversion-chart__axis" x1={g.axisX1} y1={g.axisY} x2={g.axisX2} y2={g.axisY} />
+            </svg>
+
+            <p className="inversion-chart__ref-label">{manifest.refLabel}</p>
+
+            {/* The x axis, in HTML, aligned to the tier x values. aria-hidden because the
+                values list below names every tier again and carries the numbers with it —
+                a screen reader should get the data once, not the labels twice. */}
+            <ol className="inversion-chart__axis-row" aria-hidden="true">
+              {tiers.map((t, i) => (
+                <li key={t.short} style={{ gridColumnStart: i + 2 }}>
+                  {t.short}
+                </li>
               ))}
-              {/* Supplements the legend at >=768; hidden below it, never shrunk. */}
-              <text
-                className="inversion-chart__series"
-                x={g.seriesLabelX}
-                y={y(s.values[s.values.length - 1]) + g.seriesLabelOffsetY}
-              >
-                {s.name}
-              </text>
-            </g>
-          );
-        })}
+            </ol>
 
-        <line className="inversion-chart__axis" x1={g.axisX1} y1={g.axisY} x2={g.axisX2} y2={g.axisY} />
-      </svg>
+            {/* Identity rides the line-key, never the text colour. Present at every width
+                now that the direct labels are gone from the drawing. */}
+            <ul className="inversion-chart__legend">
+              {panel.series.map((s) => (
+                <li key={s.name}>
+                  <span className={`inversion-chart__key ${KEY_CLASS[s.style]}`} aria-hidden="true" />
+                  {s.name}
+                </li>
+              ))}
+            </ul>
 
-      {manifest.refLabelPlacement === 'below' ? refLabel : null}
-
-      {/* The x axis, in HTML, aligned to the tier x values. aria-hidden because the
-          list below names every tier again and carries the numbers with it — a screen
-          reader should get the data once, not the labels twice. */}
-      <ol className="inversion-chart__axis-row" aria-hidden="true">
-        {tiers.map((t, i) => (
-          <li key={t.short} style={{ gridColumnStart: i + 2 }}>
-            {t.short}
-          </li>
+            {/* JourneyLine's tailNote mechanism, unchanged: grid-placed against the same
+                tier tracks so the note lands under the column it is about. Below the
+                two-across breakpoint the row is a run, the grid is off, and it is simply
+                the next line. */}
+            {'annotation' in panel && panel.annotation ? (
+              <p className="inversion-chart__endnote">
+                <span style={{ gridColumnStart: tiers.length + 1 }}>{panel.annotation}</span>
+              </p>
+            ) : null}
+          </div>
         ))}
-      </ol>
+      </div>
 
-      {/* Always present, at every width. Identity rides the line-key, not the text. */}
-      <ul className="inversion-chart__legend">
-        {series.map((s) => (
-          <li key={s.name}>
-            <span className={`inversion-chart__key ${KEY_CLASS[s.style]}`} aria-hidden="true" />
-            {s.name}
-          </li>
-        ))}
-      </ul>
-
+      {/* The table view, once for the pair rather than once per panel: a reader comparing
+          Reno to All nodes wants the three numbers for a tier side by side, and splitting
+          them across two lists would be the one arrangement that hides the comparison. */}
       <ol className="inversion-chart__tiers">
         {tiers.map((t, i) => (
           <li key={t.label}>
             <span className="inversion-chart__tier-name">{t.label}</span>
             <span className="inversion-chart__tier-days">{t.days}</span>
             <span className="inversion-chart__tier-values">
-              {series.map((s) => (
+              {panels.flatMap((p) => p.series).map((s) => (
                 <span key={s.name} className="inversion-chart__tier-value">
                   <span className="inversion-chart__tier-series">{s.name}</span>
                   {s.values[i]}

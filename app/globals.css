@@ -4220,12 +4220,6 @@ html.dark .figure-placeholder {
   letter-spacing: 0.02em;
 }
 
-.inversion-chart__series {
-  font-size: var(--ic-series);
-  fill: var(--text-muted);
-  font-weight: 500;
-}
-
 /* Words, in HTML, at real reading size ──────────────────────────────────── */
 
 .journey-line__ref-label,
@@ -4276,7 +4270,8 @@ html.dark .figure-placeholder {
   color: var(--text-subtle);
 }
 
-.journey-line__endnote {
+.journey-line__endnote,
+.inversion-chart__endnote {
   margin: var(--spacing-2xs) 0 0;
   /* The prose p rule caps this at the reading measure, which would be right for a
      paragraph and is wrong for a note that has to span the drawing's columns: at 584px
@@ -4426,18 +4421,17 @@ html.dark .figure-placeholder {
   /* The endnote rides the same columns as the stage row so it lands under the end of
      the line. grid-template-columns and grid-column-start only — a margin here would
      be spacing inside a breakpoint, which lint:space check 4 forbids. */
-  .journey-line__endnote {
+  .journey-line__endnote,
+  .inversion-chart__endnote {
     display: grid;
-    grid-template-columns: var(--jl-stage-cols);
+    grid-template-columns: var(--jl-stage-cols, var(--ic-tier-cols));
   }
 }
 
-/* Below md the direct labels would render at 5.5px. They go; the legend carries it. */
+/* Below md the dots and marks grow: a 4.5-unit dot is 1.5px in a 342px container. The
+   direct series labels used to be hidden here too; they no longer exist at any width,
+   because the two-across panels put them under the type floor at every breakpoint. */
 @media (max-width: 767px) {
-  .inversion-chart__series {
-    display: none;
-  }
-
   .journey-line__idx {
     font-size: var(--jl-mark-sm);
     transform: translate(var(--jl-mdx-sm), var(--jl-mdy-sm));
@@ -4454,6 +4448,48 @@ html.dark .figure-placeholder {
   .inversion-chart__dot {
     r: var(--ic-dot-r-sm);
   }
+}
+
+/* Two-across panels. FOLLOWS .framed-pair's grid mechanics rather than sharing its
+   selector, and the reason is spacing contracts rather than taste: .framed-pair also
+   carries `margin: var(--spacing-l) 0` plus a `.cs-section p:has(+ .framed-pair)` sibling
+   rule that zeroes the preceding paragraph. Both are about how a figure sits in prose.
+   These panels sit INSIDE a figure that already owns its own margin via .inversion-chart,
+   so joining the selector would import a second, conflicting spacing contract to fight
+   the first. Same columns, same 768 stack, same gap token — no third breakpoint.
+
+   The gap is declared once, out here, so the stack below only has to change
+   grid-template-columns. A gap inside the breakpoint is what lint:space check 4 forbids. */
+.inversion-chart__panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-l);
+}
+
+@media (max-width: 767px) {
+  .inversion-chart__panels {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* min-width: 0 is the load-bearing declaration, not a formality. A grid item's
+   automatic minimum size is min-content, so without this the SVG refuses to shrink
+   below its intrinsic width and the 1fr track blows out past the band. It is also
+   what check 9 was pointing at: the class was in the markup with no rule behind it. */
+.inversion-chart__panel {
+  min-width: 0;
+}
+
+/* Names the panel, so "which chart am I looking at" never depends on the caption. Above
+   the 14px floor deliberately: it is a title, not a label, and it is the only type in
+   this module that outranks the axis row. */
+.inversion-chart__panel-title {
+  margin: 0;
+  max-width: none;
+  font-size: 1rem;
+  line-height: 1.4;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .journey-line > .bento-theme__caption,

@@ -1,54 +1,68 @@
 {
-  "$doc": "Content, data and geometry for <InversionChart>. Percentages are URBN operational data cleared by Paul for publication. Edit a number here and the chart moves — y positions are COMPUTED from `scale`, never stored, so values and drawing cannot drift apart. Coordinates are viewBox units, not pixels.",
+  "$doc": "Content, data and geometry for <InversionChart>. Percentages are URBN operational data cleared by Paul for publication. Edit a number here and the chart moves — y positions are COMPUTED from `scale`, never stored, so values and drawing cannot drift apart. Coordinates are viewBox units, not pixels. TWO PANELS, ONE MANIFEST: `geometry`, `scale`, `tiers` and the reference rule are shared at this level and every panel is drawn against them, so the two panels are provably on the same scale. That is the whole reason the comparison is legible, and it is why a second manifest would be wrong rather than merely redundant.",
 
-  "$splitDoc": "Same rule as JourneyLine: only geometry and numerals stay in the SVG, every word goes in HTML. See journey-manifest.json's $splitDoc for the arithmetic. ONE CARVE-OUT: the two direct series labels stay in the SVG at desktop, where they are legible, and are hidden below 768 — the always-present HTML legend carries identity there. The dataviz skill requires a legend at two or more series regardless, with direct labels supplementing it rather than replacing it.",
+  "$splitDoc": "Same rule as JourneyLine: only geometry and numerals stay in the SVG, every word goes in HTML. See journey-manifest.json's $splitDoc for the arithmetic. THE CARVE-OUT FOR DIRECT SERIES LABELS IS RETIRED, 29 Aug. It used to keep the two labels in the SVG at >=768, justified purely by desktop legibility: 16 viewBox units against a full-band 1000-unit drawing computed to 17.4px. The two-across layout removes that justification, because each panel is now roughly half the band and the same 16 units compute to about 8px, under the build's 14px hard floor. There is no breakpoint that fixes this — the labels are gone from the drawing entirely. The always-present HTML legend was already carrying identity on its own below 768, so it now does so at every width, which is what the dataviz skill wanted anyway: a legend is mandatory at two or more series, and direct labels only ever supplemented it.",
 
-  "$exclusionsDoc": "DELIBERATELY ABSENT AND NOT AN OVERSIGHT. No third series: the Reno fulfilment centre (3 / 6 / 11) is the proof it was solvable and belongs in the caption as a sentence. No per-brand columns and no absolute miss counts — they exist in the source table and are exactly the confidential figures Paul cleared for exclusion. Do not add either back.",
+  "$exclusionsDoc": "DELIBERATELY ABSENT AND NOT AN OVERSIGHT. No per-brand columns (AN / FP / UO / URBN) and no absolute miss counts — they exist in the source table and are exactly the confidential figures Paul cleared for exclusion. Do not add either back. Derived percentages computed from the cleared figures are also NOT cleared: the clearance covers the shapes and directions in the source table only. THE NO-THIRD-SERIES RULING IS SUPERSEDED, 29 Aug, and the reasoning is recorded rather than quietly dropped. This document used to say the Reno fulfilment centre (3 / 6 / 11) 'is the proof it was solvable and belongs in the caption as a sentence'. That was decided when this module was one full-band chart and no two-across slot existed, so a caption sentence was the only placement available. The slot now exists, and a caption sentence is the weakest possible placement for the study's only evidence that the problem was fixable — a reader skimming the section never reaches it. Reno is now panel 2. It is still NOT a third series inside one plot, which is what the original ruling was actually protecting: three lines in one frame would have made the monochrome dash vocabulary carry more than it can.",
+
+  "$precisionDoc": "THE CONSTRAINT THAT MATTERS MOST IN THIS MODULE. Reno is a FULFILMENT CENTRE. The store network is STORES. Reno's 3 / 6 / 11 is proof that the NETWORK could hit dates; it is NOT proof that STORES could. Panel 2 reads against panel 1's All nodes series (3 / 16 / 22), which is the like-for-like comparison. Nothing in the panel titles, the captions, the annotation or the aria label may imply that Reno solved the store problem, and the MDX prose beside this module carries the same prohibition.",
 
   "geometry": {
     "$viewBoxDoc": "Height is 330, not the prototype's 350. The bottom 34 units were the stage/tier label band, and those labels are HTML now — leaving the height at 350 reserves empty space under the axis that reads as a gap between the drawing and its labels.",
     "viewBox": "0 0 1000 330",
     "axisY": 316,
     "axisX1": 40,
-    "$gutterDoc": "axisX2/refX2 stop at 800, not 960, and the direct labels start beyond them at 820. The rules used to run the full width while the data stopped at the last tier (760): at desktop the labels filled that gutter so it read as intentional, but once they are hidden below md the rules visibly overshoot the data into empty space. Ending the rules just past the last point fixes both readings with one number.",
+    "$gutterDoc": "axisX2/refX2 stop at 800, not 960. The rules used to run the full width while the data stopped at the last tier (760), and the direct series labels filled the gutter beyond them so it read as intentional. Those labels are gone now (see $splitDoc), so the gutter past 800 is empty in every panel at every width; ending the rules just past the last point is what keeps them from overshooting the data.",
     "axisX2": 800,
     "refX1": 40,
     "refX2": 800,
     "dotR": 4.5,
-    "dotRMobile": 13,
-    "seriesLabelX": 820,
-    "seriesLabelOffsetY": 5,
-    "$fontSizeDoc": "viewBox units. Only the series labels remain, and only at >=768 where 16 x 1.088 = 17.4px.",
-    "fontSize": { "series": 16 }
+    "dotRMobile": 13
   },
 
-  "$scaleDoc": "yZero is the 0% baseline, yMax the top of the plot. y = yZero - (value / valueMax) * (yZero - yMax).",
+  "$scaleDoc": "yZero is the 0% baseline, yMax the top of the plot. y = yZero - (value / valueMax) * (yZero - yMax). SHARED BY BOTH PANELS AND NOT NEGOTIABLE PER PANEL: valueMax 45 is set by the worst store-network figure, so Reno's 3 / 6 / 11 draws as the nearly flat line it is rather than being rescaled into a shape that looks like the others.",
   "scale": { "yZero": 290, "yMax": 60, "valueMax": 45 },
 
-  "$refDoc": "The reference line sits at the standard tier's rate, so both series visibly climb away from what dependable looked like. BELOW the drawing, mirroring JourneyLine: this chart's rule is at the bottom of its plot, so the label goes under the SVG rather than over it.",
+  "$refDoc": "The reference line sits at the standard tier's rate, so a series visibly climbs away from what dependable looked like. BELOW the drawing, mirroring JourneyLine: this chart's rule is at the bottom of its plot, so the label goes under the SVG rather than over it. It is drawn in BOTH panels, at the same y, because it is the shared baseline the pair is compared against — in panel 2 it doubles as the reading that Reno never leaves it.",
   "refValue": 3,
   "refLabel": "WHERE STANDARD SAT",
   "refLabelPlacement": "below",
 
-  "$tiersDoc": "x is ordered BY PRICE, cheapest first, and drives both the plotted points and the axis row's grid columns. The line must visibly rise where a reader expects it to fall. That inversion is the entire module.",
+  "$tiersDoc": "x is ordered BY PRICE, cheapest first, and drives both the plotted points and the axis row's grid columns in every panel. The line must visibly rise where a reader expects it to fall. That inversion is the entire module.",
   "tiers": [
     { "label": "Standard",         "days": "4 to 7 days", "short": "Standard",  "x": 140 },
     { "label": "Express",          "days": "2 to 3 days", "short": "Express",   "x": 450 },
     { "label": "Overnight / rush", "days": "1 to 2 days", "short": "Overnight", "x": 760 }
   ],
 
-  "series": [
-    { "name": "All nodes",     "style": "solid",  "values": [3, 16, 22] },
-    { "name": "Store network", "style": "dashed", "values": [3, 29, 45] }
+  "$panelsDoc": "Two panels, side by side above 768 and stacked below it, matching .framed-pair. Panel titles are AUTHORED IN THE BUILD and are placeholders in the draft's register for Paul, the same status as the caption strings below. Every panel is drawn against the shared geometry, scale, tiers and reference rule above.",
+  "panels": [
+    {
+      "id": "network",
+      "title": "The network, and the stores inside it",
+      "series": [
+        { "name": "All nodes",     "style": "solid",  "values": [3, 16, 22] },
+        { "name": "Store network", "style": "dashed", "values": [3, 29, 45] }
+      ],
+      "$annotationDoc": "AUTHORED IN THE BUILD, NOT DRAFTED — flagged for Paul, same status as the caption. Placed under the overnight column using the mechanism JourneyLine's tailNote already uses: an HTML paragraph grid-placed against the same --ic-tier-cols tracks the axis row rides. THE LINE THAT CANNOT BE CROSSED: this note is about a RATE and about where complaints concentrated. It must never say or imply that most missed dates were expedited. They were not. Standard is about 96% of volume and produced the majority of raw misses; expedited is the small share with the worst rate. Write about rates, never about where misses concentrated in absolute terms.",
+      "annotation": "About four percent of orders, bought for a date that cannot move."
+    },
+    {
+      "id": "reno",
+      "title": "One fulfilment centre",
+      "series": [
+        { "name": "Reno", "style": "solid", "values": [3, 6, 11] }
+      ]
+    }
   ],
 
   "unit": "%",
 
-  "$captionDoc": "AUTHORED IN THE BUILD, NOT DRAFTED — flagged for Paul. No caption for this module exists in docs/urbn-delivery-promise-content-draft.md, and the brief requires the Reno numbers to land here as a sentence. Both strings below, and refLabel above, are placeholders in the draft's register for Paul to rewrite.",
+  "$captionDoc": "AUTHORED IN THE BUILD, NOT DRAFTED — flagged for Paul. No caption for this module exists in docs/urbn-delivery-promise-content-draft.md. Both strings below, the panel titles, the annotation and refLabel above are placeholders in the draft's register for Paul to rewrite. THE GLOSS NO LONGER CARRIES THE RENO NUMBERS: panel 2 plots them, so repeating them here would state the same fact twice. What the gloss carries instead is the one thing the drawing cannot say for itself, which is what Reno is and therefore what it is and is not evidence for. See $precisionDoc.",
   "caption": {
     "lead": "Missed delivery dates, by tier.",
-    "gloss": "Reno missed 3, 6 and 11 percent across the same three tiers. The rest was solvable."
+    "gloss": "Reno is a fulfilment centre, so it reads against all nodes rather than against stores."
   },
 
-  "ariaLabel": "A line chart of missed delivery dates across three shipping tiers ordered by price, cheapest first. Both series start together at 3 percent for standard shipping and rise as the tier gets more expensive: across all nodes to 16 percent at express and 22 percent at overnight, and across the store network to 29 percent at express and 45 percent at overnight. The store network line rises roughly twice as steeply."
+  "ariaLabel": "Two line charts of missed delivery dates across three shipping tiers ordered by price, cheapest first, drawn on the same scale. The first chart covers the network: both series start together at 3 percent for standard shipping and rise as the tier gets more expensive, across all nodes to 16 percent at express and 22 percent at overnight, and across the store network to 29 percent at express and 45 percent at overnight. The second chart covers one fulfilment centre, Reno, which starts at the same 3 percent and stays nearly flat, reaching 6 percent at express and 11 percent at overnight. Reno is a fulfilment centre and compares to the all nodes series, not to the store network."
 }
