@@ -395,8 +395,14 @@
      while one on a `color:` at the point of use is a weight-fake. It is derived from
      --text-primary rather than reaching for --border-strong, which was the first
      attempt and rendered as tan bars on a colourless site. Mixing the text colour
-     into the canvas keeps the bar in the monochrome family in both modes. */
-  --fill-quiet:             color-mix(in oklch, var(--text-primary) 26%, var(--bg-canvas));
+     into the canvas keeps the bar in the monochrome family in both modes.
+
+     26% -> 46% REPAIRS A LIVE FAILURE AGAINST THE 3:1 GRAPHICS FLOOR. At 26 this
+     measured 1.88 against the canvas. A chart bar is a meaningful graphical object,
+     not decoration, so 3.0 is the floor and 1.88 is not near it. Light is the binding
+     mode: it needs at least 43% to clear 3.0 where dark needs 41. 46 measures 3.33,
+     with chroma 0.0169 - still monochrome-warm. */
+  --fill-quiet:             color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas));
   /* Non-text contrast carrier for underlines and interactive edges.
      --border-default (0.360 chroma-light) sits under 3:1 against the cream
      canvas, so it cannot legally carry an affordance on its own. */
@@ -496,10 +502,14 @@
   --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
   --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
   --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
-  /* Dark needs more of the text colour to read at the same weight against a dark
-     canvas: 26% of a near-white into espresso is fainter than 26% of near-black into
-     cream. Tuned per mode, like every other pair here. */
-  --fill-quiet:             color-mix(in oklch, var(--text-primary) 32%, var(--bg-canvas));
+  /* THE BASIS CHANGED, WHICH IS WHY THE DIRECTION DID. This used to read "dark needs
+     MORE of the text colour to read at the same weight", and at 26/32 that was true:
+     the pair was matched by eye. It is now matched against a measured floor, and on
+     that basis dark needs LESS - 44 gives 3.32 where light's 46 gives 3.33, so both
+     modes carry the same headroom over the 3:1 graphics floor rather than the same
+     apparent weight. Still tuned per mode, like every other pair here; only the
+     instrument moved. */
+  --fill-quiet:             color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
   --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
@@ -4246,13 +4256,19 @@ html.dark .figure-placeholder {
 /* Words, in HTML, at real reading size ──────────────────────────────────── */
 
 /* A sentence naming the dotted rule, not a tracked label: it reads as a caption to
-   the drawing rather than as an axis title, so no uppercase and no tracking. */
+   the drawing rather than as an axis title, so no uppercase and no tracking.
+
+   --text-muted, NOT --text-subtle. This is 14px and it is the only string on the
+   page that explains the dotted rule, so it is meaningful text at normal size and
+   its floor is AA-normal at 4.5. --text-subtle measures 3.87 light and 4.20 dark and
+   is AA-LARGE ONLY, which means 24px, or 18.66px bold. --text-muted measures 6.04
+   and 7.34. */
 .tier-chart__ref-label {
   margin: var(--spacing-2xs) 0 0;
   max-width: none;
   font-size: 0.875rem; /* 14px, the system floor */
   line-height: 1.4;
-  color: var(--text-subtle);
+  color: var(--text-muted);
 }
 
 
@@ -4312,13 +4328,25 @@ html.dark .figure-placeholder {
 
 /* The sentiment axis: the louder of the two small-label registers, because it names
    the axis while the stage labels only name positions along it. Hierarchy rides
-   weight and token, never size, since below 14px is not available to spend. */
+   weight, caps and tracking, never size and no longer token, since below 14px is not
+   available to spend.
+
+   --text-muted, NOT --text-subtle, AND 700 BUYS NO RELIEF HERE. WCAG large text is
+   18.66px bold; this is 14px bold, which is normal size, so the floor is AA-normal
+   at 4.5 and --text-subtle's 3.87 light / 4.20 dark fails it. These three words name
+   the axis a reader measures every point against, so they are as meaningful as text
+   on this page gets. --text-muted measures 6.04 and 7.34.
+
+   THAT ALSO MOVED THE HIERARCHY OFF THE TOKEN. Both small-label registers now sit on
+   --text-muted, so the separation is carried by weight (700 against 400), caps and
+   tracking alone. See inversion-manifest.json's $typeDoc, which used to name the
+   token as one of the channels and no longer can. */
 .journey-line__sentiment,
 .journey-line__sentiment-cols {
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--text-subtle);
+  color: var(--text-muted);
 }
 
 /* One row per band, aligned to the three the SVG draws. */
@@ -4701,7 +4729,9 @@ html.dark .figure-placeholder {
   line-height: 1.4;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--text-subtle);
+  /* --text-muted, not --text-subtle: 14px at 700 is normal size, not WCAG large,
+     which starts at 18.66px bold. Same call as .journey-line__sentiment. */
+  color: var(--text-muted);
 }
 
 .journey-line > .bento-theme__caption,
