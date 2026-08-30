@@ -10,8 +10,8 @@ problemFraming: "Why did free shipping stop working?"
 projectName: "Delivery Promise"
 headline: "Reframed a shipping problem as a broken promise, across three brands."
 summary: "I led delivery strategy across Urban Outfitters, Anthropologie and Free People. Research moved the company off a two-day arms race and onto the promise it was already breaking."
-heroImage: "/case-studies/urbn-delivery-promise/hero-pdp.png" # TODO placeholder: full-frame p18-pdp, not a crop. Replace after the bento-crop pass.
-heroImageAlt: "A product page showing free two-day shipping to a specific zip code with a named arrival date, above a panel listing three fulfillment options including one that is unavailable and says why."
+heroImage: "/case-studies/urbn-delivery-promise/hero-pdp.png"
+heroImageAlt: "A product page for a white ruffle dress: the product photograph beside a rail showing the price, free two-day shipping to a specific zip code and a named arrival date above the add-to-cart button, and below it a panel listing three shipping options including one that is unavailable and says why."
 role: "Senior Product Designer, UX strategy lead"
 timeframe: "2018 – 2019"
 team: "I led strategy and direction. Vertical UX designers on my team carried execution; a researcher owned the primary research. Partnered with brand marketing and e-commerce across three brands, Data Science on metrics, and Customer Service on pain points."
@@ -112,13 +112,31 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     passed, exactly as designed. The beats are two-column from 1024 up now, and no
     CSS changed to do it. */}
 
+{/* THE HERO IS THE REAL CROP NOW, AND THE FRONTMATTER TODO IS GONE WITH IT. It read
+    "placeholder: full-frame p18-pdp, not a crop. Replace after the bento-crop pass."
+    and it was accurate: hero-pdp.png was byte-for-byte the 1441px deck page. The
+    frame declares `calc(100vw - 4rem)` between 768 and 1023, so the worst case is a
+    959 CSS px render and a 1918px source floor - the old file sat at 0.75x UNDER it.
+    The replacement is 2500x3125 and 1.30x over.
+
+    2500x3125 IS EXACTLY 4:5, WHICH IS THE FRAME'S OWN RATIO, so `object-fit: cover`
+    has nothing to crop. That is worth knowing rather than assuming: if it ever does
+    crop, .hero-block__image-frame is not the aspect this note claims and the alt
+    below is describing something the image no longer shows.
+
+    THE ALT GAINED THE PHOTOGRAPH AND LOST "fulfillment". Its claim about the
+    shipping-options panel was checked against the new crop and holds - the panel is
+    in frame, with the unavailable pickup and its explanation. What it never
+    described is the product photograph, which is the visually dominant half of this
+    crop and was not in the old one's account either. And the panel's own header
+    reads "Shipping Options", not fulfillment. */}
 <HeroBlock
   eyebrow="DELIVERY PROMISE · URBN"
   title={['Nobody remembered the wait.', 'Everybody remembered the miss.']}
   role="I led delivery strategy for Urban Outfitters, Anthropologie and Free People. Research reframed a shipping problem as a broken promise, and set the roadmap all three built against."
   image={{
     src: '/case-studies/urbn-delivery-promise/hero-pdp.png',
-    alt: 'A product page showing free two-day shipping to a specific zip code with a named arrival date, above a panel listing three fulfillment options including one that is unavailable and says why.',
+    alt: 'A product page for a white ruffle dress: the product photograph beside a rail showing the price, free two-day shipping to a specific zip code and a named arrival date above the add-to-cart button, and below it a panel listing three shipping options including one that is unavailable and says why.',
   }}
   callout={{
     label: 'WHAT CHANGED',
@@ -554,7 +572,7 @@ The date in the ad has to be the date on the product page, the date in the cart,
   src="/case-studies/urbn-delivery-promise/solution/promise--detail.png"
   alt="A delivery promise on a product page: a truck icon beside the line free 2-day shipping to 16507 with a change location link, an arrival date of September 13 2019 beneath it, and the add to cart button below."
   width={1688}
-  height={560}
+  height={550}
   caption="The line the study is named for. A date, against a zip code, before she commits to anything."
 />
 
