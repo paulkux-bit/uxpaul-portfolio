@@ -617,7 +617,61 @@ The date in the ad has to be the date on the product page, the date in the cart,
 
 <RoadmapTable />
 
-**Every screen in this study sits in the back half of that roadmap.** The browse filters, the cart, Shop My Store. A filter promising two-day delivery is worse than no filter when the date is a guess.
+{/* THE SENTENCE NAMED THREE SCREENS THE STUDY COULD NOT SHOW, until the crops
+    landed on 30 Aug. The cart is in "One date, four places."; the browse filters and
+    the store band are directly below. The review's account of this was that a
+    reader like Jordan extrapolates from small imprecisions, and a claim about
+    specific screens with no screens under it is exactly that shape.
+
+    "Shop My Store" BECAME "Shop Your Store", AND THE ARTIFACT IS WHY. The band
+    mounted below reads *Shop Your Store* on its own button, so the old sentence sat
+    directly on top of a screenshot contradicting it. Same call as the Overnight
+    tier: the side without a rendered artifact is the side that moves.
+
+    "Shop My Store" WAS PROBABLY THE INTERNAL NAME and that is worth keeping off the
+    page rather than losing. It runs through docs/urbn-delivery-promise-v3-brief.md
+    and v4, and through all four dependency-map prototypes in docs/previews/. So the
+    project called it one thing and the button said another - ordinary, and not a
+    fact the study needs to carry, but not one to rediscover either. */}
+**Every screen in this study sits in the back half of that roadmap.** The browse filters, the cart, Shop Your Store. A filter promising two-day delivery is worse than no filter when the date is a guess.
+
+<BentoBand
+  src="/case-studies/urbn-delivery-promise/solution/browse--feature.png"
+  alt="A browse page for pullovers. The left rail carries a Delivery and Pickup filter with two options, free two-day shipping to a zip code selected and free pickup today at a named store unselected, above filters for neckline, colour, brand and price. Every product tile in the grid carries a free two-day badge."
+  caption="The browse filters."
+  gloss="The date becomes something a shopper can filter by, and every tile says whether it holds."
+  aspect={1.6}
+/>
+
+{/* A BAND, NOT A RIBBON, AND THE REASON IS A STALE CONSTANT IN THE SOURCE OF TRUTH.
+    <BentoRibbon> was the obvious mount for a 21:1 strip and it MEASURED BLURRY on a
+    phone. lib/bento-slots.json derives a ribbon's mobile canvas from
+    `ribbonTrackHeightPx: 80`, giving 80 x 21.053 = 1684px and a retina floor of 3368,
+    which this 3600px crop clears at 1.07x. But globals.css floors the ribbon track at
+    `min-height: 128px` below 430px, so the real canvas is 2694.8px and the real floor
+    is 5390 - and 3600 against that is 0.67x. Rendered at 390 on a 2x device the words
+    are visibly soft, which is the worst case for a strip that is almost entirely text.
+
+    A BAND IS WIDTH-DRIVEN WHERE A RIBBON IS HEIGHT-DRIVEN, and that is the whole
+    difference: `scrollFloor` sets the media's min-width directly, so the retina floor
+    is a number chosen rather than one derived from a track height. 1700 is the
+    largest round floor the source serves with headroom - 3600 / (2 x 1700) = 1.06x,
+    against 1.00x at 1800 - and it renders 80.7px tall, which is 94% of the strip's
+    own native height. At >=768 the band is container-width, identical to what the
+    ribbon would have been, and clears its floor at 1.65x.
+
+    THE JSON CONSTANT IS THE REAL DEFECT AND IT IS NOT FIXED HERE. crop.py reads that
+    file, so every future ribbon is cut against the same understated floor. Changing
+    it moves the floor for every crop on the site and belongs in its own pass. This is
+    the site's first mounted <BentoRibbon>, which is why it has not bitten before. */}
+<BentoBand
+  src="/case-studies/urbn-delivery-promise/solution/store--ribbon.png"
+  alt="A slim band across a product page reading free pickup today at Walnut Street, with a change store link and a Shop Your Store link at the far right."
+  caption="Shop Your Store."
+  gloss="The same promise for the store nearest her, on a band that runs under the product."
+  aspect={21.053}
+  scrollFloor={1700}
+/>
 
 We had a mature design practice, so screens were never the constraint. What stopped us was that no team held more than a third of the promise, and the thirds had to land in order. **The best thing I designed was a roadmap.**
 
