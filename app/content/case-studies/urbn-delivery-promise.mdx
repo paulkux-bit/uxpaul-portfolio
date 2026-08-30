@@ -77,12 +77,19 @@ nda: false
 import JourneyLine from '@/components/case-studies/urbn-delivery-promise/JourneyLine';
 import TierChart from '@/components/case-studies/urbn-delivery-promise/TierChart';
 import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart';
-import PromiseSequence from '@/components/case-studies/urbn-delivery-promise/PromiseSequence';
 import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
 import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
-{/* TWO MODULES ARE RETIRED, NOT DEFERRED, and one import is genuinely pending.
+{/* THREE MODULES ARE RETIRED, NOT DEFERRED, and they died three different deaths.
+
+    PromiseSequence is the newest and the only one that was never wrong. It was a
+    <BentoTheme> of three `pending: true` stages standing in for crops that had not
+    been cut, rendering as labelled grey boxes so the page could be judged before
+    the art existed. The crops landed on 30 Aug and "One date, four places." mounts
+    them for real, so the stand-in has been superseded rather than rejected. Its
+    file stays on disk and its import is gone. A placeholder outlived by the thing
+    it stood in for is not a missing figure; see the note at section 04.
 
     FanOut and DependencyMap are both dead, and both died the same way: each was
     named for a shape the argument turned out not to have. FanOut assumed the
@@ -468,15 +475,31 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <section className="cs-section">
 
-## A shopper should meet the same date everywhere.
+{/* THE QUESTION SECTION, AND IT CARRIES NO FIGURE ON PURPOSE. All three shipped
+    studies open their solution section with a question and answer it flat: BARD's
+    "How do you unify fifty-six jurisdictions without changing one?", FDT-E's "How
+    do you trust what you can't question?", Nuuly's "How do you give one cart seven
+    jobs?". This section had a declarative header and a figure, which made it the
+    only one of the four that answered before it asked.
 
-<p className="section-lede">I built it at the platform level rather than for one brand. Three brands, one promise, with room for each to override what it needed to.</p>
+    <PromiseSequence /> WAS UNMOUNTED HERE, AND IT IS RETIRED RATHER THAN MISSING.
+    Two reasons, and the second is the one a later pass will not guess. BARD and
+    FDT-E both carry no figure in the question section, so the absence is the
+    pattern. And the component was never a diagram: it is a <BentoTheme> of three
+    `pending: true` stages - the ad, the product page, the cart - rendering as
+    labelled grey boxes while their crops were outstanding. Those crops landed on
+    30 Aug and the section below mounts them for real, alongside the SMS thread
+    PromiseSequence's own $smsDoc had ruled out on retina grounds that no longer
+    hold. A placeholder superseded by the thing it stood in for is not a gap.
+
+    The file stays on disk, unmounted. Do not restore it as a missing figure. */}
+## How do you show a date a shopper can trust?
+
+<p className="section-lede">At the platform level, not per brand. Three brands, one promise, with room for each to override what it needed to.</p>
 
 The date in the ad has to be the date on the product page, the date in the cart, and the date that arrives by text. A promise told three different ways is three guesses.
 
 **Leadership moved when I showed them the horror stories.** The order cancelled four days after it was paid for. The refund a shopper was still chasing. The one-star review whose title was the name of the benefit. After that the argument stopped being about inventory.
-
-<PromiseSequence />
 
 </section>
 
