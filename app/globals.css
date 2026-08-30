@@ -2453,12 +2453,34 @@ html.dark .oku-figure {
   margin: var(--spacing-xl) 0 var(--spacing-xl);
 }
 
+/* THE HAIRLINE IS THE HOUSE MECHANISM NOW, and this is the first commit in which
+   any of it renders: <Figure> was registered in mdx-components.tsx from the start
+   and mounted by nothing until section 05. The rule it replaces was a
+   currentColor 12% mix, which is the weight-fake pattern the colour system bans
+   at the point of use and which no other image on the site uses. Every shipped
+   figure - the bento media, the framed pair - carries
+   `box-shadow: inset 0 0 0 1px var(--border-subtle)`, which is also what
+   CLAUDE.md states. An inset shadow rather than a border so the line sits inside
+   the box and cannot add a pixel to the layout. */
 .figure__image {
   display: block;
   width: 100%;
   height: auto;
   border-radius: var(--radius-s);
-  border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* AN IN-COLUMN FIGURE INSIDE A BREAKOUT SECTION HAS TO BE RE-CAPPED, and without
+   this it silently is not. `.case-study-prose` caps at 660px, but at >=1024
+   `.case-study-prose > .cs-section` breaks out to min(100vw - 4rem, 68rem) = 1088
+   and nothing re-caps a figure inside it - so `.figure` would render at the band
+   width while <Figure>'s own `sizes="(max-width: 768px) 100vw, 660px"` goes on
+   telling the browser 660. That mismatch is not cosmetic: it decides which source
+   the browser picks, and promise--detail.png at 1688px is 1.28x its retina floor
+   at 660 and 0.78x - BELOW the floor - at 1088. The cap is what makes the authored
+   `sizes` true. */
+.cs-section > .figure {
+  max-width: 660px;
 }
 
 .figure__caption {

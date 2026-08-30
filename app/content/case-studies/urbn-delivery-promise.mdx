@@ -78,6 +78,7 @@ import JourneyLine from '@/components/case-studies/urbn-delivery-promise/Journey
 import TierChart from '@/components/case-studies/urbn-delivery-promise/TierChart';
 import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart';
 import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
+import { BentoBand } from '@/components/bento';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
 import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
@@ -500,6 +501,111 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 The date in the ad has to be the date on the product page, the date in the cart, and the date that arrives by text. A promise told three different ways is three guesses.
 
 **Leadership moved when I showed them the horror stories.** The order cancelled four days after it was paid for. The refund a shopper was still chasing. The one-star review whose title was the name of the benefit. After that the argument stopped being about inventory.
+
+</section>
+
+<section className="cs-section">
+
+{/* THE HEADER RHYMES WITH SECTION 02'S AND THE PAIR IS LOAD-BEARING. That one reads
+    "Her order broke in three places." This one reads "One date, four places." Same
+    grammar, inverted meaning: three places broken in the problem section, four kept
+    in the solution section. Neither can be "improved" alone without breaking the
+    other, which is why the dependency is written down here rather than left to be
+    rediscovered - the same reason section 02's lede carries its antecedent note.
+
+    "PLACES", NOT "STEPS", AND THAT IS WHAT MAKES THE LAYOUT HONEST. The shopper's
+    real order is ad, product page, cart, text. The grid runs ad, product page, text,
+    then the cart across the bottom, because a BentoBand is a solo full-width row by
+    construction and the cart crop is 2.06:1 - it cannot sit inside a row of 3:4
+    tiles without breaking the per-row aspect lock the caption baselines depend on.
+    A set claim survives that reordering and a sequence claim would not. So the
+    glosses below are POSITIONAL - where the date is and what it is anchored to -
+    never "then", "still" or "before". Do not rewrite them into a chain.
+
+    FOUR TILES, FOUR PLACES, and the count is checkable: the detail figure above the
+    grid is a zoom of the product page's own promise line, not a fifth place. */}
+## One date, four places.
+
+<p className="section-lede">These are the platform designs, unstyled. I built the capability; the brand teams applied their own design systems on top.</p>
+
+{/* THE LEDE IS THE WHITE-LABEL FRAME AND IT IS SAID ONCE, HERE. "Product Name",
+    "$00.00", "Value / Value / Value" and the generic URBN mark are not unfinished
+    mockups - they are what a platform spec looks like, and URBN's design org was
+    structured that way: platform capability in white label, brands style on top.
+
+    TWO FAILURES THIS SENTENCE EXISTS TO PREVENT. Captioned as "the URBN experience",
+    a hiring manager opens a live brand site, sees something different, and the study
+    reads as claiming shipped brand UI. Captioned apologetically, the placeholders
+    read as sloppy rather than as the artifact of a white-label practice. The register
+    that works is the plain one sections 03 and 07 already use for the credit
+    boundary. Do NOT repeat it in the tile captions; four apologies is worse than
+    none. */}
+
+<Figure
+  src="/case-studies/urbn-delivery-promise/solution/promise--detail.png"
+  alt="A delivery promise on a product page: a truck icon beside the line free 2-day shipping to 16507 with a change location link, an arrival date of September 13 2019 beneath it, and the add to cart button below."
+  width={1688}
+  height={560}
+  caption="The line the study is named for. A date, against a zip code, before she commits to anything."
+/>
+
+{/* THE GRID. Row one is three `tall` tiles; row two is the cart as a band.
+
+    `tall` AND NOT `standard`, EVEN THOUGH THE CROPS ARE NAMED --standard. Both slots
+    are 3:4, so the aspect is identical and the crops fit either. The difference is
+    capacity: SLOT_COLS.standard is 2, so three standards chunk to [2] + [1] and the
+    third tile orphans at half width. `tall` is 3, which is the row this section
+    wants. The crops clear tall's retina floor at 1.92x (1350px against 704), where
+    they clear standard's at 1.26x, so the change costs nothing and buys headroom.
+
+    focal IS INERT AT THIS SLOT AND IS AUTHORED ANYWAY. All three crops are natively
+    1350x1800, which is exactly 3:4, so object-fit: cover has nothing to crop and
+    object-position does not move a pixel. The values are here as insurance: they name
+    the one thing in each frame that cannot be lost if the slot is ever changed to
+    `compact` (1:1) or `wide` (16:10), where cover WOULD crop. Recorded as inert
+    rather than left to look load-bearing, which is its own defect. */}
+<BentoTheme>
+  <BentoItem
+    slot="tall"
+    src="/case-studies/urbn-delivery-promise/solution/ad--standard.png"
+    alt="A sponsored social post from URBN: a photograph of a shopper in a knit sweater leaning on a fence rail, above a link card headed Winter Sweater Party that reads free 2-day shipping, no minimum."
+    focal={{ x: 0.5, y: 0.94 }}
+    caption="The ad."
+    gloss="In the offer, before she has clicked anything."
+  />
+  <BentoItem
+    slot="tall"
+    src="/case-studies/urbn-delivery-promise/solution/pdp--standard.png"
+    alt="A product page showing free two-day shipping to a zip code with a named arrival date above the add-to-cart button, and a panel listing three shipping options including one that is unavailable and says why."
+    focal={{ x: 0.5, y: 0.45 }}
+    caption="The product page."
+    gloss="Against her zip code, with the item in front of her."
+  />
+  <BentoItem
+    slot="tall"
+    src="/case-studies/urbn-delivery-promise/solution/sms--standard.png"
+    alt="Three post-purchase text messages: shipped with a delivery date, arriving today with a time, and delivered."
+    focal={{ x: 0.5, y: 0.16 }}
+    caption="The text message."
+    gloss="After it ships, narrowing to an hour and then to a doorstep."
+  />
+  {/* scrollFloor BECAUSE THE RENDER SAID SO, NOT BECAUSE THE RULE OF THUMB DID.
+      bento-slots.json puts the non-scrolling legibility line near 110px of rendered
+      height, and this band clears it: 166.1px at 390 and 132.1px at 320. It is still
+      texture at both, because that threshold was measured on BARD's bands and this is
+      a full-width desktop cart page - a nav, a three-column table and a summary rail -
+      where BARD's were single strips. Floored at 1088 so the media pans inside its own
+      focusable track instead of squashing, the same fix BARD's KPI strip carries. */}
+  <BentoBand
+    src="/case-studies/urbn-delivery-promise/solution/cart--band.png"
+    alt="A shopping cart under a banner reading that the items are available for two-day delivery, with a location panel that names the shipping destination and marks the order not eligible for store pickup."
+    aspect={2.059}
+    focal={{ x: 0.61, y: 0.26 }}
+    scrollFloor={1088}
+    caption="The cart."
+    gloss="At checkout, beside the location panel that decided the date."
+  />
+</BentoTheme>
 
 </section>
 
