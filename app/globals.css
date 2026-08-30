@@ -4547,8 +4547,42 @@ html.dark .figure-placeholder {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-xl);
-  align-items: start;
+  align-items: stretch;
   margin: var(--spacing-l) 0;
+}
+
+/* THE TWO CAPTIONS SHARE A LINE, AND NOTHING HERE IS INSIDE A MEDIA QUERY.
+   TierChart emits four blocks above its caption - drawing, tier labels, ref label -
+   and NodeChart emits two. Side by side that put NodeChart's caption 97.5px above
+   TierChart's at 1440 and left the figures 97.5px ragged at the foot; two charts in
+   one pair that do not share a baseline read as two charts that were not designed
+   together.
+
+   `align-items: stretch` above equalises the two figures' heights, and `1fr auto`
+   drops each caption into its own row at the foot, so both captions bottom-align on
+   the shared edge. The slack lands as whitespace under the shorter chart's body,
+   which is the honest place for it.
+
+   A ROW SUBGRID ON .chart-pair WAS THE FIRST ATTEMPT AND IT IS WORSE. A subgrid
+   inherits the parent's row-gap, so the caption gap would have become
+   --spacing-xl, and correcting it means declaring row-gap inside the >=1024 query -
+   exactly what lint:space check 4 forbids. This needs no query at all: below 1024
+   each figure is its own row and stretch is a no-op. */
+.chart-pair > .tier-chart,
+.chart-pair > .node-chart {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+/* min-width: 0 BECAUSE THE WRAPPER IS NOW A GRID ITEM HOLDING AN SVG. A grid item's
+   automatic minimum is min-content, and .tier-chart__svg is the same shape that
+   already forced this guard onto .chart-pair's cells and .journey-line's two
+   composition wrappers - without it the drawing refuses to shrink and blows the
+   track. lint:interaction check 9 is what surfaced it: the wrapper landed with no
+   rule at all, which the check flags because it cannot tell a deliberately unstyled
+   wrapper from a rule that was silently dropped. It was the second kind. */
+.tier-chart__body {
+  min-width: 0;
 }
 
 @media (min-width: 1024px) {
@@ -4642,10 +4676,16 @@ html.dark .figure-placeholder {
    90% and 22% of the track in both, because it lives in the geometry rather than in
    the available width. The rule this replaces claimed 150 / 135 / 33 and was out by
    roughly 1.8x. */
-.node-chart {
+/* align-content: start OR THE MARKER FLOATS OFF THE BARS. This grid is now inside a
+   `1fr` row that stretches to match TierChart's height, and a grid container taller
+   than its own content distributes the slack into its auto rows - which pushed the
+   rows block 165px below the marker naming it. `start` keeps the whole block at the
+   top of the slack, where the marker sits on the bars it labels. */
+.node-chart__body {
   display: grid;
   grid-template-columns: max-content 1fr max-content;
   column-gap: var(--spacing-s);
+  align-content: start;
 }
 
 .node-chart__average,
@@ -4660,14 +4700,19 @@ html.dark .figure-placeholder {
   align-items: center;
 }
 
-.node-chart > figcaption {
+.node-chart__body > figcaption {
   grid-column: 1 / -1;
 }
 
+/* --text-muted, NOT --text-secondary, to match .tier-chart__tier. Same register on
+   both sides of the pair - a 14px name identifying a row or a point - and the
+   manifest's $typeDoc already says stage and tier names are 400 at --text-muted.
+   Measures 6.06 light and 7.35 dark, clear of AA-normal. --hi keeps --text-primary,
+   which is what carries the emphasis. */
 .node-chart__name {
   font-size: 0.875rem; /* 14px, the system floor */
   line-height: 1.4;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
@@ -4706,8 +4751,12 @@ html.dark .figure-placeholder {
   background: var(--text-primary);
 }
 
+/* 1.25rem, NOT 1.125rem, TO MATCH .tier-chart__value. The two charts sit side by
+   side and their quiet values were 20px and 18px, which is a difference a reader
+   reads as meaning and which means nothing. Both --hi/--end values are 1.75rem, so
+   the emphasis step is now 1.4x on both sides instead of 1.4x and 1.56x. */
 .node-chart__value {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   line-height: 1.3;
   color: var(--text-secondary);

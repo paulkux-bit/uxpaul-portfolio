@@ -50,6 +50,13 @@ export default function NodeChart() {
 
   return (
     <figure className="node-chart" style={style}>
+      {/* ONE BODY WRAPPER, AND IT OWNS THE THREE-COLUMN GRID NOW. .chart-pair gives
+          each figure `grid-template-rows: 1fr auto` so the two captions land on one
+          line, which needs everything above the caption to be a SINGLE child. The
+          subgrid the marker and the rows read is therefore declared on this wrapper
+          rather than on the figure; nothing else about it changed. TierChart carries
+          the same wrapper for the same reason. */}
+      <div className="node-chart__body">
       {/* The marker label rides the same track as the bars, so it sits over the rule
           rather than over the row labels. aria-hidden: the SVG-free chart below is
           already fully readable text, and the aria label on the group states the
@@ -91,6 +98,7 @@ export default function NodeChart() {
             </span>
           </Fragment>
         ))}
+      </div>
       </div>
 
       <figcaption className="bento-theme__caption">

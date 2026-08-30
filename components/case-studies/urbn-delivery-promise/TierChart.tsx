@@ -31,6 +31,13 @@ export default function TierChart() {
 
   return (
     <figure className="tier-chart">
+      {/* ONE BODY WRAPPER, AND IT EXISTS FOR THE PAIR RATHER THAN FOR THIS CHART.
+          .chart-pair gives each figure `grid-template-rows: 1fr auto`, so the caption
+          sits in its own row at the foot and the two captions land on one line. That
+          needs everything above the caption to be a SINGLE child; without it each of
+          these four blocks would claim a row of its own and the pair would have
+          nothing to align. NodeChart carries the same wrapper for the same reason. */}
+      <div className="tier-chart__body">
       <svg className="tier-chart__svg" viewBox={g.viewBox} role="img" aria-label={manifest.tierAriaLabel}>
         <line className="tier-chart__ref" x1={g.refX1} y1={refY} x2={g.refX2} y2={refY} />
         <path className="tier-chart__line" d={d} />
@@ -66,6 +73,7 @@ export default function TierChart() {
       </ol>
 
       <p className="tier-chart__ref-label">{manifest.refLabel}</p>
+      </div>
 
       <figcaption className="bento-theme__caption">
         <span className="bento-theme__lead">{caption.lead}</span>{' '}
