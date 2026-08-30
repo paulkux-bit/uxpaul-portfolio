@@ -63,10 +63,11 @@
     { "pointIndex": 6, "index": "3" }
   ],
 
+  "$breaksDoc": "LEADS ONLY. THE TAILS WERE CUT AND THE FULL CUT WAS CONSIDERED AND REJECTED, which is the part worth writing down. Removing the list entirely would have taken out one of section 03's four furniture grammars, and the review identified those four as the actual mechanism behind the section's weight; what decided it the other way was the scroll-back cost on a phone, where the badges and the list are far apart. So the list stays and each entry is one line. Do NOT promote the badges to 01 / 02 / 03: that change belonged to the option not taken, and the badges rhyme with the marks on the drawing, which are 1 / 2 / 3. The three deleted tails were 'She is guessing until checkout.', 'Twice: on submit, then by email four days later.' and 'Nothing decided which.'; they are recorded here so a later pass restores them deliberately or not at all.",
   "breaks": [
-    { "index": "1", "lead": "No date, anywhere.",            "tail": "She is guessing until checkout." },
-    { "index": "2", "lead": "Out of stock, after she paid.", "tail": "Twice: on submit, then by email four days later." },
-    { "index": "3", "lead": "One order, three boxes.",       "tail": "Nothing decided which." }
+    { "index": "1", "lead": "No date, anywhere." },
+    { "index": "2", "lead": "Out of stock, after she paid." },
+    { "index": "3", "lead": "One order, three boxes." }
   ],
 
   "$captionDoc": "The gloss is the PROTOTYPE's wording, not the content draft's: the draft read 'the drops are not about price' and Paul reconciled to 'none' on 23 Aug, as the stronger claim and a true one. THE 'ENDS LOWER THAN IT STARTED' CLAUSE WAS REMOVED on 29 Aug: the labelled axis now shows where she ends, so the caption was narrating the picture. What replaced it is the reading a viewer might miss, which is that she recovers each time.",

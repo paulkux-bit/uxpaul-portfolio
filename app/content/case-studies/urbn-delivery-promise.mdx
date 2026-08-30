@@ -212,14 +212,18 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     as a group: "Research session" and "App Store review, July 2019" are
     attributions, not a description of who was asked.
 
-    IT ALSO SUPPLIES THE ANTECEDENT THE H2 NEVER HAD, which is the load-bearing
-    reason and the one most likely to be lost. The heading above reads "Her order
-    broke in three places", and until this sentence existed there was no "her"
-    anywhere in the rendered study for it to refer to. Angela is named only in a
-    code comment further down, which a reader never sees. Open since the 28 Aug
-    independent review. A future editor trimming this lede for length would
-    silently reintroduce a dangling pronoun in a heading, so the dependency is
-    written down here rather than left to be rediscovered.
+    THE ANTECEDENT FOR THE H2 IS THE THIRD SENTENCE, AND IT IS LOAD-BEARING. The
+    heading above reads "Her order broke in three places". The 29 Aug fix named who
+    was researched and closed a different gap, but it left the nearest singular
+    female antecedent on screen as the RESEARCHER in this very lede - two review
+    lenses read it that way independently. "This is one of their orders." fixes it:
+    "their" is the shoppers, and the beats' "she" then has someone to be. Angela is
+    named only in a code comment further down, which a reader never sees. A future
+    editor trimming this lede for length would silently reintroduce a dangling
+    pronoun in a heading, and would now do it by deleting the shortest sentence in
+    the paragraph, so the dependency is written down here rather than left to be
+    rediscovered. The first two sentences are Paul's verbatim and unchanged; the
+    third is an append.
 
     TWO THINGS DELIBERATELY NOT ADDED. No sentence saying "and here is what I
     found": the H2 makes the claim and three numbered beats follow it, so saying
@@ -227,7 +231,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     01. And no brand names: "URBN brands" is scope, not a fourth enumeration. The
     three-brand list already runs three times in this file, in the frontmatter
     summary, in the hero's role line and in section 01's lede. */}
-<p className="section-lede">A researcher ran interviews with shoppers who had ordered from URBN brands online. I worked through the analysis with her, against order data and customer service tickets.</p>
+<p className="section-lede">A researcher ran interviews with shoppers who had ordered from URBN brands online. I worked through the analysis with her, against order data and customer service tickets. This is one of their orders.</p>
 
 {/* FIGURE SLOTS x3. The subject is the SHOPPER at the moment the order breaks,
     never an abstraction and never a system diagram. That is what keeps this set
@@ -286,8 +290,18 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 <section className="cs-section">
 
 {/* THE SECTION'S JOB is Paul building an evidence case and taking it to executives:
-    evidence, then conversion, then the room. Every sentence below is Paul's and is
-    reproduced verbatim. Do not reword them.
+    evidence, then conversion, then the room.
+
+    "EVERY SENTENCE BELOW IS PAUL'S AND IS REPRODUCED VERBATIM" WAS TRUE UNTIL 30 Aug
+    AND IS NOT ANY MORE, so the standing instruction it carried is replaced rather
+    than quietly left standing. Three sentences were rewritten in a copy pass Paul
+    ruled on line by line: the lede, the first finding, and the closing credit line.
+    Each one is recorded at its own site with what changed and why. The rest of the
+    section is still verbatim.
+
+    WHAT SURVIVES OF THE OLD RULE is the part that matters: nothing here gets reworded
+    on a passing judgment. A change to this section's prose is Paul's call, taken
+    against a named problem, and it leaves a note behind.
 
     WHOSE SECTION THIS IS: THE BUSINESS AND THE BRANDS, NOT THE SHOPPER. Section 02
     was the shopper's section and this one is not, which settles the "person" half of
@@ -300,9 +314,9 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     proved by the section working. */}
 ## We were losing trust where we charged the most.
 
-<p className="section-lede">In order to create a narrative for leadership to buy in, I dug into various data threads.</p>
+<p className="section-lede">I dug into the numbers behind the misses.</p>
 
-**Standard shipping was dependable.** The premium shipping method bought a worse chance of arriving on time. Orders out of stores were the worst of all.
+**Standard shipping was dependable.** Express and overnight bought a worse chance of arriving on time. Some online orders shipped from retail stores, and those were the worst of all.
 
 {/* THE CHART PAIR, REBUILT 29 Aug. It replaced <InversionChart>, which plotted All
     nodes against Store network as though they were peers. THEY ARE NOT: All nodes is
@@ -318,7 +332,18 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     PRECISION, AND IT IS THE ONE THING HERE A READER CANNOT CHECK: Reno and Gap are
     FULFILLMENT CENTRES, the store network is STORES, so Reno's 11 percent is proof the
     NETWORK could hit the date and not proof STORES could. NodeChart's caption gloss
-    carries that clause and it is not a placeholder. */}
+    carries that clause and it is not a placeholder. It now says it in plain words -
+    "Reno is a warehouse. It proves the network could hit the date, not that stores
+    could." - because the wording it replaces, "reads against the network rather than
+    against stores", is not parseable without domain habit, and a load-bearing clause
+    a reader cannot decode is not carrying anything.
+
+    THE CAPTIONS NAME THE METRIC NOW. Until 30 Aug no visible string on either chart
+    said missed, late, on-time or delivery: not the leads, the glosses, the ref label
+    or any tier or node label. Both aria labels said it outright, so the accessible
+    description was the better caption and it was the one nobody read. The glosses
+    also state that NodeChart decomposes TierChart's last point - the two 22s are the
+    same number - which no visible string used to say. */}
 <div className="chart-pair">
   <TierChart />
   <NodeChart />
@@ -351,17 +376,28 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
   <cite>Anthropologie customer</cite>
 </blockquote>
 
-{/* PAUL'S MATERIAL, NOT YET PAUL'S FINAL WORDS. From his own account: "Data converted
-    to a journey map with real user frustration moments illustrated the horror story to
-    the execs. My role was building the narrative and presenting to execs."
+{/* THE CREDIT BOUNDARY IS NOW STATED, NOT IMPLIED. Rewritten 30 Aug when the closing
+    sentence changed; the note it replaces flagged this paragraph as Paul's raw
+    material awaiting his own words, which it no longer is.
 
     CREDIT HONESTY, A HARD CONSTRAINT RATHER THAN A STYLE NOTE. The narrative and the
     presentation are Paul's. THE NODE-LEVEL ANALYSIS WAS NOT: a data analytics SME
     proposed going deeper on the rates and that team did the work. Paul's words are
-    "Lot of smart people did the work alongside me." Nothing here may claim the
-    analysis, which is why it begins at turning numbers into a journey rather than at
-    producing them. A reader cannot detect a breach and a reference check can. */}
-**I turned the numbers into a journey, with the moments customers got angry marked on it.** That was the version leadership could see. My role through it was building the narrative and presenting it to executives.
+    "Lot of smart people did the work alongside me." A reader cannot detect a breach
+    and a reference check can.
+
+    THE OLD SENTENCE CARRIED THAT BOUNDARY BY OMISSION - "my role through it was
+    building the narrative and presenting it to executives" leaves what is not his
+    for the reader to infer. "The analysis behind the numbers was other people's."
+    says it. Saying it is also what makes the two verbs safe to shorten to "I built
+    the narrative and I presented it", because the sentence after them scopes the
+    claim instead of the phrasing having to.
+
+    IT ALSO RESOLVES AN OVERLAP FROM THIS SIDE. Section 04 opens "Leadership moved
+    when I showed them the horror stories", which is the same beat told again.
+    Section 03 is the side that gave way, per the review; SECTION 04 IS NOT TO BE
+    TOUCHED. */}
+**I turned the numbers into a journey, with the moments customers got angry marked on it.** That was the version leadership could see. I built the narrative and I presented it. The analysis behind the numbers was other people’s.
 
 {/* FIVE THINGS ARE GONE FROM THIS SECTION AND NONE SHOULD COME BACK.
 
@@ -374,8 +410,23 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     DELETED 29 Aug. "The shoppers who needed the date most were the ones we failed
     most often." plus its rush-shipping sentences. Its content is in the charts now:
     the 45 percent is a bar and the 4 percent was a rate the charts state better. And
-    the lede's old second sentence, "The faster a shopper paid to go, the more likely
-    we were to miss", which Paul's new lede replaces.
+    the lede's second sentence, "The faster a shopper paid to go, the more likely we
+    were to miss."
+
+    REPLACED 30 Aug, AND THE 29 Aug LEDE THAT REPLACED THE SENTENCE ABOVE IS ITSELF
+    GONE. "In order to create a narrative for leadership to buy in, I dug into various
+    data threads." became "I dug into the numbers behind the misses." Three review
+    lenses reached that independently, from copy, from comprehension and from
+    geometry, and it was the only lede in the study that did not fill its measure: 17
+    words to 8, with "in order to" and "various data threads" carrying none of them.
+    Two more in the same pass. "The premium shipping method bought a worse chance"
+    became "Express and overnight bought a worse chance", because "premium shipping
+    method" is a term used nowhere else in a study the review counted seven
+    speed-words in, and naming the tiers matches the chart's own labels. And THAT URBN
+    SHIPPED ONLINE ORDERS OUT OF RETAIL STORES WAS NEVER ESTABLISHED - it arrived as a
+    five-word aside in section 02's third beat and the whole of this section rests on
+    it - so "Some online orders shipped from retail stores, and those were the worst
+    of all." now states it where it is needed.
 
     NEVER USED, AND DELIBERATELY. Two sentences Paul wrote that a later pass must not
     "restore" on the grounds that they exist: "What I found was interesting", which

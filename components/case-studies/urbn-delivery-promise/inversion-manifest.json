@@ -51,14 +51,14 @@
 
   "unit": "%",
 
-  "$captionDoc": "AUTHORED IN THE BUILD, NOT DRAFTED — flagged for Paul. No captions for these modules exist in docs/urbn-delivery-promise-content-draft.md. Every string here is a placeholder in the draft's register for Paul to rewrite. THE SECOND GLOSS'S RENO CLAUSE IS LOAD-BEARING and is not a placeholder: it is what keeps a reader from taking 11 percent as proof that stores could hit the date. See $precisionDoc.",
+  "$captionDoc": "NOT PLACEHOLDERS ANY MORE. These were authored in the build and flagged for Paul; he has since rewritten all four strings and they are settled. THE LEADS NAME THE METRIC, which nothing visible on the page used to do: across both captions, both glosses, the ref label and every tier and node label, no string said missed, late, on-time or delivery. Only the two aria labels did, so the accessible description was the better caption and it was the one nobody read. THE GLOSSES STATE THE RELATIONSHIP: NodeChart decomposes TierChart's last point, the two 22s are the same number, and no visible string said so. THE RENO CLAUSE IS STILL LOAD-BEARING in its new wording - 'Reno is a warehouse. It proves the network could hit the date, not that stores could' - and it is what keeps a reader from taking 11 percent as proof that stores could hit the date. It says in plain words what 'reads against the network rather than against stores' said in a register that needs domain habit to parse. See $precisionDoc. NO SPATIAL WORDS: the draft opened 'The 22 percent above', which is true only below 1024. .chart-pair is 1fr 1fr from there, so TierChart sits to the LEFT at laptop and desktop widths. Any above/below/left/right in a caption on this page is a bug waiting for a breakpoint.",
   "tierCaption": {
-    "lead": "The more a shopper paid, the worse the odds.",
-    "gloss": "Across the whole network."
+    "lead": "Missed delivery dates, by shipping tier.",
+    "gloss": "Across the whole network, before it is broken down by where orders shipped from."
   },
   "nodeCaption": {
-    "lead": "The average was hiding a four-fold spread.",
-    "gloss": "Overnight only. Reno is a fulfillment centre, so it reads against the network rather than against stores."
+    "lead": "The same overnight tier, by where the order shipped from.",
+    "gloss": "That 22 percent is this, averaged. Reno is a warehouse. It proves the network could hit the date, not that stores could."
   },
 
   "tierAriaLabel": "A line chart of missed delivery dates across three shipping tiers ordered by price, cheapest first, across the whole network. Missed dates rise from 3 percent on standard shipping to 16 percent on express and 22 percent on overnight. A dotted reference rule marks the standard rate, so the line visibly climbs away from it.",

@@ -4422,6 +4422,9 @@ html.dark .figure-placeholder {
 /* Two columns rather than a padding-left plus an absolutely positioned numeral: the
    badge is a real box now, so a grid track holds it and the text aligns to the track
    instead of to a guessed inset. */
+/* NO COLOUR ON THE ROW. The tails were cut, so every word in a break is now the
+   lead, and --text-muted here would have been a resting declaration that nothing
+   can reach. The lead's own rule below carries the colour. */
 .journey-line__breaks li {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -4431,7 +4434,6 @@ html.dark .figure-placeholder {
   max-width: 64ch;
   font-size: 1rem;
   line-height: 1.5;
-  color: var(--text-muted);
 }
 
 .journey-line__breaks-lead {

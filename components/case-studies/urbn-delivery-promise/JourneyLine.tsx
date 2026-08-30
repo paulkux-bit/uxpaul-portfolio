@@ -151,9 +151,7 @@ export default function JourneyLine() {
             <span className="journey-line__breaks-idx" aria-hidden="true">
               {b.index}
             </span>
-            <span>
-              <span className="journey-line__breaks-lead">{b.lead}</span> {b.tail}
-            </span>
+            <span className="journey-line__breaks-lead">{b.lead}</span>
           </li>
         ))}
       </ol>
