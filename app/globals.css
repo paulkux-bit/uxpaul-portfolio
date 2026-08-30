@@ -4811,6 +4811,94 @@ html.dark .figure-placeholder {
   margin-top: var(--spacing-m);
 }
 
+/* ── Delivery Promise (URBN): PromiseWalk ─────────────────────────────────────
+   Section 05. One delivery date walked through five stages of an order.
+
+   THE LABEL COLUMN IS THE SPINE AND EVERY RULE BELOW SERVES IT. Aligned left at one
+   edge down the whole section, the five stage names read as a sequence before a
+   reader looks at any image. If they ragged, the spine is gone and the section is a
+   list of pictures. So: one label treatment, `align-items: start` so each label pins
+   to the top of its span instead of centring against medias of wildly different
+   heights, and NO full-width exception anywhere — a single stage rendered wide would
+   move its label out of the column, and one break in five loses the line.
+
+   TWO GAPS ON TWO GRIDS, EACH DECLARED ONCE AND OUTSIDE EVERY QUERY. This is the
+   split RoadmapTable already uses, and it is what makes the mobile collapse behave.
+   Stacked, only .promise-walk__stage's row-gap resolves, so a label sits tight above
+   its own figure against a --spacing-2xl break between stages: the stage name reads
+   as attached to its image rather than floating between two. Side by side, only the
+   column-gap resolves for the label and the row-gap separates Decide's two figures.
+   Same rendering either way, and nothing spacing-related inside a media query, which
+   is exactly what lint:space check 4 forbids. */
+.promise-walk {
+  display: grid;
+  row-gap: var(--spacing-2xl);
+  margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
+}
+
+.promise-walk__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--spacing-m);
+  column-gap: var(--spacing-l);
+  align-items: start;
+}
+
+/* The spine. 14px, tracked caps at 700 — the study's small-label register, the same
+   one the chart axis labels and the journey's sentiment axis carry. --text-muted
+   rather than --text-subtle: this is 14px and 14px bold is NOT WCAG large text, so
+   the floor is AA-normal 4.5 and --text-subtle measures 3.86. */
+.promise-walk__label {
+  margin: 0;
+  max-width: none;
+  font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.promise-walk__figure {
+  margin: 0;
+  display: grid;
+  row-gap: var(--spacing-s); /* caption → its own media, bound to the object */
+  /* min-width: 0 — a grid item's automatic minimum is min-content, and this one holds
+     an image. Same guard .chart-pair's cells and JourneyLine's wrappers carry. */
+  min-width: 0;
+  max-width: 536px;
+}
+
+.promise-walk__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-xs);
+  /* The house hairline: inset so the line sits inside the box and cannot add a pixel
+     to the layout. Same mechanism as .bento-theme__media and .figure__image. */
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* Two columns from 1024, NOT 768: at the 660px prose width a 536px media leaves the
+   label 124px, which is not a column. Below 1024 everything stacks and the media
+   keeps its 536px cap — that cap is what holds the portraits at 1.26x instead of the
+   1.02x they would land on at the full 660. ONLY grid-template-columns changes here;
+   every gap is declared above. */
+@media (min-width: 1024px) {
+  .promise-walk__stage {
+    grid-template-columns: minmax(0, 1fr) 536px;
+  }
+
+  .promise-walk__label {
+    grid-column: 1;
+    grid-row: 1 / -1;
+  }
+
+  .promise-walk__figure {
+    grid-column: 2;
+  }
+}
+
 /* ── Delivery Promise (URBN): RoadmapTable ────────────────────────────────────
    Three shipped milestones, what each put on a screen, and what it replaced.
    Ported from the `.mf` block of docs/previews/roadmap-table-prototype.html.

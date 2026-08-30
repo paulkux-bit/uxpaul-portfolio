@@ -1,0 +1,85 @@
+{
+  "$doc": "Content and geometry for <PromiseWalk>, section 05. ONE LABEL PER STAGE, ONE OR MORE MEDIA UNDER IT. Every string a reader sees lives here; the component holds no copy and no numbers. Widths and floors come from this file's $retinaDoc, not from lib/bento-slots.json — the walk is not a bento and does not use slots.",
+
+  "$stageDoc": "THE STAGE NAMES ARE JOURNEYLINE'S, VERBATIM, AND THAT IS THE MECHANISM. Arrive / Browse / Decide / Purchase / Post purchase are the five stages the reader met in section 03, two sections earlier, on a line that ended angry. Reading them again here — same words, same order, now with a screen against each — is what makes this section the payoff rather than a gallery. Rename one here and it stops rhyming with the drawing; rename one there and this stops being recognisable. They move together or not at all.",
+
+  "$spineDoc": "THE LABEL COLUMN IS THE POINT, NOT A LAYOUT CONVENIENCE. Aligned left at one edge down the whole section, the five names form a vertical spine a skimmer reads as a sequence before looking at a single image. If the labels ragged, the spine is gone and the walk is a list of pictures. That is why every stage is two-column with no full-width exception, and why `align-items: start` pins each label to the top of its span rather than centring it.",
+
+  "$decideDoc": "DECIDE HOLDS TWO MEDIA UNDER ONE LABEL, AND THE SHARING IS STRUCTURAL RATHER THAN COSMETIC. An earlier draft printed 'Decide' twice, once per screen. A vertical column of six labels with the same word in it twice reads as a mistake before it reads as a decision, and the spine's whole job is to be scannable as five stages. Sharing the cell makes the spine exactly five entries and says the true thing: one stage that took two screens to answer. Below 1024 the shared label sits above the first of its two figures and the second follows unlabelled — verified at 390 rather than assumed, because that is where it could orphan.",
+
+  "$retinaDoc": "THE MEDIA CELL IS CAPPED AT 536px AND THAT CAP IS A RETINA DECISION. At the 1088px band a full-width figure needs a 2176px source. ad, pdp and sms are 1350 (0.62x — fail), options--wide is 1912 (0.88x — fail). Only browse and cart survive full width, so 'mostly solo full-width rows' was not available and the two-column walk is what replaced it. At 536 every asset clears: portrait 1.26x, browse 2.43x, options 1.78x, cart 2.61x on the cell — and 1.29x on the cart's own scroll floor, which is the number that governs it.",
+
+  "$cartDoc": "PURCHASE SHOWS THE PANEL, NOT THE PAGE, AND A SCROLL TRACK IS WHAT IT REPLACED. cart--band.png is the full desktop cart at 2.06:1 and it is texture at 536px, so the first build floored it at 1088 inside a focusable horizontal track and let it pan. That was measured and rejected: at 1440 the banner cut mid-word, the nav truncated, and the location panel — the entire payload — sat off-frame to the right, so the caption promised location and eligibility beside an image showing neither. Every other stage in the walk is a complete picture; that one read as the render failing rather than as a control, in a section whose argument is that the date should never make anyone work. cart--panel.png is cut from 08-cart-top_Upscale.png at 4090,640 1674x1480 and is the panel alone: location, NOT ELIGIBLE FOR STORE PICKUP, free shipping, subtotal, checkout. Every word legible at 536, and 1.56x its floor. WHAT THE CROP GIVES UP IS THE TWO-DAY BANNER, which sits 3820px to its left across the top of the page; a crop holding both puts the panel at 216px wide at this cell size, which is unreadable. The caption states what is in frame rather than what was in the old one. cart--band.png stays in solution/, unmounted.",
+
+  "$homePageDoc": "p16, THE HOME PAGE, IS DELIBERATELY NOT CROPPED AND THIS RECORDS WHY so nobody re-opens it. Its promo tile repeats the social ad's free-2-day claim one step later in the same journey, and its store band repeats store--ribbon. Adding it would be more figures making claims the section already makes, which is the vocabulary problem the three-lens review found in section 03 wearing a new costume. Browse is better carried by the PLP facets alone, which are a genuinely distinct capability.",
+
+  "stages": [
+    {
+      "label": "Arrive",
+      "media": [
+        {
+          "src": "/case-studies/urbn-delivery-promise/solution/ad--standard.png",
+          "width": 1350,
+          "height": 1800,
+          "alt": "A sponsored social post from URBN: a photograph of a shopper in a knit sweater leaning on a fence rail, above a link card headed Winter Sweater Party that reads free 2-day shipping, no minimum.",
+          "caption": "The offer arrives with the ad, before she has chosen anything."
+        }
+      ]
+    },
+    {
+      "label": "Browse",
+      "media": [
+        {
+          "src": "/case-studies/urbn-delivery-promise/solution/browse--feature.png",
+          "width": 2600,
+          "height": 1625,
+          "alt": "A browse page for pullovers. The left rail carries a Delivery and Pickup filter with two options, free two-day shipping to a zip code selected and free pickup today at a named store unselected, above filters for neckline, colour, brand and price. Every product tile in the grid carries a free two-day badge.",
+          "caption": "Answers break 01. Location-aware delivery and pickup filters, and a badge on every tile."
+        }
+      ]
+    },
+    {
+      "label": "Decide",
+      "media": [
+        {
+          "src": "/case-studies/urbn-delivery-promise/solution/pdp--standard.png",
+          "width": 1350,
+          "height": 1800,
+          "alt": "A product page showing free two-day shipping to a zip code with a named arrival date above the add-to-cart button, and a panel listing three shipping options including one that is unavailable and says why.",
+          "caption": "Break 01 again. A named arrival date, above the button."
+        },
+        {
+          "src": "/case-studies/urbn-delivery-promise/solution/options--wide.png",
+          "width": 1912,
+          "height": 1195,
+          "alt": "A shipping options panel for a zip code: free two-day shipping with an estimated delivery date, free standard shipping with a date range, and free pickup today marked unavailable with an explanation that there is no store within a hundred miles.",
+          "caption": "Three options, and the one she cannot have stays on the page and says why."
+        }
+      ]
+    },
+    {
+      "label": "Purchase",
+      "media": [
+        {
+          "src": "/case-studies/urbn-delivery-promise/solution/cart--panel.png",
+          "width": 1674,
+          "height": 1480,
+          "alt": "A cart summary panel: the shopper's location given as a zip code with a change link, a greyed line reading not eligible for store pickup, shipping selected and marked free, a subtotal, and checkout buttons.",
+          "caption": "Answers break 02. Where it is going and what she can have, settled before she pays rather than after."
+        }
+      ]
+    },
+    {
+      "label": "Post purchase",
+      "media": [
+        {
+          "src": "/case-studies/urbn-delivery-promise/solution/sms--standard.png",
+          "width": 1350,
+          "height": 1800,
+          "alt": "Three post-purchase text messages: shipped with a delivery date, arriving today with a time, and delivered.",
+          "caption": "Answers break 03. Shipped, arriving, delivered: one thread, one order."
+        }
+      ]
+    }
+  ]
+}

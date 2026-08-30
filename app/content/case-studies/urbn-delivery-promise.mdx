@@ -78,6 +78,7 @@ import JourneyLine from '@/components/case-studies/urbn-delivery-promise/Journey
 import TierChart from '@/components/case-studies/urbn-delivery-promise/TierChart';
 import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart';
 import RoadmapTable from '@/components/case-studies/urbn-delivery-promise/RoadmapTable';
+import PromiseWalk from '@/components/case-studies/urbn-delivery-promise/PromiseWalk';
 import { BentoBand } from '@/components/bento';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
 import { PromiseBeatFigure } from '@/components/promise-beat-figure';
@@ -506,25 +507,33 @@ The date in the ad has to be the date on the product page, the date in the cart,
 
 <section className="cs-section">
 
-{/* THE HEADER RHYMES WITH SECTION 02'S AND THE PAIR IS LOAD-BEARING. That one reads
-    "Her order broke in three places." This one reads "One date, four places." Same
-    grammar, inverted meaning: three places broken in the problem section, four kept
-    in the solution section. Neither can be "improved" alone without breaking the
-    other, which is why the dependency is written down here rather than left to be
-    rediscovered - the same reason section 02's lede carries its antecedent note.
+{/* THIS SECTION WAS A GRID UNTIL 30 Aug AND THE GRID WAS THE DEFECT. Section 02
+    gives three breaks. Section 03 closes on JourneyLine: five stages, three breaks
+    marked, ending angry. Section 04 asks the question. Then this section showed four
+    screens aspect-packed into rows, in an order a reader could not see - the study
+    spent two sections building a journey and dropped it at the moment it should pay
+    off.
 
-    "PLACES", NOT "STEPS", AND THAT IS WHAT MAKES THE LAYOUT HONEST. The shopper's
-    real order is ad, product page, cart, text. The grid runs ad, product page, text,
-    then the cart across the bottom, because a BentoBand is a solo full-width row by
-    construction and the cart crop is 2.06:1 - it cannot sit inside a row of 3:4
-    tiles without breaking the per-row aspect lock the caption baselines depend on.
-    A set claim survives that reordering and a sequence claim would not. So the
-    glosses below are POSITIONAL - where the date is and what it is anchored to -
-    never "then", "still" or "before". Do not rewrite them into a chain.
+    THE CAUSE IS STRUCTURAL, NOT EDITORIAL. <BentoTheme> groups by ASPECT:
+    `overrideRows` chunks consecutive same-slot tiles into shared rows, which is
+    right for a gallery and wrong for a sequence. A journey is an ORDER. Forcing five
+    stages into aspect-packed rows is what produced the unordered grid, so no
+    rewording of the captions could have fixed it. The 2019 deck had already solved
+    it: p14's Concept row is the screens laid out under the five stage names,
+    directly beneath a Problems row that is section 02's friction beats.
 
-    FOUR TILES, FOUR PLACES, and the count is checkable: the detail figure above the
-    grid is a zoom of the product page's own promise line, not a fifth place. */}
-## One date, four places.
+    THE HEADER STATES THE JOURNEY AS ITS TWO ENDPOINTS rather than naming it as a
+    concept. "Journey" has never appeared in this study's visible copy - only in a
+    component name - and introducing it in an H2 would import design vocabulary the
+    study has so far done without.
+
+    ITS PREDECESSOR RHYMED WITH SECTION 02'S HEADER AND THIS ONE DOES NOT, which
+    retires a dependency rather than leaving it recorded. "One date, four places."
+    was built to answer "Her order broke in three places." That pairing is gone with
+    the grid it described, and a note claiming it would now be describing a pair that
+    does not exist. Section 02's header is unaffected and needs no compensating
+    change: it never depended on this one. */}
+## The date, from the ad to the doorstep.
 
 <p className="section-lede">These are the platform designs, unstyled. I built the capability; the brand teams applied their own design systems on top.</p>
 
@@ -538,7 +547,7 @@ The date in the ad has to be the date on the product page, the date in the cart,
     reads as claiming shipped brand UI. Captioned apologetically, the placeholders
     read as sloppy rather than as the artifact of a white-label practice. The register
     that works is the plain one sections 03 and 07 already use for the credit
-    boundary. Do NOT repeat it in the tile captions; four apologies is worse than
+    boundary. Do NOT repeat it in the stage captions; six apologies is worse than
     none. */}
 
 <Figure
@@ -549,63 +558,23 @@ The date in the ad has to be the date on the product page, the date in the cart,
   caption="The line the study is named for. A date, against a zip code, before she commits to anything."
 />
 
-{/* THE GRID. Row one is three `tall` tiles; row two is the cart as a band.
+{/* THE WALK. Five stages, six screens, top to bottom, in JourneyLine's own stage
+    names. Content, dimensions and the whole argument for the layout live in
+    walk-manifest.json - $stageDoc, $spineDoc, $decideDoc, $retinaDoc, $cartDoc and
+    $homePageDoc. Do not restate them here and do not put copy in the component.
 
-    `tall` AND NOT `standard`, EVEN THOUGH THE CROPS ARE NAMED --standard. Both slots
-    are 3:4, so the aspect is identical and the crops fit either. The difference is
-    capacity: SLOT_COLS.standard is 2, so three standards chunk to [2] + [1] and the
-    third tile orphans at half width. `tall` is 3, which is the row this section
-    wants. The crops clear tall's retina floor at 1.92x (1350px against 704), where
-    they clear standard's at 1.26x, so the change costs nothing and buys headroom.
+    options--wide EARNS ITS SLOT DESPITE THE PRODUCT PAGE ABOVE IT CONTAINING THE
+    SAME PANEL SMALLER, because it is the evidence for the claim the hero callout
+    makes: "Most retailers hide a delivery option you can't have. This one stays on
+    the page and says why." At 536px its copy is readable and that sentence becomes
+    checkable.
 
-    focal IS INERT AT THIS SLOT AND IS AUTHORED ANYWAY. All three crops are natively
-    1350x1800, which is exactly 3:4, so object-fit: cover has nothing to crop and
-    object-position does not move a pixel. The values are here as insurance: they name
-    the one thing in each frame that cannot be lost if the slot is ever changed to
-    `compact` (1:1) or `wide` (16:10), where cover WOULD crop. Recorded as inert
-    rather than left to look load-bearing, which is its own defect. */}
-<BentoTheme>
-  <BentoItem
-    slot="tall"
-    src="/case-studies/urbn-delivery-promise/solution/ad--standard.png"
-    alt="A sponsored social post from URBN: a photograph of a shopper in a knit sweater leaning on a fence rail, above a link card headed Winter Sweater Party that reads free 2-day shipping, no minimum."
-    focal={{ x: 0.5, y: 0.94 }}
-    caption="The ad."
-    gloss="In the offer, before she has clicked anything."
-  />
-  <BentoItem
-    slot="tall"
-    src="/case-studies/urbn-delivery-promise/solution/pdp--standard.png"
-    alt="A product page showing free two-day shipping to a zip code with a named arrival date above the add-to-cart button, and a panel listing three shipping options including one that is unavailable and says why."
-    focal={{ x: 0.5, y: 0.45 }}
-    caption="The product page."
-    gloss="Against her zip code, with the item in front of her."
-  />
-  <BentoItem
-    slot="tall"
-    src="/case-studies/urbn-delivery-promise/solution/sms--standard.png"
-    alt="Three post-purchase text messages: shipped with a delivery date, arriving today with a time, and delivered."
-    focal={{ x: 0.5, y: 0.16 }}
-    caption="The text message."
-    gloss="After it ships, narrowing to an hour and then to a doorstep."
-  />
-  {/* scrollFloor BECAUSE THE RENDER SAID SO, NOT BECAUSE THE RULE OF THUMB DID.
-      bento-slots.json puts the non-scrolling legibility line near 110px of rendered
-      height, and this band clears it: 166.1px at 390 and 132.1px at 320. It is still
-      texture at both, because that threshold was measured on BARD's bands and this is
-      a full-width desktop cart page - a nav, a three-column table and a summary rail -
-      where BARD's were single strips. Floored at 1088 so the media pans inside its own
-      focusable track instead of squashing, the same fix BARD's KPI strip carries. */}
-  <BentoBand
-    src="/case-studies/urbn-delivery-promise/solution/cart--band.png"
-    alt="A shopping cart under a banner reading that the items are available for two-day delivery, with a location panel that names the shipping destination and marks the order not eligible for store pickup."
-    aspect={2.059}
-    focal={{ x: 0.61, y: 0.26 }}
-    scrollFloor={1088}
-    caption="The cart."
-    gloss="At checkout, beside the location panel that decided the date."
-  />
-</BentoTheme>
+    THE PANEL CARRIES URBN'S OWN TYPO - "There are no URBN location within 100 miles"
+    - and it is NOT to be silently corrected. A screenshot's copy is never edited;
+    doing it once makes every other screenshot in the portfolio unverifiable. It is
+    URBN's, not Paul's, and a reader cannot tell, which is the reason this asset was
+    kept out of the hero when it was proposed for it. */}
+<PromiseWalk />
 
 </section>
 
@@ -618,10 +587,17 @@ The date in the ad has to be the date on the product page, the date in the cart,
 <RoadmapTable />
 
 {/* THE SENTENCE NAMED THREE SCREENS THE STUDY COULD NOT SHOW, until the crops
-    landed on 30 Aug. The cart is in "One date, four places."; the browse filters and
-    the store band are directly below. The review's account of this was that a
-    reader like Jordan extrapolates from small imprecisions, and a claim about
-    specific screens with no screens under it is exactly that shape.
+    landed on 30 Aug. The review's account was that a reader like Jordan extrapolates
+    from small imprecisions, and a claim about specific screens with no screens under
+    it is exactly that shape.
+
+    IT IS NOW WORDED AS A ROADMAP CLAIM RATHER THAN A HERE-ARE-THE-SCREENS ONE,
+    because two of the three moved. The browse filters and the cart are stages in the
+    walk above; only Shop Your Store is still mounted in this section. "Every screen
+    you just walked through" points back at where they actually are, and "the store
+    band below" points at the one that is here. The old wording listed three things as
+    though all three were about to appear, which stopped being true the moment browse
+    became a stage.
 
     "Shop My Store" BECAME "Shop Your Store", AND THE ARTIFACT IS WHY. The band
     mounted below reads *Shop Your Store* on its own button, so the old sentence sat
@@ -633,15 +609,7 @@ The date in the ad has to be the date on the product page, the date in the cart,
     and v4, and through all four dependency-map prototypes in docs/previews/. So the
     project called it one thing and the button said another - ordinary, and not a
     fact the study needs to carry, but not one to rediscover either. */}
-**Every screen in this study sits in the back half of that roadmap.** The browse filters, the cart, Shop Your Store. A filter promising two-day delivery is worse than no filter when the date is a guess.
-
-<BentoBand
-  src="/case-studies/urbn-delivery-promise/solution/browse--feature.png"
-  alt="A browse page for pullovers. The left rail carries a Delivery and Pickup filter with two options, free two-day shipping to a zip code selected and free pickup today at a named store unselected, above filters for neckline, colour, brand and price. Every product tile in the grid carries a free two-day badge."
-  caption="The browse filters."
-  gloss="The date becomes something a shopper can filter by, and every tile says whether it holds."
-  aspect={1.6}
-/>
+**Every screen you just walked through sits in the back half of that roadmap.** The browse filters, the cart, and the store band below. A filter promising two-day delivery is worse than no filter when the date is a guess.
 
 {/* A BAND, NOT A RIBBON, AND THE REASON IS A STALE CONSTANT IN THE SOURCE OF TRUTH.
     <BentoRibbon> was the obvious mount for a 21:1 strip and it MEASURED BLURRY on a
