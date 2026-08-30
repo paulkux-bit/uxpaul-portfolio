@@ -4568,15 +4568,48 @@ html.dark .figure-placeholder {
 
 /* ── NodeChart: no SVG at all ──────────────────────────────────────────────── */
 
-/* max-content / 1fr / max-content. The name and the value never wrap or shrink; the
-   track is the only thing that flexes. At 320px the track is around 150px and the
-   store bar still holds ~135 of it against Reno's ~33, because the ratio lives in
-   the geometry rather than in the available width. */
-.node-chart__rows {
+/* ONE GRID FOR THE WHOLE FIGURE, AND THAT IS THE FIX RATHER THAN THE STYLE.
+   max-content / 1fr / max-content is declared HERE, once, and the rows and the
+   average marker are both subgrids of it. They used to be two independent grids
+   each declaring the same template, which is not the same thing: the marker's grid
+   had no content in columns 1 and 3, so those resolved to 0 and its 1fr took the
+   whole width. Measured tracks were 0 / 488 / 0 against the rows' 92.33 / 331.95 /
+   63.73, and since the marker positions itself at a PERCENTAGE of its grid area,
+   the same 44% landed 23.7px away from the rule it names. Two declarations of one
+   fact is the bug; one declaration and two readers is the fix.
+
+   COLUMN-GAP LIVES HERE TOO, for the same reason. A subgrid inherits its parent's
+   column-gap, so setting it on the children as well would be the second statement
+   this rule exists to delete.
+
+   The name and the value never wrap or shrink; the track is the only thing that
+   flexes. MEASURED AT A 320 VIEWPORT WITH NO SCROLLBAR: track 83.9px, store bar
+   75.5, Reno 18.5. With a 15px classic scrollbar the same page gives 68.9 / 62.0 /
+   15.2, which is why a measurement here is worth nothing without the condition
+   beside it. The absolute widths are small either way and the ratio survives, at
+   90% and 22% of the track in both, because it lives in the geometry rather than in
+   the available width. The rule this replaces claimed 150 / 135 / 33 and was out by
+   roughly 1.8x. */
+.node-chart {
   display: grid;
   grid-template-columns: max-content 1fr max-content;
-  gap: var(--spacing-s);
+  column-gap: var(--spacing-s);
+}
+
+.node-chart__average,
+.node-chart__rows {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.node-chart__rows {
+  row-gap: var(--spacing-s);
   align-items: center;
+}
+
+.node-chart > figcaption {
+  grid-column: 1 / -1;
 }
 
 .node-chart__name {
@@ -4635,18 +4668,27 @@ html.dark .figure-placeholder {
   color: var(--text-primary);
 }
 
-/* The marker's label, aligned to the rule it names. It rides the same three-column
-   grid as the rows so the middle cell is the same track, then positions inside it. */
+/* The marker's label, aligned to the rule it names. The grid it reads is declared
+   on .node-chart above and reached through `subgrid`, so column 2 here IS column 2
+   of the rows - same start, same width, same 44%. It cannot drift from the rule,
+   because there is no second definition for it to drift from. */
 .node-chart__average {
-  display: grid;
-  grid-template-columns: max-content 1fr max-content;
-  gap: var(--spacing-s);
   max-width: none;
   margin: 0 0 var(--spacing-2xs);
 }
 
 .node-chart__average-label {
   grid-column: 2;
+  /* min-width: 0 OR THE LABEL SETS THE FLOOR FOR THE WHOLE CHART. A grid item's
+     automatic minimum is min-content, this one is `white-space: nowrap` at 130.8px,
+     and a subgrid's items size the PARENT's tracks - so once the marker joined the
+     rows' grid it floored their 1fr at its own width and pushed 23px of horizontal
+     scroll onto the page at 320. Measured: scrollWidth 343 against a 320 viewport,
+     and the track frozen at 130.8px from 320 all the way to 360. Same automatic
+     minimum, same one-line fix, as .chart-pair > * and .journey-line__horizontal > *.
+     The label still overhangs its track at 320; it is centred on a rule rather than
+     laid out in a column, and it stays inside the figure. */
+  min-width: 0;
   position: relative;
   left: var(--nc-average);
   transform: translateX(-50%);
