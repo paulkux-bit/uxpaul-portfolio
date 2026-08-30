@@ -4149,10 +4149,52 @@ html.dark .figure-placeholder {
 
 /* Shape ─────────────────────────────────────────────────────────────────── */
 
-axis
+/* THE FOUR STRUCTURAL LINES. Every one of them was drawing nothing until this
+   commit, and the two failures have different causes.
 
-/* Quieter and tighter than JourneyLine's: this rule marks a baseline the eye should
-   measure against, not a threshold the line crosses. */
+   c7d0b1c deleted `.journey-line__axis, .tier-chart__axis { stroke: ... }` and
+   left the bare word `axis` behind on its own line. CSS then read the NEXT rule's
+   selector as `axis .tier-chart__ref`, which matches no element, so the dotted
+   reference rule lost its stroke as collateral. An SVG line with no stroke is
+   invisible rather than faint, so nothing looked broken enough to catch: the
+   chart simply had no baseline and no dotted rule, and `.tier-chart__ref-label`
+   went on naming a rule that was not on the page. __tests__/css-selectors.test.mjs
+   now fails on any type selector that is not a real element name.
+
+   `.journey-line__band` and `.journey-line__divider` are NOT a restoration. They
+   arrived with c7d0b1c and never had a rule of any kind, so their weight is a
+   decision taken here rather than a recovery of something that was lost. The
+   three sentiment bands are gridlines: the HTML labels carry Happy / Fine /
+   Angry and the dots carry the positions, and the bands connect the two. They sit
+   at the house hairline for that reason, and deliberately quieter than the dotted
+   rule, which is a value a reader measures against rather than a guide. */
+
+/* The chart's baseline. Solid, not dashed: `.tier-chart__ref` is the only dashed
+   line in a 600x190 drawing, and a second dash pattern beside it competes with the
+   one that carries meaning. */
+.tier-chart__axis {
+  stroke: var(--border-default);
+  stroke-width: 1;
+}
+
+/* The three sentiment bands and the four stage dividers. The dividers keep the
+   dash the deleted axis rule carried, so a stage boundary reads as a different
+   kind of line from a sentiment band without either getting louder. */
+.journey-line__band,
+.journey-line__divider {
+  stroke: var(--border-subtle);
+  stroke-width: 1;
+}
+
+.journey-line__divider {
+  stroke-dasharray: 2 5;
+}
+
+/* Quieter and tighter than the path above it, and louder than the bands: this rule
+   marks a baseline the eye should measure a value against, so it is the one
+   structural line carrying information rather than guiding the eye to it.
+   --text-subtle measures 3.87 light and 4.22 dark against the canvas, clearing the
+   3:1 graphics floor. */
 .tier-chart__ref {
   stroke: var(--text-subtle);
   stroke-width: 1;
