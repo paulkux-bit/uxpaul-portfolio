@@ -4903,7 +4903,11 @@ html.dark .figure-placeholder {
   color: var(--text-primary);
 }
 
-/* `wide` — 660. The detail frames, where the specific is legible. */
+/* THE BASE CARRIES NO WIDTH, AND THAT IS THE POINT. It held max-width: 660px until
+   31 Aug, so a figure with no variant silently took the wide slot and 660 stopped
+   being a decision anybody had made. Every frame names its slot now, and
+   PromiseWalk's pick() throws on one that does not. All three widths come from
+   lib/bento-slots.json; $retinaDoc carries the measured life-size case for each. */
 .promise-walk__figure {
   margin: 0;
   display: grid;
@@ -4911,21 +4915,39 @@ html.dark .figure-placeholder {
   /* min-width: 0 — a grid item's automatic minimum is min-content, and this one holds
      an image. Same guard .chart-pair's cells and JourneyLine's wrappers carry. */
   min-width: 0;
-  max-width: 660px;
 }
 
 /* The container max, and `feature`. The three whole-page frames: at 660 they were
-   texture and at 1088 their UI copy resolves. This is what C exists for. */
+   texture and at 1088 their UI copy resolves. This is what C exists for. It is also
+   the one place the life-size rule CANNOT be met - a 1440px page at 1088 is 76%,
+   below the rule's own floor, and there is no wider slot. Recorded, not hidden. */
 .promise-walk__figure--band {
   max-width: 1088px;
 }
 
-/* `tall` — 352. Arrive and Post purchase are 375px captures, so anything above this
-   shows a phone screen bigger than a phone. It was 380 until 31 Aug, which was a
-   number picked by hand; 352 is the same cap the bento's `tall` slot uses. */
-.promise-walk__figure--phone {
+/* `standard` - 536. Every detail frame in the walk plus the social ad. Each was
+   measured back to its source region: ad--post 482-499 CSS px, browse--facet
+   468-506, options--wide 445-477. 536 puts them at 106-120% of life size. */
+.promise-walk__figure--standard {
+  max-width: 536px;
+}
+
+/* `tall` - 352. The SMS thread, and only it. THIS RULE USED TO BE CALLED --phone AND
+   USED TO CLAIM ARRIVE, on the reasoning that Arrive and Post purchase were both
+   375px captures. Post purchase is; Arrive never was. The social ad is a desktop
+   browser card measured at 482-499 CSS px, and it sat in a 352 cell because it is
+   PORTRAIT - aspect-driven placement inside a system chosen to be width-driven. It
+   rendered at 72% of life size for it. The cap was also 380 until 31 Aug, a number
+   picked by hand rather than read off a slot. */
+.promise-walk__figure--tall {
   max-width: 352px;
 }
+
+/* THERE IS NO --wide (660), AND ITS ABSENCE IS A MEASUREMENT RATHER THAN AN OVERSIGHT.
+   660 was the walk's default cell and it is now used by nothing: at 660 the three
+   detail frames render at 130-148% of life size, which is the defect cart--panel was
+   deleted for at 173%. Do not reintroduce it without re-measuring the frame that
+   wants it. See $retinaDoc for the method and $stageDoc for the rule. */
 
 .promise-walk__img {
   display: block;

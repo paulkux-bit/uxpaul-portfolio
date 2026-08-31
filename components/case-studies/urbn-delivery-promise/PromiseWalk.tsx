@@ -29,14 +29,23 @@ import manifest from './walk-manifest.json';
  * are not. The spine is weaker as a scanning object; the frames are legible. That was
  * the trade, and it is not a defect to be fixed by putting the column back.
  *
- * THE WIDTHS NOW COME FROM lib/bento-slots.json - 1088 (container max / `feature`),
- * 660 (`wide`), 352 (`tall`). Two of the three used to be numbers picked by hand. See
- * $retinaDoc, which carries the same account so the file and the manifest agree.
+ * THE WIDTHS COME FROM lib/bento-slots.json - 1088 (`feature`, the container max),
+ * 536 (`standard`), 352 (`tall`). THIS LIST SAID 1088 / 660 / 352 UNTIL 31 Aug and the
+ * 660 is now used by nothing: every detail frame was measured back to its source
+ * region and 660 was rendering all three at 130 to 148% of life size. See $retinaDoc
+ * for the method and $stageDoc for the slot rule that decided it.
  *
  * THE LABEL IS BODY TYPE, NOT AN EYEBROW. It shipped as 14px tracked uppercase, which
- * is chart chrome; nothing in the body of any of the four studies is set that way. It
- * is 18 / 600 / --text-primary now, which is .bento-theme__lead's setting exactly, so
- * label and caption share a rung and separate on weight and colour.
+ * is chart chrome; nothing in the body of any of the four studies is set that way.
+ * IT IS 22 / 600 / --text-primary, AND THE PART OF THIS NOTE THAT SAID 18 AND
+ * "separate on weight and colour" WAS FALSE FROM THE COMMIT THAT DROPPED THE LABEL
+ * COLUMN. At 18 it matched .bento-theme__lead exactly, so with the column gone
+ * "Browse" and "Delivery filters." read as one two-line heading. Space alone did not
+ * fix it - the stage row-gap went 25 to 33px and it still read as one block - so the
+ * label stepped a rung to 22, which is 1.222x the lead and clears the type system's
+ * 1.15x adjacent-rung floor. SIZE IS THE ONLY SEPARATING CHANNEL: both are 600 weight
+ * and both are --text-primary in both themes. That is one channel, not two, and it is
+ * worth knowing before anything changes either setting.
  *
  * THE STAGE NAMES ARE JOURNEYLINE'S, VERBATIM. The reader met Arrive / Browse /
  * Decide / Purchase / Post purchase in section 03, on a line that ended angry.
@@ -57,22 +66,36 @@ import manifest from './walk-manifest.json';
  *  at 1px viewport steps and these are where it stops growing for each cap. Condition
  *  is stated because a crossing without one is the defect this repo keeps hitting:
  *  .cs-section at its default page padding, light mode, headless so no scrollbar.
- *  Stepped 340 to 1220: the band cap is reached at 1152, the wide cap at 708 and the
- *  phone cap at 400. The band crossing is above 1024 because .cs-section breaks out
- *  to min(100vw - 4rem, 1088) there, where the other two are still inside the 660
- *  prose measure at 100vw - 3rem. */
+ *  Stepped 340 to 1260: band 1152, standard 584, tall 400. The band crossing is above
+ *  1024 because .cs-section breaks out to min(100vw - 4rem, 1088) there; standard and
+ *  tall are still inside the 660 prose measure at 100vw - 3rem, which is why theirs
+ *  come out at cap + 48 and the band's does not come out at 1136. */
 const SIZES_BAND = '(min-width: 1152px) 1088px, calc(100vw - 3rem)';
-const SIZES = '(min-width: 708px) 660px, calc(100vw - 3rem)';
-const SIZES_PHONE = '(min-width: 400px) 352px, calc(100vw - 3rem)';
+const SIZES_STANDARD = '(min-width: 584px) 536px, calc(100vw - 3rem)';
+const SIZES_TALL = '(min-width: 400px) 352px, calc(100vw - 3rem)';
 
-/** Variant → the CSS modifier and the `sizes` that matches its cap. One place, so a
- *  width and the sizes declaring it cannot drift apart. */
+/** Slot → the CSS modifier and the `sizes` that matches its cap. One place, so a width
+ *  and the sizes declaring it cannot drift apart. THE NAMES ARE bento-slots.json'S, not
+ *  mine: `band` is the container max, `standard` is 536, `tall` is 352. They were
+ *  band / wide / phone until 31 Aug, and `phone` was the one that did damage - it named
+ *  a device inside a system chosen to be width-driven, so the social ad went in it for
+ *  being portrait and rendered at 72% of life size. */
 const VARIANT = {
-  band:  { cls: 'promise-walk__figure promise-walk__figure--band',  sizes: SIZES_BAND },
-  phone: { cls: 'promise-walk__figure promise-walk__figure--phone', sizes: SIZES_PHONE },
-  wide:  { cls: 'promise-walk__figure',                              sizes: SIZES },
+  band: { cls: 'promise-walk__figure promise-walk__figure--band', sizes: SIZES_BAND },
+  standard: { cls: 'promise-walk__figure promise-walk__figure--standard', sizes: SIZES_STANDARD },
+  tall: { cls: 'promise-walk__figure promise-walk__figure--tall', sizes: SIZES_TALL },
 } as const;
-const pick = (v?: string) => VARIANT[(v === 'band' || v === 'phone' ? v : 'wide')];
+
+/** NO DEFAULT, DELIBERATELY. This used to fall back to the 660 cell for any variant it
+ *  did not recognise, which is how three frames ended up at a width nobody had chosen.
+ *  Every frame states its slot in the manifest and an unknown one is a build failure,
+ *  because this renders at build time. A silent fallback is the thing being fixed. */
+const pick = (v: unknown) => {
+  if (typeof v !== 'string' || !(v in VARIANT)) {
+    throw new Error(`PromiseWalk: media needs a slot from ${Object.keys(VARIANT).join(' / ')}, got ${JSON.stringify(v)}`);
+  }
+  return VARIANT[v as keyof typeof VARIANT];
+};
 
 export default function PromiseWalk() {
   return (
@@ -87,7 +110,7 @@ export default function PromiseWalk() {
           <p className="promise-walk__label">{stage.label}</p>
 
           {stage.media.map((m) => (
-            <figure className={pick('variant' in m ? m.variant : undefined).cls} key={m.src}>
+            <figure className={pick(m.variant).cls} key={m.src}>
               {/* lead THEN gloss, with the same {' '} separator TierChart, NodeChart,
                   JourneyLine and RoadmapTable all use. Until 31 Aug this rendered a
                   gloss alone, the only captioned component in the study that did, and
@@ -103,7 +126,7 @@ export default function PromiseWalk() {
                 alt={m.alt}
                 width={m.width}
                 height={m.height}
-                sizes={pick('variant' in m ? m.variant : undefined).sizes}
+                sizes={pick(m.variant).sizes}
                 className="promise-walk__img"
               />
             </figure>
