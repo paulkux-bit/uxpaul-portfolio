@@ -2479,6 +2479,21 @@ html.dark .oku-figure {
    the browser picks, and promise--detail.png at 1688px is 1.28x its retina floor
    at 660 and 0.78x - BELOW the floor - at 1088. The cap is what makes the authored
    `sizes` true. */
+/* 660 IS ACCEPTED AT 156% OF LIFE SIZE, RULED ON 1 Sep. promise--detail's source
+   region measures 422 CSS px - by anchor ratio against pdp--page's Add To Cart button,
+   and independently by the asset's own dimensions, since 1688 / 4 = 422 exactly - so
+   660 renders it at 156%. That is the largest life-size violation on the page and it
+   sits on the frame showing the line the study is named for. It is recorded rather
+   than fixed because BOTH alternatives cost more:
+
+   RENDERING IT NARROWER at about 440 would land at 104%, but it leaves roughly 648px
+   of empty band directly above a walk that spent an entire pass closing exactly that
+   kind of gap. RE-CUTTING IT WIDER needs Paul to upscale a wider source region: a
+   660 CSS px region from 04-DECIDE-pdp_Upscale.png is 1321 native against a 1320
+   floor, 1.00x with no headroom, so it is his work rather than a pass's.
+
+   For scale: cart--panel was deleted at 173% and sms--standard is kept at 97-114%.
+   156% sits between them and is the milder of the two violations, not the worse. */
 .cs-section > .figure {
   max-width: 660px;
 }
