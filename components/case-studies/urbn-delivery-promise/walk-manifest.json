@@ -3,6 +3,7 @@
   "$stageDoc": "THE STAGE NAMES ARE JOURNEYLINE'S, VERBATIM, AND THAT IS THE MECHANISM. Arrive / Browse / Decide / Purchase / Post purchase are the five stages the reader met in section 03, two sections earlier, on a line that ended angry. Reading them again here - same words, same order, now with a screen against each - is what makes this section the payoff rather than a gallery. Rename one here and it stops rhyming with the drawing; rename one there and this stops being recognisable. They move together or not at all. THE FRAME RULE, ADDED 31 Aug: EVERY DESKTOP-PAGE STAGE IS A CONTEXT FRAME THEN A DETAIL FRAME; THE TWO PHONE STAGES ARE SINGLE. Eight frames, five stages. That is a rule rather than a per-stage judgement, which is exactly what the set it replaced was missing - every asset in that one sat between the two jobs, too small to read and too partial to place. At a 660 cell a 1440px page renders at 46%, so 14px UI copy lands at 6.4px: NO CROP OF A WHOLE PAGE IS READABLE AT THIS SIZE and none should try to be. The context frame says where you are; the detail frame is the one you can read.",
   "$spineDoc": "THE LABEL COLUMN IS THE POINT, NOT A LAYOUT CONVENIENCE. Aligned left at one edge down the whole section, the five names form a vertical spine a skimmer reads as a sequence before looking at a single image. If the labels ragged, the spine is gone and the walk is a list of pictures. That is why every stage is two-column with no full-width exception, and why `align-items: start` pins each label to the top of its span rather than centring it.",
   "$decideDoc": "DECIDE HOLDS TWO MEDIA UNDER ONE LABEL, AND THE SHARING IS STRUCTURAL RATHER THAN COSMETIC. An earlier draft printed 'Decide' twice, once per screen. A vertical column of six labels with the same word in it twice reads as a mistake before it reads as a decision, and the spine's whole job is to be scannable as five stages. Sharing the cell makes the spine exactly five entries and says the true thing: one stage that took two screens to answer. Below 1024 the shared label sits above the first of its two figures and the second follows unlabelled — verified at 390 rather than assumed, because that is where it could orphan.",
+  "$captionDoc": "THE FORM IS A FEATURE NAME THEN WHAT IT DOES FOR HER, matching BARD's grid captions - 'Controlled vocabulary. Standardized picklists keep local terms aligned.' Leads run 3 to 6 words and glosses 4 to 9; BARD's run 2 to 5 and 5 to 7, so this is the same scale. THE LEADS ARE DELIBERATELY UNEVEN IN SHAPE - a sentence, a two-word noun, an imperative, a three-word triplet - and are NOT to be normalised into parallel constructions. Eight captions cut to one template is the thing that reads as machine-written. There is exactly one negation across the set and no 'X, not Y' construction at all; that was a constraint rather than an accident. WHY THEY ARE {lead, gloss} AT ALL: until 31 Aug PromiseWalk rendered a gloss with NO lead, alone among the five captioned components in this study - TierChart, NodeChart, JourneyLine and RoadmapTable all render lead then gloss. With no bold slot to put a feature name in, these captions had drifted into full sentences, cross-references and remarks about the frame rather than about the product. EVERY 'Answers break NN' AND 'Break NN again' CROSS-REFERENCE WAS REMOVED, AND THAT IS A DECISION RATHER THAN AN OVERSIGHT. THE 01/02/03 THREAD DOES NOT SURVIVE INTO THE SOLUTION HALF OF THE STUDY. It asked a reader to scroll back two sections and recall which numbered break was which, and no shipped study does anything comparable in a caption. Nothing is orphaned by it: the numerals appear in section 02's three friction beats and are echoed by JourneyLine's numbered marks and break leads in section 03, so the thread is complete inside the problem half where it belongs. Do not reintroduce it here. ALSO GONE: two captions that described the FRAME rather than the product ('The filter and its effect in one frame', 'The panel itself'), and 'settled before she pays rather than after', which argued with the problem section instead of describing the screen. 'Free 2-day shipping, no minimum.' IS URBN'S OWN AD COPY, transcribed off the creative inside the Arrive frame. It is NOT the PLP banner, which reads 'Free 2-day Shipping. No minumims.' with URBN's typo and is transcribed that way in browse--page's alt. Do not conflate the two and do not correct either. ALT TEXT IS UNCHANGED ON ALL EIGHT: alt describes the image, the caption names the feature, and they are allowed to differ.",
   "$retinaDoc": "THE MEDIA CELL IS 660px, AND 380px FOR THE TWO PHONE STAGES. Both caps are retina decisions. 660 rather than 860: at 660 the floor is 1320 and every asset clears it, where at 860 the floor is 1720 and four of six fail - two of them sourced from a 375-wide phone capture, where an upscale invents pixels rather than recovers them. 660 is also the prose width the study already uses below 1024, so the walk stops introducing a sixth measure. THE 380 CAP IS NOT COSMETIC: Arrive and Post purchase are 375px captures, and at 536 the SMS thread rendered at 1.43x life size, at 660 it would be 1.76x - a phone screen shown bigger than a phone. THIS REPLACES THE 536 CAP AND THE ARGUMENT FOR IT, which reasoned about an asset set that no longer exists: under that set four of six crops were beneath their floor at full band width, which was true then and is not true now. Measured at the 660 cell: browse--page, browse--facet, pdp--page and cart--page 1.29x, options--wide 1.45x, cart--panel 1.27x. At the 380 cell: ad--post 1.32x, sms--standard 1.78x.",
   "$cartDoc": "PURCHASE IS A CONTEXT FRAME THEN A DETAIL FRAME, AND A SCROLL TRACK IS WHAT THAT REPLACED. cart--band.png was the full desktop cart at 2.06:1 and it was texture at a small cell, so an earlier build floored it at 1088 inside a focusable horizontal track and let it pan. That was measured and rejected: the banner cut mid-word, the nav truncated, and the location panel - the entire payload - sat off-frame, so the caption promised location and eligibility beside an image showing neither. cart--band.png was deleted on 31 Aug once nothing referenced it. The stage now runs cart--page for the whole page and cart--panel, cut from 08-cart-top_Upscale.png at 4090,640 1674x1480, for the panel itself: location, NOT ELIGIBLE FOR STORE PICKUP, free shipping, subtotal, checkout, every word legible. WHAT THE PANEL CROP GIVES UP IS THE TWO-DAY BANNER, which sits 3820px to its left across the top of the page - and the context frame above it is now where that banner is shown, which is the whole reason the two-frame rule exists.",
   "$recutDoc": "WHY FIVE ASSETS WERE RE-CUT ON 31 Aug AND THE ORIGINALS DELETED, so none of them is restored on the grounds that it exists in the history. pdp--standard opened on '$110.00' sliced through its own digits, with no product image, no product name and no breadcrumb - a column of form controls with no page around them. browse--feature began below the nav, the free-shipping banner and the page title, and ended mid product row. facet--detail was a heavy AI upscale with CORRUPTED LETTERFORMS: 'Delivery' and 'Free' with broken e's, 'Walnut Street' reading 'Stroet', a deformed ampersand - and on this site a screenshot with hallucinated glyphs is worse than a soft one, because it is WRONG rather than small. It was re-cut from 03-plp-filter-and-effect_Upscale.png, which nothing was using. ad--standard was cropped so tight it read as a display ad rather than as a feed post. cart--band is covered by $cartDoc.",
@@ -18,7 +19,10 @@
           "height": 1470,
           "variant": "phone",
           "alt": "A sponsored post from URBN in a social feed: a photograph of a shopper in a knit sweater leaning on a fence rail, above a link card headed Winter Sweater Party reading free 2-day shipping, no minimum, with a Shop Now button, and the post's reaction, comment and share row beneath it.",
-          "caption": "The offer arrives with the ad, before she has chosen anything."
+          "caption": {
+            "lead": "The promise starts in the ad.",
+            "gloss": "Free 2-day shipping, no minimum."
+          }
         }
       ]
     },
@@ -30,14 +34,20 @@
           "width": 1700,
           "height": 756,
           "alt": "A browse page for pullovers with the site navigation above it and a banner reading free 2-day shipping, no minumims. The left rail carries a Delivery and Pickup filter, and the product grid shows a free two-day badge on the tiles that qualify.",
-          "caption": "Answers break 01. Location-aware delivery and pickup filters, and a badge on every tile."
+          "caption": {
+            "lead": "Delivery filters.",
+            "gloss": "Set to her zip code. Qualifying products carry a badge."
+          }
         },
         {
           "src": "/case-studies/urbn-delivery-promise/solution/browse--facet.png",
           "width": 1700,
           "height": 1348,
           "alt": "The Delivery and Pickup filter close up. Free two-day shipping to a zip code is selected and free pickup today at a named store is not, beside a product tile carrying a free two-day badge.",
-          "caption": "The filter and its effect in one frame: a zip code, a named store, and a badge on what qualifies."
+          "caption": {
+            "lead": "Ship it or pick it up.",
+            "gloss": "Two-day to her zip code, or today at her store."
+          }
         }
       ]
     },
@@ -49,14 +59,20 @@
           "width": 1700,
           "height": 929,
           "alt": "A product page with the site navigation, breadcrumb and product photograph, and a right column running from the product name and price through colour, fit and size to free two-day shipping to a zip code with a named arrival date above the add-to-cart button.",
-          "caption": "Break 01 again. A named arrival date, above the button."
+          "caption": {
+            "lead": "A named day, above the button.",
+            "gloss": "She sees it before she adds to cart."
+          }
         },
         {
           "src": "/case-studies/urbn-delivery-promise/solution/options--wide.png",
           "width": 1912,
           "height": 1195,
           "alt": "A shipping options panel for a zip code: free two-day shipping with an estimated delivery date, free standard shipping with a date range, and free pickup today marked unavailable with an explanation that there is no store within a hundred miles.",
-          "caption": "Three options, and the one she cannot have stays on the page and says why."
+          "caption": {
+            "lead": "The option she cannot have.",
+            "gloss": "Pickup stays on the page and says why."
+          }
         }
       ]
     },
@@ -68,14 +84,20 @@
           "width": 1700,
           "height": 695,
           "alt": "A shopping cart page with a banner across the top reading your items are available for 2 day delivery, the cart header and its first line item, and a summary panel giving the shopper's location as a zip code with a change link, a greyed line reading not eligible for store pickup, shipping marked free, a subtotal and checkout buttons.",
-          "caption": "Answers break 02. Where it is going and what she can have, settled before she pays rather than after."
+          "caption": {
+            "lead": "The same promise, in the cart.",
+            "gloss": "Two-day delivery, stated at the top of the page."
+          }
         },
         {
           "src": "/case-studies/urbn-delivery-promise/solution/cart--panel.png",
           "width": 1674,
           "height": 1480,
           "alt": "A cart summary panel: the shopper's location given as a zip code with a change link, a greyed line reading not eligible for store pickup, shipping selected and marked free, a subtotal, and checkout buttons.",
-          "caption": "The panel itself: location, pickup eligibility, shipping, subtotal."
+          "caption": {
+            "lead": "Where it is going.",
+            "gloss": "Zip code, pickup eligibility and shipping, before she pays."
+          }
         }
       ]
     },
@@ -88,7 +110,10 @@
           "height": 1800,
           "variant": "phone",
           "alt": "Three post-purchase text messages: shipped with a delivery date, arriving today with a time, and delivered.",
-          "caption": "Answers break 03. Shipped, arriving, delivered: one thread, one order."
+          "caption": {
+            "lead": "Shipped, arriving, delivered.",
+            "gloss": "Three texts, one order."
+          }
         }
       ]
     }

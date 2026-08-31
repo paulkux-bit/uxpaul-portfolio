@@ -78,8 +78,14 @@ export default function PromiseWalk() {
               }
               key={m.src}
             >
+              {/* lead THEN gloss, with the same {' '} separator TierChart, NodeChart,
+                  JourneyLine and RoadmapTable all use. Until 31 Aug this rendered a
+                  gloss alone, the only captioned component in the study that did, and
+                  with no bold slot to put a feature name in the captions had drifted
+                  into full sentences and cross-references. See $captionDoc. */}
               <figcaption className="bento-theme__caption">
-                <span className="bento-theme__gloss">{m.caption}</span>
+                <span className="bento-theme__lead">{m.caption.lead}</span>{' '}
+                <span className="bento-theme__gloss">{m.caption.gloss}</span>
               </figcaption>
 
               <Image
