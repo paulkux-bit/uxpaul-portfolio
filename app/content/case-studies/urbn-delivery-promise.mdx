@@ -79,7 +79,6 @@ import TierChart from '@/components/case-studies/urbn-delivery-promise/TierChart
 import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart';
 import RoadmapList from '@/components/case-studies/urbn-delivery-promise/RoadmapList';
 import PromiseWalk from '@/components/case-studies/urbn-delivery-promise/PromiseWalk';
-import { BentoBand } from '@/components/bento';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
 import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
@@ -783,68 +782,48 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <section className="cs-section">
 
-## The date had to be true before we could show it.
+## Strategic UX is how several teams got one roadmap.
 
-<p className="section-lede">I set the direction from the shopper's side, then built the sequence with the engineers who would have to make it real.</p>
+<p className="section-lede">I helped set the direction from the shopper's side and made the case for it to the people who funded it.</p>
+
+{/* THIS SECTION STOPPED BEING AN OUTCOME BEAT AND BECAME THE PLAN, 1 Sep. It held a
+    three-column table, a coda, a store-ribbon band and two paragraphs, and Paul's
+    verdict was that it read confusing and long. The countable reason is in the
+    manifest's $doc: eleven of the table's fourteen cells restated sections 02 and 05.
+    $horizonDoc carries the other half, which is that the deck has two horizons and
+    the study had only ever shown one. Section 05 keeps the evidence, 08 keeps where
+    it landed, and this one is the plan.
+
+    "THE BEST THING I DESIGNED WAS A ROADMAP" WAS REMOVED BECAUSE IT IS NOT TRUE, NOT
+    BECAUSE IT WAS LONG. It closed this section and it was the best sentence in it.
+    Paul's correction on 31 Aug: he set the vision the teams worked backwards from, he
+    did not author the roadmap. A good sentence that makes a false claim is harder to
+    catch later than a bad one, which is why the removal is recorded here rather than
+    left to a commit message. Section 09 carried the same claim and is corrected in
+    its own commit.
+
+    THE BAND IS HELD, AND SO IS THE NAME, AND THAT IS ONE DECISION RATHER THAN TWO.
+    The <BentoBand> of store--ribbon.png was the study's only evidence of the
+    store-pickup promise, and losing it is a real cost rather than a tidy-up. The
+    reason it goes: the deck lists "Shop My Store" as unbuilt longer-term vision while
+    that band is a 2019 capture whose own button reads Shop Your Store. Either it
+    shipped after the deck or that screen is a design, and NOBODY KNOWS WHICH. Holding
+    the band stops the question blocking anything, and it is why the codename also
+    leaves item 06's title in the list below. NO IMAGE, NO NAME. Neither half is
+    reversible on its own; see $nameDoc.
+
+    store--ribbon.png IS NOT DELETED. Nothing references it now, and that is cheap;
+    a deleted asset that turns out to be wanted is a re-cut. $retainedDoc records it.
+
+    THE PARAGRAPH THAT LEFT WITH THE BAND began "Every screen you just walked through
+    sits in the back half of that roadmap" and named the browse filters, the cart and
+    the band below it. Its second half pointed at the band, so it could not survive
+    the band's removal unchanged, and its first half is what section 05 already shows
+    a reader rather than tells them. */}
+
+**PMs and dev leads across several teams brought what it would take to build.** The result was a roadmap.
 
 <RoadmapList />
-
-{/* THE SENTENCE NAMED THREE SCREENS THE STUDY COULD NOT SHOW, until the crops
-    landed on 30 Aug. The review's account was that a reader like Jordan extrapolates
-    from small imprecisions, and a claim about specific screens with no screens under
-    it is exactly that shape.
-
-    IT IS NOW WORDED AS A ROADMAP CLAIM RATHER THAN A HERE-ARE-THE-SCREENS ONE,
-    because two of the three moved. The browse filters and the cart are stages in the
-    walk above; only Shop Your Store is still mounted in this section. "Every screen
-    you just walked through" points back at where they actually are, and "the store
-    band below" points at the one that is here. The old wording listed three things as
-    though all three were about to appear, which stopped being true the moment browse
-    became a stage.
-
-    "Shop My Store" BECAME "Shop Your Store", AND THE ARTIFACT IS WHY. The band
-    mounted below reads *Shop Your Store* on its own button, so the old sentence sat
-    directly on top of a screenshot contradicting it. Same call as the Overnight
-    tier: the side without a rendered artifact is the side that moves.
-
-    "Shop My Store" WAS PROBABLY THE INTERNAL NAME and that is worth keeping off the
-    page rather than losing. It runs through docs/urbn-delivery-promise-v3-brief.md
-    and v4, and through all four dependency-map prototypes in docs/previews/. So the
-    project called it one thing and the button said another - ordinary, and not a
-    fact the study needs to carry, but not one to rediscover either. */}
-**Every screen you just walked through sits in the back half of that roadmap.** The browse filters, the cart, and the store band below. A filter promising two-day delivery is worse than no filter when the date is a guess.
-
-{/* A BAND, NOT A RIBBON, AND THE REASON IS A STALE CONSTANT IN THE SOURCE OF TRUTH.
-    <BentoRibbon> was the obvious mount for a 21:1 strip and it MEASURED BLURRY on a
-    phone. lib/bento-slots.json derives a ribbon's mobile canvas from
-    `ribbonTrackHeightPx: 80`, giving 80 x 21.053 = 1684px and a retina floor of 3368,
-    which this 3600px crop clears at 1.07x. But globals.css floors the ribbon track at
-    `min-height: 128px` below 430px, so the real canvas is 2694.8px and the real floor
-    is 5390 - and 3600 against that is 0.67x. Rendered at 390 on a 2x device the words
-    are visibly soft, which is the worst case for a strip that is almost entirely text.
-
-    A BAND IS WIDTH-DRIVEN WHERE A RIBBON IS HEIGHT-DRIVEN, and that is the whole
-    difference: `scrollFloor` sets the media's min-width directly, so the retina floor
-    is a number chosen rather than one derived from a track height. 1700 is the
-    largest round floor the source serves with headroom - 3600 / (2 x 1700) = 1.06x,
-    against 1.00x at 1800 - and it renders 80.7px tall, which is 94% of the strip's
-    own native height. At >=768 the band is container-width, identical to what the
-    ribbon would have been, and clears its floor at 1.65x.
-
-    THE JSON CONSTANT IS THE REAL DEFECT AND IT IS NOT FIXED HERE. crop.py reads that
-    file, so every future ribbon is cut against the same understated floor. Changing
-    it moves the floor for every crop on the site and belongs in its own pass. This is
-    the site's first mounted <BentoRibbon>, which is why it has not bitten before. */}
-<BentoBand
-  src="/case-studies/urbn-delivery-promise/solution/store--ribbon.png"
-  alt="A slim band across a product page reading free pickup today at Walnut Street, with a change store link and a Shop Your Store link at the far right."
-  caption="Shop Your Store."
-  gloss="The same promise for the store nearest her, on a band that runs under the product."
-  aspect={21.053}
-  scrollFloor={1700}
-/>
-
-We had a mature design practice, so screens were never the constraint. What stopped us was that no team held more than a third of the promise, and the thirds had to land in order. **The best thing I designed was a roadmap.**
 
 </section>
 
