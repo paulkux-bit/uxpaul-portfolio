@@ -10,18 +10,28 @@ import manifest from './walk-manifest.json';
  * the four-screen grid this replaced, where the reader could see the screens but not
  * the sequence. So the layout here is a fixed vertical list and nothing repacks it.
  *
- * THE LABEL COLUMN IS THE SPINE. Aligned left at one edge down the whole section,
- * the five stage names read as a sequence before a reader looks at any image. That is
- * the reason for every other decision in this file: `align-items: start` on the stage
- * so the labels line up rather than centring on medias of different heights, one
- * label per stage even when the stage holds two screens, and no full-width exception.
+ * OPTION C, 31 Aug: THERE IS NO LABEL COLUMN. Each stage label sits above its own
+ * figures and the hairline rule carries the boundary. THIS FILE USED TO SAY THE
+ * OPPOSITE - "THE LABEL COLUMN IS THE SPINE", with a no-full-width-exception rule
+ * derived from it - and that conclusion is REVERSED here rather than deleted, because
+ * a later pass reading only these rules would restore the column.
  *
- * THE NO-EXCEPTION ARGUMENT IS RESTATED FOR THE NEW GEOMETRY rather than inherited.
- * It used to reason about a `minmax(0, 1fr)` label column; the column is a fixed
- * 200px now and the conclusion is unchanged, and slightly stronger for it. A stage
- * rendered full width has no left column to sit in, so its label falls above its own
- * media while the other four stay beside theirs. One break in five, and the line a
- * skimmer was reading stops being a line.
+ * THE EVIDENCE THAT REVERSED IT, measured in a render before the decision. The column
+ * was 200px holding one word, with every frame capped at 660 inside a 1088 band. At
+ * 660 a 1440px page renders at 46%, so 14px of product UI lands at 6.4px - texture by
+ * definition. At 1088 the same page renders at 76% and 10.6px, and the product-page
+ * frame resolves "Free 2-day Shipping to 16507 / Arrives by Sept 13, 2019" above Add
+ * To Cart. THE LINE THE STUDY IS NAMED FOR WAS INVISIBLE IN THE FRAME THAT SHOWS IT
+ * IN CONTEXT.
+ *
+ * WHAT C COST, AND PAUL ACCEPTED IT WITH THE RENDER IN FRONT OF HIM: five labels at
+ * one left edge are parsed in a single fixation and five labels stacked down the page
+ * are not. The spine is weaker as a scanning object; the frames are legible. That was
+ * the trade, and it is not a defect to be fixed by putting the column back.
+ *
+ * THE WIDTHS NOW COME FROM lib/bento-slots.json - 1088 (container max / `feature`),
+ * 660 (`wide`), 352 (`tall`). Two of the three used to be numbers picked by hand. See
+ * $retinaDoc, which carries the same account so the file and the manifest agree.
  *
  * THE LABEL IS BODY TYPE, NOT AN EYEBROW. It shipped as 14px tracked uppercase, which
  * is chart chrome; nothing in the body of any of the four studies is set that way. It
@@ -33,29 +43,36 @@ import manifest from './walk-manifest.json';
  * Reading them again with a screen against each is what makes this a payoff rather
  * than a gallery. See $stageDoc; they move with JourneyLine or not at all.
  *
- * THE MEDIA CELL IS 660px, AND 380px FOR THE TWO PHONE STAGES. Both caps are retina
- * decisions and both are stated in $retinaDoc rather than here, so the file and the
- * manifest cannot drift. The claim this replaces — that 536 was forced because four
- * of six crops sat under their floor at full width — was true of the asset set that
- * shipped on 30 Aug and is not true of this one. Nothing here pans or scrolls;
- * $cartDoc records the one frame that tried to and why it was re-cut instead.
- *
- * EIGHT FRAMES, FIVE STAGES: every desktop-page stage is a context frame then a
- * detail frame, and the two phone stages are single. See $stageDoc — that is a rule,
- * not a per-stage judgement, and it is what the previous set was missing.
+ * A DETAIL FRAME EXISTS ONLY WHERE THE PAGE FRAME CANNOT CARRY THE CLAIM. See
+ * $stageDoc. That is the rule C produced: raising the page frames to 1088 made
+ * Purchase's detail frame redundant and it was deleted, where Browse's and Decide's
+ * are still meaningfully clearer than their pages. Seven frames, five stages, and the
+ * count is inferable rather than arbitrary.
  *
  * Every string and every dimension lives in walk-manifest.json. Edit that, not this.
  */
 
 /** The caps live in CSS; `sizes` states them so the browser picks the right source.
- *  BOTH CROSSINGS ARE MEASURED, NOT DERIVED. The figure's rendered width was read at
- *  1px steps and these are where it stops growing for each cap: 708px of viewport for
- *  the 660 cell, 428px for the 380 phone cell. Condition: the .cs-section container at
- *  its default page padding, light mode, no scrollbar. Arithmetic would have given the
- *  same pair here, but an over-declared `sizes` is already an open item on
- *  hero-block.tsx across all four studies and this does not add a fifth. */
+ *  ALL THREE CROSSINGS ARE MEASURED, NOT DERIVED. The rendered figure width was read
+ *  at 1px viewport steps and these are where it stops growing for each cap. Condition
+ *  is stated because a crossing without one is the defect this repo keeps hitting:
+ *  .cs-section at its default page padding, light mode, headless so no scrollbar.
+ *  Stepped 340 to 1220: the band cap is reached at 1152, the wide cap at 708 and the
+ *  phone cap at 400. The band crossing is above 1024 because .cs-section breaks out
+ *  to min(100vw - 4rem, 1088) there, where the other two are still inside the 660
+ *  prose measure at 100vw - 3rem. */
+const SIZES_BAND = '(min-width: 1152px) 1088px, calc(100vw - 3rem)';
 const SIZES = '(min-width: 708px) 660px, calc(100vw - 3rem)';
-const SIZES_PHONE = '(min-width: 428px) 380px, calc(100vw - 3rem)';
+const SIZES_PHONE = '(min-width: 400px) 352px, calc(100vw - 3rem)';
+
+/** Variant → the CSS modifier and the `sizes` that matches its cap. One place, so a
+ *  width and the sizes declaring it cannot drift apart. */
+const VARIANT = {
+  band:  { cls: 'promise-walk__figure promise-walk__figure--band',  sizes: SIZES_BAND },
+  phone: { cls: 'promise-walk__figure promise-walk__figure--phone', sizes: SIZES_PHONE },
+  wide:  { cls: 'promise-walk__figure',                              sizes: SIZES },
+} as const;
+const pick = (v?: string) => VARIANT[(v === 'band' || v === 'phone' ? v : 'wide')];
 
 export default function PromiseWalk() {
   return (
@@ -70,14 +87,7 @@ export default function PromiseWalk() {
           <p className="promise-walk__label">{stage.label}</p>
 
           {stage.media.map((m) => (
-            <figure
-              className={
-                'variant' in m && m.variant === 'phone'
-                  ? 'promise-walk__figure promise-walk__figure--phone'
-                  : 'promise-walk__figure'
-              }
-              key={m.src}
-            >
+            <figure className={pick('variant' in m ? m.variant : undefined).cls} key={m.src}>
               {/* lead THEN gloss, with the same {' '} separator TierChart, NodeChart,
                   JourneyLine and RoadmapTable all use. Until 31 Aug this rendered a
                   gloss alone, the only captioned component in the study that did, and
@@ -93,7 +103,7 @@ export default function PromiseWalk() {
                 alt={m.alt}
                 width={m.width}
                 height={m.height}
-                sizes={'variant' in m && m.variant === 'phone' ? SIZES_PHONE : SIZES}
+                sizes={pick('variant' in m ? m.variant : undefined).sizes}
                 className="promise-walk__img"
               />
             </figure>

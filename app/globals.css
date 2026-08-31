@@ -4814,78 +4814,96 @@ html.dark .figure-placeholder {
 /* ── Delivery Promise (URBN): PromiseWalk ─────────────────────────────────────
    Section 05. One delivery date walked through five stages of an order.
 
-   THE LABEL COLUMN IS THE SPINE AND EVERY RULE BELOW SERVES IT. Aligned left at one
-   edge down the whole section, the five stage names read as a sequence before a
-   reader looks at any image. If they ragged, the spine is gone and the section is a
-   list of pictures. So: one label treatment, `align-items: start` so each label pins
-   to the top of its span instead of centring against medias of wildly different
-   heights, and NO full-width exception anywhere.
+   OPTION C, 31 Aug: NO LABEL COLUMN. Each stage label sits above its own figures and
+   the hairline rule carries the boundary. This REVERSES the arrangement this file
+   carried until now, and the reversal is recorded rather than silently applied,
+   because a later pass reading only the rules would restore the column.
 
-   THE NO-EXCEPTION ARGUMENT IS RESTATED AGAINST THE NEW GEOMETRY, not inherited from
-   the old one. It used to reason about a `minmax(0, 1fr)` label column; the column is
-   a fixed 200px now, and the conclusion is unchanged and slightly stronger for it. A
-   stage rendered full width has no left column to sit in, so its label falls above
-   its own media while the other four stay beside theirs — one break in five, and the
-   line a skimmer was reading stops being a line.
+   WHAT THE COLUMN COST, MEASURED BEFORE THE DECISION. It was 200px holding one word,
+   with every frame capped at 660 inside a 1088 band - 196px of the band unused down
+   the whole section. At 660 a 1440px page renders at 46%, so 14px of product UI lands
+   at 6.4px, which is texture by definition. At 1088 the same page renders at 76% and
+   10.6px, and the product-page frame resolves "Free 2-day Shipping to 16507 / Arrives
+   by Sept 13, 2019" above Add To Cart. THE LINE THE STUDY IS NAMED FOR WAS INVISIBLE
+   IN THE FRAME THAT SHOWS IT IN CONTEXT. That is the whole gain.
 
-   TWO GAPS ON TWO GRIDS, EACH DECLARED ONCE AND OUTSIDE EVERY QUERY. This is the
-   split RoadmapTable already uses, and it is what makes the mobile collapse behave.
-   Stacked, only .promise-walk__stage's row-gap resolves, so a label sits tight above
-   its own figure against a --spacing-2xl break between stages: the stage name reads
-   as attached to its image rather than floating between two. Side by side, only the
-   column-gap resolves for the label and the row-gap separates Decide's two figures.
-   Same rendering either way, and nothing spacing-related inside a media query, which
-   is exactly what lint:space check 4 forbids. */
-/* --spacing-xl, not --spacing-2xl: the hairline below now carries separation the
-   whitespace used to carry alone, so 64px of it became 48. */
+   WHAT C COST, AND PAUL ACCEPTED IT WITH THE RENDER IN FRONT OF HIM: five labels at
+   one left edge are parsed in a single fixation and five labels stacked down the page
+   are not. The spine is weaker as a scanning object and the frames are legible. That
+   was the trade.
+
+   THE THREE WIDTHS ALL COME FROM lib/bento-slots.json rather than from numbers picked
+   by hand - 1088 is the container max and `feature`, 660 is `wide`, 352 is `tall`.
+   Nothing here is invented, which is the point: a width with no source is a width
+   nobody can check.
+
+   TWO GAPS ON TWO GRIDS, EACH DECLARED ONCE AND OUTSIDE EVERY QUERY. There is no
+   media query left in this block at all, so lint:space check 4 has nothing to catch.
+   .promise-walk__stage's row-gap is label-to-figure and figure-to-figure inside a
+   stage; .promise-walk's is stage-to-stage, and the hairline carries what the extra
+   whitespace used to. */
 .promise-walk {
   display: grid;
   row-gap: var(--spacing-xl);
   margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
 }
 
-/* The boundary the uppercase used to draw. Same hairline `.thread-cols li + li`
+/* The boundary the uppercase eyebrow used to draw. Same hairline `.thread-cols li + li`
    already draws, so this is the file's existing structural rule rather than a second
-   one — and unlike a type treatment it survives the mobile stack, where the two
-   columns collapse and the label stops being positionally distinct. */
+   one. Under C it is the ONLY thing marking a stage boundary at every width, where it
+   used to share that job with the column. */
 .promise-walk__stage {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: var(--spacing-m);
-  column-gap: var(--spacing-l);
   align-items: start;
   border-top: 1px solid color-mix(in oklch, currentColor 16%, transparent);
   padding-top: var(--spacing-m);
 }
 
-/* THE SPINE IS BODY TYPE NOW, NOT AN EYEBROW. It shipped as 14px tracked uppercase at
-   --text-muted, defended here as "the study's small-label register, the same one the
-   chart axis labels carry". That description was accurate and the call was wrong: an
-   axis label is chart CHROME and this is a section spine sitting in the body. Nothing
-   else in the body of any of the four studies is set that way — the only tracked
-   uppercase in the codebase is quote attributions, chart marker labels and the hero
-   callout's WHAT CHANGED, three chrome roles and no prose among them.
+/* THE SPINE IS BODY TYPE, NOT AN EYEBROW. It shipped as 14px tracked uppercase, which
+   is chart chrome; nothing in the body of any of the four studies is set that way.
 
-   18 / 600 / --text-primary IS .bento-theme__lead's setting EXACTLY, which is the
-   point: the walk's captions render .bento-theme__gloss at 18 / 400 / --text-muted, so
-   label and caption share a rung and separate on weight and colour. That is a register
-   this study already owns rather than a sixth one invented for the spine.
+   22px, AND SPACE WAS TRIED FIRST. Under C the label and the caption lead stack: the
+   200px column used to supply 232px of horizontal separation and C removes it, so two
+   strings in identical 18/600/--text-primary sat one above the other at the same left
+   edge. Rendered at 1024 and 1440 in both themes they read as ONE two-line heading -
+   "Browse / Delivery filters." - and the gloss only resolved it after you had read
+   past the second line.
 
-   THE STAGE BOUNDARY MOVED FROM TYPE TO A RULE, below. Three alternatives were
-   prototyped and rejected: a .thread-index numeral (01–05 collides with the 01/02/03
-   sections 02 and 04 use for the three breaks, and that echo is load-bearing), the
-   name with no rule at all (does not survive the mobile stack, where the column
-   collapses and nothing marks the boundary), and the name as the caption's bold lead
-   (gives up the spine entirely). */
+   THE CHEAP LEVER WAS TRIED AND MEASURED FIRST, per the ruling: row-gap from
+   --spacing-m to --spacing-l took the gap 25px to 33px and did not change the kind of
+   thing they read as. Space alone does not separate two strings of identical type at
+   one edge; it just spaces them.
+
+   SO THE LABEL STEPS ONE RUNG, TO 22px. That is a size the locked scale already
+   carries - text-lead's 22px, and text-h3's mobile end - so nothing is invented. The
+   mechanical argument is the type system's own: 22/18 is 1.22x, which clears the
+   1.15x adjacent-rung floor, so the label and the lead are on different rungs BY THE
+   SYSTEM'S OWN DEFINITION rather than by eye. It stays clear of what it must not
+   touch: .section-lede at 26px is 1.18x above it, and the h2 at 40px is 1.82x. It is
+   deliberately NOT the 26-32px rung .friction-beat__headline uses, which would put a
+   stage label in competition with the section h2.
+
+   THE GAP THEN WENT BACK TO --spacing-m, because type is doing the separating and the
+   label should sit close to what it labels: 24px inside a stage against 48px between
+   them is a 1:2 proximity ratio, where 33:48 was 1:1.45.
+
+   WHAT WAS NOT AVAILABLE, so a later pass does not reach for either: stepping the
+   caption gloss to --text-subtle measures 3.86 light and 4.20 dark against an
+   AA-normal floor of 4.5 at 18px/400, and is the same failure aa977d8 removed from
+   three labels on this branch. Tracked uppercase is the eyebrow this section
+   deliberately removed. */
 .promise-walk__label {
   margin: 0;
   max-width: none;
-  font-size: 1.125rem; /* 18px — a reading rung, not a label rung */
+  font-size: 1.375rem; /* 22px — one rung above the 18px caption lead, 1.22x */
   font-weight: 600;
-  line-height: 1.35;
+  line-height: 1.3;
   color: var(--text-primary);
 }
 
+/* `wide` — 660. The detail frames, where the specific is legible. */
 .promise-walk__figure {
   margin: 0;
   display: grid;
@@ -4896,13 +4914,17 @@ html.dark .figure-placeholder {
   max-width: 660px;
 }
 
-/* THE PHONE CAP IS NOT COSMETIC. Arrive is a social post and Post purchase is an SMS
-   thread; both are 375px captures. At the old 536 cell the thread rendered at 1.43x
-   life size and at 660 it would be 1.76x — a phone screen shown bigger than a phone.
-   380 puts it at roughly 1:1, and both assets still clear their floor there: the ad
-   at 1.32x and the thread at 1.78x. */
+/* The container max, and `feature`. The three whole-page frames: at 660 they were
+   texture and at 1088 their UI copy resolves. This is what C exists for. */
+.promise-walk__figure--band {
+  max-width: 1088px;
+}
+
+/* `tall` — 352. Arrive and Post purchase are 375px captures, so anything above this
+   shows a phone screen bigger than a phone. It was 380 until 31 Aug, which was a
+   number picked by hand; 352 is the same cap the bento's `tall` slot uses. */
 .promise-walk__figure--phone {
-  max-width: 380px;
+  max-width: 352px;
 }
 
 .promise-walk__img {
@@ -4913,30 +4935,6 @@ html.dark .figure-placeholder {
   /* The house hairline: inset so the line sits inside the box and cannot add a pixel
      to the layout. Same mechanism as .bento-theme__media and .figure__image. */
   box-shadow: inset 0 0 0 1px var(--border-subtle);
-}
-
-/* Two columns from 1024, NOT 768: below that the band is the 660px prose width and
-   there is no room for a second column beside a 660px media. Stacked, the media keeps
-   its cap, which is what keeps a phone capture off 1.76x life size at the full width.
-
-   200px AND NOT minmax(0, 1fr). The label column was taking 520px of the 1088 band to
-   hold one word — "Post purchase" sets at 18px in about 118px, so 200 holds the
-   longest of the five on one line with room and gives the rest of the band to the
-   media. ONLY grid-template-columns changes here; every gap is declared above, which
-   is what lint:space check 4 requires. */
-@media (min-width: 1024px) {
-  .promise-walk__stage {
-    grid-template-columns: 200px minmax(0, 1fr);
-  }
-
-  .promise-walk__label {
-    grid-column: 1;
-    grid-row: 1 / -1;
-  }
-
-  .promise-walk__figure {
-    grid-column: 2;
-  }
 }
 
 /* ── Delivery Promise (URBN): RoadmapTable ────────────────────────────────────
