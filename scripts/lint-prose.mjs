@@ -2,6 +2,20 @@
 // Prose gate for shipped copy. Scans RENDERED output (.next HTML) so JSX/MDX code
 // comments and metadata never reach it: only visible page prose is checked.
 //
+// THE SCAN SURFACE IS PRINTED BESIDE THE VERDICT, and that is the point of the two
+// lines at the bottom rather than a nicety. Reading rendered HTML means this gate is
+// blind to every string that never reaches the DOM: JSON manifest doc keys, MDX and
+// JSX comments, alt text on a route nothing mounts, copy behind a dead branch. On
+// 31 Aug two `$doc` keys in walk-manifest.json carried U+2014 through a green build
+// here, and nothing in the output distinguished that PASS from a PASS by a gate that
+// had looked everywhere. A gate that cannot state its own blind spot reports success
+// indistinguishably from one that earned it.
+//
+// WIDENING THE SCAN IS A DIFFERENT DECISION AND IS NOT TAKEN HERE. Source files carry
+// prose that is deliberately not held to shipped-copy rules, so scanning them would
+// need its own rule set. This change makes the pass a claim with a boundary on it,
+// nothing more.
+//
 // Two severities, kept separate:
 //   HARD FAIL (exit 1): em-dash U+2014 in visible text. En-dash U+2013 and hyphen are fine.
 //   WARN only (exit 0): banned words from the project docs.
@@ -89,7 +103,11 @@ for (const file of files) {
   }
 }
 
-console.log(`prose-lint: scanned ${files.length} page(s) under ${HTML_ROOT}\n`);
+console.log(`prose-lint: scanned ${files.length} rendered page(s) under ${HTML_ROOT}`);
+console.log(
+  `prose-lint: NOT covered - source files, JSON manifests, MDX/JSX comments, and any\n` +
+    `            string that never renders. A pass here is a claim about shipped copy only.\n`,
+);
 
 console.log(`HARD (em-dash U+2014):`);
 if (hard.length === 0) console.log('  ✓ none');
