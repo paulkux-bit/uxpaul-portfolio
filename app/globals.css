@@ -4921,8 +4921,14 @@ html.dark .figure-placeholder {
 /* THE BASE CARRIES NO WIDTH, AND THAT IS THE POINT. It held max-width: 660px until
    31 Aug, so a figure with no variant silently took the wide slot and 660 stopped
    being a decision anybody had made. Every frame names its slot now, and
-   PromiseWalk's pick() throws on one that does not. All three widths come from
-   lib/bento-slots.json; $retinaDoc carries the measured life-size case for each. */
+   PromiseWalk's pick() throws on one that does not. Both widths come from
+   lib/bento-slots.json; $retinaDoc carries the measured life-size case for each.
+
+   THERE ARE TWO RULES HERE, NOT THREE. --band retired on 1 Sep: the three page frames
+   it capped at 1088 are real <BentoBand> elements now, so the engine owns their width
+   and .bento-band__media owns their aspect and hairline. Only the four narrow frames
+   still take a width from this file, and $bandDoc records why the engine cannot carry
+   those four. */
 .promise-walk__figure {
   margin: 0;
   display: grid;
@@ -4932,27 +4938,9 @@ html.dark .figure-placeholder {
   min-width: 0;
 }
 
-/* THE NAME IS FROM bento-slots.json's `breakouts` HALF, NOT ITS `slots` MAP, and that
-   was flagged as a loose end on 31 Aug because 1088 is `feature` in the slots map and
-   --band is not a slot name. It closes here. The file has two halves: `slots` holds
-   feature / wide / standard / tall / compact, and `breakouts` describes N:1 strips at
-   full container width and names BentoBand outright. The three whole-page frames carry
-   native aspects of 2.25:1, 1.83:1 and 2.45:1, so they are not `feature` tiles at
-   16:10 - they are breakouts. --band comes from BentoBand and its 1088 comes from
-   container.maxWidthPx. Both halves of the name are inside the file's vocabulary, so
-   nothing in the walk is named outside the slot set after all.
-
-   WHAT THE WIDTH IS FOR: at 660 the whole-page frames were texture and at 1088 their
-   UI copy resolves. That is what Option C exists for. It is also the one place the
-   life-size rule CANNOT be met - a 1440px page at 1088 is 76%, below the rule's own
-   floor, and there is no wider width available. Recorded, not hidden. */
-.promise-walk__figure--band {
-  max-width: 1088px;
-}
-
-/* `standard` - 536. Every detail frame in the walk plus the social ad. Each was
-   measured back to its source region: ad--post 482-499 CSS px, browse--facet
-   468-506, options--wide 445-477. 536 puts them at 106-120% of life size. */
+/* `standard` - 536. The two detail frames plus the social ad. Each was measured back
+   to its source region: ad--post 482-499 CSS px, browse--facet 468-506, options--wide
+   445-477. 536 puts them at 106-120% of life size. */
 .promise-walk__figure--standard {
   max-width: 536px;
 }
