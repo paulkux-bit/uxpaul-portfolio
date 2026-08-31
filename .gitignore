@@ -41,6 +41,12 @@ yarn-error.log*
 
 # Case-study raw screenshots (originals stay local; only optimized copies ship).
 public/case-studies/**/_raw/
+
+# Prototype scratch: crop candidates and edge-check zooms, written during asset
+# passes and never shipped. It was untracked but NOT ignored, so the only thing
+# keeping it out of a public repo was remembering to stage explicit paths rather
+# than `git add -A`. A discipline nothing enforces eventually fails.
+.proto-tmp/
 next-env.d.ts
 
 # Impeccable critique snapshots (local archive, not source)
