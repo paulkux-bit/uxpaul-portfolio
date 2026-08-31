@@ -150,7 +150,7 @@ export default function PromiseWalk() {
             ) : (
             <figure className={pick(m.variant).cls} key={m.src}>
               {/* lead THEN gloss, with the same {' '} separator TierChart, NodeChart,
-                  JourneyLine and RoadmapTable all use. Until 31 Aug this rendered a
+                  JourneyLine and RoadmapList all use. Until 31 Aug this rendered a
                   gloss alone, the only captioned component in the study that did, and
                   with no bold slot to put a feature name in the captions had drifted
                   into full sentences and cross-references. See $captionDoc. */}
