@@ -4819,8 +4819,14 @@ html.dark .figure-placeholder {
    reader looks at any image. If they ragged, the spine is gone and the section is a
    list of pictures. So: one label treatment, `align-items: start` so each label pins
    to the top of its span instead of centring against medias of wildly different
-   heights, and NO full-width exception anywhere — a single stage rendered wide would
-   move its label out of the column, and one break in five loses the line.
+   heights, and NO full-width exception anywhere.
+
+   THE NO-EXCEPTION ARGUMENT IS RESTATED AGAINST THE NEW GEOMETRY, not inherited from
+   the old one. It used to reason about a `minmax(0, 1fr)` label column; the column is
+   a fixed 200px now, and the conclusion is unchanged and slightly stronger for it. A
+   stage rendered full width has no left column to sit in, so its label falls above
+   its own media while the other four stay beside theirs — one break in five, and the
+   line a skimmer was reading stops being a line.
 
    TWO GAPS ON TWO GRIDS, EACH DECLARED ONCE AND OUTSIDE EVERY QUERY. This is the
    split RoadmapTable already uses, and it is what makes the mobile collapse behave.
@@ -4830,33 +4836,54 @@ html.dark .figure-placeholder {
    column-gap resolves for the label and the row-gap separates Decide's two figures.
    Same rendering either way, and nothing spacing-related inside a media query, which
    is exactly what lint:space check 4 forbids. */
+/* --spacing-xl, not --spacing-2xl: the hairline below now carries separation the
+   whitespace used to carry alone, so 64px of it became 48. */
 .promise-walk {
   display: grid;
-  row-gap: var(--spacing-2xl);
+  row-gap: var(--spacing-xl);
   margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
 }
 
+/* The boundary the uppercase used to draw. Same hairline `.thread-cols li + li`
+   already draws, so this is the file's existing structural rule rather than a second
+   one — and unlike a type treatment it survives the mobile stack, where the two
+   columns collapse and the label stops being positionally distinct. */
 .promise-walk__stage {
   display: grid;
   grid-template-columns: 1fr;
   row-gap: var(--spacing-m);
   column-gap: var(--spacing-l);
   align-items: start;
+  border-top: 1px solid color-mix(in oklch, currentColor 16%, transparent);
+  padding-top: var(--spacing-m);
 }
 
-/* The spine. 14px, tracked caps at 700 — the study's small-label register, the same
-   one the chart axis labels and the journey's sentiment axis carry. --text-muted
-   rather than --text-subtle: this is 14px and 14px bold is NOT WCAG large text, so
-   the floor is AA-normal 4.5 and --text-subtle measures 3.86. */
+/* THE SPINE IS BODY TYPE NOW, NOT AN EYEBROW. It shipped as 14px tracked uppercase at
+   --text-muted, defended here as "the study's small-label register, the same one the
+   chart axis labels carry". That description was accurate and the call was wrong: an
+   axis label is chart CHROME and this is a section spine sitting in the body. Nothing
+   else in the body of any of the four studies is set that way — the only tracked
+   uppercase in the codebase is quote attributions, chart marker labels and the hero
+   callout's WHAT CHANGED, three chrome roles and no prose among them.
+
+   18 / 600 / --text-primary IS .bento-theme__lead's setting EXACTLY, which is the
+   point: the walk's captions render .bento-theme__gloss at 18 / 400 / --text-muted, so
+   label and caption share a rung and separate on weight and colour. That is a register
+   this study already owns rather than a sixth one invented for the spine.
+
+   THE STAGE BOUNDARY MOVED FROM TYPE TO A RULE, below. Three alternatives were
+   prototyped and rejected: a .thread-index numeral (01–05 collides with the 01/02/03
+   sections 02 and 04 use for the three breaks, and that echo is load-bearing), the
+   name with no rule at all (does not survive the mobile stack, where the column
+   collapses and nothing marks the boundary), and the name as the caption's bold lead
+   (gives up the spine entirely). */
 .promise-walk__label {
   margin: 0;
   max-width: none;
-  font-size: 0.875rem; /* 14px, the system floor */
-  font-weight: 700;
-  line-height: 1.4;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  font-size: 1.125rem; /* 18px — a reading rung, not a label rung */
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
 }
 
 .promise-walk__figure {
@@ -4866,7 +4893,16 @@ html.dark .figure-placeholder {
   /* min-width: 0 — a grid item's automatic minimum is min-content, and this one holds
      an image. Same guard .chart-pair's cells and JourneyLine's wrappers carry. */
   min-width: 0;
-  max-width: 536px;
+  max-width: 660px;
+}
+
+/* THE PHONE CAP IS NOT COSMETIC. Arrive is a social post and Post purchase is an SMS
+   thread; both are 375px captures. At the old 536 cell the thread rendered at 1.43x
+   life size and at 660 it would be 1.76x — a phone screen shown bigger than a phone.
+   380 puts it at roughly 1:1, and both assets still clear their floor there: the ad
+   at 1.32x and the thread at 1.78x. */
+.promise-walk__figure--phone {
+  max-width: 380px;
 }
 
 .promise-walk__img {
@@ -4879,14 +4915,18 @@ html.dark .figure-placeholder {
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
-/* Two columns from 1024, NOT 768: at the 660px prose width a 536px media leaves the
-   label 124px, which is not a column. Below 1024 everything stacks and the media
-   keeps its 536px cap — that cap is what holds the portraits at 1.26x instead of the
-   1.02x they would land on at the full 660. ONLY grid-template-columns changes here;
-   every gap is declared above. */
+/* Two columns from 1024, NOT 768: below that the band is the 660px prose width and
+   there is no room for a second column beside a 660px media. Stacked, the media keeps
+   its cap, which is what keeps a phone capture off 1.76x life size at the full width.
+
+   200px AND NOT minmax(0, 1fr). The label column was taking 520px of the 1088 band to
+   hold one word — "Post purchase" sets at 18px in about 118px, so 200 holds the
+   longest of the five on one line with room and gives the rest of the band to the
+   media. ONLY grid-template-columns changes here; every gap is declared above, which
+   is what lint:space check 4 requires. */
 @media (min-width: 1024px) {
   .promise-walk__stage {
-    grid-template-columns: minmax(0, 1fr) 536px;
+    grid-template-columns: 200px minmax(0, 1fr);
   }
 
   .promise-walk__label {
