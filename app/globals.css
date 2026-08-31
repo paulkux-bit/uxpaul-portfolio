@@ -4894,10 +4894,25 @@ html.dark .figure-placeholder {
    AA-normal floor of 4.5 at 18px/400, and is the same failure aa977d8 removed from
    three labels on this branch. Tracked uppercase is the eyebrow this section
    deliberately removed. */
+/* THIS RULE IS THE RECORD FOR THE LABEL'S SEPARATION FROM ITS CAPTION LEAD, and
+   PromiseWalk.tsx's header points here rather than restating it. It restated it twice
+   and was falsified both times.
+
+   SIZE IS THE ONLY CHANNEL SEPARATING THE TWO. Weight is 600 on both and colour is
+   --text-primary on both, in both themes, so nothing below can be changed on the
+   assumption that another channel is carrying the difference. The lead's own settings
+   are on .bento-theme__lead; the ratio between them clears the type system's 1.15x
+   adjacent-rung floor, and lint:type check 3 is what holds that.
+
+   SPACE WAS TRIED FIRST AND FAILED. With Option C's label column gone the two sat
+   directly on top of each other at identical settings, and "Browse" over "Delivery
+   filters." read as one two-line heading. Raising the stage row-gap from --spacing-m
+   to --spacing-l and rendering at 1440 still read as one block, so the gap went back
+   and the label took a rung instead. */
 .promise-walk__label {
   margin: 0;
   max-width: none;
-  font-size: 1.375rem; /* 22px — one rung above the 18px caption lead, 1.22x */
+  font-size: 1.375rem;
   font-weight: 600;
   line-height: 1.3;
   color: var(--text-primary);
@@ -4917,10 +4932,20 @@ html.dark .figure-placeholder {
   min-width: 0;
 }
 
-/* The container max, and `feature`. The three whole-page frames: at 660 they were
-   texture and at 1088 their UI copy resolves. This is what C exists for. It is also
-   the one place the life-size rule CANNOT be met - a 1440px page at 1088 is 76%,
-   below the rule's own floor, and there is no wider slot. Recorded, not hidden. */
+/* THE NAME IS FROM bento-slots.json's `breakouts` HALF, NOT ITS `slots` MAP, and that
+   was flagged as a loose end on 31 Aug because 1088 is `feature` in the slots map and
+   --band is not a slot name. It closes here. The file has two halves: `slots` holds
+   feature / wide / standard / tall / compact, and `breakouts` describes N:1 strips at
+   full container width and names BentoBand outright. The three whole-page frames carry
+   native aspects of 2.25:1, 1.83:1 and 2.45:1, so they are not `feature` tiles at
+   16:10 - they are breakouts. --band comes from BentoBand and its 1088 comes from
+   container.maxWidthPx. Both halves of the name are inside the file's vocabulary, so
+   nothing in the walk is named outside the slot set after all.
+
+   WHAT THE WIDTH IS FOR: at 660 the whole-page frames were texture and at 1088 their
+   UI copy resolves. That is what Option C exists for. It is also the one place the
+   life-size rule CANNOT be met - a 1440px page at 1088 is 76%, below the rule's own
+   floor, and there is no wider width available. Recorded, not hidden. */
 .promise-walk__figure--band {
   max-width: 1088px;
 }

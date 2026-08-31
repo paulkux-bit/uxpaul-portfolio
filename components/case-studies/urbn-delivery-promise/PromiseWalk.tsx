@@ -29,23 +29,21 @@ import manifest from './walk-manifest.json';
  * are not. The spine is weaker as a scanning object; the frames are legible. That was
  * the trade, and it is not a defect to be fixed by putting the column back.
  *
- * THE WIDTHS COME FROM lib/bento-slots.json - 1088 (`feature`, the container max),
- * 536 (`standard`), 352 (`tall`). THIS LIST SAID 1088 / 660 / 352 UNTIL 31 Aug and the
- * 660 is now used by nothing: every detail frame was measured back to its source
- * region and 660 was rendering all three at 130 to 148% of life size. See $retinaDoc
- * for the method and $stageDoc for the slot rule that decided it.
+ * EVERY WIDTH COMES FROM lib/bento-slots.json, AND THE VALUES ARE NOT REPEATED HERE.
+ * They are the .promise-walk__figure--* modifiers in globals.css, one rule each, and
+ * that is the only place to read them. THIS PARAGRAPH USED TO LIST THEM AND WENT STALE
+ * TWICE, both times in the commit that moved them, which is why it now points instead.
+ * The reasoning does stay: a frame earns its slot by rendering nearest its own life
+ * size, so the widths are a consequence of measurement rather than a layout preference.
+ * $stageDoc has the rule, $retinaDoc has the measured source region behind each frame.
  *
  * THE LABEL IS BODY TYPE, NOT AN EYEBROW. It shipped as 14px tracked uppercase, which
  * is chart chrome; nothing in the body of any of the four studies is set that way.
- * IT IS 22 / 600 / --text-primary, AND THE PART OF THIS NOTE THAT SAID 18 AND
- * "separate on weight and colour" WAS FALSE FROM THE COMMIT THAT DROPPED THE LABEL
- * COLUMN. At 18 it matched .bento-theme__lead exactly, so with the column gone
- * "Browse" and "Delivery filters." read as one two-line heading. Space alone did not
- * fix it - the stage row-gap went 25 to 33px and it still read as one block - so the
- * label stepped a rung to 22, which is 1.222x the lead and clears the type system's
- * 1.15x adjacent-rung floor. SIZE IS THE ONLY SEPARATING CHANNEL: both are 600 weight
- * and both are --text-primary in both themes. That is one channel, not two, and it is
- * worth knowing before anything changes either setting.
+ * ITS SETTINGS AND THE CHANNEL THAT SEPARATES IT FROM THE CAPTION LEAD ARE RECORDED ON
+ * .promise-walk__label IN globals.css, NOT HERE. This paragraph carried those numbers
+ * and was wrong about them for two commits, which is the same failure as the widths
+ * above and the reason both now reference rather than restate. Read the rule before
+ * changing either the label or .bento-theme__lead: they are closer than they look.
  *
  * THE STAGE NAMES ARE JOURNEYLINE'S, VERBATIM. The reader met Arrive / Browse /
  * Decide / Purchase / Post purchase in section 03, on a line that ended angry.
