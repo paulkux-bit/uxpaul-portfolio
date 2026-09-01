@@ -4915,6 +4915,32 @@ html.dark .figure-placeholder {
    deliberately NOT the 26-32px rung .friction-beat__headline uses, which would put a
    stage label in competition with the section h2.
 
+   THE ".section-lede at 26px is 1.18x above it" CLAUSE ABOVE IS TRUE ONLY AT AND ABOVE
+   1143px, corrected 1 Sep. .section-lede is clamp(1.375rem, 0.932vw + 0.959rem,
+   1.625rem), which in px is 0.00932W + 15.344: it sits at its 22px FLOOR for every
+   viewport up to W = 714.2 and only reaches 26px at W = 1143.3. So below 714 the lede
+   and this label are THE SAME SIZE and the real ratio is 1.00x, not 1.18x. Confirmed in
+   the browser at 390, 714 and 1440: 22.0/600 against 22.0/400 at the first two, 22.0
+   against 26.0 at the third.
+
+   THE LABEL STAYS AT 22px ANYWAY, AND THAT IS A DECISION RATHER THAN AN OVERSIGHT.
+   Dropping it to 18px was rendered and rejected: 18/600 is .bento-theme__lead's exact
+   setting, so "Decide" and "The promise sits above the button." came back as identical
+   type at one edge - the collision the step to 22px was made to fix, reintroduced five
+   times per section instead of once. AND NO THIRD VALUE EXISTS. To clear the caption
+   lead by the system's 1.15x the label must be >= 20.70px; to be cleared by the lede's
+   22px floor by the same 1.15x it must be <= 19.13px. The window between 18 and 22 is
+   1.222x wide and nothing fits with 1.15x on both sides.
+
+   WHICH PAIR MATTERS IS THE POINT. The caption lead sits ONE LINE BELOW this label, in
+   every stage, five times. The section lede sits at the top of the section, above the
+   figure, and never appears beside a stage label at all. 22px resolves the adjacent
+   pair at the cost of matching a non-adjacent one, which is the right way round.
+
+   NOTHING MECHANICAL MEASURES THIS. lint:type check 3 walks only the selectors in
+   RUNGS and .promise-walk__label is not one of them, so a green type lint says nothing
+   about this pair either way.
+
    THE GAP THEN WENT BACK TO --spacing-m, because type is doing the separating and the
    label should sit close to what it labels: 24px inside a stage against 48px between
    them is a 1:2 proximity ratio, where 33:48 was 1:1.45.
