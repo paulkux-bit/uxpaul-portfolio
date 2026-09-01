@@ -6,7 +6,22 @@ import { FontLoadProbe } from '@/components/font-load-probe';
 import './globals.css';
 
 export const metadata = {
-  title: 'uxpaul',
+  /* THE TEMPLATE IS WHAT PUTS PAUL'S NAME IN THE TAB. Without it a case study's
+     `title: fm.title` REPLACES this one outright rather than extending it, so the
+     Delivery Promise tab read "Nobody remembered the wait. Everybody remembered the
+     miss." with the candidate's name nowhere in it - on a link sent to a recruiter,
+     who has that tab open while they read.
+
+     `default` is NOT run through `template`: Next applies the template to CHILD
+     segments only, so `/` stays "uxpaul" and every child gains the suffix.
+
+     MIDDOT, NEVER AN EM DASH. U+2014 is a lint:prose hard fail and lint:prose now
+     gates the build (9fd0eee). The middot is also already the house separator -
+     the home name line and every case-study card meta use it. */
+  title: {
+    default: 'uxpaul',
+    template: '%s · Paul Kali',
+  },
   description:
     'Paul Kali. Senior product designer. Currently with the U.S. Navy, previously URBN. Open to senior IC, staff, and management roles.',
 };
