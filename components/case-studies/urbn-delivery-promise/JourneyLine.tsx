@@ -135,6 +135,12 @@ export default function JourneyLine() {
       <div className="journey-line__vertical">
         <div className="journey-line__vertical-head" aria-hidden="true">
           <span />
+          {/* NO role="list" HERE, AND THAT IS AN EXCLUSION RATHER THAN A MISS. The
+              other three decorative lists carry aria-hidden on the element itself;
+              this one is hidden BY INHERITANCE from .journey-line__vertical-head
+              directly above, so a grep over element attributes reads it as the one
+              list on the site still missing the role. It is not. If that parent
+              ever stops being aria-hidden, this needs the role. */}
           <ul className="journey-line__sentiment-cols">
             {sentiment.map((s) => (
               <li key={s}>{s}</li>
