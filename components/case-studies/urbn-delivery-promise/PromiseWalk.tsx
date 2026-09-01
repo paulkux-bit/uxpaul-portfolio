@@ -115,7 +115,14 @@ export default function PromiseWalk() {
   return (
     <div className="promise-walk">
       {manifest.stages.map((stage) => (
-        <section className="promise-walk__stage" key={stage.label} aria-label={stage.label}>
+        <div className="promise-walk__stage" key={stage.label} role="group">
+          {/* A GROUP, NOT A NAMED <section>. A <section> with an accessible name maps to
+              role="region", a LANDMARK, and five of them landed in the rotor of a page
+              whose only other landmarks are banner, main, contentinfo and two navs -
+              measured in the AX tree on 1 Sep, five regions out of ten. The name also
+              duplicated the visible label rendered one line below, so each stage announced
+              twice. role=group keeps the grouping, drops the landmark, and the visible <p>
+              below carries the name. */}
           {/* ONE LABEL PER STAGE, SPANNING ITS MEDIA. Decide holds two screens; an
               earlier draft printed its name twice and a column of six labels with a
               repeated word reads as a mistake before it reads as a decision. The
@@ -170,7 +177,7 @@ export default function PromiseWalk() {
             </figure>
             ),
           )}
-        </section>
+        </div>
       ))}
     </div>
   );

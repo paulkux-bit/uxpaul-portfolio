@@ -65,6 +65,13 @@ type HeroBlockProps = {
  * 3.5rem bottom) would push the image off-axis from the type column. Same
  * primitives, no margin drift.
  */
+/** The callout label's id, referenced by the region's aria-labelledby. A module constant
+ *  rather than useId() because HeroBlock is a Server Component and hooks are not available
+ *  there. THE PREMISE THAT MAKES A CONSTANT SAFE: exactly one HeroBlock renders per route,
+ *  as the page hero. If a second one ever mounts on the same page this becomes a duplicate
+ *  id and the labelledby resolves to the first. */
+const CALLOUT_LABEL_ID = 'hero-block-callout-label';
+
 export function HeroBlock({
   eyebrow,
   title,
@@ -142,9 +149,13 @@ export function HeroBlock({
               calloutWidth ? ({ '--hero-callout-w': calloutWidth } as CSSProperties) : undefined
             }
             role="note"
-            aria-label={callout.label}
+            /* aria-labelledby, NOT aria-label. The label was announced twice: once as the
+               region's name and again as its first paragraph, because the two carried the
+               same string. Pointing at the visible <p> keeps the region named and stops
+               the repeat. Shared by all four case studies. */
+            aria-labelledby={CALLOUT_LABEL_ID}
           >
-            <p className="hero-block__callout-label">{callout.label}</p>
+            <p className="hero-block__callout-label" id={CALLOUT_LABEL_ID}>{callout.label}</p>
             <p className="hero-block__callout-body">{callout.body}</p>
           </aside>
         ) : null}

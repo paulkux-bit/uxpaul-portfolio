@@ -53,7 +53,15 @@ export default function JourneyLine() {
   const drawing = (comp: Composition, orientation: 'horizontal' | 'vertical') => {
     const [w, h] = extent(comp.viewBox);
     return (
-      <div className="journey-line__plot">
+      /* role="img" + the label live HERE, on the plot, NOT on the outer <figure>.
+         ARIA declares `img` Children Presentational, so a figure-level role can collapse
+         the whole subtree into one leaf and take the breaks list and the figcaption with
+         it. Chromium's own AX tree does NOT collapse them - measured 1 Sep, all five
+         strings unignored - but WebKit and several screen readers do, and the label
+         narrates the sentiment arc without containing any of those five strings, so where
+         it does collapse they are simply gone. TierChart and NodeChart already scope their
+         role to an inner element for the same reason; this was the outlier. */
+      <div className="journey-line__plot" role="img" aria-label={manifest.ariaLabel}>
         <svg className="journey-line__svg" viewBox={comp.viewBox} aria-hidden="true">
           {orientation === 'horizontal' ? (
             <>
@@ -100,7 +108,7 @@ export default function JourneyLine() {
   const [hw] = extent(horizontal.viewBox);
 
   return (
-    <figure className="journey-line" role="img" aria-label={manifest.ariaLabel}>
+    <figure className="journey-line">
       {/* Horizontal, from 768. The sentiment labels are a column beside the drawing,
           one per band, and the stage labels sit under it at their band centres. */}
       <div className="journey-line__horizontal">
@@ -145,7 +153,9 @@ export default function JourneyLine() {
         </div>
       </div>
 
-      <ol className="journey-line__breaks">
+      {/* role="list" because .journey-line__breaks is list-style: none, which strips list
+          semantics in WebKit. Same instrument and same reasoning as RoadmapList's <ol>. */}
+      <ol className="journey-line__breaks" role="list">
         {breaks.map((b) => (
           <li key={b.index}>
             <span className="journey-line__breaks-idx" aria-hidden="true">

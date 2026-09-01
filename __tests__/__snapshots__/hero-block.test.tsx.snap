@@ -44,12 +44,13 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
       />
     </div>
     <aside
-      aria-label="GENERATED INSIGHT"
+      aria-labelledby="hero-block-callout-label"
       class="hero-block__callout"
       role="note"
     >
       <p
         class="hero-block__callout-label"
+        id="hero-block-callout-label"
       >
         GENERATED INSIGHT
       </p>
