@@ -37,14 +37,24 @@ export const caseStudies: CaseStudy[] = [
     client: 'U.S. Navy',
   },
   {
-    // Slug only, 23 Aug. projectName and problemFraming are deliberately NOT updated to
-    // the MDX frontmatter's "Delivery Promise" / "Why did free shipping stop working?":
-    // the name is still open, the frontmatter's framing is a flagged placeholder, and the
-    // house rule is write the study THEN the card. Bard shipped a card describing a
-    // project that had stopped existing because the card was written first.
+    // Resolved 1 Sep, and BOTH premises the old note rested on are now false. It said
+    // the name was still open and the frontmatter's framing was a flagged placeholder;
+    // Paul ruled the name on 1 Sep and picked this framing from a set on the same day,
+    // and the TODO the placeholder claim pointed at was removed (the MDX records that
+    // at its own note). The house rule it cited, write the study THEN the card, is
+    // unchanged and is exactly why this card waited until now.
+    //
+    // The old framing promised a study about free shipping. "Free shipping" occurs ZERO
+    // times in the study's body prose: it survives only in comments recording why the
+    // section that asked that question was removed, and in an alt string quoting a
+    // screenshot's own copy. The question was retired with the section.
+    //
+    // problemFraming is ALSO in the MDX frontmatter and both are set to this string.
+    // Nothing reads the frontmatter copy today, but two sources for one value that
+    // disagree is exactly how the defect above happened.
     slug: 'urbn-delivery-promise',
-    problemFraming: 'Why were customers not excited by free shipping?',
-    projectName: 'Shipping',
+    problemFraming: 'What does a missed date cost her?',
+    projectName: 'Delivery Promise',
     client: 'URBN',
   },
   {
