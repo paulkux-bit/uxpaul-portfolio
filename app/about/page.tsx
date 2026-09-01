@@ -7,7 +7,10 @@ import { FramedImage } from '@/components/framed-image';
 import { RevealSection } from '@/components/about/reveal-section';
 
 export const metadata = {
-  title: 'About · uxpaul',
+  /* 'About', not 'About · uxpaul': the root layout's title template appends
+     " · Paul Kali", so the hand-rolled site name would render
+     "About · uxpaul · Paul Kali". Renders "About · Paul Kali". */
+  title: 'About',
 };
 
 export default function AboutPage() {
