@@ -33,7 +33,25 @@ export default function RoadmapList() {
 
   return (
     <figure className="roadmap-list">
-      <ol className="roadmap-list__items">
+      {/* THE NUMERAL IS NOT aria-hidden, AND THAT IS A DECISION MADE ON THE TREE
+          RATHER THAN ON PRINCIPLE. It looks redundant: the <ol> carries position, so
+          a screen reader would announce it and then read "01" again. Hiding it was
+          the obvious tidy-up and it is wrong here.
+
+          ARIA HAS NO ORDERED-LIST ROLE. <ul> and <ol> both map to role="list", and
+          the ordered-ness rides on the markers that list-style: none has already
+          removed. So numeral-hidden has a real path to "list, 6 items" with the
+          sequence announced nowhere, in a module whose entire purpose is making the
+          sequence legible before anything is read. A redundant announcement costs a
+          moment; a missing one costs the point.
+
+          MEASURED, not assumed: the rendered tree in both Chromium and WebKit
+          exposes this as list / listitem with "01 Improve inventory sync and
+          cancellation" as the row's accessible name, so the ordinal is announced as
+          content whatever the list role does. role="list" is here anyway, matching
+          reveal-list.tsx, because restoring the semantics list-style: none can strip
+          costs nothing and Playwright's WebKit is not Safari. */}
+      <ol className="roadmap-list__items" role="list">
         {items.map((item) => (
           <li key={item.n}>
             {/* A span, not an <em>. The numeral is a label, not stress emphasis, and

@@ -5020,6 +5020,25 @@ html.dark .figure-placeholder {
   margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
 }
 
+/* BOUNDED BY TWO RULES, NOT SEVEN, AND THAT CAME OUT OF MEASUREMENT RATHER THAN
+   TASTE. Measured on the shipped geometry with a Range over the text nodes rather
+   than element boxes: the longest gloss ink ended at 632px of 1088, so 456px of
+   every hairline carried nothing, and row 03 was the worst at 564px dead - 52% of
+   the module width. A rule running half its length past the last word reads as an
+   empty table column, which was the one way this module still looked like the table
+   it stopped being.
+
+   TWO OTHER FIXES WERE MEASURED AND REJECTED, kept here because both will occur to
+   a later pass. Capping the module near 780 looked best and fails this codebase's
+   own rule, which walk-manifest.json's $retinaDoc states as "a width with no source
+   is a width nobody can check"; 780 has no source. Dropping to 660 flush with the
+   prose is principled, since 660 is a real system width, but it costs the most
+   height and pushes the two long titles to three lines.
+
+   So the per-row hairlines go and the 28px ordinal does the marking. There is no
+   naked rule left behind because there is no rule left: the top and bottom borders
+   bound the module and nothing separates rows but whitespace. IF THE ROWS EVER READ
+   TOO LOOSE, the fallback is 660 flush with the prose, NOT hairlines back at 1088. */
 .roadmap-list__items {
   list-style: none;
   display: grid;
@@ -5027,6 +5046,7 @@ html.dark .figure-placeholder {
   margin: 0;
   padding: 0;
   border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
 }
 
 /* Stacked below 768: the numeral takes an auto track and the title sits beside it,
@@ -5034,23 +5054,44 @@ html.dark .figure-placeholder {
    is why the gloss is placed explicitly instead of flowing into the next cell. */
 .roadmap-list__items > li {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  /* 2.5rem, DERIVED not chosen: a tabular "06" at 1.75rem/600 measures 37.97px in
+     the render, rounded up to the nearest 0.25rem step. Fixed rather than `auto` so
+     the six titles keep one shared left edge even if the numeral's rendered width
+     moves; `auto` happens to give the same edge today only because every numeral is
+     two tabular digits. */
+  grid-template-columns: 2.5rem minmax(0, 1fr);
   row-gap: var(--spacing-3xs);   /* title → its own gloss, bound to the item */
   column-gap: var(--spacing-s);  /* numeral → title, and title → gloss at desktop */
   margin: 0;
   padding: var(--spacing-m) 0;
-  border-bottom: 1px solid var(--border-subtle);
 }
 
+/* THE ORDINAL IS THE LARGEST THING IN THE ROW, AND THAT IS THE WHOLE CHANGE. At
+   18px it worked as a bullet: it marked a row and carried no rank. At 28px the six
+   numerals read as a sequence before any title is read, which is what makes the
+   module a ranked list rather than six things that happen to be numbered.
+
+   IT WAS THE ONLY LEVER AVAILABLE. The reference this came from (the F1 app's
+   race-results table) gets its force from six things, and four of them cannot exist
+   here: display type on the row, which section 06's h2 already owns; a portrait per
+   row, which items 04 to 06 cannot have because they were never built; four
+   comparable data columns, where this has two text columns that are not quantities;
+   and the tight rows that portrait sets. The ordinal was what was left.
+
+   LINE-HEIGHT IS THE TITLE'S COMPUTED LINE BOX, NOT A RATIO OF ITS OWN. 1.125rem x
+   1.25 = 1.40625rem, so a 28px glyph sits on an 18px line and the row does not grow
+   by the difference. Left at 1.25 the numeral's own box would be 35px against the
+   title's 22.5px and every row would gain 12.5px for nothing. */
 .roadmap-list__n {
   font-variant-numeric: tabular-nums;
-  font-size: 1.125rem; /* 18px, so it sits on the title's own line */
-  line-height: 1.25;
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.40625rem; /* the title's line box: 1.125rem x 1.25 */
   font-weight: 600;
-  /* NOT --text-subtle, which is AA-large only (>=24px, or >=18.66px bold). This is
-     an 18px label carrying meaning. Same correction the old block carried, and the
-     same one already applied to JourneyLine's stage labels. */
-  color: var(--text-muted);
+  /* --text-primary now, where the 18px version took --text-muted. The old note here
+     argued against --text-subtle on the AA-large floor; at 28px/600 that floor is
+     cleared by any of the three, so the choice is made on rank instead: the ordinal
+     is the loudest thing in the row and a muted loudest thing is a contradiction. */
+  color: var(--text-primary);
 }
 
 .roadmap-list__title {
@@ -5077,7 +5118,7 @@ html.dark .figure-placeholder {
      and wraps 05 and 06 to two, which is the trade the fixed track buys: the gloss
      edge is identical down all six rows whatever the titles do. */
   .roadmap-list__items > li {
-    grid-template-columns: auto minmax(0, 21rem) minmax(0, 1fr);
+    grid-template-columns: 2.5rem minmax(0, 21rem) minmax(0, 1fr);
     align-items: baseline;
   }
 
