@@ -73,7 +73,11 @@ export function AboutDrawer({ company, year, roles, children }: AboutDrawerProps
         {children}
 
         {isProgression ? (
-          <ol className="about-roles">
+          /* role="list": preflight's `list-style: none` strips list semantics in
+             WebKit. It restores list, NOT ordered — ARIA has no ordered-list role,
+             so the <ol> still carries the progression and this only gets the
+             boundaries announced. */
+          <ol className="about-roles" role="list">
             {roles.map((role) => (
               <li key={role.title} className="about-roles__step">
                 <span className="about-roles__title text-small">{role.title}</span>

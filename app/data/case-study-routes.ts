@@ -14,7 +14,7 @@ export const caseStudyRoutes = {
   'us-navy-fdt-e': () => import('@/app/content/case-studies/us-navy-fdt-e.mdx'),
   // Uncomment as each lands. That single line publishes the route and the card.
   // 'us-navy-dagr':  () => import('@/app/content/case-studies/us-navy-dagr.mdx'),
-  // 'urbn-shipping': () => import('@/app/content/case-studies/urbn-shipping.mdx'),
+  'urbn-delivery-promise': () => import('@/app/content/case-studies/urbn-delivery-promise.mdx'),
   'nuuly': () => import('@/app/content/case-studies/nuuly.mdx'),
 } as const;
 

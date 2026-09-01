@@ -4,14 +4,21 @@ import { isPublished } from '@/app/data/case-study-routes';
 
 // Per-card cover illustration, keyed by slug -> asset basename in
 // public/case-studies/covers/ (webp + png). Decorative line art; the question
-// and client carry the meaning, so it renders aria-hidden. A card without an
-// entry still renders (question + meta only). Theme-flip via the .cover-art
-// blend rule in globals.css.
-const COVER_ART: Record<string, string> = {
+// and client carry the meaning, so it renders aria-hidden. Theme-flip via the
+// .cover-art blend rule in globals.css.
+//
+// ASSERTED BY __tests__/cover-art.test.mjs, WHICH IS WHY THIS IS EXPORTED.
+// A key that does not match a published slug used to degrade quietly to no
+// illustration: 0ee2dcc renamed a slug, this map kept the old one, the lookup
+// missed, and the card rendered a large empty well with every gate green. Now
+// four things fail CI instead - a key that is not a published slug, a value
+// missing either half of its webp/png pair, a published study with no key, and
+// two studies pointing at the same art.
+export const COVER_ART: Record<string, string> = {
   'uscg-bard': 'bard',
   'us-navy-fdt-e': 'fdte',
   'us-navy-dagr': 'dagr',
-  'urbn-shipping': 'urbn',
+  'urbn-delivery-promise': 'urbn',
   nuuly: 'nuuly',
 };
 

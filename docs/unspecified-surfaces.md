@@ -24,6 +24,21 @@ cannot produce at all. **Bento theme block, outer boundary** joined on 19 Aug
 2026, the first found by swapping one component for another, which is what
 exposed three shipped components answering the same question three ways.*
 
+**Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
+Promise build, and the first to arrive from a coordinate-space question rather
+than a token one. No locked spec governs a drawn chart: not its type sizes, not
+its mark weight, not whether it carries a legend, and above all not the
+**viewBox-unit versus screen-pixel** distinction that produced the defect. Type
+inside an SVG is sized in the drawing's own units, so the 14px floor every other
+surface is held to does not apply to it by construction — 14 units rendered at
+4.79px in a 342px container and no gate saw it, because `lint:type` parses
+`app/globals.css` and these were SVG presentation attributes. What the systems
+would need to say: which type belongs in a drawing at all (the answer adopted here
+is *only geometry and numerals*), how a stroke keeps its weight across scales
+(`vector-effect: non-scaling-stroke`), and what a chart owes a reader in legend and
+table form. Until then the rule lives in
+`docs/urbn-delivery-promise-build-brief.md` §3.1 and in the two components.
+
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
 

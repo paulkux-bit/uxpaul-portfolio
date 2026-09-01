@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DependencyMap prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@340;400;500;600;720&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chroma-unit:0.002; --hue-ground:70; --hue-surface:68; --hue-text:55;
+  --bg-canvas:           oklch(0.978 calc(var(--chroma-unit)*8)  calc(var(--hue-ground) + 6));
+  --bg-surface:          oklch(0.948 calc(var(--chroma-unit)*11) calc(var(--hue-ground) + 2));
+  --text-primary:   oklch(0.215 calc(var(--chroma-unit)*9)  var(--hue-text));
+  --text-secondary: oklch(0.355 calc(var(--chroma-unit)*10) var(--hue-text));
+  --text-muted:     oklch(0.485 calc(var(--chroma-unit)*11) var(--hue-text));
+  --text-subtle:    oklch(0.590 calc(var(--chroma-unit)*10) calc(var(--hue-text) + 5));
+  --border-subtle:  oklch(0.905 calc(var(--chroma-unit)*15) calc(var(--hue-ground) - 4));
+  --border-default: oklch(0.855 calc(var(--chroma-unit)*17) calc(var(--hue-ground) - 10));
+  --border-strong:  oklch(0.760 calc(var(--chroma-unit)*20) calc(var(--hue-ground) - 15));
+}
+html.dark{
+  --bg-canvas:      oklch(0.165 calc(var(--chroma-unit)*3)  var(--hue-ground));
+  --bg-surface:     oklch(0.205 calc(var(--chroma-unit)*7)  calc(var(--hue-ground) + 2));
+  --text-primary:   oklch(0.945 calc(var(--chroma-unit)*6) calc(var(--hue-text) + 4));
+  --text-secondary: oklch(0.825 calc(var(--chroma-unit)*7) calc(var(--hue-text) + 2));
+  --text-muted:     oklch(0.705 calc(var(--chroma-unit)*8) calc(var(--hue-text) - 2));
+  --text-subtle:    oklch(0.565 calc(var(--chroma-unit)*9) calc(var(--hue-text) - 6));
+  --border-subtle:  oklch(0.245 calc(var(--chroma-unit)*7)  calc(var(--hue-ground) + 2));
+  --border-default: oklch(0.310 calc(var(--chroma-unit)*10) calc(var(--hue-ground) + 3));
+  --border-strong:  oklch(0.430 calc(var(--chroma-unit)*13) var(--hue-ground));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-canvas);color:var(--text-primary);
+  font-family:Commissioner,system-ui,sans-serif;font-weight:400;
+  -webkit-font-smoothing:antialiased;padding:3rem 1.5rem 4rem}
+.wrap{max-width:47rem;margin:0 auto}
+h2{font-size:1.75rem;line-height:1.15;font-weight:600;letter-spacing:-.012em;
+  max-width:22ch;margin-bottom:1rem}
+.lede{font-size:1rem;line-height:1.55;color:var(--text-secondary);max-width:52ch;margin-bottom:2.5rem}
+.cap{font-size:.875rem;line-height:1.5;color:var(--text-muted);max-width:56ch;margin-top:1.25rem}
+.cap strong{color:var(--text-primary);font-weight:600}
+
+/* ─── the module ─────────────────────────────────────────── */
+.dm{margin:0}
+/* Desktop parts are OFF by default and switched on at >=768. The earlier draft
+   only hid .dm__groups inside the media query and left .dm__grid visible at
+   every width: below 768 the preserveAspectRatio="none" band stretched into a
+   black blob, because vector-effect was also scoped to the query so the stroke
+   scaled with the distortion. Both now live in the same place. */
+.dm__head,.dm__grid{display:none}
+
+/* MOBILE FIRST: grouped by foundation. Three groups, each naming the fix and
+   the surfaces it unblocks. No connectors, because six-to-three edges inside a
+   342px container are unreadable. */
+.dm__groups{list-style:none;display:grid;gap:1.75rem}
+.dm__fix{font-size:.875rem;letter-spacing:.11em;text-transform:uppercase;
+  font-weight:600;color:var(--text-primary);display:block;margin-bottom:.55rem;
+  padding-bottom:.5rem;border-bottom:1px solid var(--border-strong)}
+.dm__surfaces{list-style:none;display:grid;gap:.4rem}
+.dm__surfaces li{font-size:.9375rem;line-height:1.45;color:var(--text-muted);
+  padding-left:1.1rem;position:relative}
+.dm__surfaces li::before{content:"";position:absolute;left:0;top:.62em;
+  width:.55rem;height:1px;background:var(--border-strong)}
+
+@media (min-width:768px){
+  /* DESKTOP: the convergence. Six surfaces on the left, three fixes on the
+     right, an SVG band between them carrying the edges. Words never enter
+     the SVG. */
+  /* Not display:none. The grid is aria-hidden, so hiding this too would leave
+     a screen reader with nothing at all at desktop. Clipped instead: present in
+     the a11y tree, absent from the page. */
+  .dm__groups{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+  .dm__head{display:grid;grid-template-columns:1fr 7rem 1fr;
+    align-items:end;margin-bottom:1rem}
+  .dm__head span{font-size:.875rem;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--text-subtle);font-weight:500;padding-bottom:.5rem;
+    border-bottom:1px solid var(--border-subtle)}
+  .dm__head span:nth-child(1){text-align:right}
+  .dm__head span:nth-child(2){border:0}
+  .dm__head span:nth-child(3){text-align:left}
+  .dm__grid{display:grid;grid-template-columns:1fr 7rem 1fr;align-items:stretch}
+  .dm__col{list-style:none;display:grid}
+  .dm__col--left{text-align:right}
+  .dm__col li{display:flex;align-items:center;font-size:.9375rem;line-height:1.4}
+  .dm__col--left li{justify-content:flex-end;color:var(--text-muted)}
+  .dm__col--right li{color:var(--text-primary);font-weight:600;
+    font-size:.875rem;letter-spacing:.09em;text-transform:uppercase}
+  /* The band must not drive the block's height. An <svg> with width:100%, no
+     height, and a 100x600 viewBox resolves its intrinsic height from that ratio:
+     at 7rem wide that is 672px, which inflated every row to ~98px and made the
+     module read as sparse rather than dense. Absolutely positioned inside its
+     own cell, the two text columns set the height and the band fills it. */
+  .dm__cell{position:relative}
+  .dm__band{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
+  .dm__col li{min-height:2.75rem}
+  .dm__edge{stroke:var(--border-strong);stroke-width:1;fill:none;
+    vector-effect:non-scaling-stroke}
+  .dm__node{fill:var(--bg-canvas);stroke:var(--text-primary);stroke-width:1.5;
+    vector-effect:non-scaling-stroke}
+  .dm__node--fix{fill:var(--text-primary)}
+}
+hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:4rem 0 2.5rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h2>The date had to be true before we could show it.</h2>
+<p class="lede">I set the direction from the shopper's side, then built the sequence with the engineers who would have to make it real.</p>
+
+<figure class="dm">
+
+  <div class="dm__head" aria-hidden="true">
+    <span>What a shopper sees</span><span></span><span>What it waits on</span>
+  </div>
+
+  <!-- DESKTOP VIEW -->
+  <div class="dm__grid" aria-hidden="true">
+    <ul class="dm__col dm__col--left">
+      <li>A filter for free two-day to your zip</li>
+      <li>A product page naming an arrival date</li>
+      <li>A cart confirming two-day eligibility</li>
+      <li>Shop My Store</li>
+      <li>Recommendations from nearby inventory</li>
+      <li>One order arriving as one box</li>
+    </ul>
+
+    <div class="dm__cell">
+    <svg class="dm__band" viewBox="0 0 100 600" preserveAspectRatio="none">
+      <!-- left anchors at 50,150,250,350,450,550 ; right at 100,300,500 -->
+      <path class="dm__edge" d="M6,50  C50,50  56,100 94,100"/>
+      <path class="dm__edge" d="M6,150 C50,150 56,100 94,100"/>
+      <path class="dm__edge" d="M6,150 C50,150 56,300 94,300"/>
+      <path class="dm__edge" d="M6,250 C50,250 56,300 94,300"/>
+      <path class="dm__edge" d="M6,350 C50,350 56,300 94,300"/>
+      <path class="dm__edge" d="M6,450 C50,450 56,300 94,300"/>
+      <path class="dm__edge" d="M6,450 C50,450 56,500 94,500"/>
+      <path class="dm__edge" d="M6,550 C50,550 56,500 94,500"/>
+    </svg>
+    </div>
+
+    <ul class="dm__col dm__col--right">
+      <li>Delivery date accuracy</li>
+      <li>Inventory sync</li>
+      <li>Fulfillment rules engine</li>
+    </ul>
+  </div>
+
+  <!-- MOBILE VIEW / the accessible reading -->
+  <ul class="dm__groups">
+    <li>
+      <span class="dm__fix">Delivery date accuracy</span>
+      <ul class="dm__surfaces">
+        <li>A filter for free two-day to your zip</li>
+        <li>A product page naming an arrival date</li>
+      </ul>
+    </li>
+    <li>
+      <span class="dm__fix">Inventory sync</span>
+      <ul class="dm__surfaces">
+        <li>A product page naming an arrival date</li>
+        <li>A cart confirming two-day eligibility</li>
+        <li>Shop My Store</li>
+        <li>Recommendations from nearby inventory</li>
+      </ul>
+    </li>
+    <li>
+      <span class="dm__fix">Fulfillment rules engine</span>
+      <ul class="dm__surfaces">
+        <li>One order arriving as one box</li>
+        <li>Recommendations from nearby inventory</li>
+      </ul>
+    </li>
+  </ul>
+
+  <figcaption class="cap"><strong>The roadmap, as dependencies.</strong> Everything on the left is something I designed. Everything on the right had to ship first.</figcaption>
+</figure>
+
+</div>
+</body>
+</html>

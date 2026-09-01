@@ -62,26 +62,56 @@ All under `components/case-studies/urbn-delivery-promise/`.
 
 ### 3.1 JourneyLine
 
-Port Track A from `journey-line-prototype.html`. It renders correctly at 1100px
-and 390px in both modes; do not redesign it.
+Port Track A from `journey-line-prototype.html`. Track A is the approved SHAPE and
+stays the approved shape; do not redesign it.
 
-**The architecture rule it encodes, learned by rendering:** shape and orientation
-stay in the SVG, the argument goes in HTML. A 13px label inside a 1000-unit
-viewBox scaled into a 342px mobile container renders at 4.4px, which is absent,
-not small. So the SVG holds the line, dots, numerals, stage labels and the
-reference line; the three break descriptions are an HTML `<ol>` beneath that
-reflows. **Apply the same rule to InversionChart.**
+**The architecture rule, corrected 23 Aug:**
+
+> **Only geometry and numerals stay in the SVG. Every word goes in HTML.**
+
+So the SVG holds the path, the dots, the reference rule and the 01/02/03 numerals.
+The reference label, the five stage labels, the tail note and the three break
+descriptions are all HTML beneath it. **Apply the same rule to InversionChart.**
+
+*What this replaced, and why it is recorded rather than quietly swapped.* The rule
+here used to read "shape and orientation stay in the SVG, the argument goes in
+HTML", and this section used to claim Track A "renders correctly at 1100px and
+390px in both modes". **That claim was never verified — the fix was made and the
+render was not re-read.** Measured: the prose container is 342px, so the scale is
+342/1000 = 0.342, and the stage labels rendered at **4.79px** with the tail note at
+**5.47px**. The weak rule classified those as "orientation" and let them stay.
+
+Scaling SVG type is not the escape hatch. "POST PURCHASE" at a legible 32 units is
+~250 units wide, and five of them need ~1,250 units in a 1,000-unit box. **Words
+structurally do not fit a shared coordinate space.** Numerals stay because two
+characters do fit; they are bumped at mobile, and so is the dot radius, from the
+manifest.
+
+One more thing the same 0.342 scale broke, and it is not type: a `stroke-width` of
+2 user units renders at **0.68px**. Both modules pin stroke to screen px with
+`vector-effect: non-scaling-stroke`, the idiom `.fdte-figure` already uses.
 
 Manifest: `journey-manifest.json`
 
 ```
-points:  [{x, y, stage}]         8 points
-marks:   [{pointIndex, index}]   3 marks -> 01, 02, 03
-breaks:  [{index, lead, tail}]   3 HTML entries
-stages:  [{label, x}]            5 labels
-refLabel: "WHERE SHE STARTED"
-tailNote: "and then cancelled, four days later"
+geometry: viewBox, the two rules, dot radii (desktop + mobile),
+          numeral sizes (desktop + mobile)
+points:   [{x, y, stage}]                      8 points
+marks:    [{pointIndex, index, dx, dy,         3 marks -> 01, 02, 03
+            dxMobile, dyMobile}]
+stages:   [{label, x}]                         5 labels, HTML; x drives
+                                               the grid columns
+breaks:   [{index, lead, tail}]                3 HTML entries
+refLabel  + refLabelPlacement ("above" | "below")
+tailNote  "and then cancelled, four days later"  (HTML)
+caption   {lead, gloss}                        moved off the deleted BentoBand
 ```
+
+**The mobile pairs are not optional.** Below md the numeral goes 17 -> 44 units and
+the dot 4.5 -> 13, so an offset tuned for the desktop pair sits the numeral on top
+of its own dot. `refLabelPlacement` exists because JourneyLine's reference rule is
+at the top of its plot and InversionChart's is at the bottom, so the label goes
+above one drawing and below the other.
 
 The final point is a filled dot and sits below the reference line. That is the
 whole argument. Do not normalise it away.
@@ -90,8 +120,15 @@ whole argument. Do not normalise it away.
 
 New. Same line vocabulary as JourneyLine so the two read as one hand.
 
-**Two series, monochrome, no hue.** One solid, one dashed, both direct-labeled.
-No legend box needed beyond the direct labels.
+**Two series, monochrome, no hue.** One solid, one dashed.
+
+**An HTML legend is mandatory and is always present** — the dataviz skill requires
+one at two or more series, with direct labels *supplementing* it rather than
+replacing it. This section used to say "no legend box needed beyond the direct
+labels"; that was wrong twice over, because the direct labels are also the thing
+that cannot survive mobile. They stay in the SVG at >=768 where 16 units renders at
+17.4px, and are hidden below it. The legend carries identity at every width, on a
+line-key that repeats the dash pattern; the name itself stays in a text token.
 
 | Tier | All nodes | Store network |
 | --- | --- | --- |
@@ -109,7 +146,10 @@ source table and are deliberately excluded.
 The x axis is ordered by price. The line must visibly rise where a reader
 expects it to fall. That inversion is the entire module.
 
-Manifest: `inversion-manifest.json` — tiers, series, labels, caption, gloss.
+Manifest: `inversion-manifest.json` — geometry, `scale`, tiers (with the `x` that
+drives both the plotted points and the axis row's grid columns), series, refLabel +
+refLabelPlacement, caption, gloss. **y is computed from the percentages via `scale`
+and never stored**, so a value and its plotted position cannot drift apart.
 
 ### 3.3 PromiseSequence
 

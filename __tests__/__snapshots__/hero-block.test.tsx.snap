@@ -18,7 +18,7 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
       <span
         class="hero-block__sentence hero-block__sentence--open"
       >
-        The data was there.
+        The data was there. 
       </span>
       <span
         class="hero-block__sentence hero-block__sentence--anxious"
@@ -44,12 +44,13 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
       />
     </div>
     <aside
-      aria-label="GENERATED INSIGHT"
+      aria-labelledby="hero-block-callout-label"
       class="hero-block__callout"
       role="note"
     >
       <p
         class="hero-block__callout-label"
+        id="hero-block-callout-label"
       >
         GENERATED INSIGHT
       </p>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Delivery Promise §01 — quote pair, four treatments</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@340;400;500;600;720&display=swap" rel="stylesheet">
+<style>
+/* Tokens copied from app/globals.css. Values, not names, because this file is
+   standalone. Anything that ships reads the real custom properties. */
+:root{
+  --chroma-unit:0.002; --hue-ground:70; --hue-surface:68; --hue-text:55;
+  --bg-canvas:oklch(0.978 calc(var(--chroma-unit)*8) calc(var(--hue-ground) + 6));
+  --bg-surface:oklch(0.948 calc(var(--chroma-unit)*11) calc(var(--hue-ground) + 2));
+  --text-primary:oklch(0.215 calc(var(--chroma-unit)*9) var(--hue-text));
+  --text-secondary:oklch(0.355 calc(var(--chroma-unit)*10) var(--hue-text));
+  --text-muted:oklch(0.485 calc(var(--chroma-unit)*11) var(--hue-text));
+  --text-subtle:oklch(0.590 calc(var(--chroma-unit)*10) calc(var(--hue-text) + 5));
+  --border-subtle:oklch(0.905 calc(var(--chroma-unit)*15) calc(var(--hue-ground) - 4));
+  --border-default:oklch(0.855 calc(var(--chroma-unit)*17) calc(var(--hue-ground) - 10));
+  --border-strong:oklch(0.760 calc(var(--chroma-unit)*20) calc(var(--hue-ground) - 15));
+  --sp-3xs:.25rem; --sp-2xs:.5rem; --sp-xs:.75rem; --sp-s:1rem;
+  --sp-m:1.5rem; --sp-l:2rem; --sp-xl:3rem; --sp-2xl:4rem;
+}
+html.dark{
+  --bg-canvas:oklch(0.165 calc(var(--chroma-unit)*3) var(--hue-ground));
+  --bg-surface:oklch(0.205 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --text-primary:oklch(0.945 calc(var(--chroma-unit)*6) calc(var(--hue-text) + 4));
+  --text-secondary:oklch(0.825 calc(var(--chroma-unit)*7) calc(var(--hue-text) + 2));
+  --text-muted:oklch(0.705 calc(var(--chroma-unit)*8) calc(var(--hue-text) - 2));
+  --text-subtle:oklch(0.565 calc(var(--chroma-unit)*9) calc(var(--hue-text) - 6));
+  --border-subtle:oklch(0.245 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --border-default:oklch(0.310 calc(var(--chroma-unit)*10) calc(var(--hue-ground) + 3));
+  --border-strong:oklch(0.430 calc(var(--chroma-unit)*13) var(--hue-ground));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-canvas);color:var(--text-primary);font-family:Commissioner,system-ui,sans-serif;
+  font-weight:400;-webkit-font-smoothing:antialiased;padding:2.5rem 1.5rem 4rem}
+.wrap{max-width:47rem;margin:0 auto}
+
+/* Scaffolding only. Not part of any treatment. */
+.tag{font-size:.875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--text-muted);
+  font-weight:500;margin-bottom:var(--sp-s);padding-bottom:var(--sp-2xs);
+  border-bottom:1px solid var(--border-subtle)}
+.note{font-size:.875rem;line-height:1.5;color:var(--text-muted);max-width:60ch;margin-bottom:var(--sp-l)}
+hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--sp-2xl) 0 var(--sp-l)}
+.ctx{max-width:34rem}
+.ctx h2{font-size:1.75rem;line-height:1.15;font-weight:600;letter-spacing:-.015em;margin-bottom:var(--sp-s)}
+.ctx p{font-size:1rem;line-height:1.6;color:var(--text-secondary)}
+.ctx p b{font-weight:600;color:var(--text-primary)}
+.after{margin-top:var(--sp-l)}
+
+/* Caption, shared. Same contract as every other figure in the study. */
+.cap{font-size:.875rem;line-height:1.5;color:var(--text-muted);max-width:56ch;margin-top:var(--sp-m)}
+.cap strong{color:var(--text-primary);font-weight:600}
+
+/* ══ A · TESTIMONY PAIR ════════════════════════════════════════════════
+   Two voices in the slot FramedPair occupies in the other three studies.
+   No container, no ornament: a rule, a provenance line, the words. The
+   only thing carrying the pairing is the shared grid.
+   Provenance is --text-muted, not --text-subtle: 14px is below the
+   AA-large floor and --text-subtle is AA-large only. */
+.tp{margin:0}
+.tp__grid{display:grid;gap:var(--sp-l)}
+.tp__q{display:grid;gap:var(--sp-2xs);border-top:1px solid var(--border-strong);padding-top:var(--sp-s)}
+.tp__src{font-size:.875rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+  color:var(--text-muted)}
+.tp__body{font-size:1.0625rem;line-height:1.5;color:var(--text-primary);font-weight:400;
+  text-wrap:pretty}
+.tp__body i{font-style:normal;color:var(--text-muted)}
+@media (min-width:768px){
+  .tp__grid{grid-template-columns:1fr 1fr;gap:var(--sp-l)}
+  .tp__body{font-size:1.125rem;line-height:1.5}
+}
+
+/* ══ B · SPEECH BUBBLES ════════════════════════════════════════════════
+   Same two voices, in containers with tails. The tail is a rotated square
+   masked by the bubble's own background, so it inherits border + fill
+   without a second SVG.
+   NOTE the cost: a bubble is a picture of a person speaking. One of these
+   two was typed into the App Store at midnight. The form flattens that. */
+.sb{margin:0}
+.sb__grid{display:grid;gap:var(--sp-l)}
+.sb__item{display:grid;gap:0}
+.sb__bubble{position:relative;background:var(--bg-surface);border:1px solid var(--border-default);
+  border-radius:1.125rem;padding:var(--sp-s) var(--sp-m)}
+.sb__bubble p{font-size:1.0625rem;line-height:1.5;color:var(--text-primary);text-wrap:pretty}
+.sb__bubble p i{font-style:normal;color:var(--text-muted)}
+.sb__bubble::after{content:"";position:absolute;left:var(--sp-m);bottom:-.4rem;
+  width:.8rem;height:.8rem;background:var(--bg-surface);
+  border-right:1px solid var(--border-default);border-bottom:1px solid var(--border-default);
+  transform:rotate(45deg)}
+.sb__src{font-size:.875rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+  color:var(--text-muted);margin-top:var(--sp-s);padding-left:var(--sp-m)}
+@media (min-width:768px){
+  .sb__grid{grid-template-columns:1fr 1fr;gap:var(--sp-l)}
+  .sb__bubble p{font-size:1.125rem}
+}
+
+/* ══ C · SOURCE LEDGER ═════════════════════════════════════════════════
+   The provenance is the argument. Three independent sources is what
+   section 01 is about, so the form puts the source first, at label
+   weight, and lets the quote hang off it. Reads as a record rather than
+   as a testimonial. Numerals are the same tabular device the roadmap
+   table already uses, so the study keeps one hand. */
+.sl{margin:0}
+.sl__rows{list-style:none;display:grid;gap:0;border-top:1px solid var(--border-strong)}
+.sl__rows li{display:grid;gap:var(--sp-2xs);padding:var(--sp-m) 0;
+  border-bottom:1px solid var(--border-subtle)}
+.sl__meta{display:flex;flex-wrap:wrap;gap:.45rem;align-items:baseline}
+.sl__n{font-size:.875rem;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text-muted)}
+.sl__src{font-size:.875rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+  color:var(--text-primary)}
+.sl__kind{font-size:.875rem;color:var(--text-muted)}
+.sl__body{font-size:1.0625rem;line-height:1.5;color:var(--text-primary);text-wrap:pretty}
+.sl__body i{font-style:normal;color:var(--text-muted)}
+@media (min-width:768px){
+  .sl__rows li{grid-template-columns:14rem 1fr;gap:var(--sp-m);align-items:baseline;
+    padding:var(--sp-m) 0}
+  .sl__meta{display:grid;gap:.2rem;align-content:start}
+  .sl__body{font-size:1.125rem}
+}
+
+/* ══ D · FIGURE PAIR, WORDS IN THE CAPTION ═════════════════════════════
+   The house-rule-compliant version of "illustration with the quote in
+   it": §5 says no figure contains type, so the art holds the moment and
+   the caption holds the words. Same drawing twice, one difference: the
+   box lands on the marked square, or one square past it.
+   The art below is a SKETCH to judge the shape. Real art is a design
+   job that does not exist yet, same blocker as the three unbuilt
+   PromiseBeatFigure illustrations. */
+.fp{margin:0}
+.fp__grid{display:grid;gap:var(--sp-l)}
+.fp__cell{display:grid;gap:var(--sp-s)}
+.fp__art{background:var(--bg-surface);border:1px solid var(--border-subtle);
+  border-radius:.25rem;padding:var(--sp-m)}
+.fp__art svg{display:block;width:100%;height:auto}
+.fp__art [data-stroke]{fill:none;stroke:var(--text-primary);stroke-width:1.25;
+  vector-effect:non-scaling-stroke;stroke-linecap:square}
+.fp__art [data-faint]{fill:none;stroke:var(--border-strong);stroke-width:1;
+  vector-effect:non-scaling-stroke}
+.fp__art [data-fill]{fill:var(--text-primary);stroke:none}
+.fp__cap{font-size:1.0625rem;line-height:1.5;color:var(--text-primary);text-wrap:pretty}
+.fp__cap i{font-style:normal;color:var(--text-muted)}
+.fp__src{font-size:.875rem;letter-spacing:.09em;text-transform:uppercase;font-weight:600;
+  color:var(--text-muted);margin-top:var(--sp-2xs)}
+@media (min-width:768px){
+  .fp__grid{grid-template-columns:1fr 1fr;gap:var(--sp-l)}
+}
+</style></head>
+<body><div class="wrap">
+
+<p class="note"><strong>Delivery Promise §01.</strong> Four forms for the quote pair, in the slot
+where BARD, FDT-E and Nuuly all run a FramedPair. Same two voices in every one.
+Left voice is deck p9, verbatim with elisions. Right voice is the July 2019 App
+Store review and its exact wording is <strong>not yet verified</strong> against
+the deck: only &ldquo;still running me in circles&rdquo; is verbatim in the
+interview record.</p>
+
+<!-- ─────────────────────────────────────────── A -->
+<p class="tag">A &middot; Testimony pair</p>
+
+<div class="ctx">
+  <h2>Speed was the wrong thing to measure.</h2>
+  <p>Leadership asked us to surface inventory and location data earlier in the shopping
+  journey, because shipping was going wrong. I asked our researcher to start in the
+  customer feedback and the help tickets, then ran what she found against the order data.</p>
+</div>
+
+<figure class="tp" style="margin-top:var(--sp-l)">
+  <div class="tp__grid">
+    <div class="tp__q">
+      <span class="tp__src">Research session</span>
+      <p class="tp__body">&ldquo;I think it got around here right on time, like the time it said it
+      would. <i>[&hellip;]</i> I don&rsquo;t remember complaining about it to my friends
+      <i>[&hellip;]</i> if it said it was gonna get here on say like the 5th and it got here
+      later I would have told my friends, &lsquo;my damn package isn&rsquo;t here.&rsquo;&rdquo;</p>
+    </div>
+    <div class="tp__q">
+      <span class="tp__src">App Store, July 2019</span>
+      <p class="tp__body">&ldquo;I relied on this and bought $190 in vacation clothes only to have
+      the shipment arrive a day late, after my departure. <i>[&hellip;]</i> still running me in
+      circles.&rdquo;</p>
+    </div>
+  </div>
+  <figcaption class="cap"><strong>Two shoppers, the same delivery, opposite outcomes.</strong>
+  Neither of them mentions how many days it took.</figcaption>
+</figure>
+
+<div class="ctx after">
+  <p><b>Most shoppers could not tell you how long an order took. They could tell you
+  whether it came when we said it would.</b> That was the part they remembered, and the
+  part they repeated.</p>
+</div>
+
+<hr class="sep">
+
+<!-- ─────────────────────────────────────────── B -->
+<p class="tag">B &middot; Speech bubbles</p>
+<figure class="sb">
+  <div class="sb__grid">
+    <div class="sb__item">
+      <div class="sb__bubble"><p>&ldquo;I think it got around here right on time, like the time it
+      said it would. <i>[&hellip;]</i> I don&rsquo;t remember complaining about it to my friends
+      <i>[&hellip;]</i> if it said it was gonna get here on say like the 5th and it got here later
+      I would have told my friends, &lsquo;my damn package isn&rsquo;t here.&rsquo;&rdquo;</p></div>
+      <span class="sb__src">Research session</span>
+    </div>
+    <div class="sb__item">
+      <div class="sb__bubble"><p>&ldquo;I relied on this and bought $190 in vacation clothes only to
+      have the shipment arrive a day late, after my departure. <i>[&hellip;]</i> still running me
+      in circles.&rdquo;</p></div>
+      <span class="sb__src">App Store, July 2019</span>
+    </div>
+  </div>
+  <figcaption class="cap"><strong>Two shoppers, the same delivery, opposite outcomes.</strong>
+  Neither of them mentions how many days it took.</figcaption>
+</figure>
+
+<hr class="sep">
+
+<!-- ─────────────────────────────────────────── C -->
+<p class="tag">C &middot; Source ledger</p>
+<figure class="sl">
+  <ol class="sl__rows">
+    <li>
+      <div class="sl__meta">
+        <span class="sl__n">01</span>
+        <span class="sl__src">Research session</span>
+        <span class="sl__kind">Moderated, asked</span>
+      </div>
+      <p class="sl__body">&ldquo;I think it got around here right on time, like the time it said it
+      would. <i>[&hellip;]</i> I don&rsquo;t remember complaining about it to my friends
+      <i>[&hellip;]</i> if it said it was gonna get here on say like the 5th and it got here later
+      I would have told my friends, &lsquo;my damn package isn&rsquo;t here.&rsquo;&rdquo;</p>
+    </li>
+    <li>
+      <div class="sl__meta">
+        <span class="sl__n">02</span>
+        <span class="sl__src">App Store</span>
+        <span class="sl__kind">Public, July 2019, unprompted</span>
+      </div>
+      <p class="sl__body">&ldquo;I relied on this and bought $190 in vacation clothes only to have
+      the shipment arrive a day late, after my departure. <i>[&hellip;]</i> still running me in
+      circles.&rdquo;</p>
+    </li>
+  </ol>
+  <figcaption class="cap"><strong>Two shoppers, the same delivery, opposite outcomes.</strong>
+  One was asked. One was not. Neither of them mentions how many days it took.</figcaption>
+</figure>
+
+<hr class="sep">
+
+<!-- ─────────────────────────────────────────── D -->
+<p class="tag">D &middot; Figure pair, words in the caption</p>
+<p class="note">House rule &sect;5 bars type inside a figure, so this is the compliant form of
+&ldquo;illustration with the quote in it&rdquo;: the art holds the moment, the caption holds
+the words. Same drawing twice, one difference. <strong>The art is a sketch.</strong></p>
+<figure class="fp">
+  <div class="fp__grid">
+    <div class="fp__cell">
+      <div class="fp__art">
+        <svg viewBox="0 0 200 128" role="img" aria-label="A calendar week with one day
+        circled, and a parcel resting on that day.">
+          <!-- week strip -->
+          <path data-faint d="M20 62 H180 M20 62 V96 M180 62 V96 M20 96 H180"/>
+          <path data-faint d="M43 62 V96 M66 62 V96 M89 62 V96 M112 62 V96 M135 62 V96 M158 62 V96"/>
+          <!-- the promised day -->
+          <circle data-stroke cx="100.5" cy="79" r="13"/>
+          <!-- parcel sitting on it -->
+          <path data-stroke d="M84 46 H117 V22 H84 Z"/>
+          <path data-stroke d="M100.5 22 V46"/>
+          <path data-stroke d="M84 32 H117"/>
+          <path data-stroke d="M100.5 79 V62"/>
+        </svg>
+      </div>
+      <p class="fp__cap">&ldquo;I think it got around here right on time, like the time it said it
+      would. <i>[&hellip;]</i> I don&rsquo;t remember complaining about it to my friends.&rdquo;</p>
+      <span class="fp__src">Research session</span>
+    </div>
+    <div class="fp__cell">
+      <div class="fp__art">
+        <svg viewBox="0 0 200 128" role="img" aria-label="The same calendar week. The circled
+        day is empty and the parcel rests on the following day.">
+          <path data-faint d="M20 62 H180 M20 62 V96 M180 62 V96 M20 96 H180"/>
+          <path data-faint d="M43 62 V96 M66 62 V96 M89 62 V96 M112 62 V96 M135 62 V96 M158 62 V96"/>
+          <circle data-stroke cx="100.5" cy="79" r="13" stroke-dasharray="3 4"/>
+          <!-- parcel one square late -->
+          <path data-stroke d="M107 46 H140 V22 H107 Z"/>
+          <path data-stroke d="M123.5 22 V46"/>
+          <path data-stroke d="M107 32 H140"/>
+          <path data-stroke d="M123.5 79 V62"/>
+        </svg>
+      </div>
+      <p class="fp__cap">&ldquo;I relied on this and bought $190 in vacation clothes only to have
+      the shipment arrive a day late, after my departure.&rdquo;</p>
+      <span class="fp__src">App Store, July 2019</span>
+    </div>
+  </div>
+  <figcaption class="cap"><strong>Two shoppers, the same delivery, opposite outcomes.</strong>
+  Neither of them mentions how many days it took.</figcaption>
+</figure>
+
+</div></body></html>

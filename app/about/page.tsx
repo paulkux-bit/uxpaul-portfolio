@@ -221,7 +221,11 @@ export default function AboutPage() {
           Cleared, credentialed, and current.
         </h2>
 
-        <ul className="about-creds">
+        {/* role="list" because Tailwind preflight sets `list-style: none` on every
+            ol/ul, which strips list semantics in WebKit. Restores list, not ordered —
+            ARIA has no ordered-list role. See house rules; same fix as the case
+            studies' .friction-beats. */}
+        <ul className="about-creds" role="list">
           <li className="about-creds__item">
             <span className="about-creds__label text-body">Active TS/SCI clearance</span>
           </li>

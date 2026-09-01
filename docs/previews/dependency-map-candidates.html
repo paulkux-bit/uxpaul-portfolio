@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DependencyMap — mobile-first candidates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@340;400;500;600;720&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chroma-unit:0.002; --hue-ground:70; --hue-surface:68; --hue-text:55;
+  --bg-canvas:           oklch(0.978 calc(var(--chroma-unit)*8)  calc(var(--hue-ground) + 6));
+  --bg-surface:          oklch(0.948 calc(var(--chroma-unit)*11) calc(var(--hue-ground) + 2));
+  --text-primary:   oklch(0.215 calc(var(--chroma-unit)*9)  var(--hue-text));
+  --text-secondary: oklch(0.355 calc(var(--chroma-unit)*10) var(--hue-text));
+  --text-muted:     oklch(0.485 calc(var(--chroma-unit)*11) var(--hue-text));
+  --text-subtle:    oklch(0.590 calc(var(--chroma-unit)*10) calc(var(--hue-text) + 5));
+  --border-subtle:  oklch(0.905 calc(var(--chroma-unit)*15) calc(var(--hue-ground) - 4));
+  --border-default: oklch(0.855 calc(var(--chroma-unit)*17) calc(var(--hue-ground) - 10));
+  --border-strong:  oklch(0.760 calc(var(--chroma-unit)*20) calc(var(--hue-ground) - 15));
+  --sp-2xs:.5rem; --sp-xs:.75rem; --sp-s:1rem; --sp-m:1.5rem; --sp-l:2rem; --sp-xl:3rem;
+}
+html.dark{
+  --bg-canvas:      oklch(0.165 calc(var(--chroma-unit)*3)  var(--hue-ground));
+  --bg-surface:     oklch(0.205 calc(var(--chroma-unit)*7)  calc(var(--hue-ground) + 2));
+  --text-primary:   oklch(0.945 calc(var(--chroma-unit)*6) calc(var(--hue-text) + 4));
+  --text-secondary: oklch(0.825 calc(var(--chroma-unit)*7) calc(var(--hue-text) + 2));
+  --text-muted:     oklch(0.705 calc(var(--chroma-unit)*8) calc(var(--hue-text) - 2));
+  --text-subtle:    oklch(0.565 calc(var(--chroma-unit)*9) calc(var(--hue-text) - 6));
+  --border-subtle:  oklch(0.245 calc(var(--chroma-unit)*7)  calc(var(--hue-ground) + 2));
+  --border-default: oklch(0.310 calc(var(--chroma-unit)*10) calc(var(--hue-ground) + 3));
+  --border-strong:  oklch(0.430 calc(var(--chroma-unit)*13) var(--hue-ground));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-canvas);color:var(--text-primary);
+  font-family:Commissioner,system-ui,sans-serif;font-weight:400;
+  -webkit-font-smoothing:antialiased;padding:2.5rem 1.5rem 4rem}
+.wrap{max-width:47rem;margin:0 auto}
+h2{font-size:1.75rem;line-height:1.15;font-weight:600;letter-spacing:-.012em;max-width:22ch;margin-bottom:.75rem}
+.lede{font-size:1rem;line-height:1.55;color:var(--text-secondary);max-width:52ch;margin-bottom:var(--sp-l)}
+.cap{font-size:.875rem;line-height:1.5;color:var(--text-muted);max-width:56ch;margin-top:var(--sp-s)}
+.cap strong{color:var(--text-primary);font-weight:600}
+.tag{font-size:.875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--text-subtle);
+  font-weight:500;margin-bottom:var(--sp-s);padding-bottom:var(--sp-2xs);border-bottom:1px solid var(--border-subtle)}
+hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--sp-xl) 0 var(--sp-l)}
+
+/* ══════════ A · LOAD-BEARING STACK ══════════
+   Mobile-native by construction: a 3-column grid that only gets wider.
+   Surfaces are bars spanning the foundations they rest on. Numerals in
+   the drawing, words in the list beneath — the same split JourneyLine
+   and InversionChart already use. */
+.ls{margin:0}
+.ls__bars{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:var(--sp-2xs);margin-bottom:var(--sp-2xs)}
+.ls__bars li{grid-column:var(--c) / span var(--s);overflow:hidden;
+  border:1px solid var(--border-strong);border-radius:2px;
+  min-height:2.5rem;display:flex;align-items:center;justify-content:center;
+  font-size:.875rem;font-weight:600;font-variant-numeric:tabular-nums;
+  letter-spacing:.02em;color:var(--text-primary)}
+.ls__bars li span{display:none}
+/* The caption says "above the line". Draw the line. */
+.ls__rule{border:0;border-top:1px solid var(--text-primary);margin:0 0 var(--sp-2xs)}
+.ls__base{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2xs)}
+.ls__base li{background:var(--text-primary);color:var(--bg-canvas);border-radius:2px;
+  padding:var(--sp-xs) var(--sp-2xs);font-size:.875rem;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;line-height:1.25;text-align:center;
+  display:flex;align-items:center;justify-content:center;min-height:3.5rem}
+.ls__key{list-style:none;display:grid;gap:var(--sp-2xs);margin-top:var(--sp-s)}
+.ls__key li{font-size:.9375rem;line-height:1.45;color:var(--text-muted);
+  padding-left:2.1rem;position:relative}
+.ls__key b{position:absolute;left:0;top:0;font-weight:600;color:var(--text-primary);
+  font-variant-numeric:tabular-nums;font-size:.875rem;line-height:1.55}
+
+@media (min-width:768px){
+  /* A 1-span bar is ~230px here, which holds every label. At 342px it is 114px,
+     which holds none of them, so mobile keeps the numeral and the list carries
+     the words. Same carve-out InversionChart makes for its series labels. */
+  /* .875rem, not .9375: at 15px the longest single word in a one-span bar
+     measured 116px inside a 112px box and clipped. Measured, not guessed. */
+  .ls__bars li{font-weight:400;font-size:.875rem;padding:var(--sp-2xs) var(--sp-2xs);
+    color:var(--text-muted);min-height:2.75rem;overflow:visible}
+  .ls__bars li b{display:none}
+  .ls__bars li span{display:block;text-align:center;line-height:1.3}
+  /* Clipped, not display:none: the bars are aria-hidden, so this stays the
+     accessible reading at every width. */
+  .ls__key{position:absolute;width:1px;height:1px;overflow:hidden;
+    clip-path:inset(50%);white-space:nowrap;margin:-1px}
+}
+
+/* ══════════ B · DEPENDENCY MATRIX ══════════
+   Six full-width rows, three marker columns. The column that carries the
+   most weight is visible as a vertical run of filled marks. */
+.mx{margin:0}
+.mx__head{display:grid;grid-template-columns:1fr repeat(3,2.25rem);gap:0 var(--sp-2xs);
+  align-items:end;margin-bottom:var(--sp-2xs)}
+.mx__head span{font-size:.875rem;letter-spacing:.06em;text-transform:uppercase;
+  font-weight:600;color:var(--text-primary);writing-mode:vertical-rl;transform:rotate(180deg);
+  line-height:1;justify-self:center;padding-bottom:var(--sp-2xs)}
+.mx__head span:first-child{writing-mode:horizontal-tb;transform:none;
+  font-weight:500;color:var(--text-subtle);letter-spacing:.11em;justify-self:start}
+.mx__rows{list-style:none;display:grid;gap:0;border-top:1px solid var(--border-strong)}
+.mx__rows li{display:grid;grid-template-columns:1fr repeat(3,2.25rem);gap:0 var(--sp-2xs);
+  align-items:center;padding:var(--sp-xs) 0;border-bottom:1px solid var(--border-subtle);
+  font-size:.9375rem;line-height:1.35;color:var(--text-muted)}
+.mx__m{justify-self:center;width:.625rem;height:.625rem;border-radius:50%;
+  border:1px solid var(--border-strong)}
+.mx__m--on{background:var(--text-primary);border-color:var(--text-primary)}
+
+@media (min-width:768px){
+  /* Rotated heads cost ~200px of empty height here for no reason: there is room
+     to set them flat. They stay vertical below 768, where 2.25rem columns cannot
+     hold a horizontal word. */
+  /* 8rem, not 7: uppercase FULFILLMENT with .06em tracking measures 116px and
+     is one unbreakable word, so a 112px column clipped it. */
+  .mx__head,.mx__rows li{grid-template-columns:1fr repeat(3,8rem)}
+  .mx__head span{writing-mode:horizontal-tb;transform:none;text-align:center;
+    justify-self:stretch;line-height:1.3;border-bottom:1px solid var(--border-subtle)}
+  .mx__head span:first-child{border:0}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h2>The date had to be true before we could show it.</h2>
+<p class="lede">I set the direction from the shopper's side, then built the sequence with the engineers who would have to make it real.</p>
+
+<!-- ══════════ A ══════════ -->
+<p class="tag">A · Load-bearing stack</p>
+<figure class="ls">
+  <ol class="ls__bars" aria-hidden="true">
+    <li style="--c:1;--s:1"><b>01</b><span>A filter for free two-day to your zip</span></li>
+    <li style="--c:1;--s:2"><b>02</b><span>A product page naming an arrival date</span></li>
+    <li style="--c:2;--s:1"><b>03</b><span>A cart confirming two-day eligibility</span></li>
+    <li style="--c:2;--s:1"><b>04</b><span>Shop My Store</span></li>
+    <li style="--c:2;--s:2"><b>05</b><span>Recommendations from nearby inventory</span></li>
+    <li style="--c:3;--s:1"><b>06</b><span>One order arriving as one box</span></li>
+  </ol>
+  <hr class="ls__rule">
+  <ol class="ls__base">
+    <li>Delivery date accuracy</li>
+    <li>Inventory sync</li>
+    <li>Fulfillment rules</li>
+  </ol>
+  <ol class="ls__key">
+    <li><b>01</b>A filter for free two-day to your zip</li>
+    <li><b>02</b>A product page naming an arrival date</li>
+    <li><b>03</b>A cart confirming two-day eligibility</li>
+    <li><b>04</b>Shop My Store</li>
+    <li><b>05</b>Recommendations from nearby inventory</li>
+    <li><b>06</b>One order arriving as one box</li>
+  </ol>
+  <figcaption class="cap"><strong>The roadmap, as dependencies.</strong> Everything above the line is something I designed. Everything below it had to ship first.</figcaption>
+</figure>
+
+<hr class="sep">
+
+<!-- ══════════ B ══════════ -->
+<p class="tag">B · Dependency matrix</p>
+<figure class="mx">
+  <div class="mx__head" aria-hidden="true">
+    <span>What a shopper sees</span>
+    <span>Date accuracy</span>
+    <span>Inventory sync</span>
+    <span>Fulfillment rules</span>
+  </div>
+  <ol class="mx__rows">
+    <li>A filter for free two-day to your zip<i class="mx__m mx__m--on"></i><i class="mx__m"></i><i class="mx__m"></i></li>
+    <li>A product page naming an arrival date<i class="mx__m mx__m--on"></i><i class="mx__m mx__m--on"></i><i class="mx__m"></i></li>
+    <li>A cart confirming two-day eligibility<i class="mx__m"></i><i class="mx__m mx__m--on"></i><i class="mx__m"></i></li>
+    <li>Shop My Store<i class="mx__m"></i><i class="mx__m mx__m--on"></i><i class="mx__m"></i></li>
+    <li>Recommendations from nearby inventory<i class="mx__m"></i><i class="mx__m mx__m--on"></i><i class="mx__m mx__m--on"></i></li>
+    <li>One order arriving as one box<i class="mx__m"></i><i class="mx__m"></i><i class="mx__m mx__m--on"></i></li>
+  </ol>
+  <figcaption class="cap"><strong>The roadmap, as dependencies.</strong> Everything on the left is something I designed. Everything across the top had to ship first.</figcaption>
+</figure>
+
+</div>
+</body>
+</html>

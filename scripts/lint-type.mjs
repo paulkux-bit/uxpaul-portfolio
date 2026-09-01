@@ -42,11 +42,13 @@ const ROOT_PX = 16;
 
 // ── Allowlist ──────────────────────────────────────────────────────────────
 // EMPTY IN C0, ON PURPOSE. Every entry must carry a one-line reason.
-//   widths[]    — exception surfaces exempt from the three-band rule (§6).
-//                 C6 adds Also Shipped and the takes wall.
-//   fvs[]       — selectors permitted to pin axes via font-variation-settings
-//                 (§6: only .milestone__date and .text-qh-title survive). C6.
 //   signature[] — the three placements allowed to use 340/720 (§3.2). C4.
+//
+// widths[] and fvs[] were documented here and are GONE, with the axes they
+// governed: Commissioner has no wdth, 25011cc deleted every font-stretch, and
+// check 7 now permits exactly one font-variation-settings site-wide rather than
+// an allowlisted set. A header describing keys the object does not define is the
+// same staleness the linter exists to catch, one level up.
 // Match on exact selector string as written in globals.css.
 const ALLOWLIST = {
   // §3.2 permits three signature placements sitewide. ONE is spent. The home

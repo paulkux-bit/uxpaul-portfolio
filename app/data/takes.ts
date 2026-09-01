@@ -35,7 +35,8 @@ export interface Take {
   mark?: {
     type: MarkType;
     content: string | string[]; // string[] for stacked + coords
-    axisCharacter?: { wdth?: number; wght?: number; opsz?: number };
+    /* wght only. Commissioner exposes no wdth and no opsz axis (type system v3, C3). */
+    axisCharacter?: { wght?: number };
   };
   /** Optional — only when the mark doesn't carry the context. */
   eyebrow?: string;

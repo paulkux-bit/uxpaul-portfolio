@@ -59,7 +59,10 @@ export function RevealGrid({
   }, []);
 
   return (
-    <ul ref={ref} className={`reveal-grid ${className ?? ''}`}>
+    /* role="list": preflight's `list-style: none` strips list semantics in WebKit.
+       reveal-list.tsx, this component's sibling, has carried the role since it was
+       written; this one was the outlier of the pair. */
+    <ul ref={ref} role="list" className={`reveal-grid ${className ?? ''}`}>
       {children}
     </ul>
   );

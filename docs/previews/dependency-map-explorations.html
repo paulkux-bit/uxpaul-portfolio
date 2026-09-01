@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>DependencyMap — form explorations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@340;400;500;600;720&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chroma-unit:0.002; --hue-ground:70; --hue-surface:68; --hue-text:55;
+  --bg-canvas:oklch(0.978 calc(var(--chroma-unit)*8) calc(var(--hue-ground) + 6));
+  --bg-surface:oklch(0.948 calc(var(--chroma-unit)*11) calc(var(--hue-ground) + 2));
+  --text-primary:oklch(0.215 calc(var(--chroma-unit)*9) var(--hue-text));
+  --text-secondary:oklch(0.355 calc(var(--chroma-unit)*10) var(--hue-text));
+  --text-muted:oklch(0.485 calc(var(--chroma-unit)*11) var(--hue-text));
+  --text-subtle:oklch(0.590 calc(var(--chroma-unit)*10) calc(var(--hue-text) + 5));
+  --border-subtle:oklch(0.905 calc(var(--chroma-unit)*15) calc(var(--hue-ground) - 4));
+  --border-default:oklch(0.855 calc(var(--chroma-unit)*17) calc(var(--hue-ground) - 10));
+  --border-strong:oklch(0.760 calc(var(--chroma-unit)*20) calc(var(--hue-ground) - 15));
+  --sp-2xs:.5rem; --sp-xs:.75rem; --sp-s:1rem; --sp-m:1.5rem; --sp-l:2rem; --sp-xl:3rem;
+}
+html.dark{
+  --bg-canvas:oklch(0.165 calc(var(--chroma-unit)*3) var(--hue-ground));
+  --bg-surface:oklch(0.205 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --text-primary:oklch(0.945 calc(var(--chroma-unit)*6) calc(var(--hue-text) + 4));
+  --text-secondary:oklch(0.825 calc(var(--chroma-unit)*7) calc(var(--hue-text) + 2));
+  --text-muted:oklch(0.705 calc(var(--chroma-unit)*8) calc(var(--hue-text) - 2));
+  --text-subtle:oklch(0.565 calc(var(--chroma-unit)*9) calc(var(--hue-text) - 6));
+  --border-subtle:oklch(0.245 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --border-default:oklch(0.310 calc(var(--chroma-unit)*10) calc(var(--hue-ground) + 3));
+  --border-strong:oklch(0.430 calc(var(--chroma-unit)*13) var(--hue-ground));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-canvas);color:var(--text-primary);font-family:Commissioner,system-ui,sans-serif;
+  font-weight:400;-webkit-font-smoothing:antialiased;padding:2.5rem 1.5rem 4rem}
+.wrap{max-width:47rem;margin:0 auto}
+.tag{font-size:.875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--text-subtle);
+  font-weight:500;margin-bottom:var(--sp-s);padding-bottom:var(--sp-2xs);border-bottom:1px solid var(--border-subtle)}
+.cap{font-size:.875rem;line-height:1.5;color:var(--text-muted);max-width:56ch;margin-top:var(--sp-s)}
+.cap strong{color:var(--text-primary);font-weight:600}
+hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--sp-xl) 0 var(--sp-l)}
+
+/* ══ C · UNLOCK STAIRCASE ═══════════════════════════════════════════
+   Each row is one thing I designed. The rule is how long it sat blocked;
+   the dot is the phase its LAST blocker cleared. Sorted by unlock, so the
+   dots descend as a staircase and the shape is the schedule. */
+.uc{margin:0}
+.uc__phases{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2xs);
+  margin-bottom:var(--sp-2xs);padding-bottom:var(--sp-2xs);border-bottom:1px solid var(--border-strong)}
+.uc__phases li{list-style:none;font-size:.875rem;line-height:1.25;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--text-primary)}
+.uc__phases em{display:block;font-style:normal;font-variant-numeric:tabular-nums;
+  color:var(--text-subtle);font-weight:600;letter-spacing:.02em;margin-bottom:.15rem}
+.uc__rows{list-style:none;display:grid;gap:var(--sp-s)}
+.uc__rows li{display:grid;gap:.35rem}
+.uc__label{font-size:.9375rem;line-height:1.35;color:var(--text-muted)}
+.uc__track{position:relative;height:.875rem;
+  background:repeating-linear-gradient(90deg,var(--border-subtle) 0 calc(100%/3 - 1px),transparent calc(100%/3 - 1px) calc(100%/3))}
+ /* Dot sits at the CENTRE of its phase band, not the boundary. At the boundary
+    the phase-1 dot reads as sitting between 01 and 02, and the phase-3 dot lands
+    on 100% and gets half-clipped by the track's edge. */
+.uc__bar{position:absolute;left:0;top:50%;height:1px;background:var(--border-strong);
+  width:calc((var(--p) - 0.5) * 100% / 3)}
+.uc__dot{position:absolute;top:50%;left:calc((var(--p) - 0.5) * 100% / 3);
+  width:.625rem;height:.625rem;border-radius:50%;background:var(--text-primary);
+  transform:translate(-50%,-50%)}
+.uc__foot{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2xs);
+  margin-top:var(--sp-2xs);padding-top:var(--sp-2xs);border-top:1px solid var(--border-strong)}
+.uc__foot li{list-style:none;font-size:.875rem;color:var(--text-secondary);line-height:1.3}
+.uc__foot b{display:block;font-size:1.25rem;font-weight:600;font-variant-numeric:tabular-nums;
+  color:var(--text-primary);line-height:1.1}
+
+@media (min-width:768px){
+  .uc__rows li{grid-template-columns:19rem 1fr;gap:var(--sp-s);align-items:center}
+  .uc__rows{gap:var(--sp-xs)}
+  .uc__label{text-align:right}
+  .uc__phases,.uc__foot{grid-template-columns:19rem repeat(3,1fr);gap:0 var(--sp-s)}
+  .uc__phases li:first-child,.uc__foot li:first-child{grid-column:2}
+  .uc__track{height:1.5rem}
+}
+
+/* ══ D · SMALL MULTIPLES ════════════════════════════════════════════ */
+.sm{margin:0}
+.sm__grid{display:grid;gap:var(--sp-m)}
+.sm__panel h4{font-size:.875rem;letter-spacing:.05em;text-transform:uppercase;font-weight:600;
+  color:var(--text-primary);padding-bottom:var(--sp-2xs);margin-bottom:var(--sp-2xs);
+  border-bottom:1px solid var(--border-strong)}
+.sm__panel h4 em{font-style:normal;color:var(--text-subtle);font-variant-numeric:tabular-nums;margin-right:.4rem}
+.sm__panel ol{list-style:none;display:grid;gap:.3rem}
+.sm__panel li{font-size:.875rem;line-height:1.4;color:var(--border-default);
+  display:grid;grid-template-columns:.5rem 1fr;gap:.55rem;align-items:baseline}
+.sm__panel li i{font-style:normal;width:.5rem;height:.5rem;border-radius:50%;
+  border:1px solid var(--border-default);transform:translateY(.15rem)}
+.sm__panel li.on{color:var(--text-primary);font-weight:500}
+.sm__panel li.on i{background:var(--text-primary);border-color:var(--text-primary)}
+.sm__n{font-size:.875rem;color:var(--text-subtle);margin-top:var(--sp-2xs)}
+@media (min-width:768px){.sm__grid{grid-template-columns:repeat(3,1fr);gap:var(--sp-s)}}
+</style></head>
+<body><div class="wrap">
+
+<p class="tag">C · Unlock staircase</p>
+<figure class="uc">
+  <ol class="uc__phases">
+    <li><em>01</em>Inventory sync</li>
+    <li><em>02</em>Date accuracy</li>
+    <li><em>03</em>Split shipments</li>
+  </ol>
+  <ol class="uc__rows">
+    <li><span class="uc__label">A cart confirming two-day eligibility</span>
+        <span class="uc__track"><i class="uc__bar" style="--p:1"></i><i class="uc__dot" style="--p:1"></i></span></li>
+    <li><span class="uc__label">Shop My Store</span>
+        <span class="uc__track"><i class="uc__bar" style="--p:1"></i><i class="uc__dot" style="--p:1"></i></span></li>
+    <li><span class="uc__label">A product page naming an arrival date</span>
+        <span class="uc__track"><i class="uc__bar" style="--p:2"></i><i class="uc__dot" style="--p:2"></i></span></li>
+    <li><span class="uc__label">A filter for free two-day to your zip</span>
+        <span class="uc__track"><i class="uc__bar" style="--p:2"></i><i class="uc__dot" style="--p:2"></i></span></li>
+    <li><span class="uc__label">Recommendations from nearby inventory</span>
+        <span class="uc__track"><i class="uc__bar" style="--p:3"></i><i class="uc__dot" style="--p:3"></i></span></li>
+    <li><span class="uc__label">One order arriving as one box</span>
+        <span class="uc__track"><i class="uc__bar" style="--p:3"></i><i class="uc__dot" style="--p:3"></i></span></li>
+  </ol>
+  <ol class="uc__foot">
+    <li><b>2</b>can ship</li>
+    <li><b>4</b>can ship</li>
+    <li><b>6</b>can ship</li>
+  </ol>
+  <figcaption class="cap"><strong>The roadmap, as unlocks.</strong> The rule is how long each thing sat blocked. Nothing I designed could ship until its last dependency cleared.</figcaption>
+</figure>
+
+<hr class="sep">
+
+<p class="tag">D · Small multiples</p>
+<figure class="sm">
+  <div class="sm__grid">
+    <div class="sm__panel">
+      <h4><em>01</em>Inventory sync</h4>
+      <ol>
+        <li class="on"><i></i>A cart confirming two-day eligibility</li>
+        <li class="on"><i></i>Shop My Store</li>
+        <li class="on"><i></i>A product page naming an arrival date</li>
+        <li class="on"><i></i>Recommendations from nearby inventory</li>
+        <li><i></i>A filter for free two-day to your zip</li>
+        <li><i></i>One order arriving as one box</li>
+      </ol>
+      <p class="sm__n">Blocked 4 of 6</p>
+    </div>
+    <div class="sm__panel">
+      <h4><em>02</em>Date accuracy</h4>
+      <ol>
+        <li><i></i>A cart confirming two-day eligibility</li>
+        <li><i></i>Shop My Store</li>
+        <li class="on"><i></i>A product page naming an arrival date</li>
+        <li><i></i>Recommendations from nearby inventory</li>
+        <li class="on"><i></i>A filter for free two-day to your zip</li>
+        <li><i></i>One order arriving as one box</li>
+      </ol>
+      <p class="sm__n">Blocked 2 of 6</p>
+    </div>
+    <div class="sm__panel">
+      <h4><em>03</em>Split shipments</h4>
+      <ol>
+        <li><i></i>A cart confirming two-day eligibility</li>
+        <li><i></i>Shop My Store</li>
+        <li><i></i>A product page naming an arrival date</li>
+        <li class="on"><i></i>Recommendations from nearby inventory</li>
+        <li><i></i>A filter for free two-day to your zip</li>
+        <li class="on"><i></i>One order arriving as one box</li>
+      </ol>
+      <p class="sm__n">Blocked 2 of 6</p>
+    </div>
+  </div>
+  <figcaption class="cap"><strong>The roadmap, one fix at a time.</strong> Same six things in the same order in every panel, so the filled marks are the only thing that moves.</figcaption>
+</figure>
+
+</div></body></html>

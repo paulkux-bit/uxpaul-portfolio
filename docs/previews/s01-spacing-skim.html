@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>§01 — spacing and skim, current vs proposed</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@340;400;500;600;720&display=swap" rel="stylesheet">
+<style>
+:root{
+  --chroma-unit:0.002; --hue-ground:70; --hue-text:55;
+  --bg-canvas:oklch(0.978 calc(var(--chroma-unit)*8) calc(var(--hue-ground) + 6));
+  --text-primary:oklch(0.215 calc(var(--chroma-unit)*9) var(--hue-text));
+  --text-secondary:oklch(0.355 calc(var(--chroma-unit)*10) var(--hue-text));
+  --text-muted:oklch(0.485 calc(var(--chroma-unit)*11) var(--hue-text));
+  --border-subtle:oklch(0.905 calc(var(--chroma-unit)*15) calc(var(--hue-ground) - 4));
+  --border-strong:oklch(0.760 calc(var(--chroma-unit)*20) calc(var(--hue-ground) - 15));
+  --spacing-3xs:.25rem; --spacing-2xs:.5rem; --spacing-xs:.75rem; --spacing-s:1rem;
+  --spacing-m:1.5rem; --spacing-l:2rem; --spacing-xl:3rem; --spacing-2xl:4rem;
+}
+html.dark{
+  --bg-canvas:oklch(0.165 calc(var(--chroma-unit)*3) var(--hue-ground));
+  --text-primary:oklch(0.945 calc(var(--chroma-unit)*6) calc(var(--hue-text) + 4));
+  --text-secondary:oklch(0.825 calc(var(--chroma-unit)*7) calc(var(--hue-text) + 2));
+  --text-muted:oklch(0.705 calc(var(--chroma-unit)*8) calc(var(--hue-text) - 2));
+  --border-subtle:oklch(0.245 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --border-strong:oklch(0.430 calc(var(--chroma-unit)*13) var(--hue-ground));
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg-canvas);color:var(--text-primary);font-family:Commissioner,system-ui,sans-serif;
+  font-weight:400;-webkit-font-smoothing:antialiased;padding:2rem 1.5rem 4rem}
+.wrap{max-width:47rem;margin:0 auto}
+.tag{font-size:.875rem;letter-spacing:.11em;text-transform:uppercase;color:var(--text-muted);
+  font-weight:500;padding-bottom:var(--spacing-2xs);border-bottom:1px solid var(--border-subtle)}
+.note{font-size:.875rem;line-height:1.5;color:var(--text-muted);max-width:62ch;
+  margin:var(--spacing-s) 0 var(--spacing-2xl)}
+.note strong{color:var(--text-primary);font-weight:600}
+hr.sep{border:0;border-top:1px solid var(--border-subtle);margin:var(--spacing-2xl) 0 var(--spacing-l)}
+
+/* ── Surrounding chrome, copied from globals.css so the module is judged in the
+      type it actually sits in. THE FIRST PROTOTYPE GOT THIS WRONG: it set the
+      lede at 16px when the real one is rung 2 at ~26px, so the module looked
+      correct in a context the page does not have. That is why the skim problem
+      did not show up until the page was built. ── */
+.prose h2{font-size:clamp(1.875rem,3vw + 1rem,3.25rem);font-weight:600;line-height:1.08;
+  letter-spacing:-.02em;margin:0 0 var(--spacing-l);text-wrap:balance;max-width:22ch}
+.prose .section-lede{font-size:clamp(1.375rem,0.932vw + 0.959rem,1.625rem);line-height:1.45;
+  font-weight:400;color:var(--text-secondary);max-width:52ch;
+  margin:var(--spacing-m) 0 var(--spacing-s)}
+/* DIRECT CHILDREN ONLY. As `.prose p` this is (0,1,1) and silently outranked
+   .testimony-pair__quote (0,1,0), so every render in this session showed the
+   quote at 18px regardless of what the module asked for. Scaffolding must not
+   be able to reach inside the thing being prototyped. */
+.prose > p{font-size:1.125rem;line-height:1.65;max-width:64ch;margin:0 0 var(--spacing-m)}
+.prose p strong{font-weight:600;color:var(--text-primary)}
+/* COPIED, NOT AUTHORED: globals.css:1556 .case-study-prose { color: var(--text-primary) }.
+   This previously declared --text-secondary, which is a claim about the page that is
+   false. It inverted the colour question: in that context a secondary quote MATCHED
+   the surrounding prose; on the real page it is the only demoted element. */
+.prose > p:not(.section-lede){color:var(--text-primary)}
+
+/* ── TestimonyPair ── */
+.testimony-pair{max-width:47rem}
+.testimony-pair__grid{display:grid;gap:var(--spacing-l)}
+.testimony-pair__cell{display:grid;gap:var(--spacing-xs);align-content:start;
+  border-top:1px solid var(--border-strong);padding-top:var(--spacing-s)}
+.testimony-pair__lead{margin:0;font-size:1.125rem;line-height:1.3;font-weight:600;
+  letter-spacing:-.01em;color:var(--text-primary);text-wrap:pretty}
+.testimony-pair__quote{margin:0;font-size:1.0625rem;line-height:1.5;color:var(--text-primary);
+  text-wrap:pretty}
+.testimony-pair__elision{color:var(--text-muted)}
+.testimony-pair__source{font-size:.875rem;letter-spacing:.09em;text-transform:uppercase;
+  font-weight:600;color:var(--text-muted)}
+@media (min-width:768px){.testimony-pair__grid{grid-template-columns:1fr 1fr}}
+
+/* SHIPPED: top margin only. This is the defect. */
+.is-current .testimony-pair{margin:var(--spacing-xl) 0 0}
+
+/* PROPOSED: symmetric evidence step, matching .framed-pair's `margin: var(--spacing-l) 0`,
+   with the preceding paragraph's bottom zeroed so the top gap is single-owned.
+   That is the pattern globals.css already uses at .cs-section p:has(+ .framed-pair). */
+.is-fixed .testimony-pair{margin:var(--spacing-l) 0}
+.is-fixed .section-lede{margin-bottom:0}
+</style></head>
+<body><div class="wrap">
+<p class="note" style="margin-bottom:var(--spacing-l)"><strong>Record, not current.</strong> These renders were judged when the quote was 17px. Commit <code>c06ce50</code> set it to 18px. The judgment recorded here stands; the size does not.</p>
+
+<p class="tag">Current &middot; as shipped</p>
+<p class="note"><strong>The closer collides with the source line</strong> because
+<code>.testimony-pair</code> has a 3rem top margin and no bottom margin. And the bold in the
+closing paragraph starts 60 characters in, so a left-edge skim never finds it.</p>
+
+<div class="prose is-current">
+  <h2>Speed was the wrong thing to measure.</h2>
+  <p class="section-lede">Leadership asked us to surface inventory and location data earlier in
+  the shopping journey, because shipping was going wrong. I asked our researcher to start in the
+  customer feedback and the help tickets, then ran what she found against the order data.</p>
+
+  <figure class="testimony-pair">
+    <div class="testimony-pair__grid">
+      <div class="testimony-pair__cell">
+        <p class="testimony-pair__lead">She thinks we hit her date. She could not tell you how long it took.</p>
+        <p class="testimony-pair__quote">&ldquo;I think it got around here right on time <span class="testimony-pair__elision">[&hellip;]</span> I don&rsquo;t remember complaining about it to my friends <span class="testimony-pair__elision">[&hellip;]</span> if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, &lsquo;my damn package isn&rsquo;t here.&rsquo;&rdquo;</p>
+        <span class="testimony-pair__source">Research session</span>
+      </div>
+      <div class="testimony-pair__cell">
+        <p class="testimony-pair__lead">She says we missed hers by a day. She could tell you what it cost.</p>
+        <p class="testimony-pair__quote">&ldquo;I relied on this and bought $190 in vacation clothes only to have the shipment arrive a day late, after my departure. I could&rsquo;ve spent that money locally <span class="testimony-pair__elision">[&hellip;]</span> and actually had the clothes to take with me. <span class="testimony-pair__elision">[&hellip;]</span> They&rsquo;re still running me in circles about it.&rdquo;</p>
+        <span class="testimony-pair__source">App Store review, July 2019</span>
+      </div>
+    </div>
+  </figure>
+
+  <p>Most shoppers could not tell you how long an order took. <strong>They could tell you whether
+  it came when we said it would.</strong> That was the part they remembered, and the part they
+  repeated.</p>
+</div>
+
+<hr class="sep">
+
+<p class="tag">Proposed &middot; three changes</p>
+<p class="note"><strong>1.</strong> Symmetric 2rem margins, preceding paragraph zeroed, matching
+what <code>.framed-pair</code> already does. <strong>2.</strong> Lede cut from 42 words to 28 and
+opened on the actual claim. <strong>3.</strong> Closer leads with its bold, and the sentence that
+repeated the left lead is gone.</p>
+
+<div class="prose is-fixed">
+  <h2>Speed was the wrong thing to measure.</h2>
+  <p class="section-lede">Leadership thought this was an inventory problem. I put our researcher
+  into the customer feedback and the help tickets, then ran what she found against the order
+  data.</p>
+
+  <figure class="testimony-pair">
+    <div class="testimony-pair__grid">
+      <div class="testimony-pair__cell">
+        <p class="testimony-pair__lead">She thinks we hit her date. She could not tell you how long it took.</p>
+        <p class="testimony-pair__quote">&ldquo;I think it got around here right on time <span class="testimony-pair__elision">[&hellip;]</span> I don&rsquo;t remember complaining about it to my friends <span class="testimony-pair__elision">[&hellip;]</span> if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, &lsquo;my damn package isn&rsquo;t here.&rsquo;&rdquo;</p>
+        <span class="testimony-pair__source">Research session</span>
+      </div>
+      <div class="testimony-pair__cell">
+        <p class="testimony-pair__lead">She says we missed hers by a day. She could tell you what it cost.</p>
+        <p class="testimony-pair__quote">&ldquo;I relied on this and bought $190 in vacation clothes only to have the shipment arrive a day late, after my departure. I could&rsquo;ve spent that money locally <span class="testimony-pair__elision">[&hellip;]</span> and actually had the clothes to take with me. <span class="testimony-pair__elision">[&hellip;]</span> They&rsquo;re still running me in circles about it.&rdquo;</p>
+        <span class="testimony-pair__source">App Store review, July 2019</span>
+      </div>
+    </div>
+  </figure>
+
+  <p><strong>Shoppers could tell you whether it came when we said it would.</strong> That was the
+  part they remembered, and the part they repeated.</p>
+</div>
+
+</div></body></html>

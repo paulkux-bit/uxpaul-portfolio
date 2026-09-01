@@ -389,6 +389,20 @@
   --border-subtle:          oklch(0.905 calc(var(--chroma-unit) * 15) calc(var(--hue-ground) - 4));
   --border-default:         oklch(0.855 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 10));
   --border-strong:          oklch(0.760 calc(var(--chroma-unit) * 20) calc(var(--hue-ground) - 15));
+
+  /* Quiet fill for NodeChart's bars. AUTHORED AS A TOKEN, not mixed at the point of
+     use: a color-mix that produces a named token in the theme layer is legitimate,
+     while one on a `color:` at the point of use is a weight-fake. It is derived from
+     --text-primary rather than reaching for --border-strong, which was the first
+     attempt and rendered as tan bars on a colourless site. Mixing the text colour
+     into the canvas keeps the bar in the monochrome family in both modes.
+
+     26% -> 46% REPAIRS A LIVE FAILURE AGAINST THE 3:1 GRAPHICS FLOOR. At 26 this
+     measured 1.88 against the canvas. A chart bar is a meaningful graphical object,
+     not decoration, so 3.0 is the floor and 1.88 is not near it. Light is the binding
+     mode: it needs at least 43% to clear 3.0 where dark needs 41. 46 measures 3.33,
+     with chroma 0.0169 - still monochrome-warm. */
+  --fill-quiet:             color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas));
   /* Non-text contrast carrier for underlines and interactive edges.
      --border-default (0.360 chroma-light) sits under 3:1 against the cream
      canvas, so it cannot legally carry an affordance on its own. */
@@ -488,6 +502,14 @@
   --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
   --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
   --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
+  /* THE BASIS CHANGED, WHICH IS WHY THE DIRECTION DID. This used to read "dark needs
+     MORE of the text colour to read at the same weight", and at 26/32 that was true:
+     the pair was matched by eye. It is now matched against a measured floor, and on
+     that basis dark needs LESS - 44 gives 3.32 where light's 46 gives 3.33, so both
+     modes carry the same headroom over the 3:1 graphics floor rather than the same
+     apparent weight. Still tuned per mode, like every other pair here; only the
+     instrument moved. */
+  --fill-quiet:             color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
   --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
@@ -2145,6 +2167,36 @@ html.dark .cover-art {
 .oku-figure {
   margin: var(--spacing-xs) 0 0; /* mobile (stacked): scene → figure, kept tight so the figure stays attached */
   color: var(--text-secondary); /* light/Paper: supporting weight (stepped down from primary so the figure recedes; dark override below wins in Low Light) */
+
+  /* 300 IS THE SAME 300 AS THE >=1024 COLUMN, RESTATED SO IT APPLIES EVERYWHERE.
+     The cap is the `minmax(0, 300px)` grid column on `.friction-beat` inside its
+     own `@media (min-width: 1024px)` rule - cited by SELECTOR, not by line, because
+     this edit alone moved that rule 26 lines and a line citation would already be
+     stale. (The brief that commissioned this fix cited globals.css:2104-2106; that
+     was wrong before the edit too - those lines are `.friction-beat .thread-index`.)
+     A grid column only exists inside the rule that declares it. Below that
+     the beats stack, there is no column, and `.oku-figure svg { width: 100% }`
+     had nothing governing it: the figure filled the band. Measured at 1023,
+     across all four studies that run beats, the figure rendered 660px wide and
+     section 02 was more than twice its height at 1024 (Delivery Promise 2262px
+     against 1095px). The ink fills 54-64% of that box, so it read as a hole
+     rather than as an illustration.
+
+     THIS IS A DIFFERENT SHAPE FROM THE BREAKPOINT DEFECT FIXED THE SAME WEEK,
+     AND THE GREP THAT FOUND THAT ONE CANNOT FIND THIS ONE. TestimonyPair's was a
+     MISMATCHED breakpoint - the module split at 768 inside a band that widens at
+     1024 - and it is findable by grepping `min-width: 768px`. This is a MISSING
+     CONSTRAINT BELOW A CORRECT BREAKPOINT: `.friction-beat`'s query is already at
+     1024 and nothing about it is wrong. Searching for the first shape returns
+     nothing here. House rule 15's measurement rule is what catches it, because
+     1023 is the width one pixel under a declared breakpoint.
+
+     It does not fight the column. At >=1024 the cell is already <=300px, so this
+     agrees with it rather than competing; the figure renders identically above
+     1024 before and after. Every .oku-figure render site is inside a
+     .friction-beat - 12 of 12 across the four studies - so nothing outside the
+     beats is affected. */
+  max-width: 300px;
 }
 
 /* Dark/Low Light: dim the figure ink from primary to muted so the cream-on-espresso
@@ -2225,6 +2277,22 @@ html.dark .oku-figure {
   .friction-beat .oku-figure {
     margin: 0; /* figure top-aligns with the text block in its column */
   }
+
+  /* A beat with no figure collapses to one column instead of leaving a 300px hole.
+     ADDITIVE ON PURPOSE, and it does not touch the cap above: BARD, FDT-E and Nuuly
+     all pass a figure, so none of them ever matches this selector and none of them
+     moves. It also self-reverses — the moment art is passed, :has(figure) starts
+     matching and the two-column rule takes over again with nothing to remember to
+     undo. A modifier class was the alternative and was rejected as a drift trap.
+     Introduced for Delivery Promise, whose PromiseBeatFigure art does not exist yet.
+
+     Declares NO gap: the rule above already supplies gap: var(--spacing-l), and a
+     second spacing declaration inside this @media is the one thing that would trip
+     lint:space check 4. grid-template-columns is not a spacing property, so it does
+     not (SPACING_PROP, scripts/lint-space.mjs:41). */
+  .friction-beat:not(:has(figure)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 /* ── Pull quote ──────────────────────────────────────────────────────── */
@@ -2278,6 +2346,42 @@ html.dark .oku-figure {
 .pull-quote--quiet p::before,
 .pull-quote--quiet p::after {
   content: none;
+}
+
+/* A QUIET QUOTE INSIDE A BEAT SITS ONE STEP FURTHER DOWN, since 28 Aug.
+   .pull-quote--quiet was calibrated for a quote standing alone next to 18px
+   prose. Inside a friction beat it sits directly under .friction-beat__headline
+   at identical weight (600) and identical colour (--text-primary), and the two
+   were below the type system's own 1.15x adjacency floor at every width but 390.
+   Measured headline / quote, that direction: 1.100 at 767 and 768, 1.087 at 900,
+   1.083 at 1023 and 1024, 1.143 at 1440. Only 390 cleared it, at 1.300.
+
+   LINT:TYPE CANNOT SEE THIS AND THAT IS NOT A BUG IN THE CHECK. It computes
+   ratios across the scale; this is an adjacency between two elements whose sizes
+   come from two different rules that never meet in the stylesheet. The breach is
+   a property of the rendered pair, so only a render finds it.
+
+   THREE STUDIES SHARE THIS, NOT ONE. There are FIVE .pull-quote--quiet instances on
+   the site, not four: one in nuuly.mdx, one in us-navy-fdt-e.mdx and THREE in
+   urbn-delivery-promise.mdx. Three of the five sit inside a friction beat, and
+   because both contributing rules are site-wide the ratio was identical at all
+   three. House rules section 14: a defect found in one file is a defect in every
+   file that shares the pattern. The instances in Delivery Promise's section 03 sit
+   next to body prose, which is what --quiet was calibrated against, and do not
+   breach; they are deliberately not in scope here.
+
+   THE COUNT AND THE LINE NUMBERS IN THIS NOTE WERE BOTH WRONG UNTIL 1 Sep. It said
+   four instances and cited urbn-delivery-promise.mdx:193 and :246; BOTH of those
+   line numbers point inside comment blocks rather than at markup, and the third
+   real instance was undocumented. NO LINE NUMBERS ARE CITED HERE ANY MORE - a line
+   number in a stylesheet comment rots on the next edit to a file it does not live
+   in, which is exactly what happened. Sections and file names are stable; lines
+   are not.
+
+   One 1.15x step below the value above. Smallest rendered size is 18px at 390,
+   clear of the 14px floor. */
+.friction-beat .pull-quote--quiet p {
+  font-size: clamp(1.125rem, 1.1vw + 0.72rem, 1.5rem);
 }
 
 /* ── Transformation blocks (the Aaron James "8s → 1.8s" moment) ──────── */
@@ -2357,12 +2461,49 @@ html.dark .oku-figure {
   margin: var(--spacing-xl) 0 var(--spacing-xl);
 }
 
+/* THE HAIRLINE IS THE HOUSE MECHANISM NOW, and this is the first commit in which
+   any of it renders: <Figure> was registered in mdx-components.tsx from the start
+   and mounted by nothing until section 05. The rule it replaces was a
+   currentColor 12% mix, which is the weight-fake pattern the colour system bans
+   at the point of use and which no other image on the site uses. Every shipped
+   figure - the bento media, the framed pair - carries
+   `box-shadow: inset 0 0 0 1px var(--border-subtle)`, which is also what
+   CLAUDE.md states. An inset shadow rather than a border so the line sits inside
+   the box and cannot add a pixel to the layout. */
 .figure__image {
   display: block;
   width: 100%;
   height: auto;
   border-radius: var(--radius-s);
-  border: 1px solid color-mix(in oklch, currentColor 12%, transparent);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* AN IN-COLUMN FIGURE INSIDE A BREAKOUT SECTION HAS TO BE RE-CAPPED, and without
+   this it silently is not. `.case-study-prose` caps at 660px, but at >=1024
+   `.case-study-prose > .cs-section` breaks out to min(100vw - 4rem, 68rem) = 1088
+   and nothing re-caps a figure inside it - so `.figure` would render at the band
+   width while <Figure>'s own `sizes="(max-width: 768px) 100vw, 660px"` goes on
+   telling the browser 660. That mismatch is not cosmetic: it decides which source
+   the browser picks, and promise--detail.png at 1688px is 1.28x its retina floor
+   at 660 and 0.78x - BELOW the floor - at 1088. The cap is what makes the authored
+   `sizes` true. */
+/* 660 IS ACCEPTED AT 156% OF LIFE SIZE, RULED ON 1 Sep. promise--detail's source
+   region measures 422 CSS px - by anchor ratio against pdp--page's Add To Cart button,
+   and independently by the asset's own dimensions, since 1688 / 4 = 422 exactly - so
+   660 renders it at 156%. That is the largest life-size violation on the page and it
+   sits on the frame showing the line the study is named for. It is recorded rather
+   than fixed because BOTH alternatives cost more:
+
+   RENDERING IT NARROWER at about 440 would land at 104%, but it leaves roughly 648px
+   of empty band directly above a walk that spent an entire pass closing exactly that
+   kind of gap. RE-CUTTING IT WIDER needs Paul to upscale a wider source region: a
+   660 CSS px region from 04-DECIDE-pdp_Upscale.png is 1321 native against a 1320
+   floor, 1.00x with no headroom, so it is his work rather than a pass's.
+
+   For scale: cart--panel was deleted at 173% and sms--standard is kept at 97-114%.
+   156% sits between them and is the milder of the two violations, not the worse. */
+.cs-section > .figure {
+  max-width: 660px;
 }
 
 .figure__caption {
@@ -3090,7 +3231,9 @@ html.dark .figure-placeholder {
 
 /* ============================================================
    HERO BLOCK — Case-study asymmetric hero
-   Type left (~45%) / framed image right (~55%) at lg+; stacked at <lg.
+   Type left (52%) / framed image right (48%) at lg+; stacked at <lg. Those are the
+   rule's own fr values twelve lines down, and hero-block.tsx agrees with them; the
+   note said ~45/~55 until 1 Sep, which had the split backwards as well as wrong.
    Optional Insight Engine callout overlaps the image at lg+; sits below
    it at <lg.
 
@@ -4025,4 +4168,1248 @@ html.dark .figure-placeholder {
 
 .framed-image__img {
   object-fit: cover;
+}
+
+/* ── Delivery Promise (URBN): JourneyLine + InversionChart ────────────────────
+   Two hand-drawn SVG modules sharing ONE line vocabulary on purpose, so they read
+   as one hand: same 1000x350 viewBox, same dotted axis, same dashed reference rule,
+   same stroke, same dot radius.
+
+   THE RULE THEY BOTH OBEY:
+     Only geometry and numerals stay in the SVG. Every word goes in HTML.
+
+   The prototype kept stage labels, a reference label and a tail note inside the
+   drawing. At 390px the prose container is 342px, so the scale is 342/1000 = 0.342
+   and those rendered at 4.79px and 5.47px. Scaling the type is not the fix:
+   "POST PURCHASE" at a legible 32 units is ~250 units wide and five of them want
+   ~1,250 units in a 1,000-unit box. Words structurally do not fit a shared
+   coordinate space. What is left in the SVG is the path, the dots, the rules, the
+   two-character numerals. NOTHING ELSE: no text in any SVG in this study, at any
+   width. The old carve-out for two direct series labels is retired along with the
+   module that had them.
+
+   SIZES COME FROM THE MANIFESTS, through custom properties set on the figure, so the
+   numbers stay in one place and only the breakpoint lives here. */
+
+.journey-line,
+.tier-chart {
+  margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
+}
+
+.journey-line__svg,
+.tier-chart__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* Shape ─────────────────────────────────────────────────────────────────── */
+
+/* THE FOUR STRUCTURAL LINES. Every one of them was drawing nothing until this
+   commit, and the two failures have different causes.
+
+   c7d0b1c deleted `.journey-line__axis, .tier-chart__axis { stroke: ... }` and
+   left the bare word `axis` behind on its own line. CSS then read the NEXT rule's
+   selector as `axis .tier-chart__ref`, which matches no element, so the dotted
+   reference rule lost its stroke as collateral. An SVG line with no stroke is
+   invisible rather than faint, so nothing looked broken enough to catch: the
+   chart simply had no baseline and no dotted rule, and `.tier-chart__ref-label`
+   went on naming a rule that was not on the page. __tests__/css-selectors.test.mjs
+   now fails on any type selector that is not a real element name.
+
+   `.journey-line__band` and `.journey-line__divider` are NOT a restoration. They
+   arrived with c7d0b1c and never had a rule of any kind, so their weight is a
+   decision taken here rather than a recovery of something that was lost. The
+   three sentiment bands are gridlines: the HTML labels carry Happy / Fine /
+   Angry and the dots carry the positions, and the bands connect the two. They sit
+   at the house hairline for that reason, and deliberately quieter than the dotted
+   rule, which is a value a reader measures against rather than a guide. */
+
+/* The chart's baseline. Solid, not dashed: `.tier-chart__ref` is the only dashed
+   line in a 600x190 drawing, and a second dash pattern beside it competes with the
+   one that carries meaning. */
+/* --text-subtle, NOT a border token, and that is forced rather than chosen. Measured
+   against --bg-canvas from the oklch triples above: --border-subtle 1.25 / 1.19,
+   --border-default 1.47 / 1.46, --border-strong 2.03 / 2.36. THE WHOLE BORDER RAMP TOPS
+   OUT BELOW THE 3:1 NON-TEXT FLOOR, so no border token can carry a line that has to be
+   seen. --text-subtle is 3.87 / 4.22 and clears it. .tier-chart__ref already reaches for
+   a text token for the same reason, and the inconsistency was visible on the page: the
+   dashed reference rule cleared 3:1 while the solid axis it sat on was at half that. */
+.tier-chart__axis {
+  stroke: var(--text-subtle);
+  stroke-width: 1;
+}
+
+/* The three sentiment bands and the four stage dividers. The dividers keep the
+   dash the deleted axis rule carried, so a stage boundary reads as a different
+   kind of line from a sentiment band without either getting louder. */
+/* --text-subtle, and this one was judged on a render rather than on the ratio alone,
+   because a gridline that outweighs its data line is a different defect. At
+   --border-subtle they measured 1.25 / 1.19 against a 3:1 floor AND were nearly
+   invisible on the page: the axis labels said Happy / Fine / Angry over bands a reader
+   could not locate, so the drawing named three positions it did not show. Rendered at
+   --text-subtle in both themes the bands read, the dividers read as a different kind of
+   line, and the black sawtooth still dominates completely - the scaffolding does its job
+   without competing. The old value failed contrast AND legibility; this fixes both. */
+.journey-line__band,
+.journey-line__divider {
+  stroke: var(--text-subtle);
+  stroke-width: 1;
+}
+
+.journey-line__divider {
+  stroke-dasharray: 2 5;
+}
+
+/* Quieter and tighter than the path above it, and louder than the bands: this rule
+   marks a baseline the eye should measure a value against, so it is the one
+   structural line carrying information rather than guiding the eye to it.
+   --text-subtle measures 3.87 light and 4.22 dark against the canvas, clearing the
+   3:1 graphics floor. */
+.tier-chart__ref {
+  stroke: var(--text-subtle);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+/* non-scaling-stroke pins the weight to SCREEN px, not to the drawing's coordinate
+   space. Without it a 2-unit stroke renders at 0.68px in the 342px mobile container
+   and the whole line goes hairline — the same scale problem the words had, and the
+   established fix here: .fdte-figure and .nuuly-beat-figure already use it. */
+.journey-line__path,
+.tier-chart__line,
+.journey-line__band,
+.journey-line__divider,
+.tier-chart__axis,
+.tier-chart__ref,
+.journey-line__dot,
+.tier-chart__dot {
+  vector-effect: non-scaling-stroke;
+}
+
+.journey-line__path,
+.tier-chart__line {
+  fill: none;
+  stroke: var(--text-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+
+
+.journey-line__dot,
+.tier-chart__dot {
+  fill: var(--bg-canvas);
+  stroke: var(--text-primary);
+  stroke-width: 2;
+}
+
+/* The last point, filled. It is the argument of the chart, not just the end of the
+   line: the most expensive tier missed most often. Radius comes from the r attribute
+   rather than a token, because unlike JourneyLine this drawing does not swap dot
+   sizes at a breakpoint. */
+.tier-chart__dot--end {
+  fill: var(--text-primary);
+}
+
+
+/* Words, in HTML, at real reading size ──────────────────────────────────── */
+
+/* A sentence naming the dotted rule, not a tracked label: it reads as a caption to
+   the drawing rather than as an axis title, so no uppercase and no tracking.
+
+   --text-muted, NOT --text-subtle. This is 14px and it is the only string on the
+   page that explains the dotted rule, so it is meaningful text at normal size and
+   its floor is AA-normal at 4.5. --text-subtle measures 3.87 light and 4.20 dark and
+   is AA-LARGE ONLY, which means 24px, or 18.66px bold. --text-muted measures 6.04
+   and 7.34. */
+.tier-chart__ref-label {
+  margin: var(--spacing-2xs) 0 0;
+  max-width: none;
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+
+/* ── JourneyLine: two compositions ─────────────────────────────────────────────
+   Horizontal from 768, vertical below. Both are in the DOM and CSS picks one, which
+   is right because the choice is a layout question, not a content one. 768 is the
+   system breakpoint.
+
+   The display swap is the ONLY thing inside the queries. Every gap and margin below
+   is declared once, out here, because spacing inside a media query is exactly what
+   lint:space check 4 forbids. */
+.journey-line__horizontal {
+  display: none;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-m);
+}
+
+.journey-line__vertical {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .journey-line__horizontal {
+    display: grid;
+  }
+
+  .journey-line__vertical {
+    display: none;
+  }
+}
+
+/* min-width: 0 on the cell holding a drawing. A grid item's automatic minimum is
+   min-content, so without it the SVG refuses to shrink and blows the track past the
+   band. Same defect as .chart-pair's cells, same fix, twice more here. */
+.journey-line__horizontal > *,
+.journey-line__vertical-body > * {
+  min-width: 0;
+}
+
+/* The positioning context for the badges. They are placed as percentages of the
+   viewBox, so the box they resolve against has to be the drawing's own box and
+   nothing larger — hence a wrapper around exactly the SVG. */
+.journey-line__plot {
+  position: relative;
+}
+
+.journey-line__sentiment,
+.journey-line__sentiment-cols,
+.journey-line__stages,
+.journey-line__stages-down {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.3;
+}
+
+/* The sentiment axis: the louder of the two small-label registers, because it names
+   the axis while the stage labels only name positions along it. Hierarchy rides
+   weight, caps and tracking, never size and no longer token, since below 14px is not
+   available to spend.
+
+   --text-muted, NOT --text-subtle, AND 700 BUYS NO RELIEF HERE. WCAG large text is
+   18.66px bold; this is 14px bold, which is normal size, so the floor is AA-normal
+   at 4.5 and --text-subtle's 3.87 light / 4.20 dark fails it. These three words name
+   the axis a reader measures every point against, so they are as meaningful as text
+   on this page gets. --text-muted measures 6.04 and 7.34.
+
+   THAT ALSO MOVED THE HIERARCHY OFF THE TOKEN. Both small-label registers now sit on
+   --text-muted, so the separation is carried by weight (700 against 400), caps and
+   tracking alone. See inversion-manifest.json's $typeDoc, which used to name the
+   token as one of the channels and no longer can. */
+.journey-line__sentiment,
+.journey-line__sentiment-cols {
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* One row per band, aligned to the three the SVG draws. */
+.journey-line__sentiment {
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.journey-line__stages,
+.journey-line__stages-down {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+/* Absolutely positioned from the manifest's stage x. A five-column grid would only
+   coincide with the data by accident, which is how an earlier attempt put every
+   label near but not on its stage. */
+.journey-line__stages {
+  position: relative;
+  height: var(--spacing-l);
+  margin-top: var(--spacing-xs);
+  max-width: none;
+}
+
+.journey-line__stages span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.journey-line__vertical-head,
+.journey-line__vertical-body {
+  display: grid;
+  grid-template-columns: var(--spacing-2xl) 1fr;
+  gap: var(--spacing-s);
+}
+
+.journey-line__vertical-head {
+  margin-bottom: var(--spacing-2xs);
+}
+
+.journey-line__sentiment-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  text-align: center;
+}
+
+/* Each stage name at the y of its own first point, computed in the component. */
+.journey-line__stages-down {
+  position: relative;
+  text-align: right;
+}
+
+.journey-line__stages-down li {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+/* The badges, and the matching numerals in the breaks list below. Centred exactly on
+   their own point, with a canvas-coloured ring so the line passes BEHIND rather than
+   through. There is no SVG dot underneath one: the badge IS the marker at those three
+   points.
+
+   1.625rem is 26px and is deliberately NOT a spacing token. It is a component
+   dimension sized to hold a 14px numeral with even optical padding, not a step in the
+   vertical rhythm, and no step on the scale is 26px. The previous badge was 22px
+   around a 12px numeral, which the type floor does not allow. */
+.journey-line__mark,
+.journey-line__breaks-idx {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: var(--radius-full);
+  background: var(--text-primary);
+  color: var(--bg-canvas);
+  font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.journey-line__mark {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px var(--bg-canvas);
+}
+
+.journey-line__breaks {
+  list-style: none;
+  display: grid;
+  gap: var(--spacing-s); /* declared ONCE, outside the breakpoint — lint:space check 4 */
+  margin: var(--spacing-m) 0 0;
+  padding: 0;
+}
+
+/* Two columns rather than a padding-left plus an absolutely positioned numeral: the
+   badge is a real box now, so a grid track holds it and the text aligns to the track
+   instead of to a guessed inset. */
+/* NO COLOUR ON THE ROW. The tails were cut, so every word in a break is now the
+   lead, and --text-muted here would have been a resting declaration that nothing
+   can reach. The lead's own rule below carries the colour. */
+.journey-line__breaks li {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--spacing-s);
+  align-items: start;
+  margin: 0;
+  max-width: 64ch;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.journey-line__breaks-lead {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+@media (min-width: 768px) {
+  /* The axis rows stop being a run and become columns aligned to the manifest's x
+     values, so a label sits under its point. Items are placed from column 2; column 1
+     is the lead-in to the first point. grid-template-columns, grid-column-start and
+     max-width are not spacing properties, so nothing here reaches lint:space check 4. */
+  /* :not(:last-child) is repeated here deliberately. Without it this selector is a
+     specificity step BELOW the base rule that sets the interpunct, so the override
+     loses and the separators keep rendering between the aligned columns. */
+  .journey-line__breaks {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .journey-line__breaks li {
+    max-width: none;
+  }
+
+}
+
+
+
+/* ── Delivery Promise (URBN): the section 03 chart pair ───────────────────────
+   TierChart and NodeChart side by side from 1024, stacked below. 1024 rather than
+   a bespoke width: both figures full-width at 768 read better than two ~344px
+   columns, so the system value costs nothing here. Note this is NOT the same call
+   as the 768 text-measure bug fixed earlier in this branch — that one was about a
+   22ch reading column, and figures degrade gracefully where prose does not.
+
+   The gap is declared once, out here. Changing it inside the query is the one thing
+   lint:space check 4 forbids, so the query changes columns and nothing else. */
+.chart-pair {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-xl);
+  align-items: stretch;
+  margin: var(--spacing-l) 0;
+}
+
+/* THE TWO CAPTIONS SHARE A LINE, AND NOTHING HERE IS INSIDE A MEDIA QUERY.
+   TierChart emits four blocks above its caption - drawing, tier labels, ref label -
+   and NodeChart emits two. Side by side that put NodeChart's caption 97.5px above
+   TierChart's at 1440 and left the figures 97.5px ragged at the foot; two charts in
+   one pair that do not share a baseline read as two charts that were not designed
+   together.
+
+   `align-items: stretch` above equalises the two figures' heights, and `1fr auto`
+   drops each caption into its own row at the foot, so both captions bottom-align on
+   the shared edge. The slack lands as whitespace under the shorter chart's body,
+   which is the honest place for it.
+
+   A ROW SUBGRID ON .chart-pair WAS THE FIRST ATTEMPT AND IT IS WORSE. A subgrid
+   inherits the parent's row-gap, so the caption gap would have become
+   --spacing-xl, and correcting it means declaring row-gap inside the >=1024 query -
+   exactly what lint:space check 4 forbids. This needs no query at all: below 1024
+   each figure is its own row and stretch is a no-op. */
+.chart-pair > .tier-chart,
+.chart-pair > .node-chart {
+  display: grid;
+  grid-template-rows: 1fr auto;
+}
+
+/* min-width: 0 BECAUSE THE WRAPPER IS NOW A GRID ITEM HOLDING AN SVG. A grid item's
+   automatic minimum is min-content, and .tier-chart__svg is the same shape that
+   already forced this guard onto .chart-pair's cells and .journey-line's two
+   composition wrappers - without it the drawing refuses to shrink and blows the
+   track. lint:interaction check 9 is what surfaced it: the wrapper landed with no
+   rule at all, which the check flags because it cannot tell a deliberately unstyled
+   wrapper from a rule that was silently dropped. It was the second kind. */
+.tier-chart__body {
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .chart-pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* min-width: 0 on both cells. A grid item's automatic minimum is min-content, so
+   without it the SVG refuses to shrink and blows the track past the band. Found the
+   hard way when lint:interaction check 9 surfaced an unstyled wrapper. */
+.chart-pair > * {
+  min-width: 0;
+  margin: 0;
+}
+
+/* ── TierChart ─────────────────────────────────────────────────────────────── */
+
+/* Three equal columns, first left, second centred, third right, so every label sits
+   under its own point without overflowing the drawing at 320px. A grid keyed to the
+   manifest's x values would be more literal and would push the outer two labels off
+   the edge at phone width. */
+.tier-chart__tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+  margin: var(--spacing-xs) 0 0;
+  padding: 0;
+}
+
+.tier-chart__tiers li {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.tier-chart__tiers li:nth-child(2) {
+  align-items: center;
+  text-align: center;
+}
+
+.tier-chart__tiers li:nth-child(3) {
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* The tier name is the quiet half of the pair: 400 at --text-muted, per the
+   manifest's $typeDoc. Hierarchy among small labels rides weight and token because
+   size below 14px is not available to spend. */
+.tier-chart__tier {
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.tier-chart__value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The end value is the argument: biggest number, primary colour. */
+.tier-chart__value--end {
+  font-size: 1.75rem;
+  color: var(--text-primary);
+}
+
+/* ── NodeChart: no SVG at all ──────────────────────────────────────────────── */
+
+/* ONE GRID FOR THE WHOLE FIGURE, AND THAT IS THE FIX RATHER THAN THE STYLE.
+   max-content / 1fr / max-content is declared HERE, once, and the rows and the
+   average marker are both subgrids of it. They used to be two independent grids
+   each declaring the same template, which is not the same thing: the marker's grid
+   had no content in columns 1 and 3, so those resolved to 0 and its 1fr took the
+   whole width. Measured tracks were 0 / 488 / 0 against the rows' 92.33 / 331.95 /
+   63.73, and since the marker positions itself at a PERCENTAGE of its grid area,
+   the same 44% landed 23.7px away from the rule it names. Two declarations of one
+   fact is the bug; one declaration and two readers is the fix.
+
+   COLUMN-GAP LIVES HERE TOO, for the same reason. A subgrid inherits its parent's
+   column-gap, so setting it on the children as well would be the second statement
+   this rule exists to delete.
+
+   The name and the value never wrap or shrink; the track is the only thing that
+   flexes. MEASURED AT A 320 VIEWPORT WITH NO SCROLLBAR: track 83.9px, store bar
+   75.5, Reno 18.5. With a 15px classic scrollbar the same page gives 68.9 / 62.0 /
+   15.2, which is why a measurement here is worth nothing without the condition
+   beside it. The absolute widths are small either way and the ratio survives, at
+   90% and 22% of the track in both, because it lives in the geometry rather than in
+   the available width. The rule this replaces claimed 150 / 135 / 33 and was out by
+   roughly 1.8x. */
+/* align-content: start OR THE MARKER FLOATS OFF THE BARS. This grid is now inside a
+   `1fr` row that stretches to match TierChart's height, and a grid container taller
+   than its own content distributes the slack into its auto rows - which pushed the
+   rows block 165px below the marker naming it. `start` keeps the whole block at the
+   top of the slack, where the marker sits on the bars it labels. */
+.node-chart__body {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  column-gap: var(--spacing-s);
+  align-content: start;
+}
+
+.node-chart__average,
+.node-chart__rows {
+  display: grid;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+}
+
+.node-chart__rows {
+  row-gap: var(--spacing-s);
+  align-items: center;
+}
+
+/* --text-muted, NOT --text-secondary, to match .tier-chart__tier. Same register on
+   both sides of the pair - a 14px name identifying a row or a point - and the
+   manifest's $typeDoc already says stage and tier names are 400 at --text-muted.
+   Measures 6.06 light and 7.35 dark, clear of AA-normal. --hi keeps --text-primary,
+   which is what carries the emphasis. */
+.node-chart__name {
+  font-size: 0.875rem; /* 14px, the system floor */
+  line-height: 1.4;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.node-chart__name--hi {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* The average marker. A 1px rule at the aggregate's position, drawn on the track so
+   it lands over the bars rather than over the labels, and extended past the bar's
+   height so it reads as a threshold crossing them. */
+.node-chart__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--spacing-l);
+}
+
+.node-chart__track::after {
+  content: '';
+  position: absolute;
+  left: var(--nc-average);
+  top: calc(var(--spacing-3xs) * -1);
+  bottom: calc(var(--spacing-3xs) * -1);
+  width: 1px;
+  background: var(--text-subtle);
+}
+
+.node-chart__fill {
+  height: var(--spacing-l);
+  border-radius: var(--radius-xs);
+  background: var(--fill-quiet);
+}
+
+.node-chart__fill--hi {
+  background: var(--text-primary);
+}
+
+/* 1.25rem, NOT 1.125rem, TO MATCH .tier-chart__value. The two charts sit side by
+   side and their quiet values were 20px and 18px, which is a difference a reader
+   reads as meaning and which means nothing. Both --hi/--end values are 1.75rem, so
+   the emphasis step is now 1.4x on both sides instead of 1.4x and 1.56x. */
+.node-chart__value {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.node-chart__value--hi {
+  font-size: 1.75rem;
+  color: var(--text-primary);
+}
+
+/* The marker's label, aligned to the rule it names. The grid it reads is declared
+   on .node-chart above and reached through `subgrid`, so column 2 here IS column 2
+   of the rows - same start, same width, same 44%. It cannot drift from the rule,
+   because there is no second definition for it to drift from. */
+.node-chart__average {
+  max-width: none;
+  margin: 0 0 var(--spacing-2xs);
+}
+
+.node-chart__average-label {
+  grid-column: 2;
+  /* min-width: 0 OR THE LABEL SETS THE FLOOR FOR THE WHOLE CHART. A grid item's
+     automatic minimum is min-content, this one is `white-space: nowrap` at 130.8px,
+     and a subgrid's items size the PARENT's tracks - so once the marker joined the
+     rows' grid it floored their 1fr at its own width and pushed 23px of horizontal
+     scroll onto the page at 320. Measured: scrollWidth 343 against a 320 viewport,
+     and the track frozen at 130.8px from 320 all the way to 360. Same automatic
+     minimum, same one-line fix, as .chart-pair > * and .journey-line__horizontal > *.
+     The label still overhangs its track at 320; it is centred on a rule rather than
+     laid out in a column, and it stays inside the figure. */
+  min-width: 0;
+  position: relative;
+  left: var(--nc-average);
+  transform: translateX(-50%);
+  justify-self: start;
+  white-space: nowrap;
+  font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  /* --text-muted, not --text-subtle: 14px at 700 is normal size, not WCAG large,
+     which starts at 18.66px bold. Same call as .journey-line__sentiment. */
+  color: var(--text-muted);
+}
+
+.journey-line > .bento-theme__caption,
+.tier-chart > .bento-theme__caption,
+.node-chart > .bento-theme__caption {
+  margin-top: var(--spacing-m);
+}
+
+/* ── Delivery Promise (URBN): PromiseWalk ─────────────────────────────────────
+   Section 05. One delivery date walked through five stages of an order.
+
+   OPTION C, 31 Aug: NO LABEL COLUMN. Each stage label sits above its own figures and
+   the hairline rule carries the boundary. This REVERSES the arrangement this file
+   carried until now, and the reversal is recorded rather than silently applied,
+   because a later pass reading only the rules would restore the column.
+
+   WHAT THE COLUMN COST, MEASURED BEFORE THE DECISION. It was 200px holding one word,
+   with every frame capped at 660 inside a 1088 band - 196px of the band unused down
+   the whole section. At 660 a 1440px page renders at 46%, so 14px of product UI lands
+   at 6.4px, which is texture by definition. At 1088 the same page renders at 76% and
+   10.6px, and the product-page frame resolves "Free 2-day Shipping to 16507 / Arrives
+   by Sept 13, 2019" above Add To Cart. THE LINE THE STUDY IS NAMED FOR WAS INVISIBLE
+   IN THE FRAME THAT SHOWS IT IN CONTEXT. That is the whole gain.
+
+   WHAT C COST, AND PAUL ACCEPTED IT WITH THE RENDER IN FRONT OF HIM: five labels at
+   one left edge are parsed in a single fixation and five labels stacked down the page
+   are not. The spine is weaker as a scanning object and the frames are legible. That
+   was the trade.
+
+   THE THREE WIDTHS ALL COME FROM lib/bento-slots.json rather than from numbers picked
+   by hand - 1088 is the container max and `feature`, 660 is `wide`, 352 is `tall`.
+   Nothing here is invented, which is the point: a width with no source is a width
+   nobody can check.
+
+   TWO GAPS ON TWO GRIDS, EACH DECLARED ONCE AND OUTSIDE EVERY QUERY. There is no
+   media query left in this block at all, so lint:space check 4 has nothing to catch.
+   .promise-walk__stage's row-gap is label-to-figure and figure-to-figure inside a
+   stage; .promise-walk's is stage-to-stage, and the hairline carries what the extra
+   whitespace used to. */
+.promise-walk {
+  display: grid;
+  row-gap: var(--spacing-xl);
+  margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
+}
+
+/* The boundary the uppercase eyebrow used to draw. Same hairline `.thread-cols li + li`
+   already draws, so this is the file's existing structural rule rather than a second
+   one. Under C it is the ONLY thing marking a stage boundary at every width, where it
+   used to share that job with the column. */
+.promise-walk__stage {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--spacing-m);
+  align-items: start;
+  /* --text-subtle, and this line had the worst consequence of the three. The comment
+     above says it is the ONLY thing marking a stage boundary at every width, so the
+     whole five-stage structure of section 05 rested on it - and a currentColor 16% mix
+     measures about 1.4 against canvas in both themes, against a 3:1 non-text floor.
+     No border token could have fixed it: the ramp tops out at --border-strong, 2.03 /
+     2.36. --text-subtle is 3.87 / 4.22. */
+  border-top: 1px solid var(--text-subtle);
+  padding-top: var(--spacing-m);
+}
+
+/* THE SPINE IS BODY TYPE, NOT AN EYEBROW. It shipped as 14px tracked uppercase, which
+   is chart chrome; nothing in the body of any of the four studies is set that way.
+
+   22px, AND SPACE WAS TRIED FIRST. Under C the label and the caption lead stack: the
+   200px column used to supply 232px of horizontal separation and C removes it, so two
+   strings in identical 18/600/--text-primary sat one above the other at the same left
+   edge. Rendered at 1024 and 1440 in both themes they read as ONE two-line heading -
+   "Browse / Delivery filters." - and the gloss only resolved it after you had read
+   past the second line.
+
+   THE CHEAP LEVER WAS TRIED AND MEASURED FIRST, per the ruling: row-gap from
+   --spacing-m to --spacing-l took the gap 25px to 33px and did not change the kind of
+   thing they read as. Space alone does not separate two strings of identical type at
+   one edge; it just spaces them.
+
+   SO THE LABEL STEPS ONE RUNG, TO 22px. That is a size the locked scale already
+   carries - text-lead's 22px, and text-h3's mobile end - so nothing is invented. The
+   mechanical argument is the type system's own: 22/18 is 1.22x, which clears the
+   1.15x adjacent-rung floor, so the label and the lead are on different rungs BY THE
+   SYSTEM'S OWN DEFINITION rather than by eye. It stays clear of what it must not
+   touch: .section-lede at 26px is 1.18x above it, and the h2 at 40px is 1.82x. It is
+   deliberately NOT the 26-32px rung .friction-beat__headline uses, which would put a
+   stage label in competition with the section h2.
+
+   THE ".section-lede at 26px is 1.18x above it" CLAUSE ABOVE IS TRUE ONLY AT AND ABOVE
+   1143px, corrected 1 Sep. .section-lede is clamp(1.375rem, 0.932vw + 0.959rem,
+   1.625rem), which in px is 0.00932W + 15.344: it sits at its 22px FLOOR for every
+   viewport up to W = 714.2 and only reaches 26px at W = 1143.3. So below 714 the lede
+   and this label are THE SAME SIZE and the real ratio is 1.00x, not 1.18x. Confirmed in
+   the browser at 390, 714 and 1440: 22.0/600 against 22.0/400 at the first two, 22.0
+   against 26.0 at the third.
+
+   THE LABEL STAYS AT 22px ANYWAY, AND THAT IS A DECISION RATHER THAN AN OVERSIGHT.
+   Dropping it to 18px was rendered and rejected: 18/600 is .bento-theme__lead's exact
+   setting, so "Decide" and "The promise sits above the button." came back as identical
+   type at one edge - the collision the step to 22px was made to fix, reintroduced five
+   times per section instead of once. AND NO THIRD VALUE EXISTS. To clear the caption
+   lead by the system's 1.15x the label must be >= 20.70px; to be cleared by the lede's
+   22px floor by the same 1.15x it must be <= 19.13px. The window between 18 and 22 is
+   1.222x wide and nothing fits with 1.15x on both sides.
+
+   WHICH PAIR MATTERS IS THE POINT. The caption lead sits ONE LINE BELOW this label, in
+   every stage, five times. The section lede sits at the top of the section, above the
+   figure, and never appears beside a stage label at all. 22px resolves the adjacent
+   pair at the cost of matching a non-adjacent one, which is the right way round.
+
+   NOTHING MECHANICAL MEASURES THIS. lint:type check 3 walks only the selectors in
+   RUNGS and .promise-walk__label is not one of them, so a green type lint says nothing
+   about this pair either way.
+
+   THE GAP THEN WENT BACK TO --spacing-m, because type is doing the separating and the
+   label should sit close to what it labels: 24px inside a stage against 48px between
+   them is a 1:2 proximity ratio, where 33:48 was 1:1.45.
+
+   WHAT WAS NOT AVAILABLE, so a later pass does not reach for either: stepping the
+   caption gloss to --text-subtle measures 3.86 light and 4.20 dark against an
+   AA-normal floor of 4.5 at 18px/400, and is the same failure aa977d8 removed from
+   three labels on this branch. Tracked uppercase is the eyebrow this section
+   deliberately removed. */
+/* THIS RULE IS THE RECORD FOR THE LABEL'S SEPARATION FROM ITS CAPTION LEAD, and
+   PromiseWalk.tsx's header points here rather than restating it. It restated it twice
+   and was falsified both times.
+
+   SIZE IS THE ONLY CHANNEL SEPARATING THE TWO. Weight is 600 on both and colour is
+   --text-primary on both, in both themes, so nothing below can be changed on the
+   assumption that another channel is carrying the difference. The lead's own settings
+   are on .bento-theme__lead; the ratio between them clears the type system's 1.15x
+   adjacent-rung floor, and lint:type check 3 is what holds that.
+
+   SPACE WAS TRIED FIRST AND FAILED. With Option C's label column gone the two sat
+   directly on top of each other at identical settings, and "Browse" over "Delivery
+   filters." read as one two-line heading. Raising the stage row-gap from --spacing-m
+   to --spacing-l and rendering at 1440 still read as one block, so the gap went back
+   and the label took a rung instead. */
+.promise-walk__label {
+  margin: 0;
+  max-width: none;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+/* THE BASE CARRIES NO WIDTH, AND THAT IS THE POINT. It held max-width: 660px until
+   31 Aug, so a figure with no variant silently took the wide slot and 660 stopped
+   being a decision anybody had made. Every frame names its slot now, and
+   PromiseWalk's pick() throws on one that does not. Both widths come from
+   lib/bento-slots.json; $retinaDoc carries the measured life-size case for each.
+
+   THERE ARE TWO RULES HERE, NOT THREE. --band retired on 1 Sep: the three page frames
+   it capped at 1088 are real <BentoBand> elements now, so the engine owns their width
+   and .bento-band__media owns their aspect and hairline. Only the four narrow frames
+   still take a width from this file, and $bandDoc records why the engine cannot carry
+   those four. */
+.promise-walk__figure {
+  margin: 0;
+  display: grid;
+  row-gap: var(--spacing-s); /* caption → its own media, bound to the object */
+  /* min-width: 0 — a grid item's automatic minimum is min-content, and this one holds
+     an image. Same guard .chart-pair's cells and JourneyLine's wrappers carry. */
+  min-width: 0;
+}
+
+/* `standard` - 536. The two detail frames plus the social ad. Each was measured back
+   to its source region: ad--post 482-499 CSS px, browse--facet 468-506, options--wide
+   445-477. 536 puts them at 106-120% of life size. */
+.promise-walk__figure--standard {
+  max-width: 536px;
+}
+
+/* `tall` - 352. The SMS thread, and only it. THIS RULE USED TO BE CALLED --phone AND
+   USED TO CLAIM ARRIVE, on the reasoning that Arrive and Post purchase were both
+   375px captures. Post purchase is; Arrive never was. The social ad is a desktop
+   browser card measured at 482-499 CSS px, and it sat in a 352 cell because it is
+   PORTRAIT - aspect-driven placement inside a system chosen to be width-driven. It
+   rendered at 72% of life size for it. The cap was also 380 until 31 Aug, a number
+   picked by hand rather than read off a slot. */
+.promise-walk__figure--tall {
+  max-width: 352px;
+}
+
+/* THERE IS NO --wide (660), AND ITS ABSENCE IS A MEASUREMENT RATHER THAN AN OVERSIGHT.
+   660 was the walk's default cell and it is now used by nothing: at 660 the three
+   detail frames render at 130-148% of life size, which is the defect cart--panel was
+   deleted for at 173%. Do not reintroduce it without re-measuring the frame that
+   wants it. See $retinaDoc for the method and $stageDoc for the rule. */
+
+.promise-walk__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-xs);
+  /* The house hairline: inset so the line sits inside the box and cannot add a pixel
+     to the layout. Same mechanism as .bento-theme__media and .figure__image. */
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+}
+
+/* ── Delivery Promise (URBN): RoadmapList ─────────────────────────────────────
+   Six roadmap items across one horizon: a number, a title, and a gloss.
+
+   THIS REPLACED A THREE-COLUMN TABLE, .roadmap-table, ON 1 Sep. The old block was
+   ported from the `.mf` prototype in docs/previews/roadmap-table-prototype.html;
+   THAT CITATION NO LONGER DESCRIBES ANYTHING HERE and is corrected rather than
+   carried, because a comment pointing at a prototype for a shape that is gone is
+   worse than no comment. The prototype file still holds `.pa` and `.cf`, two
+   earlier candidates, and four further rejected forms sit in
+   docs/previews/dependency-map-*.html; none of them is this.
+
+   NO GEOMETRY, AND THAT IS INHERITED DELIBERATELY. Seven module forms were
+   prototyped for this section and every one carrying a drawing broke at one width
+   or another. Grid columns and hairlines, nothing to position and nothing to
+   distort.
+
+   THE GLOSS COLUMN IS AN EXPLICIT TRACK, NOT AN `fr` SHARE. Six glosses sharing
+   one left edge are what makes the list scannable in a single pass, so the title
+   track is a fixed width and the edge is a construction rather than a coincidence
+   of six similar title lengths. Two of the titles (05 and 06) are long enough to
+   wrap inside it, which is expected: the wrap stays inside the title column and
+   the gloss edge does not move.
+
+   GAPS ARE SPLIT INTO row-gap AND column-gap, DECLARED ONCE, OUTSIDE THE
+   BREAKPOINT, the same discipline the old block used. lint:space check 4 forbids a
+   spacing declaration inside a media query, so the query carries nothing but
+   grid-template-columns and the two placement properties, neither of which is
+   spacing. */
+
+.roadmap-list {
+  margin: var(--spacing-l) 0 0; /* evidence step, matching .figure--bento-theme */
+}
+
+/* BOUNDED BY TWO RULES, NOT SEVEN, AND THAT CAME OUT OF MEASUREMENT RATHER THAN
+   TASTE. Measured on the shipped geometry with a Range over the text nodes rather
+   than element boxes: the longest gloss ink ended at 632px of 1088, so 456px of
+   every hairline carried nothing, and row 03 was the worst at 564px dead - 52% of
+   the module width. A rule running half its length past the last word reads as an
+   empty table column, which was the one way this module still looked like the table
+   it stopped being.
+
+   TWO OTHER FIXES WERE MEASURED AND REJECTED, kept here because both will occur to
+   a later pass. Capping the module near 780 looked best and fails this codebase's
+   own rule, which walk-manifest.json's $retinaDoc states as "a width with no source
+   is a width nobody can check"; 780 has no source. Dropping to 660 flush with the
+   prose is principled, since 660 is a real system width, but it costs the most
+   height and pushes the two long titles to three lines.
+
+   So the per-row hairlines go and the 28px ordinal does the marking. There is no
+   naked rule left behind because there is no rule left: the top and bottom borders
+   bound the module and nothing separates rows but whitespace. IF THE ROWS EVER READ
+   TOO LOOSE, the fallback is 660 flush with the prose, NOT hairlines back at 1088. */
+.roadmap-list__items {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border-strong);
+  border-bottom: 1px solid var(--border-strong);
+}
+
+/* Stacked below 768: the numeral takes an auto track and the title sits beside it,
+   with the gloss under the title rather than under the numeral. That hanging indent
+   is why the gloss is placed explicitly instead of flowing into the next cell. */
+.roadmap-list__items > li {
+  display: grid;
+  /* 2.5rem, DERIVED not chosen: a tabular "06" at 1.75rem/600 measures 37.97px in
+     the render, rounded up to the nearest 0.25rem step. Fixed rather than `auto` so
+     the six titles keep one shared left edge even if the numeral's rendered width
+     moves; `auto` happens to give the same edge today only because every numeral is
+     two tabular digits. */
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  row-gap: var(--spacing-3xs);   /* title → its own gloss, bound to the item */
+  column-gap: var(--spacing-s);  /* numeral → title, and title → gloss at desktop */
+  margin: 0;
+  padding: var(--spacing-m) 0;
+}
+
+/* THE ORDINAL IS THE LARGEST THING IN THE ROW, AND THAT IS THE WHOLE CHANGE. At
+   18px it worked as a bullet: it marked a row and carried no rank. At 28px the six
+   numerals read as a sequence before any title is read, which is what makes the
+   module a ranked list rather than six things that happen to be numbered.
+
+   IT WAS THE ONLY LEVER AVAILABLE. The reference this came from (the F1 app's
+   race-results table) gets its force from six things, and four of them cannot exist
+   here: display type on the row, which section 06's h2 already owns; a portrait per
+   row, which items 04 to 06 cannot have because they were never built; four
+   comparable data columns, where this has two text columns that are not quantities;
+   and the tight rows that portrait sets. The ordinal was what was left.
+
+   LINE-HEIGHT IS THE TITLE'S COMPUTED LINE BOX, NOT A RATIO OF ITS OWN. 1.125rem x
+   1.25 = 1.40625rem, so a 28px glyph sits on an 18px line and the row does not grow
+   by the difference. Left at 1.25 the numeral's own box would be 35px against the
+   title's 22.5px and every row would gain 12.5px for nothing. */
+.roadmap-list__n {
+  font-variant-numeric: tabular-nums;
+  font-size: 1.75rem; /* 28px */
+  line-height: 1.40625rem; /* the title's line box: 1.125rem x 1.25 */
+  font-weight: 600;
+  /* --text-primary now, where the 18px version took --text-muted. The old note here
+     argued against --text-subtle on the AA-large floor; at 28px/600 that floor is
+     cleared by any of the three, so the choice is made on rank instead: the ordinal
+     is the loudest thing in the row and a muted loudest thing is a contradiction. */
+  color: var(--text-primary);
+}
+
+.roadmap-list__title {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.roadmap-list__gloss {
+  grid-column: 2;
+  margin: 0;
+  max-width: 44ch;
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+@media (min-width: 768px) {
+  /* Nothing but the template and the gloss's placement. No spacing declaration
+     reaches lint:space check 4, because every gap was declared above.
+
+     21rem is the title track. It holds items 01 to 04 on one line at this measure
+     and wraps 05 and 06 to two, which is the trade the fixed track buys: the gloss
+     edge is identical down all six rows whatever the titles do. */
+  .roadmap-list__items > li {
+    grid-template-columns: 2.5rem minmax(0, 21rem) minmax(0, 1fr);
+    align-items: baseline;
+  }
+
+  .roadmap-list__gloss {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+.roadmap-list > .bento-theme__caption {
+  margin-top: var(--spacing-m);
+}
+
+/* ── Delivery Promise (URBN): TestimonyPair ───────────────────────────────────
+   Section 01. The FramedPair slot, with voices instead of screens: this study's
+   deck has no before-screens, so its problem evidence is what people said.
+   Ported from the `.tpair` block of docs/previews/quote-pair-locked.html.
+
+   NO GEOMETRY. Two cells, two text nodes each: a quote and a source. Each cell
+   is a box on --bg-surface; there is no rule and no border.
+
+   THE GAP IS DECLARED ONCE. The locked prototype declares `gap` on the grid
+   outside the breakpoint AND again inside it at the same value; the second one is
+   a lint:space check 4 failure and is not ported. The media query carries
+   grid-template-columns and nothing else.
+
+   ALL 14px LABEL TYPE IS --text-muted. --text-subtle is AA-large only (>=24px),
+   and `.pull-quote cite` already does this correctly at the same size. */
+
+.testimony-pair {
+  /* Symmetric evidence step, matching .framed-pair's `margin: var(--spacing-l) 0`
+     at globals.css:1938. The top is single-owned: the preceding paragraph zeros
+     its bottom below, so the gap is 2rem whether margins collapse or add. The
+     bottom separates the pair from the closing paragraph, which otherwise reads
+     as an addendum to the right-hand source line.
+
+     THE BOTTOM HALF HAS NO PRECEDENT TO COPY, only a spec. Measured across the
+     repo, all three .framed-pair instances (Bard, FDT-E, Nuuly) are their
+     section's last child, so .cs-section > :last-child zeros them and that
+     margin-bottom has never rendered on any page. This is the first module of
+     the family with a following sibling. globals.css records the same
+     never-exercised pattern twice already, at the milestone and the bento theme
+     block. The VALUE is the spec's; the confirmation is only for the top. */
+  margin: var(--spacing-l) 0;
+
+  /* NO max-width, SINCE 28 AUG. This module fills the .cs-section band.
+     47rem was here and it was a defensible choice, not an accident: 47rem is
+     752px at 1440, which is exactly the body prose measure (64ch), so the pair's
+     right edge landed on the right edge of the paragraphs above it. Measured
+     before the change: module right edge 920.5, body paragraph right edge 920.2.
+     That alignment is the thing being given up.
+
+     TWO REASONS OUTWEIGHED IT.
+
+     .framed-pair fills the band, and it is the same slot in the same
+     .cs-section--problem on Bard, FDT-E and Nuuly. Measured on uscg-bard at
+     1440: .framed-pair is 1088px against body prose at 751.7px, a 336px
+     right-edge delta. The family already breaks prose alignment here; this
+     module was the one that did not.
+
+     The quote's own measure had become too narrow to read. The v2 rebuild put
+     24px of padding on each cell, so the rendered <p> is 312px - 26.6ch,
+     41.5% of body's 64ch - which is below a workable measure for running text.
+     Filling the band takes it to 480px / 40.9ch.
+
+     WHAT IS LOST, NAMED: the pair no longer aligns with the prose column, and
+     nothing else on the page reinstates that edge. Accepted deliberately.
+
+     THE GAP STAYS --spacing-l (32px) and does not follow .framed-pair down to
+     --spacing-m. FramedPair's cells are bright screenshots that self-separate
+     against the ground; these are two --bg-surface boxes one step off canvas,
+     and 24px between low-contrast surfaces reads as one box with a slot. */
+}
+
+/* Zero the preceding paragraph's bottom so .testimony-pair's margin-top solely
+   owns the prose->evidence gap. Deliberately `p`, matching the framed-pair rule
+   above rather than narrowing to .section-lede: a narrower selector stops
+   matching the moment a body paragraph is inserted between the lede and the
+   module, and the gap silently doubles with no gate to catch it.
+
+   A SECOND RULE, not merged into the framed-pair selector list. Two modules that
+   happen to share a boundary rule are not one rule. */
+.cs-section p:has(+ .testimony-pair) {
+  margin-bottom: 0;
+}
+
+.testimony-pair__grid {
+  display: grid;
+  /* SPLIT BY AXIS, both outside any media query, because `gap` is one
+     declaration serving two different jobs. The gutter between two side-by-side
+     boxes wants more room than the step between two stacked ones, and raising a
+     single `gap` to get the first would add 16px to the stacked module at 390 -
+     on a module whose entire rebuild was about mobile height. lint:space check 4
+     forbids spacing inside a media query, so the query cannot arbitrate it;
+     the axis split can, and needs no query.
+
+     Each is inert where the other applies, and the width is 1024, not 768: at
+     >=1024 grid-template-columns is 1fr 1fr, so there is one row and row-gap does
+     nothing; below it there is one column, so column-gap does nothing. Both
+     confirmed from the render rather than edited by hand - the proof is that the
+     stacked module height is identical at either column-gap value, measured at
+     390 and again at 820 once the breakpoint moved. */
+  row-gap: var(--spacing-l);
+  column-gap: var(--spacing-xl);
+}
+
+/* A BOX, NOT A RULED CELL, since 28 Aug. The rule-topped version ran 606px at
+   390 - a full phone screen of unbroken text in a section with no image.
+
+   REMOVING THE DIVIDER MADE THE MODULE SHORTER, WHICH IS THE COUNTERINTUITIVE
+   PART. A rule needs padding on both sides of itself; spacing needs it on one.
+   The source label is already uppercase, tracked 0.09em, weight 500 and muted -
+   four signals saying "a different kind of text". The rule was a fifth
+   separator doing a job four others had already done.
+
+   NO BORDER AND NO INSET HAIRLINE, DELIBERATELY. --bg-surface sits a step off
+   --bg-canvas in both modes and contains on its own; an outline would be a
+   second containment doing the same job as the tone. Judged in both modes at
+   390 and 1440. The v2 prototype declares the hairline and then switches it off
+   in its own default state (docs/previews/testimony-v2.html) - the shipped
+   answer is the default, not the base rule.
+
+   grid-template-rows: auto 1fr is the pin. The quote takes its own height, the
+   source gets the slack and is pushed to the bottom by align-self: end below,
+   so both labels align across the pair whatever the quote lengths do. That
+   levelness used to be the leads' job; it is now the box's. */
+.testimony-pair__cell {
+  background: var(--bg-surface);
+  border-radius: var(--radius-l); /* the cards step, globals.css:443 */
+  padding: var(--spacing-m);
+  display: grid;
+  grid-template-rows: auto 1fr;
+  margin: 0;
+}
+
+/* A step below the lead, deliberately. An earlier variant set both to 1.125rem at
+   desktop: the hierarchy flattened, and it pushed the right lead to three lines
+   against the left's two, which breaks the levelness the layout exists for. */
+.testimony-pair__quote {
+  margin: 0;
+  /* 18px: the reading rung, and the same size as body prose in .case-study-prose.
+     Was 17px, which was neither - 18/17 is 1.06x against the type system's 1.15x
+     adjacency rule, it sits on no rung, and after this change 17px renders on no
+     live route at all. The module's argument is that quoted matter is body
+     content and takes body treatment, so 17px contradicted the thing it was
+     implementing.
+
+     The 17px existed to hold the quote a step below the 18px/600 lead, on a
+     judgement that 18/18 read flat. That judgement was made in a prototype whose
+     surrounding lede was a 16px stand-in for the real 26px and which had no h2 at
+     all: a hierarchy judged against a truncated hierarchy. Re-rendered in a
+     correct context it did not survive. The lead still separates cleanly on
+     weight alone - 18/600 against 18/400 is 38.5% more ink, the same separation
+     the site uses between a bolded lead-in and its sentence. */
+  font-size: 1.125rem;
+  /* 1.6 DEVIATES FROM BOTH BODY NUMBERS ON PURPOSE, so do not "fix" it to match
+     body. Leading is a property of the MEASURE, not of the role.
+
+     MEASURE THE PARAGRAPH, NOT THE COLUMN. This comment previously read "this
+     column is 360px = 30.7ch" and was wrong in two ways at once: it measured the
+     grid column rather than the rendered <p>, and it went stale on 27 Aug when
+     the v2 rebuild put 24px of padding on each cell and the paragraph became
+     312px without anyone noticing. Measured at 1440 on the rendered
+     .testimony-pair__quote box, with ch taken from a real 0 glyph at 18px
+     (11.745px): the paragraph is 480px = 40.9ch, against body prose at 752px =
+     64.0ch, the width rung 1's leading is calibrated for.
+
+     WHY 1.6 AND NOT THE 1.5 THIS CARRIED. 1.5 was chosen for a 26.6ch paragraph,
+     41.5% of body's measure, where body's leading would have over-led it badly.
+     Filling the band took the paragraph to 40.9ch, 63.9% of body's. The
+     deviation should shrink with that gap and it should not vanish: 40.9ch is
+     still meaningfully shorter than 64ch, so landing on body's own 1.7 would
+     make the quote read as body prose and contradict this module's argument that
+     it takes body's SIZE and not body's leading. Judged on the render at 1440 in
+     both modes: 1.5 reads tight across the two-line quote at this measure, 1.7
+     reads like a paragraph, 1.6 holds a visible step off body while giving the
+     return enough air.
+
+     THE STAKES ARE SMALL AND THAT IS PART OF THE RECORD. At this width the left
+     quote is one line and the right is two, so exactly one inter-line gap in the
+     module is affected; 1.6 against 1.65 is not resolvable by eye. The value is
+     defensible, not proven, and a longer quote would put it back in question.
+
+     Neither body number is even the same target: type-system-v3 specifies 1.65
+     for rung 1 and .case-study-prose ships 1.7. Line count is identical at 1.5,
+     1.6, 1.65 and 1.7 in both modes - only block height moves, 149.8 / 153.4 /
+     155.2 / 157.0px for the module. At 390 body happens to share this narrow
+     measure, which makes body itself over-led there - a site-wide question, not
+     this module's to copy. */
+  line-height: 1.6;
+  color: var(--text-primary);
+  text-wrap: pretty;
+}
+
+/* Editorial marks, not speech. */
+.testimony-pair__elision {
+  color: var(--text-muted);
+}
+
+.testimony-pair__source {
+  /* PINNED TO THE BOTTOM OF THE CELL, ONLY WHERE THE CELLS ARE SIDE BY SIDE,
+     WHICH IS >=1024. With the leads gone the two quotes are nine words and
+     twenty-two, so an unpinned label would sit at a different height in each cell
+     and the pair would stop reading as a comparison. The slack moves above the
+     label instead, onto empty surface where it is invisible.
+
+     THE CONDITION IS THE CORRECTION. This comment used to assert the alignment
+     unconditionally, which was already false below the breakpoint and got worse
+     when the breakpoint moved from 768 to 1024. Stacked, the cells are sequential
+     and there is nothing to align - the same as at 390. */
+  align-self: end;
+  margin-top: var(--spacing-m);
+  font-size: 0.875rem; /* 14px */
+  /* Uppercase and 0.09em STAY, and that is the deliberate half. .pull-quote cite
+     is 14/500/muted and sentence-case, but it sits under a 28px quote - a 2.0x
+     size drop that separates it on size alone. This sits under an 18px quote, a
+     1.29x drop, so the case change is what carries the differentiation. Copying
+     cite exactly was prototyped and rendered worse: the source blurred into the
+     quote above it and stopped marking where the testimony ends. */
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  /* 500, matching cite's weight and colour. At 600 these read as a second bold
+     line and compete with the leads for the same attention. The token does not
+     change, so contrast is unaffected: 6.06:1 light, 7.35:1 dark. */
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+/* 1024, AND IT IS THE BAND'S NUMBER, NOT AN INDEPENDENTLY CHOSEN ONE.
+   The two-column layout exists so the pair can use the .cs-section band, and the
+   band widens at 1024 - globals.css:1806, `.case-study-prose > .cs-section`.
+   IF THAT MOVES, THIS MOVES WITH IT. They are one decision recorded in two
+   places, which is why the line number is cited rather than remembered.
+
+   IT WAS 768 UNTIL 28 AUG, AND 768 WAS THE GENERIC TABLET BREAKPOINT - inherited,
+   never related to this module, and sitting 256px below the number that actually
+   governs it. Across 768-1023 the columns therefore rendered inside the
+   UN-WIDENED 660px prose column: cells at 258px, quote measure 22.0ch. That is
+   below the 26.6ch the max-width comment in this same rule block calls unworkable,
+   and worse than the 52.1ch the module gets at 767 in a single column. The layout
+   was worse at 800px than at 390.
+
+   THE WINDOW WAS NOT CAUSED BY FILLING THE BAND. 47rem is 752px and the band
+   there is 660px, so the cap never bound in that range; the geometry is identical
+   either side of that change. It was 26.7ch until 088815a put 24px of padding on
+   each cell. Filling the band commissioned the review that found it.
+
+   grid-template-columns only - lint:space check 4 forbids spacing here. */
+@media (min-width: 1024px) {
+  .testimony-pair__grid {
+    grid-template-columns: 1fr 1fr;
+  }
 }

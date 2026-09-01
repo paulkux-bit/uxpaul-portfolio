@@ -1,0 +1,49 @@
+{
+  "$doc": "Content for <TestimonyPair>, section 01. Two voices in the slot FramedPair fills in the other three studies. NO GEOMETRY: two cells, two text nodes each - a quote and a source. Each cell is a box on --bg-surface; there is no rule and no border. Rebuilt 28 Aug: it had been a rule-topped cell with a lead above each quote.",
+  "$quoteDoc": "BOTH QUOTES ARE VERBATIM TRANSCRIPTIONS AND NEITHER MAY BE REWORDED. Each is now a SINGLE CONTINUOUS RUN from the source, so nothing is skipped and there are no elision markers at all - that is why the [...] marks are gone, not a decision to hide a cut. ONE PUNCTUATION CHANGE, RECORDED RATHER THAN SILENT: the left source continues past 'right on time', so a terminal period is added to close the quotation (Chicago 13.7). Paul approved it. The right quote is a complete sentence and is unchanged. This study corrected a silent capitalisation in the beat 02 quote on 27 Aug; the same standard applies to itself. An earlier draft of the right-hand quote was reconstructed from Paul's spoken description and rendered 'They're still running me in circles about it.' as the fragment 'still running me in circles' - close, and wrong. If either quote ever needs re-checking, the source is claude/delivery-promise-app-store-reviews.md, not this file and not anyone's memory. These strings were cut from the previously shipped values rather than retyped, and those were built by decoding the entities in docs/previews/quote-pair-locked.html.",
+  "$leadDoc": "THE LEADS ARE GONE, DELETED 28 AUG, AND SHOULD NOT BE RESTORED AS A FIX FOR SOMETHING ELSE. They read 'She thinks we hit her date. She could not tell you how long it took.' and 'She says we missed hers by a day. She could tell you what it cost.' - could not / could on the same measure, and they were the module's original invention. WHY THEY WENT: section 01's closer now does their job sixty words later, in Paul's voice - 'If we hit the date, they barely noticed. If we missed it, they knew exactly what it cost them.' Keeping both stated the same finding twice, the same pattern that cut 'Not how long it took' from that closer and 'The same three breaks kept coming back' from section 02's lede. They also cost height the section could not afford: the module ran 606px at 390, a full phone screen of unbroken text. The rule they rested on - both leads must sit level or the pair degrades - is now carried by the pinned source instead. __tests__/testimony-leads.test.mjs guarded their length with a character proxy and was deleted with them.",
+  "$sourceDoc": "The left source is a moderated research session; the right was written in public, unprompted. That difference is what section 01 is about, which is why the source line is present at all rather than the quotes running anonymous. Do not merge the two into one generic 'customer' label.",
+  "$pronounDoc": "'She' for an unnamed URBN shopper is cleared: Paul ruled 26 Aug that most of URBN's customers are women. This licenses the generic. It is NOT a claim about the identity of amosinky, whose gender is not stated in the review.",
+  "$elisionDoc": "THERE ARE CURRENTLY NO ELISIONS. Both quotes are continuous runs, so the component's splitter renders zero spans today. THE CODE STAYS AND IS NOT DEAD: it is the enforcement of the transcription rule, and the next quote that needs a cut gets its marker rendered as muted editorial text automatically. The marker is literal text inside a span's `text`, and the component wraps each one in a muted span. NOT <i>: globals.css remaps em and i to font-weight 600 because Commissioner ships no italic, so an <i> would render an elision bold.",
+  "$levelnessDoc": "THE INVENTION IS THE BOX PLUS THE LENGTH ASYMMETRY, NOT TWO LEVEL LEADS. Nine words against twenty-two, framed identically on the same surface: the contrast is visible before either quote is read, which is what the leads used to do by sitting level. A short confident answer beside a long specific one IS the argument - two sources, the same measure, opposite answers. WHAT WOULD BREAK IT: equalising the quote lengths (the asymmetry is the signal, and a longer left quote was tested - it moves the labels to 399 and 372, still uneven, and grows the pair from 201px to 228px), or unpinning the source. THE SOURCE IS PINNED to the bottom of the cell via grid-template-rows: auto 1fr and align-self: end, so both labels align across the pair whatever the quotes do, and the slack falls on empty surface where it is invisible. THAT GUARANTEE HOLDS ONLY WHERE THE CELLS ARE SIDE BY SIDE, WHICH IS >=1024 - below that they stack, the labels are sequential, and there is nothing to align, the same as at 390. This doc previously stated the alignment with no width attached at all, which was already false below the breakpoint before it moved from 768 to 1024 on 28 Aug. The condition is the fix; editing the number would not have been. SEPARATED FROM RoadmapList BY AXIS, NOT BY ORNAMENT. RoadmapList is ordered: read down, numbered 01 to 06. TestimonyPair is a comparison: read across, two peers, no numerals. Adding a third cell or a numeral collapses it into RoadmapList's shape. THIS ENTRY SAID RoadmapTable AND '01/02/03, ends in a coda' UNTIL 1 Sep; the module was renamed, went from three items to six, and lost its coda in the same pass. The axis distinction is what survived and it is the only part that was ever load-bearing here.",
+  "cells": [
+    {
+      "quote": [
+        {
+          "text": "I think it got around here "
+        },
+        {
+          "text": "right on time",
+          "em": true
+        },
+        {
+          "text": "."
+        }
+      ],
+      "source": "Research session"
+    },
+    {
+      "quote": [
+        {
+          "text": "I relied on this and bought "
+        },
+        {
+          "text": "$190 in vacation clothes",
+          "em": true
+        },
+        {
+          "text": " only to have the shipment arrive "
+        },
+        {
+          "text": "a day late",
+          "em": true
+        },
+        {
+          "text": ", after my departure."
+        }
+      ],
+      "source": "App Store review, July 2019"
+    }
+  ],
+  "$emphasisDoc": "THE BOLD IS THE DESIGNER'S, NOT THE SPEAKER'S. Neither person stressed these words; the emphasis is editorial, added so the argument is catchable without reading the sentence. Paul ruled for it. IT IS UNMARKED ON THE PAGE BY DECISION - there is no '(emphasis added)' note - which is why it is recorded here instead. A FUTURE PASS MUST NOT READ A BOLDED SPAN AS SOMETHING THE PERSON STRESSED. It is stored as data, one object per span with an explicit em flag, rather than as **markers** inside a string: a parsed convention hides the addition, a data structure states it. Rendered as <b>, never <strong> - <b> is stylistic offset without added importance, and <strong> would assert the speaker meant it. THE SHARE IS A PROPERTY OF THE RENDERED QUOTE, NOT OF THE STRING, AND IT IS PINNED TO THE RENDERED LINE COUNT. Marks are right on time (13 of 41 chars, 32%) and a day late (34 of 117, 29%) - two three-word marks on one axis. The second run was narrowed on 28 Aug from 'arrive a day late, after my departure' (61 chars, 52%) because filling the band halved that quote from four rendered lines to two: at four lines two runs picked two moments out of a paragraph, at two lines half the passage was emphasised and a passage that is half-emphasised has no emphasis. THE LINE COUNT IS THE VARIABLE TO WATCH. At 1440 the cells render 1 and 2 lines; at 390, 2 and 4. Anything that moves those counts - a width change, a type change, a longer quote - means re-checking the share before assuming it still reads. The quote TEXT did not change and must not: the span boundaries moved and the concatenation was asserted byte-identical."
+}

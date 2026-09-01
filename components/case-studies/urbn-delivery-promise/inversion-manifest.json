@@ -1,0 +1,80 @@
+{
+  "$doc": "Content, data and geometry for the two section 03 charts, <TierChart> and <NodeChart>. Percentages are URBN operational data cleared by Paul for publication, read from the source table's URBN blended column. Edit a number here and the drawing moves — y positions and bar widths are COMPUTED from `scale` and `barMax`, never stored, so values and drawing cannot drift apart. Coordinates are viewBox units, not pixels. ONE MANIFEST, TWO COMPONENTS, and that is the doctrine rather than a preference: a second manifest would reintroduce exactly the drift this one exists to prevent.",
+  "$historyDoc": "REPLACED <InversionChart> ON 29 Aug, AND THE REASON IS A DATA ERROR RATHER THAN A DESIGN ONE. That module plotted All nodes against Store network as though they were peers. THEY ARE NOT: All nodes is the aggregate that CONTAINS the store network, along with the Gap and Reno fulfillment centres. The source table's own totals prove it: the three node totals sum EXACTLY to the All nodes total, with nothing left over. The four absolute order volumes that used to be written out here were removed on 1 Sep - this is a public repository, the sibling doc and the MDX both say the absolute counts are deliberately unused, and the sentence proves its point without them. The reasoning is the arithmetic holding, not the figures. Two lines, one inside the other, with nothing saying so. No annotation fixes that, which is why the module was retired rather than relabelled. Do not reconstruct any part of that comparison.",
+  "$splitDoc": "NO TEXT INSIDE ANY SVG, ANYWHERE IN THIS STUDY, AT ANY WIDTH. Drawings carry geometry only; every word is HTML at a real pixel size. THIS REPLACES THE OLD DIRECT-LABEL CARVE-OUT, which kept two series labels in the drawing above 768 on the grounds that 16 viewBox units computed to 17.4px at full band. There is no longer a width at which that holds: the same 16 units are about 8px at phone width and about 8px in a half-band panel, against a 14px hard floor. The rule is now general because the physics is general. A legend or a labelled row in HTML carries identity instead.",
+  "$typeDoc": "HIERARCHY AMONG SMALL LABELS RIDES WEIGHT, CAPS AND TRACKING, NEVER SIZE AND NO LONGER TOKEN, because below 14px is not available to spend. Axis and marker labels are 700, uppercase and tracked; stage and tier names are 400 in sentence case. BOTH SIT ON --text-muted NOW, and the token stopped being one of the channels on 30 Aug: it used to be --text-subtle against --text-muted, and --text-subtle is AA-LARGE ONLY, meaning 24px or 18.66px bold. Every one of these labels is 14px, so 700 buys no relief - 14px bold is normal size - and the three of them measured 3.87 light and 4.20 dark against an AA-normal floor of 4.5. Losing the token cost one channel of three and the remaining two are the stronger ones. The failure mode this exists to prevent is every small label landing at one weight and competing, which is what happens if a design that separated them by size is flattened to the floor without replacing the channel.",
+  "$exclusionsDoc": "DELIBERATELY ABSENT AND NOT AN OVERSIGHT. No per-brand columns (AN / FP / UO individually) and no absolute miss counts — they exist in the source table and are exactly the confidential figures Paul cleared for exclusion. DERIVED PERCENTAGES ARE ALSO NOT CLEARED: the clearance covers the shapes and directions in the source table only, so a figure computed across cleared numbers is a new disclosure and does not inherit their clearance. Do not add any of the three back.",
+  "$precisionDoc": "THE CONSTRAINT THAT MATTERS MOST HERE. Reno and Gap are FULFILLMENT CENTRES. The store network is STORES. Reno's 11 percent is proof the NETWORK could hit the date; it is NOT proof STORES could. Nothing in the labels, the captions or the aria may imply otherwise. SECOND, AND SEPARATE: never write or imply that most missed dates were expedited. Standard is the overwhelming majority of volume and produced most raw misses. This module is about RATES and about where complaints concentrated, never about where misses concentrated in absolute terms.",
+  "$namingDoc": "NAMING GAP IS PAUL'S DECISION AND HE HAS SAID YES. If he ever reverses it the swap is one string per row and nothing else: `label` on the two fulfillment-centre rows becomes \"Reno FC\" and \"The other fulfillment center\". No geometry, no arithmetic and no prose depends on the names, which is why the reversal is a one-line edit rather than a rebuild.",
+  "$tierGeometryDoc": "TierChart only. viewBox height 190; the axis sits at 176 and the plot top at 20.",
+  "tierGeometry": {
+    "viewBox": "0 0 600 190",
+    "axisY": 176,
+    "axisX1": 12,
+    "axisX2": 588,
+    "refX1": 12,
+    "refX2": 588,
+    "dotR": 6,
+    "dotREnd": 7.5
+  },
+  "$scaleDoc": "y = yZero - (value / valueMax) * (yZero - yMax). Computed, never stored. valueMax is 25 rather than the 22 the line reaches, so the top point sits inside the plot instead of on its ceiling. THE COMPUTED VALUES ARE y(3)=157.3, y(16)=76.2 and y(22)=38.7, and they are recorded here for reading rather than for pasting. An earlier prototype drew 150 / 84 / 32, which is not on this scale or on any linear one: 3 to 16 covered 66 units for 13 points of value while 16 to 22 covered 52 units for 6. That non-linearity exaggerated the express-to-overnight step, which is the exact step this chart argues from. On a rate chart in a study about an average hiding the real numbers, a fudged axis is the defect that would actually cost something.",
+  "scale": {
+    "yZero": 176,
+    "yMax": 20,
+    "valueMax": 25
+  },
+  "$refDoc": "The reference rule sits at the standard tier's rate, so the line visibly climbs away from what dependable looked like. Drawn at y(refValue), computed like every other position.",
+  "refValue": 3,
+  "refLabel": "Dotted rule: where standard sat",
+  "$tiersDoc": "x is ordered BY PRICE, cheapest first, and drives the plotted points. The line must visibly rise where a reader expects it to fall. That inversion is what TierChart is for. `values` is the All nodes series, the aggregate across the whole network.",
+  "tiers": [
+    {
+      "label": "Standard",
+      "x": 40,
+      "value": 3
+    },
+    {
+      "label": "Express",
+      "x": 300,
+      "value": 16
+    },
+    {
+      "label": "Overnight",
+      "x": 560,
+      "value": 22
+    }
+  ],
+  "$nodesDoc": "NodeChart. THE TIER IS NAMED \"Overnight\" AND THAT IS ITS ONLY NAME IN THIS STUDY. It maps to the source table's OVERNIGHT/RUSH row (1-2 business days), recorded here so the provenance survives without a second user-facing name; nothing in a label, a caption or an aria string may call it anything else. The tier only, broken out by node, which is the whole point: the three nodes sit at 11, 15 and 45 against an aggregate of 22. THE AVERAGE WAS HIDING A FOUR-FOLD SPREAD, and that sentence is what this chart exists to land. Gap had never appeared in this study before 29 Aug; without it the picture is one hero and one villain, and with it the picture is a spread. NOT AN SVG: three labelled rows with proportional widths is a CSS grid, so the names and values are real HTML text at real sizes and only the track flexes.",
+  "nodes": [
+    {
+      "label": "Reno FC",
+      "value": 11,
+      "emphasis": false
+    },
+    {
+      "label": "Gap FC",
+      "value": 15,
+      "emphasis": false
+    },
+    {
+      "label": "Store network",
+      "value": 45,
+      "emphasis": true
+    }
+  ],
+  "$barMaxDoc": "Bar width is value / barMax. 50 rather than 45 so the longest bar stops short of its track's end and reads as a measured quantity rather than as a full meter. The average marker is drawn at nodeAverage / barMax.",
+  "barMax": 50,
+  "$nodeAverageDoc": "The All nodes overnight figure, which is the aggregate these three roll up into. It is the same number as tiers[2].value and is referenced from there rather than restated, so the marker cannot drift from the line chart's last point.",
+  "unit": "%",
+  "$captionDoc": "NOT PLACEHOLDERS ANY MORE. These were authored in the build and flagged for Paul; he has since rewritten all four strings and they are settled. THE LEADS NAME THE METRIC, which nothing visible on the page used to do: across both captions, both glosses, the ref label and every tier and node label, no string said missed, late, on-time or delivery. Only the two aria labels did, so the accessible description was the better caption and it was the one nobody read. THE GLOSSES STATE THE RELATIONSHIP: NodeChart decomposes TierChart's last point, the two 22s are the same number, and no visible string said so. THE RENO CLAUSE IS STILL LOAD-BEARING in its new wording - 'Reno is a warehouse. It proves the network could hit the date, not that stores could' - and it is what keeps a reader from taking 11 percent as proof that stores could hit the date. It says in plain words what 'reads against the network rather than against stores' said in a register that needs domain habit to parse. See $precisionDoc. NO SPATIAL WORDS: the draft opened 'The 22 percent above', which is true only below 1024. .chart-pair is 1fr 1fr from there, so TierChart sits to the LEFT at laptop and desktop widths. Any above/below/left/right in a caption on this page is a bug waiting for a breakpoint.",
+  "tierCaption": {
+    "lead": "Missed delivery dates, by shipping tier.",
+    "gloss": "Across the whole network, before it is broken down by where orders shipped from."
+  },
+  "nodeCaption": {
+    "lead": "The same overnight tier, by where the order shipped from.",
+    "gloss": "That 22 percent is this, averaged. Reno is a warehouse. It proves the network could hit the date, not that stores could."
+  },
+  "tierAriaLabel": "A line chart of missed delivery dates across three shipping tiers ordered by price, cheapest first, across the whole network. Missed dates rise from 3 percent on standard shipping to 16 percent on express and 22 percent on overnight. A dotted reference rule marks the standard rate, so the line visibly climbs away from it.",
+  "nodeAriaLabel": "A bar chart of missed delivery dates on overnight shipping only, broken out by node. The Reno fulfillment center missed 11 percent and the Gap fulfillment center 15 percent, while the store network missed 45 percent. A marker labelled All nodes shows the network rate of 22 percent, which sits between them. Reno and Gap are fulfillment centers and compare to the network as a whole, not to the store network."
+}

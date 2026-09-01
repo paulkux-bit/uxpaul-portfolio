@@ -1,0 +1,109 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quote module — attribution inside</title>
+<style>
+@font-face{font-family:'Commissioner';src:url('commissioner-latin.woff2') format('woff2');font-weight:100 900;font-display:block}
+:root{
+  --font-sans:'Commissioner',system-ui,sans-serif;
+  --chroma-unit:0.002; --hue-ground:70; --hue-text:55;
+  --bg-canvas:oklch(0.978 calc(var(--chroma-unit)*8) calc(var(--hue-ground) + 6));
+  --bg-surface:oklch(0.948 calc(var(--chroma-unit)*11) calc(var(--hue-ground) + 2));
+  --text-primary:oklch(0.215 calc(var(--chroma-unit)*9) var(--hue-text));
+  --text-muted:oklch(0.485 calc(var(--chroma-unit)*11) var(--hue-text));
+  --border-subtle:oklch(0.905 calc(var(--chroma-unit)*15) calc(var(--hue-ground) - 4));
+  --border-default:oklch(0.855 calc(var(--chroma-unit)*17) calc(var(--hue-ground) - 10));
+  --radius-l:16px;
+  --spacing-2xs:.5rem; --spacing-xs:.75rem; --spacing-s:1rem; --spacing-m:1.5rem; --spacing-l:2rem;
+}
+html.dark{
+  --hue-ground:55; --hue-text:74;
+  --bg-canvas:oklch(0.165 calc(var(--chroma-unit)*3) var(--hue-ground));
+  --bg-surface:oklch(0.205 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --text-primary:oklch(0.945 calc(var(--chroma-unit)*6) calc(var(--hue-text) + 4));
+  --text-muted:oklch(0.705 calc(var(--chroma-unit)*8) calc(var(--hue-text) - 2));
+  --border-subtle:oklch(0.245 calc(var(--chroma-unit)*7) calc(var(--hue-ground) + 2));
+  --border-default:oklch(0.310 calc(var(--chroma-unit)*10) calc(var(--hue-ground) + 3));
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:var(--font-sans);background:var(--bg-canvas);color:var(--text-primary);padding:20px}
+.prose{max-width:660px;margin:0 auto;font-size:1.125rem;line-height:1.7}
+.prose > p{margin:0 0 1.7em}
+.prose > p > strong{font-weight:600}
+h2{font-size:clamp(1.875rem,3vw + 1rem,3.25rem);line-height:1.1;margin:0 0 .4em;font-weight:600;letter-spacing:-.02em}
+
+.fp{display:grid;grid-template-columns:1fr;gap:var(--spacing-m);margin:var(--spacing-l) 0}
+@media (min-width:768px){ .fp{grid-template-columns:1fr 1fr} }
+
+/* the whole module is the box now; attribution lives inside it */
+.q{
+  background:var(--bg-surface);
+  border-radius:var(--radius-l);
+  box-shadow:inset 0 0 0 1px var(--border-subtle);
+  padding:var(--spacing-m);
+  margin:0;
+  display:grid; align-content:start;
+}
+.q__text{margin:0;font-size:1.125rem;line-height:1.5;color:var(--text-primary)}
+.q__text b{font-weight:600}
+.el{color:var(--text-muted)}
+/* attribution inside, separated by a rule rather than by distance */
+.q__attr{
+  margin:var(--spacing-s) 0 0;
+  padding-top:var(--spacing-s);
+  border-top:1px solid var(--border-default);
+  font-size:.875rem; line-height:1.5; color:var(--text-muted); text-wrap:pretty;
+}
+.q__attr strong{color:var(--text-primary);font-weight:600;display:block}
+.q__attr span{display:block;font-weight:500;letter-spacing:.09em;text-transform:uppercase;margin-top:2px}
+body.nobold .q__text b{font-weight:400}
+/* leads removed: the attribution is the source label alone */
+body.nolead .q__attr strong{display:none}
+body.nolead .q__attr span{margin-top:0}
+
+/* NO DIVIDERS — the rule between quote and source goes; spacing carries it.
+   --spacing-m (24px) against the quote's own 1.5 line-height reads as a step,
+   where --spacing-s (16px) sat inside the paragraph's own rhythm. */
+body.norule .q__attr{border-top:none;padding-top:0;margin-top:var(--spacing-m)}
+/* and the container edge too: the surface already contains, the hairline
+   is a second containment doing the same job. */
+body.noedge .q{box-shadow:none}
+
+/* PIN — the cell is a 2-row grid, quote at the top, attribution pushed to the
+   bottom. The two source labels then align across the pair whatever the quote
+   lengths are, and the slack falls where it is invisible: empty surface. */
+body.pin .q{grid-template-rows:auto 1fr}
+body.pin .q__attr{align-self:end;margin-top:var(--spacing-m)}
+</style>
+<body>
+<div class="prose">
+  <h2>Speed was the wrong thing to measure.</h2>
+  <p><strong>Leadership thought this was an inventory problem.</strong> I thought it was speed, and that we had to win a two-day race against Prime.</p>
+
+  <div class="fp">
+    <blockquote class="q">
+      <p class="q__text" data-q="full">&ldquo;I think it got around here <b>right on time</b> <span class="el">[&hellip;]</span> I don&rsquo;t remember complaining about it to my friends <span class="el">[&hellip;]</span> if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, <b>&lsquo;my damn package isn&rsquo;t here.&rsquo;</b>&rdquo;</p>
+      <p class="q__text" data-q="onecut" hidden>&ldquo;I think it got around here <b>right on time</b> <span class="el">[&hellip;]</span> if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, <b>&lsquo;my damn package isn&rsquo;t here.&rsquo;</b>&rdquo;</p>
+      <p class="q__text" data-q="clean" hidden>&ldquo;I think it got around here <b>right on time</b>.&rdquo;</p>
+      <p class="q__text" data-q="cleanvivid" hidden>&ldquo;if it said it was gonna get here on say like the 5th and it got here later I would have told my friends, <b>&lsquo;my damn package isn&rsquo;t here.&rsquo;</b>&rdquo;</p>
+      <p class="q__attr"><strong>She thinks we hit her date. She could not tell you how long it took.</strong><span>Research session</span></p>
+    </blockquote>
+
+    <blockquote class="q">
+      <p class="q__text" data-q="full">&ldquo;I relied on this and bought <b>$190 in vacation clothes</b> only to have the shipment <b>arrive a day late, after my departure</b>. I could&rsquo;ve spent that money locally <span class="el">[&hellip;]</span> and actually had the clothes to take with me. <span class="el">[&hellip;]</span> They&rsquo;re still running me in circles about it.&rdquo;</p>
+      <p class="q__text" data-q="onecut" hidden>&ldquo;I relied on this and bought <b>$190 in vacation clothes</b> only to have the shipment <b>arrive a day late, after my departure</b>. <span class="el">[&hellip;]</span> They&rsquo;re still running me in circles about it.&rdquo;</p>
+      <p class="q__text" data-q="clean" hidden>&ldquo;I relied on this and bought <b>$190 in vacation clothes</b> only to have the shipment <b>arrive a day late, after my departure</b>.&rdquo;</p>
+      <p class="q__text" data-q="cleanvivid" hidden>&ldquo;I relied on this and bought <b>$190 in vacation clothes</b> only to have the shipment <b>arrive a day late, after my departure</b>.&rdquo;</p>
+      <p class="q__attr"><strong>She says we missed hers by a day. She could tell you what it cost.</strong><span>App Store review, July 2019</span></p>
+    </blockquote>
+  </div>
+
+  <p><strong>But shoppers didn&rsquo;t care about how fast we were.</strong> If we hit the date, they barely noticed. If we missed it, they knew exactly what it cost them.</p>
+</div>
+<script>
+const p=new URLSearchParams(location.search);
+(p.get('v')||'nolead norule noedge').split(/[\s,+]+/).filter(Boolean).forEach(c=>document.body.classList.add(c));
+if(p.get('dark')) document.documentElement.classList.add('dark');
+const mode=p.get('q')||'clean';
+document.querySelectorAll('.q__text').forEach(el=>{el.hidden = el.dataset.q!==mode;});
+</script>

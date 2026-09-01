@@ -9,6 +9,26 @@ ROOT="${1:-.}"
 CONTENT_GLOBS=(--glob '!**/node_modules/**' --glob '!**/.next/**' --glob '!**/.git/**' --glob '!**/out/**' --glob '!**/dist/**')
 GREP_EXCLUDES=(--exclude-dir=node_modules --exclude-dir=.next --exclude-dir=.git --exclude-dir=out --exclude-dir=dist)
 
+# THE TWO ENGINES DISAGREED ABOUT SCOPE AND THAT IS WHAT MADE THE PASS UNRUNNABLE.
+# ripgrep honours .gitignore; the grep fallback honoured a hand-written list, so a
+# repo-root run emitted 7,889 lines of which 2,228 came out of .venv-fonttools alone.
+# Nobody reads 7,889 lines, so the pass stopped being run. The ignored directories are
+# now DERIVED from git at run time rather than maintained by hand, which is what keeps
+# the next virtualenv or cache directory from reopening this.
+IGNORED_DIRS=()
+if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+  for d in "$ROOT"/*/ "$ROOT"/.*/; do
+    [ -d "$d" ] || continue
+    b=$(basename "$d")
+    case "$b" in .|..) continue ;; esac
+    if git -C "$ROOT" check-ignore -q "$d" 2>/dev/null; then
+      case " ${GREP_EXCLUDES[*]} " in *"--exclude-dir=$b "*) continue ;; esac
+      GREP_EXCLUDES+=(--exclude-dir="$b")
+      IGNORED_DIRS+=("$b")
+    fi
+  done
+fi
+
 if command -v rg >/dev/null 2>&1; then RG=1; else RG=0; fi
 hr() { printf '\n\033[1m== %s ==\033[0m\n' "$1"; }
 
@@ -24,7 +44,22 @@ search() { # $1 = description, $2 = pattern, $3 = optional file-type filter (rg 
 }
 
 echo "AI-tell mechanical pass over: $ROOT"
-echo "Engine: $([ "$RG" -eq 1 ] && echo ripgrep || echo grep)"
+# THE ENGINE LINE IS LOUD ON PURPOSE. It read "Engine: grep" for months and every
+# operator read past it, including one who measured ripgrep's behaviour and reported it
+# as the script's. On this machine `rg` is a shell function with no binary on PATH, so
+# `command -v rg` fails inside bash and the fallback is the only path that has ever run.
+# A measurement of a dependency is not a measurement of the program that calls it.
+if [ "$RG" -eq 1 ]; then
+  echo "Engine: ripgrep ($(command -v rg)) - .gitignore honoured natively"
+else
+  echo "Engine: grep ($(command -v grep 2>/dev/null || echo grep))"
+  echo "  WARNING: ripgrep is not on PATH, so this is the fallback. If you expected rg," \
+       "check whether it is a shell function rather than a binary; command -v fails on" \
+       "those inside bash."
+fi
+if [ "${#IGNORED_DIRS[@]}" -gt 0 ]; then
+  echo "Also excluded (git-ignored): ${IGNORED_DIRS[*]}"
+fi
 
 # ---------- PUNCTUATION ----------
 search "Em dashes (— ) — ceiling is one per paragraph" '—'

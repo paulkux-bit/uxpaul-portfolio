@@ -1,0 +1,173 @@
+{
+  "$doc": "Content AND geometry for <JourneyLine>. Every rendered value lives here: move a point, re-anchor a mark, reword a break or rename a stage by editing this file and never JourneyLine.tsx. Coordinates are viewBox units, NOT pixels.",
+  "$splitDoc": "NO TEXT INSIDE THE SVG. NONE, AT EITHER ORIENTATION. Drawings carry geometry only and every word is HTML at a real pixel size. THE NUMERALS USED TO BE THE EXCEPTION and they no longer are: they were 17 viewBox units desktop and 44 mobile, carrying a font-size pair, a dot-size pair and four by-eye offset values each, all of it existing to keep two characters legible inside a coordinate space that was never going to hold them. They are HTML badges now, positioned from the point coordinates as percentages, which deletes the pair, the offsets and the mobile tuning together. This matches inversion-manifest.json's $splitDoc; the rule is the study's, not this module's.",
+  "$compositionDoc": "TWO COMPOSITIONS, NOT ONE DRAWING THAT SHRINKS. Horizontal from 768, vertical below it. A phone scrolls down, so the journey runs down and each stage gets a full label on its own line instead of a 65px column. The two share the points' ORDER and their sentiment band, and nothing else: each has its own viewBox and its own coordinates, because a five-across composition rotated into a phone is not the same drawing at a smaller size. 768 is the system breakpoint; an earlier draft used 760, which is not in the @theme set.",
+  "$sentimentDoc": "THE AXIS IS LABELLED AND THAT REPLACES AN ENTIRE APPARATUS. The 2019 deck (p14) has three faces down the left edge: happy, neutral, angry. The site had dropped them and substituted an abstract reference rule called WHERE SHE STARTED plus a caption clause explaining what the ending meant. Labelling the axis Happy / Fine / Angry deleted all of it: refLabel, refLabelPlacement, $refLabelDoc, tailNote, $tailNoteDoc, and the caption's 'It ends lower than it started'. Every one of them was explaining a picture that now explains itself. Do not reintroduce a reference rule here.",
+  "sentiment": [
+    "Happy",
+    "Fine",
+    "Angry"
+  ],
+  "$pointsDoc": "SHE RECOVERS THREE TIMES AND IS KNOCKED DOWN THREE TIMES, and the recovery is what makes this a horror story rather than a bad day. An earlier eight-point array had been flattened toward a steady decline, which read as a customer who was disappointed once and stayed disappointed. The sawtooth is the deck's actual shape: every time the order looks fine again, something else breaks. Indices 2, 4 and 6 are the three breaks and carry the badges; the other five carry dots. THE COUNT IN THE CAPTION WAS WRONG UNTIL 1 Sep AND IS COMPUTED HERE SO IT STAYS CHECKABLE. The gloss said 'She recovers three times' and the aria closed on 'three times and knocked down three times'. Counted off these arrays, TOWARD-HAPPY TRANSITIONS OCCUR AT INDICES 3 AND 5 ONLY, in both compositions: two recoveries, not three. Drops are five in the horizontal and four in the vertical, and THE HORIZONTAL'S EXTRA ONE IS 70 TO 75 - a five-unit move INSIDE the Happy band, which no reader counting off the drawing can see. So four is what the picture shows and four is what the caption says. This matters more than a number: the figure's whole argument is that an average hid the real shape, so a caption that miscounts the shape a reader can count is the same failure at a smaller scale.",
+  "$horizontalDoc": "viewBox 0 0 960 300. Sentiment bands at y 70 / 170 / 270, one per label. Stage dividers at x 160 / 320 / 470 / 700 mark where one stage ends and the next begins.",
+  "horizontal": {
+    "viewBox": "0 0 960 300",
+    "bandY": [
+      70,
+      170,
+      270
+    ],
+    "dividerX": [
+      160,
+      320,
+      470,
+      700
+    ],
+    "dotR": 6.5,
+    "points": [
+      {
+        "x": 80,
+        "y": 70
+      },
+      {
+        "x": 230,
+        "y": 75
+      },
+      {
+        "x": 400,
+        "y": 170
+      },
+      {
+        "x": 540,
+        "y": 85
+      },
+      {
+        "x": 640,
+        "y": 270
+      },
+      {
+        "x": 760,
+        "y": 80
+      },
+      {
+        "x": 850,
+        "y": 170
+      },
+      {
+        "x": 930,
+        "y": 275
+      }
+    ],
+    "$stageXDoc": "Where each stage's label sits, in viewBox units, converted to a percentage at render. These are the band centres computed from dividerX, EXCEPT the first: the centre of 0 to 160 is 80, and a label centred there is clipped by the figure's left edge once translateX(-50%) is applied, so it is nudged to 100. That is a typographic correction and is recorded rather than left to look like an arithmetic slip.",
+    "stageX": [
+      100,
+      240,
+      395,
+      585,
+      830
+    ]
+  },
+  "$verticalDoc": "viewBox 0 0 300 640. The sentiment bands are VERTICAL here, at x 50 / 150 / 250, so the same three labels head three columns and the line moves left and right between them as it runs down the page. Stage labels sit to the left of the drawing, each at the y of its stage's first point.",
+  "vertical": {
+    "viewBox": "0 0 300 640",
+    "bandX": [
+      50,
+      150,
+      250
+    ],
+    "dotR": 6.5,
+    "points": [
+      {
+        "x": 50,
+        "y": 40
+      },
+      {
+        "x": 50,
+        "y": 120
+      },
+      {
+        "x": 150,
+        "y": 200
+      },
+      {
+        "x": 50,
+        "y": 280
+      },
+      {
+        "x": 250,
+        "y": 360
+      },
+      {
+        "x": 50,
+        "y": 440
+      },
+      {
+        "x": 150,
+        "y": 520
+      },
+      {
+        "x": 250,
+        "y": 600
+      }
+    ]
+  },
+  "$stagesDoc": "firstPointIndex is what positions a stage label in the vertical composition: the label sits at the y of the stage's first point, computed, never estimated. An earlier attempt laid the labels out on an even five-row grid while the data sat at arbitrary y, which put every label near but not on its stage. Purchase spans points 3 and 4; post purchase spans 5, 6 and 7.",
+  "stages": [
+    {
+      "label": "Arrive",
+      "firstPointIndex": 0
+    },
+    {
+      "label": "Browse",
+      "firstPointIndex": 1
+    },
+    {
+      "label": "Decide",
+      "firstPointIndex": 2
+    },
+    {
+      "label": "Purchase",
+      "firstPointIndex": 3
+    },
+    {
+      "label": "Post purchase",
+      "firstPointIndex": 5
+    }
+  ],
+  "$marksDoc": "HTML badges, not SVG text. left% = x / viewBoxWidth * 100 and top% = y / viewBoxHeight * 100, computed from the point the badge names so it is centred exactly on it. They carry a canvas-coloured ring so the line passes BEHIND rather than through. NO SVG DOT UNDERNEATH A BADGE: the badge is the marker at those three points, which is why the dot list skips them. The dx/dy/dxMobile/dyMobile offsets this used to carry are gone with the SVG text they were correcting.",
+  "marks": [
+    {
+      "pointIndex": 2,
+      "index": "1"
+    },
+    {
+      "pointIndex": 4,
+      "index": "2"
+    },
+    {
+      "pointIndex": 6,
+      "index": "3"
+    }
+  ],
+  "$breaksDoc": "LEADS ONLY. THE TAILS WERE CUT AND THE FULL CUT WAS CONSIDERED AND REJECTED, which is the part worth writing down. Removing the list entirely would have taken out one of section 03's four furniture grammars, and the review identified those four as the actual mechanism behind the section's weight; what decided it the other way was the scroll-back cost on a phone, where the badges and the list are far apart. So the list stays and each entry is one line. Do NOT promote the badges to 01 / 02 / 03: that change belonged to the option not taken, and the badges rhyme with the marks on the drawing, which are 1 / 2 / 3. The three deleted tails were 'She is guessing until checkout.', 'Twice: on submit, then by email four days later.' and 'Nothing decided which.'; they are recorded here so a later pass restores them deliberately or not at all.",
+  "breaks": [
+    {
+      "index": "1",
+      "lead": "No date, anywhere."
+    },
+    {
+      "index": "2",
+      "lead": "Out of stock, after she paid."
+    },
+    {
+      "index": "3",
+      "lead": "One order, three boxes."
+    }
+  ],
+  "$captionDoc": "The gloss is the PROTOTYPE's wording, not the content draft's: the draft read 'the drops are not about price' and Paul reconciled to 'none' on 23 Aug, as the stronger claim and a true one. THE 'ENDS LOWER THAN IT STARTED' CLAUSE WAS REMOVED on 29 Aug: the labelled axis now shows where she ends, so the caption was narrating the picture. What replaced it is the reading a viewer might miss, which is that she recovers each time.",
+  "caption": {
+    "lead": "One order, mapped.",
+    "gloss": "She recovers twice, and is knocked down four times. None of the drops are about price."
+  },
+  "ariaLabel": "One shopper's satisfaction across five stages of a single order, running from happy through fine to angry. She starts happy through arrive and browse, drops to fine at decide when no delivery date is visible, then recovers to happy at purchase. She falls to angry when the order goes out of stock after she has paid, recovers to happy again when the order receipt arrives, falls to fine as the order turns up in three separate shipments, and recovers no further: the line ends at angry when an item is cancelled four days later. She recovers twice and is knocked down four times."
+}
