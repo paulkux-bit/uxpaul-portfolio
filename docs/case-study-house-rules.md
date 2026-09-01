@@ -415,3 +415,40 @@ container's breakpoint.** Choosing it independently - 768 because that is the
 tablet number - creates a window where the module asks for a layout its container
 cannot hold, and no amount of measuring at the extremes will show it. The
 measurement rule above finds this class of defect; only the coupling prevents it.
+
+## 16. A citation names the facts that exist — CHECKED, NOT A DEFECT
+
+**Raised twice as an inconsistency across Delivery Promise. It is not one.** This
+entry exists so the third reviewer — most likely someone running the same QA shape
+over BARD or Nuuly — finds the answer instead of the question.
+
+The site uses four citation shapes. They differ because **the artifacts differ in
+what they support**, and the rule is that a citation names exactly the facts that
+exist for it: no more, and no fewer.
+
+| shape | instance | what makes it that shape |
+|---|---|---|
+| **channel only** | `TestimonyPair` — "Research session" / "App Store review, July 2019" | Both channels are known, and the *contrast between them* is the argument section 01 makes: one moderated, one written in public and unprompted. |
+| **brand only** | `urbn-delivery-promise.mdx:375`, `:480` — "Anthropologie customer" | Deck p12 speech bubbles labelled "-AN Customer". The brand is on the artifact; the channel is **not knowable**. p12 separates bubbles (no username, no date, no stars) from boxed App Store reviews that carry all three. |
+| **brand + method** | `urbn-delivery-promise.mdx:460` — "Urban Outfitters customer, primary research" | Brand and method are both known. The channel is not. |
+| **role + channel** | `us-navy-fdt-e.mdx:114` "Analyst, immersion session"; `nuuly.mdx:167` "Operations manager, interview" | The role is the load-bearing fact. The employer is the client, already named by the study, so naming it again adds nothing. |
+
+**Normalising them would require inventing a fact or discarding one.** Giving a
+deck bubble a channel invents one. Collapsing `TestimonyPair` into a generic
+"customer" label discards the channel contrast — and `testimony-manifest.json`'s
+`$sourceDoc` prohibits exactly that, in as many words: *"Do not merge the two into
+one generic 'customer' label."* The MDX note at `:443` already records the second
+row's reasoning. Neither was written to be reconciled with the other; both are
+correct for their own artifact.
+
+**The apparent inconsistency is the discipline showing.** A site where every
+citation had the same shape would be one where some of them were padded out with
+facts nobody actually has.
+
+- **Before "fixing" a citation, ask what the source supports.** The shape is
+  downstream of the artifact, never of a style preference.
+- **No mechanical guard is wanted here, and that is deliberate.** This is a
+  judgment about what a source will bear. CLAUDE.md's rule governs: a claim about
+  what the code *is* gets asserted; a claim about *why* it is that way does not. A
+  check over citation strings would either be vacuous or would freeze a judgment
+  that has to stay arguable.
