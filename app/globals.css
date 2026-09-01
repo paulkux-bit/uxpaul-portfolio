@@ -2361,14 +2361,22 @@ html.dark .oku-figure {
    come from two different rules that never meet in the stylesheet. The breach is
    a property of the rendered pair, so only a render finds it.
 
-   THREE STUDIES SHARE THIS, NOT ONE. Of the four .pull-quote--quiet instances on
-   the site, three are inside a friction beat - nuuly.mdx:165, us-navy-fdt-e.mdx:112
-   and urbn-delivery-promise.mdx:193 - and because both contributing rules are
-   site-wide the ratio was identical at all three. House rules section 14: a defect
-   found in one file is a defect in every file that shares the pattern. The fourth,
-   urbn-delivery-promise.mdx:246, stands alone in section 03 and is deliberately
-   NOT in scope here: it sits next to body prose, which is what --quiet was
-   calibrated against, and it does not breach.
+   THREE STUDIES SHARE THIS, NOT ONE. There are FIVE .pull-quote--quiet instances on
+   the site, not four: one in nuuly.mdx, one in us-navy-fdt-e.mdx and THREE in
+   urbn-delivery-promise.mdx. Three of the five sit inside a friction beat, and
+   because both contributing rules are site-wide the ratio was identical at all
+   three. House rules section 14: a defect found in one file is a defect in every
+   file that shares the pattern. The instances in Delivery Promise's section 03 sit
+   next to body prose, which is what --quiet was calibrated against, and do not
+   breach; they are deliberately not in scope here.
+
+   THE COUNT AND THE LINE NUMBERS IN THIS NOTE WERE BOTH WRONG UNTIL 1 Sep. It said
+   four instances and cited urbn-delivery-promise.mdx:193 and :246; BOTH of those
+   line numbers point inside comment blocks rather than at markup, and the third
+   real instance was undocumented. NO LINE NUMBERS ARE CITED HERE ANY MORE - a line
+   number in a stylesheet comment rots on the next edit to a file it does not live
+   in, which is exactly what happened. Sections and file names are stable; lines
+   are not.
 
    One 1.15x step below the value above. Smallest rendered size is 18px at 390,
    clear of the 14px floor. */
@@ -3223,7 +3231,9 @@ html.dark .figure-placeholder {
 
 /* ============================================================
    HERO BLOCK — Case-study asymmetric hero
-   Type left (~45%) / framed image right (~55%) at lg+; stacked at <lg.
+   Type left (52%) / framed image right (48%) at lg+; stacked at <lg. Those are the
+   rule's own fr values twelve lines down, and hero-block.tsx agrees with them; the
+   note said ~45/~55 until 1 Sep, which had the split backwards as well as wrong.
    Optional Insight Engine callout overlaps the image at lg+; sits below
    it at <lg.
 
@@ -4550,18 +4560,6 @@ html.dark .figure-placeholder {
 
 }
 
-/* Below md the dots and marks grow: a 4.5-unit dot is 1.5px in a 342px container. The
-   direct series labels used to be hidden here too; they no longer exist at any width,
-   because the two-across panels put them under the type floor at every breakpoint. */
-@media (max-width: 767px) {
-
-}
-
-
-@media (max-width: 767px) {
-  
-}
-
 
 
 /* ── Delivery Promise (URBN): the section 03 chart pair ───────────────────────
@@ -4728,10 +4726,6 @@ html.dark .figure-placeholder {
 .node-chart__rows {
   row-gap: var(--spacing-s);
   align-items: center;
-}
-
-.node-chart__body > figcaption {
-  grid-column: 1 / -1;
 }
 
 /* --text-muted, NOT --text-secondary, to match .tier-chart__tier. Same register on

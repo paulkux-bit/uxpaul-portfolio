@@ -37,7 +37,11 @@ export const ARTWORK_DIRS = [
 /** Individual artwork FILES, where the surrounding directory is not all artwork.
  *
  * ARTWORK_DIRS cannot express these: the two Delivery Promise drawings sit beside
- * PromiseSequence.tsx, which is layout and must stay checked. Exempting the whole
+ * other components in that directory which are layout and must stay checked. The
+ * note named PromiseSequence.tsx as the thing to keep checked until 1 Sep; that
+ * module now contains zero <svg> tags and no longer renders at all, so the reason
+ * was pointing at a dead file even though the conclusion is unchanged. Exempting
+ * the whole
  * case-study directory would quietly cover any future icon dropped in there, which
  * is the failure mode this list exists to prevent. Exact paths instead.
  *

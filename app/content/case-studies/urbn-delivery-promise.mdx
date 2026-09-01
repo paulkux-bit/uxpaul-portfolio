@@ -165,9 +165,14 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 {/* THE HERO IS THE REAL CROP NOW, AND THE FRONTMATTER TODO IS GONE WITH IT. It read
     "placeholder: full-frame p18-pdp, not a crop. Replace after the bento-crop pass."
     and it was accurate: hero-pdp.png was byte-for-byte the 1441px deck page. The
-    frame declares `calc(100vw - 4rem)` between 768 and 1023, so the worst case is a
-    959 CSS px render and a 1918px source floor - the old file sat at 0.75x UNDER it.
-    The replacement is 2500x3125 and 1.30x over.
+    worst case is between 768 and 1023, and this note had it wrong until 1 Sep. It
+    reasoned from the `calc(100vw - 4rem)` in the frame's own `sizes`, giving a 959
+    CSS px render and a 1918px floor. THAT WIDTH IS NOT IN FORCE THERE: the breakout
+    rule for .case-study-prose > .hero-block lives inside @media (min-width: 1024px),
+    so below 1024 the hero renders at the 660 PROSE CAP and the real floor is 1320.
+    The replacement is 2500x3125, which is 1.89x over rather than 1.30x. Only the
+    arithmetic is corrected; the `sizes` string over-declares and fixing that is a
+    shared-component pass.
 
     2500x3125 IS EXACTLY 4:5, WHICH IS THE FRAME'S OWN RATIO, so `object-fit: cover`
     has nothing to crop. That is worth knowing rather than assuming: if it ever does
