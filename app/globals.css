@@ -4219,17 +4219,32 @@ html.dark .figure-placeholder {
 /* The chart's baseline. Solid, not dashed: `.tier-chart__ref` is the only dashed
    line in a 600x190 drawing, and a second dash pattern beside it competes with the
    one that carries meaning. */
+/* --text-subtle, NOT a border token, and that is forced rather than chosen. Measured
+   against --bg-canvas from the oklch triples above: --border-subtle 1.25 / 1.19,
+   --border-default 1.47 / 1.46, --border-strong 2.03 / 2.36. THE WHOLE BORDER RAMP TOPS
+   OUT BELOW THE 3:1 NON-TEXT FLOOR, so no border token can carry a line that has to be
+   seen. --text-subtle is 3.87 / 4.22 and clears it. .tier-chart__ref already reaches for
+   a text token for the same reason, and the inconsistency was visible on the page: the
+   dashed reference rule cleared 3:1 while the solid axis it sat on was at half that. */
 .tier-chart__axis {
-  stroke: var(--border-default);
+  stroke: var(--text-subtle);
   stroke-width: 1;
 }
 
 /* The three sentiment bands and the four stage dividers. The dividers keep the
    dash the deleted axis rule carried, so a stage boundary reads as a different
    kind of line from a sentiment band without either getting louder. */
+/* --text-subtle, and this one was judged on a render rather than on the ratio alone,
+   because a gridline that outweighs its data line is a different defect. At
+   --border-subtle they measured 1.25 / 1.19 against a 3:1 floor AND were nearly
+   invisible on the page: the axis labels said Happy / Fine / Angry over bands a reader
+   could not locate, so the drawing named three positions it did not show. Rendered at
+   --text-subtle in both themes the bands read, the dividers read as a different kind of
+   line, and the black sawtooth still dominates completely - the scaffolding does its job
+   without competing. The old value failed contrast AND legibility; this fixes both. */
 .journey-line__band,
 .journey-line__divider {
-  stroke: var(--border-subtle);
+  stroke: var(--text-subtle);
   stroke-width: 1;
 }
 
@@ -4872,7 +4887,13 @@ html.dark .figure-placeholder {
   grid-template-columns: 1fr;
   row-gap: var(--spacing-m);
   align-items: start;
-  border-top: 1px solid color-mix(in oklch, currentColor 16%, transparent);
+  /* --text-subtle, and this line had the worst consequence of the three. The comment
+     above says it is the ONLY thing marking a stage boundary at every width, so the
+     whole five-stage structure of section 05 rested on it - and a currentColor 16% mix
+     measures about 1.4 against canvas in both themes, against a 3:1 non-text floor.
+     No border token could have fixed it: the ramp tops out at --border-strong, 2.03 /
+     2.36. --text-subtle is 3.87 / 4.22. */
+  border-top: 1px solid var(--text-subtle);
   padding-top: var(--spacing-m);
 }
 
