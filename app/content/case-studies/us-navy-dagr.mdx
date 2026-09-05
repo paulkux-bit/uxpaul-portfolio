@@ -1,5 +1,5 @@
 ---
-title: "The threat moved. The briefing didn't."
+title: "The job was judgment. The day was data entry."
 slug: "us-navy-dagr"
 client: "U.S. Air Force"
 template: "A"
@@ -11,7 +11,7 @@ projectName: "Line of Sight"
 headline: "Fielded to Air Force units through Red Flag testing."
 summary: "I designed Line of Sight for Dagr, replacing a threat picture built by hand with one that tracks equipment as it moves and re-runs itself against the mission clock."
 heroImage: "/case-studies/us-navy-dagr/hero.png"
-heroImageAlt: "The Dagr Line of Sight panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height with one altitude checked at 35,000 MSL, and the jagged yellow polygon of what that radar can see from there."
+heroImageAlt: "The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own colour, and the jagged polygon of what that radar can see."
 role: "Senior Product Designer"
 timeframe: "2022–2023"
 team: "A team of nine: one product manager, two designers, six developers, with the IMOM and NGA teams as technical partners."
@@ -38,15 +38,15 @@ import { BentoBand } from '@/components/bento';
 
 <HeroBlock
   eyebrow="DAGR · U.S. AIR FORCE"
-  title={['The threat moved.', "The briefing didn't."]}
-  role="I designed Line of Sight for Dagr, the intelligence tool Air Force units use to plan missions. Lead designer. It answers one question: at what altitude can the enemy see you?"
+  title={['The job was judgment.', 'The day was data entry.']}
+  role="I designed Line of Sight, the feature Air Force units use inside Dagr to plan a mission around enemy radar. Lead designer, on a Navy team, fielded through Red Flag testing."
   image={{
     src: '/case-studies/us-navy-dagr/hero.png',
-    alt: 'The Dagr Line of Sight panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height with one altitude checked at 35,000 MSL, and the jagged yellow polygon of what that radar can see from there.',
+    alt: 'The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own colour, and the jagged polygon of what that radar can see.',
   }}
   callout={{
     label: 'WHAT CHANGED',
-    body: 'Most threat pictures are built once and briefed for days. This one expires, and re-runs itself before the unit steps.',
+    body: 'Most threat pictures are a document. This one is a question, re-asked.',
   }}
 />
 
@@ -175,11 +175,11 @@ Each answer is a layer. The analyst can hide it, recolor it to match their unit'
 
 <section className="cs-section">
 
-## The picture goes out of date before the pilot steps.
+## The picture goes out of date before takeoff.
 
 <p className="section-lede">Missions arrive up to seventy-two hours before they fly.</p>
 
-**An analysis is not a document. It is a question, re-asked.** The equipment in that picture moves during those three days, so Dagr reads the tasking order and runs the analysis again close to the time the unit steps. What is waiting for the analyst is the current answer, not the one he asked for on Monday.
+**So the answer had to come looking for the analyst.** The equipment in that picture moves during those three days, so Dagr reads the tasking order and runs the analysis again close to takeoff. What is waiting for the analyst is the current answer, not the one he asked for on Monday.
 
 The engine runs somewhere else, and for a forward-deployed unit the link to it degrades. So the interface has to be plain about which state it is in: working, answered, or failed.
 
