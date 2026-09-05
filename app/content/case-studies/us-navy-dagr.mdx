@@ -1,0 +1,263 @@
+---
+title: "The threat moved. The briefing didn't."
+slug: "us-navy-dagr"
+client: "U.S. Air Force"
+template: "A"
+disciplines: ["decision support", "geospatial", "defense", "information architecture"]
+featured: true
+order: 3
+problemFraming: "At what altitude can they see me?"
+projectName: "Line of Sight"
+headline: "Fielded to Air Force units through Red Flag testing."
+summary: "I designed Line of Sight for Dagr, replacing a threat picture built by hand with one that tracks equipment as it moves and re-runs itself against the mission clock."
+heroImage: "/case-studies/us-navy-dagr/hero.png"
+heroImageAlt: "The Dagr Line of Sight panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height with one altitude checked at 35,000 MSL, and the jagged yellow polygon of what that radar can see from there."
+role: "Senior Product Designer"
+timeframe: "2022–2023"
+team: "A team of nine: one product manager, two designers, six developers, with the IMOM and NGA teams as technical partners."
+nda: false
+---
+
+{/* ─────────────────────────────────────────────────────────────
+    Dagr / Line of Sight – Template A case study. Draft 1.
+    Voice: first person at the entry and exit; terse evidence
+    register in captions. No em-dashes (lint:prose hard-fails).
+
+    IMAGERY: every frame is cleared for public release. The hero
+    keeps its UNCLASSIFIED//FOUO banner; the FDT-E precedent is
+    banner on the hero only, cropped everywhere else, and that
+    crop pass has NOT happened yet. All product frames here are
+    uncropped 2880x1800 exports, which are exactly 16:10 and so
+    sit correctly in feature/wide slots without cropping.
+
+    took-3d.jpg is an EARLIER BUILD (early 2021), not the shipped
+    2023 feature. Its caption says so and must keep saying so.
+   ───────────────────────────────────────────────────────────── */}
+
+import { BentoBand } from '@/components/bento';
+
+<HeroBlock
+  eyebrow="DAGR · U.S. AIR FORCE"
+  title={['The threat moved.', "The briefing didn't."]}
+  role="I designed Line of Sight for Dagr, the intelligence tool Air Force units use to plan missions. Lead designer. It answers one question: at what altitude can the enemy see you?"
+  image={{
+    src: '/case-studies/us-navy-dagr/hero.png',
+    alt: 'The Dagr Line of Sight panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height with one altitude checked at 35,000 MSL, and the jagged yellow polygon of what that radar can see from there.',
+  }}
+  callout={{
+    label: 'WHAT CHANGED',
+    body: 'Most threat pictures are built once and briefed for days. This one expires, and re-runs itself before the unit steps.',
+  }}
+/>
+
+<section className="cs-section cs-section--problem">
+
+## Before he could analyze anything, he had to type it all in.
+
+**An intel analyst briefs the room before a mission flies.** Pilots, maintenance, logistics, operations planners, and the commander who decides whether the unit is ready to go.
+
+**His airframe, its flight characteristics, every leg of the route.** All of it entered by hand, and then every threat he knew about, one at a time, from what he knew and what he suspected.
+
+**The tool only modeled things that stay put.** The equipment that moves was the equipment that mattered, and it was the equipment he could not model.
+
+<blockquote className="pull-quote pull-quote--quiet">
+  <p>“He had to ask the room to really visualize it.”</p>
+  <cite>Intel analyst, discovery interview</cite>
+</blockquote>
+
+<Figure
+  src="/case-studies/us-navy-dagr/problem-imom.jpg"
+  width={1408}
+  height={1120}
+  framed
+  alt="The legacy IMOM analysis screen: orange and cyan coverage blobs layered over a raster map of a coastal region, inside Windows-era application chrome."
+  caption={
+    <>
+      <strong>The tool it replaced.</strong> Sustained since the 1990s, and the
+      only way to get this answer. Every input entered by hand, and only for
+      equipment that holds still.
+    </>
+  }
+/>
+
+</section>
+
+<section className="cs-section cs-section--frictions">
+
+## The picture was wrong before anyone flew.
+
+<p className="section-lede">We sat with intel analysts, mission planners and weapons officers across Air Combat Command.</p>
+
+<ol className="friction-beats" role="list">
+  <li className="friction-beat" data-thread="1">
+    <div className="friction-beat__text">
+      <span className="thread-index">01</span>
+      <h3 className="friction-beat__headline">Typed from memory</h3>
+      <p className="friction-beat__scene">Every threat in the model was one the analyst had entered himself. What he knew and what he thought went into the same fields, and came out looking identical.</p>
+    </div>
+  </li>
+  <li className="friction-beat" data-thread="2">
+    <div className="friction-beat__text">
+      <span className="thread-index">02</span>
+      <h3 className="friction-beat__headline">Only what stands still</h3>
+      <p className="friction-beat__scene">The model handled fixed sites well. Mobile equipment, the kind that relocates between planning and takeoff, was outside what it could do.</p>
+    </div>
+  </li>
+  <li className="friction-beat" data-thread="3">
+    <div className="friction-beat__text">
+      <span className="thread-index">03</span>
+      <h3 className="friction-beat__headline">Seventy-two hours old</h3>
+      <p className="friction-beat__scene">Missions arrive up to three days before they are flown. The picture was built once, at the start, and briefed as though nothing had moved since.</p>
+    </div>
+  </li>
+</ol>
+
+</section>
+
+<section className="cs-section">
+
+## How do you keep an answer from going stale?
+
+<p className="section-lede">Bring the live data to the math instead of typing it in.</p>
+
+The calculators already existed, inside a classified analysis engine our product team was not cleared to see into. We did not need to see into it. What it lacked was a feed: run it by hand, and you supply every input yourself.
+
+Dagr already held the tasking orders, the maps and the tracked disposition. So Line of Sight kept the engine's math and changed what reached it: live positions, the mission's own route, and the altitudes the analyst wants checked.
+
+I also structured it for the analyses that did not exist yet. An analysis became an object, and every one of them deposits layers into a list the app already had.
+
+</section>
+
+<section className="cs-section">
+
+## One radar, one altitude, one shape.
+
+<p className="section-lede">The analyst taps a threat on the map and asks it a question.</p>
+
+The panel wants two things: how high the radar's antenna sits, and which altitudes to check. Submit, and the answer comes back as a polygon. That is the ground the radar can see from that height, cut by every ridge in between.
+
+Analysts rarely want one altitude. A maximum, a minimum and a step generate the whole band in a single submit.
+
+Each answer is a layer. The analyst can hide it, recolor it to match their unit's legend, or mark it primary. Primary is the recommendation.
+
+<BentoTheme>
+  <BentoItem
+    slot="feature"
+    src="/case-studies/us-navy-dagr/works-panel.png"
+    alt="The Line of Sight Parameters panel open beside the map for a selected BAR LOCK radar: an antenna height field defaulted to 59.64 ft, an empty Altitudes For Analysis list with an Add altitude control, and a disabled Submit."
+    caption="Two inputs."
+    gloss="Antenna height, and the altitudes to check. Nothing else to enter."
+  />
+  <BentoItem
+    slot="wide"
+    src="/case-studies/us-navy-dagr/works-formula.png"
+    alt="A dialog over the parameters panel with three fields: Max Altitude 35,000 MSL, Min Altitude 33,000 MSL, and Altitude Threshold 500 ft."
+    caption="A band in one submit."
+    gloss="A maximum, a minimum and a step, instead of five separate runs."
+  />
+  <BentoItem
+    slot="wide"
+    src="/case-studies/us-navy-dagr/works-band.png"
+    alt="Five altitude entries from 35,000 down to 33,000 MSL, each with its own colour swatch, beside five overlapping line-of-sight polygons on the terrain."
+    caption="Five altitudes, five shapes."
+    gloss="Each one a separate answer to the same question."
+  />
+  <BentoItem
+    slot="feature"
+    src="/case-studies/us-navy-dagr/works-primary.png"
+    alt="The same five-altitude list with four entries dimmed and their visibility toggles off, leaving one polygon drawn on the map."
+    caption="The recommendation."
+    gloss="One layer forward, the rest a click away for when someone pushes back."
+  />
+</BentoTheme>
+
+</section>
+
+<section className="cs-section">
+
+## The picture goes out of date before the pilot steps.
+
+<p className="section-lede">Missions arrive up to seventy-two hours before they fly.</p>
+
+**An analysis is not a document. It is a question, re-asked.** The equipment in that picture moves during those three days, so Dagr reads the tasking order and runs the analysis again close to the time the unit steps. What is waiting for the analyst is the current answer, not the one he asked for on Monday.
+
+The engine runs somewhere else, and for a forward-deployed unit the link to it degrades. So the interface has to be plain about which state it is in: working, answered, or failed.
+
+<BentoBand
+  src="/case-studies/us-navy-dagr/expires-quickview.png"
+  alt="A Quickview card for BAR LOCK RADAR: a phased array marked operational and ready, allegiance IR, an acquisition maximum of 296.98 nautical miles, a tracking maximum of 100.10, and two timestamps both reading four hours ago."
+  caption="What the record admits."
+  gloss="Allegiance, acquisition and tracking ranges, and two timestamps saying the last look was four hours ago."
+  aspect={1.6}
+/>
+
+<BentoBand
+  src="/case-studies/us-navy-dagr/expires-notification.png"
+  alt="The notification panel open over the map: a new line of sight analysis available for viewing with a View action, and an earlier one that failed on a connection error with Retry and Edit actions."
+  caption="It comes back on its own."
+  gloss="A finished analysis, and a failed one with a way back in. The map behind it is not even the same part of the world."
+  aspect={1.6}
+/>
+
+</section>
+
+<section className="cs-section">
+
+## An analyst looked at the shape and said he couldn't brief it.
+
+<p className="section-lede">Testing with real data, in the classified lab.</p>
+
+**The polygons were right in structure and wrong in geometry.** I specified them flat, in Figma. They render on a globe, and a line of sight bends with the earth. The shapes came back the wrong size in the wrong places, and in this work the geometry is the entire answer.
+
+<blockquote className="pull-quote pull-quote--quiet">
+  <p>“This is something I can't brief.”</p>
+  <cite>Intel analyst, test session</cite>
+</blockquote>
+
+He was not making a point about precision. He meant that standing in front of the commander with it would cost him something he needed. Engineers and their subject matter experts did the math, and we art directed the render together over a surge of a few sprints, because the correction was global.
+
+It also changed things nobody had built yet. The drawing tools were re-specified so that anything an analyst draws has the earth's curvature applied automatically.
+
+<Figure
+  src="/case-studies/us-navy-dagr/took-3d.jpg"
+  width={1302}
+  height={878}
+  framed
+  alt="An earlier build of the Line of Sight panel in the 3D environment: a THIN SKIN radar at 59.05 ft, four altitudes from 20,000 down to 1,500 feet with one switched off, and a green line-of-sight fan nesting in bands over terrain beside red threat range domes."
+  caption={
+    <>
+      <strong>The dimension the wires could not hold.</strong> An earlier build of
+      the same panel, rendered in the 3D environment: altitude bands nest as
+      volumes, and a hidden layer is switched off in the list. My specifications
+      were flat.
+    </>
+  }
+/>
+
+</section>
+
+<section className="cs-section">
+
+## Where Dagr stands.
+
+<div className="milestone">
+  <p className="milestone__frame">Fielded through Red Flag and in use at unit level</p>
+  <p className="milestone__date">2023</p>
+  <p className="milestone__sub">Defunded in budget cuts after I left.</p>
+</div>
+
+Getting fielded is not a deploy date. It means commanders, weapons officers and planners took it into their own stack during a live exercise and were willing to work behind it.
+
+Then more aircraft communities wanted their own modeling inside it than nine people could build, and the money went somewhere else.
+
+**I went in believing the calculation was the unlock.** It was most of it. What surprised me was how much of the work downstream was judgment. Mission planning is an art, and accurate data mostly buys people the room to practice it.
+
+</section>
+
+<section className="cs-section">
+
+## Role
+
+Senior Product Designer, and lead designer on Line of Sight, one of two designers on a team of nine. Employed directly by the U.S. Navy at NIWC Pacific, designing for U.S. Air Force units at Air Combat Command. Worked alongside the IMOM and NGA teams on specifications, testing and requirements. Designed 2022 to 2023.
+
+</section>
