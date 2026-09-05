@@ -31,10 +31,18 @@ export const caseStudies: CaseStudy[] = [
     client: 'U.S. Navy',
   },
   {
+    // Written AFTER the study, per house rule 13. The framing was rewritten in the
+    // Dagr build pass, replacing 'What can the enemy see?' with the question the
+    // page actually answers: the altitude is the whole point, and the study's own
+    // hero role line asks it in those words.
+    // 'U.S. Air Force' is deliberate, not a typo. Paul was employed by the U.S. Navy
+    // at NIWC Pacific, designing for Air Force units at Air Combat Command. Same shape
+    // as BARD, where a Navy team builds a Coast Guard system. The Role section names
+    // the Navy; the client is the Air Force.
     slug: 'us-navy-dagr',
-    problemFraming: 'What can the enemy see?',
-    projectName: 'Dagr',
-    client: 'U.S. Navy',
+    problemFraming: 'At what altitude can they see me?',
+    projectName: 'Line of Sight',
+    client: 'U.S. Air Force',
   },
   {
     // Resolved 1 Sep, and BOTH premises the old note rested on are now false. It said
