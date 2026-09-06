@@ -1,0 +1,78 @@
+/* Layout for /lab/interaction. Read from disk by the server page and rendered
+   as a style element, never imported: Turbopack merges every imported
+   stylesheet into the one CSS chunk all routes share, and Tailwind emits any
+   new utility this page used into that same shared sheet, so the lab pages
+   hold to utilities the shipped pages already emit and put the rest here.
+   Values come from the spacing, radius, and color tokens. No interaction
+   states in this file; the specimens derive theirs from the shipped rules at
+   runtime. */
+
+.lab-panel {
+  background: var(--bg-canvas);
+  padding: var(--spacing-m);
+}
+
+.lab-columns {
+  margin-top: var(--spacing-xl);
+  display: grid;
+  gap: var(--spacing-l);
+}
+
+/* xl breakpoint, matching --breakpoint-xl. */
+@media (min-width: 1440px) {
+  .lab-columns {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.lab-stack {
+  margin-top: var(--spacing-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+}
+
+.lab-cell {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-s);
+  background: var(--bg-canvas);
+  padding: var(--spacing-s);
+}
+
+.lab-fail {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  padding: var(--spacing-2xs);
+}
+
+.lab-card-well {
+  max-width: 24rem;
+}
+
+.lab-page {
+  padding: var(--spacing-xl) var(--spacing-m);
+}
+
+.lab-mt-s {
+  margin-top: var(--spacing-s);
+}
+
+.lab-prose {
+  max-width: 65ch;
+}
+
+.lab-tokens {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: var(--spacing-s);
+  row-gap: var(--spacing-3xs);
+}
+
+.lab-tokens > div {
+  display: contents;
+}
+
+.lab-tokens dd {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
