@@ -52,30 +52,31 @@ import { BentoBand } from '@/components/bento';
 
 <section className="cs-section cs-section--problem">
 
-## Before he could analyze anything, he had to type it all in.
+## The go or no go turns on one assessment.
 
-**An intel analyst briefs the room before a mission flies.** Pilots, maintenance, logistics, operations planners, and the commander who decides whether the unit is ready to go.
+**Before a mission flies, the unit gathers in one room.** Pilots, maintenance crew, operations planners, flight logistics, and Wilbur, the intel analyst.
 
-**His airframe, its flight characteristics, every leg of the route.** All of it entered by hand, and then every threat he knew about, one at a time, from what he knew and what he suspected.
+**Wilbur's turn is the threat picture.** Where the enemy is, what can see the aircraft, and from what altitude. He briefs what he knows, and what he does not.
 
-**The tool only modeled things that stay put.** The equipment that moves was the equipment that mattered, and it was the equipment he could not model.
+**If the picture is wrong, an aircraft is lost or gives away its position, and the mission fails.** The commander weighs it against everything else in the room and makes the call.
 
-<blockquote className="pull-quote pull-quote--quiet">
-  <p>“He had to ask the room to really visualize it.”</p>
-  <cite>Intel analyst, discovery interview</cite>
-</blockquote>
+{/* Becomes a <FramedPair> when the briefing-room illustration lands.
+    Left: the illustration, canvas 2320 x 1473 (aspect 1.5750, within 0.0003 of
+    the crop; the widest delta any shipped FramedPair carries is 0.0043).
+    Right: this image, with this caption.
+    FDT-E is the precedent for illustration beside artefact.
+    Not stubbed now because FramedPair's placeholder prop is all-or-nothing. */}
 
 <Figure
   src="/case-studies/us-navy-dagr/problem-imom.jpg"
-  width={1408}
-  height={1120}
+  width={1391}
+  height={883}
   framed
-  alt="The legacy IMOM analysis screen: orange and cyan coverage blobs layered over a raster map of a coastal region, inside Windows-era application chrome."
+  alt="The legacy IMOM analysis screen: orange and cyan radar coverage layered over a raster nautical chart labelled ASIAN COASTAL BUFFER ZONE and KOREA, inside Windows-era application chrome."
   caption={
     <>
-      <strong>The tool it replaced.</strong> Sustained since the 1990s, and the
-      only way to get this answer. Every input entered by hand, and only for
-      equipment that holds still.
+      <strong>What he walks in with.</strong> The threat picture, built in a
+      tool sustained since the 1990s.
     </>
   }
 />
@@ -83,6 +84,16 @@ import { BentoBand } from '@/components/bento';
 </section>
 
 <section className="cs-section cs-section--frictions">
+
+{/* PENDING PLACEMENT, section 2. Moved out of section 1 on the split that made
+    section 1 the person and the stakes. This quote is about the tool failing him,
+    so it belongs with the beats, position not yet decided:
+
+    <blockquote className="pull-quote pull-quote--quiet">
+      <p>"He had to ask the room to really visualize it."</p>
+      <cite>Intel analyst, discovery interview</cite>
+    </blockquote>
+*/}
 
 ## The picture was wrong before anyone flew.
 
