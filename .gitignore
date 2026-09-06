@@ -92,3 +92,6 @@ measurements/
 # requirements file, not vendored here.
 /.venv-fonttools/
 /build-fonts/
+
+# capture-states.mjs recordings; local proof artifacts, never shipped, never bundled
+/artifacts/
