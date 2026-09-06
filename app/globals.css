@@ -2177,10 +2177,10 @@ html.dark .cover-art {
      A grid column only exists inside the rule that declares it. Below that
      the beats stack, there is no column, and `.oku-figure svg { width: 100% }`
      had nothing governing it: the figure filled the band. Measured at 1023,
-     across all four studies that run beats, the figure rendered 660px wide and
-     section 02 was more than twice its height at 1024 (Delivery Promise 2262px
-     against 1095px). The ink fills 54-64% of that box, so it read as a hole
-     rather than as an illustration.
+     across the four studies that ran figures in beats at the time, the figure
+     rendered 660px wide and section 02 was more than twice its height at 1024
+     (Delivery Promise 2262px against 1095px). The ink fills 54-64% of that box,
+     so it read as a hole rather than as an illustration.
 
      THIS IS A DIFFERENT SHAPE FROM THE BREAKPOINT DEFECT FIXED THE SAME WEEK,
      AND THE GREP THAT FOUND THAT ONE CANNOT FIND THIS ONE. TestimonyPair's was a
@@ -2194,7 +2194,7 @@ html.dark .cover-art {
      It does not fight the column. At >=1024 the cell is already <=300px, so this
      agrees with it rather than competing; the figure renders identically above
      1024 before and after. Every .oku-figure render site is inside a
-     .friction-beat - 12 of 12 across the four studies - so nothing outside the
+     .friction-beat - 15 of 15 across the five studies - so nothing outside the
      beats is affected. */
   max-width: 300px;
 }

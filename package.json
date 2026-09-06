@@ -16,7 +16,8 @@
     "regen:oku": "node scripts/regen-oku-tsx.mjs",
     "regen:fdte": "node scripts/regen-fdte-tsx.mjs",
     "regen:nuuly-beats": "node scripts/regen-nuuly-beats-tsx.mjs",
-    "regen:promise-beats": "node scripts/regen-promise-beats-tsx.mjs"
+    "regen:promise-beats": "node scripts/regen-promise-beats-tsx.mjs",
+    "regen:dagr-beats": "node scripts/regen-dagr-beats-tsx.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
