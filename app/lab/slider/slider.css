@@ -1,0 +1,110 @@
+/* Before/after slider prototype, /lab/slider only. Prototype-scoped classes;
+   nothing here is consumed by a shipped route. Durations and easing come from
+   the interaction tokens, colors from the semantic tokens, radius from the
+   radius scale. No :hover rules: hover is not a real input on touch, and the
+   divider follows the pointer directly. */
+
+.lab-page {
+  padding: var(--spacing-xl) var(--spacing-m);
+}
+
+.lab-mt-s {
+  margin-top: var(--spacing-s);
+}
+
+.lab-prose {
+  max-width: 65ch;
+}
+
+/* The frame's measure; a width, not page rhythm. */
+.lab-measure {
+  max-width: 48rem;
+}
+
+.lab-compare {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3 / 2;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-image);
+  background: var(--bg-sunken);
+  touch-action: none; /* the frame owns horizontal drag on touch */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.lab-compare__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Image A sits on top, clipped to the divider. Both images stay in the DOM
+   and both are legible at the default 50% position. */
+.lab-compare__img--a {
+  clip-path: inset(0 calc(100% - var(--lab-pos)) 0 0);
+}
+
+.lab-compare__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--lab-pos);
+  width: 2px;
+  transform: translateX(-50%);
+  background: var(--border-strong);
+}
+
+.lab-compare__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--lab-pos);
+  transform: translate(-50%, -50%);
+  /* 2.75rem = the 44px hit-area floor. A control size, not page rhythm, so it
+     is authored here rather than drawn from the spacing scale. */
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: var(--bg-surface-elevated);
+  box-shadow: var(--shadow-rest);
+  cursor: ew-resize;
+  --icon-stroke: 1.70; /* the default row of the section 2.1 table */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+}
+
+.lab-compare__label {
+  position: absolute;
+  top: var(--spacing-xs);
+  padding: 0.25em 0.75em;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-s);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.lab-compare__label--a {
+  left: var(--spacing-xs);
+}
+
+.lab-compare__label--b {
+  right: var(--spacing-xs);
+}
+
+/* Keyboard steps ease; drag is always direct. Motion is opt-in under
+   no-preference, the repo's pattern: under reduced motion the divider still
+   drags and steps, nothing eases. */
+@media (prefers-reduced-motion: no-preference) {
+  .lab-compare:not([data-dragging]) .lab-compare__img--a {
+    transition: clip-path var(--duration-control) var(--ease-out-quint);
+  }
+  .lab-compare:not([data-dragging]) .lab-compare__divider,
+  .lab-compare:not([data-dragging]) .lab-compare__handle {
+    transition: left var(--duration-control) var(--ease-out-quint);
+  }
+}
