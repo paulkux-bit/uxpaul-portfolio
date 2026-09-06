@@ -32,6 +32,10 @@ export const ARTWORK_DIRS = [
     path: 'components/promise-beats',
     reason: 'Delivery Promise friction-beat illustrations — same pipeline (scripts/regen-promise-beats-tsx.mjs), sized by layout not by adjacent type',
   },
+  {
+    path: 'components/dagr-beats',
+    reason: 'Dagr friction-beat illustrations — same pipeline (scripts/regen-dagr-beats-tsx.mjs), sized by layout not by adjacent type',
+  },
 ];
 
 /** Individual artwork FILES, where the surrounding directory is not all artwork.
