@@ -36,6 +36,7 @@ nda: false
 
 import { BentoBand } from '@/components/bento';
 import { DagrBeatFigure } from '@/components/dagr-beat-figure';
+import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento';
 
 <HeroBlock
   eyebrow="DAGR · U.S. AIR FORCE"
@@ -149,36 +150,7 @@ Analysts rarely want one altitude. A maximum, a minimum and a step generate the 
 
 Each answer is a layer. The analyst can hide it, recolor it to match their unit's legend, or mark it primary. Primary is the recommendation.
 
-<BentoTheme>
-  <BentoItem
-    slot="feature"
-    src="/case-studies/us-navy-dagr/works-panel.png"
-    alt="The Line of Sight Parameters panel open beside the map for a selected BAR LOCK radar: an antenna height field defaulted to 59.64 ft, an empty Altitudes For Analysis list with an Add altitude control, and a disabled Submit."
-    caption="Two inputs."
-    gloss="Antenna height, and the altitudes to check. Nothing else to enter."
-  />
-  <BentoItem
-    slot="wide"
-    src="/case-studies/us-navy-dagr/works-formula.png"
-    alt="A dialog over the parameters panel with three fields: Max Altitude 35,000 MSL, Min Altitude 33,000 MSL, and Altitude Threshold 500 ft."
-    caption="A band in one submit."
-    gloss="A maximum, a minimum and a step, instead of five separate runs."
-  />
-  <BentoItem
-    slot="wide"
-    src="/case-studies/us-navy-dagr/works-band.png"
-    alt="Five altitude entries from 35,000 down to 33,000 MSL, each with its own colour swatch, beside five overlapping line-of-sight polygons on the terrain."
-    caption="Five altitudes, five shapes."
-    gloss="Each one a separate answer to the same question."
-  />
-  <BentoItem
-    slot="feature"
-    src="/case-studies/us-navy-dagr/works-primary.png"
-    alt="The same five-altitude list with four entries dimmed and their visibility toggles off, leaving one polygon drawn on the map."
-    caption="The recommendation."
-    gloss="One layer forward, the rest a click away for when someone pushes back."
-  />
-</BentoTheme>
+<AnalysisBento />
 
 </section>
 
