@@ -1,0 +1,89 @@
+{
+  "$doc": "Dagr section 04, the Line of Sight flow. Manifest for AnalysisBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one Nuuly's AppsBento and FDT-E's GateWalkBento use. Scaffolded from the four <BentoItem>s that were inline in the MDX, with every alt, caption and gloss string copied byte for byte. This pass changed nothing a reader can see.",
+  "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. ' (Resolutions01Bento.tsx splitCaption). ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's MDX carried caption and gloss as two separate props, so the generic path is the only one that preserves the shipped strings without a round trip through a string split that could re-punctuate them. A later reader comparing this file to BARD's numbered themes should not read the choice as picking the wrong precedent.",
+  "$modeDoc": "EVERY COMPOSITION ENTRY SAYS mode: 'light' AND THAT IS CORRECT, NOT A BUG TO FIX. ResolutionsBento.resolve() keys the base stem for 'light' and <name>--dark for 'dark'; it has no third value. Dagr's product is dark-only and ships one file per image, so 'light' here means 'the base stem, there is no dark twin'. FDT-E's gate-walk-manifest.json does the same thing for the same reason. Changing these to 'dark' would look right and would break the lookup.",
+  "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. BARD's theme1-grid-manifest.json carries width and height that ARE load-bearing on the legacy path, so these look identical to numbers that matter. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here; a pass that swaps in crops and leaves these numbers alone leaves the file carrying stale dimensions that look authoritative.",
+  "$compositionDoc": "Three rows, verified against the live DOM before this file was written, not assumed: [feature], [wide, wide], [feature]. bento.tsx overrideRows chunks consecutive same-slot items at SLOT_COLS capacity, so the two wides pair whether or not they are bracketed. The bracket states the intent; it does not enforce it.",
+  "images": [
+    {
+      "src": "/case-studies/us-navy-dagr/works-panel.png",
+      "alt": "The Line of Sight Parameters panel open beside the map for a selected BAR LOCK radar: an antenna height field defaulted to 59.64 ft, an empty Altitudes For Analysis list with an Add altitude control, and a disabled Submit.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "feature",
+      "caption": {
+        "lead": "Two inputs.",
+        "tail": "Antenna height, and the altitudes to check. Nothing else to enter."
+      },
+      "width": 2880,
+      "height": 1800
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/works-formula.png",
+      "alt": "A dialog over the parameters panel with three fields: Max Altitude 35,000 MSL, Min Altitude 33,000 MSL, and Altitude Threshold 500 ft.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "wide",
+      "caption": {
+        "lead": "A band in one submit.",
+        "tail": "A maximum, a minimum and a step, instead of five separate runs."
+      },
+      "width": 2880,
+      "height": 1800
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/works-band.png",
+      "alt": "Five altitude entries from 35,000 down to 33,000 MSL, each with its own colour swatch, beside five overlapping line-of-sight polygons on the terrain.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "wide",
+      "caption": {
+        "lead": "Five altitudes, five shapes.",
+        "tail": "Each one a separate answer to the same question."
+      },
+      "width": 2880,
+      "height": 1800
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/works-primary.png",
+      "alt": "The same five-altitude list with four entries dimmed and their visibility toggles off, leaving one polygon drawn on the map.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "feature",
+      "caption": {
+        "lead": "The recommendation.",
+        "tail": "One layer forward, the rest a click away for when someone pushes back."
+      },
+      "width": 2880,
+      "height": 1800
+    }
+  ],
+  "composition": [
+    {
+      "name": "works-panel",
+      "mode": "light"
+    },
+    [
+      {
+        "name": "works-formula",
+        "mode": "light"
+      },
+      {
+        "name": "works-band",
+        "mode": "light"
+      }
+    ],
+    {
+      "name": "works-primary",
+      "mode": "light"
+    }
+  ]
+}
