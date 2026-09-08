@@ -1,88 +1,138 @@
 {
-  "$doc": "Dagr section 04, the Line of Sight flow. Manifest for AnalysisBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one Nuuly's AppsBento and FDT-E's GateWalkBento use. Scaffolded from the four <BentoItem>s that were inline in the MDX, with every alt, caption and gloss string copied byte for byte. This pass changed nothing a reader can see.",
-  "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. ' (Resolutions01Bento.tsx splitCaption). ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's MDX carried caption and gloss as two separate props, so the generic path is the only one that preserves the shipped strings without a round trip through a string split that could re-punctuate them. A later reader comparing this file to BARD's numbered themes should not read the choice as picking the wrong precedent.",
+  "$doc": "Dagr section 04, the Line of Sight flow. Manifest for AnalysisBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one Nuuly's AppsBento and FDT-E's GateWalkBento use. Six tiles, cut by the bento-crop skill from 4320x2700 re-exports and approved at their real rendered widths. They replace the four uncropped 2880x1800 screenshots (works-panel, works-formula, works-band, works-primary) this file carried after the scaffold pass; those four PNGs are still in public/ and are referenced by nothing.",
+  "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. ' (Resolutions01Bento.tsx splitCaption). ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's captions carry full stops inside the tail, so the generic path is the only one that preserves the shipped strings without a round trip through a string split that could re-punctuate them. A later reader comparing this file to BARD's numbered themes should not read the choice as picking the wrong precedent.",
   "$modeDoc": "EVERY COMPOSITION ENTRY SAYS mode: 'light' AND THAT IS CORRECT, NOT A BUG TO FIX. ResolutionsBento.resolve() keys the base stem for 'light' and <name>--dark for 'dark'; it has no third value. Dagr's product is dark-only and ships one file per image, so 'light' here means 'the base stem, there is no dark twin'. FDT-E's gate-walk-manifest.json does the same thing for the same reason. Changing these to 'dark' would look right and would break the lookup.",
-  "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. BARD's theme1-grid-manifest.json carries width and height that ARE load-bearing on the legacy path, so these look identical to numbers that matter. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here; a pass that swaps in crops and leaves these numbers alone leaves the file carrying stale dimensions that look authoritative.",
-  "$compositionDoc": "Three rows, verified against the live DOM before this file was written, not assumed: [feature], [wide, wide], [feature]. bento.tsx overrideRows chunks consecutive same-slot items at SLOT_COLS capacity, so the two wides pair whether or not they are bracketed. The bracket states the intent; it does not enforce it.",
+  "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. BARD's theme1-grid-manifest.json carries width and height that ARE load-bearing on the legacy path, so these look identical to numbers that matter. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here. Every value in this pass was re-read with sips from the copied file rather than carried over from the crop spec.",
+  "$ratioDoc": "ratio describes the file and is derived from the file on disk every time this manifest is written, never copied forward. In the crops staging manifest 04-03-formula read '1920:1200' after its box had been widened to 2160x1350; the value stayed numerically correct at 1.600 and was still a lie about the file. Any value that describes a file must be re-read when the file changes.",
+  "$slotDoc": "BentoItem renders <Image fill> with object-fit cover, so a slot whose aspect differs from the crop silently takes the sides off, and no lint check catches it. 04-03 and 04-05 were cut at 16:10 and briefed as standard (3:4); they are wide (16:10) and cover-crop nothing. 04-07 is 12:7, which matches no slot, so it is a band: a band takes free aspect and cannot cover-crop. Note that wide's WIDEST render is 660px in the 768 to 1023 band where it goes one-up, not its 536px desktop half-container render, which is why its retina floor is 1320 and not 1072.",
+  "$orderDoc": "FILE NUMBERS ARE NOT DOCUMENT ORDER. Section 04 runs 02, 04, 03, 05, 06, 07 so that the two 3:4 panel tiles pair in one row and the two 16:10 tiles pair in the next. The files are deliberately NOT renamed to match: the composition array below names tiles explicitly, so order never comes from filenames, and renaming files this manifest references would trade a cosmetic confusion for a real one.",
+  "$compositionDoc": "Four rows, each aspect-consistent: [standard, standard] at 0.750, [wide, wide] at 1.600, [feature] at 1.600, then the band, which self-isolates at its document position. bento.tsx overrideRows chunks consecutive same-slot items at SLOT_COLS capacity, so each pair would form a row whether or not it is bracketed; the bracket states the intent and does not enforce it. FDT-E's composition entries repeat breakout and aspect alongside name and mode. Those copies are INERT: renderTile reads breakout and aspect from the images record that resolve() returns, never from the composition entry. Dagr states each fact once, in images, because a second copy nothing reads is a copy that goes stale silently. Do not restore the duplication as a missing field.",
   "images": [
     {
-      "src": "/case-studies/us-navy-dagr/works-panel.png",
-      "alt": "The Line of Sight Parameters panel open beside the map for a selected BAR LOCK radar: an antenna height field defaulted to 59.64 ft, an empty Altitudes For Analysis list with an Add altitude control, and a disabled Submit.",
+      "src": "/case-studies/us-navy-dagr/04-02-one-number.png",
+      "alt": "The Line of Sight panel open over the map for BAR LOCK RADAR: Antenna Height reading 59.64 (default) ft, an altitude of 15,000 being typed into the MSL field below it, and an existing list headed Antenna Height: 59.64 ft (default) running from 35,000 down to 32,500 MSL.",
       "focalPoint": {
-        "x": 0.5,
+        "x": 0.35,
+        "y": 0.3
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "Antenna Height.",
+        "tail": "Carried in from the equipment record. The analyst types the altitude and nothing else."
+      },
+      "ratio": "1736:2315",
+      "width": 1736,
+      "height": 2315
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/04-04-two-headers.png",
+      "alt": "The same panel with Antenna Height changed to 100.00 and a revert arrow beside the field, an empty Add altitude control, and two collapsed group headers below it: Antenna Height: 59.64 ft (default), and Antenna Height: 100.00 ft.",
+      "focalPoint": {
+        "x": 0.35,
+        "y": 0.25
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "Grouped by antenna height.",
+        "tail": "A changed height starts its own group, and the default set stays intact."
+      },
+      "ratio": "1736:2315",
+      "width": 1736,
+      "height": 2315
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/04-03-formula.png",
+      "alt": "A dialog over the parameters panel with three fields: Max Altitude 35,000 MSL, Min Altitude 33,000 MSL, and Altitude Threshold 500 ft, above CANCEL and DONE. Behind it the altitude list already holds 35,000 down to 33,000 MSL.",
+      "focalPoint": {
+        "x": 0.6,
         "y": 0.5
+      },
+      "slot": "wide",
+      "caption": {
+        "lead": "Altitude formula.",
+        "tail": "A maximum, a minimum and a threshold generate the whole band in one submit."
+      },
+      "ratio": "8:5",
+      "width": 2160,
+      "height": 1350
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/04-05-undo.png",
+      "alt": "A toast over the terrain reading 35,000 MSL removed, with an UNDO action and a dismiss cross. The altitude list behind it now starts at 34,500 MSL, and the remaining polygons stay drawn beside the radar's marker.",
+      "focalPoint": {
+        "x": 0.42,
+        "y": 0.72
+      },
+      "slot": "wide",
+      "caption": {
+        "lead": "Reversible edits.",
+        "tail": "Removing an altitude can be undone from the toast that reports it."
+      },
+      "ratio": "8:5",
+      "width": 2400,
+      "height": 1500
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/04-06-five-shapes.png",
+      "alt": "The Line of Sight panel beside a wide terrain view: five altitude entries from 35,000 down to 33,000 MSL, each with its own colour swatch, and five overlapping polygons fanning east from the radar's marker across the ridges.",
+      "focalPoint": {
+        "x": 0.32,
+        "y": 0.42
       },
       "slot": "feature",
-      "caption": {
-        "lead": "Two inputs.",
-        "tail": "Antenna height, and the altitudes to check. Nothing else to enter."
-      },
-      "width": 2880,
-      "height": 1800
-    },
-    {
-      "src": "/case-studies/us-navy-dagr/works-formula.png",
-      "alt": "A dialog over the parameters panel with three fields: Max Altitude 35,000 MSL, Min Altitude 33,000 MSL, and Altitude Threshold 500 ft.",
-      "focalPoint": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "slot": "wide",
-      "caption": {
-        "lead": "A band in one submit.",
-        "tail": "A maximum, a minimum and a step, instead of five separate runs."
-      },
-      "width": 2880,
-      "height": 1800
-    },
-    {
-      "src": "/case-studies/us-navy-dagr/works-band.png",
-      "alt": "Five altitude entries from 35,000 down to 33,000 MSL, each with its own colour swatch, beside five overlapping line-of-sight polygons on the terrain.",
-      "focalPoint": {
-        "x": 0.5,
-        "y": 0.5
-      },
-      "slot": "wide",
       "caption": {
         "lead": "Five altitudes, five shapes.",
-        "tail": "Each one a separate answer to the same question."
+        "tail": "Each polygon is the ground the radar can see from that height, cut by the terrain between."
       },
-      "width": 2880,
-      "height": 1800
+      "ratio": "8:5",
+      "width": 3704,
+      "height": 2315
     },
     {
-      "src": "/case-studies/us-navy-dagr/works-primary.png",
-      "alt": "The same five-altitude list with four entries dimmed and their visibility toggles off, leaving one polygon drawn on the map.",
+      "src": "/case-studies/us-navy-dagr/04-07-menu.png",
+      "alt": "A row menu open on the 35,000 MSL layer with three items: Set as Mission Altitude, Resubmit Analysis, and Remove. The rest of the altitude list continues below, and that layer's polygon stays drawn on the map beside it.",
       "focalPoint": {
-        "x": 0.5,
-        "y": 0.5
+        "x": 0.42,
+        "y": 0.55
       },
-      "slot": "feature",
+      "breakout": "band",
+      "aspect": 1.714,
       "caption": {
-        "lead": "The recommendation.",
-        "tail": "One layer forward, the rest a click away for when someone pushes back."
+        "lead": "Set as Mission Altitude.",
+        "tail": "The analyst marks the altitude he plans against. The rest stay on the map to check it against."
       },
-      "width": 2880,
-      "height": 1800
+      "ratio": "12:7",
+      "width": 2400,
+      "height": 1400
     }
   ],
   "composition": [
-    {
-      "name": "works-panel",
-      "mode": "light"
-    },
     [
       {
-        "name": "works-formula",
+        "name": "04-02-one-number",
         "mode": "light"
       },
       {
-        "name": "works-band",
+        "name": "04-04-two-headers",
+        "mode": "light"
+      }
+    ],
+    [
+      {
+        "name": "04-03-formula",
+        "mode": "light"
+      },
+      {
+        "name": "04-05-undo",
         "mode": "light"
       }
     ],
     {
-      "name": "works-primary",
+      "name": "04-06-five-shapes",
+      "mode": "light"
+    },
+    {
+      "name": "04-07-menu",
       "mode": "light"
     }
   ]
