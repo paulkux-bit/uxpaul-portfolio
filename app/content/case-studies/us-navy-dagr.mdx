@@ -144,11 +144,11 @@ Every analysis the app runs drops its answer into the same layer list, including
 
 <p className="section-lede">The analyst taps a threat on the map and asks it a question.</p>
 
-The panel wants two things: how high the radar's antenna sits, and which altitudes to check. Submit, and the answer comes back as a polygon. That is the ground the radar can see from that height, cut by every ridge in between.
+The panel needs two things: how high the radar's antenna sits, and which altitudes to check. The first arrives with the radar he tapped. He types the second. Submit, and the answer comes back as a polygon, the ground that radar can see from that height, cut by every ridge in between.
 
-Analysts rarely want one altitude. A maximum, a minimum and a step generate the whole band in a single submit.
+Analysts rarely want one altitude. A maximum, a minimum and a threshold generate the whole band in a single submit.
 
-Each answer is a layer. The analyst can hide it, recolor it to match their unit's legend, or mark it primary. Primary is the recommendation.
+Each answer is a layer. He can hide it, recolor it to match his unit's legend, or set one as the mission altitude, the one he plans against and weighs the others by. Every answer stays on the map, so comparing two of them is a click rather than a rebuild. That is the part of the job that is actually analysis.
 
 <AnalysisBento />
 
