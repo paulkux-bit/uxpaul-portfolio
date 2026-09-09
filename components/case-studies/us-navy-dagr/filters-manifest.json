@@ -1,0 +1,78 @@
+{
+  "$doc": "Dagr section 05, second of two modules: narrowing the threat data to the mission. Manifest for FiltersBento.tsx, which binds it to the generic ResolutionsBento adapter, the same one IngestBento and AnalysisBento use. Three tiles, cut by the bento-crop skill from 4320x2700 re-exports in an earlier pass and staged in _crops/ until now. Nothing in this pass re-cut, resized or upscaled an image. See ingest-manifest.json's $twoModulesDoc for why the section runs two modules rather than one.",
+  "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. '. ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's captions carry full stops inside the tail, so the generic path is the only one that preserves the shipped strings without a round trip through a split that could re-punctuate them.",
+  "$modeDoc": "EVERY COMPOSITION ENTRY SAYS mode: 'light' AND THAT IS CORRECT, NOT A BUG TO FIX. ResolutionsBento.resolve() keys the base stem for 'light' and <name>--dark for 'dark'; it has no third value. Dagr's product is dark-only and ships one file per image, so 'light' means 'the base stem, there is no dark twin'. Changing these to 'dark' would look right and would break the lookup.",
+  "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. BentoItem renders <Image fill>, so nothing here reaches the render; they are recorded for crop planning only. RE-READ THEM FROM DISK on any later edit. Every value here was re-read from the copied file in public/, not carried forward from the crops staging manifest.",
+  "$ratioDoc": "ratio describes the file and is derived from the file on disk every time this manifest is written, never copied forward.",
+  "$pairDoc": "05-11 AND 05-12 MUST STAY PAIRED, AND THAT IS NOT COSMETIC. A lone standard does not orphan at half width, it stretches: overrideRows (bento.tsx) emits a row of length 1, data-cols='1' takes a single 1fr column, so it would render at the full 1088 container while SLOT_SIZES.standard still declared min(calc(50vw - 2.5rem), 536px). The browser would fetch a 536-sized file and paint it at 1088, which renders visibly soft. It would also be 3:4 at 1088, so roughly 1451px tall, a portrait panel screenshot taller than most viewports. This is the same defect found on a lone wide during the section 04 rebuild, in the same family and with the same fix: keep the pair, or change the slot and re-cut to the new floor. Do NOT resolve a future third filters tile by leaving one of these alone.",
+  "$slotDoc": "BentoItem renders <Image fill> with object-fit cover, so a slot whose aspect differs from the crop silently takes the sides off, and no lint check catches it; the per-row mixed-aspect warn in bento.tsx compares slots to each other and never reads the image. 05-14 is exactly 16:10 and sits in feature at 1088, whose retina floor is 2 x 1088 = 2176; at 4320 wide it clears with room. standard's floor is 2 x 536 = 1072, and both 3:4 tiles clear at 1736.",
+  "$stagedDoc": "05-13-two-shapes IS DELIBERATELY NOT HERE, AND IT IS NOT DELETED. It stays in _crops/ and in the crops staging manifest, untouched, and is not copied to public/. Two reasons. It is 16:10 where this module is a 3:4 pair plus a feature, so there is no row for it to join without breaking an aspect. And its picture shows two analyses over one radar, which argues a claim this section does not make. It does carry the 'RCS 10.00 m2 / Antenna Height: 59.64 ft' header that would evidence the section's first paragraph, so it may come back after a re-cut toward the panel. THAT IS A LATER DECISION. Do not re-add it to this manifest without one.",
+  "$provenanceDoc": "05-14-tailored IS A DESIGN, NOT A SHIPPED BUILD, AND ITS CAPTION SAYS SO IN THE CAPTION. 'Designed, not built.' is the last sentence of its tail and must stay there: the precedent is took-3d.jpg, whose caption already carries 'An earlier build of the same panel.' Do not soften the phrase and do not move it into alt text, where a sighted reader would never see it. Note the tile is visibly a different visual design from the other five, which is itself the tell, but a reader who does not know the product cannot be expected to read that.",
+  "$compositionDoc": "Two rows, each aspect-consistent: [standard, standard] at 0.750, then [feature] at 1.600. The feature is its own row because overrideRows chunks consecutive same-slot items at SLOT_COLS capacity and feature's cols is 1. breakout and aspect are stated once, in images, where the adapter reads them.",
+  "images": [
+    {
+      "src": "/case-studies/us-navy-dagr/05-11-equipment-tree.png",
+      "alt": "The FILTERS tab with the Equipment group open: AAA at 132, Mobile at 32 beneath it, and four types under that reading 8, 8, 15 and 1, then Stationery at 100. RADARs, SAMs and Other stay collapsed, with Facilities and Units below them.",
+      "focalPoint": {
+        "x": 0.4,
+        "y": 0.35
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "Down to the type.",
+        "tail": "Counts at every level, down to eight of a single kind."
+      },
+      "ratio": "1736:2315",
+      "width": 1736,
+      "height": 2315
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/05-12-analysis-layers.png",
+      "alt": "The Analysis Layers panel: a Line of Sight row with a START action, and under RADAR a Detection Coverage group expanded to four ticked radars, one Type A and three Type B instances, each with a remove cross. Detection Route and Detection Max Range sit collapsed below.",
+      "focalPoint": {
+        "x": 0.4,
+        "y": 0.3
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "Selected, not all.",
+        "tail": "Four radars chosen for this analysis rather than every emitter in the area."
+      },
+      "ratio": "1736:2315",
+      "width": 1736,
+      "height": 2315
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/05-14-tailored.png",
+      "alt": "A design for the analysis screen: 22 Threats in AOR above a Threat Matrix reading High Priority 6, Mobile 12, Recently Active 2 and Unknown 7, with the view set to threats tailored to an F-22 escort. A blue route curves down the map past red threat symbols, one of them boxed in orange.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "slot": "feature",
+      "caption": {
+        "lead": "Tailored to the airframe.",
+        "tail": "A route, the threats that bear on it, and the one he opened. Designed, not built."
+      },
+      "ratio": "8:5",
+      "width": 4320,
+      "height": 2700
+    }
+  ],
+  "composition": [
+    [
+      {
+        "name": "05-11-equipment-tree",
+        "mode": "light"
+      },
+      {
+        "name": "05-12-analysis-layers",
+        "mode": "light"
+      }
+    ],
+    {
+      "name": "05-14-tailored",
+      "mode": "light"
+    }
+  ]
+}

@@ -37,6 +37,8 @@ nda: false
 import { BentoBand } from '@/components/bento';
 import { DagrBeatFigure } from '@/components/dagr-beat-figure';
 import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento';
+import IngestBento from '@/components/case-studies/us-navy-dagr/IngestBento';
+import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 
 <HeroBlock
   eyebrow="DAGR · U.S. AIR FORCE"
@@ -132,9 +134,7 @@ import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento'
 
 The smart people at Idaho National Laboratory built the line of sight model, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it that made it easy to use. **Anything the app already knows is something he should not type.**
 
-I had already built the live data feeds and the filtering onto DoD approved map layers. The filtering lets him narrow to his mission and his airframe, save that setup, and re-run it on a setting he controls. He can still resubmit by hand any time.
-
-So the map is where a Line of Sight analysis starts.
+I had already built the live data feeds and the filtering onto DoD approved map layers. So the map is where a Line of Sight analysis starts.
 
 </section>
 
@@ -151,6 +151,24 @@ Analysts rarely want one altitude. A maximum, a minimum and a threshold generate
 Each answer is a layer. He can hide it, recolor it to his unit's legend, or mark one as the mission altitude. Comparing two of them is a click rather than a rebuild, and that is the part of the job that is actually analysis.
 
 <AnalysisBento />
+
+</section>
+
+<section className="cs-section">
+
+## He stopped going out to get the threat data.
+
+<p className="section-lede">One search across the national records, filtered to his airframe.</p>
+
+Line of Sight needed two things: where the threats are, and what the equipment at them can do. The live feed brought both, and every threat arrived carrying its own characteristics. That is why the panel already knew the antenna height was 59.64 feet. Wilbur never looked it up.
+
+<IngestBento />
+
+**Most of what arrives does not matter to the mission he is briefing.** He filters it down to what matters to this aircraft. What is left is small enough to work through, and working through it is the brief.
+
+<FiltersBento />
+
+The next step was to start from the route instead of the radar. A fighter and a helicopter fly into different risks, so the mission and the airframe should choose the threats, and choose them fast.
 
 </section>
 
