@@ -1,13 +1,31 @@
 {
   "$doc": "Dagr section 04, the Line of Sight flow. Manifest for AnalysisBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one Nuuly's AppsBento and FDT-E's GateWalkBento use. Six tiles, cut by the bento-crop skill from 4320x2700 re-exports and approved at their real rendered widths. They replace the four uncropped 2880x1800 screenshots (works-panel, works-formula, works-band, works-primary) this file carried after the scaffold pass; those four PNGs are still in public/ and are referenced by nothing.",
+  "$sequenceDoc": "THE ORDER IS THE WALK, NOT THE FILE NUMBERS, AND IT CHANGED. Section 04 previously ran 02, 04, 03, 05, 06, 07, chosen so that same-aspect tiles paired per row. That arrangement put five panel-dominant tiles out of six in sequence, and the section read as a form rather than as work. It now opens on the tap (04-01-quickview) and alternates map and panel: quickview, the two panel states, the formula dialog, the answers on the map, the layer menu. 04-05-undo IS CUT from this section. It is a refinement state, not a step in the walk; the file stays on disk and stays in the crops staging manifest, and cutting it here made public/case-studies/us-navy-dagr/04-05-undo.png an orphan alongside the four works-*.png, to be removed in their cleanup commit rather than this one.",
   "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. ' (Resolutions01Bento.tsx splitCaption). ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's captions carry full stops inside the tail, so the generic path is the only one that preserves the shipped strings without a round trip through a string split that could re-punctuate them. A later reader comparing this file to BARD's numbered themes should not read the choice as picking the wrong precedent.",
   "$modeDoc": "EVERY COMPOSITION ENTRY SAYS mode: 'light' AND THAT IS CORRECT, NOT A BUG TO FIX. ResolutionsBento.resolve() keys the base stem for 'light' and <name>--dark for 'dark'; it has no third value. Dagr's product is dark-only and ships one file per image, so 'light' here means 'the base stem, there is no dark twin'. FDT-E's gate-walk-manifest.json does the same thing for the same reason. Changing these to 'dark' would look right and would break the lookup.",
   "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. BARD's theme1-grid-manifest.json carries width and height that ARE load-bearing on the legacy path, so these look identical to numbers that matter. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here. Every value in this pass was re-read with sips from the copied file rather than carried over from the crop spec.",
   "$ratioDoc": "ratio describes the file and is derived from the file on disk every time this manifest is written, never copied forward. In the crops staging manifest 04-03-formula read '1920:1200' after its box had been widened to 2160x1350; the value stayed numerically correct at 1.600 and was still a lie about the file. Any value that describes a file must be re-read when the file changes.",
-  "$slotDoc": "BentoItem renders <Image fill> with object-fit cover, so a slot whose aspect differs from the crop silently takes the sides off, and no lint check catches it. 04-03 and 04-05 were cut at 16:10 and briefed as standard (3:4); they are wide (16:10) and cover-crop nothing. 04-07 is 12:7, which matches no slot, so it is a band: a band takes free aspect and cannot cover-crop. Note that wide's WIDEST render is 660px in the 768 to 1023 band where it goes one-up, not its 536px desktop half-container render, which is why its retina floor is 1320 and not 1072.",
-  "$orderDoc": "FILE NUMBERS ARE NOT DOCUMENT ORDER. Section 04 runs 02, 04, 03, 05, 06, 07 so that the two 3:4 panel tiles pair in one row and the two 16:10 tiles pair in the next. The files are deliberately NOT renamed to match: the composition array below names tiles explicitly, so order never comes from filenames, and renaming files this manifest references would trade a cosmetic confusion for a real one.",
-  "$compositionDoc": "Four rows, each aspect-consistent: [standard, standard] at 0.750, [wide, wide] at 1.600, [feature] at 1.600, then the band, which self-isolates at its document position. bento.tsx overrideRows chunks consecutive same-slot items at SLOT_COLS capacity, so each pair would form a row whether or not it is bracketed; the bracket states the intent and does not enforce it. FDT-E's composition entries repeat breakout and aspect alongside name and mode. Those copies are INERT: renderTile reads breakout and aspect from the images record that resolve() returns, never from the composition entry. Dagr states each fact once, in images, because a second copy nothing reads is a copy that goes stale silently. Do not restore the duplication as a missing field.",
+  "$slotDoc": "BentoItem renders <Image fill> with object-fit cover, so a slot whose aspect differs from the crop silently takes the sides off, and no lint check catches it. The per-row mixed-aspect warn in bento.tsx is NOT that check: it compares the slots in a row to each other through SLOT_ASPECT and never reads the image, so a 16:10 crop dropped into a 3:4 slot still cover-crops in silence. 04-07 is 12:7, which matches no slot, so it is a band: a band takes free aspect and cannot cover-crop, and 04-01 is a band for the same reason at 8:5.",
+  "$featureFloorDoc": "04-03-formula IS feature AND IS CUT TO EXACTLY 2176x1360. DO NOT WIDEN THAT BOX. As a lone wide it did not orphan at half width, it stretched: overrideRows (bento.tsx) emits a row of length 1, data-cols='1' gets a single 1fr column (globals.css), so it rendered at the full 1088 container while SLOT_SIZES.wide still declared min(calc(50vw - 2.5rem), 536px). The browser fetched a file sized for 536 and painted it at 1088, which renders visibly soft. That is the opposite sign of the standard over-declaration found in the crop pass, which only wasted bytes, and a reader can see this one. feature's retina floor is dpr 2 x maxRenderedWidthPx 1088 = 2176. THE EXACTLY-AT-FLOOR BOX IS THE OPTIMUM, NOT A COMPROMISE: rendered text scales as 1088 / crop_width, so 2176 is simultaneously the minimum that clears retina and the maximum legibility available in this slot, and every pixel above it costs type size and buys nothing. This is the opposite of the headroom logic on 04-01-quickview, where the box is set by what has to stay in frame rather than by the floor, so headroom above the floor is free there. Both are right for their case.",
+  "$compositionDoc": "Five rows, each aspect-consistent: the 04-01 band, [standard, standard] at 0.750, [feature] at 1.600, [feature] at 1.600, then the 04-07 band. The two features are two rows and not one: bento.tsx overrideRows chunks consecutive same-slot items at SLOT_COLS capacity and feature's cols is 1. Bands self-isolate at their document position and take free aspect. FDT-E's composition entries repeat breakout and aspect alongside name and mode. Those copies are INERT: renderTile reads breakout and aspect from the images record that resolve() returns, never from the composition entry. Dagr states each fact once, in images, because a second copy nothing reads is a copy that goes stale silently. Do not restore the duplication as a missing field.",
   "images": [
+    {
+      "src": "/case-studies/us-navy-dagr/04-01-quickview.png",
+      "alt": "A Quickview card open over satellite terrain for BAR LOCK RADAR, a phased array marked OPR and RDY: allegiance IR - IRAN, last seen 090400Z0420 four hours ago, acquisition max 296.98 NM and tracking max 100.10 NM, above a row of five unlabelled icons with the fourth lit blue. The tapped marker sits highlighted on the map to the left.",
+      "focalPoint": {
+        "x": 0.68,
+        "y": 0.52
+      },
+      "breakout": "band",
+      "aspect": 1.6,
+      "caption": {
+        "lead": "Quickview.",
+        "tail": "Tapping a threat opens its record, and a Line of Sight analysis starts from here."
+      },
+      "ratio": "8:5",
+      "width": 2760,
+      "height": 1725
+    },
     {
       "src": "/case-studies/us-navy-dagr/04-02-one-number.png",
       "alt": "The Line of Sight panel open over the map for BAR LOCK RADAR: Antenna Height reading 59.64 (default) ft, an altitude of 15,000 being typed into the MSL field below it, and an existing list headed Antenna Height: 59.64 ft (default) running from 35,000 down to 32,500 MSL.",
@@ -18,7 +36,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Antenna Height.",
-        "tail": "Carried in from the equipment record. The analyst types the altitude and nothing else."
+        "tail": "Carried in from the equipment record rather than typed. Wilbur supplies the altitude."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -47,42 +65,26 @@
         "x": 0.6,
         "y": 0.5
       },
-      "slot": "wide",
+      "slot": "feature",
       "caption": {
         "lead": "Altitude formula.",
         "tail": "A maximum, a minimum and a threshold generate the whole band in one submit."
       },
       "ratio": "8:5",
-      "width": 2160,
-      "height": 1350
-    },
-    {
-      "src": "/case-studies/us-navy-dagr/04-05-undo.png",
-      "alt": "A toast over the terrain reading 35,000 MSL removed, with an UNDO action and a dismiss cross. The altitude list behind it now starts at 34,500 MSL, and the remaining polygons stay drawn beside the radar's marker.",
-      "focalPoint": {
-        "x": 0.42,
-        "y": 0.72
-      },
-      "slot": "wide",
-      "caption": {
-        "lead": "Reversible edits.",
-        "tail": "Removing an altitude can be undone from the toast that reports it."
-      },
-      "ratio": "8:5",
-      "width": 2400,
-      "height": 1500
+      "width": 2176,
+      "height": 1360
     },
     {
       "src": "/case-studies/us-navy-dagr/04-06-five-shapes.png",
-      "alt": "The Line of Sight panel beside a wide terrain view: five altitude entries from 35,000 down to 33,000 MSL, each with its own colour swatch, and five overlapping polygons fanning east from the radar's marker across the ridges.",
+      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, each with its own colour swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange where the altitudes disagree.",
       "focalPoint": {
         "x": 0.32,
         "y": 0.42
       },
       "slot": "feature",
       "caption": {
-        "lead": "Five altitudes, five shapes.",
-        "tail": "Each polygon is the ground the radar can see from that height, cut by the terrain between."
+        "lead": "Where the difference shows.",
+        "tail": "Each altitude draws its own fan. They overlap almost exactly, and the rim is what changes."
       },
       "ratio": "8:5",
       "width": 3704,
@@ -99,7 +101,7 @@
       "aspect": 1.714,
       "caption": {
         "lead": "Set as Mission Altitude.",
-        "tail": "The analyst marks the altitude he plans against. The rest stay on the map to check it against."
+        "tail": "The one he plans against. The rest stay for comparison."
       },
       "ratio": "12:7",
       "width": 2400,
@@ -107,6 +109,10 @@
     }
   ],
   "composition": [
+    {
+      "name": "04-01-quickview",
+      "mode": "light"
+    },
     [
       {
         "name": "04-02-one-number",
@@ -117,16 +123,10 @@
         "mode": "light"
       }
     ],
-    [
-      {
-        "name": "04-03-formula",
-        "mode": "light"
-      },
-      {
-        "name": "04-05-undo",
-        "mode": "light"
-      }
-    ],
+    {
+      "name": "04-03-formula",
+      "mode": "light"
+    },
     {
       "name": "04-06-five-shapes",
       "mode": "light"

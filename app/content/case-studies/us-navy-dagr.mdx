@@ -126,29 +126,29 @@ import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento'
 
 <section className="cs-section">
 
-## How do you build on math you are not cleared to see?
+## How do you give an analyst back the hours he spends typing?
 
-<p className="section-lede">The model was closed. What it needed was already in the app.</p>
+<p className="section-lede">Start the analysis where the data already is.</p>
 
-Idaho National Laboratory had built the line of sight model, and the math was classified. Our product team was never going to see inside it, and did not need to.
+The smart people at Idaho National Laboratory built the line of sight model, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it that made it easy to use.
 
-**I connected what Dagr already held to an engine nobody could open.** I had built the live data feed, and the DoD approved map layer that put the threat picture in three dimensions. The filtering that narrows it to one mission and one airframe was mine too. That is why the answer was a connection rather than a rebuild.
+I had already built the live data feeds and the filtering onto DoD approved map layers. The filtering lets him narrow to his mission and his airframe, save that setup, and re-run it on a setting he controls. He can still resubmit by hand any time.
 
-Every analysis the app runs drops its answer into the same layer list, including the ones nobody had built yet.
+**So the map is where a Line of Sight analysis starts.**
 
 </section>
 
 <section className="cs-section">
 
-## One radar, one altitude, one shape.
+## From a tap on the map to a shape he can brief.
 
-<p className="section-lede">The analyst taps a threat on the map and asks it a question.</p>
+<p className="section-lede">The radar he taps brings its own numbers. He supplies the altitude.</p>
 
-The panel needs two things: how high the radar's antenna sits, and which altitudes to check. The first arrives with the radar he tapped. He types the second. Submit, and the answer comes back as a polygon, the ground that radar can see from that height, cut by every ridge in between.
+Submit, and the answer comes back as a polygon, the ground that radar can see from that height, cut by every ridge in between.
 
 Analysts rarely want one altitude. A maximum, a minimum and a threshold generate the whole band in a single submit.
 
-Each answer is a layer. He can hide it, recolor it to match his unit's legend, or set one as the mission altitude, the one he plans against and weighs the others by. Every answer stays on the map, so comparing two of them is a click rather than a rebuild. That is the part of the job that is actually analysis.
+Each answer is a layer. He can hide it, recolor it to his unit's legend, or mark one as the mission altitude. Comparing two of them is a click rather than a rebuild, and that is the part of the job that is actually analysis.
 
 <AnalysisBento />
 
