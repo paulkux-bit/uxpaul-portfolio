@@ -1,0 +1,77 @@
+{
+  "$doc": "Dagr section 05, first of two modules: where the threat data comes from. Manifest for IngestBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one AnalysisBento, Nuuly's AppsBento and FDT-E's GateWalkBento use. Three tiles, cut by the bento-crop skill from 4320x2700 re-exports in an earlier pass and staged in _crops/ until now. Nothing in this pass re-cut, resized or upscaled an image.",
+  "$twoModulesDoc": "SECTION 05 RUNS TWO BENTO MODULES WITH PROSE BETWEEN THEM, AND THAT IS HOUSE RATHER THAN A STRETCH. BARD's 'The form bends. The record underneath does not.' runs its media between paragraphs the same way, Nuuly's 'The hard part wasn't the screen' runs four, and Dagr's own expiry section two doors down runs two BentoBands around its prose. One module per evidence beat keeps each row's aspect decision local: ingest is a band over a 3:4 pair, filters is a 3:4 pair over a feature, and a single module holding all six would have had to reconcile them.",
+  "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. ' (Resolutions01Bento.tsx splitCaption). ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's captions carry full stops inside the tail, so the generic path is the only one that preserves the shipped strings without a round trip through a string split that could re-punctuate them.",
+  "$modeDoc": "EVERY COMPOSITION ENTRY SAYS mode: 'light' AND THAT IS CORRECT, NOT A BUG TO FIX. ResolutionsBento.resolve() keys the base stem for 'light' and <name>--dark for 'dark'; it has no third value. Dagr's product is dark-only and ships one file per image, so 'light' here means 'the base stem, there is no dark twin'. Changing these to 'dark' would look right and would break the lookup.",
+  "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here. Every value in this pass was re-read from the copied file in public/, not carried forward from the crops staging manifest.",
+  "$ratioDoc": "ratio describes the file and is derived from the file on disk every time this manifest is written, never copied forward. Note that 05-09 is 1852x2469 and 05-10 is 1736x2315: different pixel dimensions, 0.7501 and 0.7499, both 3:4 to within a rounding error, which is why they share a row.",
+  "$slotDoc": "BentoItem renders <Image fill> with object-fit cover, so a slot whose aspect differs from the crop silently takes the sides off, and no lint check catches it. The per-row mixed-aspect warn in bento.tsx is NOT that check: it compares the slots in a row to each other through SLOT_ASPECT and never reads the image. 05-08 is exactly 16:10 and could be feature, but stays a band because a band takes free aspect and cannot cover-crop at all. Retina floors, all cleared: band and feature need 2 x 1088 = 2176, standard needs 2 x 536 = 1072.",
+  "$compositionDoc": "Two rows, each aspect-consistent: the 05-08 band, which self-isolates at its document position and takes free aspect, then [standard, standard] at 0.750. breakout and aspect are stated once, in images, where the adapter actually reads them, rather than mirrored into the composition the way FDT-E does. A second copy nothing reads is a copy that goes stale silently.",
+  "images": [
+    {
+      "src": "/case-studies/us-navy-dagr/05-08-radius.png",
+      "alt": "A satellite map of the region with a cyan crosshair and a circle drawn over the southern coast, and a tooltip beside it reading Lat N51 degrees 4 minutes 8 seconds, Long W112 degrees 59 minutes 0 seconds, Radius 100 NM. Red threat symbols are scattered across the terrain outside the circle.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.5
+      },
+      "breakout": "band",
+      "aspect": 1.6,
+      "caption": {
+        "lead": "Where to look.",
+        "tail": "A centre point and a radius. That is the whole query."
+      },
+      "ratio": "8:5",
+      "width": 3704,
+      "height": 2315
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/05-09-summary.png",
+      "alt": "The Order of Battle Search (National Records) dialog on the third step, Area and Parameters already ticked. It reads there are angle-bracket hash records in your query, above a thumbnail of the searched area, a centre point, a 100.0 NM radius, and three chips: Equipment, Units and Facilities.",
+      "focalPoint": {
+        "x": 0.5,
+        "y": 0.42
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "Order of Battle Search.",
+        "tail": "It says what it found before he runs it."
+      },
+      "ratio": "1852:2469",
+      "width": 1852,
+      "height": 2469
+    },
+    {
+      "src": "/case-studies/us-navy-dagr/05-10-sources.png",
+      "alt": "The SOURCES tab of the threat data panel, headed 1 of 1 Sources, with two ticked queries named RIPSAW_QUERY_5-161500ZAUG21 and RIPSAW_QUERY_4-071830ZJUL21, the first still loading. Below them sit links to Order of Battle Search (National Records), Saved Order of Battle Searches, and Upload .xml (Threat) file.",
+      "focalPoint": {
+        "x": 0.4,
+        "y": 0.3
+      },
+      "slot": "standard",
+      "caption": {
+        "lead": "Sources.",
+        "tail": "Named and time-stamped, so he can say where the picture came from."
+      },
+      "ratio": "1736:2315",
+      "width": 1736,
+      "height": 2315
+    }
+  ],
+  "composition": [
+    {
+      "name": "05-08-radius",
+      "mode": "light"
+    },
+    [
+      {
+        "name": "05-09-summary",
+        "mode": "light"
+      },
+      {
+        "name": "05-10-sources",
+        "mode": "light"
+      }
+    ]
+  ]
+}
