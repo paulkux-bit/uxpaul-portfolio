@@ -6,6 +6,7 @@
   "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here. Every value in this pass was re-read from the copied file in public/, not carried forward from the crops staging manifest.",
   "$ratioDoc": "ratio describes the file and is derived from the file on disk every time this manifest is written, never copied forward. Note that 05-09 is 1852x2469 and 05-10 is 1736x2315: different pixel dimensions, 0.7501 and 0.7499, both 3:4 to within a rounding error, which is why they share a row.",
   "$slotDoc": "BentoItem renders <Image fill> with object-fit cover, so a slot whose aspect differs from the crop silently takes the sides off, and no lint check catches it. The per-row mixed-aspect warn in bento.tsx is NOT that check: it compares the slots in a row to each other through SLOT_ASPECT and never reads the image. 05-08 is exactly 16:10 and could be feature, but stays a band because a band takes free aspect and cannot cover-crop at all. Retina floors, all cleared: band and feature need 2 x 1088 = 2176, standard needs 2 x 536 = 1072.",
+  "$placeholderDoc": "WHAT THESE CROPS ACTUALLY SHOW, AND THE RULE THAT FOLLOWS FROM IT. Five of the six section 05 tiles carry a placeholder or an internal inconsistency that a reader can see, because they are captures of a build in progress rather than of live data. 05-09-summary: the record count is the literal placeholder <####>, so the dialog does not show a number. 05-10-sources: the panel header reads '1 of 1 Sources' above two listed sources, and both rows carry <####> of records. 05-11-equipment-tree: the product's own spelling is 'Stationery' where 'Stationary' is meant; the alt quotes what is on screen rather than correcting it. 05-12-analysis-layers: the first row reads 'Radar Type A Instance Here', placeholder copy sitting where a real designation would. 05-14-tailored: the header reads '22 Threats in AOR' above a Threat Matrix summing to 27, so the categories evidently overlap; nothing in the caption or alt asserts otherwise. THE RULE: NO CAPTION ON THESE TILES MAY NAME A VALUE THAT IS A PLACEHOLDER IN THE CROP. 05-09's tail said 'It says what it found before he runs it', which claimed the one thing its crop cannot show, and was rewritten to name the area, the radius and the three chips instead, every one of them legible. Its alt was rewritten in the same pass to stop treating <####> as information. The other four comply already: none of their captions reaches for the placeholder. This is the same defect class as 04-06's 'Five altitudes, five shapes' over a six-item list, fixed in the section 04 rebuild. Check a new or edited caption against its crop, not against the prose above it.",
   "$compositionDoc": "Two rows, each aspect-consistent: the 05-08 band, which self-isolates at its document position and takes free aspect, then [standard, standard] at 0.750. breakout and aspect are stated once, in images, where the adapter actually reads them, rather than mirrored into the composition the way FDT-E does. A second copy nothing reads is a copy that goes stale silently.",
   "images": [
     {
@@ -27,7 +28,7 @@
     },
     {
       "src": "/case-studies/us-navy-dagr/05-09-summary.png",
-      "alt": "The Order of Battle Search (National Records) dialog on the third step, Area and Parameters already ticked. It reads there are angle-bracket hash records in your query, above a thumbnail of the searched area, a centre point, a 100.0 NM radius, and three chips: Equipment, Units and Facilities.",
+      "alt": "The Order of Battle Search (National Records) dialog on its third step, Summary, with Area and Parameters already ticked behind it. A thumbnail of the searched area sits beside a centre point, a radius of 100.0 NM, and three removable chips reading Equipment, Units and Facilities, above CANCEL, START OVER and SEARCH.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.42
@@ -35,7 +36,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Order of Battle Search.",
-        "tail": "It says what it found before he runs it."
+        "tail": "The area, the radius and what to look for, confirmed before he runs it."
       },
       "ratio": "1852:2469",
       "width": 1852,
