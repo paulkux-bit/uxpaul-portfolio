@@ -76,7 +76,7 @@
     },
     {
       "src": "/case-studies/us-navy-dagr/04-06-five-shapes.png",
-      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, each with its own colour swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange where the altitudes disagree.",
+      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, each with its own color swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange where the altitudes disagree.",
       "focalPoint": {
         "x": 0.32,
         "y": 0.42
