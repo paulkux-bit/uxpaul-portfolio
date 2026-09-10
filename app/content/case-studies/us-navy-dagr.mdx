@@ -11,7 +11,7 @@ projectName: "Line of Sight"
 headline: "Fielded to Air Force units through Red Flag testing."
 summary: "I designed Line of Sight for Dagr, replacing a threat picture built by hand with one that tracks equipment as it moves and re-runs itself against the mission clock."
 heroImage: "/case-studies/us-navy-dagr/hero.png"
-heroImageAlt: "The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own colour, and the jagged polygon of what that radar can see."
+heroImageAlt: "The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own color, and the jagged polygon of what that radar can see."
 role: "Senior Product Designer"
 timeframe: "2022–2023"
 team: "A team of nine: one product manager, two designers, six developers, with the IMOM and NGA teams as technical partners."
@@ -46,7 +46,7 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
   role="I designed Line of Sight, the feature Air Force units use in Dagr to plan missions around enemy radar. Lead designer on a Navy team, fielded through Red Flag testing."
   image={{
     src: '/case-studies/us-navy-dagr/hero.png',
-    alt: 'The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own colour, and the jagged polygon of what that radar can see.',
+    alt: 'The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own color, and the jagged polygon of what that radar can see.',
   }}
   callout={{
     label: 'WHAT CHANGED',
@@ -56,13 +56,13 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 
 <section className="cs-section cs-section--problem">
 
-## The go or no go turns on one assessment.
+## One assessment can turn a go into a no-go.
 
-**Before a mission flies, the unit gathers in one room.** Pilots, maintenance crew, operations planners, flight logistics, and Wilbur, the intel analyst.
+Before a mission flies, the unit gathers in one room: pilots, maintenance, operations, logistics, and Wilbur, the intel analyst.
 
-**Wilbur's turn is the threat picture.** Where the enemy is, what can see the aircraft, and from what altitude. He briefs what he knows, and what he does not.
+**The threat picture is Wilbur's.** He tells them where the enemy is, what can see the aircraft, and from what altitude. He briefs what he knows, and what he does not.
 
-**If the picture is wrong, an aircraft is lost or gives away its position, and the mission fails.** The commander weighs it against everything else in the room and makes the call.
+**If the picture is wrong, an aircraft gives away its position or does not come back.** The commander weighs it against everything else and makes the call.
 
 {/* Becomes a <FramedPair> when the briefing-room illustration lands.
     Left: the illustration, canvas 2320 x 1473 (aspect 1.5750, within 0.0003 of
@@ -89,9 +89,9 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 
 <section className="cs-section cs-section--frictions">
 
-## Three ways a hand-built picture failed him.
+## Three ways a hand-built picture failed Wilbur.
 
-<p className="section-lede">We sat with intel analysts, mission planners and weapons officers across Air Combat Command, and watched them build a threat picture from scratch.</p>
+<p className="section-lede">I interviewed intel analysts across Air Combat Command, at units flying different airframes, and watched them build a threat picture from scratch.</p>
 
 <ol className="friction-beats" role="list">
   <li className="friction-beat" data-thread="1">
@@ -106,9 +106,9 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Only what stands still</h3>
-      <p className="friction-beat__scene">The model handled fixed sites well. What moved between planning and takeoff sat outside it, and what moved was the threat that mattered.</p>
+      <p className="friction-beat__scene">The model handled enemy equipment at static locations well. It had no mechanism for equipment that moved, and what moved was the threat that mattered.</p>
       <blockquote className="pull-quote pull-quote--quiet">
-        <p>“He had to ask the room to really visualize it.”</p>
+        <p>“I had to ask the room to really visualize it.”</p>
         <cite>Intel analyst, discovery interview</cite>
       </blockquote>
     </div>
@@ -118,7 +118,7 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">Intel stopped being intel</h3>
-      <p className="friction-beat__scene">Nothing showed what had changed, so every update was a rebuild. What he could not verify in time he flagged as risk, until the risk list was noise to the crew.</p>
+      <p className="friction-beat__scene">What he could not confirm in time went on the brief as risk. Aircrew trust him with their lives, and the longer that list ran, the less his word was worth.</p>
     </div>
     <DagrBeatFigure variant="rebuilt" alt="A close view of a desk: one hand rests flat beside a blank sheet while the other begins writing on it with a pen, and a map board carrying markers is pushed to the far corner." />
   </li>
@@ -134,7 +134,7 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 
 The smart people at Idaho National Laboratory built the line of sight model, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it that made it easy to use. **Anything the app already knows is something he should not type.**
 
-I had already built the live data feeds and the filtering onto DoD approved map layers. So the map is where a Line of Sight analysis starts.
+I had already built the live feeds onto DoD approved map layers. So the map is where a Line of Sight analysis starts.
 
 </section>
 
