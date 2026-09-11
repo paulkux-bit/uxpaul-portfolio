@@ -1,19 +1,19 @@
 import type { ComponentType, SVGProps } from 'react';
 import DagrTyped from './dagr-beats/typed';
 import DagrFixed from './dagr-beats/fixed';
-import DagrRebuilt from './dagr-beats/rebuilt';
+import DagrFlagged from './dagr-beats/flagged';
 
-type DagrBeatVariant = 'typed' | 'fixed' | 'rebuilt';
+type DagrBeatVariant = 'typed' | 'fixed' | 'flagged';
 
 const FIGURES: Record<DagrBeatVariant, ComponentType<SVGProps<SVGSVGElement>>> = {
   typed: DagrTyped,
   fixed: DagrFixed,
-  rebuilt: DagrRebuilt,
+  flagged: DagrFlagged,
 };
 
 interface DagrBeatFigureProps {
   /** Which failure of the threat picture this figure depicts (the shift went to
-   *  inputs / only what stands still / intel stopped being intel). */
+   *  inputs / only what stands still / it cost him the room). */
   variant: DagrBeatVariant;
   /** Accessible description of the figure, and the figure's accessible name. */
   alt: string;
@@ -37,7 +37,7 @@ interface DagrBeatFigureProps {
  * .nuuly-beat-figure exist only to hang the 0.75px non-scaling-stroke floor on, and the
  * two sets that needed one measured 8u (fdte-01, 0.87px) and 4u (nuuly-01, 0.44px).
  * Measured pen width, modal, in viewBox units at the 300px column cap: typed 10u /
- * 1.09px, fixed 12u / 1.31px, rebuilt 11u / 1.20px. All three sit at or above Delivery
+ * 1.09px, fixed 12u / 1.31px, flagged 11u / 1.20px. All three sit at or above Delivery
  * Promise's phantom (10u) and BARD's oku-02 (11u), neither of which carries a floor, so
  * a class here would be a selector with no declarations. If a re-trace ever drops the
  * pen below about 8u, the fix is a `.dagr-beat-figure svg path` rule of its own, NOT

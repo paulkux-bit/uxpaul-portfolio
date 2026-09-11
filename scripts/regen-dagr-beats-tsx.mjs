@@ -20,7 +20,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 const FIGURES = [
   ['typed', 'DagrTyped'],
   ['fixed', 'DagrFixed'],
-  ['rebuilt', 'DagrRebuilt'],
+  ['flagged', 'DagrFlagged'],
 ];
 
 const dir = new URL('../components/dagr-beats/', import.meta.url);
