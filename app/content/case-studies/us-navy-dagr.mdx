@@ -64,25 +64,32 @@ Before a mission flies, the unit gathers in one room: pilots, maintenance, opera
 
 **If the picture is wrong, an aircraft gives away its position or does not come back.** The commander weighs it against everything else and makes the call.
 
-{/* Becomes a <FramedPair> when the briefing-room illustration lands.
-    Left: the illustration, canvas 2320 x 1473 (aspect 1.5750, within 0.0003 of
-    the crop; the widest delta any shipped FramedPair carries is 0.0043).
-    Right: this image, with this caption.
-    FDT-E is the precedent for illustration beside artefact.
-    Not stubbed now because FramedPair's placeholder prop is all-or-nothing. */}
-
-<Figure
-  src="/case-studies/us-navy-dagr/problem-imom.jpg"
-  width={1391}
-  height={883}
-  framed
-  alt="The legacy IMOM analysis screen: orange and cyan radar coverage layered over a raster nautical chart labelled ASIAN COASTAL BUFFER ZONE and KOREA, inside Windows-era application chrome."
-  caption={
-    <>
-      <strong>What he walks in with.</strong> The threat picture, built in a
-      tool sustained since the 1990s.
-    </>
-  }
+<FramedPair
+  framed={false}
+  left={{
+    src: '/case-studies/us-navy-dagr/problem-briefing--feature.png',
+    width: 2320,
+    height: 1473,
+    alt: 'Editorial pencil illustration: five airmen in plain uniform shirts stand in a loose group, all in profile looking to the right at something out of frame, with faint drawn map fragments and a crosshair behind them and a single soft orange watercolour bloom to the left.',
+    caption: (
+      <>
+        <strong>What he walks into.</strong> The unit plans the mission around
+        his read of the threat.
+      </>
+    ),
+  }}
+  right={{
+    src: '/case-studies/us-navy-dagr/problem-imom.jpg',
+    width: 1391,
+    height: 883,
+    alt: 'The legacy IMOM analysis screen: orange and cyan radar coverage layered over a raster nautical chart labelled ASIAN COASTAL BUFFER ZONE and KOREA, inside Windows-era application chrome.',
+    caption: (
+      <>
+        <strong>What he walks in with.</strong> The threat picture, built in a
+        tool sustained since the 1990s.
+      </>
+    ),
+  }}
 />
 
 </section>
