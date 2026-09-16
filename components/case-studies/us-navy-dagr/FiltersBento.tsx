@@ -15,7 +15,8 @@ import manifest from './filters-manifest.json';
  * 536, so the browser fetches a 536-sized file and paints it at 1088, and at 3:4 it would
  * stand about 1451px tall. And 05-14 is a DESIGN, not a shipped build; "Designed, not
  * built." is the last sentence of its caption tail and belongs there rather than in alt
- * text, following took-3d.jpg's precedent.
+ * text. It is the study's only marker for work that was designed and not fielded; it
+ * previously cited took-3d.jpg as precedent, and that figure was unmounted at 94956aa.
  *
  * 05-13-two-shapes is deliberately absent and deliberately not deleted. It is 16:10 where
  * this module is a 3:4 pair plus a feature, so it has no row to join, and its picture
