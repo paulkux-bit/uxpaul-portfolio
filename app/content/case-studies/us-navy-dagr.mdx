@@ -9,7 +9,7 @@ order: 3
 problemFraming: "At what altitude can they see me?"
 projectName: "Line of Sight"
 headline: "Fielded to Air Force units through Red Flag testing."
-summary: "I designed Line of Sight for Dagr, replacing a threat picture built by hand with one that tracks equipment as it moves and re-runs itself against the mission clock."
+summary: "I designed Line of Sight for Dagr, replacing a threat picture the analyst built by hand with one the app assembles, so his hours go to comparing answers rather than typing them."
 heroImage: "/case-studies/us-navy-dagr/hero.png"
 heroImageAlt: "The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own color, and the jagged polygon of what that radar can see."
 role: "Senior Product Designer"
@@ -34,7 +34,6 @@ nda: false
     2023 feature. Its caption says so and must keep saying so.
    ───────────────────────────────────────────────────────────── */}
 
-import { BentoBand } from '@/components/bento';
 import { DagrBeatFigure } from '@/components/dagr-beat-figure';
 import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento';
 import IngestBento from '@/components/case-studies/us-navy-dagr/IngestBento';
@@ -50,7 +49,7 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
   }}
   callout={{
     label: 'WHAT CHANGED',
-    body: 'Most threat pictures are built once. This one keeps up.',
+    body: 'He used to spend the shift building the threat picture. Now he spends it reading one.',
   }}
 />
 
@@ -171,39 +170,13 @@ The analysis needs to know where the threats are and what the equipment at them 
 
 <IngestBento />
 
+The search does not run once. The area stays under watch, and Dagr reads the tasking order to run the analysis again near takeoff, so what he opens on the day is not the picture he built on Monday.
+
 A national search returns far more than one mission cares about. So the second thing I built was the filter. He narrows to his airframe, then down to the equipment types, until only the threats this mission has to account for are left. That is what he briefs.
 
 <FiltersBento />
 
 The search and the filter were never only for Line of Sight. Together they mean the picture he opens is already his: his mission, his airframe, the handful of threats that matter. **I was not just building a feature. I was building what the next one would sit on.**
-
-</section>
-
-<section className="cs-section">
-
-## The picture goes out of date before takeoff.
-
-<p className="section-lede">Missions arrive up to seventy-two hours before they fly.</p>
-
-**So the answer had to come looking for the analyst.** The equipment in that picture moves during those three days, so Dagr reads the tasking order and runs the analysis again close to takeoff. What is waiting for the analyst is the current answer, not the one he asked for on Monday.
-
-The engine runs somewhere else, and for a forward-deployed unit the link to it degrades. So the interface has to be plain about which state it is in: working, answered, or failed.
-
-<BentoBand
-  src="/case-studies/us-navy-dagr/expires-quickview.png"
-  alt="A Quickview card for BAR LOCK RADAR: a phased array marked operational and ready, allegiance IR, an acquisition maximum of 296.98 nautical miles, a tracking maximum of 100.10, and two timestamps both reading four hours ago."
-  caption="What the record admits."
-  gloss="Allegiance, acquisition and tracking ranges, and two timestamps saying the last look was four hours ago."
-  aspect={1.6}
-/>
-
-<BentoBand
-  src="/case-studies/us-navy-dagr/expires-notification.png"
-  alt="The notification panel open over the map: a new line of sight analysis available for viewing with a View action, and an earlier one that failed on a connection error with Retry and Edit actions."
-  caption="It comes back on its own."
-  gloss="A finished analysis, and a failed one with a way back in. The map behind it is not even the same part of the world."
-  aspect={1.6}
-/>
 
 </section>
 
