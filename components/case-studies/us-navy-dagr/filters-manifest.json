@@ -20,8 +20,8 @@
       },
       "slot": "standard",
       "caption": {
-        "lead": "Down to the type.",
-        "tail": "Counts at every level, down to eight of a single kind."
+        "lead": "Counts by type.",
+        "tail": "Every level counted, down to eight mobile AAA."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -36,8 +36,8 @@
       },
       "slot": "standard",
       "caption": {
-        "lead": "Selected, not all.",
-        "tail": "Four radars chosen for this analysis rather than every emitter in the area."
+        "lead": "Selected threats.",
+        "tail": "Four radars chosen for this analysis."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -52,8 +52,8 @@
       },
       "slot": "feature",
       "caption": {
-        "lead": "Tailored to the airframe.",
-        "tail": "A route, the threats that bear on it, and the one he opened. Designed, not built."
+        "lead": "Route view.",
+        "tail": "The threats along a planned route. Designed, not built."
       },
       "ratio": "8:5",
       "width": 4320,
