@@ -19,8 +19,8 @@
       "breakout": "band",
       "aspect": 1.6,
       "caption": {
-        "lead": "Where to look.",
-        "tail": "A centre point and a radius. That is the whole query."
+        "lead": "Center and radius.",
+        "tail": "He drops a point and sets how far out to look."
       },
       "ratio": "8:5",
       "width": 3704,
@@ -36,7 +36,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Order of Battle Search.",
-        "tail": "The area, the radius and what to look for, confirmed before he runs it."
+        "tail": "What he is asking for, confirmed before it runs."
       },
       "ratio": "1852:2469",
       "width": 1852,
@@ -52,7 +52,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Sources.",
-        "tail": "Named and time-stamped, so he can say where the picture came from."
+        "tail": "Named and time-stamped, so he can say where it came from."
       },
       "ratio": "1736:2315",
       "width": 1736,
