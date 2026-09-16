@@ -30,10 +30,17 @@ nda: false
     uncropped 2880x1800 exports, which are exactly 16:10 and so
     sit correctly in feature/wide slots without cropping.
 
-    took-3d.jpg is an EARLIER BUILD (early 2021), not the shipped
-    2023 feature. Its caption says so and must keep saying so.
+    took-3d.jpg is an EARLIER BUILD (early 2021) and is no longer
+    mounted. curvature--band.png replaced it; took-3d.jpg is an orphan
+    pending the cleanup commit. If it ever returns, its caption has to
+    say it is an earlier build.
+
+    curvature--band.png is cut from a screen recording, NOT from the 2021
+    programme deck, so its vintage is not established. Its caption does
+    not claim to show the shipped Line of Sight, and must not start.
    ───────────────────────────────────────────────────────────── */}
 
+import { BentoBand } from '@/components/bento';
 import { DagrBeatFigure } from '@/components/dagr-beat-figure';
 import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento';
 import IngestBento from '@/components/case-studies/us-navy-dagr/IngestBento';
@@ -197,20 +204,12 @@ The engineers and their subject matter experts had the math. I art directed the 
 
 The correction was global, so the drawing tools changed too. Anything an analyst draws now has the earth's curvature applied automatically.
 
-<Figure
-  src="/case-studies/us-navy-dagr/took-3d.jpg"
-  width={1302}
-  height={878}
-  framed
-  alt="An earlier build of the Line of Sight panel in the 3D environment: a THIN SKIN radar at 59.05 ft, four altitudes from 20,000 down to 1,500 feet with one switched off, and a green line-of-sight fan nesting in bands over terrain beside red threat range domes."
-  caption={
-    <>
-      <strong>The dimension the wires could not hold.</strong> An earlier build of
-      the same panel, rendered in the 3D environment: altitude bands nest as
-      volumes, and a hidden layer is switched off in the list. My specifications
-      were flat.
-    </>
-  }
+<BentoBand
+  src="/case-studies/us-navy-dagr/curvature--band.png"
+  alt="The Dagr map pulled back to 317 kilometers: the earth's limb against space, with three enemy air defense rings rendered as translucent red cylinders standing on the coastline rather than drawn flat."
+  caption="What flat could not hold."
+  gloss="Threat rings stand as volumes on a curving earth. My specifications were drawn flat in Figma."
+  aspect={2.6}
 />
 
 </section>
