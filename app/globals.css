@@ -2848,22 +2848,51 @@ html.dark .oku-figure {
   row-gap: var(--bento-row-gap);     /* stacked tiles / 2+1 orphan wrap: loose, binds caption down */
 }
 
-/* Mobile 2-up keyed on the row's RATIO (not its lg+ column count): portrait (3:4)
-   and square (1:1) rows go side-by-side so standard PAIRS don't tower full-width;
-   landscape (16:10) rows stay 1-up. These rows get the per-row subgrid caption-lock
-   at BASE (all breakpoints) — the lock, not min-height, equalizes baselines. */
-.bento-theme__row[data-ratio='portrait'],
+/* Mobile layout is keyed on the row's RATIO, not on its lg+ column count, which is why
+   3:4 and 1:1 rows can behave differently from each other and from 16:10 rows, which
+   stay 1-up at every width. Any row that goes side-by-side gets the per-row subgrid
+   caption-lock — the lock, not min-height, equalizes baselines. The two ratios no
+   longer share one rule: see each block below for which widths it covers. */
+/* SQUARE (1:1) rows stay 2-up at EVERY width, portrait does not, and the split is
+   deliberate. A square tile is small enough that its crop carries no value a reader
+   has to read off it: FDT-E's three source tiles say "GEOINT Source", "COMINT Source"
+   and "MASINT Zero", none of which names a numeral. Portrait tiles do — 05-11 names
+   "eight" and 04-02 names "59.64" — and at 390 those rendered 4.1px and 4.0px. */
 .bento-theme__row[data-ratio='square'] {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto auto; /* caption / media — the shared subgrid tracks */
 }
-.bento-theme__row[data-ratio='portrait'] .bento-theme__item,
 .bento-theme__row[data-ratio='square'] .bento-theme__item {
   display: grid;
   grid-template-rows: subgrid;
   grid-row: span 2;
   row-gap: var(--bento-caption-gap); /* caption → media (tight); overrides the parent's loose row-gap */
   column-gap: 0;
+}
+
+/* PORTRAIT (3:4) rows go 2-up from 768 only. Below that they stack full-width, because
+   a 3:4 panel screenshot at 156px renders its own UI text at 3-4px. The base single
+   column comes from .bento-theme__row, and .bento-theme__item's flex column is the
+   fallback its own comment already names, so nothing new is declared for mobile. */
+/* The gaps sit OUTSIDE the query on purpose, and lint:space check 4 is why: spacing
+   inside a media query is a §7.4 failure. They are also width-independent. Below 768
+   the item is a flex column, where row-gap restates the shorthand and column-gap is
+   inert; from 768 it is a subgrid item, where row-gap overrides the row's loose
+   --bento-row-gap. Same values either way, so nothing is restated per breakpoint. */
+.bento-theme__row[data-ratio='portrait'] .bento-theme__item {
+  row-gap: var(--bento-caption-gap);
+  column-gap: 0;
+}
+@media (min-width: 768px) {
+  .bento-theme__row[data-ratio='portrait'] {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto auto;
+  }
+  .bento-theme__row[data-ratio='portrait'] .bento-theme__item {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 2;
+  }
 }
 
 .bento-theme__item {
