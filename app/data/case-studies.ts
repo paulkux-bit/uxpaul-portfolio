@@ -35,8 +35,8 @@ export const caseStudies: CaseStudy[] = [
     // Dagr build pass, replacing 'What can the enemy see?' with the question the
     // page actually answers: the altitude is the whole point, and the study's own
     // hero role line asks it in those words.
-    // 'U.S. Air Force' is deliberate, not a typo. Paul was employed by the U.S. Navy
-    // at NIWC Pacific, designing for Air Force units at Air Combat Command. Same shape
+    // 'U.S. Air Force' is deliberate, not a typo. Paul worked for the U.S. Navy,
+    // designing for Air Force units at Air Combat Command. Same shape
     // as BARD, where a Navy team builds a Coast Guard system. The Role section names
     // the Navy; the client is the Air Force.
     slug: 'us-navy-dagr',
