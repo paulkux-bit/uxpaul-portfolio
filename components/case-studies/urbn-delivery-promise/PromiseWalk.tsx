@@ -162,7 +162,7 @@ export default function PromiseWalk() {
                   with no bold slot to put a feature name in the captions had drifted
                   into full sentences and cross-references. See $captionDoc. */}
               <figcaption className="bento-theme__caption">
-                <span className="bento-theme__lead">{m.caption.lead}</span>{' '}
+                <strong className="bento-theme__lead">{m.caption.lead}</strong>{' '}
                 <span className="bento-theme__gloss">{m.caption.gloss}</span>
               </figcaption>
 

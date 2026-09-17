@@ -173,7 +173,7 @@ export default function JourneyLine() {
       </ol>
 
       <figcaption className="bento-theme__caption">
-        <span className="bento-theme__lead">{caption.lead}</span>{' '}
+        <strong className="bento-theme__lead">{caption.lead}</strong>{' '}
         <span className="bento-theme__gloss">{caption.gloss}</span>
       </figcaption>
     </figure>
