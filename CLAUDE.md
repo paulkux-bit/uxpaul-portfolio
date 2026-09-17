@@ -555,13 +555,16 @@ The named gates are three different tools; two are external and do NOT read pros
   overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
 - **type** = `npm run lint:type` (`scripts/lint-type.mjs`), a real repo script and the
   only mechanical typography check that exists. Parses `app/globals.css` with postcss
-  and enforces the nine v3 §7 assertions: the three width bands, the 14px floor, the
+  and enforces the ten v3 §7 assertions: the 14px floor, the
   1.15× rung ratio computed across 320–2560, the 340/720 signature, authored `strong`,
-  no `color-mix(… currentColor …)` on text colour, the FVS allowlist, and both halves
+  no `color-mix(… currentColor …)` on text colour, exactly one `font-variation-settings`
+  (on `*`, reading `--flar`), no `font-stretch` or `font-optical-sizing` because those
+  axes do not exist, the flared set in CSS matching `RUNGS`, and both halves
   of the font-load check. **It gates `npm run build`** — the build runs it first and
   stops on failure. Allowlist entries live in the script, each with a one-line reason.
-  It also prints three UNCHECKED blind spots it cannot see: widths driven through a
-  CSS variable, and arbitrary width/weight utilities authored in JSX.
+  It also prints one UNCHECKED blind spot it cannot see: arbitrary font-weight
+  utilities authored in JSX, which check 4 cannot reach because it parses
+  `app/globals.css` only.
 - **There is no `npm run typeset`.** Earlier notes here described `typeset` as an
   external typography check; it is a slash-command mode of the Impeccable skill, backed
   by prose guidance with no code, no config file and no exit status, so it cannot gate
@@ -570,13 +573,14 @@ The named gates are three different tools; two are external and do NOT read pros
   real repo script. Scans rendered `.next` HTML: HARD-fails on em-dash U+2014, WARNs on the
   project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
 
-Full chain: **tsc -> eslint -> build (runs lint:type first, and fails on it) ->
-lint:prose -> detector (visual, external)**.
+Full chain: **tsc -> eslint -> build (runs lint:type, lint:space, lint:color,
+next build, lint:interaction and lint:prose, in that order, failing on the first) ->
+detector (visual, external)**.
 
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
-`npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build` and
-`lint:interaction` — it does NOT run vitest, so no vitest assertion can be described as
+`npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
+`lint:interaction` and `lint:prose` — it does NOT run vitest, so no vitest assertion can be described as
 "green in the deploy". `__tests__/noindex.test.mjs` is the case that matters: it asserts
 `BLOCK_INDEXING`, `app/robots.ts` and the `next.config.mjs` header rule, all from source.
 A green suite here with a missing header on the live site is the failure that would
