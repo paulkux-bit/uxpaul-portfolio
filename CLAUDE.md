@@ -574,13 +574,17 @@ The named gates are three different tools; two are external and do NOT read pros
   project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
 
 Full chain: **tsc -> eslint -> build (runs lint:type, lint:space, lint:color,
-next build, lint:interaction and lint:prose, in that order, failing on the first) ->
-detector (visual, external)**.
+next build, lint:interaction, lint:prose and lint:motion, in that order, failing on
+the first) -> detector (visual, external)**.
+
+- **motion** = `npm run lint:motion` (`scripts/lint-motion.mjs`). Maps every animation
+  and transition in `globals.css` to the guard covering it, and names any selector with
+  none. It takes an optional CSS path so it stays negative-testable from the repo root.
 
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
 `npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
-`lint:interaction` and `lint:prose` — it does NOT run vitest, so no vitest assertion can be described as
+`lint:interaction`, `lint:prose` and `lint:motion` — it does NOT run vitest, so no vitest assertion can be described as
 "green in the deploy". `__tests__/noindex.test.mjs` is the case that matters: it asserts
 `BLOCK_INDEXING`, `app/robots.ts` and the `next.config.mjs` header rule, all from source.
 A green suite here with a missing header on the live site is the failure that would
@@ -593,6 +597,13 @@ curl -s  https://uxpaul-portfolio.vercel.app/robots.txt
 
 Verify the behaviour where it ships. Recorded 21 Aug 2026, after a verification request
 asked for a vitest result "in the deploy", which cannot exist.
+
+**Section word counts have one instrument.** House rule 1 counts the section lede plus
+body prose. The count is taken with `innerText` off the rendered DOM, never from a parse
+of the MDX source — four source parsers disagreed with each other and with the rendered
+page on the same section. A word count quoted in a brief or a commit body is measured
+that way or it is not quoted. Recorded 16 Sep 2026, after ten Dagr commits were judged
+against the house ceiling on the wrong basis.
 
 ## Color system — locked (v2)
 
