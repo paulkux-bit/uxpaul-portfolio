@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run lint:type && npm run lint:space && npm run lint:color && next build && npm run lint:interaction && npm run lint:prose",
+    "build": "npm run lint:type && npm run lint:space && npm run lint:color && next build && npm run lint:interaction && npm run lint:prose && npm run lint:motion",
     "start": "next start",
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",
+    "lint:motion": "node scripts/lint-motion.mjs",
     "lint:type": "node scripts/lint-type.mjs",
     "lint:space": "node scripts/lint-space.mjs",
     "lint:color": "node scripts/lint-color.mjs",
