@@ -76,5 +76,5 @@
     "gloss": "That 22 percent is this, averaged. Reno is a warehouse. It proves the network could hit the date, not that stores could."
   },
   "tierAriaLabel": "A line chart of missed delivery dates across three shipping tiers ordered by price, cheapest first, across the whole network. Missed dates rise from 3 percent on standard shipping to 16 percent on express and 22 percent on overnight. A dotted reference rule marks the standard rate, so the line visibly climbs away from it.",
-  "nodeAriaLabel": "A bar chart of missed delivery dates on overnight shipping only, broken out by node. The Reno fulfillment center missed 11 percent and the Gap fulfillment center 15 percent, while the store network missed 45 percent. A marker labelled All nodes shows the network rate of 22 percent, which sits between them. Reno and Gap are fulfillment centers and compare to the network as a whole, not to the store network."
+  "nodeAriaLabel": "A bar chart of missed delivery dates on overnight shipping only, broken out by node. The Reno fulfillment center missed 11 percent and the Gap fulfillment center 15 percent, while the store network missed 45 percent. A marker labeled All nodes shows the network rate of 22 percent, which sits between them. Reno and Gap are fulfillment centers and compare to the network as a whole, not to the store network."
 }
