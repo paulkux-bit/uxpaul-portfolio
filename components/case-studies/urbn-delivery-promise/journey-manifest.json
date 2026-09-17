@@ -169,5 +169,5 @@
     "lead": "One order, mapped.",
     "gloss": "She recovers twice, and is knocked down four times. None of the drops are about price."
   },
-  "ariaLabel": "One shopper's satisfaction across five stages of a single order, running from happy through fine to angry. She starts happy through arrive and browse, drops to fine at decide when no delivery date is visible, then recovers to happy at purchase. She falls to angry when the order goes out of stock after she has paid, recovers to happy again when the order receipt arrives, falls to fine as the order turns up in three separate shipments, and recovers no further: the line ends at angry when an item is cancelled four days later. She recovers twice and is knocked down four times."
+  "ariaLabel": "One shopper's satisfaction across five stages of a single order, running from happy through fine to angry. She starts happy through arrive and browse, drops to fine at decide when no delivery date is visible, then recovers to happy at purchase. She falls to angry when the order goes out of stock after she has paid, recovers to happy again when the order receipt arrives, falls to fine as the order turns up in three separate shipments, and recovers no further: the line ends at angry when an item is canceled four days later. She recovers twice and is knocked down four times."
 }

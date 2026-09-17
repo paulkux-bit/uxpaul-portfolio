@@ -60,7 +60,7 @@
           "src": "/case-studies/urbn-delivery-promise/solution/pdp--page.png",
           "width": 2450,
           "height": 1339,
-          "alt": "A product page with the site navigation, breadcrumb and product photograph, and a right column running from the product name and price through colour, fit and size to free two-day shipping to a zip code with a named arrival date above the add-to-cart button.",
+          "alt": "A product page with the site navigation, breadcrumb and product photograph, and a right column running from the product name and price through color, fit and size to free two-day shipping to a zip code with a named arrival date above the add-to-cart button.",
           "caption": {
             "lead": "The promise sits above the button.",
             "gloss": "She sees it before she adds to cart."
@@ -87,7 +87,7 @@
           "src": "/case-studies/urbn-delivery-promise/solution/cart--page.png",
           "width": 2450,
           "height": 1001,
-          "alt": "A shopping cart page with a banner across the top reading your items are available for 2 day delivery, the cart header and its first line item, and a summary panel giving the shopper's location as a zip code with a change link, a greyed line reading not eligible for store pickup, shipping marked free, a subtotal and checkout buttons.",
+          "alt": "A shopping cart page with a banner across the top reading your items are available for 2 day delivery, the cart header and its first line item, and a summary panel giving the shopper's location as a zip code with a change link, a grayed line reading not eligible for store pickup, shipping marked free, a subtotal and checkout buttons.",
           "caption": {
             "lead": "The same promise, in the cart.",
             "gloss": "It runs across the top, above the order."
