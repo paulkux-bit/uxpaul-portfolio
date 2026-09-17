@@ -190,7 +190,7 @@ function BreakoutCaption({ caption, gloss }: { caption?: string; gloss?: string 
   if (!caption) return null;
   return (
     <figcaption className="bento-theme__caption">
-      <span className="bento-theme__lead">{caption}</span>
+      <strong className="bento-theme__lead">{caption}</strong>
       {gloss ? <span className="bento-theme__gloss">{' '}{gloss}</span> : null}
     </figcaption>
   );
@@ -204,7 +204,7 @@ function BentoFigure({ slot, priority, ...item }: BentoItemProps & { slot: Slot;
       style={{ '--bento-aspect': SLOT_ASPECT[slot] } as CSSProperties}
     >
       <figcaption className="bento-theme__caption">
-        <span className="bento-theme__lead">{item.caption}</span>
+        <strong className="bento-theme__lead">{item.caption}</strong>
         {item.gloss ? <span className="bento-theme__gloss">{' '}{item.gloss}</span> : null}
       </figcaption>
       <div className="bento-theme__media">
