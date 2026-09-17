@@ -2361,14 +2361,19 @@ html.dark .oku-figure {
    come from two different rules that never meet in the stylesheet. The breach is
    a property of the rendered pair, so only a render finds it.
 
-   THREE STUDIES SHARE THIS, NOT ONE. There are FIVE .pull-quote--quiet instances on
-   the site, not four: one in nuuly.mdx, one in us-navy-fdt-e.mdx and THREE in
-   urbn-delivery-promise.mdx. Three of the five sit inside a friction beat, and
-   because both contributing rules are site-wide the ratio was identical at all
-   three. House rules section 14: a defect found in one file is a defect in every
-   file that shares the pattern. The instances in Delivery Promise's section 03 sit
-   next to body prose, which is what --quiet was calibrated against, and do not
-   breach; they are deliberately not in scope here.
+   FOUR STUDIES SHARE THIS, NOT ONE. Every .pull-quote--quiet that sits inside a
+   friction beat breaches, because both contributing rules are site-wide and the
+   ratio is identical at all of them. House rules section 14: a defect found in one
+   file is a defect in every file that shares the pattern. The instances that sit
+   next to body prose instead, which is what --quiet was calibrated against, do not
+   breach and are deliberately not in scope here.
+
+   DO NOT MAINTAIN A COUNT HERE - GREP IT. Measured 16 Sep 2026: six instances, four
+   of them inside a beat. This note has carried a wrong number twice. It said four,
+   was corrected to five on 1 Sep, and both figures omitted Dagr entirely, so the
+   enumeration was wrong on the day it was written and wrong again the moment Dagr's
+   section 6 pass deleted one. A per-file tally in a stylesheet comment cannot see a
+   study being edited in another file.
 
    THE COUNT AND THE LINE NUMBERS IN THIS NOTE WERE BOTH WRONG UNTIL 1 Sep. It said
    four instances and cited urbn-delivery-promise.mdx:193 and :246; BOTH of those
