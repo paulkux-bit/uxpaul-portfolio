@@ -3,7 +3,7 @@
   "slug": "uscg-bard",
   "web_path_prefix": "/case-studies/uscg-bard/resolutions-01",
   "layout": [
-    "location--chip-strip",
+    "location--filter-bar",
     "location--band-b",
     [
       "event--card-portrait",
@@ -31,17 +31,17 @@
       "label": "location"
     },
     {
-      "src": "/case-studies/uscg-bard/resolutions-01/location--chip-strip-light.png",
-      "alt": "BARD filter bar: Status, Location, Event, Cause, Severity; Location active.",
+      "src": "/case-studies/uscg-bard/resolutions-01/location--filter-bar-light.png",
+      "alt": "BARD incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "track": "bento",
-      "width": 1845,
-      "height": 130,
-      "breakout": "ribbon",
-      "aspect": 14.19,
+      "width": 2620,
+      "height": 452,
+      "breakout": "band",
+      "aspect": 5.8,
       "beat": "filters",
       "caption": "One filter set, every filing. Status, location, event, cause, severity.",
       "label": "the shared filter set"
@@ -129,17 +129,17 @@
       "label": "location"
     },
     {
-      "src": "/case-studies/uscg-bard/resolutions-01/location--chip-strip-dark.png",
-      "alt": "BARD filter bar: Status, Location, Event, Cause, Severity; Location active.",
+      "src": "/case-studies/uscg-bard/resolutions-01/location--filter-bar-dark.png",
+      "alt": "BARD incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "track": "bento",
-      "width": 1845,
-      "height": 130,
-      "breakout": "ribbon",
-      "aspect": 14.19,
+      "width": 2620,
+      "height": 452,
+      "breakout": "band",
+      "aspect": 5.8,
       "beat": "filters",
       "caption": "One filter set, every filing. Status, location, event, cause, severity.",
       "label": "the shared filter set"
@@ -212,7 +212,7 @@
   ],
   "composition": [
     {
-      "name": "location--chip-strip",
+      "name": "location--filter-bar",
       "mode": "dark"
     },
     {

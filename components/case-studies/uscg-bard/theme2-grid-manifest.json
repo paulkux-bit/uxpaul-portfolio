@@ -15,10 +15,10 @@
     },
     {
       "order": 2,
-      "name": "annual-bars--band",
+      "name": "low-volume--band",
       "mode": "light",
       "breakout": "band",
-      "aspect": 5.54
+      "aspect": 3.17
     },
     {
       "order": 3,
@@ -55,14 +55,14 @@
       "aspect": 5.54
     },
     {
-      "src": "/case-studies/uscg-bard/resolutions-02/annual-bars--band.png",
-      "alt": "Hawaii dashboard chart: annual incidents declining from 14 in 2022 to 7 in 2026.",
+      "src": "/case-studies/uscg-bard/resolutions-02/low-volume--band.png",
+      "alt": "Hawaii's BARD dashboard: a KPI strip reading 7 YTD incidents, most recent Mar 14, 0 this week and 100 percent federal compliance, above a five-year bar chart falling from 14 in 2022 to 7 in 2026.",
       "caption": {
         "lead": "Low-volume jurisdictions.",
         "tail": "Visuals adapt for small datasets like Hawaii's seven annual cases."
       },
-      "width": 4068,
-      "height": 735,
+      "width": 4389,
+      "height": 1385,
       "focalPoint": {
         "x": 0.87,
         "y": 0.8
@@ -70,7 +70,7 @@
       "mode": "light",
       "jurisdiction": "HI",
       "breakout": "band",
-      "aspect": 5.54
+      "aspect": 3.17
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-02/empty-state--band.png",
@@ -116,7 +116,7 @@
       "note": "not rendered on page; for Claude Code + reviews"
     },
     {
-      "src": "/case-studies/uscg-bard/resolutions-02/annual-bars--band--dark.png",
+      "src": "/case-studies/uscg-bard/resolutions-02/low-volume--band--dark.png",
       "note": "not rendered on page; for Claude Code + reviews"
     },
     {
