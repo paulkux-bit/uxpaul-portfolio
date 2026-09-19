@@ -41,7 +41,7 @@
       "alt": "Florida dashboard trend chart: monthly incidents rising to 420 through September, above 2025, with the remaining year projected.",
       "caption": {
         "lead": "Comparative trends.",
-        "tail": "See monthly case volume against last year to spot spikes."
+        "tail": "This year against last, with the rest projected."
       },
       "width": 4068,
       "height": 735,
@@ -59,7 +59,7 @@
       "alt": "Hawaii's BARD dashboard: a KPI strip reading 7 YTD incidents, most recent Mar 14, 0 this week and 100 percent federal compliance, above a five-year bar chart falling from 14 in 2022 to 7 in 2026.",
       "caption": {
         "lead": "Low-volume jurisdictions.",
-        "tail": "Visuals adapt for small datasets like Hawaii's seven annual cases."
+        "tail": "Hawaii's seven cases a year still read as a trend."
       },
       "width": 4389,
       "height": 1385,
@@ -77,7 +77,7 @@
       "alt": "Hawaii dashboard work queue in its empty state: a small boat illustration above the words All caught up, No incidents in your queue, and a View All Incidents button.",
       "caption": {
         "lead": "Empty queue.",
-        "tail": "Clear indicators show when a state's queue is empty."
+        "tail": "She has nothing left to file."
       },
       "width": 2176,
       "height": 1000,
@@ -95,7 +95,7 @@
       "alt": "Florida dashboard summary strip: 420 incidents year to date, 47 fatalities, 38 this week, 89 percent federal compliance.",
       "caption": {
         "lead": "Metrics summary.",
-        "tail": "At-a-glance totals for YTD incidents, weekly cases, and compliance."
+        "tail": "Incidents, fatalities, this week, compliance."
       },
       "width": 3865,
       "height": 340,
