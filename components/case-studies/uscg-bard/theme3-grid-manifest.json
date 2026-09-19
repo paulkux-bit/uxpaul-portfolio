@@ -72,26 +72,26 @@
       "slot": "standard"
     },
     {
-      "src": "/case-studies/uscg-bard/resolutions-03/03-banner--dark.png",
-      "alt": "BARD dashboard alert: the U.S. Coast Guard returned 2 incidents for corrections this week, with a Review now action.",
+      "src": "/case-studies/uscg-bard/resolutions-03/03-return-audit--dark.png",
+      "alt": "BARD dashboard alert reading USCG returned 2 incidents for corrections this week with a Review now link, above the KPI strip showing 420 YTD incidents, 47 fatalities, 38 this week and 89 percent federal compliance.",
       "caption": { "lead": "Return audit.", "tail": "Tracks returned cases and updates compliance scores instantly." },
-      "width": 4218,
-      "height": 254,
+      "width": 4400,
+      "height": 764,
       "focalPoint": { "x": 0.5, "y": 0.5 },
       "mode": "dark",
-      "breakout": "ribbon",
-      "aspect": 16.61
+      "breakout": "band",
+      "aspect": 5.76
     },
     {
-      "src": "/case-studies/uscg-bard/resolutions-03/03-banner.png",
-      "alt": "BARD dashboard alert: the U.S. Coast Guard returned 2 incidents for corrections this week, with a Review now action.",
+      "src": "/case-studies/uscg-bard/resolutions-03/03-return-audit.png",
+      "alt": "BARD dashboard alert reading USCG returned 2 incidents for corrections this week with a Review now link, above the KPI strip showing 420 YTD incidents, 47 fatalities, 38 this week and 89 percent federal compliance.",
       "caption": { "lead": "Return audit.", "tail": "Tracks returned cases and updates compliance scores instantly." },
-      "width": 4218,
-      "height": 254,
+      "width": 4400,
+      "height": 764,
       "focalPoint": { "x": 0.5, "y": 0.5 },
       "mode": "light",
-      "breakout": "ribbon",
-      "aspect": 16.61
+      "breakout": "band",
+      "aspect": 5.76
     }
   ],
   "composition": [
@@ -100,11 +100,11 @@
       { "name": "03-verdicts", "mode": "dark" },
       { "name": "03-cadence", "mode": "dark" }
     ],
-    { "name": "03-banner", "mode": "dark", "breakout": "ribbon", "aspect": 16.61 }
+    { "name": "03-return-audit", "mode": "dark", "breakout": "band", "aspect": 5.76 }
   ],
   "_notes": {
     "reconciled": "Rebuilt from the authored draft into the real ResolutionsBento contract (theme-2 schema): tiles->images (light+dark split), src:{dark,light}->per-mode src strings, slot:band/ribbon->breakout, added measured aspect + focalPoint, {row,tiles}->CompRow[] with mode per entry. Crops renamed to <name>.png / <name>--dark.png.",
-    "no_crop": "Every tile's aspect equals its native crop aspect (band 5.11, standards 0.75=3:4, ribbon 16.61), so nothing cover-crops; focalPoint is centered and inert.",
+    "no_crop": "Every tile's aspect equals its native crop aspect (bands 5.11 and 5.76, standards 0.75=3:4), so nothing cover-crops; focalPoint is centered and inert.",
     "off_page": "03-reports-table-light is a working-library resave only; not in images/composition."
   }
 }
