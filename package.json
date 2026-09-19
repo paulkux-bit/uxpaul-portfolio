@@ -9,6 +9,7 @@
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",
     "lint:motion": "node scripts/lint-motion.mjs",
+    "lint:assets": "node scripts/check-manifest-assets.mjs",
     "lint:type": "node scripts/lint-type.mjs",
     "lint:space": "node scripts/lint-space.mjs",
     "lint:color": "node scripts/lint-color.mjs",
