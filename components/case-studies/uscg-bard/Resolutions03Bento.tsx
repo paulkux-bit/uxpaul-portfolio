@@ -4,7 +4,7 @@ import manifest from './theme3-grid-manifest.json';
 /**
  * Resolutions 03 — "How you count". Binds the Theme-3 manifest to the generic
  * ResolutionsBento adapter. The closer: band opener → matched 2-up (verdicts ‖ cadence)
- * → ribbon climax. Composition defaults dark (the 01-dark / 02-light / 03-dark rhythm);
+ * → band climax. Composition defaults dark (the 01-dark / 02-light / 03-dark rhythm);
  * both light + dark crops exist per tile so mode is a one-field flip in the manifest.
  *
  * The cast: `resolveJsonModule` widens the JSON's string literals (`breakout`, `mode`) to
