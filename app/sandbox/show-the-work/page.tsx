@@ -82,7 +82,8 @@ export default function ShowTheWorkSandbox() {
         {/* Resolutions 02 — "How you see". Second real theme, its OWN section (distinct from
             the Theme-1 section above and from the grey GEOMETRY stress blocks below). Rendered
             through the generic ResolutionsBento adapter reading theme2-grid-manifest.json —
-            all-light, per the 01-dark / 02-light / 03-dark rhythm. Header matches Theme 1's
+            all-light by that theme's own locked policy, not part of any site-wide
+            dark/light/dark rhythm (01 and 03 are both mixed). Header matches Theme 1's
             treatment: a quiet numeral lockup (02 · sentence-case "How you see") over a bold
             display title; one tracked eyebrow max, no stacked uppercase labels (the slop tell
             the council killed on 01).
@@ -112,9 +113,9 @@ export default function ShowTheWorkSandbox() {
         </section>
 
         {/* Resolutions 03 — "How you count". Third + final theme, its OWN section, immediately
-            after Theme 2. The closer, rendered DARK (composition default, per the 01-dark /
-            02-light / 03-dark rhythm): band opener → matched 2-up (verdicts ‖ cadence, the shape
-            02 lacked) → ribbon climax. Generic ResolutionsBento reading theme3-grid-manifest.json.
+            after Theme 2. The closer, composition default DARK though the theme is MIXED per
+            its own mode_policy: band opener → matched 2-up (verdicts ‖ cadence, the shape
+            02 lacked) → band climax. Generic ResolutionsBento reading theme3-grid-manifest.json.
             Header matches 01/02: quiet numeral lockup over the bold display title, one tracked
             eyebrow max. Same first-child preamble-void !important as 02 (rationale documented there). */}
         <section className="cs-section">

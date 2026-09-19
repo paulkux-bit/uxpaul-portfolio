@@ -21,7 +21,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: 'uscg-bard',
     problemFraming: 'How do 56 jurisdictions align without changing?',
-    projectName: 'Bard',
+    projectName: 'BARD',
     client: 'U.S. Coast Guard',
   },
   {
