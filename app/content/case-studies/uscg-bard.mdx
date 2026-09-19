@@ -1,5 +1,5 @@
 ---
-title: "I didn't redesign a government form. I helped rebuild the system fifty-six jurisdictions report into."
+title: "Every state reported. Nobody could compare."
 slug: "uscg-bard"
 client: "U.S. Coast Guard"
 template: "A"
@@ -25,27 +25,27 @@ import { BentoBand } from '@/components/bento';
 
 <HeroBlock
   eyebrow="BARD · U.S. COAST GUARD"
-  title={['The data was there.', 'The system never spoke.']}
-  role="I helped rebuild BARD, the federal database every U.S. state and territory uses to report boating accidents: sole designer, first ground-up overhaul in over twenty years."
+  title={['Every state reported.', 'Nobody could compare.']}
+  role="Investigators in every U.S. state and territory file boating accidents into one federal database. I'm the sole designer on its first ground-up overhaul in over twenty years."
   image={{
     src: '/case-studies/uscg-bard/hero.png',
     alt: "BARD dashboard greeting a state coordinator by name, summarizing the year's leading contributing factor, flagging two incidents returned for correction, and charting year-to-date incidents against the prior year. Synthetic data.",
   }}
   callout={{
     label: 'WHAT CHANGED',
-    body: 'The old system waited for a query. This one opens to what needs attention.',
+    body: "Maria used to go looking for the case at risk. Now it's the first thing she sees.",
   }}
 />
 
 <section className="cs-section cs-section--problem">
 
-## Investigators need to get every case right, but the system made that harder, not easier.
+## Investigators need to get every case right, but the system made that harder.
 
 **Boating accident cases are rising**, and each one becomes a federal record, filed against a statutory deadline.
 
-**This isn't just paperwork.** Any case could end up as evidence.
+**This isn't just paperwork.** The record is Maria's. It can end up in court.
 
-**The old system made required data easy to skip**, so cases went out breaking federal compliance rules.
+**The old system made required data easy to skip.** Her cases came back from the Coast Guard for corrections she could have caught at entry.
 
 <FramedPair
   framed={false}
@@ -56,8 +56,8 @@ import { BentoBand } from '@/components/bento';
     alt: 'Screenshot of the legacy BARD dashboard, a dense table listing boating-incident cases by ID, date, water body, county, vessel and casualty counts, and status.',
     caption: (
       <>
-        <strong>No case rose to the top.</strong> Every case is just another
-        row; the one closest to breaching the clock looks like all the others.
+        <strong>Every case, one row.</strong> Nothing shows which one is running
+        out of time.
       </>
     ),
   }}
@@ -68,8 +68,8 @@ import { BentoBand } from '@/components/bento';
     alt: 'Screenshot of the legacy Florida Boating Accident Report, a single long form densely packed with input fields for incident type, location, conditions, and reporting party.',
     caption: (
       <>
-        <strong>One form, every severity.</strong> One long form, the same
-        whether the case is a near-miss or a fatality.
+        <strong>Boating Accident Report.</strong> Near miss or fatality, every
+        case fills the same form.
       </>
     ),
   }}
@@ -83,12 +83,16 @@ import { BentoBand } from '@/components/bento';
 
 <p className="section-lede">I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the legacy system's survey results and support tickets.</p>
 
+{/* NUMERALS: 56 in display and alt text, "fifty-six" in prose. The beat headline below is
+    display, so it takes the word; section 3's heading and this study's summary are prose and
+    take the word too; problemFraming and manifest alt strings take the numeral. */}
+
 <ol className="friction-beats" role="list">
   <li className="friction-beat" data-thread="1">
     <div className="friction-beat__text">
       <span className="thread-index">01</span>
       <h3 className="friction-beat__headline">Fifty-six forks</h3>
-      <p className="friction-beat__scene">Each jurisdiction had its own form. Standardizing inputs never moved past the planning phase.</p>
+      <p className="friction-beat__scene">Each jurisdiction had its own form. Every attempt to align them had died in planning.</p>
     </div>
     <OkuFigure variant="forms-diverge" alt="Fifty-six forms diverging from a common origin, each adapting away from the others." />
   </li>
@@ -96,7 +100,7 @@ import { BentoBand } from '@/components/bento';
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Six months behind</h3>
-      <p className="friction-beat__scene">Because national figures were aggregated by hand, decision-makers were always working with six-month-old data.</p>
+      <p className="friction-beat__scene">National figures were compiled by hand, so the Coast Guard always worked from six-month-old numbers. Safety campaigns were aimed at last season's problem.</p>
     </div>
     <OkuFigure variant="insight-trapped" alt="A year of incident data with meaning lit in only a single month." />
   </li>
@@ -104,7 +108,7 @@ import { BentoBand } from '@/components/bento';
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">Four disconnected tabs</h3>
-      <p className="friction-beat__scene">Filing one case required staff to manually reconcile data across four disconnected browser tabs.</p>
+      <p className="friction-beat__scene">Filing one case required investigators to cross-check the record across four browser tabs. The judgment part of the job waited.</p>
     </div>
     <OkuFigure variant="manual-reconcile" alt="One incident record forced into two readings, reconciled by hand across two open tabs." />
   </li>
@@ -118,47 +122,57 @@ import { BentoBand } from '@/components/bento';
 
 <p className="section-lede">Standardize the data, not the people.</p>
 
-Forcing fifty-six jurisdictions onto a single form was an operational dead end. I kept local processes as they were and built a standard data structure underneath. Suddenly, trends and comparisons were possible.
+{/* ANTITHESIS BUDGET: BARD keeps two "X, not Y" lines, this lede and section 2's heading.
+    The house budget is one. Both were kept on purpose: section 2's states what the research
+    found, this one states what I did about it. The others were cut, section 1's "not easier"
+    and section 8's "not design". Do not add a third. */}
+
+**They were never all going to agree on one form.** I left local processes alone and built a standard data structure underneath. A crash in Hawaii and a crash in Florida can finally be counted the same way.
 
 </section>
 
 <section className="cs-section">
 
-## The form bends. The record underneath does not.
+## Each state files a different form into the same record.
 
 <p className="section-lede">Federal fields are required. Everything else is up to the jurisdiction.</p>
 
-I designed a modular form on a single, shared data structure. Role-based views keep the interface clean. Local investigators see only what matters for their case, while Coast Guard reviewers get a high-level view with real-time compliance scoring.
+**The modular form gives two people their own screen.** Maria sees only the fields her case needs. The Coast Guard opens that record in its own view, with a compliance score that fills in as she types.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
   alt="The BARD incident form in the state filer's view, with a Your View / USCG View toggle to switch to the Coast Guard's read of the same record; a live 20% Federal Compliance meter scores the draft as fields are filled."
-  caption="Dual-view capability."
-  gloss="Investigators enter local details; the Coast Guard's view is one toggle away."
+  caption="Your View / USCG View."
+  gloss="One toggle, no second form to fill."
   aspect={1.6}
 />
+
+{/* CAPTION LEAD NAMES A MECHANISM, NOT A BENEFIT, and that is a deliberate deviation Paul
+    ruled in. Every other lead on this page names what the reader gets; "Conditional logic"
+    names how it works. It stays because the tide-field behaviour is the evidence, and a
+    benefit lead would describe a form that looks identical in the crop. */}
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-map.png"
   alt="The full BARD incident screen for a Bay/Sound location: a 'Showing tidal fields' banner and a Tide stage field appear because the water-body type calls for them."
   caption="Conditional logic."
-  gloss="Inputs like tidal data appear only when relevant."
+  gloss="Pick a bay or sound and the tide questions appear."
   aspect={1.6}
 />
 
 </section>
 
 <section className="cs-section">
-  <h2>One data structure changed how you file, see, and count.</h2>
+  <h2>One data structure changed how she files, sees, and counts.</h2>
 
-  <p className="section-note">Every screen on this page runs on synthetic data. The live system runs on federal records.</p>
+  <p className="section-note">Every screen on this page runs on synthetic data. The system it replaces runs on federal records.</p>
 
   {/* The axis lockup is now the section header: the sentence h3 it used to precede is gone,
       so this carries the heading role. text-resolution-headline is the same register as
       .friction-beat__headline, keeping the friction→resolution read headline-to-headline. */}
   <h3 className="mt-8 mb-10 flex items-baseline gap-2 text-resolution-headline">
     <span className="thread-index">01</span>
-    <span>How you file</span>
+    <span>How she files</span>
   </h3>
   <Resolutions01Bento />
 </section>
@@ -166,7 +180,7 @@ I designed a modular form on a single, shared data structure. Role-based views k
 <section className="cs-section">
   <h3 className="mb-10 flex items-baseline gap-2 text-resolution-headline">
     <span className="thread-index">02</span>
-    <span>How you see</span>
+    <span>How she sees</span>
   </h3>
   <Resolutions02Bento />
 </section>
@@ -174,24 +188,22 @@ I designed a modular form on a single, shared data structure. Role-based views k
 <section className="cs-section">
   <h3 className="mb-10 flex items-baseline gap-2 text-resolution-headline">
     <span className="thread-index">03</span>
-    <span>How you count</span>
+    <span>How she counts</span>
   </h3>
   <Resolutions03Bento />
 </section>
 
 <section className="cs-section">
 
-## The hardest part was collaboration, not design.
+## The work was showing every jurisdiction its own view.
 
-<p className="section-lede">Getting fifty-six jurisdictions to agree was the real challenge.</p>
-
-Instead of forcing a single form, I preserved local needs while unifying the data underneath. To get buy-in, here's what I did:
+**The resistance was never about the data model.** Each one wanted to know what it would lose.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-table--band.png"
   alt="BARD field-inventory spreadsheet: every incident field mapped to Your View, USCG View, and Mobile columns across all form sections."
-  caption="Information architecture buy-in."
-  gloss="Walked every jurisdiction and SME through exactly what they'd get."
+  caption="The field inventory."
+  gloss="Every field mapped to her view, the Coast Guard's, and mobile."
   focal="top"
   aspect={2.263}
 />
@@ -199,23 +211,19 @@ Instead of forcing a single form, I preserved local needs while unifying the dat
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-insightwide--band.png"
   alt="BARD Incidents dashboard showing a plain-English engine line ('2 cases returned by USCG, 1 overdue, 1 due Nov 3') beside the deterministic shape-card spec that generates it."
-  caption="Data into insight."
-  gloss="Built an engine that turns standard data into plain-English insights."
+  caption="The insight engine."
+  gloss="The spec on the right writes the line on the left."
   focal={{ x: 0, y: 0.5 }}
   aspect={2.435}
 />
-
-I mapped every section and state view, then tested the variations directly with end users.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-figma-canvas--band.png"
   alt="Zoomed-out Figma canvas of the BARD Incident form: an information-architecture outline beside four form states (empty, single-vessel, multi-vessel, USCG view)."
   caption="Prototyping with users."
-  gloss="Mapped, built, and tested every view directly with end users."
+  gloss="Empty, one vessel, several vessels, and under review."
   aspect={1.904}
 />
-
-What surprised me most was how standardized data made urgent cases visible right away, unlike the old system.
 
 </section>
 
@@ -229,12 +237,14 @@ What surprised me most was how standardized data made urgent cases visible right
   <p className="milestone__sub">In build and testing now.</p>
 </div>
 
+Nobody has filed a real case in it yet. The numbers come after the first season. Standardizing the incident form was the foundation, and getting it right is what lets the Coast Guard see a season as it happens.
+
 </section>
 
 <section className="cs-section">
 
 ## Role
 
-Sole product designer on BARD, a U.S. Coast Guard system. Worked for the U.S. Navy, alongside product and engineering, and with Coast Guard stakeholders. On BARD since November 2025.
+Sole product designer on BARD, a U.S. Coast Guard system. Work for the U.S. Navy, alongside product and engineering, and with Coast Guard stakeholders. On BARD since November 2025.
 
 </section>
