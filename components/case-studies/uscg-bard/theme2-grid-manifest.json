@@ -3,7 +3,7 @@
   "theme": "02 - how you see",
   "thesis": "Every jurisdiction sees its own dashboard. One live source underneath.",
   "slug": "uscg-bard",
-  "mode_policy": "all-light (02 in the locked 01-dark / 02-light / 03-dark rhythm)",
+  "mode_policy": "all-light, by locked policy for this theme. There is NO site-wide 01-dark / 02-light / 03-dark rhythm: theme1's composition is mixed (filter-bar dark, band-b light, portraits light, map dark, table light) and theme3's own mode_policy says MIXED. Only 02 is single-mode.",
   "render_target": "sandbox /sandbox/show-the-work, Theme-2 section, via manifest -> BentoTheme adapter",
   "composition": [
     {

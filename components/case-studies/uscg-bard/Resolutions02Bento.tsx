@@ -3,7 +3,8 @@ import manifest from './theme2-grid-manifest.json';
 
 /**
  * Resolutions 02 — "How you see". Binds the Theme-2 manifest to the generic
- * ResolutionsBento adapter. All-light (the locked 01-dark / 02-light / 03-dark rhythm);
+ * ResolutionsBento adapter. All-light, by this theme's own locked policy — NOT part of a
+ * site-wide dark/light/dark rhythm, which never held: 01 is mixed and 03 is mixed too;
  * the `--dark` twins in the manifest's `working_library_dark` are review-only and never
  * rendered.
  *
