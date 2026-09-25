@@ -2,7 +2,7 @@
   "images": [
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/establish--band.png",
-      "alt": "The full FDT-E watch board for Operation Avalanche: the records table beside the map, 187 records, nothing flagged.",
+      "alt": "The FDT-E watch board for Operation Avalanche: a records table of 187 entries beside the map, no row flagged, one entry reading Unknown Entity.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -10,26 +10,26 @@
       "breakout": "band",
       "aspect": 1.832,
       "caption": {
-        "lead": "Trusted Board.",
-        "tail": "Near real-time view of enemy units."
+        "lead": "Watch list.",
+        "tail": "One current view of enemy units, before anything is flagged."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/anomaly--feature.png",
-      "alt": "A flagged anomaly card, possible command node detected, leading with its own confidence of eighty percent above a Verification, Response, Analysis workflow.",
+      "alt": "A C2 Anomaly card over the map, headed Potential C2 Node Detected, with OSINT and COMINT (Radio) source chips and a location panel for CH - EAST, Unknown Entity. Below it three steps: Verification with an active Start button, then Response and Analysis greyed out.",
       "focalPoint": {
         "x": 0.62,
         "y": 0.45
       },
       "slot": "feature",
       "caption": {
-        "lead": "Confidence Level.",
-        "tail": "Metadata and reasoning for the anomaly."
+        "lead": "Anomaly alert.",
+        "tail": "Names the sources behind the flag before asking for a decision."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/verification--band.png",
-      "alt": "The verification step: all-source correlation scored by intelligence discipline and linked directly to the CJADC2 doctrine on command nodes.",
+      "alt": "The Verification step: a five-part timeline on the left running All-Source Correlation, Intelligence Fusion, Collaborative Verification, Historical Data Analysis and Predictive Modeling, with a link to the CJADC2 doctrine guide inside the open first step. On the right, Intelligence Sources over the past 24 hours: COMINT 8, ELINT 6, FISINT 3, GEOINT 12, HUMINT 2, MASINT 0 and OSINT 4, each with a sparkline, MASINT's empty.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.45
@@ -37,73 +37,73 @@
       "breakout": "band",
       "aspect": 2.105,
       "caption": {
-        "lead": "Doctrine Check.",
-        "tail": "All-source correlation for a clear picture."
+        "lead": "Doctrine check.",
+        "tail": "The reference travels with the step."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/geoint--compact.png",
-      "alt": "GEOINT discipline card showing twelve relevant hits with a sparkline.",
+      "alt": "The GEOINT source card: Relevant Hits 12, with a sparkline of when they landed, Nov 02 1600Z to Nov 03 1559Z.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "compact",
       "caption": {
-        "lead": "GEOINT Source.",
-        "tail": "Geospatial intelligence shows hits and distribution."
+        "lead": "Discipline scoring.",
+        "tail": "Geospatial returns twelve hits in the chosen window."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/comint--compact.png",
-      "alt": "COMINT discipline card showing eight relevant hits with a sparkline.",
+      "alt": "The COMINT source card: Relevant Hits 8, with a sparkline over the same window.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "compact",
       "caption": {
-        "lead": "COMINT Source.",
-        "tail": "Communications intel highlights matching signals."
+        "lead": "Side by side.",
+        "tail": "Communications returns eight, over the same window."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/masint--compact.png",
-      "alt": "MASINT discipline card showing zero relevant hits.",
+      "alt": "The MASINT source card: Relevant Hits 0, its sparkline area empty over the same window.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "compact",
       "caption": {
-        "lead": "MASINT Zero.",
-        "tail": "Measurement and signature intel. No hits, which is evidence."
+        "lead": "Zero is a result.",
+        "tail": "Measurement came back empty, and it stays on screen."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/chat--standard.png",
-      "alt": "Analysts from JIC, DIA, and NIFC coordinating the anomaly response in a live chat thread.",
+      "alt": "A chat thread named Team Wolfpack: analysts tagged JIC, DIA and NIFC trading messages about the C2 anomaly, from Seems like a high-priority target through Should we consider EW jamming, the analyst's own Let's elevate the alert level and update the COP, and ending on Agreed. Need to inform the JOC ASAP.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.45
       },
       "slot": "standard",
       "caption": {
-        "lead": "Collaborative Review.",
-        "tail": "Experts discuss the case in chat."
+        "lead": "Collaborative review.",
+        "tail": "A second opinion from other agencies, inside the case."
       }
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/elevate--standard.png",
-      "alt": "The Elevate Alert Level step with a Disseminate action and a progress stepper.",
+      "alt": "The Elevate Alert Level step: a Disseminate Alert button beside Skip for now, an unchecked option to update the anomaly playbook to scan automatically, and a link to chat with the USEUCOM liaison. Four later steps sit collapsed below: Update COP, Initiate Countermeasures, Task Collection and Update COA Models.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.4
       },
       "slot": "standard",
       "caption": {
-        "lead": "Analyst Decision.",
-        "tail": "The analyst makes the final call."
+        "lead": "The analyst's call.",
+        "tail": "Send it or hold it. Nothing goes out on its own."
       }
     }
   ],
