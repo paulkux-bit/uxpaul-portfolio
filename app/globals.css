@@ -2854,10 +2854,17 @@ html.dark .oku-figure {
    caption-lock — the lock, not min-height, equalizes baselines. The two ratios no
    longer share one rule: see each block below for which widths it covers. */
 /* SQUARE (1:1) rows stay 2-up at EVERY width, portrait does not, and the split is
-   deliberate. A square tile is small enough that its crop carries no value a reader
-   has to read off it: FDT-E's three source tiles say "GEOINT Source", "COMINT Source"
-   and "MASINT Zero", none of which names a numeral. Portrait tiles do — 05-11 names
-   "eight" and 04-02 names "59.64" — and at 390 those rendered 4.1px and 4.0px. */
+   deliberate. The original reason was that square captions named no numeral while
+   portrait captions did: 05-11 names "eight" and 04-02 names "59.64", rendering
+   4.1px and 4.0px at 390. That distinction is gone. FDT-E's three source tiles now
+   read "Discipline scoring. Geospatial returns twelve hits...", "Side by side.
+   Communications returns eight..." and "Zero is a result."
+   The rule survives on the criterion that one was a proxy for, which is rendered
+   numeral size and not whether a caption names one. At 390 a square tile is 163px
+   against the portrait case's 156px, near enough identical, but the square sources
+   are 760x760 cropped tight, so they render at 21% and the "12" in the GEOINT card
+   lands near 8px against the portrait case's 4.1px.
+   Confirmed by eye at 390, 25 Sep 2026. See claude/fdte-s04-gate-walk-settled.md. */
 .bento-theme__row[data-ratio='square'] {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto auto; /* caption / media — the shared subgrid tracks */
