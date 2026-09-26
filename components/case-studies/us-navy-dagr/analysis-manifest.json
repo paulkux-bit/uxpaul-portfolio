@@ -11,7 +11,7 @@
   "images": [
     {
       "src": "/case-studies/us-navy-dagr/04-01-quickview.png",
-      "alt": "A Quickview card open over satellite terrain for BAR LOCK RADAR, a phased array marked OPR and RDY: allegiance IR - IRAN, last seen 090400Z0420 four hours ago, acquisition max 296.98 NM and tracking max 100.10 NM, above a row of five unlabelled icons with the fourth lit blue. The tapped marker sits highlighted on the map to the left.",
+      "alt": "A Quickview card open over satellite terrain for BAR LOCK RADAR, a phased array marked OPR and RDY: allegiance IR - IRAN, last seen 090400Z0420 4 hours ago, acquisition max 296.98 NM and tracking max 100.10 NM, above a row of five unlabeled icons with the fourth lit blue. The tapped marker sits highlighted on the map to the left.",
       "focalPoint": {
         "x": 0.68,
         "y": 0.52
@@ -20,7 +20,7 @@
       "aspect": 1.6,
       "caption": {
         "lead": "Quickview.",
-        "tail": "Tapping a threat opens its record. The analysis starts here."
+        "tail": "What he used to look up, on one card."
       },
       "ratio": "8:5",
       "width": 2760,
@@ -36,7 +36,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Antenna Height.",
-        "tail": "Comes from the equipment record. The altitude is the one value he enters."
+        "tail": "Filled in from the radar's record. He adds only the altitude."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -52,7 +52,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Grouped by antenna height.",
-        "tail": "A changed height starts its own group. The original set stays."
+        "tail": "He tries a new height without losing his first results."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -68,7 +68,7 @@
       "slot": "feature",
       "caption": {
         "lead": "Altitude formula.",
-        "tail": "A maximum, a minimum and a threshold return every altitude in the range."
+        "tail": "Top, bottom, and step. He gets every altitude in between."
       },
       "ratio": "8:5",
       "width": 2176,
@@ -76,7 +76,7 @@
     },
     {
       "src": "/case-studies/us-navy-dagr/04-06-five-shapes.png",
-      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, each with its own color swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange where the altitudes disagree.",
+      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, the top one without a visibility toggle, each with its own color swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange.",
       "focalPoint": {
         "x": 0.32,
         "y": 0.42
@@ -84,7 +84,7 @@
       "slot": "feature",
       "caption": {
         "lead": "Five answers, stacked.",
-        "tail": "Each altitude draws its own shape, and only the rim changes."
+        "tail": "He sees exactly where the edges differ."
       },
       "ratio": "8:5",
       "width": 3704,
