@@ -606,10 +606,10 @@ that way or it is not quoted. Recorded 16 Sep 2026, after ten Dagr commits were 
 against the house ceiling on the wrong basis.
 
 **Three measured values that are settled, so a later pass does not "fix" them.** The
-Role word range — BARD 29, FDT-E 46, Dagr 52, Nuuly 49 — is **descriptive**: it is what
+Role word range, BARD 29, FDT-E 58, Dagr 53, Nuuly 50, is **descriptive**: it is what
 shipped, not a floor or a ceiling. The earlier "31 to 52" was the min and max of four
 samples, and both ends moved in a single pass. Do not treat it as a gate. Dagr's section
-5 sits at **151** house-basis against a ~150 guide, and BARD's Role at **29** is short on
+5 sits at **109** house-basis after the 26 Sep trim, and BARD's Role at **29** is short on
 purpose. Both are deliberate. Do not trim one to reach a round number or pad the other.
 
 ## Color system — locked (v2)

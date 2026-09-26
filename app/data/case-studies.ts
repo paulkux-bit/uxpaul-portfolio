@@ -33,8 +33,8 @@ export const caseStudies: CaseStudy[] = [
   {
     // Written AFTER the study, per house rule 13. The framing was rewritten in the
     // Dagr build pass, replacing 'What can the enemy see?' with the question the
-    // page actually answers: the altitude is the whole point, and the study's own
-    // hero role line asks it in those words.
+    // page actually answers: the altitude is the whole point. Section 4's lede
+    // comes closest to asking it in those words; the hero role line does not.
     // 'U.S. Air Force' is deliberate, not a typo. Paul worked for the U.S. Navy,
     // designing for Air Force units at Air Combat Command. Same shape
     // as BARD, where a Navy team builds a Coast Guard system. The Role section names
