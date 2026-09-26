@@ -9,31 +9,31 @@ order: 3
 problemFraming: "At what altitude can they see me?"
 projectName: "Line of Sight"
 headline: "Fielded to Air Force units through Red Flag testing."
-summary: "I designed Line of Sight for Dagr, replacing a threat picture the analyst built by hand with one the app assembles, so his hours go to comparing answers rather than typing them."
+summary: "One of two design leads on Line of Sight, the Dagr feature U.S. Air Force units use to plan missions around enemy radar."
 heroImage: "/case-studies/us-navy-dagr/hero.png"
 heroImageAlt: "The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own color, and the jagged polygon of what that radar can see."
 role: "Senior Product Designer"
 timeframe: "2020–2023"
-team: "A team of nine: one product manager, two designers, six developers, with the IMOM and NGA teams as technical partners."
+team: "A team of eleven: one product manager, two designers, eight developers, with Idaho National Laboratory, IMOM and the NGA as technical partners."
 nda: false
 ---
 
 {/* ─────────────────────────────────────────────────────────────
-    Dagr / Line of Sight – Template A case study. Draft 1.
+    Dagr / Line of Sight – Template A case study.
     Voice: first person at the entry and exit; terse evidence
     register in captions. No em-dashes (lint:prose hard-fails).
 
     IMAGERY: every frame is cleared for public release. Every mounted
     frame is a crop; the uncropped 2880x1800 exports this file
     originally carried are gone. Aspects vary by slot and are recorded
-    in each section's manifest, not here. The hero keeps its
-    UNCLASSIFIED//FOUO banner; every other mounted asset is cropped
-    clear of one.
+    in each section's manifest, not here. hero.png is cut from the full
+    4320x2700 capture (los-query-panel@3x.png, kept outside the repo)
+    at crop(192, 50, 2272, 2650), resized to 1560x1950: exactly 4:5,
+    and clear of the UNCLASSIFIED//FOUO banner top and bottom.
 
-    took-3d.jpg is an EARLIER BUILD (early 2021) and is no longer
-    mounted. curvature--band.png replaced it; took-3d.jpg is an orphan
-    pending the cleanup commit. If it ever returns, its caption has to
-    say it is an earlier build.
+    took-3d.jpg was an EARLIER BUILD (early 2021), was replaced by
+    curvature--band.png, and has since been deleted from the repo. If it
+    ever returns, its caption has to say it is an earlier build.
 
     curvature--band.png is cut from a screen recording, NOT from the 2021
     programme deck, so its vintage is not established. Its caption does
@@ -49,14 +49,14 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 <HeroBlock
   eyebrow="DAGR · U.S. AIR FORCE"
   title={['The job was judgment.', 'The day was data entry.']}
-  role="I designed Line of Sight, the feature Air Force units use in Dagr to plan missions around enemy radar. Lead designer on a Navy team, fielded through Red Flag testing."
+  role="I designed Line of Sight, the feature Air Force units use in Dagr to plan missions around enemy radar, fielded through Red Flag testing. One of two design leads on a Navy team."
   image={{
     src: '/case-studies/us-navy-dagr/hero.png',
     alt: 'The Dagr Line of Sight parameters panel beside a satellite map: a BAR LOCK radar at 59.64 ft antenna height, five altitudes queued from 33,000 to 35,000 MSL each with its own color, and the jagged polygon of what that radar can see.',
   }}
   callout={{
     label: 'WHAT CHANGED',
-    body: 'He used to spend the shift building the threat picture. Now he spends it reading one.',
+    body: 'Wilbur used to spend the shift building the threat picture. Now he spends it reading one.',
   }}
 />
 
@@ -66,9 +66,9 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 
 Before a mission flies, the unit gathers in one room: pilots, maintenance, operations, logistics, and Wilbur, the intel analyst.
 
-The threat picture is Wilbur's. He tells them where the enemy is, what can see the aircraft, and from what altitude. He briefs what he knows and what he does not.
+He owns the threat picture: where the enemy is, what can see the aircraft, and from what altitude. He briefs what he knows and what he does not.
 
-**If the picture is wrong, an aircraft gives away its position or does not come back.** The commander weighs it against everything else and makes the call.
+**If the picture is wrong, an aircraft gives away its position or does not come back.**
 
 <FramedPair
   framed={false}
@@ -76,7 +76,7 @@ The threat picture is Wilbur's. He tells them where the enemy is, what can see t
     src: '/case-studies/us-navy-dagr/problem-briefing--feature.png',
     width: 2320,
     height: 1473,
-    alt: 'Editorial pencil illustration: five airmen in plain uniform shirts stand in a loose group, all in profile looking to the right at something out of frame, with faint drawn map fragments and a crosshair behind them and a single soft orange watercolour bloom to the left.',
+    alt: 'Editorial pencil illustration: five airmen in plain uniform shirts stand in a loose group, all in profile looking to the right at something out of frame, with faint drawn map fragments and a crosshair behind them and a single soft orange watercolor bloom to the left.',
     caption: (
       <>
         <strong>What he walks into.</strong> The unit plans the mission around
@@ -88,11 +88,11 @@ The threat picture is Wilbur's. He tells them where the enemy is, what can see t
     src: '/case-studies/us-navy-dagr/problem-imom.jpg',
     width: 1391,
     height: 883,
-    alt: 'The legacy IMOM analysis screen: orange and cyan radar coverage layered over a raster nautical chart labeled ASIAN COASTAL BUFFER ZONE and KOREA, inside Windows-era application chrome.',
+    alt: 'A legacy desktop analysis screen: orange, red and cyan radar coverage layered over a raster chart labeled ASIAN COASTAL BUFFER ZONE and KOREA, inside Windows-era application chrome.',
     caption: (
       <>
-        <strong>What he walks in with.</strong> The threat picture, built in a
-        tool sustained since the 1990s.
+        <strong>What he walks in with.</strong> A threat picture built by hand
+        in a legacy desktop tool.
       </>
     ),
   }}
@@ -104,7 +104,7 @@ The threat picture is Wilbur's. He tells them where the enemy is, what can see t
 
 ## Three ways a hand-built picture failed Wilbur.
 
-<p className="section-lede">I interviewed intel analysts across Air Combat Command, at units flying different airframes, and watched them build a threat picture from scratch.</p>
+<p className="section-lede">I interviewed over seventy intel analysts across Air Combat Command, at units flying different airframes, and watched many of them build a threat picture from scratch.</p>
 
 <ol className="friction-beats" role="list">
   <li className="friction-beat" data-thread="1">
@@ -119,7 +119,7 @@ The threat picture is Wilbur's. He tells them where the enemy is, what can see t
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Only what stands still</h3>
-      <p className="friction-beat__scene">The model handled enemy equipment at static locations well. It had no mechanism for equipment that moved, and what moved was the threat that mattered.</p>
+      <p className="friction-beat__scene">The model only knew what he typed in, so enemy equipment stayed where he last put it. What moved was what mattered most.</p>
       <blockquote className="pull-quote pull-quote--quiet">
         <p>“I had to ask the room to really visualize it.”</p>
         <cite>Intel analyst, discovery interview</cite>
@@ -145,9 +145,9 @@ The threat picture is Wilbur's. He tells them where the enemy is, what can see t
 
 <p className="section-lede">Start the analysis where the data already is.</p>
 
-The smart people at Idaho National Laboratory built the line of sight model, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it. **Anything the app already knows is something he should not type.**
+Idaho National Laboratory built the line of sight model, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it.
 
-I had already built the live feeds on DoD-approved map layers. So the map is where a Line of Sight analysis starts.
+**He shouldn't have to type anything the app already knows.** I had designed the live feeds on DoD-approved map layers, so the map is where a Line of Sight analysis starts.
 
 </section>
 
@@ -157,11 +157,9 @@ I had already built the live feeds on DoD-approved map layers. So the map is whe
 
 <p className="section-lede">The question is always the same. From what altitude can that radar see us?</p>
 
-Wilbur asks it on the map. He taps the radar, supplies an altitude, and gets back the ground that radar covers from that height, terrain already accounted for. Nothing to look up first.
+Wilbur asks it on the map, and the answer comes back with the terrain already accounted for, colored to his unit's legend. One altitude is rarely enough, so he asks for the whole range the mission might fly.
 
-One altitude is rarely the answer, so he asks for the range the mission might fly and gets every step inside it back at once, each its own layer, in his unit's colors.
-
-Holding two of them against each other is a click, not a rebuild. **That comparing is the analysis, and it is what the old model never left him time to do.**
+**Comparing answers is the analysis, and the old tool never left him time for it.** Holding two layers against each other is a click, not a rebuild.
 
 <AnalysisBento />
 
@@ -169,21 +167,21 @@ Holding two of them against each other is a click, not a rebuild. **That compari
 
 <section className="cs-section">
 
-## The work was deciding what he never has to see.
+## The work was deciding what he never had to see.
 
 <p className="section-lede">Line of Sight is fast because two other things came first.</p>
 
-The analysis needs two things: where the threats sit and what their equipment can do. I built one search that covers both. That is why the panel already knew the antenna height was 59.64 feet.
+I designed one search for where the threats sit and what their equipment can do. That is why the antenna height was already filled in.
 
 <IngestBento />
 
-The search does not run once. It reruns near takeoff, so the picture is never Monday's.
+The search runs again near takeoff, so the map shows equipment where it is now, not where he last put it.
 
-A national search returns far more than one mission cares about. So the second thing I built was the filter. He narrows to his airframe, then to the equipment types, until only what this mission must account for is left. That is what he briefs.
+The second thing was the filter. A helicopter and an F-22 face different threats, so he keeps only the ones that can hurt his aircraft. What is left is what he briefs.
 
 <FiltersBento />
 
-The search and the filter were never only for Line of Sight. The picture he opens is already his: his mission, his airframe, the threats that matter. **I was not just building a feature. I was building what the next one would sit on.**
+**The search and the filter were never only for Line of Sight.** They were the foundation for the next feature.
 
 </section>
 
@@ -191,17 +189,17 @@ The search and the filter were never only for Line of Sight. The picture he open
 
 ## An analyst looked at the shape and said he couldn't brief it.
 
-<p className="section-lede">Where the design met the real system.</p>
+<p className="section-lede">Testing with real data, in the classified lab.</p>
 
-**The polygons were right in structure and wrong in geometry.** I designed them unclassified, in Figma. They ran classified, on real geospatial data and real physics, rendered on a globe. A line of sight bends with the earth, so the shapes came back the wrong size in the wrong places.
+**The polygons were right in structure and wrong in geometry.** I designed them unclassified, in Figma. They ran on real data, rendered on a globe, and a radar cannot see past the curve of the Earth. The shapes came back the wrong size in the wrong places. For the analyst testing it, that shape would have cost him the room.
 
-The engineers had the math. I art directed the render until the shapes were right. The fix sat below the feature, so anything an analyst draws now bends with the earth.
+The engineers had the math. I art-directed the render until the shapes were right, before anything was fielded. The fix went into the map itself, so anything an analyst draws now follows the Earth's curve.
 
 <BentoBand
   src="/case-studies/us-navy-dagr/curvature--band.png"
-  alt="The Dagr map seen from orbit: the earth's limb against space, with three enemy air defense rings rendered as translucent red cylinders standing on the coastline rather than drawn flat."
-  caption="An example of the geometry."
-  gloss="Threat rings stand as volumes on a curving earth."
+  alt="The Dagr map seen from orbit: the Earth's limb against space, with three enemy air defense rings rendered as translucent red cylinders standing on the coastline."
+  caption="Threat rings on the globe."
+  gloss="Each stands as a volume on a curving Earth."
   aspect={2.6}
 />
 
@@ -217,7 +215,7 @@ The engineers had the math. I art directed the render until the shapes were righ
   <p className="milestone__sub">Defunded in budget cuts after I left.</p>
 </div>
 
-Fielded is not a deploy date. Commanders, weapons officers and planners took it into their own stack during a live exercise and were willing to work behind it. Then more aircraft communities wanted their own modeling in it than nine people could build, and the money went elsewhere.
+Commanders, weapons officers, and planners took it into their own stack and were willing to work behind it. Then more aircraft communities wanted their own modeling in it than our team could build.
 
 </section>
 
@@ -225,6 +223,6 @@ Fielded is not a deploy date. Commanders, weapons officers and planners took it 
 
 ## Role
 
-Senior product designer and one of two design leads on Line of Sight, responsible for the UX and UI, plus strategy and research. Worked for the U.S. Navy, designing for U.S. Air Force units at Air Combat Command. Idaho National Laboratory, IMOM and the NGA were technical partners. Designed 2020 to 2023.
+Senior product designer and one of two design leads on Dagr, on a team of eleven. Responsible for research, UX strategy, and UI. Worked for the U.S. Navy, designing for U.S. Air Force units at Air Combat Command. Idaho National Laboratory and the National Geospatial-Intelligence Agency were technical partners. Designed 2020 to 2023.
 
 </section>

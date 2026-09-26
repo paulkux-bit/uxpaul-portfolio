@@ -14,8 +14,8 @@ import manifest from './ingest-manifest.json';
  * filters is a 3:4 pair over a feature, and a single module holding all six tiles would
  * have had to reconcile those two shapes in one composition array. Splitting keeps each
  * row's aspect decision local, and it lets the section's own prose sit between the two
- * evidence beats, which is the shape BARD's "The form bends" section and Dagr's own
- * expiry section already use. See the manifest's $twoModulesDoc.
+ * evidence beats, which is the shape BARD's "The form bends" section already uses.
+ * See the manifest's $twoModulesDoc.
  *
  * The cast: resolveJsonModule widens the JSON's string literals to `string`, so a
  * structurally correct manifest cannot assign to the interface's literal unions. Known

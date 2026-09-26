@@ -50,7 +50,7 @@
       },
       "slot": "compact",
       "caption": {
-        "lead": "Discipline scoring.",
+        "lead": "Scoring by intel source.",
         "tail": "Geospatial returns twelve hits in the chosen window."
       }
     },

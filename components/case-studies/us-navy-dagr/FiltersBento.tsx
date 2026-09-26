@@ -4,7 +4,8 @@ import manifest from './filters-manifest.json';
 /**
  * Section 05, second module: narrowing what arrived down to the mission. The equipment
  * tree with counts at every level, the analysis layers holding four chosen radars rather
- * than every emitter in the area, and the tailored-to-the-airframe screen.
+ * than every emitter in the area, and the route view: the app picking the threats
+ * along his route, designed, not built.
  *
  * Binds filters-manifest.json to the generic ResolutionsBento adapter, the same one
  * IngestBento and AnalysisBento use.

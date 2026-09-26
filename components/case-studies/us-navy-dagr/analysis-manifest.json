@@ -1,6 +1,6 @@
 {
-  "$doc": "Dagr section 04, the Line of Sight flow. Manifest for AnalysisBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one Nuuly's AppsBento and FDT-E's GateWalkBento use. Six tiles, cut by the bento-crop skill from 4320x2700 re-exports and approved at their real rendered widths. They replace the four uncropped 2880x1800 screenshots (works-panel, works-formula, works-band, works-primary) this file carried after the scaffold pass; those four PNGs are still in public/ and are referenced by nothing.",
-  "$sequenceDoc": "THE ORDER IS THE WALK, NOT THE FILE NUMBERS, AND IT CHANGED. Section 04 previously ran 02, 04, 03, 05, 06, 07, chosen so that same-aspect tiles paired per row. That arrangement put five panel-dominant tiles out of six in sequence, and the section read as a form rather than as work. It now opens on the tap (04-01-quickview) and alternates map and panel: quickview, the two panel states, the formula dialog, the answers on the map, the layer menu. 04-05-undo IS CUT from this section. It is a refinement state, not a step in the walk; the file stays on disk and stays in the crops staging manifest, and cutting it here made public/case-studies/us-navy-dagr/04-05-undo.png an orphan alongside the four works-*.png, to be removed in their cleanup commit rather than this one.",
+  "$doc": "Dagr section 04, the Line of Sight flow. Manifest for AnalysisBento.tsx, which binds it to the generic ResolutionsBento adapter (components/case-studies/uscg-bard/ResolutionsBento.tsx), the same one Nuuly's AppsBento and FDT-E's GateWalkBento use. Six tiles, cut by the bento-crop skill from 4320x2700 re-exports and approved at their real rendered widths. They replace the four uncropped 2880x1800 screenshots (works-panel, works-formula, works-band, works-primary) this file carried after the scaffold pass; those four PNGs have since been deleted from public/.",
+  "$sequenceDoc": "THE ORDER IS THE WALK, NOT THE FILE NUMBERS, AND IT CHANGED. Section 04 previously ran 02, 04, 03, 05, 06, 07, chosen so that same-aspect tiles paired per row. That arrangement put five panel-dominant tiles out of six in sequence, and the section read as a form rather than as work. It now opens on the tap (04-01-quickview) and alternates map and panel: quickview, the two panel states, the formula dialog, the answers on the map, the layer menu. 04-05-undo IS CUT from this section. It is a refinement state, not a step in the walk; it stays in the crops staging manifest, and cutting it here made public/case-studies/us-navy-dagr/04-05-undo.png an orphan alongside the four works-*.png. All five have since been deleted from public/.",
   "$adapterDoc": "GENERIC ADAPTER, NOT THE LEGACY ONE, AND THE REASON IS THE CAPTIONS. Resolutions01Bento reads a single caption string and splits it at the first '. ' (Resolutions01Bento.tsx splitCaption). ResolutionsBento reads caption as { lead, tail } and passes both straight through, no split. Dagr's captions carry full stops inside the tail, so the generic path is the only one that preserves the shipped strings without a round trip through a string split that could re-punctuate them. A later reader comparing this file to BARD's numbered themes should not read the choice as picking the wrong precedent.",
   "$modeDoc": "EVERY COMPOSITION ENTRY SAYS mode: 'light' AND THAT IS CORRECT, NOT A BUG TO FIX. ResolutionsBento.resolve() keys the base stem for 'light' and <name>--dark for 'dark'; it has no third value. Dagr's product is dark-only and ships one file per image, so 'light' here means 'the base stem, there is no dark twin'. FDT-E's gate-walk-manifest.json does the same thing for the same reason. Changing these to 'dark' would look right and would break the lookup.",
   "$dimensionsDoc": "width and height ARE NOT AUTHORITATIVE AND THE ADAPTER IGNORES THEM. ResolutionsBento's ManifestImage interface has no width or height, and BentoItem renders <Image fill>, so nothing here reaches the render. They are recorded for crop planning only. BARD's theme1-grid-manifest.json carries width and height that ARE load-bearing on the legacy path, so these look identical to numbers that matter. RE-READ THEM FROM DISK on any later edit rather than trusting what is written here. Every value in this pass was re-read with sips from the copied file rather than carried over from the crop spec.",
@@ -11,7 +11,7 @@
   "images": [
     {
       "src": "/case-studies/us-navy-dagr/04-01-quickview.png",
-      "alt": "A Quickview card open over satellite terrain for BAR LOCK RADAR, a phased array marked OPR and RDY: allegiance IR - IRAN, last seen 090400Z0420 four hours ago, acquisition max 296.98 NM and tracking max 100.10 NM, above a row of five unlabelled icons with the fourth lit blue. The tapped marker sits highlighted on the map to the left.",
+      "alt": "A Quickview card open over satellite terrain for BAR LOCK RADAR, a phased array marked OPR and RDY: allegiance IR - IRAN, last seen 090400Z0420 4 hours ago, acquisition max 296.98 NM and tracking max 100.10 NM, above a row of five unlabeled icons with the fourth lit blue. The tapped marker sits highlighted on the map to the left.",
       "focalPoint": {
         "x": 0.68,
         "y": 0.52
@@ -20,7 +20,7 @@
       "aspect": 1.6,
       "caption": {
         "lead": "Quickview.",
-        "tail": "Tapping a threat opens its record. The analysis starts here."
+        "tail": "What he used to look up, on one card."
       },
       "ratio": "8:5",
       "width": 2760,
@@ -36,7 +36,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Antenna Height.",
-        "tail": "Comes from the equipment record. The altitude is the one value he enters."
+        "tail": "Filled in from the radar's record. He adds only the altitude."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -52,7 +52,7 @@
       "slot": "standard",
       "caption": {
         "lead": "Grouped by antenna height.",
-        "tail": "A changed height starts its own group. The original set stays."
+        "tail": "He tries a new height without losing his first results."
       },
       "ratio": "1736:2315",
       "width": 1736,
@@ -68,7 +68,7 @@
       "slot": "feature",
       "caption": {
         "lead": "Altitude formula.",
-        "tail": "A maximum, a minimum and a threshold return every altitude in the range."
+        "tail": "Top, bottom, and step. He gets every altitude in between."
       },
       "ratio": "8:5",
       "width": 2176,
@@ -76,7 +76,7 @@
     },
     {
       "src": "/case-studies/us-navy-dagr/04-06-five-shapes.png",
-      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, each with its own color swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange where the altitudes disagree.",
+      "alt": "The Line of Sight panel beside a wide terrain view: six altitude entries from 35,000 down to 32,500 MSL, the top one without a visibility toggle, each with its own color swatch, and a single green fan spreading north east from the radar's marker, its edges layered in orange.",
       "focalPoint": {
         "x": 0.32,
         "y": 0.42
@@ -84,7 +84,7 @@
       "slot": "feature",
       "caption": {
         "lead": "Five answers, stacked.",
-        "tail": "Each altitude draws its own shape, and only the rim changes."
+        "tail": "He sees exactly where the edges differ."
       },
       "ratio": "8:5",
       "width": 3704,
