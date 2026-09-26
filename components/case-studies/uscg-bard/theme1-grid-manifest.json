@@ -108,7 +108,7 @@
       "slot": "feature",
       "lens": "ux",
       "beat": "4 map",
-      "caption": "State-synced interface. The rail and the map never disagree.",
+      "caption": "Synced list and map. The two never disagree.",
       "label": "map sync"
     },
     {
@@ -206,7 +206,7 @@
       "slot": "feature",
       "lens": "ux",
       "beat": "4 map",
-      "caption": "State-synced interface. The rail and the map never disagree.",
+      "caption": "Synced list and map. The two never disagree.",
       "label": "map sync"
     }
   ],

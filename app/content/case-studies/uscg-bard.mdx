@@ -39,7 +39,7 @@ import { BentoBand } from '@/components/bento';
 
 ## Investigators need to get every case right, but the system made that harder.
 
-**Boating accident cases are rising**, and each one becomes a federal record, filed against a statutory deadline.
+**Boating accident cases are rising**, and each one becomes a federal record, filed against a legal deadline.
 
 **This isn't just paperwork.** The record is Maria's. It can end up in court.
 
@@ -125,7 +125,7 @@ import { BentoBand } from '@/components/bento';
     found, this one states what I did about it. The others were cut, section 1's "not easier"
     and section 8's "not design". Do not add a third. */}
 
-**They were never all going to agree on one form.** I left local processes alone and built a standard data structure underneath. A crash in Hawaii and a crash in Florida can finally be counted the same way.
+**They were never all going to agree on one form.** I left local processes alone and designed a standard data structure underneath. A crash in Hawaii and a crash in Florida can finally be counted the same way.
 
 </section>
 
@@ -135,7 +135,7 @@ import { BentoBand } from '@/components/bento';
 
 <p className="section-lede">Federal fields are required. Everything else is up to the jurisdiction.</p>
 
-**The modular form gives two people their own screen.** Maria sees only the fields her case needs. The Coast Guard opens that record in its own view, with a compliance score that fills in as she types.
+**The modular form gives Maria and the Coast Guard each their own screen.** Maria sees only the fields her case needs. The Coast Guard opens that record in its own view, with a compliance score that fills in as she types.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
@@ -163,7 +163,7 @@ import { BentoBand } from '@/components/bento';
 <section className="cs-section">
   <h2>One data structure changed how she files, sees, and counts.</h2>
 
-  <p className="section-note">Every screen on this page runs on synthetic data. The system it replaces runs on federal records.</p>
+  <p className="section-note">Every screen on this page runs on synthetic data.</p>
 
   {/* The axis lockup is now the section header: the sentence h3 it used to precede is gone,
       so this carries the heading role. text-resolution-headline is the same register as
@@ -195,7 +195,7 @@ import { BentoBand } from '@/components/bento';
 
 ## The work was showing every jurisdiction its own view.
 
-**The resistance was never about the data model.** Each one wanted to know what it would lose. Every field a state already had stayed in the system, optional for everyone else. Nobody had to lose anything to get the standard.
+**The resistance was never about the data model.** Each jurisdiction wanted to know what it would lose. Every field a state already had stayed in the system, optional for everyone else.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-table--band.png"
@@ -210,7 +210,7 @@ import { BentoBand } from '@/components/bento';
   src="/case-studies/uscg-bard/reflection/reflection-insightwide--band.png"
   alt="BARD Incidents dashboard showing a plain-English engine line ('2 cases returned by USCG, 1 overdue, 1 due Nov 3') beside the deterministic shape-card spec that generates it."
   caption="The insight engine."
-  gloss="The spec on the right writes the line on the left."
+  gloss="Rules on the right write her caseload as one plain sentence."
   focal={{ x: 0, y: 0.5 }}
   aspect={2.435}
 />
