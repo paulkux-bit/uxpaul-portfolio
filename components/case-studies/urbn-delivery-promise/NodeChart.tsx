@@ -62,14 +62,15 @@ export default function NodeChart() {
           already fully readable text, and the aria label on the group states the
           average in a sentence.
 
-          IT SAYS "ALL NODES", NOT "AVERAGE", because an average printed beside the
+          IT SAYS "ALL LOCATIONS", NOT "AVERAGE", because an average printed beside the
           three numbers it does not average invites the arithmetic and fails it. 11,
           15 and 45 mean 23.67; this is 22, the volume-weighted rate across every
-          node, and naming the population is what makes that a different number
-          rather than a wrong one. */}
+          location, and naming the population is what makes that a different number
+          rather than a wrong one. The string itself lives in the manifest as
+          averageLabel; see its $averageLabelDoc. */}
       <p className="node-chart__average" aria-hidden="true">
         <span className="node-chart__average-label">
-          All nodes, {average}
+          {manifest.averageLabel}, {average}
           {unit}
         </span>
       </p>
@@ -77,7 +78,8 @@ export default function NodeChart() {
       {/* ONE GRID, NINE CELLS, NOT THREE NESTED GRIDS. Each row must share the same
           three columns or the 1fr track is sized per row and the bars stop being
           comparable. Measured when this was three sub-grids: tracks came out 394,
-          401 and 332px, because "Store network" is a wider label than "Reno FC" and
+          401 and 332px, measured with the labels of the time, because "Store network"
+          was a wider label than "Reno FC" and
           ate its own row's track. The bars are the argument, so they have to be on
           one scale. Fragment per node, never a wrapper element. */}
       <div className="node-chart__rows" role="img" aria-label={manifest.nodeAriaLabel}>

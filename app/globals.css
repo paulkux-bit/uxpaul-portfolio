@@ -4972,7 +4972,8 @@ html.dark .figure-placeholder {
 
    THE LABEL STAYS AT 22px ANYWAY, AND THAT IS A DECISION RATHER THAN AN OVERSIGHT.
    Dropping it to 18px was rendered and rejected: 18/600 is .bento-theme__lead's exact
-   setting, so "Decide" and "The promise sits above the button." came back as identical
+   setting, so "Decide" and "The promise sits above the button.", the section 05 lead
+   at the time of the measurement, came back as identical
    type at one edge - the collision the step to 22px was made to fix, reintroduced five
    times per section instead of once. AND NO THIRD VALUE EXISTS. To clear the caption
    lead by the system's 1.15x the label must be >= 20.70px; to be cleared by the lede's
