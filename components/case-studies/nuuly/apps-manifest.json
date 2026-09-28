@@ -3,7 +3,7 @@
   "images": [
     {
       "src": "/case-studies/nuuly/apps/apps-01-menu.png",
-      "alt": "The launcher: six circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns and Packing, with Returns marked offline and a second page below.",
+      "alt": "The launcher: circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns and Packing, with Returns marked offline.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -11,7 +11,7 @@
       "slot": "feature",
       "caption": {
         "lead": "Launcher.",
-        "tail": "Each station opens the one job it has today."
+        "tail": "Six apps on the first page, Receiving on the second."
       }
     },
     {
