@@ -223,33 +223,33 @@ A station can change hands halfway through counting in new stock. The count is s
 
 ## The hard part wasn't the screen. It was knowing which bin.
 
-Scan the item, and it tells you which colored bin to drop it in. There is nothing to learn and nothing to decide.
+Scan a garment, and the screen shows which colored bin it goes in. There's nothing to learn and nothing to decide.
 
 <BentoBand
   src="/case-studies/nuuly/bins-first.png"
-  alt="Sort to wash bins, scanned one of six: the first garment has a bin code, the other five are still unread."
-  caption="Sort to bins."
-  gloss="One garment read, five still unread."
+  alt="Sort to wash bins. Scanned 1 of 6: six garments in a row; the second, Grey Motif, marked W1; the other five still unscanned."
+  caption="Sort to wash bins."
+  gloss="Each scan assigns one garment to a bin."
   aspect={1.778}
 />
 
 <BentoBand
   src="/case-studies/nuuly/bin-answer.png"
-  alt="The sorting answer: the row of garments dims and a single large code fills the middle of the screen, naming the wash bin the scanned garment goes to."
-  caption="Wash bin assigned."
-  gloss="The row dims, the code fills the screen."
+  alt="The sorting answer: the row dims behind a large W1, and the line Grey Motif goes to wash bin 1."
+  caption="Wash bin 1."
+  gloss="Big enough to read at a glance."
   aspect={1.778}
 />
 
-Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The results became a model. That model is what answers when the scanner fires.
+Getting the bin right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The data science team built a model from the results, and that model picks the bin when a garment is scanned.
 
-Two of the seven apps are that project made permanent: Test Wash runs a new style through a cycle, Measure compares it before and after. The research did not end in a document. It ended in software that keeps doing it.
+Two of the seven apps came out of that project, so the testing kept going: Test Wash runs each new style through a cycle, and Measure compares it before and after.
 
 <BentoBand
   src="/case-studies/nuuly/measure-table.png"
   alt="The Measure table for a pair of jeans: length, in seam, rise, waist and hem, each with a pre wash and post wash figure and the difference between them."
-  caption="Wear measurement."
-  gloss="Five points, before and after a wash."
+  caption="Measure garment."
+  gloss="Five points, checked before and after a wash."
   aspect={1.778}
 />
 
@@ -258,15 +258,15 @@ Two of the seven apps are that project made permanent: Test Wash runs a new styl
     slot="wide"
     src="/case-studies/nuuly/care-set.png"
     alt="Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked."
-    caption="Care instructions."
-    gloss="Set in Test Wash, for the style."
+    caption="Select wash."
+    gloss="Care steps are set once, for the whole style."
   />
   <BentoItem
     slot="wide"
     src="/case-studies/nuuly/care-surfaced.png"
-    alt="Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed."
+    alt="Returning: a prompt over the dimmed row, Two things before this one goes in, listing Empty the pockets and Put the accessory in a net bag, with the garment, above Done, carry on."
     caption="Back at the bin."
-    gloss="Returning shows only the steps that were set."
+    gloss="Only the steps set for this style appear."
   />
 </BentoTheme>
 
