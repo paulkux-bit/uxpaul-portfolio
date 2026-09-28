@@ -51,6 +51,26 @@ const ROOT_PX = 16;
 // same staleness the linter exists to catch, one level up.
 // Match on exact selector string as written in globals.css.
 const ALLOWLIST = {
+  // rawSize[]: reading-band font-sizes (ceiling 30px or under) allowed to stay
+  // raw instead of taking a --type-* token (check 12, 28 Sep 2026). Each is either
+  // live off-scale type owned by a later phase or a rule that renders on no route.
+  rawSize: [
+    { selector: '.text-h3', reason: 'About and the home hero signature, 22 to 28px, off the classic scale; ruled with the About pass (roadmap Phase 8)' },
+    { selector: '.text-lead', reason: 'About only, 22px, off the classic scale; ruled with the About pass (roadmap Phase 8)' },
+    { selector: '.slot-small3 .mark-coords', reason: 'Off the clock wall, rendered on no route (CLAUDE.md); Phase 12' },
+    { selector: '.slot-medium5 .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.slot-medium .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.slot-small4 .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.slot-small3 .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.comp-coords-corner .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.case-study-prose > h1 + p', reason: 'matches no element on the five studies (the hero is HeroBlock); Phase 12' },
+    { selector: '.case-study-prose > h3', reason: 'matches no element on the five studies; Phase 12' },
+    { selector: '.case-study-meta', reason: 'class used in no .tsx or .mdx; Phase 12' },
+    { selector: '.case-study-numbers p', reason: 'class used in no .tsx or .mdx; Phase 12' },
+    { selector: '.problem-list__text', reason: 'renders on no route in the 28 Sep census; Phase 12' },
+    { selector: '.transformation', reason: 'grid container, renders on no route in the 28 Sep census; Phase 12' },
+  ],
   // §3.2 permits three signature placements sitewide. ONE is spent. The home
   // hero is a single placement covering four declarations: .text-lede carries
   // the 340, and the three font-[720] spans in app/page.tsx are noun phrases
@@ -260,6 +280,7 @@ function evalPreferred(expr, vw) {
 
 // Resolve a font-size value to px at a given viewport. Returns null if unknowable.
 function sizeAtViewport(value, vw) {
+  value = resolveTypeVars(value);
   const clampBody = extractClamp(value);
   if (clampBody) {
     const [lo, pref, hi] = splitArgs(clampBody).map((s) => s.trim());
@@ -274,6 +295,7 @@ function sizeAtViewport(value, vw) {
 
 // The declared ceiling of a font-size (clamp max, or the fixed value).
 function ceilingPx(value) {
+  value = resolveTypeVars(value);
   const clampBody = extractClamp(value);
   if (clampBody) {
     const args = splitArgs(clampBody).map((s) => s.trim());
@@ -299,6 +321,18 @@ function fvsAxes(value) {
 }
 
 const allowed = (list, selector) => list.some((e) => e.selector === selector);
+
+// --type-* size tokens (§3.6, 28 Sep 2026). Substituted before any size is
+// computed, so checks 2, 3 and 4 measure the value a token resolves to rather
+// than reading a var() as unknowable. Filled from the stylesheet below.
+const TYPE_TOKENS = {};
+function resolveTypeVars(value) {
+  let v = value;
+  for (let i = 0; i < 5 && /var\(--type-/.test(v); i++) {
+    v = v.replace(/var\((--type-[\w-]+)\)/g, (m, name) => TYPE_TOKENS[name] ?? m);
+  }
+  return v;
+}
 
 // ── Walk the stylesheet ────────────────────────────────────────────────────
 
@@ -329,6 +363,10 @@ root.walkDecls((decl) => {
     value: decl.value,
     line: decl.source?.start?.line ?? 0,
   });
+});
+
+root.walkDecls((decl) => {
+  if (decl.prop.startsWith('--type-')) TYPE_TOKENS[decl.prop] = decl.value.trim();
 });
 
 const byProp = (p) => decls.filter((d) => d.prop === p);
@@ -681,6 +719,36 @@ const add = (id, title, failures, note) =>
         'no runtime font-load assertion found (document.fonts / FontFace) — width decisions are unverified against the Arial fallback',
     });
   add('8b', 'A runtime assertion that the variable font loaded (§7.8)', f);
+}
+
+// 12. READING-BAND SIZES COME FROM A TOKEN (§3.6, 28 Sep 2026). A font-size
+// whose ceiling is 30px or under must be var(--type-*) or a clamp() whose floor
+// and ceiling are both var(--type-*); the preferred term may stay raw, because it
+// is the slope between two tokens, not a size. em-relative sizes are skipped
+// (context-dependent, not a step on the scale). Without this check the tokens
+// are a naming convention: nothing stops the next raw value.
+{
+  const failures = [];
+  const TOKEN = /^var\(--type-[\w-]+\)$/;
+  for (const d of byProp('font-size')) {
+    const v = d.value.replace(/!important/g, '').trim();
+    const ceil = ceilingPx(v);
+    if (ceil === null || ceil > 30.5) continue;
+    if (allowed(ALLOWLIST.rawSize, d.selector)) continue;
+    let ok = TOKEN.test(v);
+    const body = extractClamp(v);
+    if (!ok && body && v.startsWith('clamp(')) {
+      const args = splitArgs(body).map((a) => a.trim());
+      ok = args.length === 3 && TOKEN.test(args[0]) && TOKEN.test(args[2]);
+    }
+    if (!ok) failures.push({ selector: d.selector, line: d.line, detail: `raw reading-band size ${v}; use a --type-* token` });
+  }
+  const unknown = byProp('font-size')
+    .map((d) => d.value)
+    .flatMap((v) => [...v.matchAll(/var\((--type-[\w-]+)\)/g)].map((m) => m[1]))
+    .filter((name) => !(name in TYPE_TOKENS));
+  for (const name of new Set(unknown)) failures.push({ selector: name, line: 0, detail: 'references a --type-* token that is not defined' });
+  add('12', 'Reading-band font-size comes from a --type-* token (§3.6)', failures);
 }
 
 // ── Known gap, surfaced rather than silently passed ────────────────────────

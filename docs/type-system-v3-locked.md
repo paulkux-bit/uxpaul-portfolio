@@ -248,6 +248,19 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 
 ---
 
+### 3.6 Size tokens (added 28 Sep 2026)
+
+**Every reading-band `font-size` (ceiling 30px or under) references a `--type-*` token** (Paul's rulings 1a 2a 3a, following ruling 7 d-c). The tokens live in the `@theme static` block of `globals.css`, in two layers, mirroring the colour system:
+
+| layer | tokens | values |
+|---|---|---|
+| scale | `--type-14` `--type-16` `--type-18` `--type-21` `--type-24` `--type-30` | the classic typographic scale, 14 to 30 |
+| roles | `--type-caption` `--type-small` `--type-body` | rungs 0, 0.5, 1: the scale's 14, 16, 18 |
+| roles | `--type-standfirst` | rung 2, `clamp(var(--type-21), …, var(--type-24))` |
+| roles | `--type-numbered-headline` | rung 3, `clamp(1.625rem, …, var(--type-30))`: the 26px phone floor is the one off-scale value, and it lives only here |
+
+Ladder selectors take the role tokens; every other reading-band size takes a scale token. A clamp outside the ladder takes scale tokens at both ends and keeps its slope raw, because the slope is the path between two sizes, not a size. 54 declarations were tokenized with zero rendered change, measured element by element on all seven routes at 390, 768 and 1440. Fifteen stay raw, each allowlisted in `ALLOWLIST.rawSize` with its reason: two live About sizes owned by the About pass, thirteen rules that render on no route. **Check 12 enforces it**, and it was proven red three ways before it was trusted: a raw value, a misspelled token, and a token change that broke the ladder (check 3 caught that one, because the lint resolves tokens before it measures). Display sizes above 30px are not tokenized yet.
+
 ## 4. The rules
 
 **R1** Never pin optical size. Two sanctioned exceptions, §6.
@@ -435,6 +448,7 @@ Assertion 4 has two halves and both are enforced: a weight of 340 or 720 fails i
 | 8b | A runtime assertion that the variable font loaded |
 | **10** | **No `font-stretch` and no `font-optical-sizing`, at any value** |
 | **11** | **The flared set in CSS matches `RUNGS`' `voice: 'flared'`, both directions** |
+| **12** | **Reading-band `font-size` comes from a `--type-*` token (§3.6), added 28 Sep 2026** |
 
 **Check 1 became check 10 rather than being edited, and 11 is new.** Numbers are not reused: each one is a claim with a history, and a reader who finds "check 1" in a commit message from 7 August should not be sent to a rule about something else.
 

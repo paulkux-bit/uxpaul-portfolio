@@ -435,7 +435,8 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
   // declared. If these go, the icon silently falls back to inherited size and
   // the default 1.70 — with every check still green.
   it('.theme-toggle declares the type context its icons resolve against', () => {
-    expect(declFor('.theme-toggle', 'font-size')).toBe('1rem');
+    // 16px, through the size token since 28 Sep 2026 (type-system-v3 §3.6).
+    expect(declFor('.theme-toggle', 'font-size')).toBe('var(--type-16)');
     expect(declFor('.theme-toggle', 'font-weight')).toBe('600');
   });
 
