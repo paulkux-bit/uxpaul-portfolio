@@ -18,7 +18,7 @@ the other place.
 
 | System | Spec | Gate |
 |---|---|---|
-| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 10 checks |
+| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 11 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
 | Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 7 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
@@ -334,6 +334,17 @@ There is intentionally no H4 — if a fourth heading level is needed, the case
 study structure is too deep; flatten it or use `text-eyebrow` as a sub-block
 label instead.
 
+### Size tokens (reading band)
+Every font-size of 30px or under references a `--type-*` token, defined once in
+the `@theme static` block of `app/globals.css`. Two layers, the way colour works:
+the scale, named by value (`--type-14`, `--type-16`, `--type-18`, `--type-21`,
+`--type-24`, `--type-30`, the classic typographic scale), and the ladder's roles
+pointing at it (`--type-caption`, `--type-small`, `--type-body`,
+`--type-standfirst`, `--type-numbered-headline`). A clamp takes tokens at both
+ends; its slope may stay raw. **Check 12 fails the build on a raw reading-band
+size**; the exceptions live in `ALLOWLIST.rawSize`, each with a reason. Display
+sizes (above 30px) are not tokenized yet. Ruled 28 Sep 2026.
+
 ### Voice — the FLAR axis, by rung
 **This replaced the three width bands.** Width was the expressive axis under
 Bricolage; Commissioner does not have one, and FLAR is what it has instead.
@@ -555,12 +566,12 @@ The named gates are three different tools; two are external and do NOT read pros
   overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
 - **type** = `npm run lint:type` (`scripts/lint-type.mjs`), a real repo script and the
   only mechanical typography check that exists. Parses `app/globals.css` with postcss
-  and enforces the ten v3 §7 assertions: the 14px floor, the
+  and enforces the eleven v3 §7 assertions: the 14px floor, the
   1.15× rung ratio computed across 320–2560, the 340/720 signature, authored `strong`,
   no `color-mix(… currentColor …)` on text colour, exactly one `font-variation-settings`
   (on `*`, reading `--flar`), no `font-stretch` or `font-optical-sizing` because those
-  axes do not exist, the flared set in CSS matching `RUNGS`, and both halves
-  of the font-load check. **It gates `npm run build`** — the build runs it first and
+  axes do not exist, the flared set in CSS matching `RUNGS`, reading-band sizes
+  coming from `--type-*` tokens (check 12), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
   stops on failure. Allowlist entries live in the script, each with a one-line reason.
   It also prints one UNCHECKED blind spot it cannot see: arbitrary font-weight
   utilities authored in JSX, which check 4 cannot reach because it parses
