@@ -320,7 +320,7 @@ real clamp, and every type-role utility must have a row.
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
 | `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Also Shipped titles |
 | `text-cover` | 22 → 32px (weight 600) | Case-study card cover headline (typographic tier). Card-only. |
-| `text-resolution-headline` | 26 → 32px (weight 600) | Resolution block headline |
+| `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
 | `text-body` | 18px | All body copy, default |
 | `text-small` | 16px | Dense lists, captions, footnotes |

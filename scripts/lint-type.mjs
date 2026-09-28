@@ -104,14 +104,15 @@ const ALLOWLIST = {
 // Check 3 stays scoped to the CLAMPED rungs (§7.3: "computed from the clamps").
 // The fixed rungs cannot satisfy 1.15 by construction (18/16 = 1.125,
 // 16/14 = 1.143), and neither can a display role that shares a ceiling with the
-// rung below it — .text-cover ceilings at 32px, exactly rung 3's ceiling, so an
-// unflagged entry would compute 1.00 and fail a check that is green for good
-// reason. `ladder: false` is what keeps membership and ratio separable.
+// rung below it — .text-cover ceilings at 32px, which was exactly rung 3's
+// ceiling until 28 Sep 2026, when rung 3 moved to 30. An unflagged entry still
+// computes under 1.15 and would fail a check that is green for good reason;
+// `ladder: false` is what keeps membership and ratio separable.
 const RUNGS = [
   { rung: 6, role: 'Arrival crescendo', selector: '.milestone__date', band: 'display', voice: 'flared', ladder: true },
   { rung: 5, role: 'Case-study hero', selector: '.hero-block__title', band: 'display', voice: 'flared', ladder: true },
   { rung: 4, role: 'Section heading', selector: '.case-study-prose h2', band: 'display', voice: 'flared', ladder: true },
-  { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline', band: 'display', voice: 'plain' /* 32px: tested, cut */, ladder: true },
+  { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline', band: 'display', voice: 'plain' /* 30px ceiling since 28 Sep 2026; flare tested at 32, cut */, ladder: true },
   { rung: 2, role: 'Standfirst', selector: '.case-study-prose .section-lede', band: 'read', voice: 'plain' /* reading type */, ladder: true },
 
   // ── Display roles that v3 §5 bands but §3.3 never put on the ladder ──────
@@ -134,7 +135,7 @@ const RUNGS = [
   // Found by scripts/assert-bands.mjs on its FIRST RUN. .resolution-block__headline
   // had already appeared in the ch-measure audit's "governs nothing" list days
   // earlier and the two were not connected.
-  { rung: 3, role: 'Resolution headline', selector: '.resolution-block__headline', band: 'display', voice: 'plain' /* 32px, and dead */, ladder: false, dead: true },
+  { rung: 3, role: 'Resolution headline', selector: '.resolution-block__headline', band: 'display', voice: 'plain' /* 30px since 28 Sep 2026, and dead */, ladder: false, dead: true },
   // .transformation is a grid CONTAINER with no font-size of its own, so it has
   // no ceiling to measure and the cut cannot be applied to it at all. `plain` is
   // the safe value rather than a derived one — and having no size is a second,
