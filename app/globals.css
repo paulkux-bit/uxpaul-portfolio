@@ -2343,6 +2343,7 @@ html.dark .oku-figure {
 .pull-quote--quiet p {
   font-size: 1.5rem; /* 24px, classic scale; every standalone pull quote one size (ruling 7 d-c, 28 Sep 2026; was 20 -> 28) */
   max-width: 28ch;
+  text-indent: -0.42em; /* hanging punctuation: the opening quote mark sits outside the text edge so the words align (ruling 8a, 28 Sep 2026). hanging-punctuation is Safari-only, so this is a negative indent. */
 }
 
 .pull-quote--quiet p::before,
