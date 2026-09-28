@@ -1643,6 +1643,7 @@
 :where(.case-study-prose) p {
   margin: 0 0 var(--spacing-m);
   max-width: 64ch;
+  text-wrap: pretty; /* rung 1 per the locked spec (v3 §3.4); was only on problem and frictions sections until 28 Sep 2026 (ruling 3a) */
 }
 
 /* Body prose in the rebuilt band sections wraps prettily (no one-word last-line

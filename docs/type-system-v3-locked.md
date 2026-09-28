@@ -157,6 +157,8 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 
 `balance` for anything under four lines that reads as a unit. `pretty` for multi-line body. Never both.
 
+**AMENDED 28 Sep 2026: `pretty` now reaches all case-study body text (ruling 3a).** It had reached only problem and frictions sections. It now applies through `:where(.case-study-prose) p`, which took one-word last lines across the five studies from 15 to 0 at 390, 768 and 1440 with no line added or lost.
+
 **AMENDED 22 Aug 2026 — rung 5 corrects to −0.020, and the spec yields to the CSS.**
 
 The table says rung 5 tracks at −0.025em. The shipped CSS had `.hero-block__sentence--open` at −0.025 and `.hero-block__sentence--anxious` at **−0.020**, which read as the CSS having drifted from the spec. It is the other way round: **`--anxious` was accidentally right.**
