@@ -78,8 +78,9 @@
   /* Width — three bands, assigned by the rung's DESKTOP CEILING so an
      element never changes width as the viewport resizes. There is no
      fourth value: picking a width by eye means you are outside the
-     system. Bands: reading (rungs 0-2, 14-26px), display (rungs 3-4,
-     32-52px ceiling), large display (rungs 5-6, 72-88px ceiling). */
+     system. Bands: reading (rungs 0-2, 14-24px), display (rungs 3-4,
+     30-52px ceiling), large display (rungs 5-6, 72-88px ceiling). Reading
+     band ceiling 26 -> 24 and rung 3 ceiling 32 -> 30 on 28 Sep 2026 (ruling 7 d-c). */
 
   /* Weight — carries hierarchy and expression. --wght-thin and
      --wght-loud are the signature pair: reserved for three placements
@@ -801,7 +802,7 @@
    from text-h3 (bigger, heavier). Standard properties only; the font-stretch
    that used to sit here went with the wdth axis in C3. */
 @utility text-resolution-headline {
-  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
+  font-size: clamp(1.625rem, 0.4255vw + 1.492rem, 1.875rem); /* rung 3, 26 -> 30px, matches .friction-beat__headline (ruling 7 d-c) */
   font-weight: 600; /* 94, unchanged — rung 3 */
   letter-spacing: 0;
   line-height: 1.15;
@@ -1642,6 +1643,7 @@
 :where(.case-study-prose) p {
   margin: 0 0 var(--spacing-m);
   max-width: 64ch;
+  text-wrap: pretty; /* rung 1 per the locked spec (v3 §3.4); was only on problem and frictions sections until 28 Sep 2026 (ruling 3a) */
 }
 
 /* Body prose in the rebuilt band sections wraps prettily (no one-word last-line
@@ -1842,9 +1844,9 @@
    Editorial standfirst: wider and larger than body, short of the full band.
    Scoped under .case-study-prose so it outweighs `.case-study-prose p`. */
 .case-study-prose .section-lede {
-  /* Rung 2. Endpoints unchanged at 22 and 26; the slope is retuned so it stops
-     converging on rung 3, which met it at 1.030x at 572px (v3 §3.3). */
-  font-size: clamp(1.375rem, 0.932vw + 0.959rem, 1.625rem);
+  /* Rung 2. 21 to 24px, both points on the classic scale (Paul's ruling 7 d-c,
+     28 Sep 2026; was 22 to 26). 21px at 390, 24px at 1440. */
+  font-size: clamp(1.3125rem, 0.2857vw + 1.2429rem, 1.5rem);
   line-height: 1.45;
   font-weight: 400;
   color: var(--text-secondary); /* standfirst: dimmed-from-primary (≈ the old currentColor 82% mix), now a token */
@@ -1905,7 +1907,7 @@
 .milestone__frame {
   margin: 0;
   max-width: 40ch;
-  font-size: clamp(1rem, 1.6vw + 0.6rem, 1.375rem); /* 16 -> 22px: text-lead tier, supporting. Scales down on mobile so the date:frame ratio holds (date clamps to its 52px floor). */
+  font-size: clamp(1rem, 0.476vw + 0.8839rem, 1.3125rem); /* 16 -> 21px (ruling 7 d-c, 28 Sep 2026; was 16 -> 22): text-lead tier, supporting. Scales down on mobile so the date:frame ratio holds (date clamps to its 52px floor). */
   line-height: 1.4;
   font-weight: 400;
   letter-spacing: -0.005em;
@@ -2018,12 +2020,12 @@
 }
 
 .thread-index {
-  font-size: clamp(1rem, 0.4vw + 0.85rem, 1.25rem);
+  font-size: clamp(1rem, 0.1905vw + 0.9536rem, 1.125rem); /* 16 -> 18px, classic scale (ruling 7 d-c, 28 Sep 2026; was 16 -> 19.36) */
   font-weight: 600;
   /* R6, one mark one rendering. Declares its own width so the 01/02/03 marker
      cannot inherit whatever the heading around it happens to set — it appears
      inside .friction-beat (94) and .thread-cols, and rendered two ways it
-     stops reading as the same mark. 20px ceiling, so reading band. */
+     stops reading as the same mark. 18px ceiling since 28 Sep 2026, so reading band. */
   letter-spacing: 0.04em;
   color: var(--text-muted); /* quiet 01/02/03 marker — AA-normal at the 16px floor (not large-bold, so subtle undershoots) */
   font-variant-numeric: tabular-nums;
@@ -2131,7 +2133,7 @@
 }
 
 .friction-beat__headline {
-  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem);
+  font-size: clamp(1.625rem, 0.4255vw + 1.492rem, 1.875rem); /* rung 3, 26 -> 30px (ruling 7 d-c, 28 Sep 2026; was 26 -> 32). Holds 26 until about 500px so the h2's 30px floor stays at least 1.15 above it (lint:type check 3 caught 1.141 at 466 on a steeper slope); 26 on phones keeps 1.15 over the 21px lede */
   font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off; rhymes the resolutions header) */
   /* 94, unchanged — rung 3. Both this and h2 are now token-driven, so the old
      "a subtle step below the H2's 96%" no longer describes it: h2 is 94 too,
@@ -2339,8 +2341,9 @@ html.dark .oku-figure {
 }
 
 .pull-quote--quiet p {
-  font-size: clamp(1.25rem, 1.5vw + 0.8rem, 1.75rem);
+  font-size: 1.5rem; /* 24px, classic scale; every standalone pull quote one size (ruling 7 d-c, 28 Sep 2026; was 20 -> 28) */
   max-width: 28ch;
+  text-indent: -0.42em; /* hanging punctuation: the opening quote mark sits outside the text edge so the words align (ruling 8a, 28 Sep 2026). hanging-punctuation is Safari-only, so this is a negative indent. */
 }
 
 .pull-quote--quiet p::before,
@@ -2384,9 +2387,14 @@ html.dark .oku-figure {
    are not.
 
    One 1.15x step below the value above. Smallest rendered size is 18px at 390,
-   clear of the 14px floor. */
+   clear of the 14px floor.
+
+   AMENDED 28 Sep 2026 (ruling 7 d-c): 21 -> 24px, both classic-scale points. Measured
+   against .friction-beat__headline at 26 -> 30: 1.238 at 390, 1.250 at 1440. The quote
+   inside a beat now reaches the standalone quote's 24px at 1440 instead of sitting a
+   step under it. */
 .friction-beat .pull-quote--quiet p {
-  font-size: clamp(1.125rem, 1.1vw + 0.72rem, 1.5rem);
+  font-size: clamp(1.3125rem, 0.2857vw + 1.2429rem, 1.5rem);
 }
 
 /* ── Transformation blocks (the Aaron James "8s → 1.8s" moment) ──────── */
@@ -2798,7 +2806,7 @@ html.dark .oku-figure {
    compressed-bold spine voice) so the friction→resolution read is headline-to-
    headline, not marker-only. */
 .resolution-block__headline {
-  font-size: clamp(1.625rem, 1.4vw + 1rem, 2rem); /* rung 3, 26 → 32px */
+  font-size: clamp(1.625rem, 0.4255vw + 1.492rem, 1.875rem); /* rung 3, 26 -> 30px (ruling 7 d-c) */
   font-weight: 600; /* unified numbered-item headline weight (killed the 550 one-off) */ /* 94, unchanged — rung 3 */
   line-height: 1.15;
   letter-spacing: 0;
@@ -4704,17 +4712,20 @@ html.dark .figure-placeholder {
   text-align: right;
 }
 
-/* The tier name is the quiet half of the pair: 400 at --text-muted, per the
-   manifest's $typeDoc. Hierarchy among small labels rides weight and token because
-   size below 14px is not available to spend. */
+/* The tier name is the quiet half of the pair with its value, at --text-muted.
+   Hierarchy among small labels rides weight and token because size below 14px is not
+   available to spend. 600 since 28 Sep 2026 (ruling 2c): at 400 it was identical type
+   to .tier-chart__ref-label (14/400/muted, 17.6px apart), and weight is the only
+   channel left to separate them. */
 .tier-chart__tier {
   font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 600;
   line-height: 1.4;
   color: var(--text-muted);
 }
 
 .tier-chart__value {
-  font-size: 1.25rem;
+  font-size: 1.3125rem; /* 21px, classic scale (ruling 7 d-c, 28 Sep 2026; was 20) */
   font-weight: 600;
   line-height: 1.2;
   color: var(--text-secondary);
@@ -4723,7 +4734,7 @@ html.dark .figure-placeholder {
 
 /* The end value is the argument: biggest number, primary colour. */
 .tier-chart__value--end {
-  font-size: 1.75rem;
+  font-size: 1.875rem; /* 30px (ruling 7 d-c; was 28) */
   color: var(--text-primary);
 }
 
@@ -4825,9 +4836,12 @@ html.dark .figure-placeholder {
 /* 1.25rem, NOT 1.125rem, TO MATCH .tier-chart__value. The two charts sit side by
    side and their quiet values were 20px and 18px, which is a difference a reader
    reads as meaning and which means nothing. Both --hi/--end values are 1.75rem, so
-   the emphasis step is now 1.4x on both sides instead of 1.4x and 1.56x. */
+   the emphasis step is now 1.4x on both sides instead of 1.4x and 1.56x.
+
+   AMENDED 28 Sep 2026 (ruling 7 d-c): values 21px and --hi/--end 30px on both charts,
+   classic-scale points. The emphasis step is 1.43x on both sides. */
 .node-chart__value {
-  font-size: 1.25rem;
+  font-size: 1.3125rem; /* 21px, classic scale (ruling 7 d-c, 28 Sep 2026; was 20) */
   font-weight: 600;
   line-height: 1.3;
   color: var(--text-secondary);
@@ -4836,7 +4850,7 @@ html.dark .figure-placeholder {
 }
 
 .node-chart__value--hi {
-  font-size: 1.75rem;
+  font-size: 1.875rem; /* 30px, classic scale (ruling 7 d-c; was 28). Emphasis step 30/21 = 1.43x */
   color: var(--text-primary);
 }
 
@@ -4993,6 +5007,10 @@ html.dark .figure-placeholder {
    label should sit close to what it labels: 24px inside a stage against 48px between
    them is a 1:2 proximity ratio, where 33:48 was 1:1.45.
 
+   AMENDED 28 Sep 2026 (ruling 7 d-c): the label is now 21px and .section-lede 21 -> 24.
+   The same-size pair below 714 is unchanged in kind (21 against 21) and still never
+   co-visible; the adjacent caption-lead pair is 21/18 = 1.167.
+
    WHAT WAS NOT AVAILABLE, so a later pass does not reach for either: stepping the
    caption gloss to --text-subtle measures 3.86 light and 4.20 dark against an
    AA-normal floor of 4.5 at 18px/400, and is the same failure aa977d8 removed from
@@ -5016,7 +5034,7 @@ html.dark .figure-placeholder {
 .promise-walk__label {
   margin: 0;
   max-width: none;
-  font-size: 1.375rem;
+  font-size: 1.3125rem; /* 21px, classic scale (ruling 7 d-c, 28 Sep 2026; was 22). 21/18 = 1.167 over the caption lead, so the note above still holds */
   font-weight: 600;
   line-height: 1.3;
   color: var(--text-primary);
@@ -5143,12 +5161,13 @@ html.dark .figure-placeholder {
    is why the gloss is placed explicitly instead of flowing into the next cell. */
 .roadmap-list__items > li {
   display: grid;
-  /* 2.5rem, DERIVED not chosen: a tabular "06" at 1.75rem/600 measures 37.97px in
-     the render, rounded up to the nearest 0.25rem step. Fixed rather than `auto` so
+  /* 2.75rem, DERIVED not chosen: a tabular "06" at 1.875rem/600 measures 40.69px in
+     the render (28 Sep 2026; it was 37.97px at 1.75rem under a 2.5rem track), rounded
+     up to the nearest 0.25rem step. Fixed rather than `auto` so
      the six titles keep one shared left edge even if the numeral's rendered width
      moves; `auto` happens to give the same edge today only because every numeral is
      two tabular digits. */
-  grid-template-columns: 2.5rem minmax(0, 1fr);
+  grid-template-columns: 2.75rem minmax(0, 1fr);
   row-gap: var(--spacing-3xs);   /* title → its own gloss, bound to the item */
   column-gap: var(--spacing-s);  /* numeral → title, and title → gloss at desktop */
   margin: 0;
@@ -5156,7 +5175,8 @@ html.dark .figure-placeholder {
 }
 
 /* THE ORDINAL IS THE LARGEST THING IN THE ROW, AND THAT IS THE WHOLE CHANGE. At
-   18px it worked as a bullet: it marked a row and carried no rank. At 28px the six
+   18px it worked as a bullet: it marked a row and carried no rank. At 28px (30px since
+   28 Sep 2026, ruling 7 d-c) the six
    numerals read as a sequence before any title is read, which is what makes the
    module a ranked list rather than six things that happen to be numbered.
 
@@ -5173,7 +5193,7 @@ html.dark .figure-placeholder {
    title's 22.5px and every row would gain 12.5px for nothing. */
 .roadmap-list__n {
   font-variant-numeric: tabular-nums;
-  font-size: 1.75rem; /* 28px */
+  font-size: 1.875rem; /* 30px, classic scale (ruling 7 d-c, 28 Sep 2026; was 28px) */
   line-height: 1.40625rem; /* the title's line box: 1.125rem x 1.25 */
   font-weight: 600;
   /* --text-primary now, where the 18px version took --text-muted. The old note here
@@ -5194,7 +5214,7 @@ html.dark .figure-placeholder {
   grid-column: 2;
   margin: 0;
   max-width: 44ch;
-  font-size: 0.9375rem; /* 15px */
+  font-size: 1rem; /* 16px, on the scale (ruling 7 d-c, 28 Sep 2026; was 15px, the only 15px text on the site) */
   line-height: 1.45;
   color: var(--text-muted);
 }
@@ -5207,7 +5227,7 @@ html.dark .figure-placeholder {
      and wraps 05 and 06 to two, which is the trade the fixed track buys: the gloss
      edge is identical down all six rows whatever the titles do. */
   .roadmap-list__items > li {
-    grid-template-columns: 2.5rem minmax(0, 21rem) minmax(0, 1fr);
+    grid-template-columns: 2.75rem minmax(0, 21rem) minmax(0, 1fr); /* 2.75rem: the 30px numeral, see the stacked rule above */
     align-items: baseline;
   }
 
@@ -5396,7 +5416,8 @@ html.dark .figure-placeholder {
      1.6, 1.65 and 1.7 in both modes - only block height moves, 149.8 / 153.4 /
      155.2 / 157.0px for the module. At 390 body happens to share this narrow
      measure, which makes body itself over-led there - a site-wide question, not
-     this module's to copy. */
+     this module's to copy. Resolved 28 Sep 2026 (ruling 4b): the spec now says 1.70
+     for case-study prose. */
   line-height: 1.6;
   color: var(--text-primary);
   text-wrap: pretty;
@@ -5423,7 +5444,8 @@ html.dark .figure-placeholder {
   font-size: 0.875rem; /* 14px */
   /* Uppercase and 0.09em STAY, and that is the deliberate half. .pull-quote cite
      is 14/500/muted and sentence-case, but it sits under a 28px quote - a 2.0x
-     size drop that separates it on size alone. This sits under an 18px quote, a
+     size drop that separates it on size alone (24px since 28 Sep 2026, ruling 7 d-c:
+     1.71x, still separating on size). This sits under an 18px quote, a
      1.29x drop, so the case change is what carries the differentiation. Copying
      cite exactly was prototyped and rendered worse: the source blurred into the
      quote above it and stopped marking where the testimony ends. */

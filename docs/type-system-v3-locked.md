@@ -128,8 +128,8 @@ There is no fourth value and no per-module choice. If you are picking a width by
 | 6 | Arrival crescendo | `clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)` | 52 | 88 | 88 |
 | 5 | Case-study hero | `clamp(2.5rem, 4.267vw + 1.353rem, 4.5rem)` | 40 | 72 | 88 |
 | 4 | Section heading | `clamp(1.875rem, 3vw + 1rem, 3.25rem)` | 30 | 52 | 94 |
-| 3 | Numbered headline | `clamp(1.625rem, 1.4vw + 1rem, 2rem)` | 26 | 32 | 94 |
-| 2 | Standfirst | `clamp(1.375rem, 0.932vw + 0.959rem, 1.625rem)` | 22 | 26 | 100 |
+| 3 | Numbered headline | `clamp(1.625rem, 0.4255vw + 1.492rem, 1.875rem)` | 26 | 30 | 94 |
+| 2 | Standfirst | `clamp(1.3125rem, 0.2857vw + 1.2429rem, 1.5rem)` | 21 | 24 | 100 |
 | 1 | Body | `1.125rem` | 18 | 18 | 100 |
 | 0.5 | Support | `1rem` | 16 | 16 | 100 |
 | 0 | Caption / eyebrow | `0.875rem` | 14 | 14 | 100 |
@@ -138,7 +138,9 @@ Rungs 3 and 2 are the fix for the 1.03 convergence at 560px. Rung 5's clamp is r
 
 **Rung 6 is retuned for the same reason (corrected 6 Aug 2026).** An earlier draft of this table left rung 6 at `clamp(3.25rem, 5vw + 1.5rem, 5.5rem)`, which leaves its floor at 560 and reaches its ceiling at 1280 — crossovers rung 5 does not share. That mismatch pinches the 6/5 pair to **1.1418 at 560px**, under the R5 floor, and no change to rung 5 fixes it, because the pinch is rung 6 sitting on its floor while rung 5 climbs. Giving rung 6 rung 5's crossovers (430 and 1180) with its endpoints unchanged yields slope `(88−52)/(1180−430) = 0.048` → `4.8vw + 1.96rem`. Worst 6/5 ratio becomes **1.222**, and the 320/1568 column values in this table are unchanged.
 
-Measured worst adjacent ratio across 320–2560 with the corrected ladder is **1.15**, set by the 3/2 pair.
+Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the corrected ladder is **1.15**, set by the 3/2 pair.
+
+**AMENDED 28 Sep 2026: the reading band moves onto the classic scale (Paul's ruling 7 d-c).** Rungs 2 and 3 above now carry the new values; the old ones were 22 to 26 and 26 to 32. Every reading-band role on the five studies lands on a point of the classic typographic scale Bringhurst records (14, 16, 18, 21, 24, 30): 6 distinct sizes at 1440 and 7 at 390, where rung 3 holds 26 on phones. The 1.15 floor is unchanged; `lint:type` check 3 passes, and computed from the declared clamps the worst pairs are now 4/3 at 1.154 (466px), 2/1 at 1.167 (391px) and 3/2 at 1.22 (506px). A first slope for rung 3 reached 1.141 at 466px and check 3 caught it; the rung now holds 26 until about 500px. Off-ladder roles moved with it: pull quotes 24 (21 to 24 inside a beat), chart values 21 and 30, stage labels 21, the 01/02/03 marker 16 to 18, the roadmap gloss 15 to 16, milestone frame 16 to 21, roadmap numerals 30. Decided by two review panels, the Plot Panel and the CC council, with renders in Chromium and WebKit on the Mac (`docs/reading-band-council.md`). Named size tokens for every role are the agreed next step, ahead of Template B.
 
 ### 3.4 Line-height, tracking, measure, wrap
 
@@ -149,11 +151,15 @@ Measured worst adjacent ratio across 320–2560 with the corrected ladder is **1
 | 4 | 1.08 | −0.02em | 30ch banded, 22ch flat | balance |
 | 3 | 1.15 | 0 | 42ch | balance |
 | 2 | 1.45 | 0 | 52ch | balance |
-| 1 | 1.65 | 0 | 64ch | pretty |
+| 1 | 1.70 case-study prose; 1.65 `text-body` | 0 | 64ch | pretty |
 | 0.5 | 1.5 | 0 | — | — |
 | 0 | 1.5 | 0, eyebrows 0.08em | 56ch | pretty |
 
 `balance` for anything under four lines that reads as a unit. `pretty` for multi-line body. Never both.
+
+**AMENDED 28 Sep 2026: `pretty` now reaches all case-study body text (ruling 3a).** It had reached only problem and frictions sections. It now applies through `:where(.case-study-prose) p`, which took one-word last lines across the five studies from 15 to 0 at 390, 768 and 1440 with no line added or lost.
+
+**AMENDED 28 Sep 2026: rung 1 line-height is 1.70 for case-study prose (ruling 4b).** `.case-study-prose` had always shipped 1.70 while this table said 1.65. The spec yields, because every copy ruling was judged at 1.70. The `text-body` utility on home and about stays 1.65.
 
 **AMENDED 22 Aug 2026 — rung 5 corrects to −0.020, and the spec yields to the CSS.**
 
@@ -562,7 +568,7 @@ The same shape as check 3 conflating rung with selector, and worth stating as a 
 | 52px | `.case-study-prose h2` | display | flared | tested at 52, the boundary |
 | 40px | `.about-phase__title` | display | **plain** | **judgment** — 36.4px at 1440 |
 | 32px | `.text-cover` | display | **plain** | tested at 32 |
-| 32px | `.friction-beat__headline` | display | **plain** | tested at 32 |
+| 30px | `.friction-beat__headline` | display | **plain** | tested at 32 |
 
 **Every selector in that table is `band: 'display'`. Not one moved band.**
 
