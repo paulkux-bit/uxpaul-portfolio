@@ -151,13 +151,15 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 | 4 | 1.08 | −0.02em | 30ch banded, 22ch flat | balance |
 | 3 | 1.15 | 0 | 42ch | balance |
 | 2 | 1.45 | 0 | 52ch | balance |
-| 1 | 1.65 | 0 | 64ch | pretty |
+| 1 | 1.70 case-study prose; 1.65 `text-body` | 0 | 64ch | pretty |
 | 0.5 | 1.5 | 0 | — | — |
 | 0 | 1.5 | 0, eyebrows 0.08em | 56ch | pretty |
 
 `balance` for anything under four lines that reads as a unit. `pretty` for multi-line body. Never both.
 
 **AMENDED 28 Sep 2026: `pretty` now reaches all case-study body text (ruling 3a).** It had reached only problem and frictions sections. It now applies through `:where(.case-study-prose) p`, which took one-word last lines across the five studies from 15 to 0 at 390, 768 and 1440 with no line added or lost.
+
+**AMENDED 28 Sep 2026: rung 1 line-height is 1.70 for case-study prose (ruling 4b).** `.case-study-prose` had always shipped 1.70 while this table said 1.65. The spec yields, because every copy ruling was judged at 1.70. The `text-body` utility on home and about stays 1.65.
 
 **AMENDED 22 Aug 2026 — rung 5 corrects to −0.020, and the spec yields to the CSS.**
 

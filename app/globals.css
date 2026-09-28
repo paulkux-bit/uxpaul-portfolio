@@ -5412,7 +5412,8 @@ html.dark .figure-placeholder {
      1.6, 1.65 and 1.7 in both modes - only block height moves, 149.8 / 153.4 /
      155.2 / 157.0px for the module. At 390 body happens to share this narrow
      measure, which makes body itself over-led there - a site-wide question, not
-     this module's to copy. */
+     this module's to copy. Resolved 28 Sep 2026 (ruling 4b): the spec now says 1.70
+     for case-study prose. */
   line-height: 1.6;
   color: var(--text-primary);
   text-wrap: pretty;
