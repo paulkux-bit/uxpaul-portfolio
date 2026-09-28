@@ -4711,11 +4711,14 @@ html.dark .figure-placeholder {
   text-align: right;
 }
 
-/* The tier name is the quiet half of the pair: 400 at --text-muted, per the
-   manifest's $typeDoc. Hierarchy among small labels rides weight and token because
-   size below 14px is not available to spend. */
+/* The tier name is the quiet half of the pair with its value, at --text-muted.
+   Hierarchy among small labels rides weight and token because size below 14px is not
+   available to spend. 600 since 28 Sep 2026 (ruling 2c): at 400 it was identical type
+   to .tier-chart__ref-label (14/400/muted, 17.6px apart), and weight is the only
+   channel left to separate them. */
 .tier-chart__tier {
   font-size: 0.875rem; /* 14px, the system floor */
+  font-weight: 600;
   line-height: 1.4;
   color: var(--text-muted);
 }
