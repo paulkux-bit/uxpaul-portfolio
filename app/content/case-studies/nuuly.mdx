@@ -9,10 +9,10 @@ order: 5
 problemFraming: "How does a rented dress get back out in time?"
 projectName: "Nuuly"
 headline: "All seven apps shipped. The floor ran on them the day Nuuly launched."
-summary: "I designed the seven apps that move a rented garment through the warehouse, from a returned tote to the wash bin to the next customer's box."
+summary: "URBN's rental brand Nuuly had no warehouse process in 2018. I designed the apps it opened with in 2019."
 heroImage: "/case-studies/nuuly/hero.png"
-heroImageAlt: "Sort to wash bins, six of six scanned: three returned garments in a row, coded D2, W1 and D3, above the workstation dock."
-role: "Senior Product Designer"
+heroImageAlt: "Sort to wash bins. Scanned 6 of 6: three returned garments in a row, coded D2, W1, and D3, above the workstation dock."
+role: "Sole designer, warehouse operator apps"
 timeframe: "2018 – 2019"
 team: "Nuuly product, data science, warehouse operations SMEs, and garment specialists, inside URBN."
 nda: false
@@ -23,7 +23,7 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
 import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 {/* ─────────────────────────────────────────────────────────────
-    Nuuly – Template A. Content draft v1, images first pass.
+    Nuuly – Template A. Copy review closed 27 Sep 2026 (claude/nuuly-review-s00 to s09).
     Arc: claude/nuuly-arc-locked.md
     Source: claude/nuuly-interview-notes.md (Paul's account, primary)
     Facts + hazards: claude/nuuly-research-brief.md
@@ -39,11 +39,11 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
     paragraph that carried it, and section 7's captions plus section 8's
     milestone are approved as written.
 
-    ONE TODO token remains and it is a rationale note, not a blocker: the
-    narrowed corner claim, which records why that sentence was scoped to what
-    the 62 frames support. It invites a rephrase rather than requiring one.
+    No TODO tokens remain here or in apps-manifest.json: the last one, the
+    narrowed corner claim, was retired in the 27 Sep copy review and its scope
+    note now sits above that sentence.
 
-    Re-enumerated 20 Aug 2026 after the ruling, not carried forward. Every
+    Re-enumerated 27 Sep 2026, not carried forward. Every
     earlier count in this header was stale within a pass or two, so if you
     change a marker, recount here rather than adjusting the number.
    ───────────────────────────────────────────────────────────── */}
@@ -51,14 +51,14 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 <HeroBlock
   eyebrow="NUULY · URBN"
   title={['A building, a promise,', 'and no process.']}
-  role="At Nuuly, URBN's clothing rental subscription, I designed the seven warehouse apps that get a returned garment back out to the next customer: sole designer, idea to launch."
+  role="At Nuuly, URBN's clothing rental subscription, I designed the seven warehouse apps that get a returned garment back out to the next customer: sole designer, from idea to launch."
   image={{
     src: '/case-studies/nuuly/hero.png',
-    alt: 'Sort to wash bins, six of six scanned: three returned garments in a row, coded D2, W1 and D3, above the workstation dock.',
+    alt: 'Sort to wash bins. Scanned 6 of 6: three returned garments in a row, coded D2, W1, and D3, above the workstation dock.',
   }}
   callout={{
     label: 'THE SCAN',
-    body: 'Usually it records what you did. This one tells you what to do next.',
+    body: 'Usually, it records what you did. This one tells you what to do next.',
   }}
 />
 
@@ -66,11 +66,11 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 ## Somebody is already waiting for the dress you just sent back.
 
-<p className="section-lede">Nuuly rents clothes by subscription: six garments a month, then six more.</p>
+<p className="section-lede">Nuuly members rent six garments a month, then send them back for six more.</p>
 
-**Her next box ships on a date she picked.** The dress is still in a return tote.
+**Her next box ships on a date she chose.** The dress she wants might still be in your return tote.
 
-**Each turn costs two shipping legs, a wash, an inspection, and a repair.** All of it out of one monthly fee. Wash it wrong and the dress is gone. Move it slowly and her box ships short.
+**Every rental gets shipped twice, washed, inspected, and sometimes repaired, all for one monthly fee.** Wash a dress the wrong way and it's ruined. Move it too slowly and her box goes out without it.
 
 {/* House pattern, taken from FDT-E's problem pair (us-navy-fdt-e.mdx): one real
     artifact beside one authored illustration, both 16:10 so the two caption
@@ -167,13 +167,13 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
         <cite>Operations manager, interview</cite>
       </blockquote>
     </div>
-    <NuulyBeatFigure variant="station" alt="A specialist leaning into a wheeled workstation to push it, the cart it just left ghosted behind." />
+    <NuulyBeatFigure variant="station" alt="A specialist leaning into a wheeled workstation to push it, its last position ghosted behind." />
   </li>
   <li className="friction-beat" data-thread="2">
     <div className="friction-beat__text">
       <span className="thread-index">02</span>
       <h3 className="friction-beat__headline">Everything is a handoff</h3>
-      <p className="friction-beat__scene">Each garment has a next step, and the specialist is the one who sets it. Get it wrong and a station downstream stalls. Get it late and the box ships short.</p>
+      <p className="friction-beat__scene">Each garment has a next step, and the specialist sets it. Get it wrong and a station downstream stalls. Get it late and a customer waits.</p>
     </div>
     <NuulyBeatFigure variant="handoff" alt="A specialist beneath an overhead rail, hand still raised, a garment traveling away from them along it." />
   </li>
@@ -181,23 +181,23 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
     <div className="friction-beat__text">
       <span className="thread-index">03</span>
       <h3 className="friction-beat__headline">One hand is always full</h3>
-      <p className="friction-beat__scene">A garment in one hand, a scanner in the other. The surface is already covered in laid-out work. Nobody puts a garment down to tap.</p>
+      <p className="friction-beat__scene">A garment in one hand, a scanner in the other. The surface is already covered in laid-out work. Nobody puts a garment down to tap the screen.</p>
     </div>
     <NuulyBeatFigure variant="hands" alt="A specialist holding a garment up off the rack in one hand and bringing a scanner to its tag with the other." />
   </li>
 </ol>
 
-<p className="mt-14!">**The screen had to work on a station that moves, in a hand that is already full, against a clock.**</p>
+<p className="mt-14!">**The screen has to work on a station that moves, in a hand that is already full, against a clock.**</p>
 
 </section>
 
 <section className="cs-section">
 
-## How do you give one cart seven jobs?
+## How do you give one station seven jobs?
 
-<p className="section-lede">Seven narrow apps, not one general tool. Any cart can be given any job, and a new station needs no new software.</p>
+<p className="section-lede">Seven narrow apps, one job each. Any station can take any job, and a new one needs no new software.</p>
 
-**The flexibility lives in the furniture. The software follows it.** Roll a cart to another part of the floor, give it different work, pick the app that matches.
+**When a station moves to new work, the specialist just opens a different app.**
 
 <AppsBento />
 
@@ -205,15 +205,15 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 <section className="cs-section">
 
-## Work outlives the shift
+## Work outlives the shift.
 
-A purchase order that is part received stays open, at the count it reached, for whoever picks it up next.
+A station can change hands halfway through counting in new stock. The count is saved, and whoever takes over picks up where it stopped.
 
 <BentoBand
   src="/case-studies/nuuly/pause-handoff.png"
-  alt="Pausing a purchase order: a dialog asking why, with the count reading seventy-one of a hundred units received and a note that anyone can pick it back up."
+  alt="Pausing a purchase order: Why are you pausing this PO? It stays open with 71 of 100 units received. Anyone can pick it back up. Two reasons, Out of tolerance and To be worked on later, above Keep receiving and Pause the PO."
   caption="Pause the order."
-  gloss="It stays open at the count it reached."
+  gloss="The next person sees the reason."
   aspect={1.778}
 />
 
@@ -223,33 +223,33 @@ A purchase order that is part received stays open, at the count it reached, for 
 
 ## The hard part wasn't the screen. It was knowing which bin.
 
-Scan the item, and it tells you which colored bin to drop it in. There is nothing to learn and nothing to decide.
+Scan a garment, and the screen shows which colored bin it goes in. There's nothing to learn and nothing to decide.
 
 <BentoBand
   src="/case-studies/nuuly/bins-first.png"
-  alt="Sort to wash bins, scanned one of six: the first garment has a bin code, the other five are still unread."
-  caption="Sort to bins."
-  gloss="One garment read, five still unread."
+  alt="Sort to wash bins. Scanned 1 of 6: six garments in a row; the second, Grey Motif, marked W1; the other five still unscanned."
+  caption="Sort to wash bins."
+  gloss="Each scan assigns one garment to a bin."
   aspect={1.778}
 />
 
 <BentoBand
   src="/case-studies/nuuly/bin-answer.png"
-  alt="The sorting answer: the row of garments dims and a single large code fills the middle of the screen, naming the wash bin the scanned garment goes to."
-  caption="Wash bin assigned."
-  gloss="The row dims, the code fills the screen."
+  alt="The sorting answer: the row dims behind a large W1, and the line Grey Motif goes to wash bin 1."
+  caption="Wash bin 1."
+  gloss="Big enough to read at a glance."
   aspect={1.778}
 />
 
-Getting that answer right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The results became a model. That model is what answers when the scanner fires.
+Getting the bin right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The data science team built a model from the results, and that model picks the bin when a garment is scanned.
 
-Two of the seven apps are that project made permanent: Test Wash runs a new style through a cycle, Measure compares it before and after. The research did not end in a document. It ended in software that keeps doing it.
+Two of the seven apps came out of that project, so the testing kept going: Test Wash runs each new style through a cycle, and Measure compares it before and after.
 
 <BentoBand
   src="/case-studies/nuuly/measure-table.png"
   alt="The Measure table for a pair of jeans: length, in seam, rise, waist and hem, each with a pre wash and post wash figure and the difference between them."
-  caption="Wear measurement."
-  gloss="Five points, before and after a wash."
+  caption="Measure garment."
+  gloss="Five points, checked before and after a wash."
   aspect={1.778}
 />
 
@@ -258,15 +258,15 @@ Two of the seven apps are that project made permanent: Test Wash runs a new styl
     slot="wide"
     src="/case-studies/nuuly/care-set.png"
     alt="Test Wash: the wash cycle and care instruction fields for a new style, with the care instruction list open and its options unticked."
-    caption="Care instructions."
-    gloss="Set in Test Wash, for the style."
+    caption="Select wash."
+    gloss="Care steps are set once, for the whole style."
   />
   <BentoItem
     slot="wide"
     src="/case-studies/nuuly/care-surfaced.png"
-    alt="Returning: a prompt over the dimmed row of garments naming the two handling steps that were set for this style when it was test washed."
+    alt="Returning: a prompt over the dimmed row, Two things before this one goes in, listing Empty the pockets and Put the accessory in a net bag, with the garment, above Done, carry on."
     caption="Back at the bin."
-    gloss="Returning shows only the steps that were set."
+    gloss="Only the steps set for this style appear."
   />
 </BentoTheme>
 
@@ -304,18 +304,15 @@ Two of the seven apps are that project made permanent: Test Wash runs a new styl
 
 <section className="cs-section">
 
-## I designed for the hundredth garment
+## I designed for the hundredth garment.
 
-I designed for recall, not discovery. The warehouse manager had already built a training environment that taught the shift, so the app did not have to explain the operation. It only had to handle the task in front of it.
+By the hundredth garment of a shift, a specialist reaches for the button without looking. I could design for that because the warehouse manager's training already covered how the whole floor works, so the app only had to handle the task in front of it.
 
-That was somebody else's investment paying for my decision.
-
-{/* TODO(copy): Paul. Narrowed 19 Aug from "every app, every screen", which the
-    evidence does not carry: Receiving has no bottom-right primary at all,
-    measured across all 62 dim frames. "Every screen that ends a task"
-    is the checkable version. Rephrase freely, but keep it to what the 62 frames
-    support. */}
-So the primary action never moves. Same corner, same place, on every screen that ends a task, so the hand learns it and stops looking.
+{/* Scope, narrowed 19 Aug and kept in the 27 Sep rewrite: "every screen that
+    ends a task", not "every app, every screen". Receiving has no bottom-right
+    primary at all, measured across all 62 dim frames. Any rephrase stays within
+    what the 62 frames support. */}
+So the main button sits in the same corner on every screen that ends a task.
 
 {/* Composite, not a crop, and the one image in this study that is not a whole
     frame. Six identical strips from five apps at identical geometry, two of
@@ -341,30 +338,28 @@ So the primary action never moves. Same corner, same place, on every screen that
     ceiling, not a selection. The prose above was narrowed to match. */}
 <BentoBand
   src="/case-studies/nuuly/corner-consistency.png"
-  alt="The same primary action in the lower right of six screens across five apps: done next return, done next garment, save measurements, weigh this package, save cycle, done next order."
-  caption="The same corner."
-  gloss="Six screens, five apps, one position."
+  alt="Six button strips side by side, each ending in its primary action: done next return, done next garment, save measurements, weigh this package, save cycle, done next order."
+  caption="Same corner."
+  gloss="Bottom right on six screens across five apps."
   aspect={1.6}
 />
 
-**The hit area runs past the paint, out to the bezel.** The button you see keeps the same margin as everything else. The one you can hit does not stop there. A screen edge is a physical bound, so a hand thrown at it cannot overshoot.
-
-It can be hit without looking, which matters because the specialist is looking at a dress.
+**The tap area reaches all the way to the edge of the screen.** The button looks like it sits inside the margin, but a tap anywhere out to the edge still counts. A hand can't overshoot the edge, so the specialist can hit it while looking at the dress.
 
 <BentoTheme>
   <BentoItem
     slot="wide"
     src="/case-studies/nuuly/move-to-bin.png"
-    alt="Move garment: the destination size, double extra small, set at display size beside the garment photo, with a single confirm action."
+    alt="Move garment: Move to bin above a large XXS, beside the garment photo."
     caption="Move to bin."
-    gloss="The destination size, at reading distance."
+    gloss="Shows the size bin large, with one button to confirm."
   />
   <BentoItem
     slot="wide"
     src="/case-studies/nuuly/verdict-repair.png"
-    alt="The same Move garment screen for a failed inspection, reading send for repair in place of a bin size, with the same single confirm action."
+    alt="Move garment for a failed inspection: Send for Repair in place of a bin size, beside the garment photo."
     caption="Send for repair."
-    gloss="The same screen, the other verdict."
+    gloss="A failed garment gets the same screen and the same button."
   />
 </BentoTheme>
 
@@ -377,16 +372,16 @@ It can be hit without looking, which matters because the specialist is looking a
 
 <section className="cs-section">
 
-## I built bright mode. They stayed on dim.
+## I designed bright mode. They stayed on dim.
 
-Warehouse lighting is not one thing. It changes by bay, by hour, by season. So I built two modes and let the specialist choose, and I worked with the Android developers to understand what the monitors could do at each end. I was proud of bright mode.
+Warehouse lighting changes from one part of the floor to another and over the course of a day. So I designed two modes and let each specialist choose, and I worked with the Android developers to learn what the monitors could handle at each end. I was proud of bright mode.
 
 Hardly anyone used it. They stayed on dim.
 
-I still do not know why. It might be what they were trained on. It might be that bright was not bright enough to be worth the switch.
+I still don't know why. Maybe they were trained on dim, or maybe bright wasn't bright enough to justify switching.
 
-{/* Approved by Paul, 20 Aug 2026: all eight captions and glosses stand as
-    written. Two dim/bright pairs rather than one, so the two modes read as a
+{/* Captions approved by Paul 20 Aug 2026; the four glosses were rewritten
+    27 Sep to the house caption style (claude/nuuly-review-s07.md). Two dim/bright pairs rather than one, so the two modes read as a
     designed system instead of a filter: the accent token re-tunes rather than
     being filtered, and the primary inverts while its position holds. Measured
     mean luminance dim to bright: confirm 42 to 185, drawer 39 to 197.
@@ -394,7 +389,7 @@ I still do not know why. It might be what they were trained on. It might be that
     A THIRD PAIR WAS CUT ON PURPOSE, 19 Aug. Do not read "two pairs" as an
     accident of what happened to be on disk, and do not add a third back.
 
-    This section is a confession: I built bright mode, they stayed on dim. Its
+    This section is a confession: I designed bright mode, they stayed on dim. Its
     whole move is that I did a lot of work and it did not matter. Image count
     argues against that. Six frames made it look like a feature showcase, which
     is the exact opposite of what the prose is admitting, and the launcher row
@@ -406,23 +401,26 @@ I still do not know why. It might be what they were trained on. It might be that
     the closer on a "prose should close a section" instinct. With it in the
     middle, the landing ("Hardly anyone used it. They stayed on dim.") had gone
     cold by the time the reader reached the coda, and two "It might be" clauses
-    with nothing after them read as truncation rather than refusal. Last, the
+    with nothing after them read as truncation rather than refusal. The coda was
+    rewritten 27 Sep into one "Maybe ... or maybe ..." sentence; the placement ruling
+    is unaffected, because it is about where the bento sits, not the coda's wording.
+    Last, the
     admission and the coda are one thought and the frames are the punchline:
     the prose is what I admit, the images are what I admit to. §4 already ends
     on <AppsBento />, so a section closing on evidence has precedent. */}
 <BentoTheme>
   <BentoItem slot="wide" src="/case-studies/nuuly/mode-confirm-dim.png"
-    alt="A registered garment in dim mode, with a yellow confirmation disc over the photo."
-    caption="Dim." gloss="The accent disc at full yellow." />
+    alt="Scan fingerprint in dim mode: a registered garment with a check mark over its photo."
+    caption="Dim." gloss="The confirmation mark in full yellow on a dark screen." />
   <BentoItem slot="wide" src="/case-studies/nuuly/mode-confirm-bright.png"
-    alt="The same confirmation in bright mode, the disc darkened to hold its contrast against a pale ground."
-    caption="Bright." gloss="The same token, darkened to hold contrast." />
+    alt="Scan fingerprint in bright mode: the same garment and check mark."
+    caption="Bright." gloss="The yellow darkens so it still stands out on a light screen." />
   <BentoItem slot="wide" src="/case-studies/nuuly/mode-drawer-dim.png"
-    alt="The Receiving action drawer in dim mode, its confirm button light on dark chrome."
-    caption="Dim." gloss="A light button on dark chrome." />
+    alt="The Receiving action drawer in dim mode: PO details, Pause this PO, and Complete this PO."
+    caption="Dim." gloss="A light button on a dark panel." />
   <BentoItem slot="wide" src="/case-studies/nuuly/mode-drawer-bright.png"
-    alt="The same drawer in bright mode, the confirm button inverted to dark on light, in the same position."
-    caption="Bright." gloss="Inverted, and in the same place." />
+    alt="The Receiving action drawer in bright mode, with the same three actions."
+    caption="Bright." gloss="The button flips to dark and stays in the same spot." />
 </BentoTheme>
 
 </section>
@@ -468,9 +466,9 @@ I left URBN that October. What Nuuly became afterwards is not mine to claim, but
 
 ## Role
 
-Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer, shipping and branding experience.
+Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer, shipping, and branding experience.
 
-The work ran alongside product management, the data science team, warehouse operations subject-matter experts, and the garment specialists who would use the tools.
+I worked with product management, the data science team, warehouse operations experts, and the garment specialists who would use the apps.
 
 Designed 2018 to 2019.
 

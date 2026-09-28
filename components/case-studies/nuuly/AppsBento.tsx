@@ -2,9 +2,13 @@ import ResolutionsBento, { type ResolutionsManifest } from '../uscg-bard/Resolut
 import manifest from './apps-manifest.json';
 
 /**
- * Apps gallery — "Seven apps, one screen, one free hand". Binds the Nuuly apps manifest
- * to the generic ResolutionsBento adapter (the same one Bard's Resolutions themes and
- * FDT-E's gate walk use).
+ * Apps gallery, under "How do you give one station seven jobs?". Binds the Nuuly apps
+ * manifest to the generic ResolutionsBento adapter (the same one Bard's Resolutions
+ * themes and FDT-E's gate walk use).
+ *
+ * Captions (27 Sep copy review): each lead is the app's name, in the house caption style;
+ * the journey below survives in the ORDER of the tiles, not in the leads. The earlier
+ * "It arrives." / "It comes back." sequence leads were retired.
  *
  * Composed as ONE GARMENT'S JOURNEY, not as an org chart: the launcher, then arrive
  * (Receiving), get a recipe (Test Wash), get measured (Measure), come back (Returning),
