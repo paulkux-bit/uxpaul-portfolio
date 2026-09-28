@@ -1,5 +1,5 @@
 {
-  "$todo": "TODO(copy): Paul. Every alt in this file was rewritten 19 Aug when the tiles became padded 16:10 whole frames rather than region crops, and three captions changed with their source frame (apps-01-menu, apps-08-measure, apps-03-returning). Placeholder until Paul edits. apps-07's alt names the W3 cycle deliberately: the 15 Aug Option B ruling makes tw-done's resolved label publishable and bars only tw-wet's fibre mapping, so withholding it would give a screen-reader user less than a sighted one for no protection.",
+  "$captionDoc": "Captions ruled 27 Sep 2026 (copy review, claude/nuuly-review-s03.md): house caption style, the lead is the app's name and the tail says what it does; the tiles keep their journey order. Triage left the launcher tail (an app never built before Paul left). Alts were rewritten 19 Aug when the tiles became padded 16:10 whole frames. apps-07's alt names the W3 cycle deliberately: the 15 Aug Option B ruling makes tw-done's resolved label publishable and bars only tw-wet's fibre mapping, so withholding it would give a screen-reader user less than a sighted one for no protection.",
   "images": [
     {
       "src": "/case-studies/nuuly/apps/apps-01-menu.png",
@@ -10,34 +10,34 @@
       },
       "slot": "feature",
       "caption": {
-        "lead": "The default menu.",
-        "tail": "Six apps here, Receiving and Triage on page two."
+        "lead": "Launcher.",
+        "tail": "Each station opens the one job it has today."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-02-receiving.png",
-      "alt": "Receiving: a purchase order grid with one slot filled, beside a garment card reading two received of ten ordered.",
+      "alt": "Receiving: a purchase order grid with one slot filled, beside a garment card reading Received 2, Ordered 10.",
       "focalPoint": {
         "x": 0.62,
         "y": 0.45
       },
       "slot": "wide",
       "caption": {
-        "lead": "It arrives.",
-        "tail": "Net-new inventory scanned in, unit by unit, against the order."
+        "lead": "Receiving.",
+        "tail": "Counts new stock in against the order, piece by piece."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-03-returning.png",
-      "alt": "Returning: a prompt to scan any garment from the bag, noting that the first tag read pulls up the whole return.",
+      "alt": "Returning: the Scan fingerprint step, with a prompt to scan a garment from the bag.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.45
       },
       "slot": "wide",
       "caption": {
-        "lead": "It comes back.",
-        "tail": "The first tag read opens the whole return."
+        "lead": "Returning.",
+        "tail": "One scan from the bag pulls up the whole return."
       }
     },
     {
@@ -49,47 +49,47 @@
       },
       "slot": "wide",
       "caption": {
-        "lead": "It gets judged.",
-        "tail": "Damage named from a fixed vocabulary, then passed or failed."
+        "lead": "Inspection.",
+        "tail": "Names the damage from a set list, then passes or fails it."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-05-packing.png",
-      "alt": "Packing: three garment bag sizes offered for the order, the large bag chosen.",
+      "alt": "Packing: Pick a garment bag, with small, medium and large bags and the large one chosen, above Weigh this package.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "wide",
       "caption": {
-        "lead": "It goes back out.",
-        "tail": "The packaging decided from the order, not from memory."
+        "lead": "Packing.",
+        "tail": "Offers three bag sizes for the order, then weighs it."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-07-test-wash.png",
-      "alt": "Test Wash: the wash cycle for a new style set to W3, delicate lights, applying to every size of the style, with the dry clean alternative unset.",
+      "alt": "Test Wash: the wash cycle for a new style set to W3, delicate lights, with the dry clean alternative unset.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "wide",
       "caption": {
-        "lead": "It gets a recipe.",
-        "tail": "One cycle, set for every size of the style."
+        "lead": "Test Wash.",
+        "tail": "Sets one wash cycle for every size of a style."
       }
     },
     {
       "src": "/case-studies/nuuly/apps/apps-08-measure.png",
-      "alt": "Measure: the garment type list open, grouped into tops and bottoms, which decides which sections get measured.",
+      "alt": "Measure: the garment type list open, grouped into tops and bottoms.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
       },
       "slot": "wide",
       "caption": {
-        "lead": "It gets measured.",
-        "tail": "The garment type decides which sections are measured."
+        "lead": "Measure.",
+        "tail": "The garment type decides what gets measured."
       }
     }
   ],
