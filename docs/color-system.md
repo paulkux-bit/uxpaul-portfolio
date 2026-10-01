@@ -34,7 +34,7 @@ Light mode is **paper** — warm cream canvas with visible chroma, deep warm cha
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
-The **PopUp annotation layer** carries the only chromatic identity that persists at rest. When the toggle is engaged, the page picks up a subtle warm wash and annotation cards appear on a more saturated tint — signaling *different voice, same world.*
+The **PopUp annotation layer** once carried a chromatic identity at rest. It is retired, and its tokens were deleted on 1 Oct 2026. The one resting exception now is the "Also shipped" brand shelf (see Brand identity below).
 
 ---
 
@@ -50,7 +50,7 @@ The **PopUp annotation layer** carries the only chromatic identity that persists
 
 ## Tokens
 
-All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma stays ≤ 0.040. Interaction states push to 0.10–0.15. PopUp tokens reach 0.07.
+All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma stays ≤ 0.040. Interaction states push to 0.10–0.15. (The retired PopUp tokens reached 0.07; they were deleted on 1 Oct 2026.)
 
 ### Surface
 
@@ -95,16 +95,9 @@ All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma st
 | `--shadow-rest`             | `0 1px 2px oklch(0.30 0.04 50 / 0.05)`                                                 | `0 1px 2px oklch(0 0 0 / 0.30)`                                                 |
 | `--shadow-hover`            | `0 2px 4px oklch(0.30 0.04 50 / 0.06), 0 12px 28px oklch(0.30 0.04 50 / 0.10)`         | `0 2px 4px oklch(0 0 0 / 0.35), 0 16px 36px oklch(0 0 0 / 0.40)`                |
 
-### PopUp annotation layer
+### PopUp annotation layer (retired)
 
-| Token                       | Light                          | Dark                           |
-|-----------------------------|--------------------------------|--------------------------------|
-| `--popup-canvas`            | `oklch(0.955 0.044 62)`        | `oklch(0.215 0.040 52)`        |
-| `--popup-surface`           | `oklch(0.930 0.054 58)`        | `oklch(0.255 0.046 52)`        |
-| `--popup-surface-elevated`  | `oklch(0.905 0.060 55)`        | `oklch(0.295 0.052 52)`        |
-| `--popup-border`            | `oklch(0.840 0.070 52)`        | `oklch(0.385 0.060 52)`        |
-| `--popup-text-primary`      | `oklch(0.245 0.030 52)`        | `oklch(0.935 0.020 75)`        |
-| `--popup-text-muted`        | `oklch(0.495 0.030 52)`        | `oklch(0.730 0.024 68)`        |
+Deleted from `globals.css` on 1 Oct 2026, consumed by nothing since the layer was retired. The six tokens and their values are in git history at `29ae8ab`.
 
 ### Brand identity — the "Also shipped" shelf
 
@@ -138,10 +131,11 @@ Fills are deliberately **aged-stock muted** (chroma ≤0.018), not pastel — th
 brand, so the fill is near-parchment. The 1.5px brand border is the primary identity element, so it
 survives forced-colors mode (where the fill drops to system canvas) — the row still reads bounded.
 
-**Per-module title character.** Each `data-brand` also sets `--qh-wdth / --qh-wght / --qh-opsz`,
-fed to the title's `font-variation-settings` (typography doc §7 manual-axis case): Lionsgate 90/600/40
-(cinematic), Red Cross 96/500/14 (humane), BBC 84/650/48 (newspaper), K. Hovnanian 100/540/24
-(architectural). One family, four typographic personalities — width 84→100, weight 500→650, opsz 14→48.
+**Per-module title character.** Each `data-brand` also sets `--qh-wght`: Lionsgate 600 (cinematic),
+Red Cross 500 (humane), BBC 650 (newspaper), K. Hovnanian 540 (architectural). Weight and colour carry
+the four personalities. (Updated 1 Oct 2026: the per-brand width and optical-size values addressed axes
+Commissioner does not have and were deleted; see type system v3 §6.) The border width is
+`--qh-border-width` (1.5px).
 
 ---
 
@@ -186,14 +180,9 @@ contrast only increases over the spec.
 - **`shadow-rest`** — default state on lifting elements (cards, toggles).
 - **`shadow-hover`** — hovered/active state. Bigger, warmer. Pairs with `translateY(-3px)`.
 
-### PopUp annotation layer
+### PopUp annotation layer (retired)
 
-- **`popup-canvas`** — the wash applied to the page background when annotations are toggled on.
-- **`popup-surface`** — annotation card background.
-- **`popup-surface-elevated`** — hover/focused annotation card.
-- **`popup-border`** — annotation card border, marker outlines.
-- **`popup-text-primary`** — annotation body copy.
-- **`popup-text-muted`** — annotation meta (kicker labels, source attributions).
+The six roles (page wash, card surface, elevated card, border, body text, meta text) were deleted with their tokens on 1 Oct 2026.
 
 ---
 
@@ -215,11 +204,9 @@ Defined in `app/globals.css` via `@utility`. Mirrors the typography utility patt
 
 Compose: `<article className="lift hover:lift-hover">…</article>`
 
-### PopUp (annotation contexts only)
+### PopUp (retired)
 
-`bg-popup-canvas`, `bg-popup-surface`, `bg-popup-surface-elevated`
-`border-popup`
-`text-popup-primary`, `text-popup-muted`
+The six PopUp utilities were deleted with their tokens on 1 Oct 2026.
 
 ---
 
@@ -254,7 +241,6 @@ Knobs (set in `globals.css`):
 - **Link affordance is multi-channel.** Underline at rest, thicker + warmer on hover. Color alone is never the only signal.
 - **`color-scheme`** is set per mode so native form controls and scrollbars adopt the right palette.
 - **`prefers-reduced-motion`** is respected globally — transitions reduce to near-instant.
-- **PopUp layer**: `popup-text-primary` on `popup-surface` hits AAA in both modes; `popup-text-muted` hits AA normal.
 
 ---
 
@@ -299,7 +285,7 @@ The decisions, in order of forking:
 2. **Warm-leaning hue axis** (50–80) — amber/sepia reads as studio, not corporate.
 3. **No accent at rest** — chromatic restraint is the senior move. Forces typography, scale, and craft to do the work.
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
-5. **PopUp takes a tint** — annotation layer carries the only chromatic identity that persists at rest.
+5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Also shipped" shelf is the one resting exception now.)
 6. **(v2) Interaction earns color** — hover, focus, selection get warm chromatic treatment as *moments*, not roles. Defensible because nothing chromatic sits at rest.
 7. **(v2) Paper has real character** — visible chroma, layered surfaces, SVG grain. The canvas is cream stock, not generated white.
 
@@ -313,7 +299,7 @@ The decisions, in order of forking:
 - ❌ **No cool grays** (hue ≥ 200). The system is warm only. **One sanctioned exception:** `--qh-bbc-base` (hue 250) on the "Also shipped" shelf, for BBC brand attribution — see the Brand identity token section. Not a license for cool hues elsewhere.
 - ❌ **No pure black or pure white.** Warmth lives in the neutrals.
 - ❌ **Dark mode is not inverted light mode.** Tune chroma and contrast independently.
-- ❌ **Don't use `--popup-*` tokens outside the annotation system.**
+- ❌ **Don't reintroduce PopUp tokens.** The annotation layer is retired; its tokens were deleted on 1 Oct 2026.
 - ❌ **Don't extend interaction-state tokens (`--focus-glow`, `--selection-bg`, `--link-hover`) to resting roles.** They're moments, not paint.
 - ❌ **No paper grain in dark mode.** Dark mode is ambient light, not paper.
 - ❌ **Don't add tokens inline.** Extend this doc first, then add to `globals.css`.

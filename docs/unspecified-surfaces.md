@@ -309,6 +309,12 @@ intermediate FLAR value: 0 and 100 are the only two anyone has judged.
 Raised 22 Aug 2026 by C5, which asked what flare could do here and found the
 surface is too small for the question.
 
+**Closed 1 Oct 2026.** Paul ruled from the C5 render that weight and colour
+carry four-ness (recorded in v3 §6), and the closing-review cleanup deleted the
+two dead properties, `--qh-wdth` and `--qh-opsz`. Nothing here is open; the
+entry stays as a record until this file is next consolidated, so the entry
+numbers other files cite do not shift.
+
 ---
 
 ## What interaction v1 closed — reconciled 9 Aug 2026
