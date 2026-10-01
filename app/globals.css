@@ -46,10 +46,11 @@
    `static` guarantees these are emitted. Measured on Tailwind 4.3.0,
    theme tree-shaking is NAMESPACE-SCOPED: it drops unreferenced
    variables in namespaces Tailwind generates utilities from, and
-   passes unknown namespaces through verbatim. Proof in this file —
-   --color-popup-soft / -soft-dark / -text sit in a plain @theme at
-   the case-study block and are absent from the production bundle,
-   while --wght-* survives with or without `static`. The --wdth-* trio that
+   passes unknown namespaces through verbatim. Proof, measured while
+   they existed: --color-popup-soft / -soft-dark / -text sat in a plain
+   @theme at the case-study block and were absent from the production
+   bundle, while --wght-* survives with or without `static`. (The PopUp
+   tokens were deleted 1 Oct 2026, closing-review cleanup.) The --wdth-* trio that
    used to sit beside it is gone with C3: Commissioner has no wdth axis.
 
    So `static` is not currently load-bearing for THESE names, and the
@@ -365,12 +366,6 @@
   --color-selection-text:         var(--selection-text);
   --color-link-hover:             var(--link-hover);
 
-  --color-popup-canvas:           var(--popup-canvas);
-  --color-popup-surface:          var(--popup-surface);
-  --color-popup-surface-elevated: var(--popup-surface-elevated);
-  --color-popup-border:           var(--popup-border);
-  --color-popup-text-primary:     var(--popup-text-primary);
-  --color-popup-text-muted:       var(--popup-text-muted);
 
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
@@ -442,12 +437,6 @@
   --shadow-hover:           0 2px 4px oklch(0.30 0.04 50 / 0.06),
                             0 12px 28px oklch(0.30 0.04 50 / 0.10);
 
-  --popup-canvas:           oklch(0.955 0.044 62);
-  --popup-surface:          oklch(0.930 0.054 58);
-  --popup-surface-elevated: oklch(0.905 0.060 55);
-  --popup-border:           oklch(0.840 0.070 52);
-  --popup-text-primary:     oklch(0.245 0.030 52);
-  --popup-text-muted:       oklch(0.495 0.030 52);
 
   /* Brand identity for the "Also shipped" shelf — a calm bordered row (Wise
      register): a 1.5px brand-color BORDER (--base) + a faint near-canvas FILL
@@ -466,6 +455,10 @@
   --qh-red-cross-fill:      oklch(0.93 0.016 30);
   --qh-bbc-fill:            oklch(0.93 0.012 250);
   --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
+  /* The brand border's width. Component-scoped (spacing spec §10 allows a
+     component to name its own value); it was an arbitrary `border-[1.5px]` in
+     JSX, the one geometric value on the home page that came from no token. */
+  --qh-border-width:        1.5px;
 
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
      because heavy weight reads heavier on the espresso canvas. */
@@ -548,12 +541,6 @@
   --shadow-hover:           0 2px 4px oklch(0 0 0 / 0.35),
                             0 16px 36px oklch(0 0 0 / 0.40);
 
-  --popup-canvas:           oklch(0.215 0.040 52);
-  --popup-surface:          oklch(0.255 0.046 52);
-  --popup-surface-elevated: oklch(0.295 0.052 52);
-  --popup-border:           oklch(0.385 0.060 52);
-  --popup-text-primary:     oklch(0.935 0.020 75);
-  --popup-text-muted:       oklch(0.730 0.024 68);
 
   /* Brand borders — dark. BRIGHTER than light (not inverted): the border sits on a dark
      fill/canvas, so it must be light enough to carry identity (verified >=3.7:1 vs both). */
@@ -713,7 +700,7 @@
 
 /* Hero lede — the weighted-sentence statement (Direction D1). The element rides
    the thin connective weight (340) + a recessive tone; the load-bearing noun
-   phrases jump to font-[720] + --text-primary inline, so WEIGHT carries the
+   phrases take 720 + --text-primary from .text-lede strong; WEIGHT carries the
    emphasis. That is the signature and it is deliberately NOT a width move: v3 R9
    requires anything meaningful to survive the fallback, and weight does while
    width does not. Plain font-weight maps to the wght axis; there is no
@@ -730,6 +717,15 @@
      deferred. This is the home h1 — decided against real content, not by
      rounding to the nearer band. */
   text-wrap: balance;
+}
+
+/* The home hero's loud half of the 340/720 signature: the three domain nouns
+   inside the text-lede h1. Authored here, not as `font-[720]` in JSX, so
+   lint:type check 4 sees the weight and its placement (closing review, 1 Oct
+   2026). <strong> because weight IS the emphasis in this sentence. */
+.text-lede strong {
+  font-weight: 720;
+  color: var(--text-primary);
 }
 
 /* Hero entrance — three beats fade up in sequence (--beat = stagger index, set
@@ -810,9 +806,8 @@
    49 declarations of. Paul ruled from the C5 preview that the four still read as
    four on weight and colour alone.
 
-   --qh-wdth and --qh-opsz are still declared in the four [data-brand] blocks and
-   are consumed by nothing. See docs/unspecified-surfaces.md; removing them is a
-   question about the Also Shipped shelf, not about a typeface. */
+   --qh-wdth and --qh-opsz, which addressed the two missing axes, were deleted
+   from the four [data-brand] blocks on 1 Oct 2026 (closing-review cleanup). */
 @utility text-qh-title {
   font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
   line-height: 1.1;
@@ -1262,23 +1257,26 @@
    .dark swaps for free. Server-rendered; no JS, no theme read.
    ============================================================ */
 
-/* --base = 1.5px border; --fill = faint container tint; --qh-wdth/wght/opsz =
-   the per-module title character (see text-qh-title). */
+/* --base = the brand border (width --qh-border-width); --fill = faint container
+   tint; --qh-wght = the per-module title weight (see text-qh-title). The wdth
+   and opsz values that sat beside it addressed axes Commissioner does not
+   have and were deleted 1 Oct 2026; the axis names in the comments below
+   record the character each brand was given. */
 [data-brand="lionsgate"] {
   --base: var(--qh-lionsgate-base); --fill: var(--qh-lionsgate-fill);
-  --qh-wdth: 90; --qh-wght: 600; --qh-opsz: 40;   /* cinematic: compressed, bold, display */
+  --qh-wght: 600;  /* cinematic: compressed, bold, display */
 }
 [data-brand="red-cross"] {
   --base: var(--qh-red-cross-base); --fill: var(--qh-red-cross-fill);
-  --qh-wdth: 96; --qh-wght: 500; --qh-opsz: 14;   /* classic/humane: open, light, readable cut */
+  --qh-wght: 500;  /* classic/humane: open, light, readable cut */
 }
 [data-brand="bbc"] {
   --base: var(--qh-bbc-base); --fill: var(--qh-bbc-fill);
-  --qh-wdth: 84; --qh-wght: 650; --qh-opsz: 48;   /* newspaper: narrowest, heaviest, display */
+  --qh-wght: 650;  /* newspaper: narrowest, heaviest, display */
 }
 [data-brand="k-hovnanian"] {
   --base: var(--qh-k-hovnanian-base); --fill: var(--qh-k-hovnanian-fill);
-  --qh-wdth: 100; --qh-wght: 540; --qh-opsz: 24;  /* architectural: full width, grounded */
+  --qh-wght: 540;  /* architectural: full width, grounded */
 }
 
 /* Three-column row via named areas (cleaner than Tailwind arbitrary multi-string
@@ -1289,6 +1287,7 @@
   /* Moved out of JSX (`rounded-[12px]`, an arbitrary value pinned to the same
      number). 12px either way — the change is where it is authored. */
   border-radius: var(--radius-m);
+  border-width: var(--qh-border-width);
   display: grid;
   align-items: center;
   column-gap: var(--spacing-s);
@@ -1565,14 +1564,6 @@
    In Claude Code: delete the old block (the one that ended with the
    reduced-motion override) and append this in its place.
    ────────────────────────────────────────────────────────────────────── */
-
-@theme {
-  --color-popup: oklch(0.68 0.16 45);
-  --color-popup-soft: oklch(0.93 0.04 50);
-  --color-popup-soft-dark: oklch(0.28 0.05 45);
-  --color-popup-text: oklch(0.32 0.08 45);
-  --color-popup-text-dark: oklch(0.92 0.04 60);
-}
 
 /* ── Page wrapper ─────────────────────────────────────────────────────── */
 
