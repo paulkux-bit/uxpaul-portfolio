@@ -15,7 +15,8 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="page-container py-section space-y-section">
+    <div className="page-container pt-2xl pb-section space-y-section">
+      {/* Page top is 64 on every page (top-of-page ruling T1c, 1 Oct 2026). */}
       {/* ── Hero ───────────────────────────────────────────────────────────
           Portrait leads in the DOM, which is also the mobile reading order;
           from md up the grid moves it to the right column. It is the LCP

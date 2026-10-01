@@ -298,6 +298,11 @@ Fails on:
    anywhere in the repo. Scanning lives in `scripts/color-literals.mjs`;
    fixtures in `scripts/fixtures/color-literals/`; assertions in
    `__tests__/color-literals.test.mjs`.
+8. Any underline (`text-decoration-color`) below 3:1 against `--bg-canvas` or
+   `--bg-surface`, in either mode, or one that is not a single token and so
+   cannot be checked. The underline is a link's non-colour cue; the house rule
+   is that it owes 3:1 like any affordance. Added 1 Oct 2026 with ruling A2b;
+   proved red with the base link back on `--border-strong` (2.03 light).
 
 **Prove every assertion in both directions before any value moves.** Four
 checks in the spacing migration passed for a reason other than the one
@@ -372,3 +377,20 @@ added deliberately rather than pre-emptively.
 
 Nav, footer, buttons and card meta are tracked in `unspecified-surfaces.md`
 alongside their type and spacing gaps, because they are one piece of work.
+
+### Closing review, 1 Oct 2026
+
+Paul ruled on rendered options (`docs/previews/system-close-a/`):
+
+- **A2b.** Link underlines at rest use `--border-interactive` (5.64 light,
+  5.29 dark against the canvas), on the base `a` rule and the active nav link;
+  `--border-strong` measured 2.04 / 2.35. Check 8 holds the floor.
+- **A3b.** Dark shadows are warm near-black, `oklch(0.12 0.03 50)`, at the
+  alpha they already had.
+- **A8b.** The shelf's dark `--qh-*-base` borders take light mode's chroma
+  (0.10 / 0.13 / 0.10 / 0.07); lightness is unchanged. This is the shelf
+  re-derivation listed above, made by eye on the render; every border keeps at
+  least 3.75:1 on its fill. Matching chroma across modes is ruled here for this
+  shelf only, against §8's general warning, with the measurement in hand.
+- **A9b.** `.milestone__sub` moves from `--text-muted` to `--text-secondary`
+  (5.04 to 8.74 light, 6.05 to 9.24 dark).

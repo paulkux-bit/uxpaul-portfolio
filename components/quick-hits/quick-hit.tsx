@@ -6,7 +6,8 @@ import type { QuickHit as QuickHitData } from '@/app/data/quick-hits';
  *
  * Calm faint brand FILL + a 1.5px brand-color BORDER carry the identity (no
  * saturated fill competing with Selected Work); typography does the work. Three
- * columns on desktop (wordmark · centered title · industry), stacking on mobile
+ * columns on desktop (wordmark · title · industry), stacking on mobile. The title
+ * is left-set like every other line on the site (closing review A7b, 1 Oct 2026)
  * — the grid lives in `.quick-hit` (globals.css). The title is the moment:
  * `text-qh-title` carries the per-brand weight (`--qh-wght`, 500-650) against
  * the labels' 600. That contrast used to be width as well; Commissioner has no
@@ -24,7 +25,7 @@ export function QuickHit({ hit }: { hit: QuickHitData }) {
     >
       <p className="qh-brand text-eyebrow text-secondary">{hit.wordmark}</p>
       {/* Parallel to Selected Work card titles → <h2> element. The weight move. */}
-      <h2 className="qh-title text-qh-title text-primary md:text-center">{hit.title}</h2>
+      <h2 className="qh-title text-qh-title text-primary">{hit.title}</h2>
       <p className="qh-industry text-caption text-right text-secondary">{hit.industry}</p>
     </article>
   );
