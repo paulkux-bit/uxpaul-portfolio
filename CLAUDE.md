@@ -20,7 +20,7 @@ the other place.
 |---|---|---|
 | Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 11 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
-| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 7 checks |
+| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 8 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
 
 This table is checked against the filesystem rather than maintained by hand, by
@@ -631,7 +631,7 @@ purpose. Both are deliberate. Do not trim one to reach a round number or pad the
 **Name:** Paper & Low Light
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
-`npm run lint:color` (7 checks), which gates `npm run build`.
+`npm run lint:color` (8 checks), which gates `npm run build`.
 **Implementation and usage notes:** `docs/color-system.md` — the `--qh-*` brand
 shelf, paper grain, the theme-swap protocol, the role map. Its token tables are
 superseded; do not read values from it.
@@ -677,7 +677,7 @@ code shipped it.)
 ### Signature treatments
 
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
-- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-strong → link-hover) shift together.
+- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
 - **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
 - **Card lift** — `translateY(-3px)` + `shadow-hover` on interactive surfaces. Use the `lift` / `lift-hover` utility pair.
 - **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.

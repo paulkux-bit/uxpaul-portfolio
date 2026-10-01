@@ -537,17 +537,21 @@
   --selection-text:         oklch(0.970 0.012 78);
   --link-hover:             oklch(0.780 0.140 60);
 
-  --shadow-rest:            0 1px 2px oklch(0 0 0 / 0.30);
-  --shadow-hover:           0 2px 4px oklch(0 0 0 / 0.35),
-                            0 16px 36px oklch(0 0 0 / 0.40);
+  /* Warm near-black, not pure black, at the same alpha (closing review A3b,
+     1 Oct 2026): CLAUDE.md asks for warm-toned shadows in both modes. */
+  --shadow-rest:            0 1px 2px oklch(0.12 0.03 50 / 0.30);
+  --shadow-hover:           0 2px 4px oklch(0.12 0.03 50 / 0.35),
+                            0 16px 36px oklch(0.12 0.03 50 / 0.40);
 
 
   /* Brand borders — dark. BRIGHTER than light (not inverted): the border sits on a dark
      fill/canvas, so it must be light enough to carry identity (verified >=3.7:1 vs both). */
-  --qh-lionsgate-base:      oklch(0.62 0.12 80);
-  --qh-red-cross-base:      oklch(0.58 0.15 25);
-  --qh-bbc-base:            oklch(0.58 0.12 250);
-  --qh-k-hovnanian-base:    oklch(0.60 0.09 62);
+  /* Chroma matches light mode (closing review A8b, 1 Oct 2026); only the
+     lightness differs between modes. Each border keeps >= 3.75:1 on its fill. */
+  --qh-lionsgate-base:      oklch(0.62 0.10 80);
+  --qh-red-cross-base:      oklch(0.58 0.13 25);
+  --qh-bbc-base:            oklch(0.58 0.10 250);
+  --qh-k-hovnanian-base:    oklch(0.60 0.07 62);
   /* Calm faint fill — dark (muted to aged-stock, not candy). */
   --qh-lionsgate-fill:      oklch(0.22 0.018 85);
   --qh-red-cross-fill:      oklch(0.22 0.018 30);
@@ -657,13 +661,17 @@
   }
   :focus:not(:focus-visible) { outline: none; box-shadow: none; }
 
-  /* Link: chromatic restraint at rest, two-channel signal on hover */
+  /* Link: chromatic restraint at rest, two-channel signal on hover. The
+     underline is the affordance, so it owes 3:1 against the page:
+     --border-interactive, as .about-link already had it (closing review A2b,
+     1 Oct 2026; --border-strong measured 2.04 light / 2.35 dark). lint:color
+     check 8 holds every underline to that floor. */
   a {
     color: inherit;
     text-decoration: underline;
     text-decoration-thickness: 1px;
     text-underline-offset: 0.22em;
-    text-decoration-color: var(--border-strong);
+    text-decoration-color: var(--border-interactive);
     transition:
       text-decoration-color var(--duration-control) var(--ease-out-soft),
       text-decoration-thickness var(--duration-control) var(--ease-out-soft);
@@ -1175,7 +1183,7 @@
   font-weight: 600;
   text-decoration-line: underline;
   text-decoration-thickness: 2px;
-  text-decoration-color: var(--border-strong);
+  text-decoration-color: var(--border-interactive); /* 3:1, as the base link (A2b) */
 }
 
 /* Theme toggle — icon button. Border-only hover (no chroma; chroma is the
@@ -1963,7 +1971,10 @@
   font-size: var(--type-16);          /* text-small — quiet */
   line-height: 1.5;
   font-weight: 400;
-  color: var(--text-muted);
+  /* One step up from --text-muted: this line carries the outcome a reader
+     checks (closing review A9b, 1 Oct 2026; 5.04 to 8.74 light, 6.05 to 9.24
+     dark). Size and weight stay quiet. */
+  color: var(--text-secondary);
 }
 
 /* ── Two-up framed evidence pair (FramedPair) ─────────────────────────────

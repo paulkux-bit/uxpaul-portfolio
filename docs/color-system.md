@@ -166,7 +166,7 @@ contrast only increases over the spec.
 
 - **`border-subtle`** — hairlines, section dividers, default card borders at rest.
 - **`border-default`** — form fields, inputs, default UI chrome.
-- **`border-strong`** — emphasis. Pull-quote left rules. Default link underlines (at rest).
+- **`border-strong`** — emphasis. Pull-quote left rules. (Link underlines moved to `border-interactive` on 1 Oct 2026, ruling A2b: at 2.04 / 2.35 this token is below the 3:1 an affordance owes.)
 
 ### Interaction states
 

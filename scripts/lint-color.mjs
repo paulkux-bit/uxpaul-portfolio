@@ -420,6 +420,43 @@ const add = (id, title, failures) =>
   add(7, 'No colour literal outside the token definitions (R4, §7.7)', f);
 }
 
+// 8: every underline clears 3:1 against the page. The underline is a link's
+// non-colour cue (WCAG 1.4.1). The house rule, first written on .about-link, is
+// that it owes 3:1 like any other affordance; the base link and the active nav
+// link sat at 2.04 light / 2.35 dark until the closing review (A2b, 1 Oct 2026).
+// Every text-decoration-color that names a token is checked against
+// --bg-canvas and --bg-surface, in both modes. A value that is not a single
+// token cannot be checked, so it fails rather than passing unseen.
+{
+  const f = [];
+  const UNDERLINE_FLOOR = 3.0;
+  for (const d of decls) {
+    if (d.prop !== 'text-decoration-color') continue;
+    const m = d.value.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+    if (!m) {
+      f.push({ where: `${CSS_FILE}:${d.line}`, detail: `${d.sel}: ${d.value} is not a single token, so it cannot be checked` });
+      continue;
+    }
+    for (const mode of ['light', 'dark']) {
+      for (const s of ['--bg-canvas', '--bg-surface']) {
+        const uv = resolveOklch(byMode[mode].get(m[1]) ?? '', mode);
+        const sv = resolveOklch(byMode[mode].get(s) ?? '', mode);
+        if (!uv || !sv) {
+          f.push({ where: `${CSS_FILE}:${d.line}`, detail: `${mode}: cannot resolve ${m[1]} on ${s}` });
+          continue;
+        }
+        const r = contrast(uv, sv);
+        if (r < UNDERLINE_FLOOR)
+          f.push({
+            where: `${CSS_FILE}:${d.line}`,
+            detail: `${mode}: ${d.sel} underline ${m[1]} on ${s} = ${r.toFixed(2)}, floor 3.0`,
+          });
+      }
+    }
+  }
+  add(8, 'Every underline clears 3:1 against the page (A2b, house rule)', f);
+}
+
 // ── Report ─────────────────────────────────────────────────────────────────
 console.log(`color-lint: ${CSS_FILE} (${allDefs.size} custom properties)\n`);
 for (const c of checks) {
