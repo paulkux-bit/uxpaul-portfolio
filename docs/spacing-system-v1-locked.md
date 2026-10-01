@@ -391,6 +391,11 @@ scale governing only one authoring surface is not a system. Fails on:
    *name* was in the known set. Checking that a name is legal is not the same
    as checking that it exists. Resolve every referenced token to a definition
    in `@theme`, or fail.
+   **Extended 30 Sep 2026:** a numeric spacing utility in JSX or MDX
+   (`mt-14`, `py-5`) also fails. Its key is Tailwind's base-unit multiplier,
+   so it names no step on this scale and no assertion checked its value; four
+   off-scale gaps (56, 40, 20, 20) reached rendered routes that way. Write the
+   named step (`mt-2xl`, `py-m`). Sandbox routes stay out of scope, as for 6.
 
 **Prove every assertion in both directions, in S0, before any value moves.**
 Recorded 8 Aug 2026, after three separate checks in this migration passed for
@@ -492,8 +497,48 @@ system. Print.
 container width. It does, and the maximum is not a matter of taste — it is set
 by the viewport at which `--page-max-width` binds. See §3.1.
 
-**Scheduled, not open:** R = 2.46 is revisited once three case studies can be
-read in sequence. One number, one token; see §3.1.
+**Closed 30 Sep 2026:** R = 2.46 was revisited with five case studies in
+sequence. Measured on the render at 2.4600, 2.4590 and 2.4596 (390, 768,
+1440), and the section break is the largest interval on every study at every
+width. It stays. One number, one token; see §3.1.
 
 None of these block the migration. All of them block calling the system
 complete.
+
+---
+
+## 10. Spacing pass, 30 Sep 2026
+
+Run in four parts: a council census of every neighbouring gap on the five
+studies (2,581 pairs, labelled by relationship), the Plot Panel and a
+Falsifier against it, renders of each option on the real page, and Paul's
+rulings. The values below are all existing steps; no step was added.
+
+| # | Relationship | Ruling | Where |
+|---|---|---|---|
+| 1c | Heading to standfirst, standfirst to body | 16 and 24 (was 32 and 16) | `.section-lede` owns both gaps; `h2:has(+ .section-lede)` gives up its bottom margin |
+| 2b | Standfirst into the friction beats | 16 and 32 | falls out of 1c: the beats keep their own 32 top margin and win the collapse |
+| 3b | A run of bento bands in prose | 48 around the run, 32 between its bands (was 32 throughout) | `.cs-section > .bento-band` |
+| 4b | Friction-beat figure, stacked (below 1024) | 16 (was 12) | `.oku-figure` |
+| 6c | Bold closing line after the beats (Nuuly, Delivery Promise) | 64, `mt-2xl!` (was 56, `mt-14!`, off scale) | MDX |
+| 7b | BARD resolution headline to its bento | 32, `mb-l` (was 40, `mb-10`, off scale) | MDX |
+| 8d | Home hero, within each pair | 24, `space-y-m` (was 20, `space-y-5`, off scale) | `app/page.tsx` |
+| 9c | Quick-hit card, vertical inset | 24, `py-m` (was 20, `py-5`, off scale) | `quick-hit.tsx` |
+
+**Relationship tokens: not added.** The census was checked for the condition
+that would justify site-wide relationship names (the same relationship taking
+different steps in different places). It did not hold once the off-scale
+values, which came in through the numeric-utility gap now closed in assertion
+7, were set aside. Carbon, Atlassian, Polaris and Primer all name the global
+scale by value; where role names exist they are component-scoped.
+
+**Component-scoped aliases are allowed.** A component may name a relationship
+inside itself by aliasing a scale step, as `--bento-caption-gap` and
+`--bento-row-gap` do. That is not a second namespace in the sense §3 rules out:
+the value still lives in one place, the scale. (Precedent: Polaris
+`space-card-padding`, Primer component tokens.)
+
+**§5's open item is closed:** `.friction-beats` uses `--spacing-xl`.
+**§9's bento item is partly closed:** 3b sets the rhythm of bands in prose; the
+gaps inside a bento theme are unchanged and measured consistent (one value
+each across every study).
