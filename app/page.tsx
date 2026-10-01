@@ -9,7 +9,8 @@ export default function Home() {
       {/* Hero — "weighted sentence" (Direction D1), range-led copy. The h1 names
           the three domains Paul works across; WEIGHT carries the emphasis:
           connectives ride text-lede's thin 340 + recessive --text-muted, the
-          three domain nouns jump to font-[720] + --text-primary. No
+          three domain nouns are <strong> at 720 + --text-primary (.text-lede strong,
+          globals.css, where lint:type check 4 can see it). No
           font-variation-settings, opsz auto. Then the signature, the Navy/URBN
           proof, and the availability beat. Four beats fade up via the .hero-beat
           CSS entrance (reduced-motion + no-JS safe). Server component, pure CSS. */}
@@ -24,9 +25,9 @@ export default function Home() {
             style={{ ['--beat' as string]: 0 }}
           >
             I design across{' '}
-            <span className="font-[720] text-primary">consumer</span>,{' '}
-            <span className="font-[720] text-primary">enterprise</span>, and{' '}
-            <span className="font-[720] text-primary">defense</span>.
+            <strong>consumer</strong>,{' '}
+            <strong>enterprise</strong>, and{' '}
+            <strong>defense</strong>.
           </h1>
 
           {/* Signature — name present but quiet; the role recedes.

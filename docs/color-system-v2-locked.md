@@ -228,6 +228,12 @@ at the worst case, sunken. The cost is that its gap to `--text-muted` narrows
 from 0.140 to 0.105. That is accepted: separation was the point of deepening,
 and `--text-subtle` is already restricted to large text only.
 
+**Reserved, 1 Oct 2026.** The closing review measured `--text-subtle` on zero
+rendered elements across every route, width and theme. Paul ruled to keep it:
+it is a valid, repaired role for large text, held in reserve rather than
+deleted. An unused role is not a defect; using it below 24px (or 18.66px bold)
+would be.
+
 ---
 
 ## 6. Rules

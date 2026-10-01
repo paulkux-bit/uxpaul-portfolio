@@ -394,7 +394,7 @@ The claim stands. What carried it does not. The four blocks were separated on **
 
 **So the surface was put in front of Paul as it stands, and he ruled that the four still read as four.** This is therefore a **language correction, not a defect**: the sentence "their variation is the content" is true, and the content is now weight and colour. The bound stays — the four values are declared once in `data-brand`, never ad hoc.
 
-`--qh-wdth` and `--qh-opsz` are still declared in the four blocks and consumed by nothing. Removing them is a question about the Also Shipped shelf; it is filed in `docs/unspecified-surfaces.md` rather than answered here.
+`--qh-wdth` and `--qh-opsz` were declared in the four blocks and consumed by nothing until **1 Oct 2026, when the closing-review cleanup deleted them**. `--qh-wght` and the per-brand colour are the whole mechanism now; the table above is kept as the record of what the three axes were.
 
 **The takes wall's discrepancies resolve by deletion rather than reconciliation.** Its `wdth` 78–82 marks, the 96/98 outliers and the 90/92 compositions all went with the axis; 16 `font-stretch` declarations on the unmounted wall were deleted in C3. The remaining bound — 14px floor, allowlist entry with a reason for any new composition — stands, and the collision between `.take-thought` as running prose and "neither surface may set type read in sentences" is **unresolved and still owed before it is ever mounted**.
 

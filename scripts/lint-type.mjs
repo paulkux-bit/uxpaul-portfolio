@@ -77,6 +77,7 @@ const ALLOWLIST = {
   // inside that same h1. The about opener and one case-study moment are unspent.
   signature: [
     { selector: '.text-lede', reason: '§3.2 placement 1 of 3 — the home hero h1; its 340 and the three font-[720] spans inside it are one signature, ceiling 60px' },
+    { selector: '.text-lede strong', reason: '§3.2 placement 1 of 3, its loud half: the three domain nouns inside the home hero h1, moved out of JSX font-[720] on 1 Oct 2026 so this check can see them' },
   ],
 };
 

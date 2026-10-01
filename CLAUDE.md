@@ -165,9 +165,10 @@ Defined as CSS custom properties in `app/globals.css` under `@theme`:
 
 ## PopUp annotation system — RETIRED
 **The PopUp system is decommissioned. Do not build against it, and do not treat
-persimmon as a live accent.** `--color-popup` and the `--popup-*` tokens are dead
-legacy: the site is monochrome-warm and **accent-free at rest**, with no
-exception. `components/popup-context.tsx` is gone, no route renders an
+persimmon as a live accent.** Its colour tokens were deleted from `globals.css`
+on 1 Oct 2026: the site is monochrome-warm and **accent-free at rest**, apart
+from the one sanctioned exception named under Core principle below.
+`components/popup-context.tsx` is gone, no route renders an
 annotation layer, and the `<PopUp>` authoring syntax is not available.
 
 This section previously described the layer as "the portfolio's signature
@@ -180,8 +181,9 @@ process visibility without forcing a linear walkthrough. The problem it targeted
 is real and still unsolved; the mechanism is not coming back in this form.
 
 Two consequences that are easy to miss:
-- The `--popup-*` tokens still defined in `globals.css` are dead. They are not
-  in the type system's scope, so `lint:type` does not flag them.
+- The PopUp colour tokens were defined in `globals.css`, consumed by nothing,
+  until the closing-review cleanup deleted them on 1 Oct 2026. Do not
+  reintroduce them.
 - Anything that claims family resemblance to the annotation layer as a design
   rationale is resting on a retired system, including the Template B card
   description in the external knowledge docs.
@@ -642,10 +644,14 @@ superseded; do not read values from it.
 
 Nothing chromatic sits on the page idle. But when the user *does* something — hovers a link, selects text, focuses an input, picks up a card — the system responds with a warm chromatic moment. Interaction states are moments, not roles. This is compatible with chromatic restraint at the system level.
 
-There is **no exception**. The PopUp annotation layer used to be one, on the
-grounds that it was a distinct editorial voice carrying chromatic identity at
-rest; that system is retired, so the rule is now absolute. Nothing chromatic
-sits at rest anywhere on the site.
+There is **one sanctioned exception, and only one**: the "Also shipped" brand
+shelf. `docs/color-system.md` sanctions its `--qh-*` brand border and faint fill
+at rest, including `--qh-bbc-base` at hue 250, for brand attribution, and says of
+each that it is not a license for further resting colour. The PopUp annotation
+layer used to be a second exception; that system is retired. Nothing else
+chromatic sits at rest anywhere on the site. (Corrected 1 Oct 2026: this
+paragraph said "no exception" while the colour doc sanctioned the shelf and the
+code shipped it.)
 
 ### Locked decisions
 
@@ -653,8 +659,8 @@ sits at rest anywhere on the site.
 - **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds.
 - **Naming:** role-based, semantic. `--text-primary`, `--bg-surface-elevated`. Never raw color names.
 - **Light and dark tuned independently.** Same hue axis, different chroma/contrast curves. Dark is not inverted light.
-- **PopUp tokens (`--popup-*`) are dead legacy.** The annotation layer they were
-  reserved for is retired. Do not use them anywhere, and do not reach for
+- **PopUp tokens were deleted (1 Oct 2026).** The annotation layer they were
+  reserved for is retired. Do not reintroduce them, and do not reach for
   persimmon as an accent.
 - **Interaction-state tokens (`--focus-glow`, `--selection-bg`, `--link-hover`) are moments, not paint.** Don't extend them to resting roles.
 
@@ -665,7 +671,8 @@ sits at rest anywhere on the site.
 - **Borders** — `--border-subtle`, `--border-default`, `--border-strong`
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
-- ~~**PopUp** — `--popup-canvas`, `--popup-surface`, `--popup-surface-elevated`, `--popup-border`, `--popup-text-primary`, `--popup-text-muted`~~ **DEAD LEGACY** (system retired; still defined in `globals.css`, consumed by nothing)
+- ~~**PopUp**: six surface and text tokens~~ **DELETED** 1 Oct 2026 (system retired, consumed by nothing)
+- **Brand shelf (sanctioned exception)**: `--qh-*-base`, `--qh-*-fill`, `--qh-border-width`; see `docs/color-system.md`
 
 ### Signature treatments
 
@@ -683,7 +690,7 @@ Defined in `app/globals.css` via `@utility`. Same naming convention as typograph
 - Text: `text-primary`, `text-secondary`, `text-muted`, `text-subtle`
 - Borders: `border-subtle`, `border-default`, `border-strong`
 - Shadows + lift: `shadow-rest`, `shadow-hover`, `lift`, `lift-hover`
-- ~~PopUp: `bg-popup-canvas`, `bg-popup-surface`, `bg-popup-surface-elevated`, `border-popup`, `text-popup-primary`, `text-popup-muted`~~ **DEAD LEGACY** (system retired)
+- ~~PopUp: six `bg-popup-*`, `border-popup` and `text-popup-*` utilities~~ **DELETED** with their tokens, 1 Oct 2026
 
 For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-muted)' }}`.
 
@@ -703,12 +710,12 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 
 ### Anti-patterns (extension of existing list)
 
-- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion.
+- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (The "Also shipped" brand shelf is the one sanctioned exception; see Core principle.)
 - ❌ No raw color tokens (e.g., `--color-blue-500`). All color is role-based.
-- ❌ No cool grays (hue ≥ 200) anywhere.
+- ❌ No cool grays (hue ≥ 200) anywhere. (`--qh-bbc-base`, hue 250, is the one sanctioned exception, for BBC attribution on the shelf.)
 - ❌ No pure black or pure white.
 - ❌ Dark mode is not inverted light mode.
-- ❌ Don't use `--popup-*` tokens at all. The annotation layer is retired and
+- ❌ Don't reintroduce PopUp tokens. The annotation layer is retired and
   persimmon is not an accent.
 - ❌ Don't extend `--focus-glow`, `--selection-bg`, or `--link-hover` to resting roles.
 - ❌ No paper grain in dark mode.
@@ -740,7 +747,7 @@ Portfolio for Paul Kali, senior product designer, targeting **Senior IC, Staff I
 **Governing principle:** signal and craft with restraint. Do NOT add things for the sake of adding. Elegance is subtraction. References: Titan, Karolis Kosas, Madeline Snow.
 
 **Locked constraints:**
-- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**. The PopUp system is retired; `--color-popup`/persimmon is dead legacy — do not use it as an accent.
+- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**, with the "Also shipped" brand shelf as the one sanctioned exception. The PopUp system is retired and its tokens deleted; persimmon is not an accent.
 - Commissioner, self-hosted; **never animate its axes** (gimmicky) — `wght` and `FLAR` are the two it has. Semantic oklch tokens only; no raw hex/rgb.
 - **em-dashes (U+2014) are hard-banned** by lint:prose; en-dashes (U+2013) in date ranges are fine.
 - **No company or client logos** anywhere (endorsement risk + palette break).
