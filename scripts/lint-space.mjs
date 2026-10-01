@@ -144,15 +144,15 @@ const ALLOWLIST = {
     // opens a card or a chrome element at md where it gains room. No fluid
     // token replaces a static inset, and §3.1 forbids inventing a pair for a
     // relationship nobody has measured, so these stay declared with a reason.
-    { file: 'components/case-study-card.tsx', util: 'md:px-8', reason: 'S3.5 density — card inset opens 24 -> 32 at md' },
-    { file: 'components/case-study-card.tsx', util: 'md:py-12', reason: 'S3.5 density — card inset opens 32 -> 48 at md' },
-    { file: 'components/case-study-card.tsx', util: 'md:mb-8', reason: 'S3.5 density — cover art to title opens at md' },
+    { file: 'components/case-study-card.tsx', util: 'md:px-l', reason: 'S3.5 density — card inset opens 24 -> 32 at md' },
+    { file: 'components/case-study-card.tsx', util: 'md:py-xl', reason: 'S3.5 density — card inset opens 32 -> 48 at md' },
+    { file: 'components/case-study-card.tsx', util: 'md:mb-l', reason: 'S3.5 density — cover art to title opens at md' },
     { file: 'components/case-study-card.tsx', util: 'md:p-8', reason: 'S3.5 density — media-tier card inset' },
-    { file: 'components/quick-hits/quick-hit.tsx', util: 'md:px-8', reason: 'S3.5 density — shelf row inset matches the card' },
-    { file: 'components/quick-hits/quick-hits-list.tsx', util: 'md:space-y-8', reason: 'S3.5 density — shelf rows separate further once each is one line' },
-    { file: 'components/site-footer.tsx', util: 'md:px-8', reason: 'S3.5 density — footer inset tracks the page container' },
-    { file: 'components/site-footer.tsx', util: 'md:py-12', reason: 'S3.5 density — footer inset tracks the page container' },
-    { file: 'components/site-header.tsx', util: 'md:gap-6', reason: 'S3.5 density — nav items separate once the header is one row' },
+    { file: 'components/quick-hits/quick-hit.tsx', util: 'md:px-l', reason: 'S3.5 density — shelf row inset matches the card' },
+    { file: 'components/quick-hits/quick-hits-list.tsx', util: 'md:space-y-l', reason: 'S3.5 density — shelf rows separate further once each is one line' },
+    { file: 'components/site-footer.tsx', util: 'md:px-l', reason: 'S3.5 density — footer inset tracks the page container' },
+    { file: 'components/site-footer.tsx', util: 'md:py-xl', reason: 'S3.5 density — footer inset tracks the page container' },
+    { file: 'components/site-header.tsx', util: 'md:gap-m', reason: 'S3.5 density — nav items separate once the header is one row' },
   ], // JSX responsive variants that do layout: { file, util, reason }
 };
 
@@ -491,7 +491,17 @@ const blindSpots = [];
     const m = SP_UTIL.exec(u.bare);
     if (!m) continue;
     const key = m[2].replace(/!$/, '');
-    if (/^\[/.test(key) || /^\d/.test(key) || key === 'auto' || key === 'px') continue;
+    // A numeric key (`mt-14`, `py-5`) is Tailwind's base-unit multiplier, not a
+    // step on this scale, so it resolves to no --spacing-* name and nothing
+    // checked its value. Four off-scale gaps reached rendered routes that way
+    // (56, 40 and two 20s; spacing pass, 30 Sep 2026). Name the step instead:
+    // `mt-2xl`, `py-m`. Sandbox routes stay out of scope, as for assertion 6.
+    if (/^\d+(\.\d+)?$/.test(key)) {
+      if (!/(^|\/)sandbox\//.test(u.file))
+        f.push({ where: `${u.file}:${u.line}`, detail: `"${u.token}" is a numeric spacing utility; use the named step (2xs, xs, s, m, l, xl, 2xl) so the value is on the scale` });
+      continue;
+    }
+    if (/^\[/.test(key) || key === 'auto' || key === 'px') continue;
     const token = `--spacing-${key}`;
     if (!seen.has(token)) seen.set(token, `${u.file}:${u.line}`);
   }

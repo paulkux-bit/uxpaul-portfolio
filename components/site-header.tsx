@@ -24,7 +24,7 @@ export function SiteHeader() {
       </a>
       <div className="page-container flex h-14 md:h-16 items-center justify-between">
         <WordmarkLink />
-        <div className="flex items-center gap-4 md:gap-6">
+        <div className="flex items-center gap-s md:gap-m">
           <ClientNav />
           <ThemeToggle />
         </div>

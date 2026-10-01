@@ -8,7 +8,7 @@ import { TakesWall } from './takes-wall';
  */
 export function TakesSection() {
   return (
-    <section aria-labelledby="off-the-clock" className="space-y-8">
+    <section aria-labelledby="off-the-clock" className="space-y-l">
       <p id="off-the-clock" className="text-caption font-semibold tracking-wide text-muted">
         Off the clock
       </p>

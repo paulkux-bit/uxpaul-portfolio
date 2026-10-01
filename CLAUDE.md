@@ -412,7 +412,8 @@ registered in Tailwind's `--spacing-*` namespace so one definition serves
   under text-only scaling and still scales under browser zoom, which is exactly
   the behaviour wanted. Measured: vertical +75.5% at a 32px root, gutter flat.
 - **Never author a raw spacing value.** No ninth step, no `em` on block-level
-  spacing, no responsive spacing utility in JSX, and no `px` outside the two
+  spacing, no responsive spacing utility in JSX, no numeric spacing utility
+  (`mt-14`; write the named step, `mt-2xl`), and no `px` outside the two
   permanent exceptions §3.2 names — `--spacing-gutter` and `.sr-only`'s `-1px`
   clip idiom. Both are exempted in the lint by name, not allowlisted, so
   neither reads as debt awaiting cleanup. Each rule is an assertion, and each

@@ -95,14 +95,14 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
           (left) and the muted meta. flex-col + the mt-auto text block pin the
           question/meta to the bottom so the cards equalize height (grid-auto-rows:1fr
           on the grid) with the illustration floating above. */}
-      <div className="flex flex-1 flex-col px-6 py-8 md:px-8 md:py-12">
+      <div className="flex flex-1 flex-col px-m py-l md:px-l md:py-xl">
         {art ? (
           /* Decorative, pre-sized, mix-blended asset served directly via
                <picture> (webp + png). next/image would re-encode and strip the
                fixed dimensions the blend relies on. The <picture> is the block
                sizing box (percentage width on an inline picture's <img> misresolves);
                ~40% card width, centered, floating over the question. */
-            <picture className="mx-auto mb-6 block w-[40%] max-w-[200px] md:mb-8">
+            <picture className="mx-auto mb-m block w-[40%] max-w-[200px] md:mb-l">
               <source srcSet={`/case-studies/covers/${art}.webp`} type="image/webp" />
               <img
                 src={`/case-studies/covers/${art}.png`}
@@ -116,7 +116,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         ) : null}
         <div className="mt-auto">
           <h2 className="text-cover">{title}</h2>
-          <div className="mt-3">{meta}</div>
+          <div className="mt-xs">{meta}</div>
         </div>
       </div>
     </article>

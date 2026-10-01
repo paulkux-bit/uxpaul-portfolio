@@ -9,7 +9,7 @@ import { quickHits } from '@/app/data/quick-hits';
  */
 export function QuickHitsList() {
   return (
-    <RevealList className="list-none space-y-6 md:space-y-8">
+    <RevealList className="list-none space-y-m md:space-y-l">
       {quickHits.map((hit) => (
         <li key={hit.brand}>
           <QuickHit hit={hit} />
