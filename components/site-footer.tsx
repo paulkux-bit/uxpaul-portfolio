@@ -12,11 +12,11 @@
 export function SiteFooter() {
   return (
     <footer className="border-t border-subtle">
-      <div className="mx-auto flex max-w-6xl flex-col gap-3 px-6 py-8 text-caption text-secondary md:flex-row md:items-center md:justify-between md:px-8 md:py-12">
+      <div className="mx-auto flex max-w-6xl flex-col gap-xs px-m py-l text-caption text-secondary md:flex-row md:items-center md:justify-between md:px-l md:py-xl">
         <p>Designed and built by Paul Kali &middot; 2026</p>
-        {/* gap-6 unchanged: .footer-link expands its HIT area on a pseudo and
+        {/* gap-m unchanged: .footer-link expands its HIT area on a pseudo and
             leaves its visual box alone, so there is no rhythm to compensate. */}
-        <nav aria-label="Footer" className="flex gap-6">
+        <nav aria-label="Footer" className="flex gap-m">
           <a
             className="footer-link"
             href="https://www.linkedin.com/in/uxpaul/"

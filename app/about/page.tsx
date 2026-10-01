@@ -34,7 +34,7 @@ export default function AboutPage() {
         />
 
         <div className="about-hero__type">
-          <div className="space-y-2">
+          <div className="space-y-2xs">
             <p className="about-hero__name text-h3">Paul Kali</p>
             <p className="about-hero__title text-lead">Senior Product Designer</p>
           </div>
@@ -81,7 +81,7 @@ export default function AboutPage() {
       </header>
 
       {/* ── Phase 1 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-foundations" className="about-phase space-y-8">
+      <RevealSection aria-labelledby="phase-foundations" className="about-phase space-y-l">
         <h2 id="phase-foundations" className="about-phase__title text-h2">
           Where I learned the trade.
         </h2>
@@ -102,7 +102,7 @@ export default function AboutPage() {
       </RevealSection>
 
       {/* ── Phase 2 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-lead" className="about-phase space-y-8">
+      <RevealSection aria-labelledby="phase-lead" className="about-phase space-y-l">
         <h2 id="phase-lead" className="about-phase__title text-h2">
           From maker to lead.
         </h2>
@@ -155,8 +155,8 @@ export default function AboutPage() {
       </RevealSection>
 
       {/* ── Phase 3 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-ownership" className="about-phase space-y-8">
-        <div className="space-y-3">
+      <RevealSection aria-labelledby="phase-ownership" className="about-phase space-y-l">
+        <div className="space-y-xs">
           <h2 id="phase-ownership" className="about-phase__title text-h2">
             Full ownership, end to end.
           </h2>
@@ -219,7 +219,7 @@ export default function AboutPage() {
       </RevealSection>
 
       {/* ── Credentials ────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="credentials" className="space-y-8">
+      <RevealSection aria-labelledby="credentials" className="space-y-l">
         <h2 id="credentials" className="about-phase__title text-h2">
           Cleared, credentialed, and current.
         </h2>
@@ -244,12 +244,12 @@ export default function AboutPage() {
       </RevealSection>
 
       {/* ── Contact ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="contact" className="space-y-8">
+      <RevealSection aria-labelledby="contact" className="space-y-l">
         <h2 id="contact" className="about-phase__title text-h2">
           Let&apos;s talk.
         </h2>
 
-        <div className="space-y-6">
+        <div className="space-y-m">
           <p className="about-contact__body text-body">
             Open to senior IC, staff, and design-management roles. Philadelphia-based; remote,
             hybrid, or the occasional NYC/DC trip.

@@ -15,10 +15,10 @@ export default function Home() {
           CSS entrance (reduced-motion + no-JS safe). Server component, pure CSS. */}
       {/* Two-scale rhythm (Phase 2): the four beats are grouped into a title
           block (catch line + name) and a supporting block (proof + availability),
-          12px intimate within each group, 48px between groups. The .hero-beat
+          24px intimate (--spacing-m) within each group, 48px between groups. The .hero-beat
           stagger (--beat 0..3) stays on the four elements regardless of grouping. */}
-      <section className="space-y-12">
-        <div className="space-y-5">
+      <section className="space-y-xl">
+        <div className="space-y-m">
           <h1
             className="hero-beat text-lede text-muted max-w-[18ch] min-[1280px]:max-w-[30ch]"
             style={{ ['--beat' as string]: 0 }}
@@ -43,7 +43,7 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-m">
           {/* Proof — Navy + URBN. Brand names wrapped in whitespace-nowrap so none
               breaks mid-name at any width. */}
           <p
@@ -71,14 +71,14 @@ export default function Home() {
       </section>
 
       {/* Case study index — labeled list, 2-up gallery, staggered reveal */}
-      <section aria-labelledby="selected-work" className="space-y-6">
+      <section aria-labelledby="selected-work" className="space-y-m">
         {/* Sentence-case section label (not text-eyebrow's uppercase) — warmer
             for the senior register; text-eyebrow stays reserved for true
             all-caps tags. Weight + the whitespace gap above carry the label. */}
         <p id="selected-work" className="text-caption font-semibold text-muted tracking-wide">
           Selected work
         </p>
-        <RevealGrid className="grid gap-x-8 gap-y-12 lg:grid-cols-2 lg:[grid-auto-rows:1fr]">
+        <RevealGrid className="grid gap-x-l gap-y-xl lg:grid-cols-2 lg:[grid-auto-rows:1fr]">
           {caseStudies.map((study) => (
             <li key={study.slug} className="h-full">
               <CaseStudyCard study={study} />

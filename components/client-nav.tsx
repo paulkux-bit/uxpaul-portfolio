@@ -19,7 +19,7 @@ export function ClientNav() {
     <nav aria-label="Primary">
       {/* role="list": preflight's `list-style: none` strips list semantics in
           WebKit, so the nav announced its links without a count. */}
-      <ul role="list" className="flex items-center gap-6">
+      <ul role="list" className="flex items-center gap-m">
         {LINKS.map(({ href, label }) => {
           const active = pathname === href;
           return (
