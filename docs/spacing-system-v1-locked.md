@@ -542,3 +542,26 @@ the value still lives in one place, the scale. (Precedent: Polaris
 **§9's bento item is partly closed:** 3b sets the rhythm of bands in prose; the
 gaps inside a bento theme are unchanged and measured consistent (one value
 each across every study).
+
+## 11. Closing review and top of page, 1 Oct 2026
+
+Ruled on rendered options (`docs/previews/system-close-a/`,
+`docs/previews/top-of-page/options/`). All values are existing steps.
+
+| # | Relationship | Ruling | Where |
+|---|---|---|---|
+| A1c | Heading straight into a body paragraph | 16 (was 32; the heading sat 40 from its paragraph in ink against 37 between paragraphs) | `.case-study-prose h2:has(+ p:not(.section-lede):not(.section-note))`; notes and milestones keep 32 |
+| A5a | Home card grid | 32 across, 48 down, kept and now commented | `app/page.tsx` |
+| T1c | Header to first content, every page | 64, `--spacing-2xl` (was `--spacing-section`, 74 / 96 / 128) | home and About `pt-2xl`; `.hero-block` top margin |
+| T2b | Home intro to "Selected work" | 64 (was 128); work to Also Shipped stays 128 | `mb-2xl!` on the intro, because `space-y-section` owns every non-last child's bottom margin |
+| T3b | Study title block beside the hero image | top-aligned (was centred; the eyebrow moved 203 to 311 with title length) | `.hero-block` at 1024 and up |
+
+**Why the page top is not `--spacing-section`.** The header has no fill, no
+border and no shadow, so header to content is a page margin, not a break
+between two bounded sections. A new `--spacing-page-top` relationship token was
+proposed (64 / 72 / 88) and not added, per ruling 3a.
+
+**What spacing cannot do here.** A card headline starts 266 px into the card
+(padding, the cover drawing, then 32), so no spacing value puts a full headline
+above the fold at 1280 x 800, 1440 x 900 or 1512 x 860. The levers are the card
+itself and the intro's length; both are recorded outside this spec.

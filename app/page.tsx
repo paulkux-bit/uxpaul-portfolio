@@ -5,7 +5,7 @@ import { caseStudies } from '@/app/data/case-studies';
 
 export default function Home() {
   return (
-    <div className="page-container pt-section pb-section space-y-section">
+    <div className="page-container pt-2xl pb-section space-y-section">
       {/* Hero — "weighted sentence" (Direction D1), range-led copy. The h1 names
           the three domains Paul works across; WEIGHT carries the emphasis:
           connectives ride text-lede's thin 340 + recessive --text-muted, the
@@ -18,7 +18,11 @@ export default function Home() {
           block (catch line + name) and a supporting block (proof + availability),
           24px intimate (--spacing-m) within each group, 48px between groups. The .hero-beat
           stagger (--beat 0..3) stays on the four elements regardless of grouping. */}
-      <section className="space-y-xl">
+      {/* Intro to "Selected work" is 64, not the 128 section break: the intro
+          introduces the work (top-of-page ruling T2b, 1 Oct 2026). mb-2xl! because
+          space-y-section sets this margin on every non-last child; the work to
+          Also Shipped break stays 128. The page top above is 64 (T1c). */}
+      <section className="space-y-xl mb-2xl!">
         <div className="space-y-m">
           <h1
             className="hero-beat text-lede text-muted max-w-[18ch] min-[1280px]:max-w-[30ch]"
@@ -79,6 +83,8 @@ export default function Home() {
         <p id="selected-work" className="text-caption font-semibold text-muted tracking-wide">
           Selected work
         </p>
+        {/* 32 across, 48 down, on purpose (closing review A5a, 1 Oct 2026): 48 lets
+            each card read as its own entry, 32 holds the pair together. */}
         <RevealGrid className="grid gap-x-l gap-y-xl lg:grid-cols-2 lg:[grid-auto-rows:1fr]">
           {caseStudies.map((study) => (
             <li key={study.slug} className="h-full">

@@ -1654,6 +1654,14 @@
   margin-bottom: 0;
 }
 
+/* A heading straight into a body paragraph takes the same 16 it gives a
+   standfirst (closing review A1c, 1 Oct 2026). At 32 it sat further from its
+   own paragraph than paragraphs sit from each other (40 against 37 in ink).
+   Notes and milestones keep the 32. */
+.case-study-prose h2:has(+ p:not(.section-lede):not(.section-note)) {
+  margin-bottom: var(--spacing-s);
+}
+
 /* ── H3 ──────────────────────────────────────────────────────────────── */
 
 .case-study-prose > h3 {
@@ -3352,14 +3360,20 @@ html.dark .figure-placeholder {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--spacing-xl);
-  margin: var(--spacing-section) 0; /* even top/bottom on the section-break value; bottom collapses with PROBLEM's 6rem */
+  /* Top is the page top, 64 on every page (top-of-page ruling T1c, 1 Oct
+     2026): the header is unbounded, so this is not a section break. Bottom
+     stays the section break; it collapses with PROBLEM's 6rem. */
+  margin: var(--spacing-2xl) 0 var(--spacing-section);
 }
 
 @media (min-width: 1024px) {
   .hero-block {
     grid-template-columns: minmax(0, 52fr) minmax(0, 48fr);
     gap: var(--spacing-2xl);
-    align-items: center;
+    /* Top-aligned, so every study starts reading level with the image top
+       (T3b, 1 Oct 2026). Centred, the eyebrow moved 203 to 311 with title
+       length alone. */
+    align-items: start;
   }
 }
 
