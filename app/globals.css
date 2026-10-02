@@ -4540,12 +4540,13 @@ html.dark .figure-placeholder {
    on this page gets. --text-muted measures 6.04 and 7.34.
 
    THAT ALSO MOVED THE HIERARCHY OFF THE TOKEN. Both small-label registers now sit on
-   --text-muted, so the separation is carried by weight (700 against 400), caps and
-   tracking alone. See inversion-manifest.json's $typeDoc, which used to name the
+   --text-muted, so the separation is carried by weight (600 against 400; it was
+   700, the browser's bold, until D1b on 1 Oct 2026 brought it into the declared
+   set), caps and tracking alone. See inversion-manifest.json's $typeDoc, which used to name the
    token as one of the channels and no longer can. */
 .journey-line__sentiment,
 .journey-line__sentiment-cols {
-  font-weight: 700;
+  font-weight: 600; /* --wght-display's value; was 700 (D1b, 1 Oct 2026) */
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -4630,7 +4631,7 @@ html.dark .figure-placeholder {
   background: var(--text-primary);
   color: var(--bg-canvas);
   font-size: var(--type-14); /* 14px, the system floor */
-  font-weight: 700;
+  font-weight: 600; /* was 700 (D1b, 1 Oct 2026) */
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -4966,7 +4967,7 @@ html.dark .figure-placeholder {
   justify-self: start;
   white-space: nowrap;
   font-size: var(--type-14); /* 14px, the system floor */
-  font-weight: 700;
+  font-weight: 600; /* was 700 (D1b, 1 Oct 2026) */
   line-height: 1.4;
   letter-spacing: 0.09em;
   text-transform: uppercase;

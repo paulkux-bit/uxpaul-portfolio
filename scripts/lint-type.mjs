@@ -71,6 +71,19 @@ const ALLOWLIST = {
     { selector: '.problem-list__text', reason: 'renders on no route in the 28 Sep census; Phase 12' },
     { selector: '.transformation', reason: 'grid container, renders on no route in the 28 Sep census; Phase 12' },
   ],
+  // weights[]: font-weight declarations allowed outside the five declared weights
+  // (check 13, 1 Oct 2026). Each is either the brand shelf's sanctioned per-brand
+  // character or a rule that renders on no route.
+  weights: [
+    { selector: '.text-qh-title', reason: 'Also shipped titles: per-brand weight through --qh-wght (500 to 650), part of the shelf\'s sanctioned brand exception (docs/color-system.md); revisited with the shelf\'s Template B redesign' },
+    { selector: '.mark', reason: 'Off the clock wall, rendered on no route (CLAUDE.md): --mark-weight 700 / 650; Phase 12' },
+    { selector: '.comp-mark-dominant .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.comp-mark-watermark .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.comp-mark-watermark .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.comp-mark-cropped .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.comp-statement .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
+    { selector: '.transformation', reason: 'grid container, renders on no route in the 28 Sep census; Phase 12' },
+  ],
   // §3.2 permits three signature placements sitewide. ONE is spent. The home
   // hero is a single placement covering four declarations: .text-lede carries
   // the 340, and the three font-[720] spans in app/page.tsx are noun phrases
@@ -750,6 +763,24 @@ const add = (id, title, failures, note) =>
     .filter((name) => !(name in TYPE_TOKENS));
   for (const name of new Set(unknown)) failures.push({ selector: name, line: 0, detail: 'references a --type-* token that is not defined' });
   add('12', 'Reading-band font-size comes from a --type-* token (§3.6)', failures);
+}
+
+// 13. EVERY WEIGHT IS ONE OF THE FIVE DECLARED (§3.2, 1 Oct 2026). A font-weight
+// must be 340, 400, 500, 600 or 720, or var(--wght-*). Check 4 guards the 340/720
+// pair and nothing else, which is how Delivery Promise shipped 700, the browser's
+// bold, on three rules nobody chose it for (human-made review, D1b/D2b). Values
+// set through another custom property cannot be resolved here and must be
+// allowlisted by selector with a reason, like any other exception.
+{
+  const failures = [];
+  const DECLARED = new Set(['340', '400', '500', '600', '720']);
+  for (const d of byProp('font-weight')) {
+    const v = d.value.replace(/!important/g, '').trim();
+    if (DECLARED.has(v) || /^var\(--wght-[\w-]+\)$/.test(v)) continue;
+    if (allowed(ALLOWLIST.weights, d.selector)) continue;
+    failures.push({ selector: d.selector, line: d.line, detail: `font-weight ${v} is not one of the five declared weights (340/400/500/600/720 or var(--wght-*))` });
+  }
+  add('13', 'Every font-weight is one of the five declared weights (§3.2)', failures);
 }
 
 // ── Known gap, surfaced rather than silently passed ────────────────────────

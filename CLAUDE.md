@@ -18,7 +18,7 @@ the other place.
 
 | System | Spec | Gate |
 |---|---|---|
-| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 11 checks |
+| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 12 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
 | Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 8 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
@@ -569,12 +569,13 @@ The named gates are three different tools; two are external and do NOT read pros
   overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
 - **type** = `npm run lint:type` (`scripts/lint-type.mjs`), a real repo script and the
   only mechanical typography check that exists. Parses `app/globals.css` with postcss
-  and enforces the eleven v3 §7 assertions: the 14px floor, the
+  and enforces the twelve v3 §7 assertions: the 14px floor, the
   1.15× rung ratio computed across 320–2560, the 340/720 signature, authored `strong`,
   no `color-mix(… currentColor …)` on text colour, exactly one `font-variation-settings`
   (on `*`, reading `--flar`), no `font-stretch` or `font-optical-sizing` because those
   axes do not exist, the flared set in CSS matching `RUNGS`, reading-band sizes
-  coming from `--type-*` tokens (check 12), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
+  coming from `--type-*` tokens (check 12), every weight one of the five declared
+  (check 13), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
   stops on failure. Allowlist entries live in the script, each with a one-line reason.
   It also prints one UNCHECKED blind spot it cannot see: arbitrary font-weight
   utilities authored in JSX, which check 4 cannot reach because it parses
