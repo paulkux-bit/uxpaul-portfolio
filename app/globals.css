@@ -587,6 +587,13 @@
     background-color: var(--bg-canvas);
     color: var(--text-primary);
     position: relative;
+    /* The footer sits at the foot of the window on a page shorter than the
+       window, which until the 404 (E1b, 1 Oct 2026) no page was. A flex column
+       with main taking the slack; every other route is taller than any window,
+       so nothing else moves (measured on all routes before and after). */
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
     transition:
       background-color var(--duration-theme) var(--ease-out-soft),
       color var(--duration-theme) var(--ease-out-soft);
@@ -606,6 +613,9 @@
     transition: opacity var(--duration-theme) var(--ease-out-soft);
   }
   html.dark body::before { opacity: 0; }
+
+  /* The slack half of the sticky footer above. */
+  body > main { flex: 1 0 auto; }
 
   /* Lift content above the grain layer */
   body > * { position: relative; z-index: 2; }
@@ -1067,6 +1077,19 @@
    its own until now. */
 .case-card {
   border-radius: var(--radius-l);
+  /* H1b, 1 Oct 2026: the card no longer lifts or casts a shadow. Paul ruled
+     border only after the human-made review found the shadow, the 3px lift and
+     the border change firing together to be the template part of the card. One
+     surface signal is left (the border tightens) beside the title's own
+     underline. The border transition moved here from the .lift utility, which
+     the card no longer carries.
+
+     TRANSFORM IS NO LONGER TRANSITIONED, and that closes interaction spec §5's
+     open item rather than adding one. Under .lift the press eased at 300ms, so
+     a ~43ms tap reached 0.53px and never the specified 1px. That duration was
+     the lift's; with no lift, the card presses the way the button, nav link,
+     toggle and work band already do: it snaps to 1px and holds. */
+  transition: border-color var(--duration-card) var(--ease-out-soft);
 }
 
 /* Footer links: standalone destinations in a row, not text in a sentence, so
@@ -1114,11 +1137,11 @@
 }
 
 /* A hover response is a promise of a click target, so it is scoped to a card
-   that has one. An unpublished card keeps its resting border and elevation. */
+   that has one. An unpublished card keeps its resting border. Border only since
+   H1b (1 Oct 2026): no lift, no shadow; the title underlines through
+   .case-card__title-link:hover, because the stretched link covers the card. */
 .case-card--linked:hover,
 .case-card--linked:focus-within {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-hover);
   border-color: var(--border-strong);
 }
 
@@ -1132,10 +1155,10 @@
    :active lands on the <article> rather than the stretched title link because
    the browser applies it up the activation chain — verified in the browser, not
    assumed. Border stays --border-strong: the surface is still hovered, and §5
-   changes only the offset and the shadow. */
+   changes only the offset. Since H1b the card has no shadow to drop, so the
+   press is the sink alone, like every other surface. */
 .case-card--linked:active {
   transform: translateY(1px);
-  box-shadow: var(--shadow-rest);
 }
 
 /* Nav links — chromatic restraint at rest; weight + neutral underline
@@ -1187,8 +1210,8 @@
 }
 
 /* Theme toggle — icon button. Border-only hover (no chroma; chroma is the
-   focus moment, inherited from the global :focus-visible halo). The lamp's
-   state is driven by the .dark class, set pre-paint by next-themes. */
+   focus moment, inherited from the global :focus-visible halo). Sun/moon
+   visibility is driven by the .dark class, set pre-paint by next-themes. */
 .theme-toggle {
   /* §2 has no position on an icon with NO adjacent text, and this button has
      none. Recorded judgment: its adjacent type is the wordmark — the only other
@@ -1229,38 +1252,9 @@
    pinned the converted icons to 18px while every check still passed — the
    geometry silently wrong and nothing to catch it. Size now comes from .icon
    against this button's declared 1rem. */
-
-/* The lamp (interaction spec §2.5): the one drawn icon, R3's one exception.
-   ONE drawing, both states always in the markup; .dark moves it between them,
-   so nothing reads the theme in React and there is no flash.
-
-   Paper, the light on: blank glass, form shading, seven rays.
-   Low light, dimmed: the rays draw all the way back, the shading goes, and the
-   glow appears as line tone across the glass.
-
-   The change runs on --duration-theme, the page's own mode fade, so the lamp
-   and the page are one event. Reduced motion: the blanket reduce rule makes it
-   instant, as it does the page fade.
-
-   Two strokes. The outline takes --icon-stroke from .icon. Every other line is
-   the hairline below: 1 in the 24-unit box, about half the outline, 0.67px at
-   16px. It is the engraver's fine line beside the heavy one, a property of the
-   drawing, not a weight matched to adjacent type, so it is not a §2.1 entry. */
-.theme-lamp { overflow: visible; } /* the bottom ray's round cap reaches 24.1 */
-.theme-lamp__fine { stroke-width: 1; }
-.theme-lamp__ray {
-  stroke-dasharray: 1 1;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset var(--duration-theme) var(--ease-out-soft);
-}
-.theme-lamp__shade { transition: opacity var(--duration-theme) var(--ease-out-soft); }
-.theme-lamp__tone {
-  opacity: 0;
-  transition: opacity var(--duration-theme) var(--ease-out-soft);
-}
-.dark .theme-lamp__ray { stroke-dashoffset: 1; }
-.dark .theme-lamp__shade { opacity: 0; }
-.dark .theme-lamp__tone { opacity: 1; }
+.theme-toggle .icon-sun { display: none; }
+.dark .theme-toggle .icon-sun { display: inline; }
+.dark .theme-toggle .icon-moon { display: none; }
 
 /* ============================================================
    CASE-STUDY INDEX REVEAL (progressive enhancement)
@@ -3447,7 +3441,8 @@ html.dark .figure-placeholder {
   /* `case` raises punctuation to cap height in an all-caps run. These eyebrows
      read "BARD · U.S. COAST GUARD" and "FDT-E · U.S. NAVY": the middot sits at
      lowercase centre among capitals and FDT-E's hyphen sits low, because both
-     glyphs are drawn for lowercase. Commissioner v1.012 carries 37 `case`
+     glyphs are drawn for lowercase. (Since P1b, 1 Oct 2026, the eyebrows are two
+     lines with no middot; the hyphen is what `case` still lifts.) Commissioner v1.012 carries 37 `case`
      substitutions; Google's v1.001 does not, which is one of the reasons C1
      self-hosts the designer's build.
 
@@ -3462,6 +3457,11 @@ html.dark .figure-placeholder {
      the wdth probe stayed green while structurally guaranteed to fail. If a
      second surface takes `case`, the guard is owed then. */
   font-feature-settings: 'case' 1;
+}
+/* P1b: client and project on two lines. Inherits everything above, including
+   `case`, which still matters for FDT-E's hyphen. */
+.hero-block__eyebrow-line {
+  display: block;
 }
 
 .hero-block__title {
@@ -4540,12 +4540,13 @@ html.dark .figure-placeholder {
    on this page gets. --text-muted measures 6.04 and 7.34.
 
    THAT ALSO MOVED THE HIERARCHY OFF THE TOKEN. Both small-label registers now sit on
-   --text-muted, so the separation is carried by weight (700 against 400), caps and
-   tracking alone. See inversion-manifest.json's $typeDoc, which used to name the
+   --text-muted, so the separation is carried by weight (600 against 400; it was
+   700, the browser's bold, until D1b on 1 Oct 2026 brought it into the declared
+   set), caps and tracking alone. See inversion-manifest.json's $typeDoc, which used to name the
    token as one of the channels and no longer can. */
 .journey-line__sentiment,
 .journey-line__sentiment-cols {
-  font-weight: 700;
+  font-weight: 600; /* --wght-display's value; was 700 (D1b, 1 Oct 2026) */
   letter-spacing: 0.09em;
   text-transform: uppercase;
   color: var(--text-muted);
@@ -4630,7 +4631,7 @@ html.dark .figure-placeholder {
   background: var(--text-primary);
   color: var(--bg-canvas);
   font-size: var(--type-14); /* 14px, the system floor */
-  font-weight: 700;
+  font-weight: 600; /* was 700 (D1b, 1 Oct 2026) */
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -4966,7 +4967,7 @@ html.dark .figure-placeholder {
   justify-self: start;
   white-space: nowrap;
   font-size: var(--type-14); /* 14px, the system floor */
-  font-weight: 700;
+  font-weight: 600; /* was 700 (D1b, 1 Oct 2026) */
   line-height: 1.4;
   letter-spacing: 0.09em;
   text-transform: uppercase;

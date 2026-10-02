@@ -42,9 +42,12 @@ export default function Home() {
               have fixed the number and kept the value invisible to the CSS
               parser, which is worse: the next reader would assume it had been
               considered. */}
+          {/* P2b, 1 Oct 2026: two lines, name then title, no interpunct. The
+              sr-only comma keeps the pause a screen reader would otherwise lose. */}
           <p className="hero-beat text-h3" style={{ ['--beat' as string]: 1 }}>
-            <span className="hero-credit-name text-primary">Paul Kali</span>
-            <span className="text-secondary"> · Senior Product Designer</span>
+            <span className="hero-credit-name block text-primary">Paul Kali</span>
+            <span className="sr-only">, </span>
+            <span className="block text-secondary">Senior Product Designer</span>
           </p>
         </div>
 
@@ -69,7 +72,7 @@ export default function Home() {
             {/* Quiet mailto: inherits text-small/secondary; no underline at rest,
                 underline on hover only. Same email as the footer. */}
             <a href="mailto:paulk.ux@gmail.com" className="quiet-link">
-              Open to senior and staff IC roles.
+              Open to senior IC, staff, and management roles.
             </a>
           </p>
         </div>

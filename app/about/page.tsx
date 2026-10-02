@@ -84,7 +84,7 @@ export default function AboutPage() {
       {/* ── Phase 1 ────────────────────────────────────────────────────── */}
       <RevealSection aria-labelledby="phase-foundations" className="about-phase space-y-l">
         <h2 id="phase-foundations" className="about-phase__title text-h2">
-          Where I learned the trade.
+          Where I learned the trade
         </h2>
 
         <div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
       {/* ── Phase 2 ────────────────────────────────────────────────────── */}
       <RevealSection aria-labelledby="phase-lead" className="about-phase space-y-l">
         <h2 id="phase-lead" className="about-phase__title text-h2">
-          From maker to lead.
+          From maker to lead
         </h2>
 
         <div>
@@ -159,7 +159,7 @@ export default function AboutPage() {
       <RevealSection aria-labelledby="phase-ownership" className="about-phase space-y-l">
         <div className="space-y-xs">
           <h2 id="phase-ownership" className="about-phase__title text-h2">
-            Full ownership, end to end.
+            Full ownership, end to end
           </h2>
           <p className="about-phase__note text-body">First retail, then defense, on purpose.</p>
         </div>
@@ -246,8 +246,11 @@ export default function AboutPage() {
 
       {/* ── Contact ────────────────────────────────────────────────────── */}
       <RevealSection aria-labelledby="contact" className="space-y-l">
+        {/* T4c, 1 Oct 2026: the address is the heading, replacing "Let's talk.",
+            which the human-made review flagged as CTA boilerplate. The plain
+            base `a` rule carries it; the links row below keeps LinkedIn. */}
         <h2 id="contact" className="about-phase__title text-h2">
-          Let&apos;s talk.
+          <a href="mailto:paulk.ux@gmail.com">paulk.ux@gmail.com</a>
         </h2>
 
         <div className="space-y-m">
@@ -256,9 +259,6 @@ export default function AboutPage() {
             hybrid, or the occasional NYC/DC trip.
           </p>
           <p className="about-contact__links">
-            <a className="about-link text-body" href="mailto:paulk.ux@gmail.com">
-              paulk.ux@gmail.com
-            </a>
             <a
               className="about-link text-body"
               href="https://linkedin.com/in/uxpaul"

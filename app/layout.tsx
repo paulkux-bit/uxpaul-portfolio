@@ -16,8 +16,9 @@ export const metadata = {
      segments only, so `/` stays "uxpaul" and every child gains the suffix.
 
      MIDDOT, NEVER AN EM DASH. U+2014 is a lint:prose hard fail and lint:prose now
-     gates the build (9fd0eee). The middot is also already the house separator -
-     the home name line and every case-study card meta use it. */
+     gates the build (9fd0eee). The page itself stopped using the middot as a
+     separator on 1 Oct 2026 (the card labels, study eyebrows and home name line
+     went to two lines); a tab title has one line, so it keeps it. */
   title: {
     default: 'uxpaul',
     template: '%s · Paul Kali',

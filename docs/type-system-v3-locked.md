@@ -119,6 +119,8 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 **"≥40px" means the role's ceiling, not its rendered size (settled 7 Aug 2026).** The earlier wording said only "illegal below 40px," which read as a statement about rendered size and put the home hero in breach of the spec on every phone: `text-lede` is `clamp(2rem, 4.5vw, 3.75rem)`, so it sits at 32px until an 889px viewport. Assertion 4 had always tested the ceiling, so spec and test disagreed. Resolved in favour of the test, on evidence: the hero was checked on device in both modes at the 32px floor, and the contrast registers in well under a second with the light weight reading as recessive rather than fragile. The signature is a *relationship* between two weights, and that relationship survives the scale change; a rendered-size rule would also have made the same role legal on desktop and illegal on mobile, which is not a property a role can have.
 
+**The five are the whole set (1 Oct 2026).** A weight outside them fails `lint:type` check 13 unless it is allowlisted with a reason (§7).
+
 **Inventory, so the count is not misread.** The home hero is **one** placement, not four: `text-lede` carries the 340, and the three `font-[720]` spans in `app/page.tsx` are load-bearing noun phrases *inside that same `h1`*. One allowlist entry covers all four declarations. Two of the three permitted placements are still unspent — the about opener and one case-study moment. The signature is currently **under**-used.
 
 ### 3.3 The ladder
@@ -449,6 +451,9 @@ Assertion 4 has two halves and both are enforced: a weight of 340 or 720 fails i
 | **10** | **No `font-stretch` and no `font-optical-sizing`, at any value** |
 | **11** | **The flared set in CSS matches `RUNGS`' `voice: 'flared'`, both directions** |
 | **12** | **Reading-band `font-size` comes from a `--type-*` token (§3.6), added 28 Sep 2026** |
+| **13** | **Every `font-weight` is one of the five declared in §3.2 (340, 400, 500, 600, 720, or `var(--wght-*)`), added 1 Oct 2026** |
+
+**Check 13 exists because check 4 only ever guarded the signature pair.** Delivery Promise shipped 700, the browser's `bold`, on three rules (the journey line's sentiment labels and numbered marks, and the node chart's average label) that nobody chose it for, and every gate passed. The human-made review found it; Paul ruled the three to 600 (D1b) and this check (D2b) on 1 Oct 2026. Its allowlist, `ALLOWLIST.weights`, carries the Also shipped titles' per-brand weights (the shelf's sanctioned brand exception) and rules that render on no route, each with a reason.
 
 **Check 1 became check 10 rather than being edited, and 11 is new.** Numbers are not reused: each one is a claim with a history, and a reader who finds "check 1" in a commit message from 7 August should not be sent to a rule about something else.
 

@@ -18,7 +18,7 @@ the other place.
 
 | System | Spec | Gate |
 |---|---|---|
-| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 11 checks |
+| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 12 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
 | Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 8 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
@@ -326,7 +326,7 @@ real clamp, and every type-role utility must have a row.
 | `text-lead` | 22px | Intro paragraph, project tagline |
 | `text-body` | 18px | All body copy, default |
 | `text-small` | 16px | Dense lists, captions, footnotes |
-| `text-caption` | 14px | Date, role, year, byline; card project·client meta |
+| `text-caption` | 14px | Date, role, year, byline; card client and project meta |
 | `text-eyebrow` | 14px caps | Reserved for all-caps tags (home section labels are sentence-case) |
 
 `text-display` was cut (homeless once the home h1 became `text-statement`; the deferred wordmark gets its own `text-wordmark`).
@@ -391,7 +391,7 @@ there is no width column here any more: width is gone with the axis.
 1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
 2. **Major** (work titles: Selected Work cards + Also Shipped) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
-4. **Eyebrow/Caption** (sentence-case section labels, project·client meta) — tracking.
+4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
 5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
 
 **Spacing is its own locked system now** — `docs/spacing-system-v1-locked.md`,
@@ -569,12 +569,13 @@ The named gates are three different tools; two are external and do NOT read pros
   overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
 - **type** = `npm run lint:type` (`scripts/lint-type.mjs`), a real repo script and the
   only mechanical typography check that exists. Parses `app/globals.css` with postcss
-  and enforces the eleven v3 §7 assertions: the 14px floor, the
+  and enforces the twelve v3 §7 assertions: the 14px floor, the
   1.15× rung ratio computed across 320–2560, the 340/720 signature, authored `strong`,
   no `color-mix(… currentColor …)` on text colour, exactly one `font-variation-settings`
   (on `*`, reading `--flar`), no `font-stretch` or `font-optical-sizing` because those
   axes do not exist, the flared set in CSS matching `RUNGS`, reading-band sizes
-  coming from `--type-*` tokens (check 12), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
+  coming from `--type-*` tokens (check 12), every weight one of the five declared
+  (check 13), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
   stops on failure. Allowlist entries live in the script, each with a one-line reason.
   It also prints one UNCHECKED blind spot it cannot see: arbitrary font-weight
   utilities authored in JSX, which check 4 cannot reach because it parses
@@ -679,7 +680,7 @@ code shipped it.)
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
 - **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
-- **Card lift** — `translateY(-3px)` + `shadow-hover` on interactive surfaces. Use the `lift` / `lift-hover` utility pair.
+- **Card hover is border only** (H1b, 1 Oct 2026): `--border-strong` and the title's underline, no lift and no shadow. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 - **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
 
 ### Utility classes (mirror typography pattern)

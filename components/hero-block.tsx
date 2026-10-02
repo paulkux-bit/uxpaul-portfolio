@@ -3,7 +3,9 @@ import type { CSSProperties, ReactNode } from 'react';
 import { PlaceholderFrame } from './_placeholder-utils';
 
 type HeroBlockProps = {
-  eyebrow: string;
+  /** One line, or [client, project] for two (P1b, 1 Oct 2026: client first, no
+   *  interpunct, the same order as the home card label). */
+  eyebrow: string | [string, string];
   title: string | [string, string];
   role: string;
   image: {
@@ -86,7 +88,19 @@ export function HeroBlock({
   return (
     <header className="hero-block">
       <div className="hero-block__type">
-        <p className="hero-block__eyebrow">{eyebrow}</p>
+        <p className="hero-block__eyebrow">
+          {typeof eyebrow === 'string' ? (
+            eyebrow
+          ) : (
+            <>
+              <span className="hero-block__eyebrow-line">{eyebrow[0]}</span>
+              {/* A pause for a screen reader, which would otherwise run the two
+                  lines together as one name. */}
+              <span className="sr-only">, </span>
+              <span className="hero-block__eyebrow-line">{eyebrow[1]}</span>
+            </>
+          )}
+        </p>
         <h1 className="hero-block__title">
           {sentences.map((s, i) => (
             <span
