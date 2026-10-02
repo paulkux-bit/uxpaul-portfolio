@@ -459,10 +459,11 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
   // worse than one that stays red, and both of these would have gone green
   // falsely at I5.
   //
-  // SCOPE: check 5 governs Lucide nodes only. `.theme-toggle svg` sizes a
-  // hand-authored SVG, which is check 4's finding today and stops existing when
-  // I5 replaces it with Lucide. Flagging it here too would report one defect
-  // twice under two rules.
+  // SCOPE: check 5 governs Lucide nodes only. A hand-authored <svg> is check 4's
+  // finding, so flagging its size here too would report one defect twice under
+  // two rules. (This comment used to name `.theme-toggle svg` as that case. I5
+  // converted the toggle to Lucide; a drawn lamp replaced it on 1 Oct 2026 and
+  // was reverted on 2 Oct, so the toggle is Lucide again.)
   {
     const f5 = [], ex5 = [], f6 = [], ex6 = [];
 

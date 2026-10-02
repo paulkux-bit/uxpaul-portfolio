@@ -31,6 +31,13 @@ Unicode glyphs used as icons, no icon fonts. Case-study illustrations are
 artwork, not icons, and are out of scope — the same line drawn for SVG artwork
 in the colour system's check 7.
 
+*Tried and reverted, 1 to 2 Oct 2026.* A hand-drawn engraved lamp replaced the
+Lucide moon and sun as R3's one exception (6824f0a, from the human-made review's
+H2). On the live header Paul could not tell what it did at 16px, and ruled the
+moon and sun back on 2 Oct. R3 stands with no exceptions. The moon and sun are a
+choice for legibility, not leftover template chrome: a control a reader cannot
+identify at a glance fails before it can look considered.
+
 **R4 — Interaction lives in `globals.css`.** Hover, focus, active and disabled
 states are authored there against named tokens. No `hover:` / `focus:` /
 `active:` utilities in `.tsx`. Interaction is currently split across both
