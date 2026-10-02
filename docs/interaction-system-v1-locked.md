@@ -31,10 +31,6 @@ Unicode glyphs used as icons, no icon fonts. Case-study illustrations are
 artwork, not icons, and are out of scope — the same line drawn for SVG artwork
 in the colour system's check 7.
 
-*Amended 1 Oct 2026: R3 has one exception, the theme switch lamp (§2.5).* It
-is chrome, not artwork, so it is named as an exception rather than filed with
-the illustrations, and the lint excuses that one file by name.
-
 **R4 — Interaction lives in `globals.css`.** Hover, focus, active and disabled
 states are authored there against named tokens. No `hover:` / `focus:` /
 `active:` utilities in `.tsx`. Interaction is currently split across both
@@ -142,50 +138,6 @@ icon through `.icon` or not at all.
 Case-study illustrations (`components/fdte/*`, `components/oku/*`), the paper
 grain texture, and the `·` interpunct, which is a typographic separator with
 its own `@supports` alt-text handling and is not an icon.
-
-### 2.5 The one drawn icon: the theme switch lamp
-
-Ruled by Paul on 1 Oct 2026 (H2 of the human-made review, option l16), after
-the Lucide moon and sun were found to be the one piece of template chrome in the
-header. Prototype and options: `docs/previews/human-made-options/lamp/`.
-
-**What it is.** A bulb on a short cord, drawn in the cover art's method: a heavy
-outline, fine lines for everything else, the screw base drawn as ellipse arcs
-seen slightly from above. It shows the state you are in. **Paper** is the light
-on: blank glass (in an engraving, light is where there is no ink), curved
-shading on the lower right, seven rays. **Low light** is dimmed: no rays, and
-the glow drawn as line tone across the glass. The button's label carries the
-action, as before.
-
-**Why it is an exception and not artwork.** `scripts/artwork-allowlist.mjs` is
-for drawings sized by layout that no icon set could supply. The lamp is chrome,
-sized 1em against adjacent type like every other icon, so filing it there would
-have been false. `lint:interaction` check 4 excuses it by exact file in
-`ALLOWLIST.drawnIcons`, and a test pins that list to the one file. R3 has one
-exception, not a category: a second drawn icon is a new ruling, not an entry.
-
-**Size and stroke.** 1em through `.icon`, against the button's declared 1rem,
-so §2.3's judgment for `.theme-toggle` stands unchanged. The outline takes
-`--icon-stroke` from `.icon` (1.95). Every other line is one hairline,
-`.theme-lamp__fine { stroke-width: 1 }`: about half the outline, 0.67px at
-16px. It is a property of the drawing, the engraver's fine line beside the heavy
-one, not a weight matched to adjacent type, so it is not a §2.1 entry. Checks 5
-and 6 govern Lucide nodes only; the lamp's size, stroke and mechanism are
-asserted by name in the §2 test suite instead.
-
-**Mechanism.** One drawing, always fully rendered; `.dark` (set pre-paint by
-next-themes) moves it between states in CSS. Nothing reads the theme in React
-to decide what to draw, so there is no flash and no hydration mismatch, the
-same property the Lucide pair had.
-
-**Motion.** The rays draw back (`stroke-dashoffset`) and the shading and tone
-cross over (`opacity`) on `--duration-theme` with `--ease-out-soft`, the page's
-own mode fade, so lamp and page are one event. Reduced motion: the blanket
-reduce rule makes it instant, like the page fade (`lint:motion` form B). The
-1px press sink (§5) is unchanged.
-
-**What changes it.** The cover redraw. The lamp borrows the covers' method; if
-the redraw changes that method, the lamp is redrawn with it, in the same pass.
 
 ---
 
@@ -489,8 +441,7 @@ is what "changes shipped appearance" means.
    no bare `ease`, `linear` or inline `cubic-bezier`.
 3. No literal `border-radius` outside the radius tokens, except allowlisted
    entries with reasons.
-4. No hand-authored `<svg>` icon outside the artwork allowlist and the one
-   drawn icon, `ALLOWLIST.drawnIcons` (§2.5).
+4. No hand-authored `<svg>` icon outside the artwork allowlist.
 5. Every icon is `1em` square — no px width or height on an icon node.
 6. Every `--icon-stroke` value appears in the §2.1 table, and every container
    that sets `font-weight` and contains an icon sets `--icon-stroke`.

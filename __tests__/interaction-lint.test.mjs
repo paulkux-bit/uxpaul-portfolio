@@ -40,7 +40,7 @@ describe('the fixtures were actually scanned', () => {
   it('reaches every fixture file', () => {
     expect(scanned.css.sort()).toEqual(['clean.css', 'violations.css']);
     expect(scanned.tsx.sort()).toEqual([
-      'clean.tsx', 'components/oku/artwork.tsx', 'components/theme-toggle.tsx', 'violations.tsx',
+      'clean.tsx', 'components/oku/artwork.tsx', 'violations.tsx',
     ]);
   });
   it('runs all nine checks', () => {
@@ -59,7 +59,6 @@ describe('the fixtures were actually scanned', () => {
     expect(seen).toContain('clean.css');
     expect(seen).toContain('clean.tsx');
     expect(seen).toContain('components/oku/artwork.tsx');
-    expect(seen).toContain('components/theme-toggle.tsx');
   });
 });
 
@@ -144,16 +143,6 @@ describe('check 4 — hand-authored svg', () => {
   });
   it('excludes the paper grain as artwork', () => {
     expect(c().excluded.some((x) => x.where.startsWith('clean.css') && x.reason === 'artwork')).toBe(true);
-  });
-  // R3 has ONE exception (spec §2.5). The fixture sits at the real file's path,
-  // so it is excused by the real entry; the list is pinned to exactly that file
-  // so a second drawn icon cannot ride in on it unnoticed.
-  it('excludes the theme lamp by its ALLOWLIST.drawnIcons entry, and only that file', () => {
-    expect(ALLOWLIST.drawnIcons.map((a) => a.file)).toEqual(['components/theme-toggle.tsx']);
-    const lamp = c().excluded.filter((x) => x.where.startsWith('components/theme-toggle.tsx'));
-    expect(lamp.length).toBeGreaterThan(0);
-    expect(lamp.every((x) => x.reason === 'drawn-icon')).toBe(true);
-    expect(failFiles(c())).not.toContain('components/theme-toggle.tsx');
   });
 });
 
@@ -372,7 +361,7 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
   }
 
   it('body and body::before move at --duration-theme — one mode transition, one speed', () => {
-    for (const sel of ['body', 'body::before', '.theme-lamp__ray', '.theme-lamp__shade', '.theme-lamp__tone']) {
+    for (const sel of ['body', 'body::before']) {
       const t = transitionsFor(sel);
       expect(t, `${sel} has no transition`).not.toHaveLength(0);
       for (const v of t) expect(v).toContain('--duration-theme');
@@ -473,27 +462,12 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
   // THE MECHANISM, not the geometry. A conditional render here passes checks 4,
   // 5 and 6, tsc and eslint, and reintroduces the theme flash plus a hydration
   // mismatch, because the server has no resolved theme.
-  //
-  // Since 1 Oct 2026 the toggle is one drawing (the lamp, spec §2.5), not two
-  // Lucide glyphs. The mechanism is the same: everything renders, .dark decides.
-  it('the theme toggle renders the whole lamp unconditionally; .dark sets its state', () => {
+  it('the theme toggle renders BOTH glyphs unconditionally', () => {
     const src = readFileSync(join(REPO, 'components', 'theme-toggle.tsx'), 'utf8');
-    const code = blankComments(src);
-    expect(code).toContain('className="icon theme-lamp"');
-    expect(code, 'the lamp replaced the Lucide pair').not.toMatch(/from\s*['"]lucide-react['"]/);
-    expect(code, 'a conditional drawing reintroduces the flash and a hydration mismatch')
-      .not.toMatch(/resolvedTheme[^\n]*\?[^\n]*</);
-    expect(code.match(/className="theme-lamp__ray"/g) ?? []).toHaveLength(7);
-    for (const sel of ['.dark .theme-lamp__ray', '.dark .theme-lamp__shade', '.dark .theme-lamp__tone'])
-      expect(rules.toString(), `${sel} is what moves the lamp between states`).toContain(`${sel} {`);
-  });
-
-  // The lamp's outline must take its stroke from .icon, so it moves with the
-  // §2.1 table; only the hairline is fixed, and it is fixed in one place.
-  it('the lamp sets no stroke-width in markup, and its hairline lives in one rule', () => {
-    const code = blankComments(readFileSync(join(REPO, 'components', 'theme-toggle.tsx'), 'utf8'));
-    expect(code).not.toMatch(/strokeWidth/);
-    expect(declFor('.theme-lamp__fine', 'stroke-width')).toBe('1');
+    expect(src).toContain('<Moon className="icon icon-moon"');
+    expect(src).toContain('<Sun className="icon icon-sun"');
+    expect(blankComments(src), 'a conditional glyph reintroduces the flash and a hydration mismatch')
+      .not.toMatch(/resolvedTheme[^\n]*\?[^\n]*<(Sun|Moon)/);
   });
 });
 

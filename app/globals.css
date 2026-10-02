@@ -1187,8 +1187,8 @@
 }
 
 /* Theme toggle — icon button. Border-only hover (no chroma; chroma is the
-   focus moment, inherited from the global :focus-visible halo). The lamp's
-   state is driven by the .dark class, set pre-paint by next-themes. */
+   focus moment, inherited from the global :focus-visible halo). Sun/moon
+   visibility is driven by the .dark class, set pre-paint by next-themes. */
 .theme-toggle {
   /* §2 has no position on an icon with NO adjacent text, and this button has
      none. Recorded judgment: its adjacent type is the wordmark — the only other
@@ -1229,38 +1229,9 @@
    pinned the converted icons to 18px while every check still passed — the
    geometry silently wrong and nothing to catch it. Size now comes from .icon
    against this button's declared 1rem. */
-
-/* The lamp (interaction spec §2.5): the one drawn icon, R3's one exception.
-   ONE drawing, both states always in the markup; .dark moves it between them,
-   so nothing reads the theme in React and there is no flash.
-
-   Paper, the light on: blank glass, form shading, seven rays.
-   Low light, dimmed: the rays draw all the way back, the shading goes, and the
-   glow appears as line tone across the glass.
-
-   The change runs on --duration-theme, the page's own mode fade, so the lamp
-   and the page are one event. Reduced motion: the blanket reduce rule makes it
-   instant, as it does the page fade.
-
-   Two strokes. The outline takes --icon-stroke from .icon. Every other line is
-   the hairline below: 1 in the 24-unit box, about half the outline, 0.67px at
-   16px. It is the engraver's fine line beside the heavy one, a property of the
-   drawing, not a weight matched to adjacent type, so it is not a §2.1 entry. */
-.theme-lamp { overflow: visible; } /* the bottom ray's round cap reaches 24.1 */
-.theme-lamp__fine { stroke-width: 1; }
-.theme-lamp__ray {
-  stroke-dasharray: 1 1;
-  stroke-dashoffset: 0;
-  transition: stroke-dashoffset var(--duration-theme) var(--ease-out-soft);
-}
-.theme-lamp__shade { transition: opacity var(--duration-theme) var(--ease-out-soft); }
-.theme-lamp__tone {
-  opacity: 0;
-  transition: opacity var(--duration-theme) var(--ease-out-soft);
-}
-.dark .theme-lamp__ray { stroke-dashoffset: 1; }
-.dark .theme-lamp__shade { opacity: 0; }
-.dark .theme-lamp__tone { opacity: 1; }
+.theme-toggle .icon-sun { display: none; }
+.dark .theme-toggle .icon-sun { display: inline; }
+.dark .theme-toggle .icon-moon { display: none; }
 
 /* ============================================================
    CASE-STUDY INDEX REVEAL (progressive enhancement)
