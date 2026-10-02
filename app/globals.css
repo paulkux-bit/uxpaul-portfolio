@@ -587,6 +587,13 @@
     background-color: var(--bg-canvas);
     color: var(--text-primary);
     position: relative;
+    /* The footer sits at the foot of the window on a page shorter than the
+       window, which until the 404 (E1b, 1 Oct 2026) no page was. A flex column
+       with main taking the slack; every other route is taller than any window,
+       so nothing else moves (measured on all routes before and after). */
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
     transition:
       background-color var(--duration-theme) var(--ease-out-soft),
       color var(--duration-theme) var(--ease-out-soft);
@@ -606,6 +613,9 @@
     transition: opacity var(--duration-theme) var(--ease-out-soft);
   }
   html.dark body::before { opacity: 0; }
+
+  /* The slack half of the sticky footer above. */
+  body > main { flex: 1 0 auto; }
 
   /* Lift content above the grain layer */
   body > * { position: relative; z-index: 2; }
