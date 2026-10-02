@@ -72,7 +72,7 @@ export default function Home() {
             {/* Quiet mailto: inherits text-small/secondary; no underline at rest,
                 underline on hover only. Same email as the footer. */}
             <a href="mailto:paulk.ux@gmail.com" className="quiet-link">
-              Open to senior and staff IC roles.
+              Open to senior IC, staff, and management roles.
             </a>
           </p>
         </div>

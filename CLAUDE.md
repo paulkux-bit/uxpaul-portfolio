@@ -326,7 +326,7 @@ real clamp, and every type-role utility must have a row.
 | `text-lead` | 22px | Intro paragraph, project tagline |
 | `text-body` | 18px | All body copy, default |
 | `text-small` | 16px | Dense lists, captions, footnotes |
-| `text-caption` | 14px | Date, role, year, byline; card project·client meta |
+| `text-caption` | 14px | Date, role, year, byline; card client and project meta |
 | `text-eyebrow` | 14px caps | Reserved for all-caps tags (home section labels are sentence-case) |
 
 `text-display` was cut (homeless once the home h1 became `text-statement`; the deferred wordmark gets its own `text-wordmark`).
@@ -391,7 +391,7 @@ there is no width column here any more: width is gone with the axis.
 1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
 2. **Major** (work titles: Selected Work cards + Also Shipped) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
-4. **Eyebrow/Caption** (sentence-case section labels, project·client meta) — tracking.
+4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
 5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
 
 **Spacing is its own locked system now** — `docs/spacing-system-v1-locked.md`,
