@@ -99,6 +99,19 @@ export const ALLOWLIST = {
     { match: '.take-card:hover', reason: 'non-interactive tint; the takes wall is a typographic wall, not a control' },
     { match: '.about-row__summary:hover', reason: 'disclosure row — the chevron rotation is the feedback (spec §5)' },
   ],
+  // check 4: hand-drawn icons, by exact file. ONE entry, and it should stay one.
+  //
+  // Not artwork. scripts/artwork-allowlist.mjs is for drawings sized by layout
+  // that no icon set could supply; this is chrome, sized 1em against adjacent
+  // type like any icon. Filing it there would have been cheaper and false, and
+  // the next reader would have trusted the false line. So it is named here as
+  // what it is: a deliberate exception to R3 (spec §2.5).
+  drawnIcons: [
+    {
+      file: 'components/theme-toggle.tsx',
+      reason: 'the theme switch lamp, R3\'s one exception (spec §2.5): drawn in the cover art\'s method so the chrome and the illustrations share a hand; Paul ruled l16 on 1 Oct 2026',
+    },
+  ],
   // check 9: classes that deliberately have no rule.
   //
   // Check 9 catches a dangling class by its CONSEQUENCE, and a wrapper nobody
@@ -430,6 +443,8 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
         }
         if (isArtworkPath(file)) { ex.push({ where: `${file}:${line}`, detail: artworkReason(file), reason: 'artwork' }); continue; }
         if (isArtworkSnippet(raw)) { ex.push({ where: `${file}:${line}`, detail: 'generated texture', reason: 'artwork' }); continue; }
+        const drawn = ALLOWLIST.drawnIcons.find((a) => a.file === file);
+        if (drawn) { ex.push({ where: `${file}:${line}`, detail: drawn.reason, reason: 'drawn-icon' }); continue; }
         if (patternExempt(file, lineText)) { ex.push({ where: `${file}:${line}`, detail: 'pattern definition', reason: 'pattern-construct' }); continue; }
         f.push({ where: `${file}:${line}`, detail: `hand-authored <svg> — R3 says Lucide is the only icon source` });
       }
@@ -443,7 +458,7 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
         else f.push({ where: `${s.file}:${line}`, detail: `inline <svg> payload in CSS — ${d.prop}` });
       });
     }
-    add(4, 'No hand-authored <svg> icon outside the artwork allowlist', f, ex);
+    add(4, 'No hand-authored <svg> icon outside the artwork allowlist and the one drawn icon', f, ex);
   }
 
   // ── checks 5 & 6 — icon sizing and stroke ───────────────────────────────
@@ -459,10 +474,10 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
   // worse than one that stays red, and both of these would have gone green
   // falsely at I5.
   //
-  // SCOPE: check 5 governs Lucide nodes only. `.theme-toggle svg` sizes a
-  // hand-authored SVG, which is check 4's finding today and stops existing when
-  // I5 replaces it with Lucide. Flagging it here too would report one defect
-  // twice under two rules.
+  // SCOPE: check 5 governs Lucide nodes only. The one hand-drawn icon, the
+  // theme lamp, is excused from check 4 by ALLOWLIST.drawnIcons and is outside
+  // these two checks by design: it is sized by `.icon` like the rest, and its
+  // stroke and mechanism are asserted by name in the §2 test suite instead.
   {
     const f5 = [], ex5 = [], f6 = [], ex6 = [];
 
