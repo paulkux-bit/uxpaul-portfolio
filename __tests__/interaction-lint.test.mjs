@@ -497,13 +497,34 @@ describe('§5 pressed states — the specified values, on the specified surfaces
     });
   }
 
-  // Only the card has a resting shadow to drop, so it is the only row where the
-  // shadow half of §5 means anything.
-  it('the card drops to --shadow-rest; nothing else claims a shadow it lacks', () => {
-    expect(activeDecls('.case-card--linked').get('box-shadow')).toContain('--shadow-rest');
-    for (const sel of ['.about-btn', '.nav-link', '.theme-toggle', '.about-work-band']) {
+  // H1b (1 Oct 2026): no surface has a resting shadow now, the card included,
+  // so no :active may claim one to drop. Before H1b the card dropped to
+  // --shadow-rest and was the one exception.
+  it('no surface claims a shadow it lacks, the card included', () => {
+    for (const sel of ['.case-card--linked', '.about-btn', '.nav-link', '.theme-toggle', '.about-work-band']) {
       expect(activeDecls(sel).has('box-shadow'), `${sel} has no resting shadow to drop`).toBe(false);
     }
+  });
+
+  // H1b, the rest and hover halves. The card rests flat (no .lift), its hover is
+  // the border alone, and it does not transition transform, so a tap reaches the
+  // full 1px like every other surface.
+  it('the card rests flat and hovers with its border only (H1b)', () => {
+    const card = readFileSync(join(REPO, 'components', 'case-study-card.tsx'), 'utf8');
+    expect(blankComments(card)).not.toMatch(/\blift\b/);
+    const hover = new Map();
+    css.walkRules((r) => {
+      if (!r.selector.split(',').some((s) => s.trim() === '.case-card--linked:hover')) return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl') hover.set(d.prop, d.value.trim());
+    });
+    expect([...hover.keys()]).toEqual(['border-color']);
+    let t = null;
+    css.walkRules((r) => {
+      if (r.selector.trim() !== '.case-card') return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl' && d.prop === 'transition') t = d.value;
+    });
+    expect(t).toContain('border-color');
+    expect(t).not.toContain('transform');
   });
 
   // The exemptions are decisions, so they are asserted rather than left as the

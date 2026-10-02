@@ -42,9 +42,9 @@ export const COVER_ART: Record<string, string> = {
  * Putting the stretched link inside it would clip the `::after` to the cover
  * and the project·client strip would stop being clickable.
  *
- * Hover/focus is structural, not a color wash: the card lifts, its border
- * tightens (subtle → strong), and in media tiers the media scales a hair
- * (motion-safe only). Server Component.
+ * Hover/focus is structural, not a color wash: the border tightens (subtle to
+ * strong) and the title underlines. No lift and no shadow since H1b (1 Oct
+ * 2026). Server Component.
  */
 export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const art = COVER_ART[study.slug];
@@ -69,21 +69,23 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const meta = (
     // Weight the client, not the project codename: to a skimming hiring
     // manager the institution (U.S. Navy, URBN) is the recognizable equity;
-    // the internal codename (Bard, Dagr, FDT-E) is opaque. Reading order stays
-    // project · client; emphasis lands on the client.
+    // the internal codename (Bard, Dagr, FDT-E) is opaque. H3b, 1 Oct 2026:
+    // two lines, client first, no interpunct. The sr-only comma keeps a pause
+    // between the two when a screen reader runs the lines together.
     <p className="text-caption">
-      <span className="text-secondary">{study.projectName} · </span>
-      <span className="font-semibold text-primary">{study.client}</span>
-      {published ? null : <span className="text-secondary"> · Coming soon</span>}
+      <span className="block font-semibold text-primary">{study.client}</span>
+      <span className="sr-only">, </span>
+      <span className="block text-secondary">{study.projectName}</span>
+      {published ? null : <span className="block text-secondary">Coming soon</span>}
     </p>
   );
 
   return (
     <article
       className={[
-        'case-card relative isolate flex h-full flex-col overflow-hidden border border-subtle bg-surface lift',
+        'case-card relative isolate flex h-full flex-col overflow-hidden border border-subtle bg-surface',
         // Hover/focus response is a promise of a click target. An unpublished
-        // card has none, so it rests: same border, same elevation, no lift.
+        // card has none, so it rests: same border, no response.
         // The states themselves live in globals.css (R4); this modifier is the
         // hook that scopes them to a card that actually links somewhere.
         published ? 'case-card--linked' : '',

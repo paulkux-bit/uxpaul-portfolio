@@ -169,7 +169,7 @@ already using, so nothing renders differently.
 | 200ms | 2 | `.about-btn`, `.about-work-band__arrow` (via the retired `--duration-hover`) |
 | 220ms | 1 | `a` — the link-hover underline, **unlisted originally** |
 | 240ms | 2 | `.about-row__mark`, `.about-row::details-content` |
-| 320ms | 1 | `@utility lift` → `--duration-card` |
+| 320ms | 1 | `@utility lift` → `--duration-card` (the card stopped carrying `lift` at H1b; the utility stays for the sandbox video card) |
 | 450ms | 2 | `body`, `body::before` → `--duration-theme` |
 
 The paper-grain fade at 450ms was described here as "an entrance, not an
@@ -288,7 +288,7 @@ unchanged and every control continues to inherit it.
 | Nav link | colour + underline | sink 1px |
 | Button | background `--text-primary` → `--text-secondary` | sink 1px |
 | Theme toggle | colour + border `--border-strong` | sink 1px |
-| Card | `translateY(-3px)` + `--shadow-hover` + `--border-strong` | sink 1px + drop to `--shadow-rest` |
+| Card | `--border-strong` + title underline (H1b, 1 Oct 2026; was `translateY(-3px)` + `--shadow-hover` + `--border-strong`) | sink 1px |
 | Work band | arrow `translateX(3px)` + label underline | sink 1px, **on the band** |
 | Disclosure row | colour | none — the rotation is the feedback |
 
@@ -296,9 +296,11 @@ unchanged and every control continues to inherit it.
 is one to drop.** Chosen over scale because scaling a large card reads as the
 layout breaking, and over tint because tint nearly vanishes on the dark ground.
 
-**Only the card has a resting shadow** (via `@utility lift`), so it is the only
-row where the shadow half means anything. The button, nav link, theme toggle and
-work band sink and do nothing else.
+**No surface has a resting shadow since H1b (1 Oct 2026).** The card used to
+(via `@utility lift`) and was the only row where the shadow half meant anything.
+Paul ruled border only after the human-made review found the shadow, the lift
+and the border change firing together to be the template part of the card. Every
+surface now sinks and does nothing else.
 
 **The work band sinks as a band.** It is a single `<Link>` whose hover is
 expressed on two descendants, so `lint:interaction` check 7 reports it twice; the
@@ -316,8 +318,10 @@ This is §3 and §5 meeting where neither section looks: §3 assigns the card it
 duration for lift and shadow, §5 specifies the pressed offset, and the tap is
 shorter than the transition. Recorded rather than changed — altering it means
 changing motion, which is a locked system, and the pressed value itself is
-correct. **Open**: whether the press should run at `--duration-control` on every
-surface.
+correct. ~~**Open**: whether the press should run at `--duration-control` on every
+surface.~~ **Closed by H1b (1 Oct 2026).** With the lift gone, the card's 300ms
+belonged to nothing; the card no longer transitions `transform` and snaps to 1px
+like the other four.
 
 **Source order is part of the specification, not an implementation detail.**
 `:hover` and `:active` on the same element have equal specificity, so an

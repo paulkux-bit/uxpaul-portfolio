@@ -679,7 +679,7 @@ code shipped it.)
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
 - **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
-- **Card lift** — `translateY(-3px)` + `shadow-hover` on interactive surfaces. Use the `lift` / `lift-hover` utility pair.
+- **Card hover is border only** (H1b, 1 Oct 2026): `--border-strong` and the title's underline, no lift and no shadow. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 - **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
 
 ### Utility classes (mirror typography pattern)

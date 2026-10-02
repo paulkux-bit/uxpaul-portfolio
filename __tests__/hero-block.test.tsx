@@ -25,6 +25,24 @@ describe('<HeroBlock />', () => {
     expect(screen.getByText('BARD · U.S. COAST GUARD')).toBeInTheDocument();
   });
 
+  // P1b: [client, project] renders two lines, client first, with a spoken pause
+  // between them and no interpunct.
+  it('renders a [client, project] eyebrow as two lines, client first', () => {
+    const { container } = render(
+      <HeroBlock
+        eyebrow={['U.S. COAST GUARD', 'BARD']}
+        title="Single sentence."
+        role="Role line."
+        image={baseImage}
+      />,
+    );
+    const lines = [...container.querySelectorAll('.hero-block__eyebrow-line')].map((n) => n.textContent);
+    expect(lines).toEqual(['U.S. COAST GUARD', 'BARD']);
+    const eyebrow = container.querySelector('.hero-block__eyebrow');
+    expect(eyebrow?.textContent).toBe('U.S. COAST GUARD, BARD');
+    expect(eyebrow?.textContent).not.toContain('·');
+  });
+
   it('renders both H1 sentences when title is a tuple', () => {
     render(
       <HeroBlock

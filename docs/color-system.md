@@ -204,6 +204,9 @@ Defined in `app/globals.css` via `@utility`. Mirrors the typography utility patt
 
 Compose: `<article className="lift hover:lift-hover">…</article>`
 
+Since H1b (1 Oct 2026) the case-study card does not use these: it rests flat and
+its hover is the border alone. The sandbox video card is the only consumer.
+
 ### PopUp (retired)
 
 The six PopUp utilities were deleted with their tokens on 1 Oct 2026.
