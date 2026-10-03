@@ -24,11 +24,12 @@ import { isPublished } from '@/app/data/case-study-routes';
  * the interaction lint, its tests and the locked interaction spec, so it waits
  * for the Phase 12 cleanup.
  *
- * WHAT IT SAYS. For a study it shows what the home card shows: client, project
- * and the question. No visible lead-in word (2i); "Next case study" is
- * screen-reader text (3a), placed first so the visible text stays in reading
- * order inside the accessible name (SC 2.5.3). The About label is Paul's copy
- * (1a), to be revisited when About is rewritten in Phase 8.
+ * WHAT IT SAYS. For a study it shows what the home card shows: the client and
+ * the question (B2, 3 Oct 2026: the visible project line went, on the cards
+ * and here). No visible lead-in word (2i). "Next case study" and the project
+ * name are screen-reader text (3a), placed so the visible text stays in
+ * reading order inside the accessible name (SC 2.5.3). The About label is
+ * Paul's copy (1a), to be revisited when About is rewritten in Phase 8.
  *
  * No margin of its own: the Role section's bottom margin is the section break
  * above it, and .case-study-page's bottom padding is the one below it.
@@ -62,9 +63,7 @@ export function NextCaseStudy({ slug }: { slug: string }) {
       <span className="block">
         <span className="sr-only">Next case study: </span>
         <span className="block text-caption font-semibold text-primary">{next.client}</span>
-        <span className="sr-only">, </span>
-        <span className="block text-caption text-secondary">{next.projectName}</span>
-        <span className="sr-only">. </span>
+        <span className="sr-only">, {next.projectName}. </span>
         <span className="about-work-band__label mt-xs block text-h3">{next.problemFraming}</span>
       </span>
       <ArrowRight className="icon text-h3 about-work-band__arrow" aria-hidden="true" focusable="false" />

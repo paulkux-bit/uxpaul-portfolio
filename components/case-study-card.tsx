@@ -24,7 +24,7 @@ export const COVER_ART: Record<string, string> = {
 
 /**
  * One entry in the case-study index. There is one cover: **typographic**. The
- * framing IS the cover, set large, with project·client beneath it. A deliberate
+ * framing IS the cover, set large, with the client beneath it. A deliberate
  * cover, never an empty state — no "placeholder" text anywhere.
  *
  * The motion and image tiers were removed by decision, not by accident: video
@@ -40,7 +40,7 @@ export const COVER_ART: Record<string, string> = {
  * Structural note: the typographic cover gets its OWN well — not the media
  * frame — because the media frame is `overflow-hidden` and scales on hover.
  * Putting the stretched link inside it would clip the `::after` to the cover
- * and the project·client strip would stop being clickable.
+ * and the client line would stop being clickable.
  *
  * Hover/focus is structural, not a color wash: the border tightens (subtle to
  * strong) and the title underlines. No lift and no shadow since H1b (1 Oct
@@ -58,8 +58,10 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
       className="case-card__title-link text-primary after:absolute after:inset-0 after:content-['']"
     >
       {study.problemFraming}
+      {/* No leading full stop: every framing ends in its own question mark,
+          which is the pause, and ". " after it was spoken as "?." */}
       <span className="sr-only">
-        . {study.projectName}, {study.client} case study
+        {' '}{study.projectName}, {study.client} case study
       </span>
     </Link>
   ) : (
@@ -67,15 +69,12 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   );
 
   const meta = (
-    // Weight the client, not the project codename: to a skimming hiring
-    // manager the institution (U.S. Navy, URBN) is the recognizable equity;
-    // the internal codename (Bard, Dagr, FDT-E) is opaque. H3b, 1 Oct 2026:
-    // two lines, client first, no interpunct. The sr-only comma keeps a pause
-    // between the two when a screen reader runs the lines together.
+    // The client only, not the project name: to a skimming hiring manager the
+    // institution (U.S. Navy, URBN) is the recognizable equity; the project
+    // name is opaque until the study explains it. B2, 3 Oct 2026, replacing
+    // H3b's two lines. The project name stays in the link's accessible name.
     <p className="text-caption">
       <span className="block font-semibold text-primary">{study.client}</span>
-      <span className="sr-only">, </span>
-      <span className="block text-secondary">{study.projectName}</span>
       {published ? null : <span className="block text-secondary">Coming soon</span>}
     </p>
   );
