@@ -205,11 +205,13 @@ sentence header that carries the point; a label reading "Credentials" above a
 list of credentials tells the reader nothing the heading did not.
 
 An eyebrow is permitted only when it is **functional**: when it carries
-information the headline cannot. The annotation label on a case-study callout
-("What changed") is the shape that qualifies, because it names what kind of
-thing follows. A section-category name never does.
+information the headline cannot. A section-category name never does.
 
-This governs the case studies too, not just About.
+This governs the case studies too, not just About. Ruled 3 Oct 2026 (E3, L3,
+R1): no study carries an eyebrow above its title, the hero callout carries no
+label word, and Nuuly's "Credit" label above Role is gone. The callout label
+was this section's example of a functional eyebrow until then; the sentence
+alone does the job. Removal is the default answer to beat.
 
 ## Don't do this
 - No purple gradients (anywhere)
