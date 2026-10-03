@@ -296,7 +296,7 @@ unchanged and every control continues to inherit it.
 | Button | background `--text-primary` → `--text-secondary` | sink 1px |
 | Theme toggle | colour + border `--border-strong` | sink 1px |
 | Card | `--border-strong` + title underline (H1b, 1 Oct 2026; was `translateY(-3px)` + `--shadow-hover` + `--border-strong`) | sink 1px |
-| Work band | arrow `translateX(3px)` + label underline | sink 1px, **on the band** |
+| Work band | arrow `translateX(3px)` + label underline; the unruled band (`--unruled`, 2 Oct 2026, no hairlines) is underlined at rest and the underline thickens to 2px in `--link-hover` | sink 1px, **on the band** |
 | Disclosure row | colour | none — the rotation is the feedback |
 
 **Pressed is `translateY(1px)`, and a drop to the resting shadow wherever there

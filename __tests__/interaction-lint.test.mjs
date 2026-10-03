@@ -451,6 +451,7 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
   // silently resolves against the container instead.
   for (const [file, node] of [
     ['app/about/page.tsx', 'about-work-band__arrow'],
+    ['components/next-case-study.tsx', 'about-work-band__arrow'],
     ['components/about/drawer.tsx', 'about-row__mark'],
   ]) {
     it(`${node} carries text-h3 for its font-size`, () => {

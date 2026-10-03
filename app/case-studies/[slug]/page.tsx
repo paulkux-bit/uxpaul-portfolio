@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { caseStudyRoutes, type PublishedSlug } from '@/app/data/case-study-routes';
+import { NextCaseStudy } from '@/components/next-case-study';
 
 export async function generateStaticParams() {
   return (Object.keys(caseStudyRoutes) as PublishedSlug[]).map((slug) => ({ slug }));
@@ -32,6 +33,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
     <article className="case-study-article">
       <div className="case-study-prose">
         <MDXContent />
+        <NextCaseStudy slug={slug} />
       </div>
     </article>
   );
