@@ -123,6 +123,31 @@ describe('<HeroBlock />', () => {
     ).toBeInTheDocument();
   });
 
+  // E3 and L3 (3 Oct 2026): no study passes an eyebrow or a callout label.
+  // Without them nothing renders in their place, and the note is left unnamed
+  // rather than pointing aria-labelledby at an element that does not exist.
+  it('renders no eyebrow element when no eyebrow is passed', () => {
+    const { container } = render(
+      <HeroBlock title="Title." role="Role." image={baseImage} />,
+    );
+    expect(container.querySelector('.hero-block__eyebrow')).not.toBeInTheDocument();
+  });
+
+  it('renders an unlabelled callout as a note with its body and no label', () => {
+    const { container } = render(
+      <HeroBlock
+        title="Title."
+        role="Role."
+        image={baseImage}
+        callout={{ body: baseCallout.body }}
+      />,
+    );
+    const note = screen.getByRole('note');
+    expect(note).not.toHaveAttribute('aria-labelledby');
+    expect(container.querySelector('.hero-block__callout-label')).not.toBeInTheDocument();
+    expect(note).toHaveTextContent(baseCallout.body);
+  });
+
   it('omits the callout when not provided', () => {
     render(
       <HeroBlock

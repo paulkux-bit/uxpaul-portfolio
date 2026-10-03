@@ -4160,16 +4160,20 @@ html.dark .figure-placeholder {
 }
 
 /* ── Selected-work band ───────────────────────────────────────────────────
-   Full-width rule top and bottom, label left, arrow right. A band, not a
-   button: the hairlines are the shape. */
+   The base band: full-width rule top and bottom, label left, arrow right, the
+   hairlines being its shape. No route renders it bare any more. Both uses
+   (About's band and the next-case-study link) carry --unruled below, which
+   takes the rules off and puts the arrow after the label's last word. The
+   base stays as the shape that modifier is defined against. */
 
 .about-work-band {
   /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
      The band itself sets no font-weight — the weight lives on the sibling's
      utility — so §2.3's "every container that sets font-weight" never fires
      here. Declared explicitly instead. The arrow carries text-h3 in JSX to
-     get the label's font-size, since it is a SIBLING of the type and would
-     otherwise inherit the band's. */
+     get the label's font-size: in this base band it is a SIBLING of the type
+     and would otherwise inherit the band's. Under --unruled it sits inside
+     the label, where the utility agrees with what it would inherit. */
   --icon-stroke: 1.70;
   display: flex;
   align-items: center;
@@ -4235,6 +4239,25 @@ html.dark .figure-placeholder {
 .about-work-band--unruled {
   border-top: 0;
   border-bottom: 0;
+  justify-content: flex-start;
+}
+
+/* A2 (3 Oct 2026): the arrow sits inside the label, after its last word, so it
+   follows the question wherever the question wraps instead of standing at the
+   far edge of the column (it stood 144px past Bard's label and 524px past
+   Nuuly's at 1440). The last word and the arrow share a no-wrap tail, so the
+   arrow never starts a line on its own. inline-block keeps the arrow out of
+   the label's underline (decorations do not propagate into atomic inlines),
+   and lets the hover nudge transform it. The vertical-align centres the 1em
+   icon on the label's lowercase, by eye at both breakpoints. */
+.about-work-band__tail {
+  white-space: nowrap;
+}
+
+.about-work-band--unruled .about-work-band__arrow {
+  display: inline-block;
+  margin-inline-start: var(--spacing-2xs);
+  vertical-align: -0.12em;
 }
 
 .about-work-band--unruled .about-work-band__label {

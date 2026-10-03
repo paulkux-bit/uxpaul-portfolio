@@ -448,7 +448,9 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
 
   // A sibling icon cannot inherit its neighbour's font-size, so the rung comes
   // to the icon. If someone "cleans up" the utility off these nodes, 1em
-  // silently resolves against the container instead.
+  // silently resolves against the container instead. The work-band arrow has
+  // sat inside its label since A2 (3 Oct 2026) and keeps the utility, so it
+  // stays right if the arrow is ever moved back out.
   for (const [file, node] of [
     ['app/about/page.tsx', 'about-work-band__arrow'],
     ['components/next-case-study.tsx', 'about-work-band__arrow'],

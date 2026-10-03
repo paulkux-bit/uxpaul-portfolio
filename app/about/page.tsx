@@ -205,17 +205,22 @@ export default function AboutPage() {
           header's "Work" nav uses, since there is no /work route. */}
       <RevealSection aria-label="Selected work">
         <Link className="about-work-band about-work-band--unruled" href="/#selected-work">
-          <span className="about-work-band__label text-h3">See selected work</span>
-          {/* text-h3 is here to set FONT-SIZE, not to style the node: the arrow
-              is a sibling of the label, so 1em would otherwise resolve against
-              the band. Weight, tracking and line-height come with it and are
-              inert on a replaced element — which is why the utility goes here
-              rather than on the band, where they would leak into text. */}
-          <ArrowRight
-            className="icon text-h3 about-work-band__arrow"
-            aria-hidden="true"
-            focusable="false"
-          />
+          <span className="about-work-band__label text-h3">
+            See selected{' '}
+            {/* The arrow follows the label's last word (A2, 3 Oct 2026), as on
+                the next-case-study link. text-h3 stays on it so its size does
+                not depend on where it sits; inside the label it agrees with
+                the label's own size. Weight, tracking and line-height come
+                with the utility and are inert on a replaced element. */}
+            <span className="about-work-band__tail">
+              work
+              <ArrowRight
+                className="icon text-h3 about-work-band__arrow"
+                aria-hidden="true"
+                focusable="false"
+              />
+            </span>
+          </span>
         </Link>
       </RevealSection>
 

@@ -4,8 +4,12 @@ import { PlaceholderFrame } from './_placeholder-utils';
 
 type HeroBlockProps = {
   /** One line, or [client, project] for two (P1b, 1 Oct 2026: client first, no
-   *  interpunct, the same order as the home card label). */
-  eyebrow: string | [string, string];
+   *  interpunct, the same order as the home card label). OPTIONAL since E3
+   *  (3 Oct 2026): Paul ruled the study eyebrow out, so no study passes one and
+   *  the element renders on no route. The prop and its CSS stay for now; their
+   *  removal belongs to the Phase 12 cleanup, with the `case` settings string
+   *  type spec R8b records on .hero-block__eyebrow. */
+  eyebrow?: string | [string, string];
   title: string | [string, string];
   role: string;
   image: {
@@ -14,7 +18,10 @@ type HeroBlockProps = {
     placeholder?: boolean;
   };
   callout?: {
-    label: string;
+    /** OPTIONAL since L3 (3 Oct 2026): Paul ruled the visible label word out, so
+     *  no study passes one. Without it the note has no name and no
+     *  aria-labelledby; role="note" does not require a name. */
+    label?: string;
     /** ReactNode (not just string) so authors can include <cite> / <a> / spans
      *  inside the callout body without restructuring the API. Matches the
      *  family precedent (AsymmetricPair text-cell, Figure caption). */
@@ -88,19 +95,21 @@ export function HeroBlock({
   return (
     <header className="hero-block">
       <div className="hero-block__type">
-        <p className="hero-block__eyebrow">
-          {typeof eyebrow === 'string' ? (
-            eyebrow
-          ) : (
-            <>
-              <span className="hero-block__eyebrow-line">{eyebrow[0]}</span>
-              {/* A pause for a screen reader, which would otherwise run the two
-                  lines together as one name. */}
-              <span className="sr-only">, </span>
-              <span className="hero-block__eyebrow-line">{eyebrow[1]}</span>
-            </>
-          )}
-        </p>
+        {eyebrow ? (
+          <p className="hero-block__eyebrow">
+            {typeof eyebrow === 'string' ? (
+              eyebrow
+            ) : (
+              <>
+                <span className="hero-block__eyebrow-line">{eyebrow[0]}</span>
+                {/* A pause for a screen reader, which would otherwise run the two
+                    lines together as one name. */}
+                <span className="sr-only">, </span>
+                <span className="hero-block__eyebrow-line">{eyebrow[1]}</span>
+              </>
+            )}
+          </p>
+        ) : null}
         <h1 className="hero-block__title">
           {sentences.map((s, i) => (
             <span
@@ -149,9 +158,6 @@ export function HeroBlock({
           )}
         </div>
         {callout ? (
-          /* aria-label derives from the authored label so other case studies
-             can use this component with non-BARD callouts (pull quotes, status
-             chips, credits) without lying to screen readers. */
           <aside
             className={
               'hero-block__callout' +
@@ -163,13 +169,17 @@ export function HeroBlock({
               calloutWidth ? ({ '--hero-callout-w': calloutWidth } as CSSProperties) : undefined
             }
             role="note"
-            /* aria-labelledby, NOT aria-label. The label was announced twice: once as the
-               region's name and again as its first paragraph, because the two carried the
-               same string. Pointing at the visible <p> keeps the region named and stops
-               the repeat. Shared by all four case studies. */
-            aria-labelledby={CALLOUT_LABEL_ID}
+            /* aria-labelledby, NOT aria-label, when there is a label. It was announced
+               twice: once as the region's name and again as its first paragraph,
+               because the two carried the same string. Pointing at the visible <p>
+               keeps the region named and stops the repeat. With no label (L3, every
+               study since 3 Oct 2026) there is nothing to point at, so the attribute
+               is omitted rather than left dangling at a missing id. */
+            aria-labelledby={callout.label ? CALLOUT_LABEL_ID : undefined}
           >
-            <p className="hero-block__callout-label" id={CALLOUT_LABEL_ID}>{callout.label}</p>
+            {callout.label ? (
+              <p className="hero-block__callout-label" id={CALLOUT_LABEL_ID}>{callout.label}</p>
+            ) : null}
             <p className="hero-block__callout-body">{callout.body}</p>
           </aside>
         ) : null}
