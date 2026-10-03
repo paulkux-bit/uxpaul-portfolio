@@ -5006,7 +5006,7 @@ html.dark .figure-placeholder {
   line-height: 1.4;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  /* --text-muted, not --text-subtle: 14px at 700 is normal size, not WCAG large,
+  /* --text-muted, not --text-subtle: 14px at 600 is normal size, not WCAG large,
      which starts at 18.66px bold. Same call as .journey-line__sentiment. */
   color: var(--text-muted);
 }
