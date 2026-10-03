@@ -105,7 +105,7 @@ against the four surfaces this system governs, that is true of exactly one:
 | surface | relation to the adjacent type | so |
 |---|---|---|
 | `.about-btn` | descendant | inherits correctly; nothing to add |
-| `.about-work-band` | **sibling** of `__label` (`text-h3`) | icon carries `text-h3` |
+| `.about-work-band` | **sibling** of `__label` (`text-h3`) in the base band; a **descendant** of it under `--unruled` since A2 (3 Oct 2026), which is every rendered use | icon carries `text-h3` anyway, so its size does not depend on placement |
 | `.about-row__summary` | **sibling** of three spans at two rungs | icon carries `text-h3` |
 | `.theme-toggle` | **no adjacent text at all** | container declares the context |
 
