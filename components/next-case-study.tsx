@@ -15,11 +15,14 @@ import { isPublished } from '@/app/data/case-study-routes';
  * the study they read first, and a ring never tells a reader the set is done.
  *
  * WHAT IT LOOKS LIKE. The About page's selected-work band, reused rather than
- * copied (2a): hairlines above and below, a text-h3 label, an arrow that
- * nudges on hover, a 1px press. Every state already lives in globals.css under
- * .about-work-band, so this component adds no CSS. The about- prefix is now a
- * misnomer. Renaming it reaches the interaction lint, its tests and the locked
- * interaction spec, so it waits for the Phase 12 cleanup.
+ * copied (2a): a text-h3 label, an arrow that nudges on hover, a 1px press, all
+ * in globals.css under .about-work-band. It carries the --unruled modifier, as
+ * About's own band now does: no hairlines, and the label underlined at rest
+ * like any link. That modifier is one block in globals.css, built to be tuned
+ * or removed after the post-build review; dropping the class brings the
+ * hairline band back. The about- prefix is now a misnomer. Renaming it reaches
+ * the interaction lint, its tests and the locked interaction spec, so it waits
+ * for the Phase 12 cleanup.
  *
  * WHAT IT SAYS. For a study it shows what the home card shows: client, project
  * and the question. No visible lead-in word (2i); "Next case study" is
@@ -47,7 +50,7 @@ export function NextCaseStudy({ slug }: { slug: string }) {
 
   if (!next) {
     return (
-      <Link className="about-work-band" href="/about">
+      <Link className="about-work-band about-work-band--unruled" href="/about">
         <span className="about-work-band__label text-h3">About me</span>
         <ArrowRight className="icon text-h3 about-work-band__arrow" aria-hidden="true" focusable="false" />
       </Link>
@@ -55,7 +58,7 @@ export function NextCaseStudy({ slug }: { slug: string }) {
   }
 
   return (
-    <Link className="about-work-band" href={`/case-studies/${next.slug}`}>
+    <Link className="about-work-band about-work-band--unruled" href={`/case-studies/${next.slug}`}>
       <span className="block">
         <span className="sr-only">Next case study: </span>
         <span className="block text-caption font-semibold text-primary">{next.client}</span>

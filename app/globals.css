@@ -4220,6 +4220,41 @@ html.dark .figure-placeholder {
   transform: translateY(1px);
 }
 
+/* ── Unruled band (Phase 3, 2 Oct 2026) ───────────────────────────────────
+   The band without its hairlines. Paul wants dividers gone wherever space can
+   do their job, and the section break above and below the band already
+   separates it (spacing spec: breaks are space, not rules; the footer hairline
+   is the one structural line). With no hairline shape left, the label is a
+   plain link again, so it takes the site's link rule: underlined at rest in
+   --border-interactive (lint:color check 8), thicker and in --link-hover on
+   hover. The arrow nudge and the 1px press are the base band's, unchanged.
+
+   ONE CLASS, ONE BLOCK, kept apart so the post-build review can tune it here or
+   revert it: take the class off components/next-case-study.tsx and
+   app/about/page.tsx and the hairline band above returns exactly as it was. */
+.about-work-band--unruled {
+  border-top: 0;
+  border-bottom: 0;
+}
+
+.about-work-band--unruled .about-work-band__label {
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--border-interactive);
+}
+
+.about-work-band--unruled:hover .about-work-band__label {
+  text-decoration-thickness: 2px;
+  text-decoration-color: var(--link-hover);
+}
+
+/* Pressed (§5), authored after the hover above, as check 7 requires. Same
+   1px sink as the base band. */
+.about-work-band--unruled:active {
+  transform: translateY(1px);
+}
+
 /* ── Credentials ──────────────────────────────────────────────────────────
    A typographic list, not chips. Label left, context right, hairline between.
    Two columns from md up; stacked below, where a right-aligned context would

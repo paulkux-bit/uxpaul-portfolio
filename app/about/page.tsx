@@ -204,7 +204,7 @@ export default function AboutPage() {
           The one bridge out of this page. Points at the same target the
           header's "Work" nav uses, since there is no /work route. */}
       <RevealSection aria-label="Selected work">
-        <Link className="about-work-band" href="/#selected-work">
+        <Link className="about-work-band about-work-band--unruled" href="/#selected-work">
           <span className="about-work-band__label text-h3">See selected work</span>
           {/* text-h3 is here to set FONT-SIZE, not to style the node: the arrow
               is a sibling of the label, so 1em would otherwise resolve against
