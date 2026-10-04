@@ -296,7 +296,7 @@ if (process.env.CARDS === '1') {
         const el = els[i];
         if (!el) return null;
         // THE sr-only SPAN MUST BE EXCLUDED. These links carry a visually-hidden
-        // ". BARD, U.S. Coast Guard case study" for screen readers. It is
+        // " U.S. Coast Guard, Bard case study" for screen readers. It is
         // clipped to 1px but still generates client rects, so selectNodeContents
         // on the link counted it as extra LINES — inflating every card title by
         // two. The earlier sweep that recorded this element as "3/4/5 lines
