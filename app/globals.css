@@ -3574,8 +3574,10 @@ html.dark .figure-placeholder {
 /* ── Callout ─────────────────────────────────────────────────────────── */
 
 /* Contained info-card ON the image at ALL breakpoints — bottom-left, inset 1.25rem
-   (the wrapper has no padding now, so this lands on the image). Elevation + hairline
-   keep it crisp over the light dashboard; --shadow-hover is mode-aware. */
+   (the wrapper has no padding now, so this lands on the image). The elevated fill
+   and the hairline keep it crisp over the screenshot. No shadow (S3, 3 Oct 2026):
+   it carried --shadow-hover at rest, the lifted look of something picked up, and
+   the interaction spec gives no surface a resting shadow since H1b. */
 .hero-block__callout {
   position: absolute;
   bottom: 1.25rem;
@@ -3584,7 +3586,6 @@ html.dark .figure-placeholder {
   max-width: min(78%, var(--hero-callout-w, 18rem)); /* 78% keeps the mobile inset; the fallback is the default card width, overridable per case study via HeroBlock's calloutWidth */
   background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-hover);
   border-radius: var(--radius-s);
   padding: var(--spacing-m); /* single even token — tight, no baggy margins */
 }
