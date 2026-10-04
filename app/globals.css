@@ -1697,7 +1697,7 @@
 
 /* ── Body paragraphs ──────────────────────────────────────────────────── */
 
-/* :where() pins this at specificity 0,0,1 so component margins (.hero-block__eyebrow/__role,
+/* :where() pins this at specificity 0,0,1 so component margins (.hero-block__role,
    .friction-beat__scene, etc.) win naturally — at 0,1,1 it had silently overridden them. It's
    unlayered, so it still beats Tailwind preflight's layered `p { margin: 0 }`. */
 :where(.case-study-prose) p {
@@ -3365,7 +3365,7 @@ html.dark .figure-placeholder {
    Optional Insight Engine callout overlaps the image at lg+; sits below
    it at <lg.
 
-   The type register (eyebrow / title / role) uses the standard axis
+   The type register (title / role) uses the standard axis
    properties — font-weight alone since C3 —
    so optical sizing tracks the rendered size (the display title gets the
    expressive 96pt cut where it's large, a readable cut at the mobile floor)
@@ -3428,40 +3428,6 @@ html.dark .figure-placeholder {
    for. It does not make it CHECKED — no check enforces the vocabulary today. */
 .hero-credit-name {
   font-weight: var(--wght-credit);
-}
-
-.hero-block__eyebrow {
-  font-size: var(--type-14);
-  line-height: 1.4;
-  letter-spacing: 0.08em;          /* matches locked text-eyebrow convention */
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin: 0; /* 100, unchanged — 14px, rung 0 */
-  font-weight: 600;
-  /* `case` raises punctuation to cap height in an all-caps run. These eyebrows
-     read "BARD · U.S. COAST GUARD" and "FDT-E · U.S. NAVY": the middot sits at
-     lowercase centre among capitals and FDT-E's hyphen sits low, because both
-     glyphs are drawn for lowercase. (Since P1b, 1 Oct 2026, the eyebrows are two
-     lines with no middot; the hyphen is what `case` still lifts.) Commissioner v1.012 carries 37 `case`
-     substitutions; Google's v1.001 does not, which is one of the reasons C1
-     self-hosts the designer's build.
-
-     ON THE LEAF, DELIBERATELY. R8's logic is not specific to
-     font-variation-settings: font-feature-settings also inherits AS A STRING
-     and overrides per feature regardless of source order, so on a container it
-     would pin every descendant's feature set. This element owns its text.
-
-     UNGUARDED, AND NAMED AS SUCH. No lint and no runtime assertion covers this
-     declaration. One feature on one leaf does not earn its own instrument, but
-     an unguarded thing gets named rather than left unmentioned — that is how
-     the wdth probe stayed green while structurally guaranteed to fail. If a
-     second surface takes `case`, the guard is owed then. */
-  font-feature-settings: 'case' 1;
-}
-/* P1b: client and project on two lines. Inherits everything above, including
-   `case`, which still matters for FDT-E's hyphen. */
-.hero-block__eyebrow-line {
-  display: block;
 }
 
 .hero-block__title {
@@ -3598,23 +3564,9 @@ html.dark .figure-placeholder {
   top: 1.25rem;
 }
 
-/* Two classes (0,2,0) so these beat `.case-study-prose p` (0,1,1), which otherwise
-   forces margin: 0 0 1.5rem onto the callout's <p> (the eyebrow→body gap and the
-   bottom-heavy trapped margin). */
-.hero-block__callout .hero-block__callout-label {
-  font-size: var(--type-14);
-  line-height: 1.3;
-  letter-spacing: 0.08em;          /* canonical text-eyebrow tracking — unified with .eyebrow (was 0.10em); the callout stays distinct via --text-secondary + on-image placement */
-  text-transform: uppercase;
-  color: var(--text-secondary);    /* eyebrow register — persimmon stays reserved for the PopUp layer */
-  margin: 0 0 var(--spacing-2xs);              /* tight single step: eyebrow hugs the body */
-  /* v3 §5: width 90 -> 100. 14px is the floor rung and R10 bans compression
-     there. The opsz pin and its FVS string are deleted (C6): 'opsz' 14 at a
-     14px role was exactly what font-optical-sizing: auto already resolved, so
-     the pin reproduced the default and bought nothing. */
-  font-weight: 600;
-}
-
+/* Two classes (0,2,0) so this beats `.case-study-prose p` (0,1,1), which otherwise
+   forces margin: 0 0 1.5rem onto the callout's <p> (a bottom-heavy trapped
+   margin). The label rule that sat beside it went with D1 (3 Oct 2026). */
 .hero-block__callout .hero-block__callout-body {
   font-size: var(--type-18);
   line-height: 1.4;

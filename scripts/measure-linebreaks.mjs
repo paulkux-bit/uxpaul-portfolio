@@ -118,7 +118,7 @@ const VARIANTS = {
        Deliberately NOT a bare figcaption selector — bento glosses live in bare
        figcaptions at body size and are not rung 0. */
     figcaption.figure__caption, .text-caption, cite { font-size: 0.9375rem; }
-    .text-eyebrow, .hero-block__eyebrow, .hero-block__callout-label { font-size: 0.8125rem; }
+    .text-eyebrow { font-size: 0.8125rem; }
   `,
   readflare: `
     :root { font-variation-settings: 'FLAR' 15, 'VOLM' 0; }
