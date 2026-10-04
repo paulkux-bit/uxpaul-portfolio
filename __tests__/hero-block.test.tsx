@@ -4,49 +4,17 @@ import { HeroBlock } from '@/components/hero-block';
 
 const baseImage = {
   src: '/case-studies/uscg-bard/hero-dashboard-fl.png',
-  alt: 'The redesigned BARD dashboard for Florida.',
+  alt: 'The redesigned Bard dashboard for Florida.',
 };
 
 const baseCallout = {
-  label: 'GENERATED INSIGHT',
   body: "Operator inattention remains Florida's leading factor this year.",
 };
 
 describe('<HeroBlock />', () => {
-  it('renders the eyebrow text exactly as passed', () => {
-    render(
-      <HeroBlock
-        eyebrow="BARD · U.S. COAST GUARD"
-        title="Single sentence."
-        role="Role line."
-        image={baseImage}
-      />,
-    );
-    expect(screen.getByText('BARD · U.S. COAST GUARD')).toBeInTheDocument();
-  });
-
-  // P1b: [client, project] renders two lines, client first, with a spoken pause
-  // between them and no interpunct.
-  it('renders a [client, project] eyebrow as two lines, client first', () => {
-    const { container } = render(
-      <HeroBlock
-        eyebrow={['U.S. COAST GUARD', 'BARD']}
-        title="Single sentence."
-        role="Role line."
-        image={baseImage}
-      />,
-    );
-    const lines = [...container.querySelectorAll('.hero-block__eyebrow-line')].map((n) => n.textContent);
-    expect(lines).toEqual(['U.S. COAST GUARD', 'BARD']);
-    const eyebrow = container.querySelector('.hero-block__eyebrow');
-    expect(eyebrow?.textContent).toBe('U.S. COAST GUARD, BARD');
-    expect(eyebrow?.textContent).not.toContain('·');
-  });
-
   it('renders both H1 sentences when title is a tuple', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title={['The data was there.', 'The system never spoke.']}
         role="Role line."
         image={baseImage}
@@ -64,7 +32,6 @@ describe('<HeroBlock />', () => {
   it('renders a single sentence when title is a string', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Just one sentence."
         role="Role line."
         image={baseImage}
@@ -78,15 +45,14 @@ describe('<HeroBlock />', () => {
   it('renders the role line', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Title."
-        role="Sole designer on the first ground-up replacement of BARD in twenty years."
+        role="Sole designer on the first ground-up replacement of Bard in twenty years."
         image={baseImage}
       />,
     );
     expect(
       screen.getByText(
-        'Sole designer on the first ground-up replacement of BARD in twenty years.',
+        'Sole designer on the first ground-up replacement of Bard in twenty years.',
       ),
     ).toBeInTheDocument();
   });
@@ -94,7 +60,6 @@ describe('<HeroBlock />', () => {
   it('renders the image with the correct alt text when not in placeholder mode', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Title."
         role="Role."
         image={baseImage}
@@ -105,53 +70,35 @@ describe('<HeroBlock />', () => {
     expect(img.tagName).toBe('IMG');
   });
 
-  it('renders the callout when provided (label + body + aria role/label)', () => {
+  // E3, L3 and D1 (3 Oct 2026): HeroBlock has no eyebrow and no callout
+  // label. The title is the first thing in the type column, and the callout
+  // is an unnamed note holding its sentence.
+  it('opens the type column on the title, with nothing above it', () => {
+    const { container } = render(
+      <HeroBlock title="Title." role="Role." image={baseImage} />,
+    );
+    const first = container.querySelector('.hero-block__type')?.firstElementChild;
+    expect(first?.tagName).toBe('H1');
+  });
+
+  it('renders the callout as an unnamed note holding its sentence', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Title."
         role="Role."
         image={baseImage}
         callout={baseCallout}
       />,
     );
-    const callout = screen.getByRole('note', { name: 'GENERATED INSIGHT' });
-    expect(callout).toBeInTheDocument();
-    expect(screen.getByText('GENERATED INSIGHT')).toBeInTheDocument();
-    expect(
-      screen.getByText("Operator inattention remains Florida's leading factor this year."),
-    ).toBeInTheDocument();
-  });
-
-  // E3 and L3 (3 Oct 2026): no study passes an eyebrow or a callout label.
-  // Without them nothing renders in their place, and the note is left unnamed
-  // rather than pointing aria-labelledby at an element that does not exist.
-  it('renders no eyebrow element when no eyebrow is passed', () => {
-    const { container } = render(
-      <HeroBlock title="Title." role="Role." image={baseImage} />,
-    );
-    expect(container.querySelector('.hero-block__eyebrow')).not.toBeInTheDocument();
-  });
-
-  it('renders an unlabelled callout as a note with its body and no label', () => {
-    const { container } = render(
-      <HeroBlock
-        title="Title."
-        role="Role."
-        image={baseImage}
-        callout={{ body: baseCallout.body }}
-      />,
-    );
     const note = screen.getByRole('note');
     expect(note).not.toHaveAttribute('aria-labelledby');
-    expect(container.querySelector('.hero-block__callout-label')).not.toBeInTheDocument();
+    expect(note.querySelectorAll('p')).toHaveLength(1);
     expect(note).toHaveTextContent(baseCallout.body);
   });
 
   it('omits the callout when not provided', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Title."
         role="Role."
         image={baseImage}
@@ -163,7 +110,6 @@ describe('<HeroBlock />', () => {
   it('marks the image as the LCP via priority — exactly one element carries it', () => {
     render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Title."
         role="Role."
         image={baseImage}
@@ -179,7 +125,6 @@ describe('<HeroBlock />', () => {
   it('applies the .hero-block layout class on the root <header>', () => {
     const { container } = render(
       <HeroBlock
-        eyebrow="EYEBROW"
         title="Title."
         role="Role."
         image={baseImage}
@@ -195,16 +140,14 @@ describe('<HeroBlock />', () => {
   it('matches the rendered HTML structure snapshot', () => {
     const { container } = render(
       <HeroBlock
-        eyebrow="BARD · U.S. COAST GUARD"
         title={['The data was there.', 'The system never spoke.']}
-        role="Sole designer on the first ground-up replacement of BARD in twenty years."
+        role="Sole designer on the first ground-up replacement of Bard in twenty years."
         image={{
           src: '/case-studies/uscg-bard/hero-dashboard-fl.png',
-          alt: 'The redesigned BARD dashboard for Florida, with one generated insight leading a year of incident data.',
+          alt: 'The redesigned Bard dashboard for Florida, with one generated insight leading a year of incident data.',
           placeholder: true,
         }}
         callout={{
-          label: 'GENERATED INSIGHT',
           body: "Operator inattention remains Florida's leading factor this year.",
         }}
       />,

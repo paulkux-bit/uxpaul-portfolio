@@ -15,7 +15,7 @@
   "images": [
     {
       "src": "/case-studies/uscg-bard/resolutions-01/location--band-b-light.png",
-      "alt": "BARD incidents view, location filter open over the table with Florida counties ranked by count.",
+      "alt": "Bard incidents view, location filter open over the table with Florida counties ranked by count.",
       "focalPoint": {
         "x": 0.47,
         "y": 0.56
@@ -32,7 +32,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/location--filter-bar-light.png",
-      "alt": "BARD incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
+      "alt": "Bard incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -48,7 +48,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/event--card-portrait-light.png",
-      "alt": "BARD event filter open: grouped event taxonomy (Vessel Impacts, Person and Vessel State) as a portrait tile.",
+      "alt": "Bard event filter open: grouped event taxonomy (Vessel Impacts, Person and Vessel State) as a portrait tile.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -64,7 +64,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/columnpicker--portrait-light.png",
-      "alt": "BARD column picker open over the table: nine visible columns as toggles plus an Available list including State Case Number.",
+      "alt": "Bard column picker open over the table: nine visible columns as toggles plus an Available list including State Case Number.",
       "focalPoint": {
         "x": 0.59,
         "y": 0.53
@@ -97,7 +97,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/map--list-and-map-light.png",
-      "alt": "BARD map view: left rail of incident cards beside the Florida map with clustered markers; the selected case FL-2026-0438 is highlighted in the rail and opened as a map popover, list and map from one source.",
+      "alt": "Bard map view: left rail of incident cards beside the Florida map with clustered markers; the selected case FL-2026-0438 is highlighted in the rail and opened as a map popover, list and map from one source.",
       "focalPoint": {
         "x": 0.7,
         "y": 0.4
@@ -113,7 +113,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/location--band-b-dark.png",
-      "alt": "BARD incidents view, location filter open over the table with Florida counties ranked by count.",
+      "alt": "Bard incidents view, location filter open over the table with Florida counties ranked by count.",
       "focalPoint": {
         "x": 0.47,
         "y": 0.56
@@ -130,7 +130,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/location--filter-bar-dark.png",
-      "alt": "BARD incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
+      "alt": "Bard incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -146,7 +146,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/event--card-portrait-dark.png",
-      "alt": "BARD event filter open: grouped event taxonomy (Vessel Impacts, Person and Vessel State) as a portrait tile.",
+      "alt": "Bard event filter open: grouped event taxonomy (Vessel Impacts, Person and Vessel State) as a portrait tile.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -162,7 +162,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/columnpicker--portrait-dark.png",
-      "alt": "BARD column picker open over the table: nine visible columns as toggles plus an Available list including State Case Number.",
+      "alt": "Bard column picker open over the table: nine visible columns as toggles plus an Available list including State Case Number.",
       "focalPoint": {
         "x": 0.59,
         "y": 0.53
@@ -195,7 +195,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/map--list-and-map-dark.png",
-      "alt": "BARD map view: left rail of incident cards beside the Florida map with clustered markers; the selected case FL-2026-0438 is highlighted in the rail and opened as a map popover, list and map from one source.",
+      "alt": "Bard map view: left rail of incident cards beside the Florida map with clustered markers; the selected case FL-2026-0438 is highlighted in the rail and opened as a map popover, list and map from one source.",
       "focalPoint": {
         "x": 0.7,
         "y": 0.4

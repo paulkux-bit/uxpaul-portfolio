@@ -7,11 +7,6 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
   <div
     class="hero-block__type"
   >
-    <p
-      class="hero-block__eyebrow"
-    >
-      BARD · U.S. COAST GUARD
-    </p>
     <h1
       class="hero-block__title"
     >
@@ -29,7 +24,7 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
     <p
       class="hero-block__role"
     >
-      Sole designer on the first ground-up replacement of BARD in twenty years.
+      Sole designer on the first ground-up replacement of Bard in twenty years.
     </p>
   </div>
   <div
@@ -44,16 +39,9 @@ exports[`<HeroBlock /> > matches the rendered HTML structure snapshot 1`] = `
       />
     </div>
     <aside
-      aria-labelledby="hero-block-callout-label"
       class="hero-block__callout"
       role="note"
     >
-      <p
-        class="hero-block__callout-label"
-        id="hero-block-callout-label"
-      >
-        GENERATED INSIGHT
-      </p>
       <p
         class="hero-block__callout-body"
       >

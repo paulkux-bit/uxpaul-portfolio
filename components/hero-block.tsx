@@ -3,13 +3,9 @@ import type { CSSProperties, ReactNode } from 'react';
 import { PlaceholderFrame } from './_placeholder-utils';
 
 type HeroBlockProps = {
-  /** One line, or [client, project] for two (P1b, 1 Oct 2026: client first, no
-   *  interpunct, the same order as the home card label). OPTIONAL since E3
-   *  (3 Oct 2026): Paul ruled the study eyebrow out, so no study passes one and
-   *  the element renders on no route. The prop and its CSS stay for now; their
-   *  removal belongs to the Phase 12 cleanup, with the `case` settings string
-   *  type spec R8b records on .hero-block__eyebrow. */
-  eyebrow?: string | [string, string];
+  /* No eyebrow and no callout label. Paul ruled both off every study on 3 Oct
+     2026 (E3, L3) and the props, their markup and their CSS went with D1 the
+     same day. The page opens on its title; the callout is its sentence alone. */
   title: string | [string, string];
   role: string;
   image: {
@@ -18,10 +14,6 @@ type HeroBlockProps = {
     placeholder?: boolean;
   };
   callout?: {
-    /** OPTIONAL since L3 (3 Oct 2026): Paul ruled the visible label word out, so
-     *  no study passes one. Without it the note has no name and no
-     *  aria-labelledby; role="note" does not require a name. */
-    label?: string;
     /** ReactNode (not just string) so authors can include <cite> / <a> / spans
      *  inside the callout body without restructuring the API. Matches the
      *  family precedent (AsymmetricPair text-cell, Figure caption). */
@@ -74,15 +66,7 @@ type HeroBlockProps = {
  * 3.5rem bottom) would push the image off-axis from the type column. Same
  * primitives, no margin drift.
  */
-/** The callout label's id, referenced by the region's aria-labelledby. A module constant
- *  rather than useId() because HeroBlock is a Server Component and hooks are not available
- *  there. THE PREMISE THAT MAKES A CONSTANT SAFE: exactly one HeroBlock renders per route,
- *  as the page hero. If a second one ever mounts on the same page this becomes a duplicate
- *  id and the labelledby resolves to the first. */
-const CALLOUT_LABEL_ID = 'hero-block-callout-label';
-
 export function HeroBlock({
-  eyebrow,
   title,
   role,
   image,
@@ -95,21 +79,6 @@ export function HeroBlock({
   return (
     <header className="hero-block">
       <div className="hero-block__type">
-        {eyebrow ? (
-          <p className="hero-block__eyebrow">
-            {typeof eyebrow === 'string' ? (
-              eyebrow
-            ) : (
-              <>
-                <span className="hero-block__eyebrow-line">{eyebrow[0]}</span>
-                {/* A pause for a screen reader, which would otherwise run the two
-                    lines together as one name. */}
-                <span className="sr-only">, </span>
-                <span className="hero-block__eyebrow-line">{eyebrow[1]}</span>
-              </>
-            )}
-          </p>
-        ) : null}
         <h1 className="hero-block__title">
           {sentences.map((s, i) => (
             <span
@@ -168,18 +137,10 @@ export function HeroBlock({
             style={
               calloutWidth ? ({ '--hero-callout-w': calloutWidth } as CSSProperties) : undefined
             }
+            /* A note with no name: role="note" does not require one, and the
+               sentence is the whole content, so naming it would only repeat it. */
             role="note"
-            /* aria-labelledby, NOT aria-label, when there is a label. It was announced
-               twice: once as the region's name and again as its first paragraph,
-               because the two carried the same string. Pointing at the visible <p>
-               keeps the region named and stops the repeat. With no label (L3, every
-               study since 3 Oct 2026) there is nothing to point at, so the attribute
-               is omitted rather than left dangling at a missing id. */
-            aria-labelledby={callout.label ? CALLOUT_LABEL_ID : undefined}
           >
-            {callout.label ? (
-              <p className="hero-block__callout-label" id={CALLOUT_LABEL_ID}>{callout.label}</p>
-            ) : null}
             <p className="hero-block__callout-body">{callout.body}</p>
           </aside>
         ) : null}

@@ -32,7 +32,7 @@ export const COVER_ART: Record<string, string> = {
  *
  * The whole card is one click target via a stretched link: a single `<a>` on
  * the title with an `::after` overlay covering the `<article>`. Accessible name
- * is the framing plus a visually-hidden project·client destination, so a
+ * is the framing plus a visually-hidden client and project destination, so a
  * screen-reader user scanning links knows where each goes (the visible label
  * stays a subset of the accessible name — SC 2.5.3). Exactly one `<h2>` + one
  * link per card in every tier.
@@ -59,9 +59,11 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
     >
       {study.problemFraming}
       {/* No leading full stop: every framing ends in its own question mark,
-          which is the pause, and ". " after it was spoken as "?." */}
+          which is the pause, and ". " after it was spoken as "?." Client
+          first (O1, 3 Oct 2026), the order the card shows and the
+          next-case-study link speaks. */}
       <span className="sr-only">
-        {' '}{study.projectName}, {study.client} case study
+        {' '}{study.client}, {study.projectName} case study
       </span>
     </Link>
   ) : (

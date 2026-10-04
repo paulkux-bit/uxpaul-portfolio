@@ -11,7 +11,7 @@
   "images": [
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-feature-cards--dark.png",
-      "alt": "BARD Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
+      "alt": "Bard Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
       "caption": { "lead": "Compliance tracking.", "tail": "Her quarter, scored as the cases come in." },
       "width": 4191,
       "height": 820,
@@ -22,7 +22,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-feature-cards.png",
-      "alt": "BARD Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
+      "alt": "Bard Reports: a Q2 compliance summary reading 167 cases accepted with compliance held at 94% against 33 CFR thresholds, beside a Recreational Boating Statistics card covering all 56 jurisdictions.",
       "caption": { "lead": "Compliance tracking.", "tail": "Her quarter, scored as the cases come in." },
       "width": 4191,
       "height": 820,
@@ -33,7 +33,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-verdicts--dark.png",
-      "alt": "BARD incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
+      "alt": "Bard incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
       "caption": { "lead": "Federal review queue.", "tail": "Every case shows where it stands with the Coast Guard." },
       "width": 1598,
       "height": 2131,
@@ -43,7 +43,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-verdicts.png",
-      "alt": "BARD incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
+      "alt": "Bard incidents queue, status column: filings marked Returned, Submitted, and USCG Review, showing federal review applied case by case.",
       "caption": { "lead": "Federal review queue.", "tail": "Every case shows where it stands with the Coast Guard." },
       "width": 1598,
       "height": 2131,
@@ -53,7 +53,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-cadence--dark.png",
-      "alt": "BARD My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
+      "alt": "Bard My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
       "caption": { "lead": "Deadline monitoring.", "tail": "She sees the overdue one before it costs her." },
       "width": 1598,
       "height": 2131,
@@ -63,7 +63,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-cadence.png",
-      "alt": "BARD My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
+      "alt": "Bard My Work queue: two returned filings with federal deadlines, one due Nov 3 and one already overdue.",
       "caption": { "lead": "Deadline monitoring.", "tail": "She sees the overdue one before it costs her." },
       "width": 1598,
       "height": 2131,
@@ -73,7 +73,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-return-audit--dark.png",
-      "alt": "BARD dashboard alert reading USCG returned 2 incidents for corrections this week with a Review now link, above the KPI strip showing 420 YTD incidents, 47 fatalities, 38 this week and 89 percent federal compliance.",
+      "alt": "Bard dashboard alert reading USCG returned 2 incidents for corrections this week with a Review now link, above the KPI strip showing 420 YTD incidents, 47 fatalities, 38 this week and 89 percent federal compliance.",
       "caption": { "lead": "Return audit.", "tail": "Two came back this week, and a link straight to them." },
       "width": 4400,
       "height": 764,
@@ -84,7 +84,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-03/03-return-audit.png",
-      "alt": "BARD dashboard alert reading USCG returned 2 incidents for corrections this week with a Review now link, above the KPI strip showing 420 YTD incidents, 47 fatalities, 38 this week and 89 percent federal compliance.",
+      "alt": "Bard dashboard alert reading USCG returned 2 incidents for corrections this week with a Review now link, above the KPI strip showing 420 YTD incidents, 47 fatalities, 38 this week and 89 percent federal compliance.",
       "caption": { "lead": "Return audit.", "tail": "Two came back this week, and a link straight to them." },
       "width": 4400,
       "height": 764,
