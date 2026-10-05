@@ -349,6 +349,32 @@ ends; its slope may stay raw. **Check 12 fails the build on a raw reading-band
 size**; the exceptions live in `ALLOWLIST.rawSize`, each with a reason. Display
 sizes (above 30px) are not tokenized yet. Ruled 28 Sep 2026.
 
+**Added 5 Oct 2026, for the narrative layout** (type v3 §3.4 and §3.6):
+- `--type-20` joins the scale. It is the case-study body's ceiling and nothing
+  else uses it.
+- `--type-prose` is rung 1 in the studies: `clamp(var(--type-18), …,
+  var(--type-20))`, 18px at 390 to 20px at 1440, set on `.case-study-prose`.
+  Home and About keep `--type-body` at a fixed 18. Leading is 1.7 below 1024 and
+  1.6 from 1024 up; the friction-beat 01/02/03 marker, the pull-quote cite and the testimony
+  source pin their own 1.7 so they do not follow it.
+- `--measure-reading` (32em) is every running-text measure in the studies: body,
+  friction scene, bento intro and caption, journey list. It is `em`, not `ch`:
+  `1ch` in Commissioner is 0.652em, so the 64ch it replaced was about 90
+  characters.
+- `--type-case-study-hero` is rung 5's clamp, 40 to 72px, the first display-size
+  token. Two roles read it: `.hero-block__title` and the turn's answer.
+- **The turn (T6)**, each study's "How do you...?" section
+  (`.cs-section--turn`): the question is an `h2` at `--type-standfirst`, weight
+  400, `--text-secondary`, unflared; the answer (`.turn-answer`) is at
+  `--type-case-study-hero`, weight 340, flared, with its key phrase
+  (`.turn-answer__key`) at 600 on its own line. The 340 spends the signature's
+  "one moment per case study" placement.
+
+Two motion tokens arrived with it and live beside the interaction speeds:
+`--duration-moment` (10s) and `--ease-moment`, the friction moment's ambient
+loop. Interaction v1 has no category for a loop, so the surface is recorded in
+`docs/unspecified-surfaces.md`.
+
 ### Voice — the FLAR axis, by rung
 **This replaced the three width bands.** Width was the expressive axis under
 Bricolage; Commissioner does not have one, and FLAR is what it has instead.
@@ -357,11 +383,14 @@ Two values only, ruled from the bench on 21 Aug 2026: **FLAR 100 on the display
 band, 0 everywhere else.** 40 and 60 were never judged by anyone and are not
 decisions that have been made.
 
-The flared set is five selectors: `.milestone__date`, `.hero-block__title`,
-`.case-study-prose h2`, `.text-lede` and `.about-hero__pov`. **Plain selectors
+The flared set is six selectors: `.milestone__date`, `.hero-block__title`,
+`.case-study-prose h2`, `.case-study-prose .turn-answer` (added 5 Oct 2026),
+`.text-lede` and `.about-hero__pov`. **Plain selectors
 take no declaration at all** — `@property --flar` sets `initial-value: 0`, so
 writing `--flar: 0` beside them would be a second statement of the same fact and
-a place for the two to disagree.
+a place for the two to disagree. The one exception is an override: the turn's
+question is an `h2`, so `.case-study-prose h2` would flare it, and its rule sets
+`--flar: 0` to take that back.
 
 Three things about this that are easy to get wrong:
 
@@ -466,7 +495,7 @@ the two-step one it replaces, and the third entry is the one that bit us.
    range. If the binary changes, `scripts/build-commissioner-font.sh` too;
    it asserts the axes and ranges it emits.
 2. **The FLAR wiring in `app/globals.css`** — `@property --flar`, the `*` rule,
-   and the five-selector flared list. If the new face has no expressive axis,
+   and the six-selector flared list. If the new face has no expressive axis,
    delete all three, and update the `voice` column in `RUNGS`
    (`scripts/lint-type.mjs`) in the same commit or check 11 reddens.
 3. **`components/font-load-probe.tsx`** — it measures one live axis to prove the

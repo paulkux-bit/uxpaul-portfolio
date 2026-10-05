@@ -1651,10 +1651,11 @@
   max-width: 660px;
   margin: 0 auto;
   position: relative;
-  /* Rung 1 for case-study prose: fluid 18 -> 20px (ruling 5b) at leading 1.6
-     (ruling 6a, was 1.70), both 5 Oct 2026, type v3 §3.4. */
+  /* Rung 1 for case-study prose: fluid 18 -> 20px (ruling 5b), type v3 §3.4.
+     Leading 1.7 below 1024 and 1.6 from 1024 up (ruling 1a, 5 Oct 2026, which
+     revised 6a's 1.6 everywhere after Paul read 1.7 on his phone). */
   font-size: var(--type-prose);
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text-primary);
 }
 
@@ -1662,6 +1663,7 @@
   .case-study-prose {
     margin-left: 0;
     margin-right: auto;
+    line-height: 1.6; /* ruling 1a: the wider column takes the tighter leading */
   }
 }
 
@@ -1699,10 +1701,10 @@
   font-weight: 600; /* v3 §5: 96 -> 94. Rung 4. */
   line-height: 1.08;
   letter-spacing: -0.02em;
-  /* Bottom 24 to whatever opens the section, except a standfirst (ruling 7b,
-     5 Oct 2026; spacing v1 §12). Was 32 here, with a 16 override for body
-     paragraphs (A1c, 1 Oct 2026); 7b replaces both with one value the heading
-     owns. */
+  /* Bottom 24 to whatever opens the section (ruling 7b, 5 Oct 2026; spacing v1
+     §12). The standfirst takes 16 instead (rule below), and a milestone keeps its
+     own 32 (2a). Was 32 here, with a 16 override for body paragraphs (A1c,
+     1 Oct 2026); 7b replaces both with one value the heading owns. */
   margin: var(--spacing-2xl) 0 var(--spacing-m);
   text-wrap: balance;
   max-width: 22ch;
@@ -1716,12 +1718,9 @@
   margin-bottom: 0;
 }
 
-/* The milestone carries a 32 top margin of its own for the case where prose
-   precedes it. As a section's first block it takes the heading's 24 like any
-   other first block (ruling 7b, 5 Oct 2026; A1c had kept it at 32). */
-.cs-section > h2 + .milestone {
-  margin-top: 0;
-}
+/* A milestone straight after a heading keeps its own 32 top margin, which wins
+   the collapse against the heading's 24 (closing review A1c, 1 Oct 2026, kept by
+   ruling 2a, 5 Oct 2026). 7b's 24 is for every other first block. */
 
 /* ── H3 ──────────────────────────────────────────────────────────────── */
 
@@ -2335,6 +2334,11 @@
 .friction-beat .thread-index {
   display: block;
   margin-bottom: var(--spacing-xs);
+  /* Pinned at the 1.7 it used to inherit from .case-study-prose, so the body's
+     1.6 from 1024 (ruling 1a) does not move the beat marker (ruling 5a, 5 Oct
+     2026). Scoped to the beats: Bard's resolution headlines carry the same
+     marker inline and take their h3's leading, which must not change. */
+  line-height: 1.7;
 }
 
 .friction-beat__headline {
@@ -2543,6 +2547,7 @@ html.dark .oku-figure {
   font-weight: 500;
   letter-spacing: 0.02em;
   color: var(--text-muted); /* AA-normal at 14px (the 55% mix risked sub-AA) */
+  line-height: 1.7; /* pinned at its old inherited value, not the body's (ruling 5a, 5 Oct 2026) */
 }
 
 .pull-quote--quiet p {
@@ -5752,7 +5757,8 @@ html.dark .figure-placeholder {
      (11.745px): the paragraph is 480px = 40.9ch, against body prose at the time
      at 752px = 64.0ch, the width rung 1's leading was calibrated for. (Corrected
      5 Oct 2026: 64ch was about 90 characters, not 64; body is now 32em, 640px at
-     1440, with leading 1.6, rulings 1c and 6a.)
+     1440, with leading 1.6 from 1024 up and 1.7 below it, rulings 1c, 6a
+     and 1a.)
 
      WHY 1.6 AND NOT THE 1.5 THIS CARRIED. 1.5 was chosen for a 26.6ch paragraph,
      41.5% of body's measure, where body's leading would have over-led it badly.
@@ -5776,8 +5782,8 @@ html.dark .figure-placeholder {
      155.2 / 157.0px for the module. At 390 body happens to share this narrow
      measure, which makes body itself over-led there - a site-wide question, not
      this module's to copy. Resolved 28 Sep 2026 (ruling 4b): the spec now says 1.70
-     for case-study prose. Superseded 5 Oct 2026 (ruling 6a): case-study prose is
-     1.6, the same value as this quote, at a 32em measure. The quote keeps its own
+     for case-study prose. Superseded 5 Oct 2026 (rulings 6a, 1a): case-study prose
+     is 1.7 below 1024 and 1.6 from 1024 up, at a 32em measure. The quote keeps its own
      declaration because its size stays 18 while body goes fluid to 20. */
   line-height: 1.6;
   color: var(--text-primary);
@@ -5803,6 +5809,7 @@ html.dark .figure-placeholder {
   align-self: end;
   margin-top: var(--spacing-m);
   font-size: var(--type-14); /* 14px */
+  line-height: 1.7; /* pinned at its old inherited value, not the body's (ruling 5a, 5 Oct 2026) */
   /* Uppercase and 0.09em STAY, and that is the deliberate half. .pull-quote cite
      is 14/500/muted and sentence-case, but it sits under a 28px quote - a 2.0x
      size drop that separates it on size alone (24px since 28 Sep 2026, ruling 7 d-c:

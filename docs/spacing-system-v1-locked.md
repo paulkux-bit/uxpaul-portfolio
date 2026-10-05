@@ -576,7 +576,8 @@ step was added.
 |---|---|---|---|
 | S2a | Text to evidence, and evidence to text (image, bento, figure, the friction moment) | 48 on both sides at every width (was 32; bento bands were already 48) | One rule, `.cs-section > :is(.framed-pair, .figure, .figure--bento-theme, .bento-band, .friction-moment, .testimony-pair, .chart-pair, .journey-line, .promise-walk, .roadmap-list)`, `margin-block: var(--spacing-xl)` |
 | 7b | Heading to standfirst | 16, unchanged (1c, 30 Sep) | `.section-lede` owns it; `h2:has(+ .section-lede)` gives up its bottom margin |
-| 7b | Heading to any other first block | 24 (was 16 to a body paragraph, A1c, and 32 to a note or milestone) | the h2's own bottom margin, `--spacing-m`; `.cs-section > h2 + .milestone` drops the milestone's 32 top |
+| 7b | Heading to any other first block | 24 (was 16 to a body paragraph, A1c, and 32 to a note) | the h2's own bottom margin, `--spacing-m` |
+| 2a | Heading to a milestone | 32, unchanged (A1c, 1 Oct) | the milestone's own `margin-top: var(--spacing-l)` wins the collapse against the heading's 24 |
 | S3b | The turn (T6): answer to the paragraph after it | 48 | `.turn-answer`'s bottom margin, `--spacing-xl`; question to answer is the standfirst's 16 |
 | G1 | The turn's own section gaps | the section break plus 48 above and 32 below | `.cs-section--turn { padding-block: var(--spacing-xl) var(--spacing-l) }`; `--spacing-section` itself is unchanged |
 
@@ -620,5 +621,5 @@ this section as its resolution.
 
 **Measured on the five studies at 390 and 1440** (light and dark identical):
 every prose-to-evidence and evidence-to-prose gap is 48, heading to standfirst
-16, heading to body, note and milestone 24, and the section gaps are unchanged
+16, heading to body and note 24, heading to milestone 32 (2a), and the section gaps are unchanged
 (73.8 at 390, 96 at 768, 114.9 at 1024, 127.9 at 1440).
