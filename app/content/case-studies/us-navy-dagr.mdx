@@ -41,7 +41,7 @@ nda: false
    ───────────────────────────────────────────────────────────── */}
 
 import { BentoBand } from '@/components/bento';
-import { DagrBeatFigure } from '@/components/dagr-beat-figure';
+import ConvoyMoment from '@/components/case-studies/us-navy-dagr/ConvoyMoment';
 import AnalysisBento from '@/components/case-studies/us-navy-dagr/AnalysisBento';
 import IngestBento from '@/components/case-studies/us-navy-dagr/IngestBento';
 import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
@@ -104,36 +104,10 @@ He owns the threat picture: where the enemy is, what can see the aircraft, and f
 
 <p className="section-lede">I interviewed over seventy intel analysts across Air Combat Command, at units flying different airframes, and watched many of them build a threat picture from scratch.</p>
 
-<ol className="friction-beats" role="list">
-  <li className="friction-beat" data-thread="1">
-    <div className="friction-beat__text">
-      <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">The shift went to inputs</h3>
-      <p className="friction-beat__scene">He found the threat data across separate systems, then typed every value into the model by hand. None of that time was analysis.</p>
-    </div>
-    <DagrBeatFigure variant="typed" alt="An analyst in uniform at a desk, typing at a keyboard with a document propped beside the monitor and three separate stacks of loose pages spread across the desk." />
-  </li>
-  <li className="friction-beat" data-thread="2">
-    <div className="friction-beat__text">
-      <span className="thread-index">02</span>
-      <h3 className="friction-beat__headline">Only what stands still</h3>
-      <p className="friction-beat__scene">The model only knew what he typed in, so enemy equipment stayed where he last put it. What moved was what mattered most.</p>
-      <blockquote className="pull-quote pull-quote--quiet">
-        <p>“I had to ask the room to really visualize it.”</p>
-        <cite>Intel analyst, discovery interview</cite>
-      </blockquote>
-    </div>
-    <DagrBeatFigure variant="fixed" alt="An analyst in uniform standing over a map board with fixed markers set into it, holding a small vehicle model up in one hand." />
-  </li>
-  <li className="friction-beat" data-thread="3">
-    <div className="friction-beat__text">
-      <span className="thread-index">03</span>
-      <h3 className="friction-beat__headline">It cost him the room</h3>
-      <p className="friction-beat__scene">What he could not confirm in time went on the brief as risk. Aircrew trust him with their lives, and the longer that list ran, the less his word was worth.</p>
-    </div>
-    <DagrBeatFigure variant="flagged" alt="An analyst in uniform standing and holding a large briefing sheet up in both hands, looking down at it, with several long diagonal strokes crossing out the lower two thirds of the sheet." />
-  </li>
-</ol>
+<ConvoyMoment
+  caption="Only what stands still."
+  gloss="“I had to ask the room to really visualize it.” Intel analyst, discovery interview."
+/>
 
 </section>
 

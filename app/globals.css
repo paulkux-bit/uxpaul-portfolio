@@ -405,6 +405,13 @@
      using, so nothing renders differently. */
   --duration-theme: 450ms;
   --duration-reveal: 560ms;   /* entrance — unchanged */
+
+  /* Ambient motion: the friction moment's loop (ruling M2, 5 Oct 2026, from the
+     Line of Sight test page). Neither an interaction speed (§3) nor an entrance
+     (§9), so it is named here rather than borrowed from either, and the surface
+     is recorded in docs/unspecified-surfaces.md. */
+  --duration-moment: 10s;
+  --ease-moment: cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
 /* ============================================================
@@ -2973,6 +2980,138 @@ html.dark .oku-figure {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted); /* was a currentColor 55% weight-fake */
+}
+
+/* ── The friction moment (ruling M2, 5 Oct 2026) ─────────────────────────
+   One drawn moment with subtle motion in place of the three beat figures,
+   components/friction-moment.tsx. Line of Sight's is the convoy: three vehicles
+   fade in and drive down and to the left, away from the base drawing's push pin,
+   which stays where the analyst last put them.
+
+   Full content width, the same as a bento band (W-full), not the reading
+   measure. Its 48 above and below come from the evidence rule beside
+   .cs-section (S2a).
+
+   STRUCTURE. The stage is the positioning context for the vehicle boxes; the art
+   wrapper is the positioning context for the pause button, so the button sits
+   at the drawing's corner rather than the caption's. Each box holds a knockout
+   (the canvas colour through the vehicle's silhouette mask, so the base's
+   contours do not show through it) and the vehicle's ink above it. */
+.friction-moment {
+  min-width: 0;
+}
+
+.friction-moment__art,
+.friction-moment__stage {
+  position: relative;
+}
+
+.friction-moment__base {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* left, top, width, height and --l / --t are set inline from the manifest. The
+   inline left/top are the end position, which is where reduced motion leaves
+   every vehicle. */
+.friction-moment__vehicle {
+  position: absolute;
+}
+
+.friction-moment__knockout {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-canvas);
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.friction-moment__sprite {
+  position: relative; /* paints above the absolutely positioned knockout */
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Black ink on transparent, so dark mode inverts the ink and nothing else. The
+   knockout is not inverted: it is --bg-canvas, which already follows the mode. */
+html.dark .friction-moment__ink {
+  filter: invert(1);
+}
+
+/* The pause control (WCAG 2.2.2). A pill on the art's bottom right: caption
+   size, canvas fill, default border, secondary text. Its states are the theme
+   toggle's (interaction v1 §5): colour and a --border-strong border on hover,
+   a 1px sink when pressed, the global focus halo. 44px is the touch target the
+   site's other controls use. */
+.friction-moment__toggle {
+  position: absolute;
+  right: var(--spacing-s);
+  bottom: var(--spacing-s);
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding-inline: var(--spacing-s);
+  font-size: var(--type-caption);
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg-canvas);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.friction-moment__toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+
+/* Pressed (§5): sink 1px. Authored after :hover, which §5 requires. */
+.friction-moment__toggle:active {
+  transform: translateY(1px);
+}
+
+.friction-moment__caption {
+  margin-top: var(--spacing-2xs); /* the bento caption bind, below the art here */
+}
+
+/* The loop: 10s, ease-moment, on left, top and opacity, offset from each box's
+   --l / --t. Keyframes from the test page: in from +6.5% / -3.83% at 0, fully in
+   by 8%, arrived at 72%, held to 92%, faded out by 100%. */
+@media (prefers-reduced-motion: no-preference) {
+  .friction-moment__toggle {
+    transition:
+      color var(--duration-control) var(--ease-out-soft),
+      border-color var(--duration-control) var(--ease-out-soft);
+  }
+
+  .friction-moment__vehicle {
+    animation: friction-moment-drive var(--duration-moment) var(--ease-moment) infinite;
+  }
+
+  .friction-moment[data-paused='true'] .friction-moment__vehicle {
+    animation-play-state: paused;
+  }
+
+  @keyframes friction-moment-drive {
+    0%   { left: calc(var(--l) + 6.5%); top: calc(var(--t) - 3.83%); opacity: 0; }
+    8%   { left: calc(var(--l) + 6.2%); top: calc(var(--t) - 3.65%); opacity: 1; }
+    72%  { left: var(--l); top: var(--t); opacity: 1; }
+    92%  { left: var(--l); top: var(--t); opacity: 1; }
+    100% { left: var(--l); top: var(--t); opacity: 0; }
+  }
+}
+
+/* Reduced motion: the vehicles sit at their end positions (the inline left/top)
+   and there is nothing to pause, so there is no button. */
+@media (prefers-reduced-motion: reduce) {
+  .friction-moment__toggle {
+    display: none;
+  }
 }
 
 /* ── Resolution bento (Show the Work) ─────────────────────────────────────

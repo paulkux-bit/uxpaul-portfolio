@@ -53,6 +53,16 @@ rules live in `type-system-v3-locked.md` §3.4 and the gaps in
 `spacing-system-v1-locked.md` §12; this entry stays as the record of how the
 surface arrived.
 
+**Ambient motion (the friction moment).** Joined 5 Oct 2026. Interaction v1 §3
+governs interaction speeds and §9 leaves entrance motion open; neither has a
+category for a loop that runs on its own. The convoy cinemagraph on Line of
+Sight is the first: a 10s loop on a sine-like ease, ruled from the test page
+(M2) and named in the theme as `--duration-moment` and `--ease-moment` so the
+values live once. What the systems would need to say: whether ambient loops are
+allowed beyond one per study, the pause control's place in the button rules
+(it borrows the theme toggle's states), and the finesse list Paul holds (easing,
+travel, the loop seam, transform rather than left and top).
+
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
 
