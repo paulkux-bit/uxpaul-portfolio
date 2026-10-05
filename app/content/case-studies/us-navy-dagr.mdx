@@ -62,11 +62,11 @@ import FiltersBento from '@/components/case-studies/us-navy-dagr/FiltersBento';
 
 ## One assessment can turn a go into a no-go.
 
-Before a mission flies, the unit gathers in one room: pilots, maintenance, operations, logistics, and Wilbur, the intel analyst.
+Before a mission flies, the unit gathers in one room, and the plan waits on Wilbur, the intel analyst.
 
-He owns the threat picture: where the enemy is, what can see the aircraft, and from what altitude. He briefs what he knows and what he does not.
+He owns the threat picture, which answers one question: at what altitude can the enemy see us? He briefs what he knows and what he does not.
 
-**If the picture is wrong, an aircraft gives away its position or does not come back.**
+**If the answer is wrong, the aircraft gives away its position or does not come back.**
 
 <FramedPair
   framed={false}
@@ -77,8 +77,8 @@ He owns the threat picture: where the enemy is, what can see the aircraft, and f
     alt: 'Editorial pencil illustration: five airmen in plain uniform shirts stand in a loose group, all in profile looking to the right at something out of frame, with faint drawn map fragments and a crosshair behind them and a single soft orange watercolor bloom to the left.',
     caption: (
       <>
-        <strong>What he walks into.</strong> The unit plans the mission around
-        his read of the threat.
+        <strong>What he walks into.</strong> Pilots, maintenance, operations,
+        and logistics, all waiting on one brief.
       </>
     ),
   }}
@@ -100,7 +100,7 @@ He owns the threat picture: where the enemy is, what can see the aircraft, and f
 
 <section className="cs-section cs-section--frictions">
 
-## Three ways a hand-built picture failed Wilbur.
+## One hand-built picture failed Wilbur in three ways.
 
 <p className="section-lede">I interviewed over seventy intel analysts across Air Combat Command, at units flying different airframes, and watched many of them build a threat picture from scratch.</p>
 
@@ -108,6 +108,8 @@ He owns the threat picture: where the enemy is, what can see the aircraft, and f
   caption="Only what stands still."
   gloss="“I had to ask the room to really visualize it.” Intel analyst, discovery interview."
 />
+
+Wilbur found the threat data in separate systems and typed every value into the legacy tool by hand. None of that time was analysis. The tool knew only what he typed, and enemy equipment stayed where he last put it, even after it moved. What he could not confirm in time went on the brief as risk. Aircrew trusted him with their lives, and each unknown made that trust harder to keep.
 
 </section>
 
@@ -117,21 +119,21 @@ He owns the threat picture: where the enemy is, what can see the aircraft, and f
 
 <p className="section-lede turn-answer">Start the analysis <span className="turn-answer__key">where the data already is.</span></p>
 
-Idaho National Laboratory built the line of sight model, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it.
+He should not have to type anything the app already knows. I designed the live feeds on DoD-approved map layers, so Line of Sight starts on the map.
 
-**He shouldn't have to type anything the app already knows.** I had designed the live feeds on DoD-approved map layers, so the map is where a Line of Sight analysis starts.
+Idaho National Laboratory built the model behind it, and the math is classified. Our team was never going to see inside it, and did not need to. What we owed Wilbur was everything around it.
 
 </section>
 
 <section className="cs-section">
 
-## He can afford to ask twice.
+## I designed Line of Sight so Wilbur can ask as many times as he needs.
 
-<p className="section-lede">The question is always the same. From what altitude can that radar see us?</p>
+<p className="section-lede">The question is always the same: at what altitude can that radar see us?</p>
 
-Wilbur asks it on the map, and the answer comes back with the terrain already accounted for, colored to his unit's legend. One altitude is rarely enough, so he asks for the whole range the mission might fly.
+One altitude is rarely enough. He needs the full range the mission might fly, and the old tool never gave him time to ask twice.
 
-**Comparing answers is the analysis, and the old tool never left him time for it.** Holding two layers against each other is a click, not a rebuild.
+So the app fills in the radar's details for him. One entry returns every altitude in the range, with the terrain accounted for. Every answer stays on the map, because **comparing them is the analysis.**
 
 <AnalysisBento />
 
@@ -139,33 +141,31 @@ Wilbur asks it on the map, and the answer comes back with the terrain already ac
 
 <section className="cs-section">
 
-## The work was deciding what he never had to see.
+## I designed the search and the filter that Line of Sight builds on.
 
-<p className="section-lede">Line of Sight is fast because two other things came first.</p>
+<p className="section-lede">Before Line of Sight could answer anything, it had to know where the threats were and which ones mattered.</p>
 
-I designed one search for where the threats sit and what their equipment can do. That is why the antenna height was already filled in.
+The search finds where the threats sit and what their equipment can do. It runs again near takeoff, so the map shows equipment where it is now, not where he last put it.
 
 <IngestBento />
 
-The search runs again near takeoff, so the map shows equipment where it is now, not where he last put it.
-
-The second thing was the filter. A helicopter and an F-22 face different threats, so he keeps only the ones that can hurt his aircraft. What is left is what he briefs.
+The filter keeps only the threats that can hurt his aircraft, because a helicopter and an F-22 face different ones. What is left is what he briefs.
 
 <FiltersBento />
 
-**The search and the filter were never only for Line of Sight.** They were the foundation for the next feature.
+The search and the filter were never only for Line of Sight. Route view, the next feature, was designed on them too.
 
 </section>
 
 <section className="cs-section">
 
-## An analyst looked at the shape and said he couldn't brief it.
+## Real data broke my mockups, so I art‑directed the shapes until they were right.
 
-<p className="section-lede">Testing with real data, in the classified lab.</p>
+<p className="section-lede">An analyst looked at the first shapes and said he could not brief them.</p>
 
-**The polygons were right in structure and wrong in geometry.** I designed them unclassified, in Figma. They ran on real data, rendered on a globe, and a radar cannot see past the curve of the Earth. The shapes came back the wrong size in the wrong places. For the analyst testing it, that shape would have cost him the room.
+The shapes were right in what they showed and wrong in where they sat. I had designed them unclassified, in Figma, on a flat map. On real data, rendered on a globe, they came back the wrong size in the wrong places, because a radar cannot see past the curve of the Earth. Briefed as they were, those shapes would have cost him the aircrew's trust.
 
-The engineers had the math. I art-directed the render until the shapes were right, before anything was fielded. The fix went into the map itself, so anything an analyst draws now follows the Earth's curve.
+The engineers had the math, and they implemented the fix before anything was fielded. It went into the map itself, so anything an analyst draws now follows the Earth's curve.
 
 <BentoBand
   src="/case-studies/us-navy-dagr/curvature--band.png"
@@ -187,7 +187,7 @@ The engineers had the math. I art-directed the render until the shapes were righ
   <p className="milestone__sub">Defunded in budget cuts after I left.</p>
 </div>
 
-Commanders, weapons officers, and planners took it into their own stack and were willing to work behind it. Then more aircraft communities wanted their own modeling in it than our team could build.
+Commanders, weapons officers, and planners made it part of how they plan, and vouched for it. Then more aircraft communities wanted it built for their aircraft than our team could keep up with.
 
 </section>
 
