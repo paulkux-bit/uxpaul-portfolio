@@ -132,7 +132,7 @@ There is no fourth value and no per-module choice. If you are picking a width by
 | 4 | Section heading | `clamp(1.875rem, 3vw + 1rem, 3.25rem)` | 30 | 52 | 94 |
 | 3 | Numbered headline | `clamp(1.625rem, 0.4255vw + 1.492rem, 1.875rem)` | 26 | 30 | 94 |
 | 2 | Standfirst | `clamp(1.3125rem, 0.2857vw + 1.2429rem, 1.5rem)` | 21 | 24 | 100 |
-| 1 | Body | `1.125rem` | 18 | 18 | 100 |
+| 1 | Body | `1.125rem`; case-study prose `--type-prose`, 18 to 20px (§3.4, 5 Oct 2026) | 18 | 18 (20 in the studies) | 100 |
 | 0.5 | Support | `1rem` | 16 | 16 | 100 |
 | 0 | Caption / eyebrow | `0.875rem` | 14 | 14 | 100 |
 
@@ -153,7 +153,7 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 | 4 | 1.08 | −0.02em | 30ch banded, 22ch flat | balance |
 | 3 | 1.15 | 0 | 42ch | balance |
 | 2 | 1.45 | 0 | 52ch | balance |
-| 1 | 1.70 case-study prose; 1.65 `text-body` | 0 | 64ch | pretty |
+| 1 | 1.60 case-study prose; 1.65 `text-body` | 0 | `--measure-reading`, 32em (case-study prose) | pretty |
 | 0.5 | 1.5 | 0 | — | — |
 | 0 | 1.5 | 0, eyebrows 0.08em | 56ch | pretty |
 
@@ -162,6 +162,12 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 **AMENDED 28 Sep 2026: `pretty` now reaches all case-study body text (ruling 3a).** It had reached only problem and frictions sections. It now applies through `:where(.case-study-prose) p`, which took one-word last lines across the five studies from 15 to 0 at 390, 768 and 1440 with no line added or lost.
 
 **AMENDED 28 Sep 2026: rung 1 line-height is 1.70 for case-study prose (ruling 4b).** `.case-study-prose` had always shipped 1.70 while this table said 1.65. The spec yields, because every copy ruling was judged at 1.70. The `text-body` utility on home and about stays 1.65.
+
+**AMENDED 5 Oct 2026: the case-study reading measure, size and leading (Paul's rulings 1c, 5b, 6a; the 2i-T review of the narrative layout).** Three changes to rung 1 in `.case-study-prose`. Home and About (`text-body`) are unchanged.
+
+- **1c, one measure token, `--measure-reading: 32em`.** It replaces 64ch at every reading measure in the studies: body paragraphs (`:where(.case-study-prose) p`), `.friction-beat__scene`, `.bento-theme__intro`, `.bento-theme__caption` and `.journey-line__breaks li`. `em` resolves on the element that reads the token, so body at 20px gets 640px, body at 18px gets 576px, the 18px caption gets 576px and the 16px journey list 512px. **64ch was never 64 characters**: `1ch` in Commissioner is 0.652em (the "0" advance), so 64ch at 18px was 752px, about 90 characters a line. Measured on the five studies at 768, 1024 and 1440 after the change: median 66 to 71 characters per full body line, maximum 77, none over 80 (WCAG 1.4.8). Below 768 the column, not the token, sets the measure.
+- **5b, fluid body, 18 to 20px.** `--type-20: 1.25rem` joins the scale beside `--type-18` (it is not on the Bringhurst list, which goes 18 then 21; it is the body's ceiling and nothing else uses it). The role token is `--type-prose: clamp(var(--type-18), 0.1905vw + 1.0786rem, var(--type-20))`, on `.case-study-prose`: 18px at 390, 20px at 1440, the standfirst's crossovers, so standfirst over body is 1.167 at 390 and 1.200 at 1440 and never lower between. Rung 1 is on the ladder in `RUNGS` now that it moves, so check 3 walks the 2/1 pair (proved red by moving the ceiling to `--type-21`: 1.143 at 1965px).
+- **6a, leading 1.6** for case-study prose, from the 1.70 ruled on 28 Sep (4b). It moves everything in the prose that inherits its leading; measured, that is the body, the friction scenes, the 01/02/03 marker (1.7 to 1.6 at 16 to 18px), the pull-quote `cite` and the testimony source line (both 14px, 23.8 to 22.4px a line). Captions that declare their own leading (`.bento-theme__caption` 1.35, `.figure__caption` 1.5) do not move (ruling 4a).
 
 **AMENDED 22 Aug 2026 — rung 5 corrects to −0.020, and the spec yields to the CSS.**
 
@@ -256,8 +262,9 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 
 | layer | tokens | values |
 |---|---|---|
-| scale | `--type-14` `--type-16` `--type-18` `--type-21` `--type-24` `--type-30` | the classic typographic scale, 14 to 30 |
+| scale | `--type-14` `--type-16` `--type-18` `--type-20` `--type-21` `--type-24` `--type-30` | the classic typographic scale, 14 to 30, plus 20 (the case-study body ceiling, 5 Oct 2026) |
 | roles | `--type-caption` `--type-small` `--type-body` | rungs 0, 0.5, 1: the scale's 14, 16, 18 |
+| roles | `--type-prose` | rung 1 in case-study prose, `clamp(var(--type-18), …, var(--type-20))`, 18 to 20px (ruling 5b, 5 Oct 2026) |
 | roles | `--type-standfirst` | rung 2, `clamp(var(--type-21), …, var(--type-24))` |
 | roles | `--type-numbered-headline` | rung 3, `clamp(1.625rem, …, var(--type-30))`: the 26px phone floor is the one off-scale value, and it lives only here |
 

@@ -109,15 +109,33 @@
   --type-14: 0.875rem;
   --type-16: 1rem;
   --type-18: 1.125rem;
+  --type-20: 1.25rem;   /* case-study body ceiling at 1440 (ruling 5b, 5 Oct 2026); not on Bringhurst's list, which goes 18 then 21 */
   --type-21: 1.3125rem;
   --type-24: 1.5rem;
   --type-30: 1.875rem;
 
   --type-caption:           var(--type-14);  /* rung 0, caption and eyebrow */
   --type-small:             var(--type-16);  /* rung 0.5, support */
-  --type-body:              var(--type-18);  /* rung 1, body */
+  --type-body:              var(--type-18);  /* rung 1, body: home and About (text-body) */
+  --type-prose:             clamp(var(--type-18), 0.1905vw + 1.0786rem, var(--type-20));  /* rung 1, case-study prose, 18 -> 20px (ruling 5b, 5 Oct 2026) */
   --type-standfirst:        clamp(var(--type-21), 0.2857vw + 1.2429rem, var(--type-24));  /* rung 2, 21 -> 24px */
   --type-numbered-headline: clamp(1.625rem, 0.4255vw + 1.492rem, var(--type-30));       /* rung 3, 26 -> 30px */
+
+  /* Rung 1 in the study prose is fluid since 5 Oct 2026 (ruling 5b): 18px at 390,
+     20px at 1440, the same crossovers as the standfirst, so the standfirst holds
+     1.167 over it at 390 and 1.200 at 1440 and never less in between. lint:type
+     check 3 walks the pair (rung 1 is on the ladder in RUNGS for that reason).
+     Home and About keep --type-body at a fixed 18. */
+
+  /* The reading measure (ruling 1c, 5 Oct 2026; type v3 §3.4). One token for every
+     running-text measure in the studies. 32em is 640px at a 20px body and 576px at
+     18px: about 69 characters a full line, none over 80, at 768 and up.
+
+     em, NOT ch, AND THAT IS THE CORRECTION. 1ch in Commissioner is 0.652em, so the
+     64ch this replaced was about 90 characters at 400, not 64. em resolves on the
+     element that reads the token, so a caption at 18px gets 576px and body at 20px
+     gets 640px from the one value. */
+  --measure-reading: 32em;
 }
 
 /* ============================================================
@@ -1619,8 +1637,10 @@
   max-width: 660px;
   margin: 0 auto;
   position: relative;
-  font-size: var(--type-18);
-  line-height: 1.7;
+  /* Rung 1 for case-study prose: fluid 18 -> 20px (ruling 5b) at leading 1.6
+     (ruling 6a, was 1.70), both 5 Oct 2026, type v3 §3.4. */
+  font-size: var(--type-prose);
+  line-height: 1.6;
   color: var(--text-primary);
 }
 
@@ -1665,24 +1685,28 @@
   font-weight: 600; /* v3 §5: 96 -> 94. Rung 4. */
   line-height: 1.08;
   letter-spacing: -0.02em;
-  margin: var(--spacing-2xl) 0 var(--spacing-l);
+  /* Bottom 24 to whatever opens the section, except a standfirst (ruling 7b,
+     5 Oct 2026; spacing v1 §12). Was 32 here, with a 16 override for body
+     paragraphs (A1c, 1 Oct 2026); 7b replaces both with one value the heading
+     owns. */
+  margin: var(--spacing-2xl) 0 var(--spacing-m);
   text-wrap: balance;
   max-width: 22ch;
 }
 
 /* A heading with a standfirst under it hands the gap to the standfirst, so the
-   pair reads as one unit (spacing pass ruling 1c, 30 Sep 2026). Single owner:
-   the h2's own bottom margin would otherwise win the collapse at 32. */
+   pair reads as one unit (spacing pass ruling 1c, 30 Sep 2026; kept by 7b,
+   5 Oct 2026). Single owner: the h2's own 24 would otherwise win the collapse
+   against the standfirst's 16. */
 .case-study-prose h2:has(+ .section-lede) {
   margin-bottom: 0;
 }
 
-/* A heading straight into a body paragraph takes the same 16 it gives a
-   standfirst (closing review A1c, 1 Oct 2026). At 32 it sat further from its
-   own paragraph than paragraphs sit from each other (40 against 37 in ink).
-   Notes and milestones keep the 32. */
-.case-study-prose h2:has(+ p:not(.section-lede):not(.section-note)) {
-  margin-bottom: var(--spacing-s);
+/* The milestone carries a 32 top margin of its own for the case where prose
+   precedes it. As a section's first block it takes the heading's 24 like any
+   other first block (ruling 7b, 5 Oct 2026; A1c had kept it at 32). */
+.cs-section > h2 + .milestone {
+  margin-top: 0;
 }
 
 /* ── H3 ──────────────────────────────────────────────────────────────── */
@@ -1702,7 +1726,7 @@
    unlayered, so it still beats Tailwind preflight's layered `p { margin: 0 }`. */
 :where(.case-study-prose) p {
   margin: 0 0 var(--spacing-m);
-  max-width: 64ch;
+  max-width: var(--measure-reading); /* 32em, ruling 1c (5 Oct 2026; was 64ch, about 90 characters) */
   text-wrap: pretty; /* rung 1 per the locked spec (v3 §3.4); was only on problem and frictions sections until 28 Sep 2026 (ruling 3a) */
 }
 
@@ -1866,7 +1890,9 @@
 
 /* ── Container-width section band (Aaron James model) ─────────────────────
    A case-study section spans the full article content width; only running
-   body prose stays at the ~64ch reading measure (.case-study-prose p). The
+   body prose stays at the reading measure, --measure-reading (32em: 640px at
+   1440, 576px at 390; ruling 1c, 5 Oct 2026. The 64ch this said was about 90
+   characters, not 64). The
    band mirrors the shared lg+ breakout rule (≈1807) so its left edge aligns
    with the Hero and the prose column. Un-rebuilt flat sections keep working
    in the 660px column; each converts to a band as it is rebuilt. */
@@ -1877,6 +1903,52 @@
      neighbour (Hero's 6rem bottom, or the next section/eyebrow), giving 6rem
      between any two sections rather than a compounded stack. */
   margin: var(--spacing-section) 0;
+}
+
+/* TEXT TO EVIDENCE IS 48 ON BOTH SIDES, AT EVERY WIDTH (ruling S2a, 5 Oct 2026;
+   was 32; spacing v1 §12). Each evidence block owns its own margin-block, so the
+   gap does not depend on what sits next to it: a paragraph's 24 bottom margin
+   collapses inside the 48, and a hidden or inserted sibling cannot break it the
+   way an adjacency rule (`p:has(+ .framed-pair)`) could.
+
+   The list is every block that sits directly in a section and carries a picture
+   or a drawn chart, on the five studies as of 5 Oct 2026. Six of them used to
+   carry a top margin and no bottom (journey line, tier chart, promise walk,
+   roadmap list, friction beats, Oku figure); the four here that can be a
+   section's direct child now have both. The tier chart sits inside .chart-pair,
+   which is listed. NOT listed, on purpose:
+   - .friction-beats: lede to beats stays 32 (ruling 2b, 30 Sep 2026); the beats
+     carry text as well as figures, and S2a's set is image, bento, figure, moment.
+   - .oku-figure: inside a beat, scene to figure, 16 (ruling 4b).
+   - .milestone: a status block, not evidence; keeps 32 (closing review A1c).
+   - .bento-band: listed, but a run of bands keeps 32 between its bands (3b),
+     in the two rules beside .bento-band below.
+   - Blocks nested inside a theme or a resolution block (Bard's headline to its
+     bento stays 32, spacing pass 7b, 30 Sep 2026).
+
+   SOURCE ORDER IS LOAD-BEARING. This sits ABOVE the first- and last-child rules
+   below at the same specificity (0,2,0), so a section's first or last block
+   still loses its outer margin to the section break. */
+.cs-section > :is(
+  .framed-pair,
+  .figure,
+  .figure--bento-theme,
+  .bento-band,
+  .friction-moment,
+  .testimony-pair,
+  .chart-pair,
+  .journey-line,
+  .promise-walk,
+  .roadmap-list
+) {
+  margin-block: var(--spacing-xl);
+}
+
+/* A resolution headline names the bento under it, so the pair binds at the
+   headline's own 32 (mb-l in the MDX; spacing pass 7b, 30 Sep 2026) rather than
+   taking the 48 above, which is for prose meeting evidence. Bard only. */
+.cs-section > .text-resolution-headline + .figure--bento-theme {
+  margin-top: 0;
 }
 
 .cs-section > :first-child {
@@ -2021,15 +2093,16 @@
      the bottom separates the pair from a FOLLOWING beat so it reads as its own
      statement, not an addendum to the taller caption. Grid bottom = tallest cell,
      so the gap clears a 2-line caption by construction. When the pair is the
-     section's last child, .cs-section > :last-child zeros it (Bard unchanged). */
+     section's last child, .cs-section > :last-child zeros it (Bard unchanged).
+     In a section the evidence rule beside .cs-section sets 48 on both sides
+     (ruling S2a, 5 Oct 2026); this 32 applies only outside one. */
   margin: var(--spacing-l) 0;
 }
 
-/* Zero the preceding paragraph's bottom margin so .framed-pair's margin-top solely owns the
-   prose→evidence gap (single-owned 2rem; 0 + 2rem whether margins collapse or add). */
-.cs-section p:has(+ .framed-pair) {
-  margin-bottom: 0;
-}
+/* `.cs-section p:has(+ .framed-pair) { margin-bottom: 0 }` was here, so the pair's
+   top margin solely owned the gap. Removed 5 Oct 2026 (S2a): the pair owns 48 on
+   both sides and the paragraph's 24 collapses inside it, so the gap no longer
+   depends on which sibling precedes the pair. */
 
 .framed-pair .framed-pair__cell {
   /* Outrank .figure's `margin: 3rem 0 3.5rem` (defined later, equal specificity).
@@ -2210,7 +2283,7 @@
 
 .friction-beat__scene {
   margin: 0;
-  max-width: 64ch;
+  max-width: var(--measure-reading); /* ruling 1c, 5 Oct 2026; was 64ch */
 }
 
 /* The figure floats on paper — no box/border/background. color sets the ink the
@@ -2903,7 +2976,7 @@ html.dark .oku-figure {
 
 .bento-theme__intro {
   margin: 0 0 var(--spacing-s);
-  max-width: 64ch; /* intro stays at the reading measure even on the band */
+  max-width: var(--measure-reading); /* intro stays at the reading measure even on the band (32em, ruling 1c, 5 Oct 2026; was 64ch) */
 }
 
 .bento-theme__rows {
@@ -2983,10 +3056,10 @@ html.dark .oku-figure {
 
 .bento-theme__caption {
   margin: 0;
-  max-width: 64ch;        /* self-owns the measure that :where(.case-study-prose) p supplied
-                             while this was a <p>; the <figcaption> no longer matches that rule,
-                             so declaring it here keeps captions >64ch (e.g. the KPI line) wrapping
-                             identically — the figcaption swap stays pixel-for-pixel invisible */
+  max-width: var(--measure-reading); /* self-owns the measure that :where(.case-study-prose) p
+                             supplied while this was a <p>; the <figcaption> no longer matches
+                             that rule. 32em since ruling 1c (5 Oct 2026; was 64ch, about 90
+                             characters): 576px at this caption's 18px. Size is unchanged (4a). */
   font-size: var(--type-18);    /* 18px — off the 14px floor */
   line-height: 1.35;
   min-height: 1.52rem;    /* fallback == 1.125rem × 1.35 */
@@ -3127,9 +3200,12 @@ html.dark .oku-figure {
    preceding <p>'s 1.5rem bottom margin above and 0 below (paragraphs carry bottom
    margin only) — asymmetric. Give it deliberate symmetric rhythm matching the engine's
    --bento-row-gap. Child combinator so it never touches theme-nested bands. */
-.cs-section > .bento-band {
-  margin-block: var(--spacing-xl);
-}
+/* `.cs-section > .bento-band { margin-block: var(--spacing-xl) }` lived here.
+   Folded into the evidence rule beside .cs-section on 5 Oct 2026 (S2a), which
+   gives every evidence block the band's 48; the value did not move. One
+   difference: that rule sits above the last-child rule, so a band that ends its
+   section now loses its bottom margin to the section break like every other last
+   block. It collapsed into the section margin anyway, so nothing rendered moves. */
 
 /* A run of bands reads as one group: 48 around the run, 32 between its bands
    (spacing pass ruling 3b, 30 Sep 2026). The later band owns the inner gap. */
@@ -3141,26 +3217,12 @@ html.dark .oku-figure {
   margin-bottom: 0;
 }
 
-/* The theme block's counterpart, and the reason it is a separate rule.
-   .figure--bento-theme is `margin: var(--spacing-l) 0 0` — 2rem top, ZERO
-   bottom. That asymmetry was never a decision: every consumer until now was the
-   last child of its section (Bard's three Resolutions themes, FDT-E's gate
-   walk), where .cs-section > :last-child zeros the bottom anyway, so the value
-   was never exercised. Nuuly §5 and §6 are the first to put prose after one,
-   and :where(.case-study-prose) p carries bottom margin only — so theme + p
-   resolved to a ZERO gap. This SPECIFIES the bottom rather than changing it.
-
-   :not(:last-child) is load-bearing, not tidiness. Without it this selector
-   ties .cs-section > :last-child at (0,2,0) and wins on source order, silently
-   adding 2rem to all four of the older bentos. With it, they cannot match.
-
-   --spacing-l is the evidence step, "prose to screenshots"
-   (spacing-system-v1-locked.md §3). The VALUE is governed; the boundary rule
-   for a theme block is not, which is why it is also in
-   docs/unspecified-surfaces.md rather than only here. */
-.cs-section > .figure--bento-theme:not(:last-child) {
-  margin-bottom: var(--spacing-l);
-}
+/* The theme block's bottom margin. `.cs-section > .figure--bento-theme:not(:last-child)
+   { margin-bottom: var(--spacing-l) }` was here: .figure--bento-theme shipped
+   `margin: var(--spacing-l) 0 0`, a bottom nobody had decided, and Nuuly §5 and §6
+   were the first to put prose after one, which resolved to a zero gap. Since
+   5 Oct 2026 (S2a) the evidence rule beside .cs-section owns both sides at 48 and
+   sits above the last-child rule, which does the job :not(:last-child) did here. */
 
 /* Breakouts are block-flow (no flex `gap`), so the caption→media bind that
    .bento-theme__item gets from `gap: var(--bento-caption-gap)` is applied here
@@ -4673,7 +4735,7 @@ html.dark .figure-placeholder {
   gap: var(--spacing-s);
   align-items: start;
   margin: 0;
-  max-width: 64ch;
+  max-width: var(--measure-reading); /* ruling 1c, 5 Oct 2026; was 64ch. 512px at this list's 16px */
   font-size: var(--type-16);
   line-height: 1.5;
 }
@@ -5368,14 +5430,16 @@ html.dark .figure-placeholder {
      the family with a following sibling. globals.css records the same
      never-exercised pattern twice already, at the milestone and the bento theme
      block. The VALUE is the spec's; the confirmation is only for the top. */
-  margin: var(--spacing-l) 0;
+  margin: var(--spacing-l) 0; /* in a section, 48 both sides from the evidence rule (S2a, 5 Oct 2026) */
 
   /* NO max-width, SINCE 28 AUG. This module fills the .cs-section band.
      47rem was here and it was a defensible choice, not an accident: 47rem is
      752px at 1440, which is exactly the body prose measure (64ch), so the pair's
      right edge landed on the right edge of the paragraphs above it. Measured
      before the change: module right edge 920.5, body paragraph right edge 920.2.
-     That alignment is the thing being given up.
+     That alignment is the thing being given up. (Corrected 5 Oct 2026: body is
+     32em since ruling 1c, 640px at 1440 on a 20px body, and 64ch was about 90
+     characters in Commissioner, not 64. 752px is no longer the body measure.)
 
      TWO REASONS OUTWEIGHED IT.
 
@@ -5387,8 +5451,10 @@ html.dark .figure-placeholder {
 
      The quote's own measure had become too narrow to read. The v2 rebuild put
      24px of padding on each cell, so the rendered <p> is 312px - 26.6ch,
-     41.5% of body's 64ch - which is below a workable measure for running text.
-     Filling the band takes it to 480px / 40.9ch.
+     41.5% of body's then 752px - which is below a workable measure for running
+     text. Filling the band takes it to 480px / 40.9ch (about 60 characters; ch
+     is 0.652em in Commissioner, so a ch count overstates the character count).
+     Body is 640px at 1440 since 5 Oct 2026 (ruling 1c).
 
      WHAT IS LOST, NAMED: the pair no longer aligns with the prose column, and
      nothing else on the page reinstates that edge. Accepted deliberately.
@@ -5399,17 +5465,10 @@ html.dark .figure-placeholder {
      and 24px between low-contrast surfaces reads as one box with a slot. */
 }
 
-/* Zero the preceding paragraph's bottom so .testimony-pair's margin-top solely
-   owns the prose->evidence gap. Deliberately `p`, matching the framed-pair rule
-   above rather than narrowing to .section-lede: a narrower selector stops
-   matching the moment a body paragraph is inserted between the lede and the
-   module, and the gap silently doubles with no gate to catch it.
-
-   A SECOND RULE, not merged into the framed-pair selector list. Two modules that
-   happen to share a boundary rule are not one rule. */
-.cs-section p:has(+ .testimony-pair) {
-  margin-bottom: 0;
-}
+/* `.cs-section p:has(+ .testimony-pair) { margin-bottom: 0 }` was here, zeroing the
+   preceding paragraph so the pair's top margin solely owned the gap. Removed
+   5 Oct 2026 (S2a): the pair owns 48 on both sides through the evidence rule beside
+   .cs-section, and the paragraph's 24 collapses inside it whatever precedes it. */
 
 .testimony-pair__grid {
   display: grid;
@@ -5489,8 +5548,10 @@ html.dark .figure-placeholder {
      the v2 rebuild put 24px of padding on each cell and the paragraph became
      312px without anyone noticing. Measured at 1440 on the rendered
      .testimony-pair__quote box, with ch taken from a real 0 glyph at 18px
-     (11.745px): the paragraph is 480px = 40.9ch, against body prose at 752px =
-     64.0ch, the width rung 1's leading is calibrated for.
+     (11.745px): the paragraph is 480px = 40.9ch, against body prose at the time
+     at 752px = 64.0ch, the width rung 1's leading was calibrated for. (Corrected
+     5 Oct 2026: 64ch was about 90 characters, not 64; body is now 32em, 640px at
+     1440, with leading 1.6, rulings 1c and 6a.)
 
      WHY 1.6 AND NOT THE 1.5 THIS CARRIED. 1.5 was chosen for a 26.6ch paragraph,
      41.5% of body's measure, where body's leading would have over-led it badly.
@@ -5514,7 +5575,9 @@ html.dark .figure-placeholder {
      155.2 / 157.0px for the module. At 390 body happens to share this narrow
      measure, which makes body itself over-led there - a site-wide question, not
      this module's to copy. Resolved 28 Sep 2026 (ruling 4b): the spec now says 1.70
-     for case-study prose. */
+     for case-study prose. Superseded 5 Oct 2026 (ruling 6a): case-study prose is
+     1.6, the same value as this quote, at a 32em measure. The quote keeps its own
+     declaration because its size stays 18 while body goes fluid to 20. */
   line-height: 1.6;
   color: var(--text-primary);
   text-wrap: pretty;

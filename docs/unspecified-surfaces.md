@@ -207,6 +207,18 @@ mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
 Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
 by `.milestone` in Nuuly §8.
 
+**Closed for evidence blocks 5 Oct 2026** (ruling S2a, `spacing-system-v1-locked.md`
+§12). The statement asked for is: the evidence block owns its vertical boundary,
+48 on both sides, through one `margin-block` rule covering every evidence block
+that sits directly in a section, ordered above the first- and last-child rules
+so a section's outer blocks still yield to the section break. That covers the
+framed pair, the bento theme and band, `<Figure>`, the friction moment and the
+four Delivery Promise modules; the audit of `margin-top`-only rules found six,
+and §12 says where each one landed. The milestone is not evidence and keeps its
+`:not(:last-child)` bottom; its token stays the open choice its CSS comment
+names. The entry stays as a record until this file is next consolidated, so the
+entry numbers other files cite do not shift.
+
 **Which rung the six unbanded display roles sit on.** v3 §9 already names six
 shipped selectors whose size ceilings sit on no rung and leaves the question
 open on purpose: the ladder is about size relative to neighbours and about

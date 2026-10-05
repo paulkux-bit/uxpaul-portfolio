@@ -565,3 +565,50 @@ proposed (64 / 72 / 88) and not added, per ruling 3a.
 (padding, the cover drawing, then 32), so no spacing value puts a full headline
 above the fold at 1280 x 800, 1440 x 900 or 1512 x 860. The levers are the card
 itself and the intro's length; both are recorded outside this spec.
+
+## 12. The narrative layout, 5 Oct 2026
+
+Ruled by Paul from the Line of Sight test page after the 2i-T review (Cowork's
+Plot Panel, CC's reviewers, the Falsifier). All values are existing steps; no
+step was added.
+
+| # | Relationship | Ruling | Where |
+|---|---|---|---|
+| S2a | Text to evidence, and evidence to text (image, bento, figure, the friction moment) | 48 on both sides at every width (was 32; bento bands were already 48) | One rule, `.cs-section > :is(.framed-pair, .figure, .figure--bento-theme, .bento-band, .friction-moment, .testimony-pair, .chart-pair, .journey-line, .promise-walk, .roadmap-list)`, `margin-block: var(--spacing-xl)` |
+| 7b | Heading to standfirst | 16, unchanged (1c, 30 Sep) | `.section-lede` owns it; `h2:has(+ .section-lede)` gives up its bottom margin |
+| 7b | Heading to any other first block | 24 (was 16 to a body paragraph, A1c, and 32 to a note or milestone) | the h2's own bottom margin, `--spacing-m`; `.cs-section > h2 + .milestone` drops the milestone's 32 top |
+
+**The evidence step moves from `--spacing-l` to `--spacing-xl` in the studies.**
+§3's table and §5's three tiers name `--spacing-l` as the evidence step, "prose
+to screenshots". Between prose and evidence in a case-study section it is now
+48. `--spacing-l` stays 32 everywhere else it is used (between bands in a run,
+3b; milestone to prose; a resolution headline to its bento, 7b of 30 Sep).
+
+**Each evidence block owns its own margin-block.** §5's single-owned-gap rule
+zeroed the paragraph and gave the component its `margin-top`, through
+adjacency rules (`p:has(+ .framed-pair)`, `p:has(+ .testimony-pair)`). Those two
+rules are removed. The block owns 48 on both sides, a paragraph keeps its 24
+bottom margin, and in block flow the two collapse to 48, so the gap is the same
+whatever sibling precedes the block, including a hidden one. The rule sits
+above `.cs-section > :first-child` and `:last-child` at the same specificity,
+so a block that opens or closes its section still yields its outer margin to
+the section break. It also absorbs `.cs-section > .bento-band` and
+`.cs-section > .figure--bento-theme:not(:last-child)`. Six blocks had a top
+margin and no bottom one (journey line, tier chart, promise walk, roadmap list,
+friction beats, Oku figure). The journey line, promise walk and roadmap list now
+have both through this rule; the tier chart sits inside `.chart-pair`, which is
+listed; the beats and the Oku figure are covered below.
+
+**What S2a does not reach, on purpose.** The friction beats keep 32 from their
+standfirst (2b, 30 Sep): they carry text as well as figures, and S2a's set is
+image, bento, figure, moment. The Oku figure inside a beat keeps 16 (4b). A run
+of bento bands keeps 32 between its bands (3b). Bard's resolution headline keeps
+32 to the bento it names (`.cs-section > .text-resolution-headline +
+.figure--bento-theme`). The milestone is a status block, not evidence. Blocks
+nested inside a theme, a resolution block or the chart pair keep their own
+internal gaps.
+
+**Measured on the five studies at 390 and 1440** (light and dark identical):
+every prose-to-evidence and evidence-to-prose gap is 48, heading to standfirst
+16, heading to body, note and milestone 24, and the section gaps are unchanged
+(73.8 at 390, 96 at 768, 114.9 at 1024, 127.9 at 1440).

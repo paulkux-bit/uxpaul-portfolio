@@ -148,6 +148,12 @@ const RUNGS = [
   { rung: 4, role: 'Section heading', selector: '.case-study-prose h2', band: 'display', voice: 'flared', ladder: true },
   { rung: 3, role: 'Numbered headline', selector: '.friction-beat__headline', band: 'display', voice: 'plain' /* 30px ceiling since 28 Sep 2026; flare tested at 32, cut */, ladder: true },
   { rung: 2, role: 'Standfirst', selector: '.case-study-prose .section-lede', band: 'read', voice: 'plain' /* reading type */, ladder: true },
+  // Rung 1 joined the ladder on 5 Oct 2026, when case-study body went fluid,
+  // 18 to 20px (ruling 5b). While it was a fixed 18 the 2/1 pair could only
+  // shrink at the standfirst's floor, and nothing asserted it; now both ends move,
+  // so check 3 walks it. Measured from the clamps: 1.167 at 390, 1.200 at 1440.
+  // text-body on home and About stays a fixed 18 and is not this entry.
+  { rung: 1, role: 'Body (case-study prose)', selector: '.case-study-prose', band: 'read', voice: 'plain' /* reading type */, ladder: true },
 
   // ── Display roles that v3 §5 bands but §3.3 never put on the ladder ──────
   // Mechanical additions: the spec already assigns these a band, and only the
