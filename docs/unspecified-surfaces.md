@@ -39,6 +39,20 @@ is *only geometry and numerals*), how a stroke keeps its weight across scales
 table form. Until then the rule lives in
 `docs/urbn-delivery-promise-build-brief.md` §3.1 and in the two components.
 
+**The turn (T6), the "How do you...?" section.** Joined 5 Oct 2026 from the
+narrative layout, and ruled the same day, so it is recorded here as found and
+already resolved rather than open. No spec governed a section whose heading is
+smaller than its first paragraph: the question is a heading at standfirst size,
+and the answer is a paragraph at the hero title's size, so neither the h2 rung
+nor the standfirst rung describes what the pair is, and the section break alone
+gave the page's one typographic event the same air as every other section (122
+above and 106 below at 390 on the test page, raised before the build). Paul
+ruled G1 (48 more above, 32 more below, as padding inside the section), S3b (48
+from the answer to the next paragraph) and K1 (the key phrase at 600). The type
+rules live in `type-system-v3-locked.md` §3.4 and the gaps in
+`spacing-system-v1-locked.md` §12; this entry stays as the record of how the
+surface arrived.
+
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
 

@@ -121,6 +121,12 @@
   --type-standfirst:        clamp(var(--type-21), 0.2857vw + 1.2429rem, var(--type-24));  /* rung 2, 21 -> 24px */
   --type-numbered-headline: clamp(1.625rem, 0.4255vw + 1.492rem, var(--type-30));       /* rung 3, 26 -> 30px */
 
+  /* Rung 5, the case-study hero, 40 -> 72px. The clamp is .hero-block__title's,
+     unchanged, lifted into a token on 5 Oct 2026 because a second role now sets at
+     this size: the turn's answer (T6). Two copies of one clamp would be two places
+     for rung 5 to drift. Display sizes are otherwise still untokenised (§3.6). */
+  --type-case-study-hero:   clamp(2.5rem, 4.267vw + 1.353rem, 4.5rem);
+
   /* Rung 1 in the study prose is fluid since 5 Oct 2026 (ruling 5b): 18px at 390,
      20px at 1440, the same crossovers as the standfirst, so the standfirst holds
      1.167 over it at 390 and 1.200 at 1440 and never less in between. lint:type
@@ -225,6 +231,7 @@
 .milestone__date,
 .hero-block__title,
 .case-study-prose h2,
+.case-study-prose .turn-answer,
 .text-lede,
 .about-hero__pov {
   --flar: 100;
@@ -1987,6 +1994,61 @@
   text-wrap: balance;     /* display-tier standfirst: even the lines, no short tail (like h2/headlines/labels) */
 }
 
+/* ── The turn (T6, ruled 5 Oct 2026) ─────────────────────────────────────
+   The study's "How do you...?" section: the question small and grey, the answer
+   at the hero title's rung, light, with its key phrase heavy on its own line.
+   The page's one typographic event, so nothing else below the title sets at this
+   size. Markup in the MDX:
+     <section className="cs-section cs-section--turn">
+       ## question
+       <p className="section-lede turn-answer">Setup <span className="turn-answer__key">key phrase.</span></p>
+   The answer keeps .section-lede so `h2:has(+ .section-lede)` hands it the
+   heading gap (16), and these rules follow the standfirst rule so they win at
+   equal specificity. Recorded in docs/unspecified-surfaces.md and ruled in type
+   v3 §3.4 and spacing v1 §12. */
+
+/* G1: extra air on top of the section break, 48 above and 32 below, inside the
+   section so the break itself is unchanged. 176 above and 160 below at 1440,
+   122 and 106 at 390. */
+.cs-section--turn {
+  padding-block: var(--spacing-xl) var(--spacing-l);
+}
+
+/* The question: standfirst size and colour, weight 400, plain. --flar: 0 is an
+   override, not a restatement of the initial value: `.case-study-prose h2`
+   flares every section heading and this one must not. */
+.case-study-prose .cs-section--turn h2 {
+  --flar: 0;
+  font-size: var(--type-standfirst);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0;
+  color: var(--text-secondary);
+  max-width: 40ch;
+}
+
+/* The answer: rung 5 size, leading and flare, weight 340, primary. The 340 spends
+   the "one moment per case study" signature placement (§3.2; allowlisted in
+   lint:type). Tracking is the test page's -0.025em, not the -0.020 rung 5 took on
+   22 Aug 2026. S3b: 48 to the paragraph after it. */
+.case-study-prose .turn-answer {
+  font-size: var(--type-case-study-hero);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  font-weight: 340;
+  color: var(--text-primary);
+  max-width: 18ch;
+  text-wrap: balance;
+  margin: var(--spacing-s) 0 var(--spacing-xl);
+}
+
+/* K1: the key phrase at 600 on its own line. 700 would fail lint:type check 13,
+   and 720 would make this a second 340/720 signature inside one placement. */
+.case-study-prose .turn-answer__key {
+  display: block;
+  font-weight: 600;
+}
+
 /* Standing disclosure about the artifacts on the page (synthetic data, redaction,
    NDA scope). Deliberately quiet: caption register, muted, one line where it fits.
    Sits below a section heading, not inside a figure, so it governs everything after
@@ -3495,7 +3557,7 @@ html.dark .figure-placeholder {
 .hero-block__title {
   /* Rung 5. Endpoints unchanged at 40 and 72; the slope is retuned so its
      crossovers land on rung 4's, at 430 and 1180 (v3 §3.3). */
-  font-size: clamp(2.5rem, 4.267vw + 1.353rem, 4.5rem);
+  font-size: var(--type-case-study-hero); /* the same clamp, tokenised 5 Oct 2026 */
   line-height: 1.0;
   color: var(--text-primary);
   margin: 0;

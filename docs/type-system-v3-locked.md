@@ -123,6 +123,8 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 **Inventory, so the count is not misread.** The home hero is **one** placement, not four: `text-lede` carries the 340, and the three `font-[720]` spans in `app/page.tsx` are load-bearing noun phrases *inside that same `h1`*. One allowlist entry covers all four declarations. Two of the three permitted placements are still unspent — the about opener and one case-study moment. The signature is currently **under**-used.
 
+**Updated 5 Oct 2026: the case-study moment is spent, by the turn's answer (T6).** Weight 340 at rung 5, one per study, allowlisted as `.case-study-prose .turn-answer`. Its heavy half is 600 rather than 720 (ruling K1), so it is a light-against-heavy contrast in the signature's spirit without being a second 340/720 pair. The about opener is the one placement left.
+
 ### 3.3 The ladder
 
 | Rung | Role | Clamp | 320px | 1568px | Width |
@@ -168,6 +170,21 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 - **1c, one measure token, `--measure-reading: 32em`.** It replaces 64ch at every reading measure in the studies: body paragraphs (`:where(.case-study-prose) p`), `.friction-beat__scene`, `.bento-theme__intro`, `.bento-theme__caption` and `.journey-line__breaks li`. `em` resolves on the element that reads the token, so body at 20px gets 640px, body at 18px gets 576px, the 18px caption gets 576px and the 16px journey list 512px. **64ch was never 64 characters**: `1ch` in Commissioner is 0.652em (the "0" advance), so 64ch at 18px was 752px, about 90 characters a line. Measured on the five studies at 768, 1024 and 1440 after the change: median 66 to 71 characters per full body line, maximum 77, none over 80 (WCAG 1.4.8). Below 768 the column, not the token, sets the measure.
 - **5b, fluid body, 18 to 20px.** `--type-20: 1.25rem` joins the scale beside `--type-18` (it is not on the Bringhurst list, which goes 18 then 21; it is the body's ceiling and nothing else uses it). The role token is `--type-prose: clamp(var(--type-18), 0.1905vw + 1.0786rem, var(--type-20))`, on `.case-study-prose`: 18px at 390, 20px at 1440, the standfirst's crossovers, so standfirst over body is 1.167 at 390 and 1.200 at 1440 and never lower between. Rung 1 is on the ladder in `RUNGS` now that it moves, so check 3 walks the 2/1 pair (proved red by moving the ceiling to `--type-21`: 1.143 at 1965px).
 - **6a, leading 1.6** for case-study prose, from the 1.70 ruled on 28 Sep (4b). It moves everything in the prose that inherits its leading; measured, that is the body, the friction scenes, the 01/02/03 marker (1.7 to 1.6 at 16 to 18px), the pull-quote `cite` and the testimony source line (both 14px, 23.8 to 22.4px a line). Captions that declare their own leading (`.bento-theme__caption` 1.35, `.figure__caption` 1.5) do not move (ruling 4a).
+
+**AMENDED 5 Oct 2026: the turn (T6), two roles that borrow rung sizes (Paul's rulings T6, K1, G1, S3b; the narrative layout).** Each Template A study has one "How do you...?" section, `.cs-section--turn`. Its question and answer are set as a pair and are the page's one typographic event below the title.
+
+| role | selector | size | weight | colour | line-height | tracking | max-width | wrap | voice |
+|---|---|---|---|---|---|---|---|---|---|
+| question | `.case-study-prose .cs-section--turn h2` | rung 2, `--type-standfirst` (21 to 24) | 400 | `--text-secondary` | 1.45 | 0 | 40ch | balance (inherited from the h2) | plain, `--flar: 0` |
+| answer | `.case-study-prose .turn-answer` | rung 5, `--type-case-study-hero` (40 to 72) | 340 | `--text-primary` | 1.00 | −0.025em | 18ch | balance | flared |
+| key phrase | `.case-study-prose .turn-answer__key` | inherits | 600 (K1) | inherits | inherits | inherits | own line (`display: block`) | | flared (inherits) |
+
+- **Both are off the ladder.** They share a rung's clamp with that rung's own selector (answer with `.hero-block__title`, question with the standfirst), so a ladder entry would compute 1.00 against its twin. In `RUNGS` both carry `ladder: false`.
+- **The answer spends the case-study signature placement** (§3.2, "one moment per case study"). Its key phrase is 600, not 720: 700 fails check 13, and 720 would put a full 340/720 pair inside a placement whose light half is the point. Allowlisted in `ALLOWLIST.signature`.
+- **Tracking −0.025em, not rung 5's −0.020.** The answer was ruled from the test page at −0.025em; the 22 Aug correction below is about the hero title's two clauses and was not re-judged here. Recorded so a later pass does not "correct" one to the other without a render.
+- **`--type-case-study-hero`** holds rung 5's clamp, unchanged, moved out of `.hero-block__title` so the answer reads the same value rather than a copy. It is the first display-size token; the rest of the display band is still untokenised (§3.6).
+- **The question overrides the h2 flare.** `.case-study-prose h2` is flared at the 52px cut; the question is reading size and takes `--flar: 0` explicitly, which §10.3's "plain selectors take no declaration" does not forbid, because this is an override of an inherited match, not a restatement of the initial value. `scripts/assert-bands.mjs` asserts it at 0 and the answer at 100 on the Line of Sight route.
+- Measured at 1440: question 24px, two lines; answer 72px, two lines ("Start the analysis" / "where the data already is."), key 600; at 390 the answer is 40px on three lines.
 
 **AMENDED 22 Aug 2026 — rung 5 corrects to −0.020, and the spec yields to the CSS.**
 
@@ -589,6 +606,7 @@ The same shape as check 3 conflating rung with selector, and worth stating as a 
 |---|---|---|---|---|
 | 88px | `.milestone__date` | display | flared | tested at 88 |
 | 72px | `.hero-block__title` | display | flared | tested at 72 |
+| 72px | `.case-study-prose .turn-answer` | display | flared | rung 5's clamp; added 5 Oct 2026 (T6) |
 | 60px | `.text-lede` | display | flared | above the line |
 | 56px | `.about-hero__pov` | display | flared | **judgment** — 51.2px at 1440 |
 | 52px | `.case-study-prose h2` | display | flared | tested at 52, the boundary |

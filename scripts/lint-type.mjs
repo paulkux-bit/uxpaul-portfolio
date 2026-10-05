@@ -84,13 +84,15 @@ const ALLOWLIST = {
     { selector: '.comp-statement .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
     { selector: '.transformation', reason: 'grid container, renders on no route in the 28 Sep census; Phase 12' },
   ],
-  // §3.2 permits three signature placements sitewide. ONE is spent. The home
+  // §3.2 permits three signature placements sitewide. TWO are spent. The home
   // hero is a single placement covering four declarations: .text-lede carries
   // the 340, and the three font-[720] spans in app/page.tsx are noun phrases
-  // inside that same h1. The about opener and one case-study moment are unspent.
+  // inside that same h1. The case-study moment is the turn's answer (T6, 5 Oct
+  // 2026), one per study. The about opener is unspent.
   signature: [
     { selector: '.text-lede', reason: '§3.2 placement 1 of 3 — the home hero h1; its 340 and the three font-[720] spans inside it are one signature, ceiling 60px' },
     { selector: '.text-lede strong', reason: '§3.2 placement 1 of 3, its loud half: the three domain nouns inside the home hero h1, moved out of JSX font-[720] on 1 Oct 2026 so this check can see them' },
+    { selector: '.case-study-prose .turn-answer', reason: '§3.2 placement 2 of 3, "one moment per case study": the T6 turn answer at the rung 5 clamp, ceiling 72px. Its key phrase is 600, not 720 (ruling K1, 5 Oct 2026), so the light half is spent here without the loud one' },
   ],
 };
 
@@ -154,6 +156,17 @@ const RUNGS = [
   // so check 3 walks it. Measured from the clamps: 1.167 at 390, 1.200 at 1440.
   // text-body on home and About stays a fixed 18 and is not this entry.
   { rung: 1, role: 'Body (case-study prose)', selector: '.case-study-prose', band: 'read', voice: 'plain' /* reading type */, ladder: true },
+
+  // ── The turn (T6), ruled 5 Oct 2026 ──────────────────────────────────────
+  // Two roles that borrow a rung's size without being that rung's selector, so
+  // both are off the ladder: the answer shares rung 5's clamp with the hero title
+  // (a 1.00 ratio by design) and the question shares rung 2's with the standfirst.
+  // The answer is flared at a 72px ceiling, above the 52px cut, so check 11 needs
+  // it in CSS. The question is plain and carries `--flar: 0` in CSS, because it
+  // is also matched by `.case-study-prose h2`, which is flared; check 11 reads
+  // only the 100 rule, so the override is asserted by scripts/assert-bands.mjs.
+  { rung: 5, role: 'Turn answer (T6)', selector: '.case-study-prose .turn-answer', band: 'display', voice: 'flared' /* 72px */, ladder: false },
+  { rung: 2, role: 'Turn question (T6)', selector: '.case-study-prose .cs-section--turn h2', band: 'read', voice: 'plain' /* 24px, standfirst size */, ladder: false },
 
   // ── Display roles that v3 §5 bands but §3.3 never put on the ladder ──────
   // Mechanical additions: the spec already assigns these a band, and only the

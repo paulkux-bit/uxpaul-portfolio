@@ -42,7 +42,9 @@
 import { chromium } from 'playwright';
 
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
-const ROUTES = ['/', '/about', '/case-studies/uscg-bard', '/case-studies/us-navy-fdt-e', '/case-studies/nuuly'];
+// us-navy-dagr joined on 5 Oct 2026: it is the first route with the turn (T6),
+// whose answer is flared and whose question must not be.
+const ROUTES = ['/', '/about', '/case-studies/uscg-bard', '/case-studies/us-navy-fdt-e', '/case-studies/nuuly', '/case-studies/us-navy-dagr'];
 
 /** Mirrors RUNGS' `voice: 'flared'` set. lint:type check 11 keeps them equal. */
 const FLARED = [
@@ -51,6 +53,7 @@ const FLARED = [
   '.text-lede',           //  60px
   '.about-hero__pov',     //  51.2px @1440 — judgment, see RUNGS
   '.case-study-prose h2', //  52px — the boundary the cut was taken at
+  '.case-study-prose .turn-answer', // 72px, the T6 answer at rung 5's clamp (5 Oct 2026)
 ];
 
 /**
@@ -66,6 +69,11 @@ const PLAIN = [
   '.about-phase__title',      // 36.4px @1440, 40px ceiling
   '.text-cover',              // 32px
   '.friction-beat__headline', // 32px
+  // The T6 question (5 Oct 2026): reading size, and the one h2 in the prose that
+  // is NOT flared. It also matches `.case-study-prose h2`, so the flared read
+  // below excludes plain matches; otherwise this override would read as a
+  // failure of the h2 voice.
+  '.case-study-prose .cs-section--turn h2',
 ];
 
 /**
@@ -122,7 +130,10 @@ for (const route of ROUTES) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   await page.goto(BASE + route, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
-  for (const r of await read(page, MAPPED)) {
+  // A flared selector is read without the elements a plain selector claims, so a
+  // plain override nested inside a flared role (the T6 question inside
+  // `.case-study-prose h2`) is asserted once, at 0, rather than twice.
+  for (const r of [...(await read(page, FLARED, PLAIN)), ...(await read(page, PLAIN))]) {
     voiced[r.sel] ??= { total: 0, routes: [], values: new Set() };
     if (r.count) { voiced[r.sel].total += r.count; voiced[r.sel].routes.push(route); }
     r.values.forEach((v) => voiced[r.sel].values.add(v));
@@ -146,7 +157,7 @@ const assertVoice = (title, selectors, expected) => {
     const b = voiced[sel];
     const vals = [...b.values].filter(Boolean);
     const ok = b.total > 0 && vals.length === 1 && vals[0] === expected;
-    if (b.total === 0) fails.push(`${sel} matches ZERO elements on all five routes`);
+    if (b.total === 0) fails.push(`${sel} matches ZERO elements on all ${ROUTES.length} routes`);
     else if (!(vals.length === 1 && vals[0] === expected))
       fails.push(`${sel} computes --flar ${JSON.stringify(vals)}, expected ["${expected}"]`);
     console.log(

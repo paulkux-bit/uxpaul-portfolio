@@ -577,6 +577,8 @@ step was added.
 | S2a | Text to evidence, and evidence to text (image, bento, figure, the friction moment) | 48 on both sides at every width (was 32; bento bands were already 48) | One rule, `.cs-section > :is(.framed-pair, .figure, .figure--bento-theme, .bento-band, .friction-moment, .testimony-pair, .chart-pair, .journey-line, .promise-walk, .roadmap-list)`, `margin-block: var(--spacing-xl)` |
 | 7b | Heading to standfirst | 16, unchanged (1c, 30 Sep) | `.section-lede` owns it; `h2:has(+ .section-lede)` gives up its bottom margin |
 | 7b | Heading to any other first block | 24 (was 16 to a body paragraph, A1c, and 32 to a note or milestone) | the h2's own bottom margin, `--spacing-m`; `.cs-section > h2 + .milestone` drops the milestone's 32 top |
+| S3b | The turn (T6): answer to the paragraph after it | 48 | `.turn-answer`'s bottom margin, `--spacing-xl`; question to answer is the standfirst's 16 |
+| G1 | The turn's own section gaps | the section break plus 48 above and 32 below | `.cs-section--turn { padding-block: var(--spacing-xl) var(--spacing-l) }`; `--spacing-section` itself is unchanged |
 
 **The evidence step moves from `--spacing-l` to `--spacing-xl` in the studies.**
 §3's table and §5's three tiers name `--spacing-l` as the evidence step, "prose
@@ -607,6 +609,14 @@ of bento bands keeps 32 between its bands (3b). Bard's resolution headline keeps
 .figure--bento-theme`). The milestone is a status block, not evidence. Blocks
 nested inside a theme, a resolution block or the chart pair keep their own
 internal gaps.
+
+**The turn's gaps are ruled values, not a new step.** G1 adds space inside the
+section, as padding, so the break between any two sections stays
+`--spacing-section` and the turn simply sits in more air: 176 above its
+question and 160 below its last paragraph at 1440 (127.9 + 48, 127.9 + 32), 122
+and 106 at 390. It was raised as an unspecified surface (122 above and 106
+below on the test page) and is recorded in `docs/unspecified-surfaces.md` with
+this section as its resolution.
 
 **Measured on the five studies at 390 and 1440** (light and dark identical):
 every prose-to-evidence and evidence-to-prose gap is 48, heading to standfirst
