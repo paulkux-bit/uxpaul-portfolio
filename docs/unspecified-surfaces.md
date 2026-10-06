@@ -39,6 +39,30 @@ is *only geometry and numerals*), how a stroke keeps its weight across scales
 table form. Until then the rule lives in
 `docs/urbn-delivery-promise-build-brief.md` §3.1 and in the two components.
 
+**The turn (T6), the "How do you...?" section.** Joined 5 Oct 2026 from the
+narrative layout, and ruled the same day, so it is recorded here as found and
+already resolved rather than open. No spec governed a section whose heading is
+smaller than its first paragraph: the question is a heading at standfirst size,
+and the answer is a paragraph at the hero title's size, so neither the h2 rung
+nor the standfirst rung describes what the pair is, and the section break alone
+gave the page's one typographic event the same air as every other section (122
+above and 106 below at 390 on the test page, raised before the build). Paul
+ruled G1 (48 more above, 32 more below, as padding inside the section), S3b (48
+from the answer to the next paragraph) and K1 (the key phrase at 600). The type
+rules live in `type-system-v3-locked.md` §3.4 and the gaps in
+`spacing-system-v1-locked.md` §12; this entry stays as the record of how the
+surface arrived.
+
+**Ambient motion (the friction moment).** Joined 5 Oct 2026. Interaction v1 §3
+governs interaction speeds and §9 leaves entrance motion open; neither has a
+category for a loop that runs on its own. The convoy cinemagraph on Line of
+Sight is the first: a 10s loop on a sine-like ease, ruled from the test page
+(M2) and named in the theme as `--duration-moment` and `--ease-moment` so the
+values live once. What the systems would need to say: whether ambient loops are
+allowed beyond one per study, the pause control's place in the button rules
+(it borrows the theme toggle's states), and the finesse list Paul holds (easing,
+travel, the loop seam, transform rather than left and top).
+
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
 
@@ -206,6 +230,18 @@ audit of every remaining `margin-top`-only block-level rule, since the failure
 mode is silent until a page happens to exercise it. Raised 19 Aug 2026 by the
 Nuuly §5/§6 conversion from `FramedPair` to `BentoTheme`; extended 20 Aug 2026
 by `.milestone` in Nuuly §8.
+
+**Closed for evidence blocks 5 Oct 2026** (ruling S2a, `spacing-system-v1-locked.md`
+§12). The statement asked for is: the evidence block owns its vertical boundary,
+48 on both sides, through one `margin-block` rule covering every evidence block
+that sits directly in a section, ordered above the first- and last-child rules
+so a section's outer blocks still yield to the section break. That covers the
+framed pair, the bento theme and band, `<Figure>`, the friction moment and the
+four Delivery Promise modules; the audit of `margin-top`-only rules found six,
+and §12 says where each one landed. The milestone is not evidence and keeps its
+`:not(:last-child)` bottom; its token stays the open choice its CSS comment
+names. The entry stays as a record until this file is next consolidated, so the
+entry numbers other files cite do not shift.
 
 **Which rung the six unbanded display roles sit on.** v3 §9 already names six
 shipped selectors whose size ceilings sit on no rung and leaves the question

@@ -123,6 +123,8 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 **Inventory, so the count is not misread.** The home hero is **one** placement, not four: `text-lede` carries the 340, and the three `font-[720]` spans in `app/page.tsx` are load-bearing noun phrases *inside that same `h1`*. One allowlist entry covers all four declarations. Two of the three permitted placements are still unspent — the about opener and one case-study moment. The signature is currently **under**-used.
 
+**Updated 5 Oct 2026: the case-study moment is spent, by the turn's answer (T6).** Weight 340 at rung 5, one per study, allowlisted as `.case-study-prose .turn-answer`. Its heavy half is 600 rather than 720 (ruling K1), so it is a light-against-heavy contrast in the signature's spirit without being a second 340/720 pair. The about opener is the one placement left.
+
 ### 3.3 The ladder
 
 | Rung | Role | Clamp | 320px | 1568px | Width |
@@ -132,7 +134,7 @@ There is no fourth value and no per-module choice. If you are picking a width by
 | 4 | Section heading | `clamp(1.875rem, 3vw + 1rem, 3.25rem)` | 30 | 52 | 94 |
 | 3 | Numbered headline | `clamp(1.625rem, 0.4255vw + 1.492rem, 1.875rem)` | 26 | 30 | 94 |
 | 2 | Standfirst | `clamp(1.3125rem, 0.2857vw + 1.2429rem, 1.5rem)` | 21 | 24 | 100 |
-| 1 | Body | `1.125rem` | 18 | 18 | 100 |
+| 1 | Body | `1.125rem`; case-study prose `--type-prose`, 18 to 20px (§3.4, 5 Oct 2026) | 18 | 18 (20 in the studies) | 100 |
 | 0.5 | Support | `1rem` | 16 | 16 | 100 |
 | 0 | Caption / eyebrow | `0.875rem` | 14 | 14 | 100 |
 
@@ -153,7 +155,7 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 | 4 | 1.08 | −0.02em | 30ch banded, 22ch flat | balance |
 | 3 | 1.15 | 0 | 42ch | balance |
 | 2 | 1.45 | 0 | 52ch | balance |
-| 1 | 1.70 case-study prose; 1.65 `text-body` | 0 | 64ch | pretty |
+| 1 | case-study prose 1.70 below 1024px, 1.60 from 1024px; 1.65 `text-body` | 0 | `--measure-reading`, 32em (case-study prose) | pretty |
 | 0.5 | 1.5 | 0 | — | — |
 | 0 | 1.5 | 0, eyebrows 0.08em | 56ch | pretty |
 
@@ -162,6 +164,28 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 **AMENDED 28 Sep 2026: `pretty` now reaches all case-study body text (ruling 3a).** It had reached only problem and frictions sections. It now applies through `:where(.case-study-prose) p`, which took one-word last lines across the five studies from 15 to 0 at 390, 768 and 1440 with no line added or lost.
 
 **AMENDED 28 Sep 2026: rung 1 line-height is 1.70 for case-study prose (ruling 4b).** `.case-study-prose` had always shipped 1.70 while this table said 1.65. The spec yields, because every copy ruling was judged at 1.70. The `text-body` utility on home and about stays 1.65.
+
+**AMENDED 5 Oct 2026: the case-study reading measure, size and leading (Paul's rulings 1c, 5b, 6a; the 2i-T review of the narrative layout).** Three changes to rung 1 in `.case-study-prose`. Home and About (`text-body`) are unchanged.
+
+- **1c, one measure token, `--measure-reading: 32em`.** It replaces 64ch at every reading measure in the studies: body paragraphs (`:where(.case-study-prose) p`), `.friction-beat__scene`, `.bento-theme__intro`, `.bento-theme__caption` and `.journey-line__breaks li`. `em` resolves on the element that reads the token, so body at 20px gets 640px, body at 18px gets 576px, the 18px caption gets 576px and the 16px journey list 512px. **64ch was never 64 characters**: `1ch` in Commissioner is 0.652em (the "0" advance), so 64ch at 18px was 752px, about 90 characters a line. Measured on the five studies at 768, 1024 and 1440 after the change: median 66 to 71 characters per full body line, maximum 77, none over 80 (WCAG 1.4.8). Below 768 the column, not the token, sets the measure.
+- **5b, fluid body, 18 to 20px.** `--type-20: 1.25rem` joins the scale beside `--type-18` (it is not on the Bringhurst list, which goes 18 then 21; it is the body's ceiling and nothing else uses it). The role token is `--type-prose: clamp(var(--type-18), 0.1905vw + 1.0786rem, var(--type-20))`, on `.case-study-prose`: 18px at 390, 20px at 1440, the standfirst's crossovers, so standfirst over body is 1.167 at 390 and 1.200 at 1440 and never lower between. Rung 1 is on the ladder in `RUNGS` now that it moves, so check 3 walks the 2/1 pair (proved red by moving the ceiling to `--type-21`: 1.143 at 1965px).
+- **6a, leading 1.6** for case-study prose, from the 1.70 ruled on 28 Sep (4b). **Revised the same day by ruling 1a: 1.7 below 1024px, 1.6 from 1024px up**, after Paul read 1.7 on his phone on the test page. One declaration on `.case-study-prose` and one inside its existing 1024 query; the wider column takes the tighter leading. Measured at 20px on 1440: 32px a line; at 18px on 390: 30.6px.
+- **5a, three surfaces pinned at their old leading.** The 01/02/03 marker in the friction beats (`.friction-beat .thread-index`; the same marker inline in Bard's resolution headlines takes its h3's leading and is untouched), the pull-quote `cite` and the testimony source line (`.testimony-pair__source`) never declared a leading and inherited 1.7 from the prose. Under 1a they would have moved to 1.6 from 1024; each now declares `line-height: 1.7`, so they render as they did on main (marker 27.2px at 390, 30.6px at 1440; cite and source 23.8px). Captions that declare their own leading (`.bento-theme__caption` 1.35, `.figure__caption` 1.5) never moved (ruling 4a).
+
+**AMENDED 5 Oct 2026: the turn (T6), two roles that borrow rung sizes (Paul's rulings T6, K1, G1, S3b; the narrative layout).** Each Template A study has one "How do you...?" section, `.cs-section--turn`. Its question and answer are set as a pair and are the page's one typographic event below the title.
+
+| role | selector | size | weight | colour | line-height | tracking | max-width | wrap | voice |
+|---|---|---|---|---|---|---|---|---|---|
+| question | `.case-study-prose .cs-section--turn h2` | rung 2, `--type-standfirst` (21 to 24) | 400 | `--text-secondary` | 1.45 | 0 | 40ch | balance (inherited from the h2) | plain, `--flar: 0` |
+| answer | `.case-study-prose .turn-answer` | rung 5, `--type-case-study-hero` (40 to 72) | 340 | `--text-primary` | 1.00 | −0.025em | 18ch | balance | flared |
+| key phrase | `.case-study-prose .turn-answer__key` | inherits | 600 (K1) | inherits | inherits | inherits | own line (`display: block`) | | flared (inherits) |
+
+- **Both are off the ladder.** They share a rung's clamp with that rung's own selector (answer with `.hero-block__title`, question with the standfirst), so a ladder entry would compute 1.00 against its twin. In `RUNGS` both carry `ladder: false`.
+- **The answer spends the case-study signature placement** (§3.2, "one moment per case study"). Its key phrase is 600, not 720: 700 fails check 13, and 720 would put a full 340/720 pair inside a placement whose light half is the point. Allowlisted in `ALLOWLIST.signature`.
+- **Tracking −0.025em, not rung 5's −0.020.** The answer was ruled from the test page at −0.025em; the 22 Aug correction below is about the hero title's two clauses and was not re-judged here. Recorded so a later pass does not "correct" one to the other without a render.
+- **`--type-case-study-hero`** holds rung 5's clamp, unchanged, moved out of `.hero-block__title` so the answer reads the same value rather than a copy. It is the first display-size token; the rest of the display band is still untokenised (§3.6).
+- **The question overrides the h2 flare.** `.case-study-prose h2` is flared at the 52px cut; the question is reading size and takes `--flar: 0` explicitly, which §10.3's "plain selectors take no declaration" does not forbid, because this is an override of an inherited match, not a restatement of the initial value. `scripts/assert-bands.mjs` asserts it at 0 and the answer at 100 on the Line of Sight route.
+- Measured at 1440: question 24px, two lines; answer 72px, two lines ("Start the analysis" / "where the data already is."), key 600; at 390 the answer is 40px on three lines.
 
 **AMENDED 22 Aug 2026 — rung 5 corrects to −0.020, and the spec yields to the CSS.**
 
@@ -256,8 +280,9 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 
 | layer | tokens | values |
 |---|---|---|
-| scale | `--type-14` `--type-16` `--type-18` `--type-21` `--type-24` `--type-30` | the classic typographic scale, 14 to 30 |
+| scale | `--type-14` `--type-16` `--type-18` `--type-20` `--type-21` `--type-24` `--type-30` | the classic typographic scale, 14 to 30, plus 20 (the case-study body ceiling, 5 Oct 2026) |
 | roles | `--type-caption` `--type-small` `--type-body` | rungs 0, 0.5, 1: the scale's 14, 16, 18 |
+| roles | `--type-prose` | rung 1 in case-study prose, `clamp(var(--type-18), …, var(--type-20))`, 18 to 20px (ruling 5b, 5 Oct 2026) |
 | roles | `--type-standfirst` | rung 2, `clamp(var(--type-21), …, var(--type-24))` |
 | roles | `--type-numbered-headline` | rung 3, `clamp(1.625rem, …, var(--type-30))`: the 26px phone floor is the one off-scale value, and it lives only here |
 
@@ -582,6 +607,7 @@ The same shape as check 3 conflating rung with selector, and worth stating as a 
 |---|---|---|---|---|
 | 88px | `.milestone__date` | display | flared | tested at 88 |
 | 72px | `.hero-block__title` | display | flared | tested at 72 |
+| 72px | `.case-study-prose .turn-answer` | display | flared | rung 5's clamp; added 5 Oct 2026 (T6) |
 | 60px | `.text-lede` | display | flared | above the line |
 | 56px | `.about-hero__pov` | display | flared | **judgment** — 51.2px at 1440 |
 | 52px | `.case-study-prose h2` | display | flared | tested at 52, the boundary |
