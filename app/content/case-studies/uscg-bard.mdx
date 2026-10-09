@@ -6,7 +6,7 @@ template: "A"
 disciplines: ["systems design", "design systems", "data visualization", "civic / federal"]
 featured: true
 order: 1
-problemFraming: "How do 56 jurisdictions align without changing?"
+problemFraming: "How do 56 jurisdictions align without changing how they work?"
 projectName: "Bard"
 headline: "Collapsing fifty-six incompatible jurisdiction forms into one federal schema."
 summary: "Sole designer on the first ground-up overhaul of Bard, the federal system of record for boating-incident reporting across fifty-six jurisdictions."
@@ -23,25 +23,23 @@ import { BentoBand } from '@/components/bento';
 
 <HeroBlock
   title={['Every state reported.', 'Nobody could compare.']}
-  role="Investigators in every U.S. state and territory file boating accidents into one federal database. I'm the sole designer on its first ground-up overhaul in over twenty years."
+  role="Investigators in every U.S. state and territory file boating accident reports into one federal database, Bard. I am the sole designer of its first ground-up redesign since it launched in 2004."
   image={{
     src: '/case-studies/uscg-bard/hero.png',
-    alt: "Bard dashboard greeting a state coordinator by name, summarizing the year's leading contributing factor, flagging two incidents returned for correction, and charting year-to-date incidents against the prior year. Synthetic data.",
+    alt: "Bard dashboard greeting a state investigator by name, summarizing the year's leading contributing factor, flagging two incidents returned for correction, and charting year-to-date incidents against the prior year. Synthetic data.",
   }}
   callout={{
-    body: "Maria used to go looking for the case at risk. Now it's the first thing she sees.",
+    body: 'Maria used to decide for herself which case to work on first. The new Bard puts it at the top.',
   }}
 />
 
 <section className="cs-section cs-section--problem">
 
-## Investigators need to get every case right, but the system made that harder.
+## Every case is a federal record, and some end up in court.
 
-**Boating accident cases are rising**, and each one becomes a federal record, filed against a legal deadline.
+More people are on the water than ever, so boating accidents are rising. A state investigator like Maria files every accident in her state as a case, against a legal deadline, and the record is hers.
 
-**The record is Maria's.** It can end up in court.
-
-**The old system made required data easy to skip.** Her cases came back from the Coast Guard for corrections she could have caught at entry.
+**But the old system made it easy to skip required data,** so her cases came back from the Coast Guard for corrections she could have caught at entry.
 
 <FramedPair
   framed={false}
@@ -65,7 +63,7 @@ import { BentoBand } from '@/components/bento';
     caption: (
       <>
         <strong>Boating Accident Report.</strong> Near miss or fatality, every
-        case fills the same form.
+        case gets the same questions.
       </>
     ),
   }}
@@ -75,64 +73,44 @@ import { BentoBand } from '@/components/bento';
 
 <section className="cs-section cs-section--frictions">
 
-## The real work was happening around the system, not in it.
+## The old system failed Maria and the Coast Guard in three ways.
 
-<p className="section-lede">I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the legacy system's survey results and support tickets.</p>
+<p className="section-lede">I talked to twenty people who do the work, from the busiest states to the smallest territories, and read the old system's survey results and support tickets.</p>
 
 <FrictionMoment work="degas-millinery-shop" />
 
-{/* NUMERALS: 56 in display and alt text, "fifty-six" in prose. The beat headline below is
-    display, so it takes the word; section 3's heading and this study's summary are prose and
-    take the word too; problemFraming and manifest alt strings take the numeral. */}
+{/* NUMERALS: 56 in display and alt text, "fifty-six" in prose. The paragraph below,
+    section 3's heading and this study's summary are prose and take the word;
+    problemFraming and manifest alt strings take the numeral. */}
 
-<ol className="friction-beats" role="list">
-  <li className="friction-beat" data-thread="1">
-    <div className="friction-beat__text">
-      <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">Fifty-six forks</h3>
-      <p className="friction-beat__scene">Each jurisdiction had its own form. Every attempt to align them had died in planning.</p>
-    </div>
-  </li>
-  <li className="friction-beat" data-thread="2">
-    <div className="friction-beat__text">
-      <span className="thread-index">02</span>
-      <h3 className="friction-beat__headline">Six months behind</h3>
-      <p className="friction-beat__scene">National figures were compiled by hand, so the Coast Guard always worked from six-month-old numbers. Safety campaigns were aimed at last season's problem.</p>
-    </div>
-  </li>
-  <li className="friction-beat" data-thread="3">
-    <div className="friction-beat__text">
-      <span className="thread-index">03</span>
-      <h3 className="friction-beat__headline">Four disconnected tabs</h3>
-      <p className="friction-beat__scene">Filing one case required investigators to cross-check the record across four browser tabs. The judgment part of the job waited.</p>
-    </div>
-  </li>
-</ol>
+Every attempt to align the fifty-six forms had died in planning, so nobody could compare one state's records with another's.
+
+The Coast Guard compiled national figures by hand, worked from six-month-old numbers, and aimed safety campaigns at last season's problem. For Maria, filing one case meant cross-checking the record across four browser tabs, so the judgment part of her job waited.
+
+</section>
+
+<section className="cs-section cs-section--turn">
+
+## How do you compare fifty-six jurisdictions without changing how any of them work?
+
+<p className="section-lede turn-answer">Standardize the data, <span className="turn-answer__key">not the people.</span></p>
+
+{/* ANTITHESIS BUDGET: BARD keeps one "X, not Y" line, this answer, which is the house
+    budget. Section 2's heading used to be a second ("around the system, not in it"); its
+    8 Oct 2026 rewrite is not one. The others were cut earlier, section 1's "not easier"
+    and section 8's "not design". Do not add a second. */}
+
+They were never all going to agree on one form. So I left local processes alone and designed a standard data structure underneath. A boating accident in Hawaii and one in Florida can finally be counted the same way.
 
 </section>
 
 <section className="cs-section">
 
-## How do you unify fifty-six jurisdictions without changing one?
-
-<p className="section-lede">Standardize the data, not the people.</p>
-
-{/* ANTITHESIS BUDGET: BARD keeps two "X, not Y" lines, this lede and section 2's heading.
-    The house budget is one. Both were kept on purpose: section 2's states what the research
-    found, this one states what I did about it. The others were cut, section 1's "not easier"
-    and section 8's "not design". Do not add a third. */}
-
-**They were never all going to agree on one form.** I left local processes alone and designed a standard data structure underneath. A crash in Hawaii and a crash in Florida can finally be counted the same way.
-
-</section>
-
-<section className="cs-section">
-
-## Each state files a different form into the same record.
+## I designed a modular form, so each state files its own way into one record.
 
 <p className="section-lede">Federal fields are required. Everything else is up to the jurisdiction.</p>
 
-**The modular form gives Maria and the Coast Guard each their own screen.** Maria sees only the fields her case needs. The Coast Guard opens that record in its own view, with a compliance score that fills in as she types.
+Maria and the Coast Guard read the same record for different reasons, and the form serves both. Maria can check her case the way the Coast Guard will read it. A compliance score fills in as she types, so she catches what used to come back for corrections. She sees only the fields her case needs.
 
 <BentoBand
   src="/case-studies/uscg-bard/product/form-structure.png"
@@ -158,13 +136,15 @@ import { BentoBand } from '@/components/bento';
 </section>
 
 <section className="cs-section">
-  <h2>One data structure changed how she files, sees, and counts.</h2>
+  <h2>I designed one place where Maria files, sees, and counts her cases.</h2>
 
-  <p className="section-note">Every screen on this page runs on synthetic data.</p>
+  <p className="section-lede">Each one answers one of the three ways the old system failed.</p>
 
-  {/* The axis lockup is now the section header: the sentence h3 it used to precede is gone,
-      so this carries the heading role. text-resolution-headline is the same register as
-      .friction-beat__headline, keeping the friction→resolution read headline-to-headline. */}
+  <p>Filing takes one screen instead of four browser tabs. Her dashboard updates as each case arrives. The numbers compare across states, so the Coast Guard can act in season. And the case she needs to work first sits at the top.</p>
+
+  {/* The axis lockup is the subsection header: the sentence h3 it used to precede is gone,
+      so this carries the heading role. text-resolution-headline is the register the retired
+      .friction-beat__headline used; section 2 now names the three failures in prose. */}
   <h3 className="mt-l mb-l flex items-baseline gap-2xs text-resolution-headline">
     <span className="thread-index">01</span>
     <span>How she files</span>
@@ -190,9 +170,11 @@ import { BentoBand } from '@/components/bento';
 
 <section className="cs-section">
 
-## The work was showing every jurisdiction its own view.
+## Every state wanted to keep its own fields, so I kept every one of them.
 
-**The resistance was never about the data model.** Each jurisdiction wanted to know what it would lose. Every field a state already had stayed in the system, optional for everyone else.
+<p className="section-lede">The resistance was never about the data structure.</p>
+
+A field only one state uses stays in the system, optional for everyone else.
 
 <BentoBand
   src="/case-studies/uscg-bard/reflection/reflection-table--band.png"
@@ -227,12 +209,12 @@ import { BentoBand } from '@/components/bento';
 ## Where Bard stands.
 
 <div className="milestone">
-  <p className="milestone__frame">On track for Initial Operating Capability with the U.S. Coast Guard.</p>
+  <p className="milestone__frame">On track for Initial Operating Capability, its first live use by the U.S. Coast Guard</p>
   <p className="milestone__date">Spring 2027</p>
   <p className="milestone__sub">In build and testing now.</p>
 </div>
 
-Nobody has filed a real case in it yet. The numbers come after the first season. Standardizing the incident form was the foundation, and getting it right is what lets the Coast Guard see a season as it happens.
+Nobody has filed a real case in it yet, so the numbers come after the first season. The data structure underneath every form is what lets the Coast Guard see a season as it happens.
 
 </section>
 
@@ -240,6 +222,8 @@ Nobody has filed a real case in it yet. The numbers come after the first season.
 
 ## Role
 
-Sole product designer on Bard, a U.S. Coast Guard system. Work for the U.S. Navy, alongside product and engineering, and with Coast Guard stakeholders. On Bard since November 2025.
+Sole product designer on Bard, a U.S. Coast Guard system. Responsible for research, information architecture, and UI.
+
+Worked for the U.S. Navy alongside product and engineering, with Coast Guard stakeholders. On Bard since November 2025.
 
 </section>
