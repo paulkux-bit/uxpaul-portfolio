@@ -2197,19 +2197,36 @@
   box-shadow: none;
 }
 
-/* A dark-only ink file (FramedPair `darkSrc`, ruling draw-c, 9 Oct 2026). The
-   site themes by the class on <html>, so the swap is two images and this toggle,
-   not <picture> with prefers-color-scheme. Both carry .cover-art, so the dark file
-   takes the same invert the light one had in dark mode: the only thing dark mode
-   changes is which file shows. Two classes deep so it beats .figure__image's
-   `display: block`, which is authored later. */
-.framed-pair__cell .framed-pair__ink-dark {
+/* Dark mode's ink (FramedPair `darkMask`; rulings draw-c and 2b, 9 Oct 2026).
+   Inverted to pure white the drawing read like a photo negative, so in dark mode
+   the tile shows a block of --text-secondary masked by the simplified drawing's
+   alpha instead of an image: the ink takes the token's colour and follows the
+   theme, and outside the ink nothing paints, so the page ground shows through.
+   The site themes by the class on <html>, so html.dark does the swap, not
+   prefers-color-scheme. mask-image is set inline per drawing (AVIF with a WebP
+   fallback by image-set); the size and repeat live here.
+
+   THE MASK SITS OVER THE LIGHT IMAGE, which stays in the layout in dark mode,
+   hidden with visibility rather than display, so the tile is exactly as tall in
+   both themes. A block sized from the declared ratio differed from the served
+   image by up to 0.28 px and moved a caption line by 1 CSS px at 1024 @2x. */
+.framed-pair__ink {
+  position: relative;
+}
+.framed-pair__cell .framed-pair__ink-mask {
   display: none;
+  position: absolute;
+  inset: 0;
+  background-color: var(--text-secondary);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
 html.dark .framed-pair__cell .framed-pair__ink-light {
-  display: none;
+  visibility: hidden;
 }
-html.dark .framed-pair__cell .framed-pair__ink-dark {
+html.dark .framed-pair__cell .framed-pair__ink-mask {
   display: block;
 }
 
