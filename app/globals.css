@@ -2948,11 +2948,12 @@ html.dark .cover-art {
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
-/* The bento caption bind, below the art here. Two classes deep because
-   .bento-theme__caption's `margin: 0` is authored later in this file at one
-   class, and would otherwise win. */
+/* Image to caption is 16, the gap every .figure__caption on the site uses
+   (ruling gap-c, 9 Oct 2026; was the bento caption's 8). Caption to credit stays
+   8. Two classes deep because .bento-theme__caption's `margin: 0` is authored
+   later in this file at one class, and would otherwise win. */
 .friction-moment .friction-moment__caption {
-  margin-top: var(--spacing-2xs);
+  margin-top: var(--spacing-s);
 }
 
 /* The credit line: rung 0 as locked (type v3 §3.4; ruling B1), at the credit
