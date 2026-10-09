@@ -94,7 +94,6 @@ const ALLOWLIST = {
     { selector: '.thread-cols', prop: 'column-gap', reason: 'S3 layout — a column gap only exists once the spine is three columns at 1024' },
     { selector: '.thread-cols li', prop: 'padding', reason: 'S3 layout — stacked rows need vertical padding, columns do not' },
     { selector: '.friction-beat', prop: 'gap', reason: 'S3 layout — the beat has no gap stacked; the gap appears with the two-column grid' },
-    { selector: '.friction-beat .oku-figure', prop: 'margin', reason: 'S3 layout — the figure loses its prose margin inside a grid cell' },
     { selector: '.compare__grid', prop: 'gap', reason: 'S3 layout — a deliberate zero so the two halves read as one seamless comparison' },
     { selector: '.compare__divider', prop: 'margin', reason: 'S3 layout — the divider only exists in the two-up arrangement' },
     { selector: '.bento-theme__item', prop: 'column-gap', reason: 'S3 layout — caption sits beside its media at 1024, not beneath it' },

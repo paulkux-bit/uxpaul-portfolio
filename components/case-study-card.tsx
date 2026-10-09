@@ -22,6 +22,21 @@ export const COVER_ART: Record<string, string> = {
   nuuly: 'nuuly',
 };
 
+// Covers that also ship a 1200 px pair, `${art}-1200.webp` / `.png`, beside the
+// 600 px `${art}.webp` / `.png` that COVER_ART and the test resolve (9 Oct 2026,
+// rulings size-b, sharp-s, B2, C1). Nuuly is a single 600 file. The <img>
+// width/height state the largest file each card has. Exported for the test.
+export const COVER_1200 = new Set(['bard', 'fdte', 'dagr', 'urbn']);
+
+// The art's rendered width, measured 9 Oct 2026: min(55% of the card's content
+// box, 280px). One column below 1024 (content = 100vw - 98px below 768, where the
+// gutter holds at 24; 280 is reached by 768), two from 1024 (220.6 px at 1024,
+// 254.1 from about 1150 up). At 2x the widest is 560 device px, under 600, so 1x
+// and 2x always take the 600 file; 3x takes the 1200 wherever the art is wider
+// than 200 px, and a 390 phone at 3x (482 px) still takes the 600.
+const COVER_SIZES =
+  '(min-width: 1024px) 255px, (min-width: 768px) 280px, min(calc((100vw - 98px) * 0.55), 280px)';
+
 /**
  * One entry in the case-study index. There is one cover: **typographic**. The
  * framing IS the cover, set large, with the client beneath it. A deliberate
@@ -104,15 +119,33 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
                <picture> (webp + png). next/image would re-encode and strip the
                fixed dimensions the blend relies on. The <picture> is the block
                sizing box (percentage width on an inline picture's <img> misresolves);
-               ~40% card width, centered, floating over the question. */
-            <picture className="mx-auto mb-m block w-[40%] max-w-[200px] md:mb-l">
-              <source srcSet={`/case-studies/covers/${art}.webp`} type="image/webp" />
+               55% of the card's content width, capped at 280px, centered, floating
+               over the question. */
+            <picture className="mx-auto mb-m block w-[55%] max-w-[280px] md:mb-l">
+              {/* One <source> and one <img>, direct children: a fragment between
+                  them and <picture> loses @next/next/no-img-element's picture
+                  exemption. Only the four 1200 covers get srcset and sizes. */}
+              <source
+                srcSet={
+                  COVER_1200.has(art)
+                    ? `/case-studies/covers/${art}.webp 600w, /case-studies/covers/${art}-1200.webp 1200w`
+                    : `/case-studies/covers/${art}.webp`
+                }
+                sizes={COVER_1200.has(art) ? COVER_SIZES : undefined}
+                type="image/webp"
+              />
               <img
                 src={`/case-studies/covers/${art}.png`}
+                srcSet={
+                  COVER_1200.has(art)
+                    ? `/case-studies/covers/${art}.png 600w, /case-studies/covers/${art}-1200.png 1200w`
+                    : undefined
+                }
+                sizes={COVER_1200.has(art) ? COVER_SIZES : undefined}
                 alt=""
                 aria-hidden="true"
-                width={600}
-                height={600}
+                width={COVER_1200.has(art) ? 1200 : 600}
+                height={COVER_1200.has(art) ? 1200 : 600}
                 className="cover-art w-full"
               />
             </picture>

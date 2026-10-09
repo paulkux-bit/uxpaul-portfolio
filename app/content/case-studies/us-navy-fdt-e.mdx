@@ -21,48 +21,50 @@ nda: false
 {/* ─────────────────────────────────────────────────────────────
     FDT-E – Template A case study, components mirroring
     uscg-bard.mdx. Prose rewritten in the copy pass of 24 to 25 Sep
-    2026; the rulings and the copy of record live in the project
-    knowledge base. Voice: first person at the entry and exit; terse
+    2026, and again from the fine art test page on 8 Oct 2026; the
+    rulings and the copy of record live in the project knowledge base. Voice: first person at the entry and exit; terse
     evidence register in captions. No em-dashes (lint:prose
-    hard-fails). All imagery notional / unclassified. FdteFigure
-    variants are STUBS pending real art.
+    hard-fails). All imagery notional / unclassified. Section 2's
+    figure is a painting from app/data/works.json, not product imagery.
    ───────────────────────────────────────────────────────────── */}
 
-import { FdteFigure } from '@/components/fdte-figure';
 import GateWalkBento from '@/components/case-studies/us-navy-fdt-e/GateWalkBento';
 import { BentoBand } from '@/components/bento';
 
 <HeroBlock
   title={["An anomaly isn't intel", 'until someone works it.']}
-  role="I led design on FDT-E, which Naval Intelligence uses to track enemy forces. I designed the workflow an analyst follows to check what the system flags against doctrine, then escalate it."
+  role="Navy intel analysts use FDT-E to track enemy forces, and its AI model flags anything unusual. I led the design, including the verification gate where an analyst checks each flag against doctrine before it goes up the chain."
   image={{
     src: '/case-studies/us-navy-fdt-e/hero.png',
     alt: 'The FDT-E anomaly workspace: a C2 anomaly case under Operation Avalanche, with a four-phase rail (Verification, Response, Analysis, Modification) beside a five-step verification timeline running from all-source correlation to predictive modeling.',
   }}
   callout={{
-    body: 'The model makes the first guess. The analyst gets the tools to make the final call.',
+    body: "Michelle used to read other agencies' finished articles. Now she checks a live assessment herself.",
   }}
 />
 
 <section className="cs-section cs-section--problem">
 
-## An analyst can't act on a guess.
+## An analyst cannot act on a guess.
 
-<p className="section-lede">Minutes matter, and the analyst is the one accountable.</p>
+Commanders act on what an intel analyst like Michelle reports about enemy forces, so she has to defend the call.
 
-**The data arrives faster than anyone can sort it.** A mistake wastes assets or hits the wrong target. A delay lets the real threat slip away.
+**A wrong call sends forces to the wrong place or hits the wrong target. A late one lets the real threat get away.**
 
-{/* Wide pair (Bard's shared-row pattern): the feels-like illustration beside
-    the real intel-tool overwhelm. Both tiles 16:10, so heights match and the
+{/* Wide pair (Bard's shared-row pattern): an engraving of the analyst's buried
+    desk (black ink on white, so it takes .cover-art through `ink`, 8 Oct 2026)
+    beside the real intel-tool overwhelm. Both tiles 16:10, so heights match and the
     caption baselines lock. Per-tile lead/gloss captions render below each
     image in the terse evidence register (.figure__caption). */}
 <FramedPair
   framed={false}
   left={{
-    src: '/case-studies/us-navy-fdt-e/problem-dataflood--feature.png',
+    src: '/case-studies/us-navy-fdt-e/problem-desk--feature.png',
+    darkMask: '/case-studies/us-navy-fdt-e/problem-desk--mask',
     width: 2320,
     height: 1450,
-    alt: 'Editorial illustration: an analyst dwarfed by a swirling flood of intelligence fragments, one warm signal in the noise.',
+    ink: true,
+    alt: 'Engraving of an empty desk buried under folders, photographs and printout strips, with loose sheets lifting off it in a rising column and a headset hanging on the empty chair.',
     caption: (
       <>
         <strong>Too much.</strong> One analyst, buried in sensor feeds, open
@@ -87,60 +89,33 @@ import { BentoBand } from '@/components/bento';
 
 <section className="cs-section cs-section--frictions">
 
-## Good intel analysts don't trust data blindly.
+## Good intel analysts do not trust data blindly.
 
-<p className="section-lede">I interviewed over a dozen people and watched them work, from junior analysts to flag officers. By doctrine, commanders push data down. Analysts weigh it, debate it, and make their own call.</p>
+<p className="section-lede">I interviewed over a dozen people and watched them work, from junior analysts to flag officers. By doctrine, analysts weigh what they get, debate it, and make their own call.</p>
 
-But three things stood in the way:
+<FrictionMoment work="vermeer-woman-holding-balance" />
 
-<ol className="friction-beats" role="list">
-  <li className="friction-beat" data-thread="1">
-    <div className="friction-beat__text">
-      <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">The fight sets the tempo</h3>
-      <p className="friction-beat__scene">In peacetime, analysts can live with ambiguity. In war, they want facts, with confidence attached.</p>
-    </div>
-    <FdteFigure variant="tempo" alt="An operator works a console lever beneath a huge clock face, its hands racing ahead of him." />
-  </li>
-  <li className="friction-beat" data-thread="2">
-    <div className="friction-beat__text">
-      <span className="thread-index">02</span>
-      <h3 className="friction-beat__headline">Nothing settles it</h3>
-      <p className="friction-beat__scene">Analysts get conflicting reports with no fast way to compare them, so they hesitate. At wartime tempo, that delay is a failure in itself.</p>
-      <blockquote className="pull-quote pull-quote--quiet">
-        <p>“The database shows a unit active ten minutes ago and reported destroyed last week. Which is ground truth?”</p>
-        <cite>Analyst, immersion session</cite>
-      </blockquote>
-    </div>
-    <FdteFigure variant="paralysis" alt="An analyst stands frozen at a fork in the road between two contradictory signs." />
-  </li>
-  <li className="friction-beat" data-thread="3">
-    <div className="friction-beat__text">
-      <span className="thread-index">03</span>
-      <h3 className="friction-beat__headline">The black box</h3>
-      <p className="friction-beat__scene">An assessment came down as a finished answer. Analysts won't act on a call they can't question.</p>
-    </div>
-    <FdteFigure variant="black-box" alt="An analyst, chin in hand, scrutinizes a flagged position on a large wall map." />
-  </li>
-</ol>
+The assessments Michelle relied on were articles from other intelligence agencies: finished answers she could not question, and never live. When two disagreed, she had no way to know which was right, so she hesitated. In peacetime, that is caution. In war, the delay is a failure in itself.
+
+</section>
+
+<section className="cs-section cs-section--turn">
+
+## How do you trust what you cannot question?
+
+<p className="section-lede turn-answer">You don't. <span className="turn-answer__key">You make it show its work.</span></p>
+
+The product team wanted the model to do more on its own, like kicking off workflows. I brought the research back, argued for a verification gate instead, and the team built it in.
+
+Michelle works every flag through the gate before it goes up the chain.
 
 </section>
 
 <section className="cs-section">
 
-## How do you trust what you can't question?
+## I designed the gate so the model brings the evidence and Michelle makes the call.
 
-<p className="section-lede">The product team wanted a smarter model. I pushed for one that analysts could check.</p>
-
-**Nothing the model finds reaches an analyst until it clears a verification gate.** I brought the research back and made the case for the gate, and the team built it into the product. Each check in the gate is something doctrine already requires, so using the tool and following doctrine are the same thing.
-
-</section>
-
-<section className="cs-section">
-
-## The model can start the work, but only an analyst can finish it.
-
-<p className="section-lede">The model flags what may be an enemy command center, shows its sources, and runs the checks military doctrine requires. The analyst finishes with a call they can defend.</p>
+The evidence arrives live, while there is still time to act on it. A flag opens as a case, and the case holds everything she needs to defend her call, in the order she works it.
 
 <GateWalkBento />
 
@@ -148,9 +123,9 @@ But three things stood in the way:
 
 <section className="cs-section">
 
-## Anomaly detection wasn't where I started.
+## I designed the foundations anomaly detection builds on.
 
-<p className="section-lede">It was only possible because of three things I designed first. What's below runs on notional data.</p>
+<p className="section-lede">The model can only flag what Michelle can already find and trust.</p>
 
 <BentoBand
   src="/case-studies/us-navy-fdt-e/foundations/search-ia--band.jpg"
@@ -176,7 +151,7 @@ But three things stood in the way:
   aspect={2.402}
 />
 
-**The version operators use is better.** It runs on real data, in a place I can't show you. What you just saw is the shadow of it.
+**The version analysts use is better.** It runs on real data, in a place I cannot show you. What you just saw is its shadow.
 
 </section>
 
@@ -190,7 +165,7 @@ But three things stood in the way:
   <p className="milestone__sub">Now in active use across major commands.</p>
 </div>
 
-I handed it off at the end of 2025. Other products now treat it as the source of truth for enemy force locations. That is one thread of many the app still needs. A contractor team is building the rest.
+I handed it off at the end of 2025. Other products now treat it as the source of truth for enemy locations. That is only part of what analysts need, and a contractor team is building the rest.
 
 </section>
 
@@ -198,6 +173,8 @@ I handed it off at the end of 2025. Other products now treat it as the source of
 
 ## Role
 
-Lead product designer on FDT-E, the Force Disposition Tracker Enterprise. Responsible for UX strategy, design specification, and UI. Its users are all-source intel analysts. Worked for the U.S. Navy, supporting the Office of Naval Intelligence, alongside product and engineering and active-duty subject-matter experts. Research ran on watch floors at several commands, during live operations. Designed 2024 to 2025.
+Lead product designer on FDT-E, the Force Disposition Tracker Enterprise. Led UX strategy, design specifications, and UI. Its users are all-source intel analysts.
+
+Worked for the U.S. Navy, supporting the Office of Naval Intelligence, alongside product, engineering, and active-duty subject-matter experts. Research ran on watch floors at several commands during live operations. Designed 2024 to 2025.
 
 </section>

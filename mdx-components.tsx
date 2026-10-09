@@ -10,7 +10,7 @@ import { AsymmetricPair } from '@/components/asymmetric-pair';
 import { BentoGrid } from '@/components/bento-grid';
 import { BentoTheme, BentoItem } from '@/components/bento';
 import { FramedPair } from '@/components/framed-pair';
-import { OkuFigure } from '@/components/oku-figure';
+import { FrictionMoment } from '@/components/friction-moment';
 import { HeroBlock } from '@/components/hero-block';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -28,7 +28,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     BentoTheme,
     BentoItem,
     FramedPair,
-    OkuFigure,
+    FrictionMoment,
     HeroBlock,
   };
 }

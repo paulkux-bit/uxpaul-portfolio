@@ -79,9 +79,6 @@ const ALLOWLIST = {
     { file: 'scripts/lint-color.mjs', snippet: 'detail: `rgb()', reason: "check 1's own failure message names the form it detects" },
     { file: 'scripts/lint-color.mjs', snippet: 'detail: `hsl()', reason: "check 1's own failure message names the form it detects" },
     { file: 'scripts/lint-color.mjs', snippet: "add(1, 'Every colour is oklch", reason: "check 1's title enumerates the forms it bans" },
-    // snippet deliberately stops before the hex: spelling the value out here
-    // would make this entry a literal in its own right, and check 7 flagged it.
-    { file: 'scripts/reframe-fdte-svg.mjs', snippet: 'replace(/fill="(black|', reason: 'the regex that REPLACES black fills with currentColor — a tool for removing literals' },
     // The fixture assertions state the expected values, so they are literals by
     // necessity. Scoped to assertion lines, not to the file: a literal written
     // outside an expect() here is still caught.

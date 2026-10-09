@@ -370,10 +370,12 @@ sizes (above 30px) are not tokenized yet. Ruled 28 Sep 2026.
   (`.turn-answer__key`) at 600 on its own line. The 340 spends the signature's
   "one moment per case study" placement.
 
-Two motion tokens arrived with it and live beside the interaction speeds:
-`--duration-moment` (10s) and `--ease-moment`, the friction moment's ambient
-loop. Interaction v1 has no category for a loop, so the surface is recorded in
-`docs/unspecified-surfaces.md`.
+**The friction moment** is one still painting in section 2 of every study,
+`components/friction-moment.tsx`, read from `app/data/works.json` and checked in
+the build by `npm run lint:works` (fine art build, 8 Oct 2026). It replaced the
+animated convoy and the friction beats. The artwork is never altered in either
+theme; its height cap is `--art-max-height`, recorded in
+`docs/unspecified-surfaces.md` because no locked spec governs an image's height.
 
 ### Voice — the FLAR axis, by rung
 **This replaced the three width bands.** Width was the expressive axis under
@@ -574,12 +576,16 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
 - Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
   `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
   light-only to `--border-default` — never change the base token.
-- Figures are illustrations (3:1 graphics floor, not text). Per-mode, intentional:
-  `.oku-figure { color: var(--text-secondary) }` and
-  `html.dark .oku-figure { color: var(--text-muted) }`. Do not normalize this to parity.
-- Illustrations are drawn bold/simple FOR display size (≥~1.5px lines), traced to
-  currentColor fill-based SVG → .tsx with its own viewBox. Never fix shimmer with added
-  strokes or layer promotion — fix it in the source art.
+- The traced SVG beat figures (`.oku-figure` and its siblings, regenerated from .svg by
+  `regen:*` scripts) were retired with the friction beats on 8 Oct 2026. Raster ink
+  drawings take `.cover-art`: multiply in light, invert plus screen in dark. On the
+  card covers the ground is white and the opaque, isolated card is the backdrop. On
+  the page there is no backdrop to blend with (`body > *` is its own stacking
+  context), so the section 1 drawings on Line of Sight and FDT-E (FramedPair's
+  `ink`) ship as ink on a transparent ground; a white-ground file there renders as
+  a white box in light and a black box in dark. In dark mode those two tiles show no
+  image: a block of `--text-secondary` masked by a simplified drawing (`darkMask`,
+  faintest strokes dropped), toggled by `html.dark`.
 - `.case-study-prose p` is wrapped `:where(.case-study-prose) p` so component margins win.
 
 ## Workflow conventions
@@ -620,8 +626,14 @@ The named gates are three different tools; two are external and do NOT read pros
   project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
 
 Full chain: **tsc -> eslint -> build (runs lint:type, lint:space, lint:color,
-next build, lint:interaction, lint:prose and lint:motion, in that order, failing on
-the first) -> detector (visual, external)**.
+next build, lint:works, lint:interaction, lint:prose and lint:motion, in that order,
+failing on the first) -> detector (visual, external)**.
+
+- **works** = `npm run lint:works` (`scripts/lint-works.mjs`). Reads the rendered study
+  pages after `next build`: every Template A study renders exactly one friction moment,
+  each from a record in `app/data/works.json` with non-empty alt, caption, credit fields
+  and licence, and every delivery file exists at its recorded size (and is in the git
+  index when `.git` is present).
 
 - **motion** = `npm run lint:motion` (`scripts/lint-motion.mjs`). Maps every animation
   and transition in `globals.css` to the guard covering it, and names any selector with
@@ -630,7 +642,7 @@ the first) -> detector (visual, external)**.
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
 `npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
-`lint:interaction`, `lint:prose` and `lint:motion` — it does NOT run vitest, so no vitest assertion can be described as
+`lint:works`, `lint:interaction`, `lint:prose` and `lint:motion`. It does NOT run vitest, so no vitest assertion can be described as
 "green in the deploy". `__tests__/noindex.test.mjs` is the case that matters: it asserts
 `BLOCK_INDEXING`, `app/robots.ts` and the `next.config.mjs` header rule, all from source.
 A green suite here with a missing header on the live site is the failure that would

@@ -155,7 +155,6 @@ import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart
 import RoadmapList from '@/components/case-studies/urbn-delivery-promise/RoadmapList';
 import PromiseWalk from '@/components/case-studies/urbn-delivery-promise/PromiseWalk';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
-import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 {/* THREE MODULES ARE RETIRED, NOT DEFERRED, and they died three different deaths.
 
@@ -177,14 +176,10 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     either. The rejected forms are kept, unbuilt, in docs/previews/
     dependency-map-*.html so the next person can see what was already tried.
 
-    PromiseBeatFigure: the three illustrations, drawn by Paul on 27 Aug. Sources are
-    components/promise-beats/*.svg, normalized and traced by
-    scripts/normalize-beat-figure.py and regenerated into .tsx by
-    npm run regen:promise-beats. THE ART LANDING CHANGED THIS SECTION'S LAYOUT:
-    .friction-beat:not(:has(figure)) had been dropping the figure column so a beat
-    with no art went full width, and it stopped matching the moment the figures were
-    passed, exactly as designed. The beats are two-column from 1024 up now, and no
-    CSS changed to do it. */}
+    PromiseBeatFigure, the three beat illustrations, went on 8 Oct 2026 with every
+    study's friction beats (the fine art build). Section 02 now carries one painting,
+    components/friction-moment.tsx, and the source art and its pipeline left the
+    repo with the component. */}
 
 {/* THE HERO IS THE REAL CROP NOW, AND THE FRONTMATTER TODO IS GONE WITH IT. It read
     "placeholder: full-frame p18-pdp, not a crop. Replace after the bento-crop pass."
@@ -211,13 +206,13 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     reads "Shipping Options", not fulfillment. */}
 <HeroBlock
   title={['Nobody remembered the wait.', 'Everybody remembered the miss.']}
-  role="I led UX strategy for the platform powering Urban Outfitters, Anthropologie, and Free People, and set the direction all three adopted: one delivery date shoppers could trust."
+  role="I led UX strategy for the platform behind Urban Outfitters, Anthropologie, and Free People, and set the direction all three adopted: show one delivery date shoppers could trust."
   image={{
     src: '/case-studies/urbn-delivery-promise/hero-pdp.png',
     alt: 'A product page for a white ruffle dress: the photograph beside a column reading Product Name, $110.00, and Free 2-day Shipping to 16507, Arrives by Sept 13, 2019, above the Add To Cart button, with a Shipping Options for 16507 panel below listing Free 2-day Shipping, Free Standard Shipping, and Free Pick Up today, unavailable because there are no URBN location within 100 miles.',
   }}
   callout={{
-    body: 'The delivery option she can’t have stays on the page, with the reason beside it.',
+    body: 'Angela used to learn the delivery date at checkout. The promise shows it to her before she decides.',
   }}
 />
 
@@ -227,7 +222,14 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <p className="section-lede">URBN's online business was growing but still missing its targets.</p>
 
-{/* THE ASK, CORRECTED 29 Aug. The second sentence is Paul's, verbatim. The bold
+{/* REWRITTEN 8 Oct 2026 FROM THE FINE ART TEST PAGE. The paragraph below lost both
+    bold leads and now opens on Angela: "the date a shopper like Angela is told her
+    order will arrive". Paul's misread and leadership's, which were their own bold-led
+    paragraph, close it, his first, so the reading order the 28 Aug ruling protected
+    survives the merge. The notes from 29 Aug on are history for the sentences they
+    name.
+
+    THE ASK, CORRECTED 29 Aug. The second sentence is Paul's, verbatim. The bold
     lead is untouched, so the skim layer is byte-identical either way; this change
     is invisible to a skimming reader and matters only to one who reads.
 
@@ -239,8 +241,8 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     deliberately not quoted here - it is in the git history, and the phrase was
     meant to leave the file entirely rather than survive in a comment.
 
-    IT ALSO BROKE THE PARAGRAPH BELOW. That one reads "I thought it was speed...
-    Leadership thought this was an inventory problem." With the old sentence the
+    IT ALSO BROKE WHAT FOLLOWED. That now reads, in the same paragraph, "I thought
+    the problem was speed... Leadership thought it was an inventory problem." With the old sentence the
     ask named inventory, and then the next paragraph named inventory again as
     leadership's hypothesis, one paragraph apart - so the section's own framing
     had already conceded the answer it was about to present as a wrong turn. The
@@ -253,20 +255,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     money back in: this study already repeats itself in two places that are on the
     record, the three-brand enumeration and section 03's tier inversion, and the
     targets would be the third. */}
-**A delivery promise is the date a shopper sees at checkout.** Customers were complaining about ours, and we were asked to find out why and how to fix it.
-
-{/* PAUL'S MISREAD FIRST, 28 Aug. Both sentences already existed; they were
-    reordered and the bold moved with his. Neither was rewritten.
-
-    THE SKIM LAYER IS IDENTICAL EITHER WAY, which is why the reason is not the
-    obvious one. Bolding the second sentence in place renders exactly the same
-    extracted list, because the list IS the bold text. The choice was made on two
-    other grounds: reading order, so his own wrong call arrives before anyone
-    else's rather than as a contrast to it; and house rules section 2, which makes
-    the bold lead the problem section's structural device - bolding in place would
-    have put this paragraph's bold at its end while the other three lead with it.
-    Costs one rendered line and 31px at 390, nothing at 768 and above. */}
-**I thought it was speed, and that we had to win a two-day race against Prime.** Leadership thought this was an inventory problem.
+A delivery promise is the date a shopper like Angela is told her order will arrive. Shoppers were complaining about ours, and we were asked to find out why and how to fix it. I thought the problem was speed, and that we had to win a two-day race against Prime. Leadership thought it was an inventory problem.
 
 <TestimonyPair />
 
@@ -307,7 +296,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <section className="cs-section cs-section--frictions">
 
-## Her order broke in three places.
+## Angela's order broke in three places.
 
 {/* THE POPULATION, NAMED 29 Aug. The sentence is Paul's, verbatim. The previous
     lede credited the researcher and listed all three evidence sources but never
@@ -316,8 +305,13 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     as a group: "Research session" and "App Store review, July 2019" are
     attributions, not a description of who was asked.
 
-    THE ANTECEDENT FOR THE H2 IS THE THIRD SENTENCE, AND IT IS LOAD-BEARING. The
-    heading above reads "Her order broke in three places". The 29 Aug fix named who
+    THE ANTECEDENT PROBLEM BELOW IS DISSOLVED, 8 Oct 2026. The heading now names
+    Angela, the deck's persona, so it no longer depends on this lede for someone to be,
+    and "Here is what a typical shopper went through." went with the dependency. The
+    paragraph is kept as the record of why that sentence existed.
+
+    THE ANTECEDENT FOR THE H2 WAS THE THIRD SENTENCE. The
+    heading above read "Her order broke in three places". The 29 Aug fix named who
     was researched and closed a different gap, but it left the nearest singular
     female antecedent on screen as the RESEARCHER in this very lede - two review
     lenses read it that way independently. "This is one of their orders." fixed it:
@@ -326,8 +320,8 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     than one (the deck's journey is the Angela persona), so the claim was not one
     Paul could support. "Here is what a typical shopper went through." replaces it
     and carries the same dependency: it names the shopper, so the beats' "she" and
-    the heading's "Her" still have someone to be. Angela is
-    named only in a code comment further down, which a reader never sees. A future
+    the heading's "Her" still have someone to be. Angela was then
+    named only in a code comment further down, which a reader never saw. A future
     editor trimming this lede for length would silently reintroduce a dangling
     pronoun in a heading, and would now do it by deleting the shortest sentence in
     the paragraph, so the dependency is written down here rather than left to be
@@ -335,67 +329,39 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     third is an append.
 
     TWO THINGS DELIBERATELY NOT ADDED. No sentence saying "and here is what I
-    found": the H2 makes the claim and three numbered beats follow it, so saying
+    found": the H2 makes the claim and the painting and two paragraphs follow it, so saying
     it again is the restates-the-obvious pattern already cut twice from section
     01. And no brand names: "URBN brands" is scope, not a fourth enumeration. The
     three-brand list already runs three times in this file, in the frontmatter
     summary, in the hero's role line and in section 01's lede. */}
-<p className="section-lede">A researcher interviewed URBN's online shoppers, and I worked through the findings with her, comparing them with order data and service tickets. Here is what a typical shopper went through.</p>
+<p className="section-lede">A researcher interviewed URBN's online shoppers, and I worked through the findings with her, comparing them with order data and service tickets.</p>
 
-{/* FIGURE SLOTS x3. The subject is the SHOPPER at the moment the order breaks,
-    never an abstraction and never a system diagram. That is what keeps this set
-    distinct from BARD's (system defects) and Nuuly's (a specialist at work).
-    Friction-beat figures render at a 300px cap, 168px tall: one oversized
-    object per frame, nothing finer than 40px. That CSS is shared across all
-    four studies. Do not touch it. */}
-<ol className="friction-beats" role="list">
-  <li className="friction-beat" data-thread="1">
-    <div className="friction-beat__text">
-      <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">She could not see the date</h3>
-      <p className="friction-beat__scene">Shipping cost and delivery timing appeared at checkout, after she had already chosen everything. Until then, she was guessing.</p>
-    </div>
-    <PromiseBeatFigure variant="blind" alt="A shopper holding a dress up at arm's length in front of a large wall calendar whose grid is completely empty, with no day marked." />
-  </li>
-  <li className="friction-beat" data-thread="2">
-    <div className="friction-beat__text">
-      <span className="thread-index">02</span>
-      <h3 className="friction-beat__headline">She paid for something we did not have</h3>
-      <p className="friction-beat__scene">Inventory updated slowly. The out-of-stock message landed on order submission, or as a cancellation days after she had been charged.</p>
-      {/* QUOTE PROVENANCE, SETTLED 27 Aug. Deck p12, first speech bubble, attributed
-          on the slide as "-AN Customer". Transcribed from the PDF at 8x, not from
-          memory. The shipped version had cut "And, even worse," from the front of the
-          sentence without a marker and raised "ordering" to "Ordering"; restoring the
-          three words makes it verbatim and removes the need for an ellipsis.
-          THE CITE IS NOT "review". p12 separates speech bubbles (labelled -AN
-          Customer, no username, no date, no stars) from boxed App Store reviews
-          (username, date, star rating). This is a bubble, so the channel is unknown.
-          THE STRAIGHT APOSTROPHE IN "wasn't" IS THE ARTIFACT'S. Do not normalise it;
-          the App Store reviews on the same slide use curly ones.
-          THE CITE SHAPES ACROSS THIS STUDY DIFFER ON PURPOSE and it has been raised
-          as an inconsistency twice. Settled: docs/case-study-house-rules.md 16. A
-          citation names the facts that exist for its own artifact, so brand-only
-          here, brand-plus-method at the Urban Outfitters quote, and channel-only in
-          TestimonyPair are three correct answers rather than three styles.
-          Full derivation: docs/beat-02-quote-provenance.md (repo mirror, reachable by
-          anyone holding only this repository); fuller record, including verbatims
-          deliberately not mirrored, in claude/delivery-promise-beat-02-quote-provenance.md */}
-      <blockquote className="pull-quote pull-quote--quiet">
-        <p>“And, even worse, ordering, paying, and then 3-4 days later getting the email that the item wasn't actually available anymore.”</p>
-        <cite>Anthropologie customer</cite>
-      </blockquote>
-    </div>
-    <PromiseBeatFigure variant="phantom" alt="A shopper leaning over an open cardboard shipping box on a table, reaching into it. The box is empty. A long paper receipt hangs from her other hand." />
-  </li>
-  <li className="friction-beat" data-thread="3">
-    <div className="friction-beat__text">
-      <span className="thread-index">03</span>
-      <h3 className="friction-beat__headline">One order arrived as three</h3>
-      <p className="friction-beat__scene">About half of multi-item orders split into separate shipments, most of them sent from stores, with no rules for which store sent what.</p>
-    </div>
-    <PromiseBeatFigure variant="split" alt="Three clothing parcels grouped together on blank ground: a flat taped box, an upright soft mailer behind it, and a third mailer that a shopper, crouched beside them, is pulling open with both hands." />
-  </li>
-</ol>
+<FrictionMoment work="dehooch-entrance-hall" />
+
+{/* QUOTE PROVENANCE, SETTLED 27 Aug, AND QUOTED AS A FRAGMENT SINCE 8 Oct 2026.
+    Deck p12, first speech bubble, attributed on the slide as "-AN Customer".
+    Transcribed from the PDF at 8x, not from memory. Until 8 Oct it stood alone in
+    section 02's second friction beat, whole, from "And, even worse," on. The fine
+    art pass moved it into the paragraph below and quotes it from "ordering" to the
+    end: verbatim from that word on, opening mid-sentence in lower case, so it needs
+    no ellipsis, and "the worst was" carries what "And, even worse," said.
+    THE ATTRIBUTION IS NOT "review". p12 separates speech bubbles (labelled -AN
+    Customer, no username, no date, no stars) from boxed App Store reviews
+    (username, date, star rating). This is a bubble, so the channel is unknown and
+    the sentence names the brand only: "As one Anthropologie shopper said".
+    THE STRAIGHT APOSTROPHE IN "wasn't" IS THE ARTIFACT'S. Do not normalise it;
+    the App Store reviews on the same slide use curly ones.
+    THE ATTRIBUTION SHAPES ACROSS THIS STUDY DIFFER ON PURPOSE and it has been
+    raised as an inconsistency twice. Settled: docs/case-study-house-rules.md 16. A
+    citation names the facts that exist for its own artifact, so brand-only here,
+    brand-plus-method at the Urban Outfitters quote, and channel-only in
+    TestimonyPair are three correct answers rather than three styles.
+    Full derivation: docs/beat-02-quote-provenance.md (repo mirror, reachable by
+    anyone holding only this repository); fuller record, including verbatims
+    deliberately not mirrored, in claude/delivery-promise-beat-02-quote-provenance.md */}
+Until checkout, Angela could not see when her order would arrive, so she guessed. Behind the page, stock counts updated slowly. As one Anthropologie shopper said, the worst was “ordering, paying, and then 3-4 days later getting the email that the item wasn't actually available anymore.”
+
+About half of multi-item orders split into separate shipments, most of them sent from stores, with no rules for which store sent what.
 
 <p className="mt-2xl!">**Marketing made the promise, the warehouse tried to keep it, and customer service cleaned up the mess.**</p>
 
@@ -412,6 +378,13 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     ruled on line by line: the lede, the first finding, and the closing credit line.
     Each one is recorded at its own site with what changed and why. The rest of the
     section is still verbatim.
+
+    ON 8 Oct 2026 THE FINE ART PASS REWROTE FOUR MORE, from the test page Paul ruled:
+    the first finding (no bold, one clause lighter), the store-operations paragraph
+    (now opening on the Urban Outfitters quote), the "let down" line (now carrying the
+    Anthropologie quote) and the journey paragraph (the team is named). Both
+    pull-quotes were folded into prose. Notes below that describe the earlier forms
+    are history for those forms.
 
     WHAT SURVIVES OF THE OLD RULE is the part that matters: nothing here gets reworded
     on a passing judgment. A change to this section's prose is Paul's call, taken
@@ -430,7 +403,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <p className="section-lede">I asked where the misses actually were.</p>
 
-**Standard shipping was dependable.** Express and overnight were not. And some online orders shipped from retail stores, which were the worst of all.
+Standard shipping was dependable. Express and overnight were not, and orders shipped from retail stores were the worst.
 
 {/* THE CHART PAIR, REBUILT 29 Aug. It replaced <InversionChart>, which plotted All
     nodes against Store network as though they were peers. THEY ARE NOT: All nodes is
@@ -463,19 +436,13 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
   <NodeChart />
 </div>
 
-<blockquote className="pull-quote pull-quote--quiet">
-  <p>“I have to be extremely desperate to pay for expedited.”</p>
-  <cite>Urban Outfitters customer, primary research</cite>
-</blockquote>
-
-**I asked store operations what happens during a shift.** They already had a report, and it said why: chaotic shifts, shipping deadlines nobody could hit, and not enough people scheduled to send online orders out.
-
-**Shoppers we let down didn't leave. They bought less.**
+One Urban Outfitters shopper told our researcher, “I have to be extremely desperate to pay for expedited.” So I asked store operations what happened during a shift. They already had a report that explained why: chaotic shifts, shipping deadlines nobody could hit, and not enough people scheduled to send online orders out.
 
 {/* Deck p12, a speech bubble labelled "-AN Customer". NOT AN APP STORE REVIEW: the
     boxed items lower on that page, the ones carrying usernames and dates, are the
-    reviews. Channel unknown, so the cite names the brand and not the channel, exactly
-    as section 02's does.
+    reviews. Channel unknown, so the attribution names the brand and not the channel
+    ("As one Anthropologie shopper said", since 8 Oct folded into the line it proves),
+    exactly as section 02's does.
 
     NO ELLIPSIS. This is the closing sentence of its bubble and runs to the end, so
     nothing is skipped and there is nothing to mark.
@@ -485,10 +452,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     I'll follow through!" is the SAME bubble section 02 already quotes the middle of,
     so shipping it would put one customer in two sections. It also carries apostrophes
     whose form has to be read off the PDF at 8x before it is set. */}
-<blockquote className="pull-quote pull-quote--quiet">
-  <p>“I have really reduced my shopping on this site because of this.”</p>
-  <cite>Anthropologie customer</cite>
-</blockquote>
+**Shoppers we let down did not leave. They bought less.** As one Anthropologie shopper said, “I have really reduced my shopping on this site because of this.”
 
 {/* THE CREDIT BOUNDARY IS NOW STATED, NOT IMPLIED. Rewritten 30 Aug when the closing
     sentence changed; the note it replaces flagged this paragraph as Paul's raw
@@ -513,7 +477,8 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     "ALONGSIDE ME" IS THE ONE THING THAT COULD NOT BE USED AS WRITTEN, because it can
     be read as Paul having done the analysis too, which is the exact breach a
     reference check catches. The line names the team and credits the judgment
-    instead: the numbers came from a data analytics team, and going deeper on the
+    instead: the numbers came from a data analytics team (since 8 Oct, by name: "URBN's
+    Data Analytics team", the name the Role section uses), and going deeper on the
     rates was THEIR idea. That is sourced - an SME on that team proposed it and the
     team did the work. THE BOUNDARY DID NOT MOVE: he built the narrative and
     presented it, they made the numbers, and no clause lets a reader mix the two. Saying it is also what makes the two verbs safe to shorten to "I built
@@ -533,7 +498,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     section 03 without an ending, not without a repetition. Three of section 04's
     sentences moved up here instead; what they cost section 04 is in its own comment.
     Nothing was duplicated in the move - the beat is told once, here. */}
-**I turned the numbers into a journey.** The refund a shopper was still chasing. The one-star review titled “Free express shipping.” That was the version I showed leadership, and after that, the argument stopped being about inventory. The numbers under it came from a data analytics team, whose idea it was to go deeper into the rates.
+I turned the numbers into a journey: the refund a shopper was still chasing, the one-star review titled “Free express shipping.” That was the version I showed leadership, and after that, the argument stopped being about inventory. The numbers under it came from URBN's Data Analytics team, whose idea it was to go deeper into the rates.
 
 {/* NINE THINGS ARE GONE FROM THIS SECTION, ONE ARRIVED, AND NONE OF IT SHOULD BE
     UNDONE.
@@ -554,7 +519,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
     DROPPED ON THE WAY, AND NOT AN OVERSIGHT. Section 04's fourth horror story, "The
     order cancelled four days after it was paid for.", did NOT come across. Section
-    02's second friction beat already carries it in a customer's own words with the
+    02's first paragraph (its second friction beat until 8 Oct) already carries it in a customer's own words with the
     aftermath in it - "ordering, paying, and then 3-4 days later getting the email
     that the item wasn't actually available anymore." A summary of a scene the reader
     has already had in the shopper's own voice is the weaker of the two tellings. Its
@@ -628,15 +593,17 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     THE THIRD BOLD WAS THE HEADING IN SHORTER WORDS. "Miss the date and you lose
     trust" against a heading reading "We were losing trust where we charged the most":
     the section spent one of its four skim units restating what the reader had just
-    read. It is "Shoppers we let down didn't leave. They bought less." now (27 Sep; it
+    read. It is "Shoppers we let down did not leave. They bought less." now (27 Sep,
+    full form 8 Oct; it
     read "The shoppers we failed kept shopping, just less." before), which states the
     SHAPE of the damage rather than the fact of it - attrition, not churn. That is a
-    commercial fact a hiring manager can price, and the quote directly beneath proves
-    it in her own words. THE HINGE DESCRIPTION WENT ON 26 Sep, WITH THE MOVE THAT
+    commercial fact a hiring manager can price, and the quote that follows it in the
+    same paragraph (folded in 8 Oct) proves it in her own words. THE HINGE DESCRIPTION WENT ON 26 Sep, WITH THE MOVE THAT
     BROKE IT. The "extremely desperate to pay for expedited" quote now sits directly
-    under the chart pair, where it answers the overnight numbers, so the store
-    operations paragraph stands between it and this bold and the two are no longer
-    adjacent. The bold still leads into the reduced-shopping quote beneath it. It
+    under the chart pair, where it answers the overnight numbers (since 8 Oct it opens
+    the store-operations paragraph), so that paragraph stands between it and this bold
+    and the two are no longer adjacent. The bold still leads into the reduced-shopping
+    quote, now in its own paragraph. It
     also drops "trust" from three consecutive skim units to two.
 
     REPLACED 30 Aug, AND THE 29 Aug LEDE THAT REPLACED THE SENTENCE ABOVE IS ITSELF
@@ -653,7 +620,8 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     five-word aside in section 02's third beat and the whole of this section rests on
     it - so a sentence naming it outright now states it where it is needed. (Reworded
     31 Aug to "And some online orders shipped from retail stores, which were the
-    worst of all." - same claim, one clause lighter.)
+    worst of all." - same claim, one clause lighter - and on 8 Oct to "Express and
+    overnight were not, and orders shipped from retail stores were the worst.")
 
     NEVER USED, AND DELIBERATELY. Two sentences Paul wrote that a later pass must not
     "restore" on the grounds that they exist: "What I found was interesting", which
@@ -693,7 +661,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 </section>
 
-<section className="cs-section">
+<section className="cs-section cs-section--turn">
 
 {/* THE QUESTION SECTION, AND IT CARRIES NO FIGURE ON PURPOSE. All three shipped
     studies open their solution section with a question and answer it flat: BARD's
@@ -715,9 +683,16 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     The file stays on disk, unmounted. Do not restore it as a missing figure. */}
 ## How do you show a date a shopper can trust?
 
-<p className="section-lede">One promise for the platform all three brands share, with room for each brand to change what it needed to.</p>
+<p className="section-lede turn-answer">Only show a date <span className="turn-answer__key">you know you can keep.</span></p>
 
-{/* CUT 31 Aug FROM TWO PARAGRAPHS TO ONE, AND THE ARGUMENT IS NOT LENGTH. Both
+{/* THE TURN, 8 Oct 2026. The section takes cs-section--turn, and its answer replaced
+    the old lede ("One promise for the platform all three brands share, ..."). The
+    answer now does what the 26 Sep bold was doing below: it answers the heading in
+    the skim layer, at display size, so the paragraph's first sentence lost its bold
+    and took the platform clause from the old lede. Notes below that describe the old
+    lede or the bold are history for them.
+
+    CUT 31 Aug FROM TWO PARAGRAPHS TO ONE, AND THE ARGUMENT IS NOT LENGTH. Both
     paragraphs that left were doing a neighbouring section's job.
 
     "The date in the ad has to be the date on the product page, the date in the cart,
@@ -785,7 +760,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     and kept rather than swapped for something abstract. Two plain-pass findings did
     clear: "the capability" was an abstract noun arriving before the reader had seen a
     screen, and "run a promise" was a metaphor that does not hold. */}
-**I designed the promise once, unbranded, so all three brands would show the date in the same places.** Their teams took it from there. They added their own design systems and their own shipping rules on top. The screens below are that shared design, before any brand built on it.
+I designed the promise once, unbranded, for the platform all three brands share, so each would put the date in the same places. Their teams took it from there, adding their own design systems and shipping rules on top. The screens below are that shared design, before any brand built on it.
 
 </section>
 
@@ -817,11 +792,18 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     the grid it described, and a note claiming it would now be describing a pair that
     does not exist. Section 02's header is unaffected and needs no compensating
     change: it never depended on this one. */}
-## The date, from the ad to the doorstep.
+## I put the same date on every screen Angela touches, from the ad to the doorstep.
 
-<p className="section-lede">A date that changes from screen to screen isn't a promise.</p>
+<p className="section-lede">A date that changes from screen to screen is not a promise.</p>
 
-{/* THE LEDE STOPPED ENUMERATING ON 31 Aug, AND THE ENUMERATION IS WHAT WAS SPENT.
+{/* THE BOLD BELOW WENT ON 8 Oct 2026, INTO THE HEADING. The fine art pass made the
+    heading the claim ("I put the same date on every screen Angela touches, from the
+    ad to the doorstep.") and removed "So I put the same promise on every screen a
+    shopper touches.", which would now say it twice. Everything below about that bold
+    is the record of what it was; the eight-frame check it passed holds for the
+    heading's "same date" on the same terms.
+
+    THE LEDE STOPPED ENUMERATING ON 31 Aug, AND THE ENUMERATION IS WHAT WAS SPENT.
     It read "The date in the ad has to be the date on the product page, the date in
     the cart, and the date that arrives by text. A promise told three different ways
     is three guesses." THREE NUMBERS, NO TWO AGREEING: it said THREE ways, listed FOUR
@@ -920,7 +902,6 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     reads "The date, from the ad to the doorstep." and the lede reads "A date that
     changes from screen to screen isn't a promise.", so a caption saying "a date"
     would be the third inside a few lines. */}
-**So I put the same promise on every screen a shopper touches.**
 
 <Figure
   src="/case-studies/urbn-delivery-promise/solution/promise--detail.png"
@@ -936,10 +917,11 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     $homePageDoc. Do not restate them here and do not put copy in the component.
 
     options--wide EARNS ITS SLOT DESPITE THE PRODUCT PAGE ABOVE IT CONTAINING THE
-    SAME PANEL SMALLER, because it is the evidence for the claim the hero callout
-    makes: "The delivery option she can't have stays on the page, with the reason
-    beside it." At 536px its copy is readable and that sentence becomes checkable.
-    The callout has had no label since L3 (3 Oct 2026); its sentence is Paul's Da.
+    SAME PANEL SMALLER, because it is the evidence for "The delivery option she can't
+    have stays on the page, with the reason beside it", the hero callout until 8 Oct
+    2026 and still the Shipping options caption's claim. At 536px its copy is readable
+    and that sentence stays checkable. The callout now reads "Angela used to learn the
+    delivery date at checkout. The promise shows it to her before she decides."
 
     THE PANEL CARRIES URBN'S OWN TYPO - "There are no URBN location within 100 miles"
     - and it is NOT to be silently corrected. A screenshot's copy is never edited;
@@ -952,11 +934,17 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 <section className="cs-section">
 
-## Strategic UX is how several teams got one roadmap.
+## I set the direction. The teams built the roadmap.
 
-<p className="section-lede">I set the direction from the shopper's side and made the case for it to the people who funded it.</p>
+{/* THE HEADING CHANGED ON 8 Oct 2026, AND THE 1 Sep RULING BELOW IS HISTORY. The fine
+    art pass replaced "Strategic UX is how several teams got one roadmap." with the
+    two claims this section and Role had been keeping apart: he set the direction,
+    the teams built the roadmap. The lede went with it, and the paragraph lost its
+    bold and gained the sentence the lede was doing ("My job was to convince the
+    people who paid for them."). The six-item check below still holds for "Most of
+    the fixes needed more than design" and "The first three below".
 
-{/* THE HEADING KEEPS "Strategic UX" DELIBERATELY, ruled 1 Sep. Naming the discipline
+    THE HEADING KEPT "Strategic UX" DELIBERATELY, ruled 1 Sep. Naming the discipline
     is what section 03's own rule forbids, and this is the only heading across four
     studies whose subject is an abstraction - so the objection is real and it is
     OVERRIDDEN rather than overlooked. This study genuinely is the strategy-heavy one
@@ -1025,7 +1013,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     the band's removal unchanged, and its first half is what section 05 already shows
     a reader rather than tells them. */}
 
-**Most fixes weren't design problems.** The first three on the roadmap below had to be solved before the date could mean anything.
+Most of the fixes needed more than design. My job was to convince the people who paid for them. The first three below had to land before the date could mean anything.
 
 <RoadmapList />
 
@@ -1036,7 +1024,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 ## Where Delivery Promise landed.
 
 <div className="milestone">
-  <p className="milestone__frame">Adopted across Anthropologie, Free People, and Urban Outfitters</p>
+  <p className="milestone__frame">Adopted across Urban Outfitters, Anthropologie, and Free People</p>
   <p className="milestone__date">Built</p>
   <p className="milestone__sub">In stages, over the years after 2019.</p>
 </div>
@@ -1088,7 +1076,7 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     paragraph answers it and scopes the claim. Counted 26 Sep: all five studies keep
     a paragraph after their milestone, so there is no milestone-terminal house
     pattern to restore it to. */}
-I left URBN in October 2019. Most of what shipped shipped without me, and I won't take credit for building it. What I will claim is the argument behind it: stop racing two-day shipping and keep the date you promised.
+I left URBN in October 2019, before most of it shipped, so I do not claim the build. I do claim the argument behind it: stop racing two-day shipping, and keep the date you promised.
 
 </section>
 
@@ -1147,11 +1135,18 @@ I left URBN in October 2019. Most of what shipped shipped without me, and I won'
     UNTOUCHED. The case difference between them is deliberate: section 03 describes the
     group with an indefinite article, this names it in a list of org names beside
     Customer Service, and each matches the sentence it sits in. DO NOT LOWERCASE THIS
-    ONE TO MATCH SECTION 03, AND DO NOT CAPITALISE SECTION 03'S TO MATCH THIS. */}
-UX manager and strategy lead on Delivery Promise, employed directly by URBN. I set the direction and argued for the priority; the teams that would build the fixes created the roadmap. The UX designers I managed, one for each part of the shopping journey, did the detailed design, and a researcher owned the primary research.
+    ONE TO MATCH SECTION 03, AND DO NOT CAPITALISE SECTION 03'S TO MATCH THIS.
+    REVERSED 8 Oct 2026 BY THE FINE ART PASS, which Paul ruled: section 03 now names
+    the group too, "URBN's Data Analytics team", so both sites carry the org name
+    and the case difference is gone. The one-group ruling stands.
 
-Partnered with brand marketing and e-commerce managers across all three brands, Data Analytics on the metrics, and Customer Service on what shoppers were calling about.
+    ROLE WAS TRIMMED ON 8 Oct 2026. "; the teams that would build the fixes created the
+    roadmap" left the first paragraph because section 06's heading now says it ("The
+    teams built the roadmap."), and "Designed 2018 to 2019." joined the second
+    paragraph. The notes above that quote section 06's old lede, "made the case for
+    it", are history: that lede is gone. */}
+UX manager and strategy lead on Delivery Promise, employed directly by URBN. I set the direction and argued for the priority. The UX designers I managed, one for each part of the shopping journey, did the detailed design, and a researcher owned the primary research.
 
-Designed 2018 to 2019.
+Partnered with brand marketing and e-commerce managers across all three brands, Data Analytics on the metrics, and Customer Service on what shoppers were calling about. Designed 2018 to 2019.
 
 </section>

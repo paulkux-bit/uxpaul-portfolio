@@ -142,6 +142,14 @@
      element that reads the token, so a caption at 18px gets 576px and body at 20px
      gets 640px from the one value. */
   --measure-reading: 32em;
+
+  /* The fine art moment's height cap (ruling C2, 8 Oct 2026). A painting in
+     section 2 is never taller than this; a work that would be gets narrower and
+     stays left-aligned. 40rem is 640px at the default root, so at 1440 a work fits
+     the 640 x 640 square the test pages were judged on, and it grows with text
+     zoom like the measure beside it. No locked spec governs an image's height, so
+     the surface is recorded in docs/unspecified-surfaces.md. */
+  --art-max-height: 40rem;
 }
 
 /* ============================================================
@@ -405,13 +413,6 @@
      using, so nothing renders differently. */
   --duration-theme: 450ms;
   --duration-reveal: 560ms;   /* entrance — unchanged */
-
-  /* Ambient motion: the friction moment's loop (ruling M2, 5 Oct 2026, from the
-     Line of Sight test page). Neither an interaction speed (§3) nor an entrance
-     (§9), so it is named here rather than borrowed from either, and the surface
-     is recorded in docs/unspecified-surfaces.md. */
-  --duration-moment: 10s;
-  --ease-moment: cubic-bezier(0.45, 0.05, 0.55, 0.95);
 }
 
 /* ============================================================
@@ -1932,7 +1933,6 @@
    which is listed. NOT listed, on purpose:
    - .friction-beats: lede to beats stays 32 (ruling 2b, 30 Sep 2026); the beats
      carry text as well as figures, and S2a's set is image, bento, figure, moment.
-   - .oku-figure: inside a beat, scene to figure, 16 (ruling 4b).
    - .milestone: a status block, not evidence; keeps 32 (closing review A1c).
    - .bento-band: listed, but a run of bands keeps 32 between its bands (3b),
      in the two rules beside .bento-band below.
@@ -2188,6 +2188,48 @@
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
+/* An ink drawing (FramedPair `ink`) floats on the page the way the card covers do.
+   Its ground is transparent, so the hairline above would paint a visible frame
+   around it, inverted to a light one in dark mode by .cover-art's filter. Over the
+   opaque art these tiles carried before 8 Oct the hairline painted under the image
+   and never showed, so dropping it keeps what the page looked like. */
+.cs-section--problem .framed-pair__cell .figure__image.cover-art {
+  box-shadow: none;
+}
+
+/* Dark mode's ink (FramedPair `darkMask`; rulings draw-c and 2b, 9 Oct 2026).
+   Inverted to pure white the drawing read like a photo negative, so in dark mode
+   the tile shows a block of --text-secondary masked by the simplified drawing's
+   alpha instead of an image: the ink takes the token's colour and follows the
+   theme, and outside the ink nothing paints, so the page ground shows through.
+   The site themes by the class on <html>, so html.dark does the swap, not
+   prefers-color-scheme. mask-image is set inline per drawing (AVIF with a WebP
+   fallback by image-set); the size and repeat live here.
+
+   THE MASK SITS OVER THE LIGHT IMAGE, which stays in the layout in dark mode,
+   hidden with visibility rather than display, so the tile is exactly as tall in
+   both themes. A block sized from the declared ratio differed from the served
+   image by up to 0.28 px and moved a caption line by 1 CSS px at 1024 @2x. */
+.framed-pair__ink {
+  position: relative;
+}
+.framed-pair__cell .framed-pair__ink-mask {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background-color: var(--text-secondary);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+html.dark .framed-pair__cell .framed-pair__ink-light {
+  visibility: hidden;
+}
+html.dark .framed-pair__cell .framed-pair__ink-mask {
+  display: block;
+}
+
 @media (max-width: 767px) {
   .framed-pair[data-stack-mobile='true'] {
     grid-template-columns: 1fr;
@@ -2359,13 +2401,21 @@
   max-width: var(--measure-reading); /* ruling 1c, 5 Oct 2026; was 64ch */
 }
 
-/* The figure floats on paper — no box/border/background. color sets the ink the
-   SVG's fill="currentColor" inherits, so it renders in body-text ink and flips with
-   theme. Lever: step to var(--text-secondary) if full ink reads heavy. */
-/* Card cover line art (raster, pure-white bg). One asset per theme via blend:
-   light multiply drops the white into the card fill, black ink stays; dark inverts
-   (ink -> white) then screen drops the now-black bg into the card fill. Composites
-   against the card's opaque bg-surface (the card is `isolate`), never the page. */
+/* Ink line art (raster, pure-white bg). One asset per theme via blend: light
+   multiply drops the white into what is behind it, black ink stays; dark inverts
+   (ink -> white) then screen drops the now-black bg into it. TWO SURFACES. On the
+   card covers it composites against the card's opaque bg-surface (the card is
+   `isolate`).
+
+   ON THE PAGE THERE IS NO BACKDROP TO BLEND WITH, which is why the section 1
+   drawings of Line of Sight and FDT-E (FramedPair's `ink`, 8 Oct 2026) are shipped
+   differently. `body > *` lifts content into its own stacking context above the
+   grain, so inside it the backdrop is transparent and multiply/screen change
+   nothing: measured, the drawing's ground rendered 255,255,255 in light and
+   0,0,0 in dark, a black box. Those two files are ink on TRANSPARENT instead
+   (alpha = 255 - luminance, ink black), which is pixel-identical to multiply over
+   any page and, after invert(1), to screen, and lets the canvas and the grain show
+   through. They still carry this class for the invert. */
 .cover-art {
   display: block;
   mix-blend-mode: multiply;
@@ -2373,97 +2423,6 @@
 html.dark .cover-art {
   filter: invert(1);
   mix-blend-mode: screen;
-}
-
-.oku-figure {
-  margin: var(--spacing-s) 0 0; /* mobile (stacked): scene → figure, tighter than the beat's own 24 so the figure stays attached (ruling 4b, 30 Sep 2026; was 12) */
-  color: var(--text-secondary); /* light/Paper: supporting weight (stepped down from primary so the figure recedes; dark override below wins in Low Light) */
-
-  /* 300 IS THE SAME 300 AS THE >=1024 COLUMN, RESTATED SO IT APPLIES EVERYWHERE.
-     The cap is the `minmax(0, 300px)` grid column on `.friction-beat` inside its
-     own `@media (min-width: 1024px)` rule - cited by SELECTOR, not by line, because
-     this edit alone moved that rule 26 lines and a line citation would already be
-     stale. (The brief that commissioned this fix cited globals.css:2104-2106; that
-     was wrong before the edit too - those lines are `.friction-beat .thread-index`.)
-     A grid column only exists inside the rule that declares it. Below that
-     the beats stack, there is no column, and `.oku-figure svg { width: 100% }`
-     had nothing governing it: the figure filled the band. Measured at 1023,
-     across the four studies that ran figures in beats at the time, the figure
-     rendered 660px wide and section 02 was more than twice its height at 1024
-     (Delivery Promise 2262px against 1095px). The ink fills 54-64% of that box,
-     so it read as a hole rather than as an illustration.
-
-     THIS IS A DIFFERENT SHAPE FROM THE BREAKPOINT DEFECT FIXED THE SAME WEEK,
-     AND THE GREP THAT FOUND THAT ONE CANNOT FIND THIS ONE. TestimonyPair's was a
-     MISMATCHED breakpoint - the module split at 768 inside a band that widens at
-     1024 - and it is findable by grepping `min-width: 768px`. This is a MISSING
-     CONSTRAINT BELOW A CORRECT BREAKPOINT: `.friction-beat`'s query is already at
-     1024 and nothing about it is wrong. Searching for the first shape returns
-     nothing here. House rule 15's measurement rule is what catches it, because
-     1023 is the width one pixel under a declared breakpoint.
-
-     It does not fight the column. At >=1024 the cell is already <=300px, so this
-     agrees with it rather than competing; the figure renders identically above
-     1024 before and after. Every .oku-figure render site is inside a
-     .friction-beat - 15 of 15 across the five studies - so nothing outside the
-     beats is affected. */
-  max-width: 300px;
-}
-
-/* Dark/Low Light: dim the figure ink from primary to muted so the cream-on-espresso
-   line stops optically vibrating at rest, while staying well above the 3:1 graphics
-   floor. Per-mode wrapper color only — the SVG (currentColor) stays the single source.
-   By-eye dial: step to --text-subtle if it still buzzes. */
-html.dark .oku-figure {
-  color: var(--text-muted);
-}
-
-.oku-figure svg {
-  display: block;
-  width: 100%;
-  height: auto; /* scales to the SVG's own ~16:9 viewBox */
-}
-
-/* ── Hairline stroke floor, two consumers ────────────────────────────────
-   Some figures are single FILLED paths whose hairline linework collapses at the
-   rendered size: the drawn lines go sub-pixel and antialias to grey. Add constant
-   weight via stroke. non-scaling-stroke pins it to a fixed 0.75px of SCREEN, not of
-   the drawing's own coordinate space, so the weight holds wherever the figure is
-   scaled and whatever transform the tracer emitted. Stroke follows currentColor, so
-   the per-mode wrapper ink stays the single color source.
-
-   0.75px IS NEAR ITS CEILING, NOT MID-RANGE. Do not round it up. These are merged
-   compound paths of OUTLINED linework: every drawn line is a closed contour, so the
-   stroke lands on BOTH sides of it and effective weight is roughly double a
-   single-edge stroke. At 1px the sketch quality fattens away and the densest passages
-   (Nuuly beat 03's hands) begin closing up. 0.5px still reads thin. Measured at true
-   size in both modes, twice, by two people who arrived at the same number.
-
-   TWO CLASSES, ONE VALUE, DELIBERATELY NOT MERGED. The trigger is a property of the
-   ART, not of the study: hairline source linework needs the floor, chunky art does
-   not. .oku-figure stays stroke-free because Bard's Oku figures have native weight,
-   and it is the shared wrapper, so a floor there would hit every figure on the site.
-   Whether the floor should instead live on .oku-figure with an opt-out is recorded as
-   an open question in docs/unspecified-surfaces.md rather than guessed at here.
-   FDT-E's was the original one-off (Paul, July 2026), an exception to the "fix line
-   weight in the source art" convention; Nuuly's traced beat art is the second case. */
-.fdte-figure svg path {
-  stroke: currentColor;
-  stroke-width: 0.75px;
-  vector-effect: non-scaling-stroke;
-}
-
-/* Nuuly's traced beat figures, the second case. Same declarations, kept as a SEPARATE
-   rule rather than added to the selector list above: the two are scoped independently
-   on purpose, so retuning one study's art never silently retunes the other's.
-   IN DEVTOOLS THEY WILL LOOK MERGED. Lightning CSS folds byte-identical blocks into a
-   single selector list at minify time, so the built sheet shows one rule reading
-   .fdte-figure svg path, .nuuly-beat-figure svg path. That is the minifier, not the
-   source: change either value here and the output splits back into two rules. */
-.nuuly-beat-figure svg path {
-  stroke: currentColor;
-  stroke-width: 0.75px;
-  vector-effect: non-scaling-stroke;
 }
 
 /* A pull quote INSIDE a friction beat: the display-scale 3.5rem block margins are
@@ -2485,17 +2444,15 @@ html.dark .oku-figure {
     align-items: start;
   }
 
-  .friction-beat .oku-figure {
-    margin: 0; /* figure top-aligns with the text block in its column */
-  }
-
   /* A beat with no figure collapses to one column instead of leaving a 300px hole.
      ADDITIVE ON PURPOSE, and it does not touch the cap above: BARD, FDT-E and Nuuly
      all pass a figure, so none of them ever matches this selector and none of them
      moves. It also self-reverses — the moment art is passed, :has(figure) starts
      matching and the two-column rule takes over again with nothing to remember to
      undo. A modifier class was the alternative and was rejected as a drift trap.
-     Introduced for Delivery Promise, whose PromiseBeatFigure art does not exist yet.
+     Introduced for Delivery Promise before its beat art existed. Since the fine art
+     build (8 Oct 2026) no study renders a friction beat at all; this module's CSS
+     is kept, unrendered, pending a ruling on rung 3 (decision I1).
 
      Declares NO gap: the rule above already supplies gap: var(--spacing-l), and a
      second spacing declaration inside this @media is the one thing that would trip
@@ -2987,136 +2944,67 @@ html.dark .oku-figure {
   color: var(--text-muted); /* was a currentColor 55% weight-fake */
 }
 
-/* ── The friction moment (ruling M2, 5 Oct 2026) ─────────────────────────
-   One drawn moment with subtle motion in place of the three beat figures,
-   components/friction-moment.tsx. Line of Sight's is the convoy: three vehicles
-   fade in and drive down and to the left, away from the base drawing's push pin,
-   which stays where the analyst last put them.
+/* ── The friction moment: one still painting (fine art build, 8 Oct 2026) ──
+   components/friction-moment.tsx. One work per Template A study, in section 2
+   between the lede and the first paragraph; the record is app/data/works.json.
+   It replaced the animated convoy (ruling M2, 5 Oct 2026) and the three friction
+   beats, and kept the name because the spacing spec's S2a row and the evidence
+   rule beside .cs-section already list "the friction moment". Its 48 above and
+   below come from that rule; nothing here sets them.
 
-   Full content width, the same as a bento band (W-full), not the reading
-   measure. Its 48 above and below come from the evidence rule beside
-   .cs-section (S2a).
+   THE ARTWORK IS NEVER ALTERED, in either theme: no filter, no blend mode, no
+   invert, no mat, no radius, no motion and no hover. A painting is evidence of
+   itself, and dark mode is not licence to retouch it. There is deliberately no
+   html.dark rule in this block.
 
-   STRUCTURE. The stage is the positioning context for the vehicle boxes; the art
-   wrapper is the positioning context for the pause button, so the button sits
-   at the drawing's corner rather than the caption's. Each box holds a knockout
-   (the canvas colour through the vehicle's silhouette mask, so the base's
-   contours do not show through it) and the vehicle's ink above it. */
+   Width is the reading measure, left-aligned, never centred. Height is capped at
+   --art-max-height; a tall work narrows instead, and the caption and credit keep
+   their own measure rather than shrinking to it (Daumier renders 429 wide under a
+   576 caption at 1440). */
 .friction-moment {
+  max-width: var(--measure-reading);
   min-width: 0;
 }
 
-.friction-moment__art,
-.friction-moment__stage {
-  position: relative;
-}
-
-.friction-moment__base {
+/* The house image hairline, as .figure__image writes it (ruling D1). AN INSET
+   BOX-SHADOW PAINTS UNDER AN IMG'S CONTENT, so over an opaque painting it does not
+   show: a 3x capture of the Degas corner on the test page found no line. This
+   matches what was approved on the test pages; the finding is recorded in
+   docs/unspecified-surfaces.md rather than fixed here, because .figure__image has
+   the same property site-wide. */
+.friction-moment__image {
   display: block;
-  width: 100%;
+  width: auto;
+  max-width: 100%;
   height: auto;
+  max-height: var(--art-max-height);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
-/* left, top, width, height and --l / --t are set inline from the manifest. The
-   inline left/top are the end position, which is where reduced motion leaves
-   every vehicle. */
-.friction-moment__vehicle {
-  position: absolute;
+/* Image to caption is 16, the gap every .figure__caption on the site uses
+   (ruling gap-c, 9 Oct 2026; was the bento caption's 8). Caption to credit stays
+   8. Two classes deep because .bento-theme__caption's `margin: 0` is authored
+   later in this file at one class, and would otherwise win. */
+.friction-moment .friction-moment__caption {
+  margin-top: var(--spacing-s);
 }
 
-.friction-moment__knockout {
-  position: absolute;
-  inset: 0;
-  background: var(--bg-canvas);
-  mask-size: 100% 100%;
-  mask-repeat: no-repeat;
-  -webkit-mask-size: 100% 100%;
-  -webkit-mask-repeat: no-repeat;
-}
-
-.friction-moment__sprite {
-  position: relative; /* paints above the absolutely positioned knockout */
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* Black ink on transparent, so dark mode inverts the ink and nothing else. The
-   knockout is not inverted: it is --bg-canvas, which already follows the mode. */
-html.dark .friction-moment__ink {
-  filter: invert(1);
-}
-
-/* The pause control (WCAG 2.2.2). A pill on the art's bottom right: caption
-   size, canvas fill, default border, secondary text. Its states are the theme
-   toggle's (interaction v1 §5): colour and a --border-strong border on hover,
-   a 1px sink when pressed, the global focus halo. 44px is the touch target the
-   site's other controls use. */
-.friction-moment__toggle {
-  position: absolute;
-  right: var(--spacing-s);
-  bottom: var(--spacing-s);
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding-inline: var(--spacing-s);
+/* The credit line: rung 0 as locked (type v3 §3.4; ruling B1), at the credit
+   weight v3 §3.2 names for "credit lines". The title is <cite> in quotation
+   marks; font-style is restated because cite is italic by default and the face
+   has none. */
+.friction-moment__credit {
+  margin: var(--spacing-2xs) 0 0;
+  max-width: 56ch;
   font-size: var(--type-caption);
-  font-weight: 500;
+  font-weight: var(--wght-credit);
   line-height: 1.5;
-  color: var(--text-secondary);
-  background: var(--bg-canvas);
-  border: 1px solid var(--border-default);
-  border-radius: var(--radius-full);
-  cursor: pointer;
+  color: var(--text-muted);
+  text-wrap: pretty;
 }
 
-.friction-moment__toggle:hover {
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-}
-
-/* Pressed (§5): sink 1px. Authored after :hover, which §5 requires. */
-.friction-moment__toggle:active {
-  transform: translateY(1px);
-}
-
-.friction-moment__caption {
-  margin-top: var(--spacing-2xs); /* the bento caption bind, below the art here */
-}
-
-/* The loop: 10s, ease-moment, on left, top and opacity, offset from each box's
-   --l / --t. Keyframes from the test page: in from +6.5% / -3.83% at 0, fully in
-   by 8%, arrived at 72%, held to 92%, faded out by 100%. */
-@media (prefers-reduced-motion: no-preference) {
-  .friction-moment__toggle {
-    transition:
-      color var(--duration-control) var(--ease-out-soft),
-      border-color var(--duration-control) var(--ease-out-soft);
-  }
-
-  .friction-moment__vehicle {
-    animation: friction-moment-drive var(--duration-moment) var(--ease-moment) infinite;
-  }
-
-  .friction-moment[data-paused='true'] .friction-moment__vehicle {
-    animation-play-state: paused;
-  }
-
-  @keyframes friction-moment-drive {
-    0%   { left: calc(var(--l) + 6.5%); top: calc(var(--t) - 3.83%); opacity: 0; }
-    8%   { left: calc(var(--l) + 6.2%); top: calc(var(--t) - 3.65%); opacity: 1; }
-    72%  { left: var(--l); top: var(--t); opacity: 1; }
-    92%  { left: var(--l); top: var(--t); opacity: 1; }
-    100% { left: var(--l); top: var(--t); opacity: 0; }
-  }
-}
-
-/* Reduced motion: the vehicles sit at their end positions (the inline left/top)
-   and there is nothing to pause, so there is no button. */
-@media (prefers-reduced-motion: reduce) {
-  .friction-moment__toggle {
-    display: none;
-  }
+.friction-moment__credit cite {
+  font-style: normal;
 }
 
 /* ── Resolution bento (Show the Work) ─────────────────────────────────────
@@ -4695,7 +4583,7 @@ html.dark .figure-placeholder {
 /* non-scaling-stroke pins the weight to SCREEN px, not to the drawing's coordinate
    space. Without it a 2-unit stroke renders at 0.68px in the 342px mobile container
    and the whole line goes hairline — the same scale problem the words had, and the
-   established fix here: .fdte-figure and .nuuly-beat-figure already use it. */
+   fix the retired FDT-E and Nuuly beat figures used for their linework. */
 .journey-line__path,
 .tier-chart__line,
 .journey-line__band,
