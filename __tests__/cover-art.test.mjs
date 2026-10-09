@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { COVER_ART } from '../components/case-study-card.tsx';
+import { COVER_1200, COVER_ART } from '../components/case-study-card.tsx';
 import { caseStudies } from '../app/data/case-studies.ts';
 
 const REPO = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -87,5 +87,18 @@ describe('cover art is keyed to real slugs and real files', () => {
       else seen.set(art, slug);
     }
     expect(dupes, `two studies point at one illustration: ${dupes.join('; ')}`).toEqual([]);
+  });
+
+  // 5. The 1200 px pairs (9 Oct 2026) are reached only through srcset, so a
+  // missing one is a 404 that only 3x screens ever see: invisible on a 1x or 2x
+  // check. Same rule as assertion 2, for the second size.
+  it('every cover with a 1200 variant has both halves of it', () => {
+    for (const art of COVER_1200) {
+      expect(Object.values(COVER_ART), `${art} is in COVER_1200 but no study uses it`).toContain(art);
+      for (const ext of ['webp', 'png']) {
+        const rel = `${COVERS}/${art}-1200.${ext}`;
+        expect(existsSync(join(REPO, rel)), `${art} declares a 1200 variant, but ${rel} is missing`).toBe(true);
+      }
+    }
   });
 });
