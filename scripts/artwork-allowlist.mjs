@@ -14,29 +14,15 @@
 //
 // Each entry states why the thing is artwork rather than an icon.
 
-/** Directories whose SVG content is illustration. */
-export const ARTWORK_DIRS = [
-  {
-    path: 'components/fdte',
-    reason: 'FDT-E case-study illustrations — traced line art, regenerated from .svg by scripts/regen-fdte-tsx.mjs, sized by layout not by adjacent type',
-  },
-  {
-    path: 'components/oku',
-    reason: 'OKU case-study illustrations — same pipeline (scripts/regen-oku-tsx.mjs), artwork with its own viewBox',
-  },
-  {
-    path: 'components/nuuly-beats',
-    reason: 'Nuuly friction-beat illustrations — same pipeline (scripts/regen-nuuly-beats-tsx.mjs), sized by layout not by adjacent type',
-  },
-  {
-    path: 'components/promise-beats',
-    reason: 'Delivery Promise friction-beat illustrations — same pipeline (scripts/regen-promise-beats-tsx.mjs), sized by layout not by adjacent type',
-  },
-  {
-    path: 'components/dagr-beats',
-    reason: 'Dagr friction-beat illustrations — same pipeline (scripts/regen-dagr-beats-tsx.mjs), sized by layout not by adjacent type',
-  },
-];
+/** Directories whose SVG content is illustration.
+ *
+ * EMPTY SINCE 8 OCT 2026, AND KEPT. The five entries here (components/fdte, oku,
+ * nuuly-beats, promise-beats, dagr-beats) were the traced friction-beat figures,
+ * retired with the beats in the fine art build. An entry for a directory that no
+ * longer exists would be an exception whose premise is gone, so they went with
+ * the files. The mechanism stays because the next study that ships a directory of
+ * drawings needs exactly this, and a list that is empty is visibly empty. */
+export const ARTWORK_DIRS = [];
 
 /** Individual artwork FILES, where the surrounding directory is not all artwork.
  *

@@ -1,0 +1,115 @@
+{
+  "$doc": "One record per fine art moment, the still painting in section 2 of every Template A study. Typed by app/data/works.ts, rendered by components/friction-moment.tsx, checked in the build by scripts/lint-works.mjs, and encoded from the masters by scripts/build-fine-art.mjs. The credit line is generated from these fields and never stored, so the credit and the record cannot disagree. display is the 1x box at 1440: the work fits 640 x 640 (--art-max-height) at its natural aspect. files lists the 1x then the 2x delivery file of each format.",
+  "works": [
+    {
+      "slug": "degas-millinery-shop",
+      "study": "uscg-bard",
+      "artist": "Edgar Degas",
+      "title": "The Millinery Shop",
+      "date": "1879 to 1886",
+      "institution": "Art Institute of Chicago",
+      "accession": "1933.428",
+      "objectUrl": "https://www.artic.edu/artworks/14572/the-millinery-shop",
+      "licence": "CC0",
+      "master": { "file": "degas-millinery-shop.jpg", "md5": "5b153eb8cfdd68ec9a6c2a264fe67d3c", "width": 2576, "height": 2339 },
+      "display": { "width": 640, "height": 581 },
+      "files": {
+        "avif": ["/fine-art/degas-millinery-shop-640.avif", "/fine-art/degas-millinery-shop-1280.avif"],
+        "webp": ["/fine-art/degas-millinery-shop-640.webp", "/fine-art/degas-millinery-shop-1280.webp"]
+      },
+      "alt": "A milliner in a green dress holds a hat up to inspect it, with finished hats on stands around her.",
+      "caption": {
+        "lead": "Unsure of every filing.",
+        "gloss": "Maria knew the Coast Guard could send a case back, and the form never said what was missing."
+      }
+    },
+    {
+      "slug": "vermeer-woman-holding-balance",
+      "study": "us-navy-fdt-e",
+      "artist": "Johannes Vermeer",
+      "title": "Woman Holding a Balance",
+      "date": "about 1664",
+      "institution": "National Gallery of Art, Washington",
+      "accession": "1942.9.97",
+      "objectUrl": "https://www.nga.gov/artworks/1236-woman-holding-balance",
+      "licence": "Open Access",
+      "master": { "file": "vermeer-woman-holding-balance.jpg", "md5": "3c04c37a68f72c3f77f9029e8e0a9086", "width": 2277, "height": 2576 },
+      "display": { "width": 566, "height": 640 },
+      "files": {
+        "avif": ["/fine-art/vermeer-woman-holding-balance-566.avif", "/fine-art/vermeer-woman-holding-balance-1132.avif"],
+        "webp": ["/fine-art/vermeer-woman-holding-balance-566.webp", "/fine-art/vermeer-woman-holding-balance-1132.webp"]
+      },
+      "alt": "A woman in a blue jacket stands at a table by a window, holding a small empty balance by its thread and waiting for it to settle.",
+      "caption": {
+        "lead": "Torn before every call.",
+        "gloss": "Michelle knew one report was wrong, but not which."
+      }
+    },
+    {
+      "slug": "homer-fog-warning",
+      "study": "us-navy-dagr",
+      "artist": "Winslow Homer",
+      "title": "The Fog Warning",
+      "date": "1885",
+      "institution": "Museum of Fine Arts, Boston",
+      "accession": "94.72",
+      "objectUrl": "https://collections.mfa.org/objects/31042",
+      "licence": "Public domain image, MFA Terms of Use",
+      "master": { "file": "homer-fog-warning.jpg", "md5": "5b26e40659f38460159b145613355cff", "width": 2576, "height": 1611 },
+      "display": { "width": 640, "height": 400 },
+      "files": {
+        "avif": ["/fine-art/homer-fog-warning-640.avif", "/fine-art/homer-fog-warning-1280.avif"],
+        "webp": ["/fine-art/homer-fog-warning-640.webp", "/fine-art/homer-fog-warning-1280.webp"]
+      },
+      "alt": "A fisherman rows a small boat loaded with fish through heavy swell, looking over his shoulder at a fog bank rising on the horizon, a schooner far off.",
+      "caption": {
+        "lead": "Uneasy before every brief.",
+        "gloss": "Wilbur knew the threats might have moved, and the tool could not tell him where."
+      }
+    },
+    {
+      "slug": "dehooch-entrance-hall",
+      "study": "urbn-delivery-promise",
+      "artist": "Pieter de Hooch",
+      "title": "Man Handing a Letter to a Woman in the Entrance Hall of a House",
+      "date": "1670",
+      "institution": "Rijksmuseum, Amsterdam",
+      "accession": "SK-C-147",
+      "objectUrl": "https://www.rijksmuseum.nl/en/collection/SK-C-147",
+      "licence": "Public Domain Mark",
+      "master": { "file": "dehooch-entrance-hall.jpg", "md5": "34e347f598b96bfd6d5a7f95ac076a21", "width": 2244, "height": 2576 },
+      "display": { "width": 558, "height": 640 },
+      "files": {
+        "avif": ["/fine-art/dehooch-entrance-hall-558.avif", "/fine-art/dehooch-entrance-hall-1116.avif"],
+        "webp": ["/fine-art/dehooch-entrance-hall-558.webp", "/fine-art/dehooch-entrance-hall-1116.webp"]
+      },
+      "alt": "In the sunlit entrance hall of a canal house, a seated young woman looks up as a messenger, hat in hand, holds out a letter. The front door stands open to the canal.",
+      "caption": {
+        "lead": "Hopeful at every knock.",
+        "gloss": "Angela knew she had paid, but not when her order would come."
+      }
+    },
+    {
+      "slug": "daumier-laundress",
+      "study": "nuuly",
+      "artist": "Honoré Daumier",
+      "title": "The Laundress",
+      "date": "1863",
+      "institution": "The Metropolitan Museum of Art",
+      "accession": "47.122",
+      "objectUrl": "https://www.metmuseum.org/art/collection/search/436091",
+      "licence": "Public Domain",
+      "master": { "file": "daumier-laundress.jpg", "md5": "6c8d38c5b6cb58e1df5095727e919bbc", "width": 1727, "height": 2576 },
+      "display": { "width": 429, "height": 640 },
+      "files": {
+        "avif": ["/fine-art/daumier-laundress-429.avif", "/fine-art/daumier-laundress-858.avif"],
+        "webp": ["/fine-art/daumier-laundress-429.webp", "/fine-art/daumier-laundress-858.webp"]
+      },
+      "alt": "A laundress climbs stone steps up from the river with a heavy bundle of washing on her hip, reaching back with her free hand to help a small child up behind her.",
+      "caption": {
+        "lead": "Pressed at every station.",
+        "gloss": "Ella knew someone was waiting on every garment, and she never had a free hand."
+      }
+    }
+  ]
+}

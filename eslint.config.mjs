@@ -12,11 +12,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Generated figure wrappers (scripts/regen-*-tsx.mjs output; the .svg beside
-    // each .tsx is the source of truth). Ignoring them here replaces the per-file
-    // eslint-disable banners, which lint flagged as unused.
-    "components/oku/*.tsx",
-    "components/fdte/*.tsx",
     // lint:color check-7 fixtures. Deliberately full of colour literals and not
     // source: they are scanned by scripts/color-literals.mjs and asserted in
     // __tests__/color-literals.test.mjs, never compiled or rendered.

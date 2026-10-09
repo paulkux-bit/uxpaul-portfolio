@@ -40,7 +40,7 @@ describe('the fixtures were actually scanned', () => {
   it('reaches every fixture file', () => {
     expect(scanned.css.sort()).toEqual(['clean.css', 'violations.css']);
     expect(scanned.tsx.sort()).toEqual([
-      'clean.tsx', 'components/oku/artwork.tsx', 'violations.tsx',
+      'clean.tsx', 'components/case-studies/urbn-delivery-promise/JourneyLine.tsx', 'violations.tsx',
     ]);
   });
   it('runs all nine checks', () => {
@@ -58,7 +58,7 @@ describe('the fixtures were actually scanned', () => {
     const seen = checks.flatMap(where).map((w) => w.split(':')[0]);
     expect(seen).toContain('clean.css');
     expect(seen).toContain('clean.tsx');
-    expect(seen).toContain('components/oku/artwork.tsx');
+    expect(seen).toContain('components/case-studies/urbn-delivery-promise/JourneyLine.tsx');
   });
 });
 
@@ -137,7 +137,7 @@ describe('check 4 — hand-authored svg', () => {
     expect(failFiles(c())).toContain('violations.css');
   });
   it('excludes case-study artwork via the SHARED allowlist, not a second list', () => {
-    const art = c().excluded.filter((x) => x.where.startsWith('components/oku/'));
+    const art = c().excluded.filter((x) => x.where.startsWith('components/case-studies/urbn-delivery-promise/JourneyLine.tsx'));
     expect(art.length).toBeGreaterThan(0);
     expect(art.every((x) => x.reason === 'artwork')).toBe(true);
   });

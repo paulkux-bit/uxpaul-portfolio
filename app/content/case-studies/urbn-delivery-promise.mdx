@@ -155,7 +155,6 @@ import NodeChart from '@/components/case-studies/urbn-delivery-promise/NodeChart
 import RoadmapList from '@/components/case-studies/urbn-delivery-promise/RoadmapList';
 import PromiseWalk from '@/components/case-studies/urbn-delivery-promise/PromiseWalk';
 import TestimonyPair from '@/components/case-studies/urbn-delivery-promise/TestimonyPair';
-import { PromiseBeatFigure } from '@/components/promise-beat-figure';
 
 {/* THREE MODULES ARE RETIRED, NOT DEFERRED, and they died three different deaths.
 
@@ -177,14 +176,10 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     either. The rejected forms are kept, unbuilt, in docs/previews/
     dependency-map-*.html so the next person can see what was already tried.
 
-    PromiseBeatFigure: the three illustrations, drawn by Paul on 27 Aug. Sources are
-    components/promise-beats/*.svg, normalized and traced by
-    scripts/normalize-beat-figure.py and regenerated into .tsx by
-    npm run regen:promise-beats. THE ART LANDING CHANGED THIS SECTION'S LAYOUT:
-    .friction-beat:not(:has(figure)) had been dropping the figure column so a beat
-    with no art went full width, and it stopped matching the moment the figures were
-    passed, exactly as designed. The beats are two-column from 1024 up now, and no
-    CSS changed to do it. */}
+    PromiseBeatFigure, the three beat illustrations, went on 8 Oct 2026 with every
+    study's friction beats (the fine art build). Section 02 now carries one painting,
+    components/friction-moment.tsx, and the source art and its pipeline left the
+    repo with the component. */}
 
 {/* THE HERO IS THE REAL CROP NOW, AND THE FRONTMATTER TODO IS GONE WITH IT. It read
     "placeholder: full-frame p18-pdp, not a crop. Replace after the bento-crop pass."
@@ -342,12 +337,8 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
     summary, in the hero's role line and in section 01's lede. */}
 <p className="section-lede">A researcher interviewed URBN's online shoppers, and I worked through the findings with her, comparing them with order data and service tickets. Here is what a typical shopper went through.</p>
 
-{/* FIGURE SLOTS x3. The subject is the SHOPPER at the moment the order breaks,
-    never an abstraction and never a system diagram. That is what keeps this set
-    distinct from BARD's (system defects) and Nuuly's (a specialist at work).
-    Friction-beat figures render at a 300px cap, 168px tall: one oversized
-    object per frame, nothing finer than 40px. That CSS is shared across all
-    four studies. Do not touch it. */}
+<FrictionMoment work="dehooch-entrance-hall" />
+
 <ol className="friction-beats" role="list">
   <li className="friction-beat" data-thread="1">
     <div className="friction-beat__text">
@@ -355,7 +346,6 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
       <h3 className="friction-beat__headline">She could not see the date</h3>
       <p className="friction-beat__scene">Shipping cost and delivery timing appeared at checkout, after she had already chosen everything. Until then, she was guessing.</p>
     </div>
-    <PromiseBeatFigure variant="blind" alt="A shopper holding a dress up at arm's length in front of a large wall calendar whose grid is completely empty, with no day marked." />
   </li>
   <li className="friction-beat" data-thread="2">
     <div className="friction-beat__text">
@@ -385,7 +375,6 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
         <cite>Anthropologie customer</cite>
       </blockquote>
     </div>
-    <PromiseBeatFigure variant="phantom" alt="A shopper leaning over an open cardboard shipping box on a table, reaching into it. The box is empty. A long paper receipt hangs from her other hand." />
   </li>
   <li className="friction-beat" data-thread="3">
     <div className="friction-beat__text">
@@ -393,7 +382,6 @@ import { PromiseBeatFigure } from '@/components/promise-beat-figure';
       <h3 className="friction-beat__headline">One order arrived as three</h3>
       <p className="friction-beat__scene">About half of multi-item orders split into separate shipments, most of them sent from stores, with no rules for which store sent what.</p>
     </div>
-    <PromiseBeatFigure variant="split" alt="Three clothing parcels grouped together on blank ground: a flat taped box, an upright soft mailer behind it, and a third mailer that a shopper, crouched beside them, is pulling open with both hands." />
   </li>
 </ol>
 

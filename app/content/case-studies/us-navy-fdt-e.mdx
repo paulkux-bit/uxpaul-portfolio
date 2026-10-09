@@ -24,11 +24,10 @@ nda: false
     2026; the rulings and the copy of record live in the project
     knowledge base. Voice: first person at the entry and exit; terse
     evidence register in captions. No em-dashes (lint:prose
-    hard-fails). All imagery notional / unclassified. FdteFigure
-    variants are STUBS pending real art.
+    hard-fails). All imagery notional / unclassified. Section 2's
+    figure is a painting from app/data/works.json, not product imagery.
    ───────────────────────────────────────────────────────────── */}
 
-import { FdteFigure } from '@/components/fdte-figure';
 import GateWalkBento from '@/components/case-studies/us-navy-fdt-e/GateWalkBento';
 import { BentoBand } from '@/components/bento';
 
@@ -91,6 +90,8 @@ import { BentoBand } from '@/components/bento';
 
 <p className="section-lede">I interviewed over a dozen people and watched them work, from junior analysts to flag officers. By doctrine, commanders push data down. Analysts weigh it, debate it, and make their own call.</p>
 
+<FrictionMoment work="vermeer-woman-holding-balance" />
+
 But three things stood in the way:
 
 <ol className="friction-beats" role="list">
@@ -100,7 +101,6 @@ But three things stood in the way:
       <h3 className="friction-beat__headline">The fight sets the tempo</h3>
       <p className="friction-beat__scene">In peacetime, analysts can live with ambiguity. In war, they want facts, with confidence attached.</p>
     </div>
-    <FdteFigure variant="tempo" alt="An operator works a console lever beneath a huge clock face, its hands racing ahead of him." />
   </li>
   <li className="friction-beat" data-thread="2">
     <div className="friction-beat__text">
@@ -112,7 +112,6 @@ But three things stood in the way:
         <cite>Analyst, immersion session</cite>
       </blockquote>
     </div>
-    <FdteFigure variant="paralysis" alt="An analyst stands frozen at a fork in the road between two contradictory signs." />
   </li>
   <li className="friction-beat" data-thread="3">
     <div className="friction-beat__text">
@@ -120,7 +119,6 @@ But three things stood in the way:
       <h3 className="friction-beat__headline">The black box</h3>
       <p className="friction-beat__scene">An assessment came down as a finished answer. Analysts won't act on a call they can't question.</p>
     </div>
-    <FdteFigure variant="black-box" alt="An analyst, chin in hand, scrutinizes a flagged position on a large wall map." />
   </li>
 </ol>
 

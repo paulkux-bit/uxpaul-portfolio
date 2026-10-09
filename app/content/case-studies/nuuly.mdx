@@ -20,7 +20,6 @@ nda: false
 
 import { BentoBand } from '@/components/bento';
 import AppsBento from '@/components/case-studies/nuuly/AppsBento';
-import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 {/* ─────────────────────────────────────────────────────────────
     Nuuly – Template A. Copy review closed 27 Sep 2026 (claude/nuuly-review-s00 to s09).
@@ -149,11 +148,8 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
 
 <p className="section-lede">I interviewed fourteen garment specialists and operations managers, and watched them work, before there was a screen to design.</p>
 
-{/* FIGURE SLOTS x3. Paul is drawing these. NOT the monochrome line treatment
-    BARD and FDT-E use: this is the third study to run the friction-beats
-    module, and the art is the only thing differentiating it. See
-    claude/nuuly-arc-locked.md, "Module repetition". Subject is the SPECIALIST
-    doing the thing the beat describes, never an abstraction. */}
+<FrictionMoment work="daumier-laundress" />
+
 <ol className="friction-beats" role="list">
   <li className="friction-beat" data-thread="1">
     <div className="friction-beat__text">
@@ -165,7 +161,6 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
         <cite>Operations manager, interview</cite>
       </blockquote>
     </div>
-    <NuulyBeatFigure variant="station" alt="A specialist leaning into a wheeled workstation to push it, its last position ghosted behind." />
   </li>
   <li className="friction-beat" data-thread="2">
     <div className="friction-beat__text">
@@ -173,7 +168,6 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
       <h3 className="friction-beat__headline">Everything is a handoff</h3>
       <p className="friction-beat__scene">Each garment has a next step, and the specialist sets it. Get it wrong and a station downstream stalls. Get it late and a customer waits.</p>
     </div>
-    <NuulyBeatFigure variant="handoff" alt="A specialist beneath an overhead rail, hand still raised, a garment traveling away from them along it." />
   </li>
   <li className="friction-beat" data-thread="3">
     <div className="friction-beat__text">
@@ -181,7 +175,6 @@ import { NuulyBeatFigure } from '@/components/nuuly-beat-figure';
       <h3 className="friction-beat__headline">One hand is always full</h3>
       <p className="friction-beat__scene">A garment in one hand, a scanner in the other. The surface is already covered in laid-out work. Nobody puts a garment down to tap the screen.</p>
     </div>
-    <NuulyBeatFigure variant="hands" alt="A specialist holding a garment up off the rack in one hand and bringing a scanner to its tag with the other." />
   </li>
 </ol>
 

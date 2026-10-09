@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npm run lint:type && npm run lint:space && npm run lint:color && next build && npm run lint:interaction && npm run lint:prose && npm run lint:motion",
+    "build": "npm run lint:type && npm run lint:space && npm run lint:color && next build && npm run lint:works && npm run lint:interaction && npm run lint:prose && npm run lint:motion",
     "start": "next start",
     "lint": "eslint",
     "lint:prose": "node scripts/lint-prose.mjs",
@@ -15,11 +15,8 @@
     "lint:color": "node scripts/lint-color.mjs",
     "lint:interaction": "node scripts/lint-interaction.mjs",
     "test": "vitest",
-    "regen:oku": "node scripts/regen-oku-tsx.mjs",
-    "regen:fdte": "node scripts/regen-fdte-tsx.mjs",
-    "regen:nuuly-beats": "node scripts/regen-nuuly-beats-tsx.mjs",
-    "regen:promise-beats": "node scripts/regen-promise-beats-tsx.mjs",
-    "regen:dagr-beats": "node scripts/regen-dagr-beats-tsx.mjs"
+    "lint:works": "node scripts/lint-works.mjs",
+    "build:fine-art": "node scripts/build-fine-art.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

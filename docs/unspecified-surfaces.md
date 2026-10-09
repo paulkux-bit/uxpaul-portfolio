@@ -53,15 +53,29 @@ rules live in `type-system-v3-locked.md` §3.4 and the gaps in
 `spacing-system-v1-locked.md` §12; this entry stays as the record of how the
 surface arrived.
 
-**Ambient motion (the friction moment).** Joined 5 Oct 2026. Interaction v1 §3
-governs interaction speeds and §9 leaves entrance motion open; neither has a
-category for a loop that runs on its own. The convoy cinemagraph on Line of
-Sight is the first: a 10s loop on a sine-like ease, ruled from the test page
-(M2) and named in the theme as `--duration-moment` and `--ease-moment` so the
-values live once. What the systems would need to say: whether ambient loops are
-allowed beyond one per study, the pause control's place in the button rules
-(it borrows the theme toggle's states), and the finesse list Paul holds (easing,
-travel, the loop seam, transform rather than left and top).
+**The fine art moment (image height and the hairline).** Joined 8 Oct 2026 from
+the fine art build, which replaced the animated friction moment (and with it the
+ambient-motion entry that stood here: the loop no longer exists). Each study's
+section 2 now carries one still painting, `components/friction-moment.tsx`. Two
+things in it no locked spec governs:
+
+1. **An image's height.** Spacing v1 governs the gaps around the figure (S2a, 48
+   both sides) and type v3 governs its caption and credit (the bento caption and
+   rung 0), but nothing governs how tall a picture may be. A portrait painting at
+   the reading measure ran to 724px at 1440 on the test pages. Ruled C2: a new
+   token, `--art-max-height: 40rem` (640px at the default root), and a tall work
+   narrows rather than growing. What a spec would need to say: whether one cap
+   serves every in-column image or this surface alone, and whether it should be
+   `rem` (grows with text zoom, as here) or `px`.
+2. **The image hairline does not paint over an opaque image.** The house rule,
+   `box-shadow: inset 0 0 0 1px var(--border-subtle)` on `.figure__image` and now on
+   `.friction-moment__image`, draws under an `<img>`'s content, so over an opaque
+   picture there is no visible line: a 3x capture of the Degas corner on the test
+   page showed none. That is one instrument; it wants a person's eye as the second.
+   Ruled D1: the moment replicates the house rule as written, which is what was
+   approved on the test pages. If a visible edge is wanted, the working pattern is
+   `.bento-theme__media`'s `::after` overlay, and the question is site-wide rather
+   than this surface's.
 
 **Nav.** Type sizes, weights and the spacing between items. Neither system
 assigns it a rung or a step.
@@ -143,7 +157,10 @@ is colour judgement. All eight are allowlisted in `scripts/lint-color.mjs`
 under `ALLOWLIST.specimens`, with the reason attached to each, so the lint
 keeps surfacing them rather than absolving them.
 
-**Illustration line weight.** What minimum rendered stroke a case-study figure
+**Illustration line weight.** *Dissolved 8 Oct 2026: the traced beat figures it
+was written for (`.fdte-figure`, `.nuuly-beat-figure`, `.oku-figure`) were retired
+with the friction beats, so no shipped surface carries the question today. Kept as
+the record for the next traced figure.* What minimum rendered stroke a case-study figure
 needs, and where the rule lives. No locked spec governs it. Type v3 covers text.
 Interaction v1 §2 covers *icon* stroke through `--icon-stroke`, which is a
 different surface answering a different question.
