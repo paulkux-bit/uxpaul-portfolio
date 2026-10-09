@@ -36,11 +36,16 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
     the care-pair setup was never a real gap and its marker is deleted, the
     wash figures are confirmed, the margin-rule sentence is cut along with the
     paragraph that carried it, and section 7's captions plus section 8's
-    milestone are approved as written.
+    milestone are approved as written. (Section 8's frame was reworded in the fine
+    art pass, 8 Oct 2026; see its note.)
 
     No TODO tokens remain here or in apps-manifest.json: the last one, the
-    narrowed corner claim, was retired in the 27 Sep copy review and its scope
-    note now sits above that sentence.
+    narrowed corner claim, was retired in the 27 Sep copy review, and the sentence
+    itself went in the fine art pass (8 Oct 2026), so its scope note went too.
+
+    COPY OF RECORD SINCE 8 Oct 2026 is docs/previews/narrative/nuuly-fineart-test.html
+    in its default state, except section 1's left caption, whose lead on that page
+    was an error; "Nuuly's consumer site." stays, as ruled.
 
     Re-enumerated 27 Sep 2026, not carried forward. Every
     earlier count in this header was stale within a pass or two, so if you
@@ -49,13 +54,13 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
 
 <HeroBlock
   title={['A building, a promise,', 'and no process.']}
-  role="At Nuuly, URBN's clothing rental subscription, I designed the seven warehouse apps that get a returned garment back out to the next customer: sole designer, from idea to launch."
+  role="Nuuly is URBN's clothing rental subscription. I was the sole designer of the seven warehouse apps that moved a returned garment back out to the next member, from idea to launch."
   image={{
     src: '/case-studies/nuuly/hero.png',
     alt: 'Sort to wash bins. Scanned 6 of 6: three returned garments in a row, coded D2, W1, and D3, above the workstation dock.',
   }}
   callout={{
-    body: 'One scan, and the specialist knows which wash bin the garment goes in.',
+    body: 'With one scan, the specialist knows which wash bin the garment goes in.',
   }}
 />
 
@@ -65,9 +70,9 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
 
 <p className="section-lede">Nuuly members rent six garments a month, then send them back for six more.</p>
 
-**Her next box ships on a date she chose.** The dress she wants might still be in your return tote.
+That member's next box ships on a date she chose, and the dress she wants might still be in your return tote. Every rental gets shipped twice, washed, inspected, and sometimes repaired, all for one monthly fee.
 
-**Every rental gets shipped twice, washed, inspected, and sometimes repaired, all for one monthly fee.** If that dress is washed wrong, it's ruined. If it gets held up anywhere, her box goes out without it.
+**If that dress is washed wrong, it is ruined. If it gets held up anywhere, her box goes out without it.**
 
 {/* House pattern, taken from FDT-E's problem pair (us-navy-fdt-e.mdx): one real
     artifact beside one authored illustration, both 16:10 so the two caption
@@ -150,45 +155,21 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
 
 <FrictionMoment work="daumier-laundress" />
 
-<ol className="friction-beats" role="list">
-  <li className="friction-beat" data-thread="1">
-    <div className="friction-beat__text">
-      <span className="thread-index">01</span>
-      <h3 className="friction-beat__headline">The station moves</h3>
-      <p className="friction-beat__scene">Rolled to wherever the work is. Reset for whoever is on it. Nobody owns a station for a whole shift.</p>
-      <blockquote className="pull-quote pull-quote--quiet">
-        <p>“I need to move my staff and stations around as I try to balance the amount of orders.”</p>
-        <cite>Operations manager, interview</cite>
-      </blockquote>
-    </div>
-  </li>
-  <li className="friction-beat" data-thread="2">
-    <div className="friction-beat__text">
-      <span className="thread-index">02</span>
-      <h3 className="friction-beat__headline">Everything is a handoff</h3>
-      <p className="friction-beat__scene">Each garment has a next step, and the specialist sets it. Get it wrong and a station downstream stalls. Get it late and a customer waits.</p>
-    </div>
-  </li>
-  <li className="friction-beat" data-thread="3">
-    <div className="friction-beat__text">
-      <span className="thread-index">03</span>
-      <h3 className="friction-beat__headline">One hand is always full</h3>
-      <p className="friction-beat__scene">A garment in one hand, a scanner in the other. The surface is already covered in laid-out work. Nobody puts a garment down to tap the screen.</p>
-    </div>
-  </li>
-</ol>
+A garment specialist like Ella never keeps one station for a whole shift. As one operations manager told me, “I need to move my staff and stations around as I try to balance the amount of orders.”
 
-<p className="mt-2xl!">**The screen has to work on a station that moves, in a hand that is already full, against a clock.**</p>
+She scans each garment and decides where it goes next. She has to get it right and get it done fast. The next station is waiting for that garment, and so is a member.
+
+<p className="mt-2xl!">**The screen has to work on a moving station, in a hand that is already full, against a clock.**</p>
 
 </section>
 
-<section className="cs-section">
+<section className="cs-section cs-section--turn">
 
 ## How do you give one station seven jobs?
 
-<p className="section-lede">Seven apps, one job each. Any station can run any of them, and adding a station needs no new software.</p>
+<p className="section-lede turn-answer">Seven apps, <span className="turn-answer__key">one job each.</span></p>
 
-**When a station moves to new work, the specialist just opens a different app.**
+Any station can run any app, so adding a station needs no new software. When Ella moves to a new task, she opens the app she needs.
 
 <AppsBento />
 
@@ -196,9 +177,9 @@ import AppsBento from '@/components/case-studies/nuuly/AppsBento';
 
 <section className="cs-section">
 
-## Work outlives the shift.
+## I designed the work to outlive the shift.
 
-A station can change hands halfway through counting in new stock. The count is saved, and whoever takes over picks up where it stopped.
+If Ella hands her station off halfway through counting in new stock, the count is saved. Whoever takes over picks up where she stopped.
 
 <BentoBand
   src="/case-studies/nuuly/pause-handoff.png"
@@ -212,9 +193,7 @@ A station can change hands halfway through counting in new stock. The count is s
 
 <section className="cs-section">
 
-## The hard part was knowing which bin.
-
-Scan a garment, and the screen shows which colored bin it goes in. There's nothing to learn and nothing to decide.
+## I designed one scan to choose the wash bin.
 
 <BentoBand
   src="/case-studies/nuuly/bins-first.png"
@@ -232,9 +211,7 @@ Scan a garment, and the screen shows which colored bin it goes in. There's nothi
   aspect={1.778}
 />
 
-Getting the bin right took months. I worked on a wash-cycle discovery project that ran thousands of machine washes, measuring garments before and after. The data science team built a model from the results, and that model picks the bin when a garment is scanned.
-
-Two of the seven apps came out of that project, so the testing kept going: Test Wash runs each new style through a cycle, and Measure compares it before and after.
+Knowing which bin took months. I worked on a wash-cycle discovery project that ran thousands of machine washes and measured every garment. The data science team built a model from the results, and that model picks the bin at the scan. Test Wash and Measure, two of the seven apps, came out of that project.
 
 <BentoBand
   src="/case-studies/nuuly/measure-table.png"
@@ -297,13 +274,7 @@ Two of the seven apps came out of that project, so the testing kept going: Test 
 
 ## I designed for the hundredth garment.
 
-By the hundredth garment of a shift, a specialist reaches for the button without looking. I could design for that because the warehouse manager's training already covered how the whole floor works, so the app only had to handle the task in front of it.
-
-{/* Scope, narrowed 19 Aug and kept in the 27 Sep rewrite: "every screen that
-    ends a task", not "every app, every screen". Receiving has no bottom-right
-    primary at all, measured across all 62 dim frames. Any rephrase stays within
-    what the 62 frames support. */}
-So the main button sits in the same corner on every screen that ends a task.
+By the hundredth garment of a shift, Ella reaches for the button without looking. The warehouse manager's training already covered how the floor works, so each app only had to handle the task in front of her. Her hand could learn one spot.
 
 {/* Composite, not a crop, and the one image in this study that is not a whole
     frame. Six identical strips from five apps at identical geometry, two of
@@ -335,7 +306,7 @@ So the main button sits in the same corner on every screen that ends a task.
   aspect={1.6}
 />
 
-**The tap area reaches all the way to the edge of the screen.** The button looks like it sits inside the margin, but a tap anywhere out to the edge still counts. A hand can't overshoot the edge, so the specialist can hit it while looking at the dress.
+The button looks like it sits inside the margin, but its tap area runs to the edge of the screen. A hand cannot overshoot the edge, so she can hit it while looking at the dress.
 
 <BentoTheme>
   <BentoItem
@@ -356,7 +327,8 @@ So the main button sits in the same corner on every screen that ends a task.
 
 {/* §6 deliberately ends on the verdict pair with no closing paragraph, ruled
     20 Aug 2026. The cut paragraph restated the corner decision and the hit-area
-    mechanic, both already stated above in Paul's voice, and carried a rule
+    mechanic, both already stated above in Paul's voice (since 8 Oct the corner is
+    "Her hand could learn one spot." and the Same corner caption), and carried a rule
     clause he had not signed. Do not add a closer back. */}
 
 </section>
@@ -365,9 +337,7 @@ So the main button sits in the same corner on every screen that ends a task.
 
 ## I designed bright mode. They stayed on dim.
 
-The floor wasn't lit the same everywhere, and people had their own preferences, so I designed a dim mode and a bright mode. I worked with the Android developers to see what the monitors could actually do. I was proud of bright mode.
-
-Hardly anyone used it. They stayed on dim.
+The floor wasn't lit the same everywhere, and people had their own preferences, so I designed a dim mode and a bright mode. I worked with the Android developers to see what the monitors could actually do. I was proud of bright mode. Hardly anyone used it.
 
 I still don't know why. Maybe it's what they were trained on. Maybe bright wasn't bright enough. Maybe dim just looked better in that room, and it stuck.
 
@@ -390,7 +360,8 @@ I still don't know why. Maybe it's what they were trained on. Maybe bright wasn'
 
     THE BENTO IS DELIBERATELY LAST, moved here 20 Aug. Do not move it back above
     the closer on a "prose should close a section" instinct. With it in the
-    middle, the landing ("Hardly anyone used it. They stayed on dim.") had gone
+    middle, the landing ("Hardly anyone used it.", since 8 Oct the end of the first
+    paragraph; "They stayed on dim." lives in the heading) had gone
     cold by the time the reader reached the coda, and two "It might be" clauses
     with nothing after them read as truncation rather than refusal. The coda was
     rewritten 27 Sep and again 28 Sep, now three "Maybe" lines in Paul's
@@ -419,21 +390,23 @@ I still don't know why. Maybe it's what they were trained on. Maybe bright wasn'
 
 <section className="cs-section">
 
-## Where Nuuly stands.
+## Where Nuuly landed.
 
 {/* Approved by Paul, 20 Aug 2026.
 
     The frame is a fact he confirmed: Receiving, Test Wash and Measure had to be
     live before Nuuly could rent a single garment. A logical dependency rather
     than a metric, so there is nothing in it to dispute. An earlier draft named
-    the three apps and ran to 80 characters; he cut it as verbose.
+    the three apps and ran to 80 characters; he cut it as verbose. "Operator tools"
+    became "warehouse apps" in the fine art pass (8 Oct 2026), the study's own name
+    for them everywhere else, and the frame lost its full stop like the other four.
 
     JULY 2019 IS NUULY'S PUBLIC LAUNCH DATE, not the tools' ship date. That is
     why the sub explains the date rather than restating the frame. An earlier
     sub read "All seven were live by then", which repeated the frame's idea and
     the word "live". Do not reintroduce a sub that competes with the frame. */}
 <div className="milestone">
-  <p className="milestone__frame">Nuuly could not open until the operator tools worked.</p>
+  <p className="milestone__frame">Nuuly could not open until the warehouse apps worked</p>
   <p className="milestone__date">July 2019</p>
   <p className="milestone__sub">Nuuly went live to the public.</p>
 </div>
@@ -441,14 +414,15 @@ I still don't know why. Maybe it's what they were trained on. Maybe bright wasn'
 {/* §8 keeps a paragraph after the milestone. Deliberate, ruled 20 Aug 2026.
     Nuuly shipped seven years ago and Paul left URBN three months after launch,
     July to October 2019, so a reader arrives at this section with a question:
-    is this still his? The paragraph answers it and scopes the claim. It is also
-    what makes the "Where Nuuly stands" heading honest, since the milestone alone
-    answers a past-tense question with a past-tense fact.
+    is this still his? The paragraph answers it and scopes the claim. Since 8 Oct
+    2026 it does so in one sentence, "I left URBN that October, three months after
+    launch.", under a heading that is itself past tense ("Where Nuuly landed."), so
+    the paragraph no longer has to make a present-tense heading honest.
 
     THE CLAIM THAT BARD AND FDT-E END ON THEIR MILESTONE WAS FALSE AND IS GONE.
     Counted 26 Sep: all five studies keep a paragraph after their milestone, so
     there is no milestone-terminal house pattern to be fixed back to. */}
-I left URBN that October. What Nuuly became afterwards is not mine to claim, but the loop these apps describe is still the loop, and a garment still gets its cleaning recipe by being washed and measured first.
+I left URBN that October, three months after launch.
 
 </section>
 
@@ -456,11 +430,9 @@ I left URBN that October. What Nuuly became afterwards is not mine to claim, but
 
 ## Role
 
-Sole designer on Nuuly's seven warehouse operator applications, employed directly by URBN. Other designers worked on Nuuly's consumer, shipping, and branding experience.
+Sole designer on Nuuly's seven warehouse apps, employed directly by URBN. Other designers worked on Nuuly's consumer, shipping, and branding experience.
 
-I worked with product management, the data science team, warehouse operations experts, and the garment specialists who would use the apps.
-
-Designed 2018 to 2019.
+I worked with product management, the data science team, warehouse operations experts, and the garment specialists who would use the apps. Designed 2018 to 2019.
 
 {/* Credit resolved 12 Aug 2026: Paul was the sole designer on the seven
     operator apps. The claim is scoped to the apps deliberately. Unqualified
