@@ -578,8 +578,12 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
   light-only to `--border-default` — never change the base token.
 - The traced SVG beat figures (`.oku-figure` and its siblings, regenerated from .svg by
   `regen:*` scripts) were retired with the friction beats on 8 Oct 2026. Raster ink
-  drawings on pure white (the card covers) take `.cover-art`:
-  multiply in light, invert plus screen in dark.
+  drawings take `.cover-art`: multiply in light, invert plus screen in dark. On the
+  card covers the ground is white and the opaque, isolated card is the backdrop. On
+  the page there is no backdrop to blend with (`body > *` is its own stacking
+  context), so the section 1 drawings on Line of Sight and FDT-E (FramedPair's
+  `ink`) ship as ink on a transparent ground; a white-ground file there renders as
+  a white box in light and a black box in dark.
 - `.case-study-prose p` is wrapped `:where(.case-study-prose) p` so component margins win.
 
 ## Workflow conventions

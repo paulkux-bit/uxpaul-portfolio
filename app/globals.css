@@ -2188,6 +2188,15 @@
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }
 
+/* An ink drawing (FramedPair `ink`) floats on the page the way the card covers do.
+   Its ground is transparent, so the hairline above would paint a visible frame
+   around it, inverted to a light one in dark mode by .cover-art's filter. Over the
+   opaque art these tiles carried before 8 Oct the hairline painted under the image
+   and never showed, so dropping it keeps what the page looked like. */
+.cs-section--problem .framed-pair__cell .figure__image.cover-art {
+  box-shadow: none;
+}
+
 @media (max-width: 767px) {
   .framed-pair[data-stack-mobile='true'] {
     grid-template-columns: 1fr;
@@ -2359,10 +2368,21 @@
   max-width: var(--measure-reading); /* ruling 1c, 5 Oct 2026; was 64ch */
 }
 
-/* Card cover line art (raster, pure-white bg). One asset per theme via blend:
-   light multiply drops the white into the card fill, black ink stays; dark inverts
-   (ink -> white) then screen drops the now-black bg into the card fill. Composites
-   against the card's opaque bg-surface (the card is `isolate`), never the page. */
+/* Ink line art (raster, pure-white bg). One asset per theme via blend: light
+   multiply drops the white into what is behind it, black ink stays; dark inverts
+   (ink -> white) then screen drops the now-black bg into it. TWO SURFACES. On the
+   card covers it composites against the card's opaque bg-surface (the card is
+   `isolate`).
+
+   ON THE PAGE THERE IS NO BACKDROP TO BLEND WITH, which is why the section 1
+   drawings of Line of Sight and FDT-E (FramedPair's `ink`, 8 Oct 2026) are shipped
+   differently. `body > *` lifts content into its own stacking context above the
+   grain, so inside it the backdrop is transparent and multiply/screen change
+   nothing: measured, the drawing's ground rendered 255,255,255 in light and
+   0,0,0 in dark, a black box. Those two files are ink on TRANSPARENT instead
+   (alpha = 255 - luminance, ink black), which is pixel-identical to multiply over
+   any page and, after invert(1), to screen, and lets the canvas and the grain show
+   through. They still carry this class for the invert. */
 .cover-art {
   display: block;
   mix-blend-mode: multiply;

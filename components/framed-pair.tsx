@@ -13,6 +13,12 @@ interface FramedPairItem {
    *  so next/image renders the true ratio instead of letterboxing into 16:9. */
   width?: number;
   height?: number;
+  /** A black-ink drawing (an engraving, not a screenshot), shipped as ink on a
+   *  TRANSPARENT ground, alpha = 255 - luminance. Adds .cover-art, whose invert
+   *  turns the ink light in dark mode; the transparency is what lets the page show
+   *  through, because on the page the blend has no backdrop (see .cover-art in
+   *  globals.css). A white-ground file here renders as a black box in dark mode. */
+  ink?: boolean;
 }
 
 interface FramedPairProps {
@@ -72,7 +78,7 @@ export function FramedPair({
               height={panel.height ?? 900}
               sizes={sizes}
               quality={85}
-              className="figure__image"
+              className={panel.ink ? 'figure__image cover-art' : 'figure__image'}
             />
           )}
           {panel.caption ? (
