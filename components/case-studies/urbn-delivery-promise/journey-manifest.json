@@ -164,9 +164,9 @@
       "lead": "One order, three boxes."
     }
   ],
-  "$captionDoc": "The gloss is the PROTOTYPE's wording, not the content draft's: the draft read 'the drops are not about price' and Paul reconciled to 'none' on 23 Aug, as the stronger claim and a true one. THE 'ENDS LOWER THAN IT STARTED' CLAUSE WAS REMOVED on 29 Aug: the labelled axis now shows where she ends, so the caption was narrating the picture. What replaced it is the reading a viewer might miss, which is that she recovers each time.",
+  "$captionDoc": "The gloss is the PROTOTYPE's wording, not the content draft's: the draft read 'the drops are not about price' and Paul reconciled to 'none' on 23 Aug, as the stronger claim and a true one. THE 'ENDS LOWER THAN IT STARTED' CLAUSE WAS REMOVED on 29 Aug: the labelled axis now shows where she ends, so the caption was narrating the picture. What replaced it is the reading a viewer might miss, which is that she recovers each time. THE LEAD NAMES ANGELA SINCE 8 Oct 2026 ('Angela's order, mapped.', was 'A typical order, mapped.'), from the fine art test page: the deck's journey is the Angela persona, and section 02's heading names her too. The ariaLabel keeps 'a typical order', which is not rendered text and still describes what the line plots.",
   "caption": {
-    "lead": "A typical order, mapped.",
+    "lead": "Angela's order, mapped.",
     "gloss": "She recovers twice and is knocked down four times. None of the drops are about price."
   },
   "ariaLabel": "One shopper's satisfaction across five stages of a typical order, running from happy through fine to angry. She starts happy through arrive and browse, drops to fine at decide when no delivery date is visible, then recovers to happy at purchase. She falls to angry when the order goes out of stock after she has paid, recovers to happy again when the order receipt arrives, falls to fine as the order turns up in three separate shipments, and recovers no further: the line ends at angry when an item is canceled four days later. She recovers twice and is knocked down four times."
