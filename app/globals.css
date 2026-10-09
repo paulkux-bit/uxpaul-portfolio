@@ -2197,6 +2197,22 @@
   box-shadow: none;
 }
 
+/* A dark-only ink file (FramedPair `darkSrc`, ruling draw-c, 9 Oct 2026). The
+   site themes by the class on <html>, so the swap is two images and this toggle,
+   not <picture> with prefers-color-scheme. Both carry .cover-art, so the dark file
+   takes the same invert the light one had in dark mode: the only thing dark mode
+   changes is which file shows. Two classes deep so it beats .figure__image's
+   `display: block`, which is authored later. */
+.framed-pair__cell .framed-pair__ink-dark {
+  display: none;
+}
+html.dark .framed-pair__cell .framed-pair__ink-light {
+  display: none;
+}
+html.dark .framed-pair__cell .framed-pair__ink-dark {
+  display: block;
+}
+
 @media (max-width: 767px) {
   .framed-pair[data-stack-mobile='true'] {
     grid-template-columns: 1fr;

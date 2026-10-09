@@ -19,6 +19,13 @@ interface FramedPairItem {
    *  through, because on the page the blend has no backdrop (see .cover-art in
    *  globals.css). A white-ground file here renders as a black box in dark mode. */
   ink?: boolean;
+  /** A simplified ink file shown only in dark mode (ruling draw-c, 9 Oct 2026):
+   *  the same drawing with its faintest strokes dropped, because the full file
+   *  reads too busy inverted on the dark page. Same size and treatment as `src`;
+   *  requires `ink`. Both files render, and html.dark decides which shows
+   *  (.framed-pair__ink-light / __ink-dark in globals.css). The site themes by
+   *  the class on <html>, so <picture> with prefers-color-scheme would be wrong. */
+  darkSrc?: string;
 }
 
 interface FramedPairProps {
@@ -71,15 +78,38 @@ export function FramedPair({
           {placeholder ? (
             <PlaceholderFrame src={panel.src} ratio={ratio} />
           ) : (
-            <Image
-              src={panel.src}
-              alt={panel.alt}
-              width={panel.width ?? 1600}
-              height={panel.height ?? 900}
-              sizes={sizes}
-              quality={85}
-              className={panel.ink ? 'figure__image cover-art' : 'figure__image'}
-            />
+            <>
+              <Image
+                src={panel.src}
+                alt={panel.alt}
+                width={panel.width ?? 1600}
+                height={panel.height ?? 900}
+                sizes={sizes}
+                quality={85}
+                className={
+                  panel.ink
+                    ? `figure__image cover-art${panel.darkSrc ? ' framed-pair__ink-light' : ''}`
+                    : 'figure__image'
+                }
+              />
+              {/* Both stay lazy (next/image's default), so the hidden one is not
+                  fetched up front where the browser defers display:none lazy
+                  images: Chromium does, measured 9 Oct 2026. WebKit fetched the
+                  hidden file too, so Safari in dark mode may download both; that
+                  cost was accepted (ruling A1). display:none also keeps the
+                  hidden copy and its alt out of the accessibility tree. */}
+              {panel.ink && panel.darkSrc ? (
+                <Image
+                  src={panel.darkSrc}
+                  alt={panel.alt}
+                  width={panel.width ?? 1600}
+                  height={panel.height ?? 900}
+                  sizes={sizes}
+                  quality={85}
+                  className="figure__image cover-art framed-pair__ink-dark"
+                />
+              ) : null}
+            </>
           )}
           {panel.caption ? (
             <figcaption className="figure__caption">{panel.caption}</figcaption>
