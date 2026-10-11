@@ -99,7 +99,12 @@ export function ClientWorkDialog() {
 
   const [current, setCurrent] = useState<number | null>(null);
   const [image, setImage] = useState(0);
-  const [swapping, setSwapping] = useState(false);
+  // A piece change runs in three phases: the old piece leaves against the
+  // direction of travel, the new one is placed on the far side with no
+  // transition, then it settles into place. `travel` is +1 for next, -1 for
+  // previous. Under reduced motion the phase never leaves 'idle'.
+  const [phase, setPhase] = useState<'idle' | 'leaving' | 'arriving'>('idle');
+  const [travel, setTravel] = useState(1);
   const [announcement, setAnnouncement] = useState('');
 
   const titleId = useId();
@@ -178,7 +183,7 @@ export function ClientWorkDialog() {
         : null);
     openerRef.current = null;
     setCurrent(null);
-    setSwapping(false);
+    setPhase('idle');
     setAnnouncement('');
     row?.focus();
   }, [current]);
@@ -222,26 +227,46 @@ export function ClientWorkDialog() {
     return () => observer.disconnect();
   }, [current]);
 
-  // Previous and next: replace the hash, cross-fade, announce.
+  // Previous and next: replace the hash, move the content in the direction of
+  // travel, announce. The four pieces read as one set a reader flips through
+  // (build review, 10x move C), which the ruled-out counter would otherwise
+  // have had to say.
   const goToPiece = (step: number) => {
     if (current === null) return;
     const next = (current + step + COUNT) % COUNT;
     window.history.replaceState(window.history.state, '', `#${templateB[next].slug}`);
+    const reduce = prefersReducedMotion();
     const swap = () => {
-      // Closed while the old piece was fading out: do not reopen.
+      // Closed while the old piece was leaving: do not reopen.
       if (!dialogRef.current?.open) return;
       setCurrent(next);
       setImage(0);
       imageRef.current = 0;
-      setSwapping(false);
+      setPhase(reduce ? 'idle' : 'arriving');
       setAnnouncement(`Now showing ${templateB[next].name}`);
       panelRef.current?.scrollTo({ top: 0 });
     };
-    if (prefersReducedMotion()) return swap();
-    setSwapping(true);
+    if (reduce) return swap();
+    setTravel(step > 0 ? 1 : -1);
+    setPhase('leaving');
     const wait = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-control')) || 180;
     window.setTimeout(swap, wait);
   };
+
+  // The arriving piece is painted once on the far side, then released, so it
+  // transitions into place rather than jumping. Two frames: the first commits
+  // the far-side position, the second lets it move.
+  useEffect(() => {
+    if (phase !== 'arriving') return;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setPhase('idle'));
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [phase]);
 
   const onPieceLink = (event: React.MouseEvent<HTMLAnchorElement>, step: number) => {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
@@ -268,7 +293,12 @@ export function ClientWorkDialog() {
             if (event.target === event.currentTarget) close();
           }}
         >
-          <div ref={panelRef} tabIndex={-1} className={`client-work__panel${swapping ? ' is-swapping' : ''}`}>
+          <div
+            ref={panelRef}
+            tabIndex={-1}
+            className={`client-work__panel${phase === 'idle' ? '' : ` is-${phase}`}`}
+            style={{ ['--client-work-travel' as string]: travel }}
+          >
             <button ref={closeRef} type="button" className="client-work__close" aria-label="Close" onClick={close}>
               <X className="icon" aria-hidden="true" />
             </button>

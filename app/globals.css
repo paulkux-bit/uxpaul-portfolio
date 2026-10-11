@@ -1843,8 +1843,8 @@ dialog.client-work::backdrop {
 }
 
 /* Motion: the panel enters with a short fade and rise as the scrim fades in;
-   content cross-fades on a piece change (the script waits --duration-control);
-   the bar slides. All of it is skipped under reduced motion, where the scrim
+   content cross-fades and moves in the direction of travel on a piece change
+   (the script waits --duration-control); the bar slides. All of it is skipped under reduced motion, where the scrim
    and the bar are simply there and the swap is instant. */
 @media (prefers-reduced-motion: no-preference) {
   dialog.client-work[open] .client-work__panel {
@@ -1863,7 +1863,9 @@ dialog.client-work::backdrop {
     }
   }
   .client-work__panel > :not(.client-work__close) {
-    transition: opacity var(--duration-control) var(--ease-out-soft);
+    transition:
+      opacity var(--duration-control) var(--ease-out-soft),
+      transform var(--duration-control) var(--ease-out-soft);
   }
   .client-work__thumb::after {
     transition:
@@ -1871,8 +1873,20 @@ dialog.client-work::backdrop {
       background-color var(--duration-control) var(--ease-out-soft);
   }
 }
-.client-work__panel.is-swapping > :not(.client-work__close) {
+/* A piece change moves the content one --spacing-m in the direction of travel
+   (--client-work-travel: 1 for next, -1 for previous, set by the script): the
+   old piece leaves against it, the new one is placed on the far side with no
+   transition and then settles (build review, 10x move C). The script skips
+   both phases under reduced motion. At rest no transform is declared, so the
+   sheet's sticky nav and fixed close button are never inside a transform. */
+.client-work__panel.is-leaving > :not(.client-work__close) {
   opacity: 0;
+  transform: translateX(calc(var(--spacing-m) * var(--client-work-travel) * -1));
+}
+.client-work__panel.is-arriving > :not(.client-work__close) {
+  opacity: 0;
+  transform: translateX(calc(var(--spacing-m) * var(--client-work-travel)));
+  transition: none;
 }
 @keyframes client-work-in {
   from {
