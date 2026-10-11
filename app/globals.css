@@ -1784,10 +1784,15 @@ dialog.client-work::backdrop {
    runs to different heights, so the panel was 550 to 664px tall at 1024 and a
    previous/next swap moved its top edge up to 41px under the reader's eye
    (build review, path item 7). Here it fills the stage instead, the same
-   height for every piece; from 1216 the frame already fixes it. */
+   height for every piece; from 1216 the frame already fixes it. The row
+   stretches to that height too, so the text column fills it and the
+   previous/next links sit at its foot for every piece: with the row sized to
+   its content they landed 149px apart at 768 (measured), moving under a
+   cursor flipping through. */
 @media (min-width: 768px) and (max-width: 1215px) {
   .client-work__panel {
     height: calc(100dvh - 2 * var(--spacing-xl));
+    align-content: stretch;
   }
 }
 
