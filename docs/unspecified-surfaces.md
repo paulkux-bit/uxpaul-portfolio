@@ -58,9 +58,13 @@ answer:
    mode in the theme layer. The prototype mixed `--text-primary` at 46% in both
    modes, which darkened the page in light mode and lifted it to grey in dark
    mode (measured `oklch(0.945 0.012 78 / 0.46)`). Paul ruled that it dims in
-   both modes (11 Oct 2026), so dark mixes `--bg-sunken` instead. What a spec
-   would need to say: a scrim role in colour v2 with a stated effect in each
-   mode, and whether a modal panel takes the card's radius or a control's.
+   both modes (11 Oct 2026), so dark mixes `--bg-sunken` instead. Even dimmed,
+   the dark panel separated from the page at only 1.10:1, so from the build
+   review (11 Oct 2026) the panel carries a 1px outline edge, `--border-subtle`
+   in dark and transparent in light, which forced colours also paint. What a
+   spec would need to say: a scrim role in colour v2 with a stated effect in
+   each mode, whether a modal surface owes an edge in dark, and whether a modal
+   panel takes the card's radius or a control's.
 
 4. **Entrance motion.** Interaction v1 leaves entrance unspecified. The panel's
    fade and rise takes `--duration-card` (written for lift, shadow and media

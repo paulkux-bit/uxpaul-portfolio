@@ -1791,6 +1791,48 @@ dialog.client-work::backdrop {
   }
 }
 
+/* The panel's edge (build review, path item 3, 11 Oct 2026). An outline, not a
+   border, so it takes no layout space and the 588x490 frame does not shrink;
+   offset inward so it sits on the panel's own edge and follows its radius.
+   Transparent in light, where the scrim already separates panel from page
+   (2.73:1); --border-subtle in dark, where it measured 1.10:1, the house
+   hairline that image edges already use. Forced colours paint an outline even
+   when it is transparent, which gives the panel the edge it had lost there
+   (border 0 and the scrim gone). Restated on :focus-visible, because the panel
+   takes focus on a pointer or deep-link open and its focus rule would
+   otherwise remove it. From 768 only: the sheet fills the screen and has no
+   page around it to separate from. */
+@media (min-width: 768px) {
+  .client-work__panel {
+    --client-work-edge: transparent;
+    outline: 1px solid var(--client-work-edge);
+    outline-offset: -1px;
+  }
+  .dark .client-work__panel {
+    --client-work-edge: var(--border-subtle);
+  }
+  .client-work__panel:focus-visible {
+    outline: 1px solid var(--client-work-edge);
+    outline-offset: -1px;
+  }
+}
+
+/* Forced colours: the current-thumbnail bar resolved to Canvas on a Canvas
+   thumb, so nothing marked the current image. The bar keeps its authored
+   colour here, as system colours: CanvasText for the current image, GrayText
+   for a hovered one. */
+@media (forced-colors: active) {
+  .client-work__thumb::after {
+    forced-color-adjust: none;
+  }
+  .client-work__thumb:hover {
+    --client-work-bar: GrayText;
+  }
+  .client-work__thumb[aria-current='true'] {
+    --client-work-bar: CanvasText;
+  }
+}
+
 /* Short viewports (the prototype's 53rem, written in px like every other
    query here): the panel's block padding steps down so 1280x800 holds the
    588x490 frame without scrolling. The site's first height query, logged. */
