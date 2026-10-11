@@ -41,11 +41,12 @@ const MASTERS = process.argv[2] ?? 'docs/previews/template-b/_scratch/crops-v5';
 // plain re-run must not fall back to them, which is why this is a map in the
 // script and not a renamed file. An upscale folder passed as the argument
 // follows the same names. khov-2 was re-cut on 11 Oct 2026 from a new source
-// at 1130x942, under the 1176 rung, so its 2x file is 1130 wide.
+// at 1130x942, under the 1176 rung, so its 2x file is 1130 wide. v3 replaced
+// v2 the same day: v2 caught a strip of the page below the Done/Clear bar.
 const MASTER_FILES = {
   'bbc-confusing': 'bbc-confusing-whole.png',
   'bbc-pillars': 'bbc-pillars-whole.png',
-  'khov-2': 'khov-2-v2.png',
+  'khov-2': 'khov-2-v3.png',
 };
 const RUNGS = [144, 588, 1176];
 const TARGET_2X = { width: 1176, height: 980 }; // the 588x490 frame at 2x
