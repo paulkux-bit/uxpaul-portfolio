@@ -229,12 +229,12 @@
     },
     "/client-work/k-hovnanian/khov-2": {
       "master": {
-        "file": "khov-2.png",
-        "md5": "5f916e3378a3d14918e5ccd5cac631a9",
-        "width": 1174,
-        "height": 978
+        "file": "khov-2-v2.png",
+        "md5": "90d8d402322b0006e44748c25742066a",
+        "width": 1130,
+        "height": 942
       },
-      "density": 2,
+      "density": 1.92,
       "files": [
         {
           "width": 144,
@@ -245,8 +245,8 @@
           "height": 490
         },
         {
-          "width": 1174,
-          "height": 978
+          "width": 1130,
+          "height": 942
         }
       ]
     },
