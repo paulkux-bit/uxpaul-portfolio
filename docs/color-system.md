@@ -34,7 +34,7 @@ Light mode is **paper** — warm cream canvas with visible chroma, deep warm cha
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
-The **PopUp annotation layer** once carried a chromatic identity at rest. It is retired, and its tokens were deleted on 1 Oct 2026. The one resting exception now is the "Also shipped" brand shelf (see Brand identity below).
+The **PopUp annotation layer** once carried a chromatic identity at rest. It is retired, and its tokens were deleted on 1 Oct 2026. The one resting exception now is the "Client work" brand shelf (see Brand identity below).
 
 ---
 
@@ -99,7 +99,7 @@ All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma st
 
 Deleted from `globals.css` on 1 Oct 2026, consumed by nothing since the layer was retired. The six tokens and their values are in git history at `29ae8ab`.
 
-### Brand identity — the "Also shipped" shelf
+### Brand identity — the "Client work" shelf
 
 Each brief-work entry is a **calm bordered row** (Wise-register): a faint near-canvas brand **fill**
 (`--qh-*-fill`) + a 1.5px brand-color **border** (`--qh-*-base`) carrying the identity; typography
@@ -288,7 +288,7 @@ The decisions, in order of forking:
 2. **Warm-leaning hue axis** (50–80) — amber/sepia reads as studio, not corporate.
 3. **No accent at rest** — chromatic restraint is the senior move. Forces typography, scale, and craft to do the work.
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
-5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Also shipped" shelf is the one resting exception now.)
+5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Client work" shelf is the one resting exception now.)
 6. **(v2) Interaction earns color** — hover, focus, selection get warm chromatic treatment as *moments*, not roles. Defensible because nothing chromatic sits at rest.
 7. **(v2) Paper has real character** — visible chroma, layered surfaces, SVG grain. The canvas is cream stock, not generated white.
 
@@ -296,10 +296,10 @@ The decisions, in order of forking:
 
 ## Anti-patterns (no-fly list)
 
-- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. **One sanctioned exception:** the `--qh-*` brand border + faint fill on the "Also shipped" shelf (persimmon-clear, attribution-only — see the Brand identity token section). This is not a license for further resting color.
+- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. **One sanctioned exception:** the `--qh-*` brand border + faint fill on the "Client work" shelf (persimmon-clear, attribution-only — see the Brand identity token section). This is not a license for further resting color.
 - ❌ **No purple gradients.** Anywhere.
 - ❌ **No raw color tokens** (e.g., `--color-blue-500`). All tokens are role-based.
-- ❌ **No cool grays** (hue ≥ 200). The system is warm only. **One sanctioned exception:** `--qh-bbc-base` (hue 250) on the "Also shipped" shelf, for BBC brand attribution — see the Brand identity token section. Not a license for cool hues elsewhere.
+- ❌ **No cool grays** (hue ≥ 200). The system is warm only. **One sanctioned exception:** `--qh-bbc-base` (hue 250) on the "Client work" shelf, for BBC brand attribution — see the Brand identity token section. Not a license for cool hues elsewhere.
 - ❌ **No pure black or pure white.** Warmth lives in the neutrals.
 - ❌ **Dark mode is not inverted light mode.** Tune chroma and contrast independently.
 - ❌ **Don't reintroduce PopUp tokens.** The annotation layer is retired; its tokens were deleted on 1 Oct 2026.

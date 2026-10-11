@@ -5,11 +5,12 @@
 // of reconstructing one, the same principle as the lint fixtures.
 //
 // DO NOT SWEEP THIS AS ORPHANED. Nothing in the repo references it by name, so a
-// string-grep census reports it as dead. That census is wrong: line ~71 below is
-// one of four places recording the Also Shipped shelf's NON-INTERACTIVE decision,
-// alongside app/data/quick-hits.ts:7, components/quick-hits/quick-hit.tsx:5 and
-// app/page.tsx:84. It is a decision record that happens to be executable, and
-// grep cannot tell those apart from dead code. Checked 22 Aug 2026.
+// string-grep census reports it as dead. That census is wrong: it is a proof
+// harness that happens to be executable, and grep cannot tell that apart from
+// dead code. Checked 22 Aug 2026. It used to be one of four places recording the
+// home shelf's NON-INTERACTIVE decision; that decision was reversed on 11 Oct
+// 2026, when the shelf became "Client work" and each row's title began opening
+// the client work dialog, and the target below now shoots all three states.
 //
 // It exists because the extension-screenshot route was not trustworthy. Its null
 // test — two captures with no change between — found two independent sources of
@@ -75,10 +76,11 @@ const ROUTES = [
       { name: 'mail', sel: MAIL, states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'theme-toggle', sel: '.theme-toggle', states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'nav-link', sel: '.nav-link', states: ['rest', 'hover', 'focus'], inflate: HALO },
-      // DECISION RECORD, not an oversight: 'rest' ONLY, no hover and no focus,
-      // because the Also Shipped shelf is non-interactive in v1. The ABSENCE of
-      // the other two states is the thing being recorded. See the header.
-      { name: 'quick-hit', sel: '.quick-hit', states: ['rest'] },
+      // The "Client work" shelf row. Rest only until 11 Oct 2026, as the record
+      // of a non-interactive shelf; the row's title is now a link that opens
+      // the client work dialog, so hover and focus are shot too. Focus lands on
+      // the title link, which is stretched over the row.
+      { name: 'quick-hit', sel: '.quick-hit', states: ['rest', 'hover', 'focus'], focusOn: 'a[data-client-work]', inflate: HALO },
       // The skip link sits at translateY(-160%) until focused. Tab from the top
       // of the document is the only way to see it.
       { name: 'skip-link', sel: '.skip-link', states: ['focus'], inflate: HALO,

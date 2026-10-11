@@ -471,7 +471,7 @@
                             0 12px 28px oklch(0.30 0.04 50 / 0.10);
 
 
-  /* Brand identity for the "Also shipped" shelf — a calm bordered row (Wise
+  /* Brand identity for the "Client work" shelf — a calm bordered row (Wise
      register): a 1.5px brand-color BORDER (--base) + a faint near-canvas FILL
      (--fill). Two sanctioned exceptions to the system: chromatic color at rest
      (attribution only), and --qh-bbc-* at hue 250 (cool, outside warm 50-80).
@@ -835,13 +835,13 @@
   /* v3 §5: 90 -> 94. Display band (32px ceiling). Card covers loosen by 4%.
      The old note here claimed a per-module "Major register" that rhymed with
      Also Shipped at ~90% — v3 R2 retires mood registers: width follows the
-     rung, and contrast is carried by weight. Also Shipped is now an §6
+     rung, and contrast is carried by weight. The shelf (now "Client work") is an §6
      exception surface with its own rules, so the rhyme is no longer a
      constraint on this role. */
   text-wrap: balance;
 }
 
-/* "Also shipped" brief-block title. A §6 exception surface: the four blocks are
+/* "Client work" shelf title. A §6 exception surface: the four blocks are
    a curated set and their variation IS the content. Size stays uniform so the
    rows align.
 
@@ -1315,7 +1315,7 @@
 }
 
 /* ============================================================
-   "ALSO SHIPPED" shelf — brand → local var mapping + accents
+   "CLIENT WORK" shelf (formerly "Also shipped") — brand → local var mapping + accents
    data-brand on each <article> aliases the per-brand border + fill onto generic
    --base / --fill locals, so the component markup stays brand-agnostic and
    .dark swaps for free. Server-rendered; no JS, no theme read.

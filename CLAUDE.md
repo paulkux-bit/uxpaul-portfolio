@@ -66,7 +66,7 @@ commit has already landed in this repo with a red test and a report that did not
 mention it — the only thing that catches that is saying the number out loud.
 
 Cross-cutting gaps neither type nor spacing nor colour claims live in
-`docs/unspecified-surfaces.md` — eight entries as of 19 Aug 2026.
+`docs/unspecified-surfaces.md`.
 
 ## Strategic direction
 Strategic direction (audience, brand personality, references, anti-references, 
@@ -116,7 +116,10 @@ whenever two pieces of work look equally worthy.
 - `AGENTS.md` — auto-generated, leave alone
 
 ### Page composition
-- Home (`app/page.tsx`): hero → Selected Work → Also Shipped → footer.
+- Home (`app/page.tsx`): hero → Selected Work → Client work → footer.
+- "Client work" (formerly "Also shipped") is the brand shelf of four
+  agency-era client pieces (Template B), read from `app/data/template-b.ts`.
+  Each row's title is a link to `#slug`. No agency name appears on the shelf.
 - Home hero is a **weighted-sentence statement** (Direction D1): the h1 leads
   with a concrete proof line (`text-lede`) where **weight carries the emphasis**
   — thin connective words (`--text-muted`), bold key noun phrases (`font-[720]`
@@ -322,7 +325,7 @@ real clamp, and every type-role utility must have a row.
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
-| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Also Shipped titles |
+| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Client work shelf titles |
 | `text-cover` | 22 → 32px (weight 600) | Case-study card cover headline (typographic tier). Card-only. |
 | `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
@@ -422,7 +425,7 @@ for an entire judgment session while every gate stayed green.
 Registers separate on **size, weight and colour**. No register owns an axis, and
 there is no width column here any more: width is gone with the axis.
 1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
-2. **Major** (work titles: Selected Work cards + Also Shipped) — size and weight.
+2. **Major** (work titles: Selected Work cards + Client work shelf) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
 5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
@@ -688,7 +691,7 @@ superseded; do not read values from it.
 
 Nothing chromatic sits on the page idle. But when the user *does* something — hovers a link, selects text, focuses an input, picks up a card — the system responds with a warm chromatic moment. Interaction states are moments, not roles. This is compatible with chromatic restraint at the system level.
 
-There is **one sanctioned exception, and only one**: the "Also shipped" brand
+There is **one sanctioned exception, and only one**: the "Client work" brand
 shelf. `docs/color-system.md` sanctions its `--qh-*` brand border and faint fill
 at rest, including `--qh-bbc-base` at hue 250, for brand attribution, and says of
 each that it is not a license for further resting colour. The PopUp annotation
@@ -754,7 +757,7 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 
 ### Anti-patterns (extension of existing list)
 
-- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (The "Also shipped" brand shelf is the one sanctioned exception; see Core principle.)
+- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (The "Client work" brand shelf is the one sanctioned exception; see Core principle.)
 - ❌ No raw color tokens (e.g., `--color-blue-500`). All color is role-based.
 - ❌ No cool grays (hue ≥ 200) anywhere. (`--qh-bbc-base`, hue 250, is the one sanctioned exception, for BBC attribution on the shelf.)
 - ❌ No pure black or pure white.
@@ -791,7 +794,7 @@ Portfolio for Paul Kali, senior product designer, targeting **Senior IC, Staff I
 **Governing principle:** signal and craft with restraint. Do NOT add things for the sake of adding. Elegance is subtraction. References: Titan, Karolis Kosas, Madeline Snow.
 
 **Locked constraints:**
-- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**, with the "Also shipped" brand shelf as the one sanctioned exception. The PopUp system is retired and its tokens deleted; persimmon is not an accent.
+- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**, with the "Client work" brand shelf as the one sanctioned exception. The PopUp system is retired and its tokens deleted; persimmon is not an accent.
 - Commissioner, self-hosted; **never animate its axes** (gimmicky) — `wght` and `FLAR` are the two it has. Semantic oklch tokens only; no raw hex/rgb.
 - **em-dashes (U+2014) are hard-banned** by lint:prose; en-dashes (U+2013) in date ranges are fine.
 - **No company or client logos** anywhere (endorsement risk + palette break).

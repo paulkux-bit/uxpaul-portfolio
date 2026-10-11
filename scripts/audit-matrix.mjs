@@ -142,7 +142,7 @@ for (const pagePath of PAGES) {
           }
         }
 
-        // 3. "Also Shipped" module layout check on Home Page
+        // 3. "Client work" shelf layout check on Home Page
         let alsoShippedInfo = null;
         if (pagePath === '/') {
           const section = document.querySelector('section:has(.quick-hit), .quick-hit, [class*="quick-hit"]')?.closest('section') || document.body;
