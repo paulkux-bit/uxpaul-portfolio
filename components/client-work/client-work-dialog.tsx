@@ -252,11 +252,6 @@ export function ClientWorkDialog() {
   const piece = current === null ? null : templateB[current];
   const previous = current === null ? null : templateB[(current - 1 + COUNT) % COUNT];
   const next = current === null ? null : templateB[(current + 1) % COUNT];
-  // The h2 renders the title, then the byline; whatever sits between them in
-  // the name line (a space, or ", " for the BBC) keeps its punctuation for
-  // assistive tech only, so the heading's accessible name is the name line.
-  const tail = piece ? piece.name.slice(piece.title.length) : '';
-  const seam = piece ? tail.slice(0, tail.indexOf(piece.byline)).trim() : '';
 
   return (
     <dialog
@@ -325,11 +320,14 @@ export function ClientWorkDialog() {
             </div>
 
             <div className="client-work__side">
-              <h2 id={titleId} className="client-work__title">
-                <span className="client-work__name text-h1">
-                  {piece.title}
-                  {seam ? <span className="sr-only">{seam}</span> : null}
-                </span>{' '}
+              {/* The h2 shows the title, then the byline, and is NAMED by the
+                  full name line ("Connected Politics, pitched to the BBC"),
+                  which the dialog takes as its own name. The punctuation used to
+                  ride in an sr-only span; positioned out of flow, it became its
+                  own box in name computation and read "Politics , pitched"
+                  (build review, path item 4). */}
+              <h2 id={titleId} className="client-work__title" aria-label={piece.name}>
+                <span className="client-work__name text-h1">{piece.title}</span>{' '}
                 <span className="client-work__byline">{piece.byline}</span>
               </h2>
               <p className="client-work__role text-caption">{role}</p>
