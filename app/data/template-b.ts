@@ -124,7 +124,7 @@ export const templateB: readonly TemplateBPiece[] = [
     images: [
       {
         src: '/client-work/bbc/bbc-confusing',
-        alt: 'Problem slide: the words Politics is confusing surrounded by party names, politicians and issues such as fracking, wind farms and school closures.',
+        alt: 'Problem slide: the words Politics is confusing surrounded by party names, politicians and issues such as fracking, wind farms and parking plans.',
       },
       {
         src: '/client-work/bbc/bbc-pillars',
