@@ -64,9 +64,9 @@ export const templateB: readonly TemplateBPiece[] = [
     byline: 'for Lionsgate',
     name: 'Broadcast Rights Sales for Lionsgate',
     statement:
-      'Sales reps traveled with slide decks, DVDs and posters, and kept track of buyers in spreadsheets. One platform replaced all of it.',
+      'Sales reps traveled with slide decks, DVDs, and posters, and tracked buyers in spreadsheets. One platform replaced it all.',
     paragraph:
-      'I designed the platform. Reps picked movies and shows for each buyer, and every buyer got a page that introduced their rep. Reps followed all their buyers from one dashboard. Sales conversion rose 20% after launch.',
+      "I led the platform's UX design. Reps picked movies and shows for each buyer, and each buyer got a page introducing their rep. Reps followed all their buyers from one dashboard. Sales conversion rose 20% after launch.",
     images: [
       {
         src: '/client-work/lionsgate/lg-1',
@@ -91,9 +91,9 @@ export const templateB: readonly TemplateBPiece[] = [
     byline: 'for the American Red Cross',
     name: '1-Click Donation for the American Red Cross',
     statement:
-      "The old checkout made monthly gifts, gifts in someone's honor and custom amounts hard to give.",
+      "The old checkout made monthly gifts, gifts in someone's honor, and custom amounts hard to give.",
     paragraph:
-      'I designed a three-step checkout, with monthly and honor gifts as simple checkboxes on step one. Returning donors with a saved card gave in one click. The average first gift rose 30%, thanks to a preselected amount the team added.',
+      'I led UX design for a three-step checkout, with monthly and honor gifts as checkboxes on step one. Returning donors with a saved card gave in one click. A preselected amount the team added raised the average first gift 30%.',
     images: [
       {
         src: '/client-work/american-red-cross/arc-1',
@@ -120,7 +120,7 @@ export const templateB: readonly TemplateBPiece[] = [
     statement:
       'Our American team pitched the BBC a new way to follow politics, with a working iPad prototype.',
     paragraph:
-      "The app would open on news from the reader's own area, then the topics they chose to follow, on any device. I pulled the research together and led the wireframes. We came in second.",
+      "The app would open to news from the reader's area, then to the topics they chose to follow, on any device. I pulled the research together and led the wireframes. We came in second.",
     images: [
       {
         src: '/client-work/bbc/bbc-confusing',
@@ -147,7 +147,7 @@ export const templateB: readonly TemplateBPiece[] = [
     statement:
       'We rebuilt the site for phones first, with tools marketing could update on their own.',
     paragraph:
-      'I designed the home page to start with location, so shoppers picked a state or saw communities nearby. Then they filtered homes by type, price and how soon they could move in. We built the site and its tools.',
+      'I designed the home page to start with location, so shoppers could pick a state or see nearby communities. Then they filtered homes by type, price, and how soon they could move in. We built the site and its tools.',
     images: [
       {
         src: '/client-work/k-hovnanian/khov-1',
