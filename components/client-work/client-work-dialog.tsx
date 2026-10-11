@@ -55,13 +55,17 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+function srcSetFor(image: TemplateBImage, format: 'avif' | 'webp') {
+  return (FILES[image.src]?.files ?? []).map((f) => `${image.src}-${f.width}.${format} ${f.width}w`).join(', ');
+}
+
 /** AVIF and WebP at every rung the encoder wrote. The <img> falls back to the
  *  588 WebP (or the widest rung below it) and carries the widest rung's size,
  *  so the box has its aspect ratio before the bytes arrive. */
 function Picture({ image, sizes, alt, eager }: { image: TemplateBImage; sizes: string; alt: string; eager: boolean }) {
   const files = FILES[image.src]?.files ?? [];
   if (files.length === 0) return null;
-  const srcSet = (format: 'avif' | 'webp') => files.map((f) => `${image.src}-${f.width}.${format} ${f.width}w`).join(', ');
+  const srcSet = (format: 'avif' | 'webp') => srcSetFor(image, format);
   const fallback = files[Math.min(1, files.length - 1)];
   const widest = files[files.length - 1];
   return (
@@ -153,6 +157,38 @@ export function ClientWorkDialog() {
     document.addEventListener('click', onClick);
     return () => document.removeEventListener('click', onClick);
   }, [show]);
+
+  // Open on intent (build review, 10x move D): when a row is hovered or takes
+  // focus, fetch that piece's first image with the same srcset and sizes the
+  // frame will ask for, so the browser picks the same rung and the open finds
+  // it in the cache. Once per piece. Measured before this: 548 ms from click to
+  // first image on a throttled connection. Touch has no hover; a tap still
+  // fires pointerover a moment before its click.
+  //
+  // AN OFF-DOM Image, NOT <link rel="preload">. A preload that is not used
+  // within a few seconds logs a console warning, and hovering through the shelf
+  // without opening left four of them (measured): noise for the reader who
+  // opens DevTools. Image() warms the same cache and logs nothing.
+  useEffect(() => {
+    const done = new Set<string>();
+    const onIntent = (event: Event) => {
+      if (!(event.target instanceof Element)) return;
+      const slug = event.target.closest<HTMLAnchorElement>('a[data-client-work]')?.dataset.clientWork;
+      const piece = templateB.find((p) => p.slug === slug);
+      if (!piece || done.has(piece.slug)) return;
+      done.add(piece.slug);
+      const warm = new Image();
+      warm.decoding = 'async';
+      warm.sizes = FRAME_SIZES;
+      warm.srcset = srcSetFor(piece.images[0], 'avif');
+    };
+    document.addEventListener('pointerover', onIntent);
+    document.addEventListener('focusin', onIntent);
+    return () => {
+      document.removeEventListener('pointerover', onIntent);
+      document.removeEventListener('focusin', onIntent);
+    };
+  }, []);
 
   // Cold deep link, and Back or Forward onto (or off) a piece's hash. A hash
   // that names no piece (the skip link's #main, for one) leaves a closed
