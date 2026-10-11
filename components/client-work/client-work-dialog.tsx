@@ -55,6 +55,16 @@ function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
+/** A duration token in milliseconds. The production build minifies 180ms to
+ *  .18s, and parseFloat alone read that as 0.18 ms, so the swap waited no time
+ *  at all and the old piece never left (found by the behaviour checks). */
+function durationMs(token: string, fallback: number) {
+  const raw = getComputedStyle(document.documentElement).getPropertyValue(token).trim();
+  const value = parseFloat(raw);
+  if (Number.isNaN(value)) return fallback;
+  return raw.endsWith('ms') ? value : value * 1000;
+}
+
 function srcSetFor(image: TemplateBImage, format: 'avif' | 'webp') {
   return (FILES[image.src]?.files ?? []).map((f) => `${image.src}-${f.width}.${format} ${f.width}w`).join(', ');
 }
@@ -285,8 +295,7 @@ export function ClientWorkDialog() {
     if (reduce) return swap();
     setTravel(step > 0 ? 1 : -1);
     setPhase('leaving');
-    const wait = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--duration-control')) || 180;
-    window.setTimeout(swap, wait);
+    window.setTimeout(swap, durationMs('--duration-control', 180));
   };
 
   // The arriving piece is painted once on the far side, then released, so it
