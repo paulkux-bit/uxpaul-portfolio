@@ -214,6 +214,9 @@
    is a judgment call and not a lookup:
 
      .about-hero__pov     51.2px @1440   flared — functionally 52
+     .client-work__name   51.2px @1440   flared, on .about-hero__pov's
+                                         precedent: text-h1, the client
+                                         work dialog title (11 Oct 2026)
      .about-phase__title  36.4px @1440   plain  — inside the 32-40 range
                                                   measured indistinct
 
@@ -241,7 +244,8 @@
 .case-study-prose h2,
 .case-study-prose .turn-answer,
 .text-lede,
-.about-hero__pov {
+.about-hero__pov,
+.client-work__name {
   --flar: 100;
 }
 
@@ -470,6 +474,12 @@
   --shadow-hover:           0 2px 4px oklch(0.30 0.04 50 / 0.06),
                             0 12px 28px oklch(0.30 0.04 50 / 0.10);
 
+  /* Scrim behind the client work dialog (::backdrop). A state layer, so alpha
+     is allowed (v2 R1); mixed here to author the token, never at the point of
+     use. Light: the text ink at 46%, as the locked prototype set it. No spec
+     owns a scrim yet: docs/unspecified-surfaces.md, client work dialog, item 3. */
+  --scrim:                  color-mix(in oklch, var(--text-primary) 46%, transparent);
+
 
   /* Brand identity for the "Client work" shelf — a calm bordered row (Wise
      register): a 1.5px brand-color BORDER (--base) + a faint near-canvas FILL
@@ -575,6 +585,12 @@
   --shadow-rest:            0 1px 2px oklch(0.12 0.03 50 / 0.30);
   --shadow-hover:           0 2px 4px oklch(0.12 0.03 50 / 0.35),
                             0 16px 36px oklch(0.12 0.03 50 / 0.40);
+
+  /* Scrim, dark. NOT the light recipe: --text-primary is the light ink here,
+     so mixing it would lift the page to grey rather than dim it (measured on
+     the prototype, oklch(0.945 0.012 78 / 0.46)). Paul ruled it dims in both
+     modes (11 Oct 2026), so dark mixes the darkest surface instead. */
+  --scrim:                  color-mix(in oklch, var(--bg-sunken) 60%, transparent);
 
 
   /* Brand borders — dark. BRIGHTER than light (not inverted): the border sits on a dark
@@ -1367,6 +1383,390 @@
     column-gap: var(--spacing-l);
     grid-template-columns: 12rem 1fr 8rem;
     grid-template-areas: 'brand title industry';
+  }
+}
+
+/* ============================================================
+   CLIENT WORK DIALOG (Template B), components/client-work/client-work-dialog.tsx
+   Each shelf row's title opens its piece in a native <dialog> over the home
+   page, by the URL hash. Built from the locked prototype
+   (docs/previews/template-b/template-b-dialog-locked.html, layout D, text T1,
+   thumbnails) in this system's tokens; the plan is
+   docs/template-b-build-plan.md. No locked spec governs a dialog, so every
+   borrowing below is logged in docs/unspecified-surfaces.md (client work
+   dialog, items 1 to 5), not invented here.
+
+   MOBILE FIRST. Below 768px it is a full-screen sheet, the work first; from
+   768px it is a flat panel the width of the page, work on 7 of 12 columns,
+   text on 5. Type comes from role utilities in the markup; this block places.
+   ============================================================ */
+
+/* Scroll lock while open, in CSS so no script writes styles to the page. The
+   gutter stays reserved so the page does not shift sideways as its scrollbar
+   goes. */
+html:has(dialog.client-work[open]) {
+  overflow: hidden;
+  scrollbar-gutter: stable;
+}
+
+/* The dialog is a transparent full-viewport layer; the panel is the surface.
+   Resets the UA dialog box. Clicks on the stage (outside the panel) close. */
+dialog.client-work {
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--text-primary);
+}
+dialog.client-work::backdrop {
+  background-color: var(--scrim);
+}
+.client-work__stage {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+}
+
+/* The sheet. --bg-surface, the panel's own surface at every size. */
+.client-work__panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  width: 100%;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--bg-surface);
+}
+.client-work__media {
+  min-width: 0;
+  padding: var(--spacing-2xl) var(--spacing-gutter) 0;
+}
+.client-work__side {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--spacing-l) var(--spacing-gutter) 0;
+}
+
+/* Close. The .theme-toggle precedent, on mobile too (ruling Q5, 11 Oct 2026):
+   no adjacent text, so it declares its own type context for the icon (§2),
+   and it answers hover with colour and --border-strong, not a fill. On the
+   sheet it is fixed and floats over scrolling images, so it sits on the
+   sheet's own --bg-surface ground; it casts no resting shadow (H1b). From 768
+   it is placed in the panel's corner on no ground at all. */
+.client-work__close {
+  position: fixed;
+  top: var(--spacing-3xs);
+  right: var(--spacing-3xs);
+  z-index: 1;
+  font-size: var(--type-16);
+  font-weight: 600;
+  --icon-stroke: 1.95;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-s);
+  background-color: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    color var(--duration-control) var(--ease-out-soft),
+    border-color var(--duration-control) var(--ease-out-soft);
+}
+.client-work__close:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+}
+/* Pressed (§5): sink 1px. After the hover, per the cascade note on the card. */
+.client-work__close:active {
+  transform: translateY(1px);
+}
+
+/* The image track: one 6:5 frame, swiped or stepped. Scroll-snap does the
+   swipe; the arrow keys and the thumbnails scroll it from the script. */
+.client-work__track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  border-radius: var(--radius-xs);
+}
+.client-work__track::-webkit-scrollbar {
+  display: none;
+}
+.client-work__slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 6 / 5;
+  margin: 0;
+  overflow: hidden;
+  scroll-snap-align: start;
+  border-radius: var(--radius-xs);
+  background-color: var(--bg-canvas);
+}
+.client-work__slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+/* The frame's 1px edge. An inset box-shadow on the frame itself draws UNDER an
+   opaque <img> (docs/unspecified-surfaces.md, fine art moment, item 2), and
+   these are mostly white screenshots, so the edge is an overlay above the
+   image: the .bento-theme__media::after pattern. */
+.client-work__slide::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xs);
+  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  pointer-events: none;
+}
+/* fit: 'whole' (khov-1, a phone screen): shown entire and centred, no ground
+   and no frame edge. */
+.client-work__slide--whole {
+  background-color: transparent;
+}
+.client-work__slide--whole::after {
+  content: none;
+}
+.client-work__slide--whole img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+  object-fit: contain;
+  border-radius: var(--radius-xs);
+}
+
+/* Thumbnails: a row of swatches under the frame, five columns on the sheet and
+   seven from 768, so three thumbs sit at the left. The bar under each is the
+   state: --text-primary on the current image, --border-strong on hover
+   (ruling Q6), scaled away otherwise. */
+.client-work__thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--spacing-s);
+  margin-top: var(--spacing-m);
+}
+.client-work__thumb {
+  --client-work-bar: var(--text-primary);
+  --client-work-bar-scale: 0;
+  position: relative;
+  display: block;
+  aspect-ratio: 6 / 5;
+  min-height: 44px;
+  background-color: var(--bg-canvas);
+  cursor: pointer;
+}
+.client-work__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.client-work__thumb::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 calc(var(--spacing-xs) * -1);
+  height: 2px;
+  background-color: var(--client-work-bar);
+  transform: scaleX(var(--client-work-bar-scale));
+  transform-origin: left;
+}
+.client-work__thumb:hover {
+  --client-work-bar: var(--border-strong);
+  --client-work-bar-scale: 1;
+}
+/* Pressed (§5): sink 1px, after the hover. */
+.client-work__thumb:active {
+  transform: translateY(1px);
+}
+/* After the hover on purpose: the current thumb keeps its bar when hovered. */
+.client-work__thumb[aria-current='true'] {
+  --client-work-bar: var(--text-primary);
+  --client-work-bar-scale: 1;
+}
+
+/* Title in two parts, one h2, so the accessible name is the full name line:
+   the project name at text-h1 600, flared (RUNGS, off the ladder), then the
+   byline at the standfirst size. text-box trims the cap so the title's top
+   sits on the image's top; Firefox ignores it and sits a few px low. */
+.client-work__title {
+  margin: 0;
+  text-box: trim-start cap alphabetic;
+}
+.client-work__name {
+  display: block;
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+.client-work__byline {
+  display: block;
+  margin-top: var(--spacing-2xs);
+  font-size: var(--type-standfirst);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+.client-work__role {
+  margin-top: var(--spacing-2xs);
+  color: var(--text-muted);
+}
+/* The statement is the skim line, so it takes the air above it. */
+.client-work__statement {
+  margin-top: var(--spacing-xl);
+  margin-bottom: var(--spacing-m);
+  color: var(--text-primary);
+  text-wrap: balance;
+}
+.client-work__paragraph {
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+/* Previous and next. On the sheet: a sticky bar at the foot, on the panel's
+   ground, the two links together at the left and the previous one reduced to
+   its arrow (its name stays for assistive tech). From 768: pinned to the foot
+   of the text column, one at each end, the baseline on the thumbnail row's
+   bottom. Text links (spec §5: no pressed state); the underline arrives on
+   hover through .quiet-link, so colour is never the only signal. */
+.client-work__nav {
+  --icon-stroke: 1.95;
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-m);
+  margin-top: auto;
+  padding: var(--spacing-s) 0 calc(var(--spacing-s) + env(safe-area-inset-bottom));
+  background-color: var(--bg-surface);
+}
+.client-work__nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  min-height: 44px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--text-muted);
+  transition:
+    color var(--duration-control) var(--ease-out-soft),
+    text-decoration-color var(--duration-control) var(--ease-out-soft),
+    text-decoration-thickness var(--duration-control) var(--ease-out-soft);
+}
+.client-work__nav-link:hover {
+  color: var(--text-primary);
+}
+.client-work__nav-link--prev {
+  justify-content: center;
+  min-width: 44px;
+}
+.client-work__nav-link--prev .client-work__nav-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .client-work__stage {
+    padding: var(--spacing-xl) var(--spacing-gutter);
+  }
+  .client-work__panel {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--spacing-xl);
+    width: min(100%, var(--page-max-width));
+    height: auto;
+    max-height: calc(100dvh - 2 * var(--spacing-xl));
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-s);
+  }
+  .client-work__media,
+  .client-work__side {
+    padding: 0;
+  }
+  .client-work__close {
+    position: absolute;
+    background-color: transparent;
+  }
+  .client-work__thumbs {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+  .client-work__nav {
+    position: static;
+    justify-content: space-between;
+    padding: var(--spacing-l) 0 0;
+    background-color: transparent;
+  }
+  .client-work__nav-link {
+    align-items: flex-end;
+    line-height: 1;
+  }
+  .client-work__nav-link--prev {
+    justify-content: flex-start;
+    min-width: 0;
+  }
+  .client-work__nav-link--prev .client-work__nav-label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+}
+
+/* Short viewports (the prototype's 53rem, written in px like every other
+   query here): the panel's block padding steps down so 1280x800 holds the
+   588x490 frame without scrolling. The site's first height query, logged. */
+@media (min-width: 768px) and (max-height: 848px) {
+  .client-work__panel {
+    padding-block: var(--spacing-l);
+  }
+}
+
+/* Motion: the panel enters with a short fade and rise; content cross-fades
+   on a piece change (the script waits --duration-control); the bar slides. All
+   three are skipped under reduced motion, where the bar is simply there and
+   the swap is instant. */
+@media (prefers-reduced-motion: no-preference) {
+  dialog.client-work[open] .client-work__panel {
+    animation: client-work-in var(--duration-card) var(--ease-out-soft);
+  }
+  .client-work__panel > :not(.client-work__close) {
+    transition: opacity var(--duration-control) var(--ease-out-soft);
+  }
+  .client-work__thumb::after {
+    transition:
+      transform var(--duration-card) var(--ease-out-soft),
+      background-color var(--duration-control) var(--ease-out-soft);
+  }
+}
+.client-work__panel.is-swapping > :not(.client-work__close) {
+  opacity: 0;
+}
+@keyframes client-work-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 

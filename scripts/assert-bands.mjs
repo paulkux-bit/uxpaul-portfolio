@@ -44,7 +44,9 @@ import { chromium } from 'playwright';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 // us-navy-dagr joined on 5 Oct 2026: it is the first route with the turn (T6),
 // whose answer is flared and whose question must not be.
-const ROUTES = ['/', '/about', '/case-studies/uscg-bard', '/case-studies/us-navy-fdt-e', '/case-studies/nuuly', '/case-studies/us-navy-dagr'];
+// /#lionsgate joined on 11 Oct 2026: the client work dialog title renders only
+// while the dialog is open, and a cold load with a piece's hash opens it.
+const ROUTES = ['/', '/#lionsgate', '/about', '/case-studies/uscg-bard', '/case-studies/us-navy-fdt-e', '/case-studies/nuuly', '/case-studies/us-navy-dagr'];
 
 /** Mirrors RUNGS' `voice: 'flared'` set. lint:type check 11 keeps them equal. */
 const FLARED = [
@@ -54,6 +56,7 @@ const FLARED = [
   '.about-hero__pov',     //  51.2px @1440 — judgment, see RUNGS
   '.case-study-prose h2', //  52px — the boundary the cut was taken at
   '.case-study-prose .turn-answer', // 72px, the T6 answer at rung 5's clamp (5 Oct 2026)
+  '.client-work__name',   //  51.2px @1440, text-h1 in the client work dialog (11 Oct 2026)
 ];
 
 /**
@@ -87,6 +90,12 @@ const PLAIN = [
 /** Reading surfaces that must stay at 0. A leak lands here first. */
 const READING = [
   '.case-study-prose p',
+  // The client work dialog's text under its flared title (11 Oct 2026). The
+  // title is a span inside the h2, so a leak would have to come from a
+  // container; these say none did.
+  '.client-work__byline',
+  '.client-work__statement',
+  '.client-work__paragraph',
   '.case-study-prose .section-lede',
   '.about-row__body',
   // Added in C4a when the phase titles above them were flared. C5 made those
@@ -129,6 +138,7 @@ const voiced = {}, reading = {};
 for (const route of ROUTES) {
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   await page.goto(BASE + route, { waitUntil: 'networkidle' });
+  if (route.includes('#')) await page.waitForSelector('dialog[open]');
   await page.evaluate(() => document.fonts.ready);
   // A flared selector is read without the elements a plain selector claims, so a
   // plain override nested inside a flared role (the T6 question inside

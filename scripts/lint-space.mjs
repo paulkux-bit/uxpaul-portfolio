@@ -93,6 +93,16 @@ const ALLOWLIST = {
     { selector: ".case-study-prose > .figure--constrained-bleed, .case-study-prose > .figure--asymmetric-pair, .case-study-prose > .figure--bento, .case-study-prose > .figure--mode-pair[data-breakout='true'], .case-study-prose > .figure--compare, .case-study-prose > .hero-block", prop: 'margin-inline', reason: 'S3 layout — same breakout cancellation, for every figure variant that breaks out' },
     { selector: '.thread-cols', prop: 'column-gap', reason: 'S3 layout — a column gap only exists once the spine is three columns at 1024' },
     { selector: '.thread-cols li', prop: 'padding', reason: 'S3 layout — stacked rows need vertical padding, columns do not' },
+    // The client work dialog (11 Oct 2026). Mobile first: below 768 it is a
+    // full-screen sheet with the gutters inside each column; from 768 it is a
+    // panel, so the gutters move to the stage and the columns stop carrying
+    // their own. Layout changes, not rhythm. docs/template-b-build-plan.md §5.
+    { selector: '.client-work__stage', prop: 'padding', reason: 'client work dialog: the scrim margin round the panel exists only once it is a panel, from 768' },
+    { selector: '.client-work__panel', prop: 'column-gap', reason: 'client work dialog: a column gap exists only once the panel is two columns, from 768' },
+    { selector: '.client-work__panel', prop: 'padding', reason: 'client work dialog: the panel inset replaces the sheet columns\' own gutters from 768' },
+    { selector: '.client-work__media, .client-work__side', prop: 'padding', reason: 'client work dialog: cancels the sheet columns\' gutters once the panel inset holds them, from 768' },
+    { selector: '.client-work__nav', prop: 'padding', reason: 'client work dialog: the sticky bar\'s own padding becomes the gap above the nav pinned in the text column, from 768' },
+    { selector: '.client-work__panel', prop: 'padding-block', reason: 'client work dialog: short viewports (848px tall or less) step the panel inset down so 1280x800 holds the frame without scrolling' },
     { selector: '.friction-beat', prop: 'gap', reason: 'S3 layout — the beat has no gap stacked; the gap appears with the two-column grid' },
     { selector: '.compare__grid', prop: 'gap', reason: 'S3 layout — a deliberate zero so the two halves read as one seamless comparison' },
     { selector: '.compare__divider', prop: 'margin', reason: 'S3 layout — the divider only exists in the two-up arrangement' },

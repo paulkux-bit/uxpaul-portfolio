@@ -119,7 +119,11 @@ whenever two pieces of work look equally worthy.
 - Home (`app/page.tsx`): hero → Selected Work → Client work → footer.
 - "Client work" (formerly "Also shipped") is the brand shelf of four
   agency-era client pieces (Template B), read from `app/data/template-b.ts`.
-  Each row's title is a link to `#slug`. No agency name appears on the shelf.
+  Each row's title is a link to `#slug`, which opens that piece in the client
+  work dialog (`components/client-work/client-work-dialog.tsx`), a native
+  `<dialog>` over the home page; Back, Esc and the scrim close it. No agency
+  name appears on either surface. Its gaps are logged in
+  `docs/unspecified-surfaces.md` (client work dialog).
 - Home hero is a **weighted-sentence statement** (Direction D1): the h1 leads
   with a concrete proof line (`text-lede`) where **weight carries the emphasis**
   — thin connective words (`--text-muted`), bold key noun phrases (`font-[720]`
@@ -388,9 +392,11 @@ Two values only, ruled from the bench on 21 Aug 2026: **FLAR 100 on the display
 band, 0 everywhere else.** 40 and 60 were never judged by anyone and are not
 decisions that have been made.
 
-The flared set is six selectors: `.milestone__date`, `.hero-block__title`,
+The flared set is seven selectors: `.milestone__date`, `.hero-block__title`,
 `.case-study-prose h2`, `.case-study-prose .turn-answer` (added 5 Oct 2026),
-`.text-lede` and `.about-hero__pov`. **Plain selectors
+`.text-lede`, `.about-hero__pov` and `.client-work__name` (the client work
+dialog title, added 11 Oct 2026, flared at 51.2px on `.about-hero__pov`'s
+precedent). **Plain selectors
 take no declaration at all** — `@property --flar` sets `initial-value: 0`, so
 writing `--flar: 0` beside them would be a second statement of the same fact and
 a place for the two to disagree. The one exception is an override: the turn's
@@ -500,7 +506,7 @@ the two-step one it replaces, and the third entry is the one that bit us.
    range. If the binary changes, `scripts/build-commissioner-font.sh` too;
    it asserts the axes and ranges it emits.
 2. **The FLAR wiring in `app/globals.css`** — `@property --flar`, the `*` rule,
-   and the six-selector flared list. If the new face has no expressive axis,
+   and the seven-selector flared list. If the new face has no expressive axis,
    delete all three, and update the `voice` column in `RUNGS`
    (`scripts/lint-type.mjs`) in the same commit or check 11 reddens.
 3. **`components/font-load-probe.tsx`** — it measures one live axis to prove the

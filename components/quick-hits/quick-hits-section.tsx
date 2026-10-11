@@ -1,4 +1,5 @@
 import { QuickHitsList } from './quick-hits-list';
+import { ClientWorkDialog } from '@/components/client-work/client-work-dialog';
 
 /**
  * "Client work": the shelf of four agency-era client pieces (Template B),
@@ -6,6 +7,9 @@ import { QuickHitsList } from './quick-hits-list';
  * owned by the home wrapper's vertical rhythm (space-y), matching the Selected
  * Work section; the label is the same sentence-case treatment as "Selected work".
  * No agency name appears on the shelf or in the dialog.
+ *
+ * The client work dialog renders once, after the list: the one client island
+ * here besides the list's reveal. It renders nothing until a row is opened.
  */
 export function QuickHitsSection() {
   return (
@@ -14,6 +18,7 @@ export function QuickHitsSection() {
         Client work
       </p>
       <QuickHitsList />
+      <ClientWorkDialog />
     </section>
   );
 }

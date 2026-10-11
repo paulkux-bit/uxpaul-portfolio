@@ -96,6 +96,7 @@ export const ALLOWLIST = {
     // which is genuinely awaiting :active in I4 and stays a failure.
     { match: '.quiet-link:hover', reason: 'text link — no surface to move (spec §5)' },
     { match: '.case-card__title-link:hover', reason: 'text link inside a card — no surface to move (spec §5)' },
+    { match: '.client-work__nav-link:hover', reason: 'text link, the client work dialog\'s previous and next: no surface to move (spec §5)' },
     { match: '.take-card:hover', reason: 'non-interactive tint; the takes wall is a typographic wall, not a control' },
     { match: '.about-row__summary:hover', reason: 'disclosure row — the chevron rotation is the feedback (spec §5)' },
   ],
