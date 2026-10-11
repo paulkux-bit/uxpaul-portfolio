@@ -93,7 +93,7 @@ export const templateB: readonly TemplateBPiece[] = [
     statement:
       "The old checkout made monthly gifts, gifts in someone's honor and custom amounts hard to give.",
     paragraph:
-      'I designed a three-step checkout, with monthly and honor gifts as simple checkboxes on step one. Returning donors gave on a single page. The average first gift rose 30%, thanks to a preselected amount the team added.',
+      'I designed a three-step checkout, with monthly and honor gifts as simple checkboxes on step one. Returning donors with a saved card gave in one click. The average first gift rose 30%, thanks to a preselected amount the team added.',
     images: [
       {
         src: '/client-work/american-red-cross/arc-1',
