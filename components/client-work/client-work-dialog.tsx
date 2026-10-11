@@ -30,9 +30,11 @@ import manifest from '@/app/data/client-work-images.json';
  * closed, so the home page asks for no image of this surface until a reader
  * opens one.
  *
- * Focus moves into the dialog on open (showModal puts it on the close button)
- * and returns on close to the row that opened it, or, after a cold deep link,
- * to the current piece's row.
+ * Focus moves into the dialog on open and returns on close to the row that
+ * opened it, or, after a cold deep link, to the current piece's row. Opened from
+ * the keyboard, it lands on the close button, whose halo shows; opened by a
+ * pointer, a deep link or Back/Forward, it lands on the panel, which draws no
+ * ring (Paul's ruling, 11 Oct 2026: the ring on open is for keyboard users).
  */
 
 type ImageFile = { width: number; height: number };
@@ -89,6 +91,9 @@ export function ClientWorkDialog() {
   // (a cold deep link did not, so closing it must not go Back off the site).
   const openerRef = useRef<HTMLElement | null>(null);
   const pushedRef = useRef(false);
+  // Opened by a keyboard activation of a row (Enter fires a click with
+  // detail 0). Everything else, including a cold deep link, is not.
+  const keyboardRef = useRef(false);
   // The current image, readable from observer callbacks without a stale closure.
   const imageRef = useRef(0);
 
@@ -107,15 +112,20 @@ export function ClientWorkDialog() {
   }, []);
 
   // showModal() AFTER the content renders, not in show(): opened empty, it would
-  // find nothing to focus and announce a dialog with no name. Focus then goes to
-  // the close button by hand: on the sheet the panel scrolls, Chrome makes a
-  // scroll container focusable, and the panel comes first in tree order, so
-  // showModal's own choice differs between the sheet and the panel.
+  // find nothing to focus and announce a dialog with no name. Focus is then
+  // placed by hand rather than left to showModal, whose choice differs between
+  // the sheet (Chrome makes the scrolling panel focusable, and it comes first)
+  // and the panel. A keyboard open goes to the close button, so its halo marks
+  // where the reader is. Any other open goes to the panel (tabindex -1, no
+  // ring): a script focus on a cold load counts as keyboard-like to the
+  // browser, so focusing the button there would light its halo for a reader
+  // who never touched a key.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (current === null || !dialog || dialog.open) return;
     dialog.showModal();
-    closeRef.current?.focus();
+    if (keyboardRef.current) closeRef.current?.focus();
+    else panelRef.current?.focus({ preventScroll: true });
   }, [current]);
 
   // Rows: a plain click opens; anything modified is the browser's.
@@ -131,6 +141,7 @@ export function ClientWorkDialog() {
       event.preventDefault();
       openerRef.current = link;
       pushedRef.current = true;
+      keyboardRef.current = event.detail === 0;
       window.history.pushState({ clientWork: true }, '', `#${templateB[index].slug}`);
       show(index);
     };
@@ -144,6 +155,7 @@ export function ClientWorkDialog() {
   useEffect(() => {
     const sync = () => {
       const index = indexOfHash(window.location.hash);
+      keyboardRef.current = false;
       if (index >= 0) show(index);
       else if (dialogRef.current?.open) dialogRef.current.close();
     };
@@ -261,7 +273,7 @@ export function ClientWorkDialog() {
             if (event.target === event.currentTarget) close();
           }}
         >
-          <div ref={panelRef} className={`client-work__panel${swapping ? ' is-swapping' : ''}`}>
+          <div ref={panelRef} tabIndex={-1} className={`client-work__panel${swapping ? ' is-swapping' : ''}`}>
             <button ref={closeRef} type="button" className="client-work__close" aria-label="Close" onClick={close}>
               <X className="icon" aria-hidden="true" />
             </button>
@@ -301,7 +313,7 @@ export function ClientWorkDialog() {
                   <button
                     key={item.src}
                     type="button"
-                    className="client-work__thumb"
+                    className={`client-work__thumb${item.fit === 'whole' ? ' client-work__thumb--whole' : ''}`}
                     aria-label={`Image ${k + 1} of ${piece.images.length}`}
                     aria-current={k === image ? 'true' : undefined}
                     onClick={() => goToImage(k)}

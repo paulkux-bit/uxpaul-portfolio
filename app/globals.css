@@ -1432,7 +1432,15 @@ dialog.client-work::backdrop {
   min-height: 100%;
 }
 
-/* The sheet. --bg-surface, the panel's own surface at every size. */
+/* The sheet. --bg-surface, the panel's own surface at every size.
+
+   THE PANEL TAKES FOCUS ON A POINTER OR DEEP-LINK OPEN, and draws no ring for
+   it. Paul's ruling (11 Oct 2026): the ring on open is for keyboard users only.
+   Opened from the keyboard, focus goes to the close button and its halo shows;
+   opened by a click, a cold deep link or Back/Forward, focus goes here
+   (tabindex -1, not in the tab order), so it is inside the dialog with nothing
+   lit. The panel is a container, not a control, so a ring would mark no
+   target; every control inside keeps the global halo. */
 .client-work__panel {
   position: relative;
   display: grid;
@@ -1443,6 +1451,10 @@ dialog.client-work::backdrop {
   overflow-y: auto;
   overscroll-behavior: contain;
   background-color: var(--bg-surface);
+}
+.client-work__panel:focus-visible {
+  outline: none;
+  box-shadow: none;
 }
 .client-work__media {
   min-width: 0;
@@ -1460,11 +1472,21 @@ dialog.client-work::backdrop {
    and it answers hover with colour and --border-strong, not a fill. On the
    sheet it is fixed and floats over scrolling images, so it sits on the
    sheet's own --bg-surface ground; it casts no resting shadow (H1b). From 768
-   it is placed in the panel's corner on no ground at all. */
+   it is placed in the panel's corner on no ground at all.
+
+   INSET: 24 on the panel, the site's standard surface inset (spacing v1 ruling
+   9c: the card and shelf-row inset, --spacing-m). It was the prototype's 4px,
+   which pressed the focus halo into the panel's rounded corner and against
+   the viewport edge on the sheet (critique, 11 Oct 2026). ON THE SHEET IT IS
+   16, --spacing-s, and that is measured, not taste: the button sits in the
+   64px band above the image, so at 24 its ground covered a 4px notch of the
+   frame's top-right corner (24 to 68 against an image starting at 64), and no
+   step closes that gap. At 16 it clears the image by 4px and its 11px halo
+   still clears the viewport edge. */
 .client-work__close {
   position: fixed;
-  top: var(--spacing-3xs);
-  right: var(--spacing-3xs);
+  top: var(--spacing-s);
+  right: var(--spacing-s);
   z-index: 1;
   font-size: var(--type-16);
   font-weight: 600;
@@ -1578,6 +1600,13 @@ dialog.client-work::backdrop {
   object-fit: cover;
   object-position: center top;
 }
+/* A fit: 'whole' image (khov-1, a phone screen) is shown whole in its thumb
+   too, centred on the thumb's ground, so the thumb shows the phone and not a
+   crop of the photo at its top (critique, 11 Oct 2026). */
+.client-work__thumb--whole img {
+  object-fit: contain;
+  object-position: center;
+}
 .client-work__thumb::after {
   content: '';
   position: absolute;
@@ -1638,8 +1667,10 @@ dialog.client-work::backdrop {
 }
 
 /* Previous and next. On the sheet: a sticky bar at the foot, on the panel's
-   ground, the two links together at the left and the previous one reduced to
-   its arrow (its name stays for assistive tech). From 768: pinned to the foot
+   ground, the two links at opposite ends, the previous one reduced to its
+   arrow (its name stays for assistive tech). They used to sit together at the
+   left, where the bare arrow read as part of the next link's label (critique,
+   11 Oct 2026). From 768: pinned to the foot
    of the text column, one at each end, the baseline on the thumbnail row's
    bottom. Text links (spec §5: no pressed state); the underline arrives on
    hover through .quiet-link, so colour is never the only signal. */
@@ -1649,6 +1680,7 @@ dialog.client-work::backdrop {
   bottom: 0;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-m);
   margin-top: auto;
   padding: var(--spacing-s) 0 calc(var(--spacing-s) + env(safe-area-inset-bottom));
@@ -1702,14 +1734,22 @@ dialog.client-work::backdrop {
   }
   .client-work__close {
     position: absolute;
+    top: var(--spacing-m);
+    right: var(--spacing-m);
     background-color: transparent;
+  }
+  /* The close button at the 24 inset reaches 20px into the text column (24 to
+     68 from the panel's edge, against a column that starts at 48), so a long
+     first line ran under it at 1024, 1280 and 1920 (measured). The title keeps
+     that corner clear: 32, the 20 plus a gap. */
+  .client-work__title {
+    padding-right: var(--spacing-l);
   }
   .client-work__thumbs {
     grid-template-columns: repeat(7, minmax(0, 1fr));
   }
   .client-work__nav {
     position: static;
-    justify-content: space-between;
     padding: var(--spacing-l) 0 0;
     background-color: transparent;
   }

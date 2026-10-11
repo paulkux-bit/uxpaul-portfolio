@@ -102,6 +102,7 @@ const ALLOWLIST = {
     { selector: '.client-work__panel', prop: 'padding', reason: 'client work dialog: the panel inset replaces the sheet columns\' own gutters from 768' },
     { selector: '.client-work__media, .client-work__side', prop: 'padding', reason: 'client work dialog: cancels the sheet columns\' gutters once the panel inset holds them, from 768' },
     { selector: '.client-work__nav', prop: 'padding', reason: 'client work dialog: the sticky bar\'s own padding becomes the gap above the nav pinned in the text column, from 768' },
+    { selector: '.client-work__title', prop: 'padding-right', reason: 'client work dialog: keeps the title clear of the close button, which sits in the panel corner only from 768; on the sheet the title is below the image' },
     { selector: '.client-work__panel', prop: 'padding-block', reason: 'client work dialog: short viewports (848px tall or less) step the panel inset down so 1280x800 holds the frame without scrolling' },
     { selector: '.friction-beat', prop: 'gap', reason: 'S3 layout — the beat has no gap stacked; the gap appears with the two-column grid' },
     { selector: '.compare__grid', prop: 'gap', reason: 'S3 layout — a deliberate zero so the two halves read as one seamless comparison' },
