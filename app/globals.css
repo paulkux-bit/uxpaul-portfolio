@@ -1780,6 +1780,17 @@ dialog.client-work::backdrop {
   }
 }
 
+/* Until the panel reaches --page-max-width (at 1216), the four pieces' text
+   runs to different heights, so the panel was 550 to 664px tall at 1024 and a
+   previous/next swap moved its top edge up to 41px under the reader's eye
+   (build review, path item 7). Here it fills the stage instead, the same
+   height for every piece; from 1216 the frame already fixes it. */
+@media (min-width: 768px) and (max-width: 1215px) {
+  .client-work__panel {
+    height: calc(100dvh - 2 * var(--spacing-xl));
+  }
+}
+
 /* Short viewports (the prototype's 53rem, written in px like every other
    query here): the panel's block padding steps down so 1280x800 holds the
    588x490 frame without scrolling. The site's first height query, logged. */
