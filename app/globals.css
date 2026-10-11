@@ -1745,9 +1745,6 @@ dialog.client-work::backdrop {
   .client-work__title {
     padding-right: var(--spacing-l);
   }
-  .client-work__thumbs {
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
   .client-work__nav {
     position: static;
     padding: var(--spacing-l) 0 0;
@@ -1756,6 +1753,19 @@ dialog.client-work::backdrop {
   .client-work__nav-link {
     align-items: flex-end;
     line-height: 1;
+  }
+}
+
+/* From 1024 the text column is wide enough for both piece names and the work
+   column for seven thumbnail columns. Between 768 and 1023 the sheet's two
+   answers hold (build review, path item 2, 11 Oct 2026): the previous link
+   stays an arrow, because the two no-wrap names overlapped by up to 16px at
+   768 and spilled out of their links until about 880; and the thumbnails stay
+   five across, because 44px tall at 6:5 makes each 53px wide, wider than a
+   seventh of a 336px work column, and they overlapped by 2.5px at 768. */
+@media (min-width: 1024px) {
+  .client-work__thumbs {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
   }
   .client-work__nav-link--prev {
     justify-content: flex-start;
