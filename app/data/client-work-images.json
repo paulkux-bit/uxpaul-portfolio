@@ -141,12 +141,12 @@
     },
     "/client-work/bbc/bbc-confusing": {
       "master": {
-        "file": "bbc-confusing.png",
-        "md5": "c08396c238dae3bef7d55dda3bd6d71a",
-        "width": 840,
-        "height": 700
+        "file": "bbc-confusing-whole.png",
+        "md5": "5da7c6bbcdd93145826cf01de75a55e1",
+        "width": 1500,
+        "height": 1250
       },
-      "density": 1.43,
+      "density": 2.55,
       "files": [
         {
           "width": 144,
@@ -157,19 +157,19 @@
           "height": 490
         },
         {
-          "width": 840,
-          "height": 700
+          "width": 1176,
+          "height": 980
         }
       ]
     },
     "/client-work/bbc/bbc-pillars": {
       "master": {
-        "file": "bbc-pillars.png",
-        "md5": "84522c830327568f8886eaa427b9ca31",
-        "width": 860,
-        "height": 717
+        "file": "bbc-pillars-whole.png",
+        "md5": "258e7c59c65406634044565ab80a6f79",
+        "width": 1500,
+        "height": 1250
       },
-      "density": 1.46,
+      "density": 2.55,
       "files": [
         {
           "width": 144,
@@ -180,8 +180,8 @@
           "height": 490
         },
         {
-          "width": 860,
-          "height": 717
+          "width": 1176,
+          "height": 980
         }
       ]
     },

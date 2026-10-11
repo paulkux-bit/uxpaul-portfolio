@@ -10,7 +10,7 @@
 // THE MASTERS ARE NOT IN THE REPO, the same call as the fine art masters
 // (scripts/build-fine-art.mjs). They are read from
 // docs/previews/template-b/_scratch/crops-v5/ by default: <id>.png, or <id>.webp
-// where no PNG exists. Several are below the 2x target and Paul will replace
+// where no PNG exists, unless MASTER_FILES below names another file. Several are below the 2x target and Paul will replace
 // them with upscales, so THE SWAP IS ONE RE-RUN: point this script at the folder
 // of new masters. The manifest records each master's md5 and size, so the swap
 // shows up in the diff and nothing else needs editing.
@@ -34,6 +34,17 @@ import sharp from 'sharp';
 import { templateB } from '../app/data/template-b.ts';
 
 const MASTERS = process.argv[2] ?? 'docs/previews/template-b/_scratch/crops-v5';
+// Masters whose file is not <id>.png. The two BBC slides were re-cut whole on
+// 11 Oct 2026 (build review, path item 1): the first crops cut words at both
+// edges and clipped the pillars' base, so the alt text described a slide the
+// crop no longer showed. The originals stay on disk, untouched, as <id>.png; a
+// plain re-run must not fall back to them, which is why this is a map in the
+// script and not a renamed file. An upscale folder passed as the argument
+// follows the same names.
+const MASTER_FILES = {
+  'bbc-confusing': 'bbc-confusing-whole.png',
+  'bbc-pillars': 'bbc-pillars-whole.png',
+};
 const RUNGS = [144, 588, 1176];
 const TARGET_2X = { width: 1176, height: 980 }; // the 588x490 frame at 2x
 // The fine art tiers to start. These are UI captures with small type, not
@@ -53,9 +64,10 @@ let failed = false;
 for (const piece of templateB) {
   for (const image of piece.images) {
     const id = basename(image.src);
-    const file = ['png', 'webp'].map((ext) => `${id}.${ext}`).find((f) => existsSync(join(MASTERS, f)));
+    const candidates = MASTER_FILES[id] ? [MASTER_FILES[id]] : ['png', 'webp'].map((ext) => `${id}.${ext}`);
+    const file = candidates.find((f) => existsSync(join(MASTERS, f)));
     if (!file) {
-      console.error(`✗ ${id}: no ${id}.png or ${id}.webp in ${MASTERS}`);
+      console.error(`✗ ${id}: none of ${candidates.join(', ')} in ${MASTERS}`);
       failed = true;
       continue;
     }
