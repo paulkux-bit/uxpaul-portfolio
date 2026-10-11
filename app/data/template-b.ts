@@ -128,7 +128,7 @@ export const templateB: readonly TemplateBPiece[] = [
       },
       {
         src: '/client-work/bbc/bbc-pillars',
-        alt: 'Strategy slide: a stepped pyramid of six digital pillars, from Structured at the base to Responsive at the top.',
+        alt: 'Strategy slide: a stepped pyramid of digital pillars, from Intuitive at the base to Responsive at the top.',
       },
       {
         src: '/client-work/bbc/bbc-3',

@@ -72,12 +72,12 @@
     },
     "/client-work/american-red-cross/arc-1": {
       "master": {
-        "file": "arc-1.png",
-        "md5": "b58848e51a71d50e56517f0fabdcccfa",
-        "width": 905,
-        "height": 754
+        "file": "arc-1-up.jpg",
+        "md5": "97643373bff131b396607938c7ad6f13",
+        "width": 1809,
+        "height": 1507
       },
-      "density": 1.54,
+      "density": 3.08,
       "files": [
         {
           "width": 144,
@@ -88,19 +88,19 @@
           "height": 490
         },
         {
-          "width": 905,
-          "height": 754
+          "width": 1176,
+          "height": 980
         }
       ]
     },
     "/client-work/american-red-cross/arc-2": {
       "master": {
-        "file": "arc-2.png",
-        "md5": "e19494d0f8d8d6d17454ffe9e49cbf40",
-        "width": 840,
-        "height": 700
+        "file": "arc-2-up.jpg",
+        "md5": "c8be45751eb3fa99656fcb38eeb674e5",
+        "width": 1679,
+        "height": 1399
       },
-      "density": 1.43,
+      "density": 2.86,
       "files": [
         {
           "width": 144,
@@ -111,19 +111,19 @@
           "height": 490
         },
         {
-          "width": 840,
-          "height": 700
+          "width": 1176,
+          "height": 980
         }
       ]
     },
     "/client-work/american-red-cross/arc-3": {
       "master": {
-        "file": "arc-3.png",
-        "md5": "3b62b8d9210f1fe29199ae530f6d8da6",
-        "width": 900,
-        "height": 750
+        "file": "arc-3-up.jpg",
+        "md5": "91ee531512d84532e9ea8c59acd9cbf4",
+        "width": 1800,
+        "height": 1499
       },
-      "density": 1.53,
+      "density": 3.06,
       "files": [
         {
           "width": 144,
@@ -131,22 +131,22 @@
         },
         {
           "width": 588,
-          "height": 490
+          "height": 489
         },
         {
-          "width": 900,
-          "height": 750
+          "width": 1176,
+          "height": 979
         }
       ]
     },
     "/client-work/bbc/bbc-confusing": {
       "master": {
-        "file": "bbc-confusing-whole.png",
-        "md5": "5da7c6bbcdd93145826cf01de75a55e1",
-        "width": 1500,
-        "height": 1250
+        "file": "bbc-confusing-zoom-up.jpg",
+        "md5": "f7238db0fab30bcbba0e6a6c0c151670",
+        "width": 1679,
+        "height": 1399
       },
-      "density": 2.55,
+      "density": 2.86,
       "files": [
         {
           "width": 144,
@@ -164,12 +164,12 @@
     },
     "/client-work/bbc/bbc-pillars": {
       "master": {
-        "file": "bbc-pillars-whole.png",
-        "md5": "258e7c59c65406634044565ab80a6f79",
-        "width": 1500,
-        "height": 1250
+        "file": "bbc-pillars-zoom-up.jpg",
+        "md5": "5ff3923ddf804b22e6828ac367d57570",
+        "width": 1656,
+        "height": 1379
       },
-      "density": 2.55,
+      "density": 2.81,
       "files": [
         {
           "width": 144,
@@ -181,7 +181,7 @@
         },
         {
           "width": 1176,
-          "height": 980
+          "height": 979
         }
       ]
     },
@@ -210,20 +210,24 @@
     },
     "/client-work/k-hovnanian/khov-1": {
       "master": {
-        "file": "khov-1.png",
-        "md5": "a66e8095586548c929f4a88645aec110",
-        "width": 320,
-        "height": 574
+        "file": "khov-1-up.jpg",
+        "md5": "f6c50330445713448fecc3b675a8b9c1",
+        "width": 639,
+        "height": 1148
       },
-      "density": 1.17,
+      "density": 2.34,
       "files": [
         {
           "width": 144,
-          "height": 258
+          "height": 259
         },
         {
-          "width": 320,
-          "height": 574
+          "width": 588,
+          "height": 1056
+        },
+        {
+          "width": 639,
+          "height": 1148
         }
       ]
     },

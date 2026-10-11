@@ -10,10 +10,10 @@
 // THE MASTERS ARE NOT IN THE REPO, the same call as the fine art masters
 // (scripts/build-fine-art.mjs). They are read from
 // docs/previews/template-b/_scratch/crops-v5/ by default: <id>.png, or <id>.webp
-// where no PNG exists, unless MASTER_FILES below names another file. Several are below the 2x target and Paul will replace
-// them with upscales, so THE SWAP IS ONE RE-RUN: point this script at the folder
-// of new masters. The manifest records each master's md5 and size, so the swap
-// shows up in the diff and nothing else needs editing.
+// where no PNG exists, unless MASTER_FILES below names another file. sharp reads
+// the format from the data, so a master may be JPEG. A swap is a MASTER_FILES
+// entry and one re-run. The manifest records each master's md5 and size, so the
+// swap shows up in the diff and nothing else needs editing.
 //
 // NO MD5 PINNING, unlike build-fine-art.mjs. Pinning there proves the right
 // painting was read. Here the masters are expected to change, and pinning would
@@ -34,18 +34,26 @@ import sharp from 'sharp';
 import { templateB } from '../app/data/template-b.ts';
 
 const MASTERS = process.argv[2] ?? 'docs/previews/template-b/_scratch/crops-v5';
-// Masters whose file is not <id>.png. The two BBC slides were re-cut whole on
-// 11 Oct 2026 (build review, path item 1): the first crops cut words at both
-// edges and clipped the pillars' base, so the alt text described a slide the
-// crop no longer showed. The originals stay on disk, untouched, as <id>.png; a
-// plain re-run must not fall back to them, which is why this is a map in the
-// script and not a renamed file. An upscale folder passed as the argument
-// follows the same names. khov-2 was re-cut on 11 Oct 2026 from a new source
-// at 1130x942, under the 1176 rung, so its 2x file is 1130 wide. v3 replaced
-// v2 the same day: v2 caught a strip of the page below the Done/Clear bar.
+// Masters whose file is not <id>.png. Every earlier master stays on disk,
+// untouched, under its own name; a plain re-run must not fall back to one,
+// which is why this is a map in the script and not a renamed file. An upscale
+// folder passed as the argument follows the same names.
+//
+// 11 Oct 2026: Paul's 2x upscales replaced the masters below 2x for Red Cross,
+// the BBC slides and khov-1. The two BBC slides moved from whole-slide cuts to
+// zoomed crops of the word cloud and the pyramid, and the pillars alt text
+// changed with them. khov-1 is 639 wide, so its largest file is 639 wide.
+// khov-2-up.png and bbc-3-up.jpg were held back: the upscaler rewrote their
+// small text (Quick Move-In read Ouick Move-In, West Sussex read West Dotone).
+// khov-2 stays on v3 (1130x942, which replaced v2 for a strip of the page
+// below the Done/Clear bar), and bbc-3 on its original.
 const MASTER_FILES = {
-  'bbc-confusing': 'bbc-confusing-whole.png',
-  'bbc-pillars': 'bbc-pillars-whole.png',
+  'arc-1': 'arc-1-up.jpg',
+  'arc-2': 'arc-2-up.jpg',
+  'arc-3': 'arc-3-up.jpg',
+  'bbc-confusing': 'bbc-confusing-zoom-up.jpg',
+  'bbc-pillars': 'bbc-pillars-zoom-up.jpg',
+  'khov-1': 'khov-1-up.jpg',
   'khov-2': 'khov-2-v3.png',
 };
 const RUNGS = [144, 588, 1176];
