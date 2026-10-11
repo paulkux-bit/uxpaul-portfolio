@@ -22,7 +22,62 @@ nor a census, but from a rendering defect found in review. **Composite evidence
 grid** joined on 19 Aug 2026, the first to come from a surface the crop pipeline
 cannot produce at all. **Bento theme block, outer boundary** joined on 19 Aug
 2026, the first found by swapping one component for another, which is what
-exposed three shipped components answering the same question three ways.*
+exposed three shipped components answering the same question three ways.
+**Client work dialog** joined on 11 Oct 2026, the site's first modal surface,
+and the first entry logged before its component existed.*
+
+**The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
+build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
+component existed rather than after. The four client pieces on the home page
+open in a native `<dialog>` over the page, the site's first modal surface. No
+locked spec governs a dialog, so each of the following borrows the nearest
+token, and each is an input to the design system pass rather than a settled
+answer:
+
+1. **The title has no rung.** The project name borrows `text-h1` (36 to 56px;
+   CLAUDE.md scopes it to case-study and section page titles) at weight 600, and
+   is flared. It measures 51.2px at 1440, under the 52px cut by the same margin
+   as `.about-hero__pov`, which is flared by ruling, and that is the precedent
+   that admits it. It sits in RUNGS off the ladder, as the turn (T6) does. What
+   a spec would need to say: whether a dialog title is a section page title, or
+   a rung of its own.
+
+2. **The byline and the statement nearly collide.** The byline ("for Lionsgate")
+   is `--type-standfirst` and the statement below it is `text-h3`. Measured from
+   the clamps: 21 against 22px at 390, 23.5 against 24.4 at 1280, 24 against
+   25.2 at 1440, a ratio of 1.04 to 1.05 where the ladder steps at 1.15. Colour
+   (secondary against primary) and the role line between them do the separating.
+   What a spec would need to say: whether a near-miss is allowed when colour
+   carries the step, or which of the two moves.
+
+3. **The surface, the scrim and the width.** The panel is `--bg-surface` at
+   `--radius-s`, with no shadow. `--radius-s` is the compact-control radius;
+   `.milestone` and the hero callout are the precedent for using it on a panel.
+   The width is `--page-max-width`, the page's own measure, so the dialog reads
+   as a page laid over a page. The scrim had no token: `--scrim` is authored per
+   mode in the theme layer. The prototype mixed `--text-primary` at 46% in both
+   modes, which darkened the page in light mode and lifted it to grey in dark
+   mode (measured `oklch(0.945 0.012 78 / 0.46)`). Paul ruled that it dims in
+   both modes (11 Oct 2026), so dark mixes `--bg-sunken` instead. What a spec
+   would need to say: a scrim role in colour v2 with a stated effect in each
+   mode, and whether a modal panel takes the card's radius or a control's.
+
+4. **Entrance motion.** Interaction v1 leaves entrance unspecified. The panel's
+   fade and rise takes `--duration-card` (written for lift, shadow and media
+   scale; Paul ruled it over `--duration-reveal`, 11 Oct 2026) and the content
+   cross-fade waits `--duration-control`. What a spec would need to say: an
+   entrance category, which the reveal containers also lack.
+
+5. **Sheet chrome and two firsts.** The prototype gave the close button a
+   `--bg-sunken` hover and, below 768px, a resting `--shadow-hover`. Paul ruled
+   that it follows `.theme-toggle` instead, on mobile too (11 Oct 2026): colour
+   plus `--border-strong` on hover, no resting shadow. On mobile it floats over
+   the scrolling sheet on the sheet's own `--bg-surface` ground. The
+   short-viewport padding drop is the site's first height query (848px).
+   `text-box: trim-start cap alphabetic` sets the title's cap top on the image
+   top; no spec mentions it, and Firefox ignores it. What a spec would need to
+   say: whether a floating control needs a ground, and whether height queries
+   are part of the breakpoint set.
 
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
