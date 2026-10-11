@@ -1842,13 +1842,25 @@ dialog.client-work::backdrop {
   }
 }
 
-/* Motion: the panel enters with a short fade and rise; content cross-fades
-   on a piece change (the script waits --duration-control); the bar slides. All
-   three are skipped under reduced motion, where the bar is simply there and
-   the swap is instant. */
+/* Motion: the panel enters with a short fade and rise as the scrim fades in;
+   content cross-fades on a piece change (the script waits --duration-control);
+   the bar slides. All of it is skipped under reduced motion, where the scrim
+   and the bar are simply there and the swap is instant. */
 @media (prefers-reduced-motion: no-preference) {
   dialog.client-work[open] .client-work__panel {
     animation: client-work-in var(--duration-card) var(--ease-out-soft);
+  }
+  /* The scrim fades in with the panel, over the same duration. It had no
+     transition, so it landed at full strength in the first frame while the
+     panel was still fading (build review, path item 5). @starting-style gives
+     the backdrop a transparent first frame to transition from. */
+  dialog.client-work::backdrop {
+    transition: background-color var(--duration-card) var(--ease-out-soft);
+  }
+  @starting-style {
+    dialog.client-work[open]::backdrop {
+      background-color: transparent;
+    }
   }
   .client-work__panel > :not(.client-work__close) {
     transition: opacity var(--duration-control) var(--ease-out-soft);
