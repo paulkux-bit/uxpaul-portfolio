@@ -183,7 +183,7 @@ Consumers to update: `components/quick-hits/quick-hit.tsx` and `quick-hits-list.
 - **Previous and next:**
   - Links with `href="#slug"`, so a middle-click opens a new tab that cold-opens that piece.
   - Visible text is the neighbour's `wordmark`. A leading `sr-only` "Previous piece:" or "Next piece:" keeps the visible text inside the accessible name (SC 2.5.3). This follows `components/next-case-study.tsx`, not `aria-label`.
-  - Below 768px the previous link's wordmark is visually hidden and stays in the accessible name.
+  - From 768 to 1023px the previous link's wordmark is visually hidden and stays in the accessible name. Below 768 and from 1024 both wordmarks show, and a name that runs out of room ends in an ellipsis on one line.
 - **Live region:** one polite `sr-only` region announces "Image n of 3" and "Now showing {name}".
 - **Piece change:**
   - Add `is-swapping`, wait `--duration-control` (read from computed style), swap, remove.

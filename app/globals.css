@@ -1667,13 +1667,16 @@ dialog.client-work::backdrop {
 }
 
 /* Previous and next. On the sheet: a sticky bar at the foot, on the panel's
-   ground, the two links at opposite ends, the previous one reduced to its
-   arrow (its name stays for assistive tech). They used to sit together at the
-   left, where the bare arrow read as part of the next link's label (critique,
-   11 Oct 2026). From 768: pinned to the foot
-   of the text column, one at each end, the baseline on the thumbnail row's
-   bottom. Text links (spec §5: no pressed state); the underline arrives on
-   hover through .quiet-link, so colour is never the only signal. */
+   ground, the two links at opposite ends, each named beside its arrow. They
+   used to sit together at the left, where a bare previous arrow read as part
+   of the next link's label (critique, 11 Oct 2026). The longest pair, K.
+   Hovnanian and American Red Cross, nearly fills a 360 sheet, so a name that
+   runs out of room ends in an ellipsis on one line rather than wrapping or
+   reaching the other link: only the name shrinks, the arrow is flex: none, the
+   gap is never spent, and min-width holds the 44px target. From 768: pinned to
+   the foot of the text column, one at each end, the baseline on the thumbnail
+   row's bottom. Text links (spec §5: no pressed state); the underline arrives
+   on hover through .quiet-link, so colour is never the only signal. */
 .client-work__nav {
   --icon-stroke: 1.95;
   position: sticky;
@@ -1690,6 +1693,7 @@ dialog.client-work::backdrop {
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-2xs);
+  min-width: 44px;
   min-height: 44px;
   font-weight: 600;
   white-space: nowrap;
@@ -1702,17 +1706,10 @@ dialog.client-work::backdrop {
 .client-work__nav-link:hover {
   color: var(--text-primary);
 }
-.client-work__nav-link--prev {
-  justify-content: center;
-  min-width: 44px;
-}
-.client-work__nav-link--prev .client-work__nav-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
+.client-work__nav-label {
+  min-width: 0;
   overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @media (min-width: 768px) {
@@ -1756,27 +1753,32 @@ dialog.client-work::backdrop {
   }
 }
 
-/* From 1024 the text column is wide enough for both piece names and the work
-   column for seven thumbnail columns. Between 768 and 1023 the sheet's two
-   answers hold (build review, path item 2, 11 Oct 2026): the previous link
-   stays an arrow, because the two no-wrap names overlapped by up to 16px at
-   768 and spilled out of their links until about 880; and the thumbnails stay
-   five across, because 44px tall at 6:5 makes each 53px wide, wider than a
-   seventh of a 336px work column, and they overlapped by 2.5px at 768. */
+/* Between 768 and 1023 the previous link is its arrow alone (build review,
+   path item 2, 11 Oct 2026): the text column there is narrower than the 360
+   sheet's bar, and the two no-wrap names overlapped by up to 16px at 768 and
+   spilled out of their links until about 880. The name stays for assistive
+   tech. Below 768 and from 1024 both links are named. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .client-work__nav-link--prev {
+    justify-content: center;
+  }
+  .client-work__nav-link--prev .client-work__nav-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* From 1024 the work column is wide enough for seven thumbnail columns. Below
+   it they stay five across, because 44px tall at 6:5 makes each 53px wide,
+   wider than a seventh of a 336px work column, and they overlapped by 2.5px at
+   768. */
 @media (min-width: 1024px) {
   .client-work__thumbs {
     grid-template-columns: repeat(7, minmax(0, 1fr));
-  }
-  .client-work__nav-link--prev {
-    justify-content: flex-start;
-    min-width: 0;
-  }
-  .client-work__nav-link--prev .client-work__nav-label {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip-path: none;
   }
 }
 
