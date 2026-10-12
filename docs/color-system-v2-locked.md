@@ -375,6 +375,8 @@ one legitimate exception to R1 — this should be stated explicitly rather than
 tolerated. Charts and status colours, which do not exist yet and should be
 added deliberately rather than pre-emptively.
 
+**12 Oct 2026:** the shelf (now "Earlier work") no longer uses the `--qh-*` exception. The tokens are defined and consumed by nothing, pending deletion in the design system pass (`docs/unspecified-surfaces.md`, Earlier work shelf).
+
 Nav, footer, buttons and card meta are tracked in `unspecified-surfaces.md`
 alongside their type and spacing gaps, because they are one piece of work.
 
