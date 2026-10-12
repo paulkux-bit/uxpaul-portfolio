@@ -45,7 +45,11 @@ export default function Home() {
           {/* P2b, 1 Oct 2026: two lines, name then title, no interpunct. The
               sr-only comma keeps the pause a screen reader would otherwise lose. */}
           <p className="hero-beat text-h3" style={{ ['--beat' as string]: 1 }}>
-            <span className="hero-credit-name block text-primary">Paul Kali</span>
+            {/* data-header-handoff: the header's wordmark hands off to the face
+                once this line's bottom passes under the header. */}
+            <span className="hero-credit-name block text-primary" data-header-handoff="">
+              Paul Kali
+            </span>
             <span className="sr-only">, </span>
             <span className="block text-secondary">Senior Product Designer</span>
           </p>

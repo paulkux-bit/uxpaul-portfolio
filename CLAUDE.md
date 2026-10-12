@@ -127,6 +127,14 @@ whenever two pieces of work look equally worthy.
   name appears on either surface. The internal name stays `client-work`. Its
   gaps are logged in `docs/unspecified-surfaces.md` (client work dialog, and
   the Earlier work shelf).
+- The header wordmark hands off to Paul's profile in a coin
+  (`components/wordmark-link.tsx`) once the page's opening scrolls under the
+  header: the "Paul Kali" line on home, the portrait on About, the page's h1
+  everywhere else (`[data-header-handoff]` marks the first two). A page with
+  no anchor keeps the wordmark. The face is `public/header-face.webp`, made by
+  `npm run build:header-face`; the coin's colours are the component tokens
+  `--face-disc` and `--face-ring`. Under reduced motion the swap is instant.
+  Logged in `docs/unspecified-surfaces.md` (header identity mark).
 - Home hero is a **weighted-sentence statement** (Direction D1): the h1 leads
   with a concrete proof line (`text-lede`) where **weight carries the emphasis**
   — thin connective words (`--text-muted`), bold key noun phrases (`font-[720]`
