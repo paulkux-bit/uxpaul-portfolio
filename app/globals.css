@@ -851,9 +851,9 @@
   /* v3 §5: 90 -> 94. Display band (32px ceiling). Card covers loosen by 4%.
      The old note here claimed a per-module "Major register" that rhymed with
      Also Shipped at ~90% — v3 R2 retires mood registers: width follows the
-     rung, and contrast is carried by weight. The shelf (now "Client work") is an §6
-     exception surface with its own rules, so the rhyme is no longer a
-     constraint on this role. */
+     rung, and contrast is carried by weight. The shelf (now "Earlier work") was
+     an §6 exception surface until 12 Oct 2026 and now sets its titles in
+     text-h3, so the rhyme is no longer a constraint on this role. */
   text-wrap: balance;
 }
 
@@ -1328,6 +1328,131 @@
   .reveal-grid > [data-reveal-shown]:nth-child(3) { transition-delay: 140ms; }
   .reveal-grid > [data-reveal-shown]:nth-child(4) { transition-delay: 210ms; }
   .reveal-grid > [data-reveal-shown]:nth-child(5) { transition-delay: 280ms; }
+}
+
+/* ============================================================
+   EARLIER WORK shelf (internal name client-work), components/quick-hits/*
+   Direction A of docs/shelf-review-cc.md, ruled 11 Oct 2026. Each row is the
+   hero signature's grammar: the project name, then its client in a softer
+   colour, one link, with the industry at the right on the title's baseline.
+   Type and colour come from role utilities on the markup (text-h3,
+   text-primary, text-secondary, text-caption, text-muted); this carries only
+   layout, weight and states. Built from existing roles only, because the
+   design system pass will revisit colour, the type scale and weight. The
+   borrowings are logged in docs/unspecified-surfaces.md (Earlier work shelf).
+   The list's reveal is the .reveal-list contract below, on the whole <ol>.
+   ============================================================ */
+
+/* Closing rule under the last row (ruling 5), on the list so a press never
+   moves it. The .about-creds hairline grammar. */
+.shelf__list {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shelf__row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--spacing-l);
+  row-gap: var(--spacing-2xs);
+  padding-block: var(--spacing-m);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* text-h3 supplies size, leading and tracking. This takes its 500 back to
+   body weight, so the shelf sits a size and a weight step under the Selected
+   work card titles (25.2/400 against 32/600 at 1440). */
+.shelf__title {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-weight: var(--wght-body);
+  text-wrap: balance;
+}
+
+/* One box. On a phone the client breaks to its own line inside the link
+   rather than splitting an inline link in two. */
+.shelf__link {
+  display: inline-block;
+  max-width: 100%;
+  color: inherit;
+}
+.shelf__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* Full width below 768, so it sits under the client. The auto margin does
+   nothing there and right-aligns it from 768, with no spacing value inside a
+   media query. */
+.shelf__industry {
+  flex-basis: 100%;
+  margin: 0 0 0 auto;
+}
+
+@media (max-width: 767px) {
+  .shelf__by { display: block; }
+  .shelf__title { text-wrap: pretty; }
+}
+
+@media (min-width: 768px) {
+  .shelf__row {
+    flex-wrap: nowrap;
+    padding-block: var(--spacing-l);
+  }
+  .shelf__industry {
+    flex: none;
+    white-space: nowrap;
+  }
+}
+
+/* Touch: a rest signifier where hover cannot stand in (ruling 3). The name
+   alone carries the base a rule's resting underline; thickness and colour do
+   not inherit into the span, so they are restated, and the 0.22em offset is
+   inherited from the link. Pointer devices keep .quiet-link: no underline at
+   rest, the standard underline on hover. */
+@media (hover: none) {
+  .shelf__name {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--border-interactive);
+  }
+}
+
+/* One halo for the whole row (ruling, 11 Oct 2026): the global :focus-visible
+   pair, restated on the row because a pseudo-element cannot take focus, and
+   set out --spacing-2xs to the sides so the flush-left text does not touch the
+   ring. Without :has() the link keeps its own global halo, one box. */
+.shelf__row::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(var(--spacing-2xs) * -1);
+  border-radius: var(--radius-xs);
+  pointer-events: none;
+}
+@supports selector(:has(a)) {
+  .shelf__link:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+  /* Lifts the focused row over the next row's hairline, which would
+     otherwise paint across the bottom of the ring. */
+  .shelf__row:has(.shelf__link:focus-visible) {
+    z-index: 1;
+  }
+  .shelf__row:has(.shelf__link:focus-visible)::before {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--focus-glow);
+  }
+}
+
+/* Pressed (interaction §5): the row sinks 1px, as the work band does. Hover
+   is the link's (.quiet-link), so nothing here outranks it. */
+.shelf__row:active {
+  transform: translateY(1px);
 }
 
 /* ============================================================

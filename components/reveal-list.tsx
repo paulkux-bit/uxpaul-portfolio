@@ -3,19 +3,24 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * One-shot reveal for the "Client work" shelf. Progressive enhancement,
- * mirroring RevealGrid (copied, not generalized — second consumer; generalize
- * on the third):
+ * One-shot reveal for the "Earlier work" shelf, AS ONE UNIT (ruled 11 Oct
+ * 2026): the whole list fades in at the home entrance's timing, not row by row,
+ * because a per-row reveal slid each hairline in on its own. Progressive
+ * enhancement, mirroring RevealGrid (copied, not generalized; second consumer,
+ * generalize on the third):
  *
- * - SSR / no-JS renders every item visible (the hide is driven by JS-set data
+ * - SSR / no-JS renders the list visible (the hide is driven by JS-set data
  *   attributes the server never emits), so a failed/absent JS load is safe.
- * - Under `prefers-reduced-motion: reduce` the effect no-ops — items stay visible.
- * - Items already in the viewport at mount are marked shown immediately (no
- *   hide → no flash); items below the fold are hidden, then revealed by an
- *   IntersectionObserver as they scroll in. No stagger (short list).
+ * - Under `prefers-reduced-motion: reduce` the effect no-ops and the list stays
+ *   visible.
+ * - A list already in the viewport at mount is marked shown immediately (no
+ *   hide, no flash); one below the fold is hidden, then revealed by an
+ *   IntersectionObserver as it scrolls in.
  *
- * Renders the `<ol>` itself so QuickHit stays a Server Component, passed in as
- * `<li>` children.
+ * The <ol> is the wrapper's only child, so the `.reveal-list > [data-reveal-*]`
+ * contract in globals.css (and the entrance-motion entry in lint:interaction)
+ * applies to the whole list unchanged. Rows stay Server Components, passed in
+ * as `<li>` children.
  */
 export function RevealList({
   className,
@@ -31,7 +36,6 @@ export function RevealList({
     if (!el) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const items = Array.from(el.children) as HTMLElement[];
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -44,23 +48,23 @@ export function RevealList({
       { threshold: 0.3 },
     );
 
-    for (const item of items) {
-      const rect = item.getBoundingClientRect();
-      const inView = rect.top < window.innerHeight && rect.bottom > 0;
-      if (inView) {
-        item.dataset.revealShown = 'true';
-      } else {
-        item.dataset.revealHidden = 'true';
-        observer.observe(item);
-      }
+    const rect = el.getBoundingClientRect();
+    const inView = rect.top < window.innerHeight && rect.bottom > 0;
+    if (inView) {
+      el.dataset.revealShown = 'true';
+    } else {
+      el.dataset.revealHidden = 'true';
+      observer.observe(el);
     }
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <ol ref={ref} role="list" className={`reveal-list ${className ?? ''}`}>
-      {children}
-    </ol>
+    <div className="reveal-list">
+      <ol ref={ref} role="list" className={className}>
+        {children}
+      </ol>
+    </div>
   );
 }

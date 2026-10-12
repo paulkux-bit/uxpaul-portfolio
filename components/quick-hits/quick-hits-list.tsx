@@ -3,17 +3,16 @@ import { QuickHit } from './quick-hit';
 import { templateB } from '@/app/data/template-b';
 
 /**
- * The "Client work" shelf list. Server Component — renders the semantic <ol>
- * (via RevealList, which owns the scroll-reveal client island) with each row
- * as an <li>. No stagger (short list).
+ * The "Earlier work" shelf list. Server Component. Renders the semantic <ol>
+ * (via RevealList, which owns the scroll-reveal client island), each row an
+ * <li>. The rows separate by their hairlines, not by space, and the list
+ * reveals as one unit.
  */
 export function QuickHitsList() {
   return (
-    <RevealList className="list-none space-y-m md:space-y-l">
+    <RevealList className="shelf__list">
       {templateB.map((piece) => (
-        <li key={piece.slug}>
-          <QuickHit piece={piece} />
-        </li>
+        <QuickHit key={piece.slug} piece={piece} />
       ))}
     </RevealList>
   );

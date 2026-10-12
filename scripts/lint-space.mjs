@@ -120,6 +120,7 @@ const ALLOWLIST = {
     // the design rather than migrate it. They are candidates for a measured
     // fluid pair later (S5 measures; §3.1 forbids inventing pairs), and until
     // one is measured they stay, declared, with a reason.
+    { selector: '.shelf__row', prop: 'padding-block', reason: 'S3 density: the Earlier work row opens from 24 to 32 once it is one line at 768, with no measured pair yet' },
     { selector: '.quick-hit', prop: 'column-gap', reason: 'S3 density — the shelf row loosens from 16 to 32 when it goes multi-column at 768; no measured pair yet' },
     { selector: '.take-card', prop: 'padding', reason: 'S3 density — tighter card inset below 767; unmounted surface, no measured pair' },
     { selector: '.case-study-meta', prop: 'column-gap', reason: 'S3 density — meta columns separate widely once they sit on one line at 640' },
@@ -158,8 +159,6 @@ const ALLOWLIST = {
     { file: 'components/case-study-card.tsx', util: 'md:py-xl', reason: 'S3.5 density — card inset opens 32 -> 48 at md' },
     { file: 'components/case-study-card.tsx', util: 'md:mb-l', reason: 'S3.5 density — cover art to title opens at md' },
     { file: 'components/case-study-card.tsx', util: 'md:p-8', reason: 'S3.5 density — media-tier card inset' },
-    { file: 'components/quick-hits/quick-hit.tsx', util: 'md:px-l', reason: 'S3.5 density — shelf row inset matches the card' },
-    { file: 'components/quick-hits/quick-hits-list.tsx', util: 'md:space-y-l', reason: 'S3.5 density — shelf rows separate further once each is one line' },
     { file: 'components/site-footer.tsx', util: 'md:px-l', reason: 'S3.5 density — footer inset tracks the page container' },
     { file: 'components/site-footer.tsx', util: 'md:py-xl', reason: 'S3.5 density — footer inset tracks the page container' },
     { file: 'components/site-header.tsx', util: 'md:gap-m', reason: 'S3.5 density — nav items separate once the header is one row' },

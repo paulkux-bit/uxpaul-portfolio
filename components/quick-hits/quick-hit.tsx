@@ -1,51 +1,44 @@
 import type { TemplateBPiece } from '@/app/data/template-b';
 
 /**
- * One row on the "Client work" shelf: a calm bordered row (Wise "Choose a
- * debit card" register). Server Component. The title is a link that opens the
- * piece in the client work dialog (components/client-work/client-work-dialog.tsx),
- * by the URL hash `#slug`. Without JavaScript the link is a harmless hash change.
+ * One row on the "Earlier work" shelf (direction A, Signature list, ruled
+ * 11 Oct 2026; docs/shelf-review-cc.md). Server Component. The row borrows the
+ * hero signature's grammar: the project name, then its client in a softer
+ * colour, in one link, with the industry at the right on the title's baseline
+ * from 768 and under the client below it. A ruled band, no brand colour.
  *
- * THE LINK IS THE ONLY INTERACTIVE CHANGE, ON PURPOSE (ruling Q3, 11 Oct 2026).
- * The shelf's look is redesigned in a later pass, so the row keeps its resting
- * treatment and adds the site's standard link states and nothing else: `.quiet-link`
- * gives no underline at rest and the global a:hover underline on hover, and focus
- * is the global :focus-visible halo. There is no new border, card or hover rule. The
- * link is stretched over the row the way the case card stretches its title
- * (components/case-study-card.tsx), so the whole row is the target and the
- * accessible name is the project name alone.
+ * The link opens the piece in the client work dialog
+ * (components/client-work/client-work-dialog.tsx) by the URL hash `#slug`, and
+ * is stretched over the row (`.shelf__link::after`), so the whole row is the
+ * target. Without JavaScript it is a harmless hash change. Hover is the site's
+ * standard (`.quiet-link` plus the global a:hover). On touch the name carries
+ * the resting underline, focus draws one halo round the row, and the row sinks
+ * 1px when pressed (globals.css, EARLIER WORK shelf).
  *
- * Calm faint brand FILL + a 1.5px brand-color BORDER carry the identity (no
- * saturated fill competing with Selected Work); typography does the work. Three
- * columns on desktop (wordmark, title, industry), stacking on mobile. The title
- * is left-set like every other line on the site (closing review A7b, 1 Oct 2026),
- * and the grid lives in `.quick-hit` (globals.css). The title is the moment:
- * `text-qh-title` carries the per-brand weight (`--qh-wght`, 500-650) against
- * the labels' 600. That contrast used to be width as well; Commissioner has no
- * wdth axis, so weight and colour carry it alone (v3 §6).
- *
- * Color comes from `data-brand` (aliases --base + --fill). Title/labels use the
- * standard text tokens (AAA on the faint fill, both modes). The border is the
- * primary identity element, so it carries through forced-colors.
+ * The link's name is `piece.name`, the full name line, as the dialog title's
+ * is. A punctuation mark in an sr-only span would become its own box in name
+ * computation and read "Politics , pitched" (the dialog's build review, path
+ * item 4), so the BBC's comma rides in the label instead.
  */
 export function QuickHit({ piece }: { piece: TemplateBPiece }) {
   return (
-    <article
-      data-brand={piece.brand}
-      className="quick-hit relative border-[var(--base)] bg-[var(--fill)] px-m py-m md:min-h-[6rem] md:px-l"
-    >
-      <p className="qh-brand text-eyebrow text-secondary">{piece.wordmark}</p>
-      {/* Parallel to Selected Work card titles → <h2> element. The weight move. */}
-      <h2 className="qh-title text-qh-title text-primary">
+    <li className="shelf__row">
+      {/* Parallel to the Selected Work card titles, so an <h2>. */}
+      <h2 className="shelf__title text-h3 text-primary">
         <a
           href={`#${piece.slug}`}
           data-client-work={piece.slug}
-          className="quiet-link after:absolute after:inset-0 after:content-['']"
+          aria-label={piece.name}
+          className="shelf__link quiet-link"
         >
-          {piece.title}
+          <span className="shelf__name">{piece.title}</span>{' '}
+          <span className="shelf__by text-secondary">{piece.byline}</span>
         </a>
       </h2>
-      <p className="qh-industry text-caption text-right text-secondary">{piece.industry}</p>
-    </article>
+      <p className="shelf__industry text-caption text-muted">
+        <span className="sr-only">Industry: </span>
+        {piece.industry}
+      </p>
+    </li>
   );
 }
