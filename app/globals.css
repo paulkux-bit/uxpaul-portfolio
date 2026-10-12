@@ -481,26 +481,21 @@
   --scrim:                  color-mix(in oklch, var(--text-primary) 46%, transparent);
 
 
-  /* Brand identity for the "Client work" shelf — a calm bordered row (Wise
-     register): a 1.5px brand-color BORDER (--base) + a faint near-canvas FILL
-     (--fill). Two sanctioned exceptions to the system: chromatic color at rest
-     (attribution only), and --qh-bbc-* at hue 250 (cool, outside warm 50-80).
-     Title/labels reuse --text-primary/--text-secondary (AAA on the faint fill,
-     both modes). Persimmon-clear. See docs/color-system.md.
-     --base = the 1.5px brand BORDER (full identity chroma). Light: dark-on-light fill. */
+  /* Brand shelf tokens.
+     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+     Nothing reads them: the shelf became "Earlier work" and dropped its brand
+     border and fill. They were the per-brand 1.5px border (--base) and faint
+     fill (--fill), the site's one sanctioned resting colour, --qh-bbc-* at
+     hue 250 included (docs/color-system.md). Do not use them. */
   --qh-lionsgate-base:      oklch(0.40 0.10 80);
   --qh-red-cross-base:      oklch(0.39 0.13 25);
   --qh-bbc-base:            oklch(0.30 0.10 250);
   --qh-k-hovnanian-base:    oklch(0.39 0.07 60);
-  /* --fill = the calm faint brand tint (near-canvas). Title/labels reuse --text-primary/secondary
-     (AAA on this fill). */
   --qh-lionsgate-fill:      oklch(0.93 0.016 85);
   --qh-red-cross-fill:      oklch(0.93 0.016 30);
   --qh-bbc-fill:            oklch(0.93 0.012 250);
   --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
-  /* The brand border's width. Component-scoped (spacing spec §10 allows a
-     component to name its own value); it was an arbitrary `border-[1.5px]` in
-     JSX, the one geometric value on the home page that came from no token. */
   --qh-border-width:        1.5px;
 
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
@@ -593,15 +588,14 @@
   --scrim:                  color-mix(in oklch, var(--bg-sunken) 60%, transparent);
 
 
-  /* Brand borders — dark. BRIGHTER than light (not inverted): the border sits on a dark
-     fill/canvas, so it must be light enough to carry identity (verified >=3.7:1 vs both). */
-  /* Chroma matches light mode (closing review A8b, 1 Oct 2026); only the
-     lightness differs between modes. Each border keeps >= 3.75:1 on its fill. */
+  /* Brand shelf tokens, dark.
+     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+     Chroma matched light mode (closing review A8b, 1 Oct 2026). */
   --qh-lionsgate-base:      oklch(0.62 0.10 80);
   --qh-red-cross-base:      oklch(0.58 0.13 25);
   --qh-bbc-base:            oklch(0.58 0.10 250);
   --qh-k-hovnanian-base:    oklch(0.60 0.07 62);
-  /* Calm faint fill — dark (muted to aged-stock, not candy). */
   --qh-lionsgate-fill:      oklch(0.22 0.018 85);
   --qh-red-cross-fill:      oklch(0.22 0.018 30);
   --qh-bbc-fill:            oklch(0.22 0.014 250);
@@ -857,24 +851,12 @@
   text-wrap: balance;
 }
 
-/* "Client work" shelf title. A §6 exception surface: the four blocks are
-   a curated set and their variation IS the content. Size stays uniform so the
-   rows align.
-
-   WHAT CARRIES THE VARIATION NOW IS WEIGHT AND COLOUR, AND ONLY THOSE. It was
-   three axes per brand via data-brand — wdth 84-100, wght 500-650, opsz 14-48,
-   driven through one font-variation-settings string so they rendered together.
-   Commissioner has neither a wdth nor an opsz axis, and C3 deleted the string.
-   --qh-wght is the only one of the three still reaching a pixel.
-
-   FLARE WAS CONSIDERED AS THE REPLACEMENT AND RULED OUT ON SIZE, not on taste.
-   This role ceilings at 36px, below the 40px the 52px flare cut leaves plain, so
-   per-brand FLAR would have been inert-but-plausible CSS — the class C3 deleted
-   49 declarations of. Paul ruled from the C5 preview that the four still read as
-   four on weight and colour alone.
-
-   --qh-wdth and --qh-opsz, which addressed the two missing axes, were deleted
-   from the four [data-brand] blocks on 1 Oct 2026 (closing-review cleanup). */
+/* Former "Client work" shelf title.
+   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+   The Earlier work rows set their titles in text-h3; nothing applies this.
+   It carried the per-brand weight (--qh-wght, 500-650) of a §6 exception
+   surface (type v3 §6). Its scale row in CLAUDE.md goes with it. */
 @utility text-qh-title {
   font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
   line-height: 1.1;
@@ -1456,17 +1438,16 @@
 }
 
 /* ============================================================
-   "CLIENT WORK" shelf (formerly "Also shipped") — brand → local var mapping + accents
-   data-brand on each <article> aliases the per-brand border + fill onto generic
-   --base / --fill locals, so the component markup stays brand-agnostic and
-   .dark swaps for free. Server-rendered; no JS, no theme read.
+   FORMER "CLIENT WORK" shelf (brand blocks and .quick-hit).
+   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+   No element carries data-brand or .quick-hit since the shelf became
+   "Earlier work" (the EARLIER WORK shelf section above). Kept so that build
+   changed no token and no test input: __tests__/interaction-lint.test.mjs
+   still reads .quick-hit's radius. Delete the blocks, .quick-hit and
+   @utility text-qh-title together, before the tokens, or lint:color check 6
+   fails.
    ============================================================ */
-
-/* --base = the brand border (width --qh-border-width); --fill = faint container
-   tint; --qh-wght = the per-module title weight (see text-qh-title). The wdth
-   and opsz values that sat beside it addressed axes Commissioner does not
-   have and were deleted 1 Oct 2026; the axis names in the comments below
-   record the character each brand was given. */
 [data-brand="lionsgate"] {
   --base: var(--qh-lionsgate-base); --fill: var(--qh-lionsgate-fill);
   --qh-wght: 600;  /* cinematic: compressed, bold, display */
@@ -1484,13 +1465,7 @@
   --qh-wght: 540;  /* architectural: full width, grounded */
 }
 
-/* Three-column row via named areas (cleaner than Tailwind arbitrary multi-string
-   template-areas). Mobile stacks: brand + industry on a top row, title beneath
-   (Option B). Desktop: fixed side columns (12rem fits "AMERICAN RED CROSS",
-   8rem fits "Entertainment") so all four blocks align; title centers in 1fr. */
 .quick-hit {
-  /* Moved out of JSX (`rounded-[12px]`, an arbitrary value pinned to the same
-     number). 12px either way — the change is where it is authored. */
   border-radius: var(--radius-m);
   border-width: var(--qh-border-width);
   display: grid;

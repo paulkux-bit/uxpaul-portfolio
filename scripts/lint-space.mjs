@@ -121,7 +121,7 @@ const ALLOWLIST = {
     // fluid pair later (S5 measures; §3.1 forbids inventing pairs), and until
     // one is measured they stay, declared, with a reason.
     { selector: '.shelf__row', prop: 'padding-block', reason: 'S3 density: the Earlier work row opens from 24 to 32 once it is one line at 768, with no measured pair yet' },
-    { selector: '.quick-hit', prop: 'column-gap', reason: 'S3 density — the shelf row loosens from 16 to 32 when it goes multi-column at 768; no measured pair yet' },
+    { selector: '.quick-hit', prop: 'column-gap', reason: 'UNUSED since 12 Oct 2026: .quick-hit is applied to nothing since the shelf became Earlier work. It loosened the old row from 16 to 32 at 768. Delete with the rule in the design system pass (docs/unspecified-surfaces.md, Earlier work shelf, item 4)' },
     { selector: '.take-card', prop: 'padding', reason: 'S3 density — tighter card inset below 767; unmounted surface, no measured pair' },
     { selector: '.case-study-meta', prop: 'column-gap', reason: 'S3 density — meta columns separate widely once they sit on one line at 640' },
     { selector: '.transformation', prop: 'gap', reason: 'S3 density — before/after tighten when they stack below 640' },
