@@ -2,7 +2,7 @@
  * Does a font-level declaration actually render, at the size the selector sets?
  *
  *   node scripts/measure-flare-ink.mjs                 (needs `next start` on :3000)
- *   ONLY=qh-brand node scripts/measure-flare-ink.mjs   one target
+ *   ONLY=text-cover node scripts/measure-flare-ink.mjs   one target
  *
  * GENERALISED IN C6a FROM FLARE TO ANY PROPERTY, and the reason is the noise
  * floor rather than tidiness. C6a needed the same question asked of
@@ -61,8 +61,8 @@ const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:3000';
 /* `expect` is written down BEFORE the run so the numbers can contradict it.
    For the flare rows it is what the 52px cut predicts: 'gone' = flare is being
    removed here and should be visible in the before state; 'kept' = it stays and
-   is the control. For the C6a row it is 'inert', which is a PREDICTION OF ZERO
-   and the only row where zero is the pass. */
+   is the control. An 'inert' row (C6a's, now removed; see below) predicts
+   ZERO, and is the only kind where zero is the pass. */
 const FLARE = { prop: '--flar', on: '100', off: '0' };
 const TARGETS = [
   { sel: '.text-cover',               route: '/',                        px: 32, expect: 'gone' },
@@ -73,15 +73,11 @@ const TARGETS = [
   { sel: '.hero-block__title',        route: '/case-studies/uscg-bard',  px: 72, expect: 'kept' },
   { sel: '.milestone__date',          route: '/case-studies/uscg-bard',  px: 88, expect: 'kept' },
 
-  /* C6a. Commissioner's `case` feature substitutes 18 glyphs in the shipped
-     subset and `period` is not one of them — a full stop is baseline-anchored in
-     both cases, so there is nothing to raise. None of the four wordmarks
-     (LIONSGATE, AMERICAN RED CROSS, BBC, K. HOVNANIAN) contains a glyph the
-     feature touches. This row exists to render that claim rather than read it
-     out of a GSUB table, because a table read is a static claim about a font and
-     the question is about a page. Zero is the pass. */
-  { sel: '[data-brand="k-hovnanian"] .qh-brand', route: '/', px: 14, expect: 'inert',
-    label: 'qh-brand', prop: 'font-feature-settings', on: "'case' 1", off: 'normal' },
+  /* The C6a row, `case` on the K. Hovnanian shelf wordmark ([data-brand]
+     .qh-brand, expect 'inert'), was removed on 12 Oct 2026: the Earlier work
+     shelf renders no wordmark, so the selector matches nothing. Its result,
+     zero, is recorded in type v3 §6 ("REJECTED 22 Aug 2026"). Restore the row
+     shape from git history to ask the same question of another element. */
 ];
 
 const VIEWPORTS = [1440, 1920];

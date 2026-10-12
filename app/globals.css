@@ -481,26 +481,21 @@
   --scrim:                  color-mix(in oklch, var(--text-primary) 46%, transparent);
 
 
-  /* Brand identity for the "Client work" shelf — a calm bordered row (Wise
-     register): a 1.5px brand-color BORDER (--base) + a faint near-canvas FILL
-     (--fill). Two sanctioned exceptions to the system: chromatic color at rest
-     (attribution only), and --qh-bbc-* at hue 250 (cool, outside warm 50-80).
-     Title/labels reuse --text-primary/--text-secondary (AAA on the faint fill,
-     both modes). Persimmon-clear. See docs/color-system.md.
-     --base = the 1.5px brand BORDER (full identity chroma). Light: dark-on-light fill. */
+  /* Brand shelf tokens.
+     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+     Nothing reads them: the shelf became "Earlier work" and dropped its brand
+     border and fill. They were the per-brand 1.5px border (--base) and faint
+     fill (--fill), the site's one sanctioned resting colour, --qh-bbc-* at
+     hue 250 included (docs/color-system.md). Do not use them. */
   --qh-lionsgate-base:      oklch(0.40 0.10 80);
   --qh-red-cross-base:      oklch(0.39 0.13 25);
   --qh-bbc-base:            oklch(0.30 0.10 250);
   --qh-k-hovnanian-base:    oklch(0.39 0.07 60);
-  /* --fill = the calm faint brand tint (near-canvas). Title/labels reuse --text-primary/secondary
-     (AAA on this fill). */
   --qh-lionsgate-fill:      oklch(0.93 0.016 85);
   --qh-red-cross-fill:      oklch(0.93 0.016 30);
   --qh-bbc-fill:            oklch(0.93 0.012 250);
   --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
-  /* The brand border's width. Component-scoped (spacing spec §10 allows a
-     component to name its own value); it was an arbitrary `border-[1.5px]` in
-     JSX, the one geometric value on the home page that came from no token. */
   --qh-border-width:        1.5px;
 
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
@@ -593,15 +588,14 @@
   --scrim:                  color-mix(in oklch, var(--bg-sunken) 60%, transparent);
 
 
-  /* Brand borders — dark. BRIGHTER than light (not inverted): the border sits on a dark
-     fill/canvas, so it must be light enough to carry identity (verified >=3.7:1 vs both). */
-  /* Chroma matches light mode (closing review A8b, 1 Oct 2026); only the
-     lightness differs between modes. Each border keeps >= 3.75:1 on its fill. */
+  /* Brand shelf tokens, dark.
+     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+     Chroma matched light mode (closing review A8b, 1 Oct 2026). */
   --qh-lionsgate-base:      oklch(0.62 0.10 80);
   --qh-red-cross-base:      oklch(0.58 0.13 25);
   --qh-bbc-base:            oklch(0.58 0.10 250);
   --qh-k-hovnanian-base:    oklch(0.60 0.07 62);
-  /* Calm faint fill — dark (muted to aged-stock, not candy). */
   --qh-lionsgate-fill:      oklch(0.22 0.018 85);
   --qh-red-cross-fill:      oklch(0.22 0.018 30);
   --qh-bbc-fill:            oklch(0.22 0.014 250);
@@ -851,30 +845,18 @@
   /* v3 §5: 90 -> 94. Display band (32px ceiling). Card covers loosen by 4%.
      The old note here claimed a per-module "Major register" that rhymed with
      Also Shipped at ~90% — v3 R2 retires mood registers: width follows the
-     rung, and contrast is carried by weight. The shelf (now "Client work") is an §6
-     exception surface with its own rules, so the rhyme is no longer a
-     constraint on this role. */
+     rung, and contrast is carried by weight. The shelf (now "Earlier work") was
+     an §6 exception surface until 12 Oct 2026 and now sets its titles in
+     text-h3, so the rhyme is no longer a constraint on this role. */
   text-wrap: balance;
 }
 
-/* "Client work" shelf title. A §6 exception surface: the four blocks are
-   a curated set and their variation IS the content. Size stays uniform so the
-   rows align.
-
-   WHAT CARRIES THE VARIATION NOW IS WEIGHT AND COLOUR, AND ONLY THOSE. It was
-   three axes per brand via data-brand — wdth 84-100, wght 500-650, opsz 14-48,
-   driven through one font-variation-settings string so they rendered together.
-   Commissioner has neither a wdth nor an opsz axis, and C3 deleted the string.
-   --qh-wght is the only one of the three still reaching a pixel.
-
-   FLARE WAS CONSIDERED AS THE REPLACEMENT AND RULED OUT ON SIZE, not on taste.
-   This role ceilings at 36px, below the 40px the 52px flare cut leaves plain, so
-   per-brand FLAR would have been inert-but-plausible CSS — the class C3 deleted
-   49 declarations of. Paul ruled from the C5 preview that the four still read as
-   four on weight and colour alone.
-
-   --qh-wdth and --qh-opsz, which addressed the two missing axes, were deleted
-   from the four [data-brand] blocks on 1 Oct 2026 (closing-review cleanup). */
+/* Former "Client work" shelf title.
+   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+   The Earlier work rows set their titles in text-h3; nothing applies this.
+   It carried the per-brand weight (--qh-wght, 500-650) of a §6 exception
+   surface (type v3 §6). Its scale row in CLAUDE.md goes with it. */
 @utility text-qh-title {
   font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
   line-height: 1.1;
@@ -1331,17 +1313,141 @@
 }
 
 /* ============================================================
-   "CLIENT WORK" shelf (formerly "Also shipped") — brand → local var mapping + accents
-   data-brand on each <article> aliases the per-brand border + fill onto generic
-   --base / --fill locals, so the component markup stays brand-agnostic and
-   .dark swaps for free. Server-rendered; no JS, no theme read.
+   EARLIER WORK shelf (internal name client-work), components/quick-hits/*
+   Direction A of docs/shelf-review-cc.md, ruled 11 Oct 2026. Each row is the
+   hero signature's grammar: the project name, then its client in a softer
+   colour, one link, with the industry at the right on the title's baseline.
+   Type and colour come from role utilities on the markup (text-h3,
+   text-primary, text-secondary, text-caption, text-muted); this carries only
+   layout, weight and states. Built from existing roles only, because the
+   design system pass will revisit colour, the type scale and weight. The
+   borrowings are logged in docs/unspecified-surfaces.md (Earlier work shelf).
+   The list's reveal is the .reveal-list contract below, on the whole <ol>.
    ============================================================ */
 
-/* --base = the brand border (width --qh-border-width); --fill = faint container
-   tint; --qh-wght = the per-module title weight (see text-qh-title). The wdth
-   and opsz values that sat beside it addressed axes Commissioner does not
-   have and were deleted 1 Oct 2026; the axis names in the comments below
-   record the character each brand was given. */
+/* Closing rule under the last row (ruling 5), on the list so a press never
+   moves it. The .about-creds hairline grammar. */
+.shelf__list {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.shelf__row {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--spacing-l);
+  row-gap: var(--spacing-2xs);
+  padding-block: var(--spacing-m);
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* text-h3 supplies size, leading and tracking. This takes its 500 back to
+   body weight, so the shelf sits a size and a weight step under the Selected
+   work card titles (25.2/400 against 32/600 at 1440). */
+.shelf__title {
+  flex: 0 1 auto;
+  min-width: 0;
+  margin: 0;
+  font-weight: var(--wght-body);
+  text-wrap: balance;
+}
+
+/* One box. On a phone the client breaks to its own line inside the link
+   rather than splitting an inline link in two. */
+.shelf__link {
+  display: inline-block;
+  max-width: 100%;
+  color: inherit;
+}
+.shelf__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+/* Full width below 768, so it sits under the client. The auto margin does
+   nothing there and right-aligns it from 768, with no spacing value inside a
+   media query. */
+.shelf__industry {
+  flex-basis: 100%;
+  margin: 0 0 0 auto;
+}
+
+@media (max-width: 767px) {
+  .shelf__by { display: block; }
+  .shelf__title { text-wrap: pretty; }
+}
+
+@media (min-width: 768px) {
+  .shelf__row {
+    flex-wrap: nowrap;
+    padding-block: var(--spacing-l);
+  }
+  .shelf__industry {
+    flex: none;
+    white-space: nowrap;
+  }
+}
+
+/* Touch: a rest signifier where hover cannot stand in (ruling 3). The name
+   alone carries the base a rule's resting underline; thickness and colour do
+   not inherit into the span, so they are restated, and the 0.22em offset is
+   inherited from the link. Pointer devices keep .quiet-link: no underline at
+   rest, the standard underline on hover. */
+@media (hover: none) {
+  .shelf__name {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-decoration-color: var(--border-interactive);
+  }
+}
+
+/* One halo for the whole row (ruling, 11 Oct 2026): the global :focus-visible
+   pair, restated on the row because a pseudo-element cannot take focus, and
+   set out --spacing-2xs to the sides so the flush-left text does not touch the
+   ring. Without :has() the link keeps its own global halo, one box. */
+.shelf__row::before {
+  content: '';
+  position: absolute;
+  inset: 0 calc(var(--spacing-2xs) * -1);
+  border-radius: var(--radius-xs);
+  pointer-events: none;
+}
+@supports selector(:has(a)) {
+  .shelf__link:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+  /* Lifts the focused row over the next row's hairline, which would
+     otherwise paint across the bottom of the ring. */
+  .shelf__row:has(.shelf__link:focus-visible) {
+    z-index: 1;
+  }
+  .shelf__row:has(.shelf__link:focus-visible)::before {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--focus-glow);
+  }
+}
+
+/* Pressed (interaction §5): the row sinks 1px, as the work band does. Hover
+   is the link's (.quiet-link), so nothing here outranks it. */
+.shelf__row:active {
+  transform: translateY(1px);
+}
+
+/* ============================================================
+   FORMER "CLIENT WORK" shelf (brand blocks and .quick-hit).
+   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
+   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
+   No element carries data-brand or .quick-hit since the shelf became
+   "Earlier work" (the EARLIER WORK shelf section above). Kept so that build
+   changed no token and no test input: __tests__/interaction-lint.test.mjs
+   still reads .quick-hit's radius. Delete the blocks, .quick-hit and
+   @utility text-qh-title together, before the tokens, or lint:color check 6
+   fails.
+   ============================================================ */
 [data-brand="lionsgate"] {
   --base: var(--qh-lionsgate-base); --fill: var(--qh-lionsgate-fill);
   --qh-wght: 600;  /* cinematic: compressed, bold, display */
@@ -1359,13 +1465,7 @@
   --qh-wght: 540;  /* architectural: full width, grounded */
 }
 
-/* Three-column row via named areas (cleaner than Tailwind arbitrary multi-string
-   template-areas). Mobile stacks: brand + industry on a top row, title beneath
-   (Option B). Desktop: fixed side columns (12rem fits "AMERICAN RED CROSS",
-   8rem fits "Entertainment") so all four blocks align; title centers in 1fr. */
 .quick-hit {
-  /* Moved out of JSX (`rounded-[12px]`, an arbitrary value pinned to the same
-     number). 12px either way — the change is where it is authored. */
   border-radius: var(--radius-m);
   border-width: var(--qh-border-width);
   display: grid;

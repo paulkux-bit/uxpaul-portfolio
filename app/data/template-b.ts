@@ -1,15 +1,16 @@
-// Source of truth for the home page's "Client work" shelf and the dialog each
+// Source of truth for the home page's "Earlier work" shelf and the dialog each
 // row opens (Template B: four agency-era client pieces). The shelf reads
-// brand, wordmark, title and industry; the dialog reads everything. It
+// title, byline, name and industry; the dialog reads everything but brand. It
 // replaced app/data/quick-hits.ts, which held the shelf's four fields alone.
 //
 // Copy and alt text are locked (docs/cc-prompt-template-b-build.md, rulings of
 // 11 Oct 2026). Do not edit the words here without Paul. No agency name appears
 // anywhere in this file or on either surface.
 //
-// Colours are NOT stored here: `brand` maps to the --qh-{brand}-* tokens via
-// the [data-brand] selectors in globals.css, so dark mode cascades server-side
-// with no client theme read.
+// `brand` is UNUSED since 12 Oct 2026: the shelf dropped its brand colour and
+// nothing reads the field. It stays, with QuickHitBrand, until the design
+// system pass deletes the brand tokens (docs/unspecified-surfaces.md, Earlier
+// work shelf, item 4).
 //
 // NO RUNTIME IMPORTS, ON PURPOSE. scripts/build-client-work.mjs imports this
 // file directly under Node's built-in type stripping, so it must stay plain
@@ -31,19 +32,20 @@ export interface TemplateBImage {
 export interface TemplateBPiece {
   /** The URL hash that opens this piece: /#lionsgate. */
   slug: 'lionsgate' | 'american-red-cross' | 'bbc' | 'k-hovnanian';
-  /** Maps to the --qh-{brand}-* tokens via data-brand. */
+  /** Unused since 12 Oct 2026, deleted with the brand tokens. */
   brand: QuickHitBrand;
-  /** Brand name set in the site face on the shelf, uppercased by text-eyebrow
-   *  (not logo art). Also the visible label of the previous and next links. */
+  /** The client's name: the visible label of the dialog's previous and next
+   *  links. It no longer appears on the shelf, where `byline` names the client. */
   wordmark: string;
   /** Shown as the shelf row's right-aligned meta. */
   industry: string;
   /** Project name: the shelf row title and the first part of the dialog title. */
   title: string;
-  /** The second part of the dialog title. */
+  /** The second part of the dialog title, and the shelf row's client line. */
   byline: string;
   /** The full name line. It starts with `title`; the h2 renders title then
-   *  byline, so its accessible name is this string. Also announced on change. */
+   *  byline, so its accessible name is this string. Also announced on change,
+   *  and the shelf link's accessible name. */
   name: string;
   statement: string;
   paragraph: string;
@@ -59,7 +61,7 @@ export const templateB: readonly TemplateBPiece[] = [
     slug: 'lionsgate',
     brand: 'lionsgate',
     wordmark: 'Lionsgate',
-    industry: 'Entertainment',
+    industry: 'Media',
     title: 'Broadcast Rights Sales',
     byline: 'for Lionsgate',
     name: 'Broadcast Rights Sales for Lionsgate',
@@ -86,7 +88,7 @@ export const templateB: readonly TemplateBPiece[] = [
     slug: 'american-red-cross',
     brand: 'red-cross',
     wordmark: 'American Red Cross',
-    industry: 'Humanitarian',
+    industry: 'Nonprofit',
     title: '1-Click Donation',
     byline: 'for the American Red Cross',
     name: '1-Click Donation for the American Red Cross',

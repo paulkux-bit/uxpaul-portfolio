@@ -24,7 +24,9 @@ cannot produce at all. **Bento theme block, outer boundary** joined on 19 Aug
 2026, the first found by swapping one component for another, which is what
 exposed three shipped components answering the same question three ways.
 **Client work dialog** joined on 11 Oct 2026, the site's first modal surface,
-and the first entry logged before its component existed.*
+and the first entry logged before its component existed. **Earlier work shelf**
+joined on 12 Oct 2026, the first entry to carry dead code with a deletion
+recipe.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -82,6 +84,59 @@ answer:
    top; no spec mentions it, and Firefox ignores it. What a spec would need to
    say: whether a floating control needs a ground, and whether height queries
    are part of the breakpoint set.
+
+**The Earlier work shelf (home page).** Joined 12 Oct 2026 from the Earlier
+work build (`docs/cc-prompt-earlier-work-build.md`, direction A of
+`docs/shelf-review-cc.md`). The shelf left the brand exception, so it has no
+`data-brand`, no `--qh-*` and no `text-qh-title`. It is built from existing
+roles only, because the design system pass will revisit colour, the type scale
+and weight. Each item below borrows the nearest role, and each is an input to
+that pass rather than a settled answer:
+
+1. **The row title has no rung.** The project name and its client borrow
+   `text-h3` (22 to 28px, which CLAUDE.md scopes to subsections and callouts)
+   at `--wght-body` (400) instead of the role's 500. The client takes
+   `--text-secondary`, after the hero signature. It measures 25.2px at 1440, a
+   size and a weight step under the Selected work card titles (`text-cover`,
+   32/600). At 390 the two are the same size, 22px, and only weight (400
+   against 600) and the card's border separate them.
+2. **A resting underline on touch only.** Under `@media (hover: none)` the
+   project name carries the base `a` rule's resting underline (1px
+   `--border-interactive`). A quiet link otherwise has no signifier at rest
+   where hover cannot stand in. Interaction v1 §5 gives a text link hover and
+   no pressed state, and names no input-dependent rest state. Pointer devices
+   keep `.quiet-link`.
+3. **One focus halo for a whole row.** The global pair (2px `--focus-ring` at a
+   3px offset, 6px `--focus-glow`) is drawn on the row's `::before`, set out
+   `--spacing-2xs` to the sides, while the row's link has `:focus-visible`. The
+   link's own halo is suppressed inside `@supports selector(:has(a))`, so a
+   browser without `:has()` keeps it. Interaction v1 §5 has every control
+   inherit the global halo, and this redraws it around the target rather than
+   the text.
+4. **The brand shelf's code is dead, and scheduled for deletion.** The `--qh-*`
+   tokens (light and dark), the four `[data-brand]` blocks, `.quick-hit` and its
+   area rules, `@utility text-qh-title`, and the `brand` field and
+   `QuickHitBrand` type in `app/data/template-b.ts` have been consumed by
+   nothing since this build. They stayed so the build changed no token and no
+   test input (Paul, option i, 12 Oct 2026). Delete them in the design system
+   pass, in one commit, in this order:
+   1. the `[data-brand]` blocks, `.quick-hit` and `@utility text-qh-title`,
+      together
+   2. the tokens
+   3. `ALLOWLIST.weights` `.text-qh-title` in `scripts/lint-type.mjs` and
+      `ALLOWLIST.media` `.quick-hit` in `scripts/lint-space.mjs`
+   4. the `['.quick-hit', '--radius-m']` row in
+      `__tests__/interaction-lint.test.mjs`
+   5. the data field and type
+   6. the CLAUDE.md scale row and every backticked `--qh-` token
+   7. the sanction text in type v3 §6, colour v2 §9 and `docs/color-system.md`.
+
+   Deleting the tokens before the blocks, or the blocks before the utility,
+   fails `lint:color` check 6.
+
+Needs: rulings from the design system pass on a list-title rung, on whether
+touch gets a rest signifier site-wide, and on the row halo. Then item 4 is
+deleted and leaves this file.
 
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather

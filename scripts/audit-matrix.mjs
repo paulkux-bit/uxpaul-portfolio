@@ -142,11 +142,11 @@ for (const pagePath of PAGES) {
           }
         }
 
-        // 3. "Client work" shelf layout check on Home Page
+        // 3. "Earlier work" shelf layout check on Home Page (.shelf__row rows)
         let alsoShippedInfo = null;
         if (pagePath === '/') {
-          const section = document.querySelector('section:has(.quick-hit), .quick-hit, [class*="quick-hit"]')?.closest('section') || document.body;
-          const rows = Array.from(section.querySelectorAll('.quick-hit, [class*="quick-hit"]'));
+          const section = document.querySelector('.shelf__row')?.closest('section') || document.body;
+          const rows = Array.from(section.querySelectorAll('.shelf__row'));
           alsoShippedInfo = rows.map(r => {
             const rect = r.getBoundingClientRect();
             const children = Array.from(r.children).map(c => {

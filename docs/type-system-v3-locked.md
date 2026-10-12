@@ -398,6 +398,8 @@ Five rules currently ship below the 14px floor and must be raised or deleted: `.
 
 Both surfaces are display-only. Neither may set type that is read in sentences.
 
+**12 Oct 2026:** the shelf (now "Earlier work") no longer uses this exception. Its rows set `text-h3` at body weight, and `text-qh-title` and the `[data-brand]` blocks are dead code pending the design system pass (`docs/unspecified-surfaces.md`, Earlier work shelf).
+
 ---
 
 **AMENDED 22 Aug 2026.**

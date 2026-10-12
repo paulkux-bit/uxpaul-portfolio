@@ -6,7 +6,7 @@ import { role, templateB, type TemplateBImage } from '@/app/data/template-b';
 import manifest from '@/app/data/client-work-images.json';
 
 /**
- * The client work dialog (Template B). Each "Client work" shelf row's title
+ * The client work dialog (Template B). Each "Earlier work" shelf row's title
  * links to `#slug`; this island opens that piece in a native <dialog> over the
  * home page. Built from the locked prototype
  * (docs/previews/template-b/template-b-dialog-locked.html) to the plan in
@@ -411,7 +411,7 @@ export function ClientWorkDialog() {
               </p>
               <p className="client-work__paragraph text-small">{piece.paragraph}</p>
 
-              <nav className="client-work__nav text-caption" aria-label="Other client work">
+              <nav className="client-work__nav text-caption" aria-label="Other earlier work">
                 <a
                   href={`#${previous.slug}`}
                   className="client-work__nav-link client-work__nav-link--prev quiet-link"
