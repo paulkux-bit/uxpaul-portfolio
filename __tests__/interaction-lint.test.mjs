@@ -348,6 +348,9 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
     'a', '.site-header', '.skip-link', '.nav-link', '.theme-toggle',
     '.about-row__mark', '.about-row::details-content',
     '.about-btn', '.about-work-band__arrow',
+    // The client work dialog's close button and its previous and next links
+    // (11 Oct 2026): controls, so they move at the control speed.
+    '.client-work__close', '.client-work__nav-link',
   ];
   for (const sel of CONTROL) {
     it(`${sel} moves at --duration-control`, () => {
@@ -359,6 +362,22 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
       }
     });
   }
+
+  // Ruling Q8 (11 Oct 2026): the dialog's entrance takes --duration-card, not
+  // --duration-reveal, and the cross-fade takes --duration-control. Entrance is
+  // unspecified in interaction v1, so nothing else would notice either drifting.
+  it('the client work dialog enters at --duration-card and cross-fades at --duration-control', () => {
+    const animation = [];
+    css.walkRules((r) => {
+      if (r.selector.trim() !== 'dialog.client-work[open] .client-work__panel') return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl' && d.prop === 'animation') animation.push(d.value);
+    });
+    expect(animation).toHaveLength(1);
+    expect(animation[0]).toContain('--duration-card');
+    const fade = transitionsFor('.client-work__panel > :not(.client-work__close)');
+    expect(fade).toHaveLength(1);
+    expect(fade[0]).toContain('--duration-control');
+  });
 
   it('body and body::before move at --duration-theme — one mode transition, one speed', () => {
     for (const sel of ['body', 'body::before']) {

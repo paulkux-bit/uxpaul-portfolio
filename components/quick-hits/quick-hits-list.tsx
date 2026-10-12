@@ -1,18 +1,18 @@
 import { RevealList } from '@/components/reveal-list';
 import { QuickHit } from './quick-hit';
-import { quickHits } from '@/app/data/quick-hits';
+import { templateB } from '@/app/data/template-b';
 
 /**
- * The "Also shipped" shelf list. Server Component — renders the semantic <ol>
- * (via RevealList, which owns the scroll-reveal client island) with each book
+ * The "Client work" shelf list. Server Component — renders the semantic <ol>
+ * (via RevealList, which owns the scroll-reveal client island) with each row
  * as an <li>. No stagger (short list).
  */
 export function QuickHitsList() {
   return (
     <RevealList className="list-none space-y-m md:space-y-l">
-      {quickHits.map((hit) => (
-        <li key={hit.brand}>
-          <QuickHit hit={hit} />
+      {templateB.map((piece) => (
+        <li key={piece.slug}>
+          <QuickHit piece={piece} />
         </li>
       ))}
     </RevealList>

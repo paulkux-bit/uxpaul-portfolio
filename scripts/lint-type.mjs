@@ -75,7 +75,7 @@ const ALLOWLIST = {
   // (check 13, 1 Oct 2026). Each is either the brand shelf's sanctioned per-brand
   // character or a rule that renders on no route.
   weights: [
-    { selector: '.text-qh-title', reason: 'Also shipped titles: per-brand weight through --qh-wght (500 to 650), part of the shelf\'s sanctioned brand exception (docs/color-system.md); revisited with the shelf\'s Template B redesign' },
+    { selector: '.text-qh-title', reason: 'Client work shelf titles: per-brand weight through --qh-wght (500 to 650), part of the shelf\'s sanctioned brand exception (docs/color-system.md); revisited with the shelf\'s Template B redesign' },
     { selector: '.mark', reason: 'Off the clock wall, rendered on no route (CLAUDE.md): --mark-weight 700 / 650; Phase 12' },
     { selector: '.comp-mark-dominant .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
     { selector: '.comp-mark-watermark .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
@@ -237,6 +237,15 @@ const RUNGS = [
   // This is the pair the split was tested against, and neither C4a ruling moved.
   { rung: null, role: 'About phase title', selector: '.about-phase__title', band: 'display', voice: 'plain' /* 40px: judgment */, ladder: false },
   { rung: null, role: 'About hero POV', selector: '.about-hero__pov', band: 'display', voice: 'flared' /* 51.2px: judgment */, ladder: false },
+
+  // ── The client work dialog title (Template B), 11 Oct 2026 ──────────────
+  // No rung covers a dialog title, so it borrows text-h1 (36 to 56px) and sits
+  // off the ladder, as the turn (T6) does. It measures 51.2px at 1440 and
+  // reaches 56 only above about 1690, so it is flared on .about-hero__pov's
+  // judgment, not on the number. Logged in docs/unspecified-surfaces.md
+  // (client work dialog, item 1). It renders only while the dialog is open, so
+  // scripts/assert-bands.mjs asserts it on /#lionsgate.
+  { rung: null, role: 'Client work dialog title', selector: '.client-work__name', band: 'display', voice: 'flared' /* 51.2px @1440: judgment */, ladder: false },
 
   // Banded on 21 Aug and the application WITHDRAWN the same day: it renders on
   // no route, so the ruling was made about an element that does not exist. The

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 /**
- * One-shot reveal for the "Also shipped" shelf. Progressive enhancement,
+ * One-shot reveal for the "Client work" shelf. Progressive enhancement,
  * mirroring RevealGrid (copied, not generalized — second consumer; generalize
  * on the third):
  *
