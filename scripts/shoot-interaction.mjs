@@ -10,7 +10,8 @@
 // dead code. Checked 22 Aug 2026. It used to be one of four places recording the
 // home shelf's NON-INTERACTIVE decision; that decision was reversed on 11 Oct
 // 2026, when the shelf became "Client work" and each row's title began opening
-// the client work dialog, and the target below now shoots all three states.
+// the client work dialog, and the target below now shoots all three states. On
+// 12 Oct 2026 the shelf became "Earlier work" and its row class .shelf__row.
 //
 // It exists because the extension-screenshot route was not trustworthy. Its null
 // test — two captures with no change between — found two independent sources of
@@ -76,11 +77,12 @@ const ROUTES = [
       { name: 'mail', sel: MAIL, states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'theme-toggle', sel: '.theme-toggle', states: ['rest', 'hover', 'focus'], inflate: HALO },
       { name: 'nav-link', sel: '.nav-link', states: ['rest', 'hover', 'focus'], inflate: HALO },
-      // The "Client work" shelf row. Rest only until 11 Oct 2026, as the record
-      // of a non-interactive shelf; the row's title is now a link that opens
-      // the client work dialog, so hover and focus are shot too. Focus lands on
-      // the title link, which is stretched over the row.
-      { name: 'quick-hit', sel: '.quick-hit', states: ['rest', 'hover', 'focus'], focusOn: 'a[data-client-work]', inflate: HALO },
+      // The "Earlier work" shelf row (.quick-hit until 12 Oct 2026). Rest only
+      // until 11 Oct 2026, as the record of a non-interactive shelf; the row's
+      // title is now a link that opens the client work dialog, so hover and
+      // focus are shot too. Focus lands on the title link, which is stretched
+      // over the row, and the halo is drawn round the whole row.
+      { name: 'shelf-row', sel: '.shelf__row', states: ['rest', 'hover', 'focus'], focusOn: 'a[data-client-work]', inflate: HALO },
       // The skip link sits at translateY(-160%) until focused. Tab from the top
       // of the document is the only way to see it.
       { name: 'skip-link', sel: '.skip-link', states: ['focus'], inflate: HALO,
