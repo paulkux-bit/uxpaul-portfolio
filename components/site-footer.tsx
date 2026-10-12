@@ -13,7 +13,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-subtle">
       <div className="mx-auto flex max-w-6xl flex-col gap-xs px-m py-l text-caption text-secondary md:flex-row md:items-center md:justify-between md:px-l md:py-xl">
-        <p>Designed and built by Paul Kali &middot; 2026</p>
+        <p>Designed and built by Paul Kali</p>
         {/* gap-m unchanged: .footer-link expands its HIT area on a pseudo and
             leaves its visual box alone, so there is no rhythm to compensate. */}
         <nav aria-label="Footer" className="flex gap-m">
