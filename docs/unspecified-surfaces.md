@@ -26,7 +26,8 @@ exposed three shipped components answering the same question three ways.
 **Client work dialog** joined on 11 Oct 2026, the site's first modal surface,
 and the first entry logged before its component existed. **Earlier work shelf**
 joined on 12 Oct 2026, the first entry to carry dead code with a deletion
-recipe.*
+recipe. **Header identity mark** joined the same day, the first entry on the
+site's chrome rather than its content.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -137,6 +138,58 @@ that pass rather than a settled answer:
 Needs: rulings from the design system pass on a list-title rung, on whether
 touch gets a rest signifier site-wide, and on the row halo. Then item 4 is
 deleted and leaves this file.
+
+**The header identity mark (wordmark to face).** Joined 12 Oct 2026 from the
+header handoff build (`docs/cc-prompt-header-handoff-build.md`, Paul's
+rulings of 12 Oct after `docs/header-review-cc.md` and
+`docs/header-preview-panel.md`). Once a page's opening scrolls under the
+header, the wordmark hands off to Paul's profile in a coin, and back on the way
+up (`components/wordmark-link.tsx`). No locked spec governs an identity mark, a
+sequenced swap, or a focus ring that moves to a child, so each item below is an
+input to the design system pass:
+
+1. **The mark: size, picture, coin and ring.**
+   - **Size.** The circle is 2.25rem below 768 and 2.5rem from 768, inside a
+     2.75rem target (ruling 2a). No spacing or size token governs a header
+     mark.
+   - **Picture.** `public/header-face.webp`, 120px, 3,534 bytes, made by
+     `scripts/build-header-face.mjs` from the md5-pinned cutout. It crops an
+     840px square at x 80, y 50, maps Rec. 709 luma from light `--text-primary`
+     to light `--bg-canvas` at gamma 0.88, resizes to 120px and encodes WebP at
+     q82. Its ink and paper are the two tokens' sRGB, written into the script,
+     so a palette change needs a re-run.
+   - **Coin.** Two component tokens, authored by mixing in the theme layer on
+     `--scrim`'s precedent and kept out of the twelve palette roles (Paul, 12
+     Oct: logged here, no change to the locked colour spec). `--face-disc` is
+     `--bg-surface` in light and `--text-primary` mixed 92% toward
+     `--bg-canvas` in dark. `--face-ring` is `--text-primary` at 28% in both.
+   - **Contrast.** The ring measures 1.83:1 on the disc and 2.00:1 on the
+     header in light. In dark it is 1.06:1 on the disc, where the disc's own
+     edge (13.49:1) draws the circle. Neither has to reach 3:1: the circle
+     frames an image inside a link named "uxpaul".
+   - What a spec would need: a role for an identity mark in colour v2, and
+     whether component tokens like `--scrim` and `--face-*` belong in the
+     locked palette.
+2. **The sequenced swap and its beat.** The leaving element fades at
+   `--duration-control`, and the arriving one at `--duration-card` after a beat
+   of `calc(var(--duration-control) / 2)` (90ms), so no frame holds the word and
+   the face together. The face also scales from 0.94. Interaction v1 §3 names
+   two speeds and no delay, so this derives the beat rather than adding a third
+   speed. Under reduced motion the transitions do not apply and the blanket
+   rule makes the swap instant, still in order (Paul, 12 Oct, replacing his
+   earlier fade ruling). What a spec would need: whether a sequence beat is a
+   motion token.
+3. **Focus that follows the circle.** While the face shows, the link's own
+   halo is turned off and the house pair (2px `--focus-ring` at a 3px offset,
+   6px `--focus-glow`) is drawn on the face, round through `--radius-full`.
+   Interaction v1 §5 has every control inherit the global halo on itself, and
+   this is the first halo drawn on a child. The link box stays 2.75rem in both
+   states, so the target never moves. What a spec would need: when a halo may
+   describe a child rather than the control.
+
+Needs: rulings from the design system pass on all three. Until then
+`--face-disc` and `--face-ring` are the only component colour tokens besides
+`--scrim`.
 
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
