@@ -152,12 +152,14 @@ input to the design system pass:
    - **Size.** The circle is 2.25rem below 768 and 2.5rem from 768, inside a
      2.75rem target (ruling 2a). No spacing or size token governs a header
      mark.
-   - **Picture.** `public/header-face.webp`, 120px, 3,534 bytes, made by
+   - **Picture.** `public/header-face.webp`, 120px, 3,736 bytes, made by
      `scripts/build-header-face.mjs` from the md5-pinned cutout. It crops an
-     840px square at x 80, y 50, maps Rec. 709 luma from light `--text-primary`
-     to light `--bg-canvas` at gamma 0.88, resizes to 120px and encodes WebP at
-     q82. Its ink and paper are the two tokens' sRGB, written into the script,
-     so a palette change needs a re-run.
+     840px square at x 80, y 50, stretches Rec. 709 luma between two fixed
+     levels measured on that crop (0.076 and 0.847, its 1st and 99th
+     percentiles, ruled 12 Oct after the sign-off sheet), then maps it from
+     light `--text-primary` to light `--bg-canvas` at gamma 0.88, resizes to
+     120px and encodes WebP at q82. Its ink and paper are the two tokens' sRGB,
+     written into the script, so a palette change needs a re-run.
    - **Coin.** Two component tokens, authored by mixing in the theme layer on
      `--scrim`'s precedent and kept out of the twelve palette roles (Paul, 12
      Oct: logged here, no change to the locked colour spec). `--face-disc` is

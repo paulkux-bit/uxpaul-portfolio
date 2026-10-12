@@ -17,9 +17,11 @@
 //   1. Crop an 840px square at x 80, y 50, padding the right edge with
 //      transparency (80 + 840 runs past the 896px master). That moves the head
 //      about 6% left, so there is room in front of the face.
-//   2. Tone: Rec. 709 luma on the sRGB values, raised to gamma 0.88 to lift the
-//      shadows so hair, sunglasses and shirt do not merge, mapped from INK to
-//      PAPER. Alpha is untouched. No other colour or skin adjustment.
+//   2. Tone: Rec. 709 luma on the sRGB values, stretched between LO and HI
+//      (raised contrast, ruling 1b after the sign-off sheet, 12 Oct 2026),
+//      then raised to gamma 0.88 to lift the shadows so hair, sunglasses and
+//      shirt do not merge, mapped from INK to PAPER. Alpha is untouched. No
+//      other colour or skin adjustment.
 //   3. Lanczos3 to 120px (3x DPR for the 40px circle), WebP q82, alpha q90.
 //
 // INK AND PAPER ARE THE SITE'S OWN BLACK AND WHITE, written here as sRGB because
@@ -35,6 +37,13 @@ const OUT = 'public/header-face.webp';
 
 const INK = [32, 23, 18];      // light --text-primary, oklch(0.215 0.018 55)
 const PAPER = [254, 247, 236]; // light --bg-canvas,    oklch(0.978 0.016 76)
+// The contrast stretch's two fixed levels, measured once on the pinned master:
+// the 840px crop below, opaque pixels only (alpha > 200), Rec. 709 luma, the
+// 1st and 99th percentiles (0.0761 and 0.8469 over 364,356 pixels). Fixed
+// rather than recomputed per run, so the face only changes when this file
+// does. Ruled 12 Oct 2026 (1b), after the sign-off sheet.
+const LO = 0.076;
+const HI = 0.847;
 const GAMMA = 0.88;
 const CROP = { left: 80, top: 50, size: 840 };
 const SIZE = 120;
@@ -60,7 +69,8 @@ const { data } = await sharp(padded)
   .toBuffer({ resolveWithObject: true });
 
 for (let i = 0; i < data.length; i += 4) {
-  const t = ((0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]) / 255) ** GAMMA;
+  const luma = (0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2]) / 255;
+  const t = Math.min(1, Math.max(0, (luma - LO) / (HI - LO))) ** GAMMA;
   for (let k = 0; k < 3; k++) data[i + k] = Math.round(INK[k] + (PAPER[k] - INK[k]) * t);
 }
 
