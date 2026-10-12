@@ -5,9 +5,9 @@ import { ThemeToggle } from './theme-toggle';
 
 /**
  * Global site header. Server-rendered shell; only the genuinely interactive
- * bits are client islands (elevation, wordmark active state, nav active state,
- * theme toggle). Persists across route changes because the App Router keeps the
- * layout mounted.
+ * bits are client islands (elevation, the wordmark's active state and its face
+ * handoff, nav active state, theme toggle). Persists across route changes
+ * because the App Router keeps the layout mounted.
  *
  * Inner container uses the shared `.page-container` axis (--page-max-width +
  * --page-padding-inline, defined in globals.css) so the wordmark aligns with

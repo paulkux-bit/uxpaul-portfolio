@@ -30,6 +30,7 @@ export default function AboutPage() {
           ratio="1 / 1"
           variant="portrait"
           priority
+          headerHandoff
           className="about-hero__portrait"
           sizes="(max-width: 767px) calc(100vw - 3rem), 440px"
         />

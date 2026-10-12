@@ -1,24 +1,153 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import face120 from '@/public/header-face.webp';
+
+/** The trigger's hysteresis: the face shows once the anchor's bottom passes
+ *  under the header, and leaves only once it is this far back below it. */
+const HYSTERESIS_PX = 8;
 
 /**
- * Wordmark / home link. Client-only for the `usePathname` read: since the nav
- * no longer carries a "Home" item, this is the sole home affordance, so it
+ * Wordmark / home link, and the header identity mark (ruled 12 Oct 2026).
+ * Since the nav carries no "Home" item, this is the sole home affordance, so it
  * announces itself as current on `/` via aria-current. No underline in any
  * state (that idiom is reserved for nav links).
+ *
+ * THE HANDOFF. Once a page's opening scrolls under the header, the word hands
+ * off to Paul's profile in a coin, and back on the way up. The anchor is the
+ * first `[data-header-handoff]` (the "Paul Kali" line on home, the portrait on
+ * About), else the page's h1, so every page, future ones included, follows the
+ * rule without an edit. A page with neither keeps the wordmark.
+ *
+ * - Two IntersectionObservers on the anchor, with root margins of minus the
+ *   measured header height and minus that plus 8px. Past the first line the
+ *   face shows; it leaves only back across the second, so the edge cannot
+ *   flicker. A ResizeObserver on the header rebuilds them when its height
+ *   changes (resize, text zoom: the header is sized in rem).
+ * - A MutationObserver on #main finds the anchor when it mounts after this
+ *   effect, or is replaced, on a client navigation.
+ * - The face waits for img.decode(), so it never shows half-loaded.
+ * - State starts as the wordmark and is keyed to the path, so the server
+ *   render, no-JS and anchorless pages are unchanged.
+ *
+ * "uxpaul" stays the link's text and accessible name, hidden by opacity only;
+ * the face is aria-hidden with alt="". The look, the sequenced motion and the
+ * round focus live in globals.css (SITE HEADER, wordmark handoff).
  */
 export function WordmarkLink() {
-  const isHome = usePathname() === '/';
+  const pathname = usePathname();
+  const isHome = pathname === '/';
+  const imgRef = useRef<HTMLImageElement>(null);
+  // The path the face is showing for, or null. Keyed to the path so a
+  // navigation drops back to the wordmark without a reset in the effect.
+  const [facePath, setFacePath] = useState<string | null>(null);
+  const face = facePath === pathname;
+
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>('.site-header');
+    const main = document.getElementById('main');
+    if (!header || !main) return;
+
+    let decoded = false;
+    let past = false;
+    let anchor: Element | null = null;
+    let headerHeight = 0;
+    let on: IntersectionObserver | undefined;
+    let off: IntersectionObserver | undefined;
+    let cancelled = false;
+
+    const apply = () => {
+      if (!cancelled) setFacePath(decoded && past ? pathname : null);
+    };
+
+    const find = () => document.querySelector('[data-header-handoff]') ?? main.querySelector('h1');
+
+    const observe = () => {
+      on?.disconnect();
+      off?.disconnect();
+      if (!anchor) return;
+      headerHeight = header.getBoundingClientRect().height;
+      on = new IntersectionObserver(
+        ([e]) => {
+          const line = e.rootBounds?.top ?? headerHeight;
+          if (!e.isIntersecting && e.boundingClientRect.bottom <= line) {
+            past = true;
+            apply();
+          }
+        },
+        { rootMargin: `-${headerHeight}px 0px 0px 0px` },
+      );
+      off = new IntersectionObserver(
+        ([e]) => {
+          if (e.isIntersecting) {
+            past = false;
+            apply();
+          }
+        },
+        { rootMargin: `-${headerHeight + HYSTERESIS_PX}px 0px 0px 0px` },
+      );
+      on.observe(anchor);
+      off.observe(anchor);
+    };
+
+    const track = () => {
+      if (anchor?.isConnected) return;
+      // A new anchor starts from the wordmark; a rebuild on resize does not,
+      // so the face never blinks when the header changes height.
+      anchor = find();
+      past = false;
+      apply();
+      observe();
+    };
+
+    imgRef.current?.decode().then(
+      () => {
+        decoded = true;
+        apply();
+      },
+      () => {}, // a failed decode keeps the wordmark
+    );
+
+    const mutations = new MutationObserver(track);
+    mutations.observe(main, { childList: true, subtree: true });
+    const resize = new ResizeObserver(() => {
+      if (anchor && header.getBoundingClientRect().height !== headerHeight) observe();
+    });
+    resize.observe(header);
+    track();
+
+    return () => {
+      cancelled = true;
+      on?.disconnect();
+      off?.disconnect();
+      mutations.disconnect();
+      resize.disconnect();
+    };
+  }, [pathname]);
 
   return (
     <Link
       href="/"
       aria-current={isHome ? 'page' : undefined}
-      className="wordmark inline-flex min-h-11 items-center"
+      data-face={face || undefined}
+      className="wordmark"
     >
-      uxpaul
+      <span className="wordmark__word">uxpaul</span>
+      <span className="wordmark__face" aria-hidden="true">
+        <Image
+          ref={imgRef}
+          src={face120}
+          alt=""
+          width={120}
+          height={120}
+          unoptimized
+          loading="eager"
+          decoding="async"
+        />
+      </span>
     </Link>
   );
 }

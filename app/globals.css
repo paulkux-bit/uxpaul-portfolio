@@ -480,6 +480,16 @@
      owns a scrim yet: docs/unspecified-surfaces.md, client work dialog, item 3. */
   --scrim:                  color-mix(in oklch, var(--text-primary) 46%, transparent);
 
+  /* Header identity mark: the coin the wordmark hands off to (ruled 12 Oct
+     2026). Component tokens on --scrim's precedent, mixed here to author them,
+     never at the point of use, and outside the twelve palette roles so
+     lint:color check 2 does not read the ring's alpha as a border's. No spec
+     owns them yet: docs/unspecified-surfaces.md, header identity mark, item 1.
+     Light: the disc is the surface; the ring, ink at 28%, draws the circle
+     (2.00:1 on the header ground). */
+  --face-disc:              var(--bg-surface);
+  --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
+
 
   /* Brand shelf tokens.
      UNUSED since 12 Oct 2026: delete in the design system pass, in the order
@@ -586,6 +596,12 @@
      the prototype, oklch(0.945 0.012 78 / 0.46)). Paul ruled it dims in both
      modes (11 Oct 2026), so dark mixes the darkest surface instead. */
   --scrim:                  color-mix(in oklch, var(--bg-sunken) 60%, transparent);
+  /* Header identity mark, dark: one coin in both modes, so the disc is a
+     dimmed cream, the text ink mixed 92% toward the canvas (about
+     oklch(0.883 0.012 76)). Its edge draws the circle at 13.5:1; the ring
+     (ink at 28%) all but vanishes on it, as in the approved preview. */
+  --face-disc:              color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas));
+  --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
 
 
   /* Brand shelf tokens, dark.
@@ -1083,6 +1099,103 @@
   letter-spacing: -0.01em;
   color: var(--text-primary);
   text-decoration: none;
+  /* The word and the face share one grid cell, so the link's box never
+     changes across the handoff and nothing shifts. 2.75rem is the ruled 44px
+     target (it was the min-h-11 utility, the same 2.75rem). */
+  display: inline-grid;
+  align-items: center;
+  justify-items: start;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+}
+
+/* ── Wordmark handoff (ruled 12 Oct 2026) ─────────────────────────────────
+   Once a page's opening scrolls under the header, the word hands off to
+   Paul's profile in a coin: data-face on the link, set by
+   components/wordmark-link.tsx. Logged in docs/unspecified-surfaces.md
+   (header identity mark): the size, the coin, the beat and the round focus. */
+.wordmark__word,
+.wordmark__face {
+  grid-area: 1 / 1;
+}
+
+/* 36px below 768, 40px from 768 (ruling 2a), in rem so it follows text zoom.
+   Hidden it sits at 0.94 so it can scale up as it arrives. */
+.wordmark__face {
+  position: relative;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--radius-full);
+  background: var(--face-disc);
+  opacity: 0;
+  transform: scale(0.94);
+  pointer-events: none;
+}
+.wordmark__face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+/* The ring, 1px like the image-edge hairline, on top of the photo. */
+.wordmark__face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--face-ring);
+}
+@media (min-width: 768px) {
+  .wordmark__face {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+}
+.wordmark[data-face] .wordmark__word {
+  opacity: 0;
+}
+.wordmark[data-face] .wordmark__face {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sequenced, so no frame holds both (ruling 3a). The leaving element goes at
+   control speed; the arriving one follows a beat later at card speed. The
+   beat is half a control duration, 90ms: derived, not a third speed. Way up
+   is the base state (face leaves, word returns); way down is data-face (word
+   leaves, face arrives and scales from 0.94). Under reduced motion none of
+   this applies, and the blanket rule makes the swap instant, still in order
+   (Paul, 12 Oct 2026). */
+@media (prefers-reduced-motion: no-preference) {
+  .wordmark__word {
+    transition: opacity var(--duration-card) var(--ease-out-soft) calc(var(--duration-control) / 2);
+  }
+  .wordmark__face {
+    transition:
+      opacity var(--duration-control) var(--ease-out-soft),
+      transform var(--duration-control) var(--ease-out-soft);
+  }
+  .wordmark[data-face] .wordmark__word {
+    transition: opacity var(--duration-control) var(--ease-out-soft);
+  }
+  .wordmark[data-face] .wordmark__face {
+    transition:
+      opacity var(--duration-card) var(--ease-out-soft) calc(var(--duration-control) / 2),
+      transform var(--duration-card) var(--ease-out-soft) calc(var(--duration-control) / 2);
+  }
+}
+
+/* Focus follows the circle while the face shows: the global pair (2px ring at
+   a 3px offset, 6px glow), restated on the face, because the link's own halo
+   would be a rectangle sized to the hidden word. */
+.wordmark[data-face]:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.wordmark[data-face]:focus-visible .wordmark__face {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--focus-glow);
 }
 
 /* ============================================================

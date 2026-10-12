@@ -23,6 +23,12 @@ interface FramedImageProps {
   /** `object-position`, for crops that should not centre. */
   position?: string;
   className?: string;
+  /**
+   * Marks this frame as the page's header handoff anchor: once its bottom edge
+   * scrolls under the header, the wordmark hands off to the face
+   * (components/wordmark-link.tsx). The About portrait carries it.
+   */
+  headerHandoff?: boolean;
 }
 
 /**
@@ -58,6 +64,7 @@ export function FramedImage({
   priority = false,
   position,
   className,
+  headerHandoff = false,
 }: FramedImageProps) {
   const isStatic = typeof src !== 'string';
 
@@ -65,6 +72,7 @@ export function FramedImage({
     <div
       className={['framed-image', `framed-image--${variant}`, className].filter(Boolean).join(' ')}
       style={{ aspectRatio: ratio }}
+      data-header-handoff={headerHandoff ? '' : undefined}
     >
       <Image
         src={src}
