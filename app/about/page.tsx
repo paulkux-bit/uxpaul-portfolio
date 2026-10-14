@@ -154,7 +154,7 @@ export default function AboutPage() {
               href="/Paul-Kali-Resume-2026.pdf"
               target="_blank"
               rel="noopener"
-              download
+              download="Paul Kali Resume.pdf"
             >
               Résumé (PDF)
               {/* §2: no size, no strokeWidth. 1em against the button's own
