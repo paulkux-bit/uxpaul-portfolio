@@ -80,8 +80,8 @@ const WORKED = [
     line: (
       <>
         Designed the UX framework for a <span className="whitespace-nowrap">mobile-first</span>{' '}
-        network management tool for enterprise IT, and built demos that helped raise a $48M Series
-        C.
+        network management tool for enterprise IT, and built product demos used in SevOne&apos;s
+        fundraising.
       </>
     ),
   },
