@@ -1,17 +1,120 @@
-import Link from 'next/link';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+import { ArrowDown } from 'lucide-react';
 
 import portrait from '@/public/paul-portrait-square.jpg';
-import { AboutDrawer } from '@/components/about/drawer';
 import { FramedImage } from '@/components/framed-image';
 import { RevealSection } from '@/components/about/reveal-section';
 
 export const metadata = {
-  /* 'About', not 'About · uxpaul': the root layout's title template appends
-     " · Paul Kali", so the hand-rolled site name would render
-     "About · uxpaul · Paul Kali". Renders "About · Paul Kali". */
+  /* 'About' alone: the root layout's title template appends " | Paul Kali",
+     so a hand-rolled site name here would print the name twice. Renders
+     "About | Paul Kali". */
   title: 'About',
 };
+
+/* Every string below is Paul's, ruled module by module on 12 and 13 Oct 2026
+   (docs/previews/hero/final-copy-v11.md). Copy them, never reword them. Styling
+   is deferred to the design system pass: one weight and one colour per line. */
+
+const BRING = [
+  {
+    label: 'End-to-end product design.',
+    line: 'I enjoy designing features from concept through delivery, partnering with product managers and developers.',
+  },
+  {
+    label: 'Design systems.',
+    line: 'I ensure my work is grounded in shared components and processes so teams can reuse strong solutions and move faster.',
+  },
+  {
+    label: 'Complex, data-heavy interfaces.',
+    line: "At the Navy, I've had many reps designing tools that help analysts and operators make decisions from dense data.",
+  },
+  {
+    label: 'Stakeholder alignment.',
+    line: "Beyond the hands-on work, I focus on aligning internal and external partners, because that's what turns design into something that ships.",
+  },
+  {
+    label: 'User research partner.',
+    line: 'I never turn down a chance to work with user researchers and learn firsthand from users.',
+  },
+];
+
+/* Latest first. Promotions live in the title as "X to Y", and dates are written
+   with "to". The line is JSX so a brand name or a hyphenated compound can be
+   held together with whitespace-nowrap, as in v11. */
+const WORKED = [
+  {
+    company: 'U.S. Navy, NIWC Pacific',
+    title: 'Senior Product Designer',
+    dates: '2019 to present',
+    line: <>Designed intelligence tools for Navy and Air Force units on systems with no internet.</>,
+  },
+  {
+    company: 'URBN',
+    title: 'Manager, Product Design',
+    dates: '2017 to 2019',
+    line: (
+      <>
+        Managed eight designers on the platform behind{' '}
+        <span className="whitespace-nowrap">Urban Outfitters</span>, Anthropologie, and{' '}
+        <span className="whitespace-nowrap">Free People</span>, and designed Nuuly&apos;s first
+        warehouse tools myself.
+      </>
+    ),
+  },
+  {
+    company: 'Tonic Design Co.',
+    title: 'Senior UX Designer to Director, UX Design',
+    dates: '2014 to 2017',
+    line: (
+      <>
+        Worked mostly with real estate and <span className="whitespace-nowrap">e-commerce</span>{' '}
+        clients, and designed Abercrombie &amp; Fitch&apos;s loyalty program, which lifted repeat
+        app visits 30%.
+      </>
+    ),
+  },
+  {
+    company: 'SevOne',
+    title: 'Senior UX Designer',
+    dates: '2014',
+    line: (
+      <>
+        Designed the UX framework for a <span className="whitespace-nowrap">mobile-first</span>{' '}
+        network management tool for enterprise IT, and built demos that helped raise a $48M Series
+        C.
+      </>
+    ),
+  },
+  {
+    company: 'Empathy Lab, now EPAM',
+    title: 'Information Architect to Director, Experience Design',
+    dates: '2010 to 2014',
+    line: (
+      <>
+        Led UX for media and nonprofit clients, including DirecTV, Lionsgate, Televisa, and the
+        American Red Cross.
+      </>
+    ),
+  },
+  {
+    company: 'Comcast Interactive Media',
+    title: 'Information Architect',
+    dates: '2006 to 2010',
+    line: (
+      <>
+        Designed the information architecture for Comcast&apos;s{' '}
+        <span className="whitespace-nowrap">video-on-demand</span> service, available in millions
+        of households.
+      </>
+    ),
+  },
+];
+
+const CREDENTIALS = [
+  'Active TS/SCI clearance',
+  'JPME Phase 1, U.S. Naval War College',
+  'B.A., Rutgers University',
+];
 
 export default function AboutPage() {
   return (
@@ -20,7 +123,7 @@ export default function AboutPage() {
       {/* ── Hero ───────────────────────────────────────────────────────────
           Portrait leads in the DOM, which is also the mobile reading order;
           from md up the grid moves it to the right column. It is the LCP
-          element, so it keeps priority and the blur placeholder, and the 4:5
+          element, so it keeps priority and the blur placeholder, and the square
           box reserves its space before the bytes land. Not wrapped in
           RevealSection: hiding the LCP element to fade it in is self-defeating. */}
       <header className="about-hero">
@@ -36,23 +139,14 @@ export default function AboutPage() {
         />
 
         <div className="about-hero__type">
-          <div className="space-y-2xs">
-            <p className="about-hero__name text-h3">Paul Kali</p>
-            <p className="about-hero__title text-lead">Senior Product Designer</p>
-          </div>
+          {/* The title is a label, not the heading: the h1 below carries the page. */}
+          <p className="about-hero__title text-lead">Senior Product Designer</p>
 
-          {/* The page's only two-tone moment. One <h1>, two spans: the
-              accessible name is the whole sentence, and the spans carry
-              nothing but colour. */}
+          {/* One weight and one colour until the design system pass (13 Oct
+              2026); it was the page's two-tone moment until then. */}
           <h1 className="about-hero__pov text-h1">
-            <span className="about-hero__pov-lead">I design the parts of</span>{' '}
-            <span>a product people can&apos;t afford to get wrong.</span>
+            I&apos;m Paul. I&apos;ve designed for shoppers, TV viewers, and Navy operators.
           </h1>
-
-          <p className="about-hero__grounding text-body">
-            Right now, intelligence systems for the U.S. Navy. Before that, the platform behind
-            URBN&apos;s brands, from Anthropologie to Nuuly.
-          </p>
 
           <div className="about-actions">
             <a
@@ -75,206 +169,100 @@ export default function AboutPage() {
             >
               LinkedIn
             </a>
-            <a className="about-link text-body" href="mailto:paulk.ux@gmail.com">
-              Email
-            </a>
           </div>
         </div>
       </header>
 
-      {/* ── Phase 1 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-foundations" className="about-phase space-y-l">
-        <h2 id="phase-foundations" className="about-phase__title text-h2">
-          Where I learned the trade
+      {/* ── What I bring ───────────────────────────────────────────────────
+          role="list" because Tailwind preflight sets `list-style: none` on every
+          ol/ul, which strips list semantics in WebKit. Same fix on every list
+          below. */}
+      <RevealSection aria-labelledby="bring" className="about-phase space-y-xl">
+        <h2 id="bring" className="about-phase__title text-h2">
+          What I bring
         </h2>
-
-        <div>
-          <AboutDrawer
-            company="Comcast Interactive Media"
-            year="2006 – 2010"
-            roles={[{ title: 'Information Architect', dates: '2006 – 2010' }]}
-          >
-            <p className="about-row__body text-body">
-              Designed the information architecture behind Comcast.net and Xfinitytv.com, in front
-              of millions of households. Where the fundamentals came from: systems thinking, IA,
-              and designing for scale.
-            </p>
-          </AboutDrawer>
-        </div>
-      </RevealSection>
-
-      {/* ── Phase 2 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-lead" className="about-phase space-y-l">
-        <h2 id="phase-lead" className="about-phase__title text-h2">
-          From maker to lead
-        </h2>
-
-        <div>
-          <AboutDrawer
-            company="Empathy Lab (EPAM)"
-            year="2010 – 2014"
-            roles={[
-              { title: 'Director, Experience Design', dates: '2013 – 2014' },
-              { title: 'Senior UX Designer', dates: '2011 – 2013' },
-              { title: 'Information Architect', dates: '2010 – 2011' },
-            ]}
-          >
-            <p className="about-row__body text-body">
-              Started as an information architect and left running experience design as a director,
-              in under four years. UX lead for clients including DirecTV, American Red Cross, Lionsgate,
-              Philosophy, Sentara, and Televisa, including OTT apps for live TV and video on demand
-              across Televisa, Cablevision Mexico, and Sky Mexico.
-            </p>
-          </AboutDrawer>
-
-          <AboutDrawer
-            company="SevOne"
-            year="2014"
-            roles={[{ title: 'Senior UX Designer', dates: '2014' }]}
-          >
-            <p className="about-row__body text-body">
-              Designed the UX framework for a next-gen, mobile-first enterprise network-management
-              tool, and built the demos that helped secure $48M in Series C funding from Bain
-              Capital.
-            </p>
-          </AboutDrawer>
-
-          <AboutDrawer
-            company="Tonic Design Co."
-            year="2014 – 2017"
-            roles={[
-              { title: 'Director, UX Design', dates: '2016 – 2017' },
-              { title: 'Senior UX Designer', dates: '2014 – 2016' },
-            ]}
-          >
-            <p className="about-row__body text-body">
-              Joined as a senior designer, left as director. Designed the Abercrombie &amp; Fitch
-              loyalty program, which drove a 30% increase in repeat app visits, and led strategy
-              and concept validation that won new retail and healthcare business.
-            </p>
-          </AboutDrawer>
-        </div>
-      </RevealSection>
-
-      {/* ── Phase 3 ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="phase-ownership" className="about-phase space-y-l">
-        <div className="space-y-xs">
-          <h2 id="phase-ownership" className="about-phase__title text-h2">
-            Full ownership, end to end
-          </h2>
-          <p className="about-phase__note text-body">First retail, then defense, on purpose.</p>
-        </div>
-
-        <div>
-          <AboutDrawer
-            company="URBN"
-            year="2017 – 2019"
-            roles={[{ title: 'Manager, Product Design', dates: '2017 – 2019' }]}
-          >
-            <p className="about-row__body text-body">
-              Led product design on the platform behind URBN&apos;s brands (Anthropologie, Free
-              People, Urban Outfitters, and Nuuly), and mentored the team building it. Together we
-              took Nuuly&apos;s rental platform from concept to launch, including its 0→1 warehouse
-              operations, and shipped a navigation redesign that drove a 20% traffic increase to
-              category pages across all four brands.
-            </p>
-          </AboutDrawer>
-
-          <AboutDrawer
-            company="U.S. Navy · NIWC Pacific"
-            year="2019 – Now"
-            roles={[{ title: 'Senior Product Designer', dates: '2019 – Now' }]}
-          >
-            <p className="about-row__body text-body">
-              Sole design lead for core intelligence platforms used by thousands of operators,
-              discovery through delivery. Cut mission-critical reporting time by 25% around direct
-              user research, and turned static briefing slides into interactive data
-              visualizations.
-            </p>
-            <p className="about-row__body text-body">
-              Moving to a hands-on IC role was a deliberate choice: to go deep on systems where a
-              wrong call carries real weight. The hard part isn&apos;t the pixels. It&apos;s
-              designing for air-gapped systems with no internet, and making the case for UX to
-              stakeholders who&apos;ve never had a designer in the room.
-            </p>
-          </AboutDrawer>
-        </div>
-      </RevealSection>
-
-      {/* ── Selected-work band ─────────────────────────────────────────────
-          The one bridge out of this page. Points at the same target the
-          header's "Work" nav uses, since there is no /work route. */}
-      <RevealSection aria-label="Selected work">
-        <Link className="about-work-band about-work-band--unruled" href="/#selected-work">
-          <span className="about-work-band__label text-h3">
-            See selected{' '}
-            {/* The arrow follows the label's last word (A2, 3 Oct 2026), as on
-                the next-case-study link. text-h3 stays on it so its size does
-                not depend on where it sits; inside the label it agrees with
-                the label's own size. Weight, tracking and line-height come
-                with the utility and are inert on a replaced element. */}
-            <span className="about-work-band__tail">
-              work
-              <ArrowRight
-                className="icon text-h3 about-work-band__arrow"
-                aria-hidden="true"
-                focusable="false"
-              />
-            </span>
-          </span>
-        </Link>
-      </RevealSection>
-
-      {/* ── Credentials ────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="credentials" className="space-y-l">
-        <h2 id="credentials" className="about-phase__title text-h2">
-          Cleared, credentialed, and current.
-        </h2>
-
-        {/* role="list" because Tailwind preflight sets `list-style: none` on every
-            ol/ul, which strips list semantics in WebKit. Restores list, not ordered —
-            ARIA has no ordered-list role. See house rules; same fix as the case
-            studies' .friction-beats. */}
-        <ul className="about-creds" role="list">
-          <li className="about-creds__item">
-            <span className="about-creds__label text-body">Active TS/SCI clearance</span>
-          </li>
-          <li className="about-creds__item">
-            <span className="about-creds__label text-body">JPME Phase 1</span>
-            <span className="about-creds__context text-small">U.S. Naval War College</span>
-          </li>
-          <li className="about-creds__item">
-            <span className="about-creds__label text-body">B.A.</span>
-            <span className="about-creds__context text-small">Rutgers University</span>
-          </li>
+        <ul className="about-bring" role="list">
+          {BRING.map(({ label, line }) => (
+            <li key={label} className="about-bring__item">
+              <h3 className="about-bring__label text-h3">{label}</h3>
+              <p className="about-bring__line text-body">{line}</p>
+            </li>
+          ))}
         </ul>
       </RevealSection>
 
-      {/* ── Contact ────────────────────────────────────────────────────── */}
-      <RevealSection aria-labelledby="contact" className="space-y-l">
-        {/* T4c, 1 Oct 2026: the address is the heading, replacing "Let's talk.",
-            which the human-made review flagged as CTA boilerplate. The plain
-            base `a` rule carries it; the links row below keeps LinkedIn. */}
+      {/* ── Where I've worked ──────────────────────────────────────────────
+          A flat list: every row shows its line, with no expand and collapse.
+          The sr-only punctuation gives a screen reader the pauses the grid
+          gives the eye. */}
+      <RevealSection aria-labelledby="worked" className="about-phase space-y-xl">
+        <h2 id="worked" className="about-phase__title text-h2">
+          Where I&apos;ve worked
+        </h2>
+        <div className="space-y-l">
+          <ul className="about-cv text-body" role="list">
+            {WORKED.map(({ company, title, dates, line }) => (
+              <li key={company} className="about-cv__row">
+                <span className="about-cv__company">{company}</span>
+                <span className="sr-only">, </span>
+                <span className="about-cv__title">{title}</span>
+                <span className="sr-only">, </span>
+                <span className="about-cv__dates">{dates}</span>
+                <span className="sr-only">. </span>
+                <p className="about-cv__line">{line}</p>
+              </li>
+            ))}
+          </ul>
+
+          <ul className="about-credentials text-small" role="list">
+            {CREDENTIALS.map((credential) => (
+              <li key={credential}>{credential}</li>
+            ))}
+          </ul>
+        </div>
+      </RevealSection>
+
+      {/* ── What I'm looking for ───────────────────────────────────────── */}
+      <RevealSection aria-labelledby="looking" className="about-phase space-y-xl">
+        <h2 id="looking" className="about-phase__title text-h2">
+          What I&apos;m looking for
+        </h2>
+        <dl className="text-body">
+          <div className="about-looking__row">
+            <dt className="about-looking__label">Role</dt>
+            <dd className="about-looking__value">Senior or staff product designer, IC</dd>
+            <dd className="about-looking__note">
+              I moved from managing to IC work to be closer to design decisions, and I still mentor
+              junior designers.
+            </dd>
+          </div>
+          <div className="about-looking__row">
+            <dt className="about-looking__label">Location</dt>
+            <dd className="about-looking__value">Hybrid, remote, or in person near Philadelphia</dd>
+          </div>
+          <div className="about-looking__row">
+            <dt className="about-looking__label">Scope</dt>
+            <dd className="about-looking__value">
+              Large-scale products with problems that cross many teams
+            </dd>
+          </div>
+        </dl>
+      </RevealSection>
+
+      {/* ── Close ──────────────────────────────────────────────────────────
+          T4c, 1 Oct 2026: the address is the heading. The plain base `a` rule
+          carries it. Its own section, so the gap above it is the page's section
+          break (Q7-a, 13 Oct 2026). */}
+      <RevealSection aria-labelledby="contact" className="about-phase space-y-m">
         <h2 id="contact" className="about-phase__title text-h2">
           <a href="mailto:paulk.ux@gmail.com">paulk.ux@gmail.com</a>
         </h2>
-
-        <div className="space-y-m">
-          <p className="about-contact__body text-body">
-            Open to senior IC, staff, and design-management roles. Philadelphia-based; remote,
-            hybrid, or the occasional NYC/DC trip.
-          </p>
-          <p className="about-contact__links">
-            <a
-              className="about-link text-body"
-              href="https://linkedin.com/in/uxpaul"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              LinkedIn
-            </a>
-          </p>
-        </div>
+        <p className="about-close__life text-small">
+          I live outside Philadelphia with my wife, who teaches high school art.
+        </p>
+        <p className="about-close__life text-small">
+          Thanks, sweetheart, for your love and support!
+        </p>
       </RevealSection>
     </div>
   );

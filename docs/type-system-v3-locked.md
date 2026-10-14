@@ -125,6 +125,8 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 **Updated 5 Oct 2026: the case-study moment is spent, by the turn's answer (T6).** Weight 340 at rung 5, one per study, allowlisted as `.case-study-prose .turn-answer`. Its heavy half is 600 rather than 720 (ruling K1), so it is a light-against-heavy contrast in the signature's spirit without being a second 340/720 pair. The about opener is the one placement left.
 
+**Updated 13 Oct 2026: the home hero spends only the light half, until the design system pass.** Paul ruled the home h1 one weight and one colour (structure 1a amended): the whole sentence rides `text-lede`'s 340 in `--text-primary`, with no emphasis inside it. The 720 half is unspent, so the inventory above is history: its three `font-[720]` spans moved to a `.text-lede strong` rule on 1 Oct 2026, and that rule and its allowlist entry were removed on 13 Oct. The placement stays the home hero's, allowlisted as `.text-lede`; whether its loud half returns is the design system pass's call.
+
 ### 3.3 The ladder
 
 | Rung | Role | Clamp | 320px | 1568px | Width |

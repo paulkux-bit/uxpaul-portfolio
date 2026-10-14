@@ -775,13 +775,16 @@
   text-wrap: balance;
 }
 
-/* Hero lede — the weighted-sentence statement (Direction D1). The element rides
-   the thin connective weight (340) + a recessive tone; the load-bearing noun
-   phrases take 720 + --text-primary from .text-lede strong; WEIGHT carries the
-   emphasis. That is the signature and it is deliberately NOT a width move: v3 R9
-   requires anything meaningful to survive the fallback, and weight does while
-   width does not. Plain font-weight maps to the wght axis; there is no
-   font-variation-settings here and no opsz — the axis does not exist. */
+/* Hero lede: the home h1, the claim that stands alone above the proof group
+   (structure 1a amended, 13 Oct 2026). One weight and one colour until the
+   design system pass: the whole sentence rides 340 in --text-primary, so the
+   home hero spends only the LIGHT half of its 340/720 signature, the way the
+   turn's answer does. The loud half (720 on key phrases, from the retired
+   .text-lede strong rule) is unspent until that pass rules it. The signature is
+   deliberately a WEIGHT contrast and NOT a width move: v3 R9 requires anything
+   meaningful to survive the fallback, and weight does while width does not.
+   Plain font-weight maps to the wght axis; there is no font-variation-settings
+   here and no opsz, because the axis does not exist. */
 @utility text-lede {
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
@@ -794,15 +797,6 @@
      deferred. This is the home h1 — decided against real content, not by
      rounding to the nearer band. */
   text-wrap: balance;
-}
-
-/* The home hero's loud half of the 340/720 signature: the three domain nouns
-   inside the text-lede h1. Authored here, not as `font-[720]` in JSX, so
-   lint:type check 4 sees the weight and its placement (closing review, 1 Oct
-   2026). <strong> because weight IS the emphasis in this sentence. */
-.text-lede strong {
-  font-weight: 720;
-  color: var(--text-primary);
 }
 
 /* Hero entrance — three beats fade up in sequence (--beat = stagger index, set
@@ -4527,11 +4521,11 @@ html.dark .figure-placeholder {
   gap: var(--spacing-l);
 }
 
-/* Portrait above the name on mobile (it leads in the DOM), and the right
+/* Portrait above the label on mobile (it leads in the DOM), and the right
    column from the stack point up.
 
    No max-width on mobile: it fills the content column edge to edge, so its left
-   and right edges line up with the name and the POV line. The previous
+   and right edges line up with the label and the h1. The previous
    300px cap plus left alignment left an asymmetric gap on the right that read
    as a broken crop. Not full bleed: the page container's gutters still apply. */
 .about-hero__portrait {
@@ -4567,6 +4561,9 @@ html.dark .figure-placeholder {
   }
 }
 
+/* The small "Paul Kali" label above the old title, removed from the hero.
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code). */
 .about-hero__name {
   color: var(--text-primary);
 }
@@ -4575,14 +4572,18 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
 }
 
-/* The one two-tone moment on the page. Both halves live in a single <h1>, so
-   the accessible name is the whole sentence: the spans carry colour only. */
+/* The About h1, one weight and one colour until the design system pass. It
+   was the page's two-tone moment until 13 Oct 2026, a muted lead span inside
+   the one <h1> (.about-hero__pov-lead, below). */
 .about-hero__pov {
   color: var(--text-primary);
   text-wrap: balance;
   max-width: 20ch;
 }
 
+/* The h1's muted lead span and the grounding line under the h1, both removed
+   from the hero. UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code). */
 .about-hero__pov-lead {
   color: var(--text-muted);
 }
@@ -4665,12 +4666,177 @@ html.dark .figure-placeholder {
   max-width: 24ch;
 }
 
+/* The phase note ("First retail, then defense, on purpose."), removed with
+   the phases. .about-phase and .about-phase__title above stay in use: the
+   About sections and their four h2s carry them (ruling Q3-a).
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code). */
 .about-phase__note {
   color: var(--text-secondary);
   max-width: 52ch;
 }
 
+/* ── What I bring, Where I've worked, What I'm looking for, close ────────
+   The 13 Oct 2026 About (final copy v11). Every line is one weight and one
+   colour until the design system pass; the lists are ruled with the résumé
+   rows' hairline grammar. Logged in docs/unspecified-surfaces.md.
+
+   ONE TRACK SET FROM 900 (Q8-a): What I bring's label and Where I've worked's
+   company share column 1, and the line and the job title share column 2, so
+   the two lists read down one edge. 7.5rem is the résumé rows' date track.
+
+   Every gap is declared outside the media query, so the layout switch changes
+   only the grid, never the spacing (lint:space check 4). */
+
+/* No margin reset on these lists: preflight already zeroes it, and a reset
+   here would cancel the space-y-* margin Tailwind v4 puts on a non-last child,
+   which is what sets the gap between the work list and the credentials. */
+.about-bring,
+.about-cv {
+  list-style: none;
+  padding: 0;
+}
+
+.about-bring__item,
+.about-cv__row {
+  display: grid;
+  column-gap: var(--spacing-m);
+  padding-block: var(--spacing-m);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.about-bring__item:last-child,
+.about-cv__row:last-child {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.about-bring__item {
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--spacing-2xs);
+  align-items: baseline;
+}
+
+.about-bring__label {
+  color: var(--text-primary);
+}
+
+.about-bring__line {
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+
+/* Mobile: company left and dates right on line one, then the title, then the
+   line across the full width. */
+.about-cv__row {
+  grid-template-columns: minmax(0, 1fr) auto;
+  row-gap: var(--spacing-3xs);
+  align-items: baseline;
+}
+
+.about-cv__company {
+  grid-area: 1 / 1;
+  color: var(--text-primary);
+  font-weight: var(--wght-credit);
+}
+
+.about-cv__title {
+  grid-area: 2 / 1;
+  color: var(--text-muted);
+}
+
+.about-cv__dates {
+  grid-area: 1 / 2;
+  justify-self: end;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.about-cv__line {
+  grid-column: 1 / -1;
+  margin-top: var(--spacing-2xs);
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+
+@media (min-width: 900px) {
+  .about-bring__item,
+  .about-cv__row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) 7.5rem;
+  }
+  .about-bring__line {
+    grid-column: 2 / -1;
+  }
+  .about-cv__title {
+    grid-area: 1 / 2;
+  }
+  .about-cv__dates {
+    grid-area: 1 / 3;
+  }
+  .about-cv__line {
+    grid-column: 2 / -1;
+  }
+}
+
+/* The three credentials, one quiet line that wraps, under the work list. */
+.about-credentials {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-2xs) var(--spacing-l);
+  color: var(--text-muted);
+}
+
+/* What I'm looking for: a label column and a value column at every width.
+   The 6.5rem label track fits "Location" at text-body. */
+.about-looking__row {
+  display: grid;
+  grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr);
+  column-gap: var(--spacing-m);
+  row-gap: var(--spacing-3xs);
+  padding-block: var(--spacing-s);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.about-looking__row:last-child {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.about-looking__label {
+  grid-column: 1;
+  color: var(--text-muted);
+}
+
+.about-looking__value,
+.about-looking__note {
+  grid-column: 2;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.about-looking__value {
+  color: var(--text-primary);
+}
+
+.about-looking__note {
+  color: var(--text-secondary);
+}
+
+/* The close: the email heading, then the life line. */
+.about-close__life {
+  color: var(--text-secondary);
+  max-width: 50ch;
+}
+
 /* ── Résumé rows ──────────────────────────────────────────────────────────
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code).
+   Everything from here to the Selected-work band (.about-row*, .about-roles*)
+   styles components/about/drawer.tsx, which no route renders since About
+   became a flat list (13 Oct 2026). Its allowlist entries in lint-space and
+   lint-interaction carry the same marker.
+
    One DOM, three layouts, and the only difference is the grid definition.
 
    < 600    company owns its own line across the full width minus the mark, then
@@ -5019,10 +5185,11 @@ html.dark .figure-placeholder {
 
 /* ── Selected-work band ───────────────────────────────────────────────────
    The base band: full-width rule top and bottom, label left, arrow right, the
-   hairlines being its shape. No route renders it bare any more. Both uses
-   (About's band and the next-case-study link) carry --unruled below, which
-   takes the rules off and puts the arrow after the label's last word. The
-   base stays as the shape that modifier is defined against. */
+   hairlines being its shape. No route renders it bare any more. Its one use,
+   the next-case-study link, carries --unruled below, which takes the rules off
+   and puts the arrow after the label's last word; About's own band was removed
+   on 13 Oct 2026. The base stays as the shape that modifier is defined
+   against. */
 
 .about-work-band {
   /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
@@ -5137,6 +5304,11 @@ html.dark .figure-placeholder {
 }
 
 /* ── Credentials ──────────────────────────────────────────────────────────
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code).
+   The credentials are one wrapping line under the work list now
+   (.about-credentials).
+
    A typographic list, not chips. Label left, context right, hairline between.
    Two columns from md up; stacked below, where a right-aligned context would
    strand against the label. */
@@ -5178,7 +5350,10 @@ html.dark .figure-placeholder {
   }
 }
 
-/* ── Contact ──────────────────────────────────────────────────────────── */
+/* ── Contact ──────────────────────────────────────────────────────────────
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code).
+   The close keeps its h2 and sets the life line in .about-close__life. */
 
 .about-contact__body {
   color: var(--text-secondary);

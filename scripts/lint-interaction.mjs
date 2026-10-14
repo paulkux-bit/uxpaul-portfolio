@@ -98,7 +98,7 @@ export const ALLOWLIST = {
     { match: '.case-card__title-link:hover', reason: 'text link inside a card — no surface to move (spec §5)' },
     { match: '.client-work__nav-link:hover', reason: 'text link, the client work dialog\'s previous and next: no surface to move (spec §5)' },
     { match: '.take-card:hover', reason: 'non-interactive tint; the takes wall is a typographic wall, not a control' },
-    { match: '.about-row__summary:hover', reason: 'disclosure row — the chevron rotation is the feedback (spec §5)' },
+    { match: '.about-row__summary:hover', reason: 'UNUSED since 13 Oct 2026, delete in the design system pass: the drawer renders on no route. Disclosure row: the chevron rotation is the feedback (spec §5)' },
   ],
   // check 9: classes that deliberately have no rule.
   //

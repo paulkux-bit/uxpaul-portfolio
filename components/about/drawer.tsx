@@ -19,6 +19,11 @@ type AboutDrawerProps = {
 };
 
 /**
+ * UNUSED since 13 Oct 2026: delete in the design system pass
+ * (docs/unspecified-surfaces.md, About's unused code). About became a flat
+ * list with no expand and collapse, and no route renders this component. Its
+ * CSS (.about-row*, .about-roles*) is marked the same way in globals.css.
+ *
  * One résumé row. Native <details>/<summary>, closed by default, each one
  * independent. Server Component: there is no state to hold and no handler to
  * bind, so open/close, Enter and Space, and the screen-reader disclosure role

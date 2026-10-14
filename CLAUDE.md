@@ -74,9 +74,9 @@ design principles, accessibility floor) lives in `PRODUCT.md` at the repo root.
 Read it before making design decisions. Defer to it on every judgment call.
 
 ## Project
-Personal portfolio site for Paul Kali (Senior Product Designer with 8 years 
-of leadership experience). Goal: land a senior IC, design lead, or director 
-role.
+Personal portfolio site for Paul Kali (Senior Product Designer). Goal: land a
+senior or staff IC role (Paul, 13 Oct 2026: IC only, not management; the
+site carries no tenure number).
 
 ### Schedule — there is no hard deadline
 
@@ -135,34 +135,33 @@ whenever two pieces of work look equally worthy.
   `npm run build:header-face`; the coin's colours are the component tokens
   `--face-disc` and `--face-ring`. Under reduced motion the swap is instant.
   Logged in `docs/unspecified-surfaces.md` (header identity mark).
-- Home hero is a **weighted-sentence statement** (Direction D1): the h1 leads
-  with a concrete proof line (`text-lede`) where **weight carries the emphasis**
-  — thin connective words (`--text-muted`), bold key noun phrases (`font-[720]`
-  + `--text-primary`); the name is a quiet signature (`text-h3`) below; then the
-  proof paragraph. A concrete fact, not a positioning tagline. No tenure number,
-  no geographic qualifier.
+- Home hero is **structure 1a amended** (Paul, 13 Oct 2026): the h1 sentence
+  stands alone (`text-lede`), then the proof group, headed by the name and title
+  (`text-h3`, the "Paul Kali" line keeps `data-header-handoff`) over the Navy
+  and URBN paragraph. Every line is one weight and one colour until the design
+  system pass: the h1 is `text-lede`'s 340 in `--text-primary`, with no
+  `<strong>` inside it. No availability line, no tenure number, no geographic
+  qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`.
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
   and unrendered, pending a decision on where (or whether) it returns.
-- About (`app/about/page.tsx`), v4: hero → three phase sections with résumé
-  drawers → a selected-work band → credentials → contact. **The career timeline
-  was deleted**; no `about-timeline` or `ERAS` references remain, and its CSS
-  went with it. Dates live only on the rows. Each phase is a declarative
-  sentence title at `text-h2`; phase three carries a single note line
-  (`.about-phase__note`, "First retail, then defense, on purpose."). The role
-  reads in the closed drawer row, because that is what a skimming reader is
-  looking for.
-- About's hero is the page's one two-tone moment: a single `<h1>` split into a
-  muted lead span and a primary remainder, so the accessible name stays one
-  sentence. The name above it is a label, not the heading.
-- Résumé rows are one DOM at both breakpoints. Company, role and year are flat
-  siblings and only the grid definition changes: company on its own line with a
-  muted "Role · Year" beneath it on mobile, all four inline from md up. The
-  interpunct is a `::after` on the role, never a text node, so desktop can drop
-  it without a second markup branch. Do not reintroduce a wrapper around company
-  and role: that is what forced the two layouts to disagree about what the grid
-  items were.
+- About (`app/about/page.tsx`), v5 (13 Oct 2026, final copy v11): hero → What
+  I bring (five items, each a label and one line) → Where I've worked (a flat
+  list of six rows: company, title, dates and one line, no expand and collapse;
+  promotions live in the title as "X to Y"; dates are written with "to") with
+  the three credentials under it → What I'm looking for (Role, Location, Scope)
+  → the close (the email as the heading, then the life line and a thank-you line). The phase
+  sections, their résumé drawers, the selected-work band and the credentials
+  heading were removed. `AboutDrawer` and the drawer CSS stay on disk marked
+  UNUSED, for deletion in the design system pass (`docs/unspecified-surfaces.md`).
+  **The career timeline was deleted** in v4; no `about-timeline` or `ERAS`
+  references remain, and its CSS went with it.
+- About's hero: the portrait (the header handoff anchor), then the label
+  "Senior Product Designer", then the `<h1>` in one weight and one colour until
+  the design system pass (it was split two-tone until 13 Oct 2026), then the
+  Résumé (PDF) button and LinkedIn. The title above the h1 is a label, not the
+  heading.
 
 ## Breakpoints (match exactly)
 Defined as CSS custom properties in `app/globals.css` under `@theme`:
@@ -221,6 +220,8 @@ See `PRODUCT.md` for the full accessibility floor. Quick summary:
 Decorative category eyebrows are banned. Every section leads with a declarative
 sentence header that carries the point; a label reading "Credentials" above a
 list of credentials tells the reader nothing the heading did not.
+
+About's section headings (What I bring, Where I've worked, What I'm looking for, and the email close) are plain topic headings by Paul's ruling of 13 Oct 2026, so recruiters can find what he brings, where he has worked and what he is looking for. They are headings, not eyebrows, so the eyebrow ban stands.
 
 An eyebrow is permitted only when it is **functional**: when it carries
 information the headline cannot. A section-category name never does.
@@ -335,7 +336,7 @@ real clamp, and every type-role utility must have a row.
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
-| `text-lede` | 32 → 60px | Home hero weighted sentence (h1). Thin base (wght 340); key noun phrases jump to `font-[720]` so weight carries emphasis. |
+| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour until the design system pass; the signature's 720 half is unspent. |
 | `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
@@ -441,11 +442,11 @@ for an entire judgment session while every gate stayed green.
 ### Page typographic arc + spacing (Phase 2)
 Registers separate on **size, weight and colour**. No register owns an axis, and
 there is no width column here any more: width is gone with the axis.
-1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
+1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340) until the design system pass.
 2. **Major** (work titles: Selected Work cards + Earlier work shelf) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
-5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
+5. **Subordinate** (footer `text-caption`): quietest. The home availability line it also held was removed on 13 Oct 2026.
 
 **Spacing is its own locked system now** — `docs/spacing-system-v1-locked.md`,
 enforced by `npm run lint:space`, which gates `npm run build` beside
@@ -803,7 +804,7 @@ The `attribute="class"` is critical — the CSS expects `.dark` on `<html>`, not
 
 ## Design intent & director frame (read before any design or content change)
 
-Portfolio for Paul Kali, senior product designer, targeting **Senior IC, Staff IC, and Design Manager** roles at mission-driven orgs (consumer/FAANG, defense, civic tech). "Best offer wins." The site itself is a portfolio piece: its craft is evidence.
+Portfolio for Paul Kali, senior product designer, targeting **senior and staff IC** roles (IC only since 13 Oct 2026; Design Manager is no longer a target) at mission-driven orgs (consumer/FAANG, defense, civic tech). "Best offer wins." The site itself is a portfolio piece: its craft is evidence.
 
 **Audience — design for these three, name them when a change affects behavior:**
 - **Dana** (Director, ~3-min skim): experiences the site as perceived performance + polish. Never opens a drawer.

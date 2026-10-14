@@ -77,7 +77,7 @@ const ALLOWLIST = {
       selector: '.about-row__mark',
       prop: 'margin-block-start',
       reason:
-        'S1 — optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Since I5 the mark is 1em of the same rung, so both terms are one font-size and this is text-h3’s clamp × 0.125 — still the type system’s number, still not on the spacing scale. It reads as `em` arithmetic because it is; it is written in rem because check 2 bans em on block-level spacing and does not consult this list (finding #19).',
+        'UNUSED since 13 Oct 2026, delete in the design system pass: the drawer mark renders on no route. S1: optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Since I5 the mark is 1em of the same rung, so both terms are one font-size and this is text-h3’s clamp × 0.125, still the type system’s number, still not on the spacing scale. It reads as `em` arithmetic because it is; it is written in rem because check 2 bans em on block-level spacing and does not consult this list (finding #19).',
     },
   ], // literals that may stay: { selector, prop, value, reason }
   media: [
@@ -109,10 +109,10 @@ const ALLOWLIST = {
     { selector: '.compare__divider', prop: 'margin', reason: 'S3 layout — the divider only exists in the two-up arrangement' },
     { selector: '.bento-theme__item', prop: 'column-gap', reason: 'S3 layout — caption sits beside its media at 1024, not beneath it' },
     { selector: '.bento-theme__row', prop: 'row-gap', reason: 'S3 layout — row rhythm changes with the caption-beside arrangement' },
-    { selector: '.about-row__summary', prop: 'column-gap', reason: 'S3 layout — the resume row is stacked below 900 and four columns above; the gap is zero in one and real in the other' },
-    { selector: '.about-row__summary', prop: 'row-gap', reason: 'S3 layout — pair of the column-gap switch' },
-    { selector: '.about-row__company', prop: 'padding-inline-end', reason: 'S3 layout — only the 600-899 band puts the company beside its meta line' },
-    { selector: '.about-row__role::after', prop: 'margin-inline', reason: 'S3 layout — the interpunct exists only in the 600-899 phrase form' },
+    { selector: '.about-row__summary', prop: 'column-gap', reason: 'UNUSED since 13 Oct 2026, delete in the design system pass: S3 layout: the resume row is stacked below 900 and four columns above; the gap is zero in one and real in the other' },
+    { selector: '.about-row__summary', prop: 'row-gap', reason: 'UNUSED since 13 Oct 2026, delete in the design system pass: S3 layout: pair of the column-gap switch' },
+    { selector: '.about-row__company', prop: 'padding-inline-end', reason: 'UNUSED since 13 Oct 2026, delete in the design system pass: S3 layout: only the 600-899 band puts the company beside its meta line' },
+    { selector: '.about-row__role::after', prop: 'margin-inline', reason: 'UNUSED since 13 Oct 2026, delete in the design system pass: S3 layout: the interpunct exists only in the 600-899 phrase form' },
     { selector: ".framed-pair[data-stack-mobile='true']", prop: 'row-gap', reason: 'S3 layout — a row gap only exists once the pair stacks below 767' },
 
     // DELIBERATE PER-BREAKPOINT DENSITY. These retune a static value at a
@@ -130,7 +130,7 @@ const ALLOWLIST = {
     { selector: ".figure--framed .figure__image, .figure--framed .figure-placeholder", prop: 'padding', reason: 'S3 density — framed inset drops from 32 to 24 below 640 so the image keeps its width' },
     { selector: '.hero-block', prop: 'gap', reason: 'S3 density — type column to image opens from 48 to 64 at 1024 where they sit side by side' },
     { selector: '.about-hero', prop: 'gap', reason: 'S3 density — portrait to text opens from 32 to 48 at 768' },
-    { selector: '.about-creds__item', prop: 'gap', reason: 'S3 density — credential label and value sit on one line at 768 and need a real column gap' },
+    { selector: '.about-creds__item', prop: 'gap', reason: 'UNUSED since 13 Oct 2026, delete in the design system pass: S3 density: credential label and value sit on one line at 768 and need a real column gap' },
   ], // spacing inside @media that does layout: { selector, prop, reason }
   fluid: [], // sanctioned clamp() pairs beyond the two tokens: { selector, reason }
   responsive: [
