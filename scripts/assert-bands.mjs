@@ -97,16 +97,17 @@ const READING = [
   '.client-work__statement',
   '.client-work__paragraph',
   '.case-study-prose .section-lede',
-  '.about-row__body',
-  // Added in C4a when the phase titles above them were flared. C5 made those
-  // titles plain, so the ADJACENCY these two were guarding is gone — and they
-  // stay, because the reason they stay is different from the reason they came:
   // /about is the one route whose h1 is flared while everything under it is
   // not, so it is where an inherited 100 would be least expected and least
-  // visible. Keeping a check whose stated premise expired without restating it
-  // is how an assertion turns into decoration.
-  '.about-phase__note',
-  '.about-contact__body',
+  // visible. Its reading surfaces are asserted here for that reason. They were
+  // .about-row__body, .about-phase__note and .about-contact__body until the
+  // 13 Oct 2026 rebuild removed all three from the page; a reading selector
+  // that matches nothing passes here silently, so they were swapped for the
+  // page's new text rather than left as decoration.
+  '.about-bring__line',
+  '.about-cv__line',
+  '.about-looking__value',
+  '.about-close__life',
   '.hero-block__role',
   '.figure__caption',
 ];

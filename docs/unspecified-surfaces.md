@@ -206,9 +206,46 @@ each h1 is one weight and one colour on purpose, pending the design system pass:
    340/720 signature (type v3 §3.2, the 13 Oct note), the way the turn's answer
    does. The `.text-lede strong` rule that carried the 720 and its allowlist
    entry were removed rather than left matching nothing.
+2. **The About h1.** "I'm Paul. I've designed for shoppers, TV viewers, and
+   Navy operators." sets in `text-h1` at 600 in `--text-primary`, still
+   flared (`.about-hero__pov`). It was the page's two-tone moment until 13 Oct
+   2026; the muted lead span is out of the page, and its rule,
+   `.about-hero__pov-lead`, now matches nothing.
 
-Needs: the design system pass to rule whether the home h1 takes a second weight
+Needs: the design system pass to rule whether either h1 takes a second weight
 or colour again, and on which words. Until then nothing here is a defect.
+
+**The About lists (What I bring, Where I've worked, What I'm looking for).**
+Joined 13 Oct 2026 from the same build. Three new list surfaces, each set with
+the nearest existing roles and the résumé rows' hairline grammar; no locked spec
+governs a label-and-line list, a résumé table or a definition list:
+
+1. **What I bring.** Five items, each a label (`h3`, `text-h3`, 500,
+   `--text-primary`) over one line (`text-body`, `--text-secondary`, 52ch).
+   From 900px the label takes column 1 and the line columns 2 to 3. The five
+   `h3`s are in the outline on purpose (v11's structure). What a spec would
+   need: whether a label is a heading or a term, and its rung.
+2. **Where I've worked.** A flat list of six rows: company (`text-body` at
+   `--wght-credit`), title and dates (`--text-muted`, dates tabular and
+   nowrap), and one line (`--text-secondary`). The title column holds
+   promotions as "X to Y", so it is the longest field on the page: "Information
+   Architect to Director, Experience Design" wraps in its `1.3fr` track from 900
+   to roughly 1100px. The credentials sit under the list as one wrapping line in
+   `text-small`, `--text-muted`. What a spec would need: the row's rung for
+   company against title, and how a long promotion title should wrap.
+3. **The looking-for label column.** A `dl` whose rows put the term (Role,
+   Location, Scope; `--text-muted`) in a `6.5rem` column beside its value, at
+   every width. Role carries a second `dd` in `--text-secondary`. The `6.5rem`
+   track is sized to "Location" at `text-body` and is a raw width, like the
+   résumé rows' `7.5rem` date track. What a spec would need: a width token for
+   a label column.
+4. **Shared tracks.** What I bring and Where I've worked share one track set
+   from 900px (`minmax(0, 1fr) minmax(0, 1.3fr) 7.5rem`, ruling Q8-a), so the
+   label and the company share an edge, as do the line and the title.
+
+Needs: rungs and a width token from the design system pass. The email close
+sits one section break (`--spacing-section`, 74px at 390 and 128px at 1440)
+below What I'm looking for; v11 had it 48px below, inside that section.
 
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
@@ -485,7 +522,7 @@ is ruled on rather than looked up.
   fact is a small finding in itself — having no size is an independent reason it
   was never display type.
 
-**`.about-phase__title`** (36px, five on `/about`) and **`.about-hero__pov`**
+**`.about-phase__title`** (36px, four on `/about` since 13 Oct 2026, was five) and **`.about-hero__pov`**
 (51px, one on `/about`) are the two live display surfaces **v3 does not mention
 anywhere** — not in §3.3's ladder, not in §5's width table, not in §9's list of
 six unbanded selectors. There was no rung to inherit and no band to read.
@@ -505,9 +542,12 @@ indistinct. Both keep the band C4a gave them. Nothing was overturned: C4a ruled
 on what the type is, C5 ruled on what it can carry, and those were one key when
 C4a landed.
 
-`/about` therefore ships with a flared `<h1>` above five plain `<h2>`s. That
-reads as hierarchy rather than inconsistency, and it is a render question rather
-than a table one.
+`/about` therefore ships with a flared `<h1>` above four plain `<h2>`s (and,
+since 13 Oct 2026, five `text-h3` labels under What I bring). That reads as
+hierarchy rather than inconsistency, and it is a render question rather than a
+table one. The four are the section headings and the email close; the class
+keeps its phase name although the phases are gone (ruling Q3-a); a rename to
+`.about-section__title` waits for the design system pass.
 
 Needs: a rung for each of the six, which waits on real content. The band and the
 voice for the two about-page roles are both settled. Raised 21 Aug 2026 by the

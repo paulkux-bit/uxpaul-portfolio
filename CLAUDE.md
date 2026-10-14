@@ -146,24 +146,22 @@ whenever two pieces of work look equally worthy.
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
   and unrendered, pending a decision on where (or whether) it returns.
-- About (`app/about/page.tsx`), v4: hero → three phase sections with résumé
-  drawers → a selected-work band → credentials → contact. **The career timeline
-  was deleted**; no `about-timeline` or `ERAS` references remain, and its CSS
-  went with it. Dates live only on the rows. Each phase is a declarative
-  sentence title at `text-h2`; phase three carries a single note line
-  (`.about-phase__note`, "First retail, then defense, on purpose."). The role
-  reads in the closed drawer row, because that is what a skimming reader is
-  looking for.
-- About's hero is the page's one two-tone moment: a single `<h1>` split into a
-  muted lead span and a primary remainder, so the accessible name stays one
-  sentence. The name above it is a label, not the heading.
-- Résumé rows are one DOM at both breakpoints. Company, role and year are flat
-  siblings and only the grid definition changes: company on its own line with a
-  muted "Role · Year" beneath it on mobile, all four inline from md up. The
-  interpunct is a `::after` on the role, never a text node, so desktop can drop
-  it without a second markup branch. Do not reintroduce a wrapper around company
-  and role: that is what forced the two layouts to disagree about what the grid
-  items were.
+- About (`app/about/page.tsx`), v5 (13 Oct 2026, final copy v11): hero → What
+  I bring (five items, each a label and one line) → Where I've worked (a flat
+  list of six rows: company, title, dates and one line, no expand and collapse;
+  promotions live in the title as "X to Y"; dates are written with "to") with
+  the three credentials under it → What I'm looking for (Role, Location, Scope)
+  → the close (the email as the heading, then the life line). The phase
+  sections, their résumé drawers, the selected-work band and the credentials
+  heading were removed. `AboutDrawer` and the drawer CSS stay on disk marked
+  UNUSED, for deletion in the design system pass (`docs/unspecified-surfaces.md`).
+  **The career timeline was deleted** in v4; no `about-timeline` or `ERAS`
+  references remain, and its CSS went with it.
+- About's hero: the portrait (the header handoff anchor), then the label
+  "Senior Product Designer", then the `<h1>` in one weight and one colour until
+  the design system pass (it was split two-tone until 13 Oct 2026), then the
+  Résumé (PDF) button and LinkedIn. The title above the h1 is a label, not the
+  heading.
 
 ## Breakpoints (match exactly)
 Defined as CSS custom properties in `app/globals.css` under `@theme`:
@@ -222,6 +220,8 @@ See `PRODUCT.md` for the full accessibility floor. Quick summary:
 Decorative category eyebrows are banned. Every section leads with a declarative
 sentence header that carries the point; a label reading "Credentials" above a
 list of credentials tells the reader nothing the heading did not.
+
+About's section headings (What I bring, Where I've worked, What I'm looking for, and the email close) are plain topic headings by Paul's ruling of 13 Oct 2026, so recruiters can find what he brings, where he has worked and what he is looking for. They are headings, not eyebrows, so the eyebrow ban stands.
 
 An eyebrow is permitted only when it is **functional**: when it carries
 information the headline cannot. A section-category name never does.

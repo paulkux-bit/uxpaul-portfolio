@@ -471,7 +471,6 @@ describe('§2 icon contexts — the right stroke, from the right adjacent type',
   // sat inside its label since A2 (3 Oct 2026) and keeps the utility, so it
   // stays right if the arrow is ever moved back out.
   for (const [file, node] of [
-    ['app/about/page.tsx', 'about-work-band__arrow'],
     ['components/next-case-study.tsx', 'about-work-band__arrow'],
     ['components/about/drawer.tsx', 'about-row__mark'],
   ]) {
