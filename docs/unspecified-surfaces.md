@@ -27,7 +27,9 @@ exposed three shipped components answering the same question three ways.
 and the first entry logged before its component existed. **Earlier work shelf**
 joined on 12 Oct 2026, the first entry to carry dead code with a deletion
 recipe. **Header identity mark** joined the same day, the first entry on the
-site's chrome rather than its content.*
+site's chrome rather than its content. **Hero headings in one weight** joined on
+13 Oct 2026, the first entry that records styling deliberately withheld rather
+than missing.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -192,6 +194,21 @@ input to the design system pass:
 Needs: rulings from the design system pass on all three. Until then
 `--face-disc` and `--face-ring` are the only component colour tokens besides
 `--scrim`.
+
+**Hero headings in one weight and one colour.** Joined 13 Oct 2026 from the
+home and About copy build (`docs/cc-prompt-hero-about-build.md`, Paul's final
+copy v11). Paul ruled the words of both heroes and deferred their styling, so
+each h1 is one weight and one colour on purpose, pending the design system pass:
+
+1. **The home h1.** "I design the parts of products that people can't afford
+   to get wrong." sets in `text-lede` at its own 340 in `--text-primary`, with
+   no `<strong>` inside it. That spends only the light half of the home hero's
+   340/720 signature (type v3 §3.2, the 13 Oct note), the way the turn's answer
+   does. The `.text-lede strong` rule that carried the 720 and its allowlist
+   entry were removed rather than left matching nothing.
+
+Needs: the design system pass to rule whether the home h1 takes a second weight
+or colour again, and on which words. Until then nothing here is a defect.
 
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather

@@ -135,12 +135,13 @@ whenever two pieces of work look equally worthy.
   `npm run build:header-face`; the coin's colours are the component tokens
   `--face-disc` and `--face-ring`. Under reduced motion the swap is instant.
   Logged in `docs/unspecified-surfaces.md` (header identity mark).
-- Home hero is a **weighted-sentence statement** (Direction D1): the h1 leads
-  with a concrete proof line (`text-lede`) where **weight carries the emphasis**
-  — thin connective words (`--text-muted`), bold key noun phrases (`font-[720]`
-  + `--text-primary`); the name is a quiet signature (`text-h3`) below; then the
-  proof paragraph. A concrete fact, not a positioning tagline. No tenure number,
-  no geographic qualifier.
+- Home hero is **structure 1a amended** (Paul, 13 Oct 2026): the h1 sentence
+  stands alone (`text-lede`), then the proof group, headed by the name and title
+  (`text-h3`, the "Paul Kali" line keeps `data-header-handoff`) over the Navy
+  and URBN paragraph. Every line is one weight and one colour until the design
+  system pass: the h1 is `text-lede`'s 340 in `--text-primary`, with no
+  `<strong>` inside it. No availability line, no tenure number, no geographic
+  qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`.
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
@@ -335,7 +336,7 @@ real clamp, and every type-role utility must have a row.
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
-| `text-lede` | 32 → 60px | Home hero weighted sentence (h1). Thin base (wght 340); key noun phrases jump to `font-[720]` so weight carries emphasis. |
+| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour until the design system pass; the signature's 720 half is unspent. |
 | `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
@@ -441,11 +442,11 @@ for an entire judgment session while every gate stayed green.
 ### Page typographic arc + spacing (Phase 2)
 Registers separate on **size, weight and colour**. No register owns an axis, and
 there is no width column here any more: width is gone with the axis.
-1. **Display** (hero catch line, `text-lede`) — owns **weight** (340 → 720 shift).
+1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340) until the design system pass.
 2. **Major** (work titles: Selected Work cards + Earlier work shelf) — size and weight.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
-5. **Subordinate** (availability `text-small`, footer `text-caption`) — quietest.
+5. **Subordinate** (footer `text-caption`): quietest. The home availability line it also held was removed on 13 Oct 2026.
 
 **Spacing is its own locked system now** — `docs/spacing-system-v1-locked.md`,
 enforced by `npm run lint:space`, which gates `npm run build` beside

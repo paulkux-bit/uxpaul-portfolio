@@ -6,44 +6,32 @@ import { caseStudies } from '@/app/data/case-studies';
 export default function Home() {
   return (
     <div className="page-container pt-2xl pb-section space-y-section">
-      {/* Hero — "weighted sentence" (Direction D1), range-led copy. The h1 names
-          the three domains Paul works across; WEIGHT carries the emphasis:
-          connectives ride text-lede's thin 340 + recessive --text-muted, the
-          three domain nouns are <strong> at 720 + --text-primary (.text-lede strong,
-          globals.css, where lint:type check 4 can see it). No
-          font-variation-settings, opsz auto. Then the signature, the Navy/URBN
-          proof, and the availability beat. Four beats fade up via the .hero-beat
-          CSS entrance (reduced-motion + no-JS safe). Server component, pure CSS. */}
-      {/* Two-scale rhythm (Phase 2): the four beats are grouped into a title
-          block (catch line + name) and a supporting block (proof + availability),
-          24px intimate (--spacing-m) within each group, 48px between groups. The .hero-beat
-          stagger (--beat 0..3) stays on the four elements regardless of grouping. */}
+      {/* Hero, structure 1a amended (Paul, 13 Oct 2026; docs/hero-home-review-cc.md).
+          The claim stands alone as the h1; then the proof group, headed by the name.
+          Every line is one weight and one colour until the design system pass: the
+          h1 rides text-lede's own 340 in --text-primary, with no <strong> inside it.
+          Three beats fade up via the .hero-beat CSS entrance (reduced-motion and
+          no-JS safe). Server component, pure CSS. */}
+      {/* Two-scale rhythm (Phase 2): 48px (--spacing-xl) between the h1 and the
+          proof group, 24px (--spacing-m) inside the group. */}
       {/* Intro to "Selected work" is 64, not the 128 section break: the intro
           introduces the work (top-of-page ruling T2b, 1 Oct 2026). mb-2xl! because
           space-y-section sets this margin on every non-last child; the work to
           Client work break stays 128. The page top above is 64 (T1c). */}
       <section className="space-y-xl mb-2xl!">
-        <div className="space-y-m">
-          <h1
-            className="hero-beat text-lede text-muted max-w-[18ch] min-[1280px]:max-w-[30ch]"
-            style={{ ['--beat' as string]: 0 }}
-          >
-            I design across{' '}
-            <strong>consumer</strong>,{' '}
-            <strong>enterprise</strong>, and{' '}
-            <strong>defense</strong>.
-          </h1>
+        <h1
+          className="hero-beat text-lede text-primary max-w-[18ch] min-[1280px]:max-w-[30ch]"
+          style={{ ['--beat' as string]: 0 }}
+        >
+          I design the parts of products that people can&apos;t afford to get&nbsp;wrong.
+        </h1>
 
-          {/* Signature — name present but quiet; the role recedes.
-              The name's WEIGHT lives in globals.css (.hero-credit-name), not in a
-              utility here. It was `font-semibold` — a raw 600 — where v3 §3.2
-              assigns --wght-credit (500) to "Credit lines, quiet emphasis, h3",
-              and this is a credit line rendered at text-h3. A `font-[500]` would
-              have fixed the number and kept the value invisible to the CSS
-              parser, which is worse: the next reader would assume it had been
-              considered. */}
-          {/* P2b, 1 Oct 2026: two lines, name then title, no interpunct. The
-              sr-only comma keeps the pause a screen reader would otherwise lose. */}
+        <div className="space-y-m">
+          {/* The name heads the proof. Its WEIGHT lives in globals.css
+              (.hero-credit-name, --wght-credit), not in a utility here, so the
+              CSS parser can see it. P2b, 1 Oct 2026: two lines, name then title,
+              no interpunct. The sr-only comma keeps the pause a screen reader
+              would otherwise lose. */}
           <p className="hero-beat text-h3" style={{ ['--beat' as string]: 1 }}>
             {/* data-header-handoff: the header's wordmark hands off to the face
                 once this line's bottom passes under the header. */}
@@ -53,31 +41,19 @@ export default function Home() {
             <span className="sr-only">, </span>
             <span className="block text-secondary">Senior Product Designer</span>
           </p>
-        </div>
 
-        <div className="space-y-m">
-          {/* Proof — Navy + URBN. Brand names wrapped in whitespace-nowrap so none
-              breaks mid-name at any width. */}
+          {/* Proof: Navy, then URBN. Brand names and "hands-on" are wrapped in
+              whitespace-nowrap so none breaks mid-name or at its hyphen. */}
           <p
             className="hero-beat text-body text-primary max-w-[62ch]"
             style={{ ['--beat' as string]: 2 }}
           >
-            Currently at the U.S. Navy, modernizing intelligence platforms for
-            thousands of operators. Previously led design at URBN for the platform
-            behind{' '}
-            <span className="whitespace-nowrap">Anthropologie</span>,{' '}
-            <span className="whitespace-nowrap">Free People</span>,{' '}
-            <span className="whitespace-nowrap">Urban Outfitters</span>, and{' '}
-            <span className="whitespace-nowrap">Nuuly</span>.
-          </p>
-
-          {/* Availability — quiet coda, grouped with the proof. */}
-          <p className="hero-beat text-small text-secondary max-w-[62ch]" style={{ ['--beat' as string]: 3 }}>
-            {/* Quiet mailto: inherits text-small/secondary; no underline at rest,
-                underline on hover only. Same email as the footer. */}
-            <a href="mailto:paulk.ux@gmail.com" className="quiet-link">
-              Open to senior IC, staff, and management roles.
-            </a>
+            I currently work for the U.S. Navy, where I&apos;ve designed intelligence tools for
+            thousands of operators. Previously at URBN, I designed Nuuly&apos;s first warehouse
+            tools and led design across{' '}
+            <span className="whitespace-nowrap">Urban Outfitters</span>, Anthropologie, and{' '}
+            <span className="whitespace-nowrap">Free People</span>. I&nbsp;work{' '}
+            <span className="whitespace-nowrap">hands-on</span>, from research to delivery.
           </p>
         </div>
       </section>

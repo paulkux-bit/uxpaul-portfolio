@@ -84,14 +84,14 @@ const ALLOWLIST = {
     { selector: '.comp-statement .take-thought', reason: 'Off the clock wall, rendered on no route; Phase 12' },
     { selector: '.transformation', reason: 'grid container, renders on no route in the 28 Sep census; Phase 12' },
   ],
-  // §3.2 permits three signature placements sitewide. TWO are spent. The home
-  // hero is a single placement covering four declarations: .text-lede carries
-  // the 340, and the three font-[720] spans in app/page.tsx are noun phrases
-  // inside that same h1. The case-study moment is the turn's answer (T6, 5 Oct
-  // 2026), one per study. The about opener is unspent.
+  // §3.2 permits three signature placements sitewide. TWO are spent, and both
+  // spend only their LIGHT half. The home hero's h1 is one weight since 13 Oct
+  // 2026 (structure 1a amended): .text-lede carries the 340, and the 720 that
+  // .text-lede strong gave its key phrases is unspent until the design system
+  // pass rules it. The case-study moment is the turn's answer (T6, 5 Oct 2026),
+  // one per study. The about opener is unspent.
   signature: [
-    { selector: '.text-lede', reason: '§3.2 placement 1 of 3 — the home hero h1; its 340 and the three font-[720] spans inside it are one signature, ceiling 60px' },
-    { selector: '.text-lede strong', reason: '§3.2 placement 1 of 3, its loud half: the three domain nouns inside the home hero h1, moved out of JSX font-[720] on 1 Oct 2026 so this check can see them' },
+    { selector: '.text-lede', reason: '§3.2 placement 1 of 3, the home hero h1, ceiling 60px. Its light half only since 13 Oct 2026: the sentence is one weight, and the 720 on key phrases is unspent until the design system pass, as with the turn answer below' },
     { selector: '.case-study-prose .turn-answer', reason: '§3.2 placement 2 of 3, "one moment per case study": the T6 turn answer at the rung 5 clamp, ceiling 72px. Its key phrase is 600, not 720 (ruling K1, 5 Oct 2026), so the light half is spent here without the loud one' },
   ],
 };
@@ -812,9 +812,11 @@ const add = (id, title, failures, note) =>
 }
 
 // ── Known gap, surfaced rather than silently passed ────────────────────────
-// The 720 half of the signature ships as a Tailwind arbitrary utility in JSX
-// (font-[720]), which a globals.css-only parser cannot see. C4 adds the JSX
-// scan alongside the allowlist. Reported, not asserted.
+// A signature weight authored as a Tailwind arbitrary utility in JSX
+// (font-[720]) is invisible to a globals.css-only parser. The home hero's 720
+// shipped that way until 1 Oct 2026; no live route does now, and the sandbox
+// clone still does. C4 adds the JSX scan alongside the allowlist. Reported,
+// not asserted.
 const jsxWeights = [];
 {
   async function walk(dir) {
@@ -829,7 +831,7 @@ const jsxWeights = [];
       const p = join(dir, e.name);
       if (e.isDirectory()) await walk(p);
       else if (/\.(tsx|jsx|mdx)$/.test(e.name)) {
-        // stripComments, because app/page.tsx's own doc-comment says
+        // stripComments, because app/page.tsx's doc-comment once said
         // "three domain nouns jump to font-[720]" and was being counted as a
         // fourth shipped utility. A blind-spot report that overcounts is a
         // different lie from one that undercounts, and neither is acceptable
@@ -871,8 +873,8 @@ if (jsxWeights.length) {
   );
   {
     // DO NOT READ THE COUNT AS LIVE SURFACES. It walks app/ and components/,
-    // and app/sandbox/home-video/page.tsx duplicates the home hero verbatim,
-    // so the sandbox copy is counted beside the real one. Measured 21 Aug:
+    // and app/sandbox/home-video/page.tsx is a clone of the pre-13 Oct home
+    // hero, so the sandbox copy is counted beside any real one. Measured 21 Aug:
     // 7 occurrences, 3 of them the live home hero (consumer / enterprise /
     // defense inside .text-lede), 4 the sandbox duplicate. The blind spot is
     // real; it is smaller than the number looks.

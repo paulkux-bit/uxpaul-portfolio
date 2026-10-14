@@ -775,13 +775,16 @@
   text-wrap: balance;
 }
 
-/* Hero lede — the weighted-sentence statement (Direction D1). The element rides
-   the thin connective weight (340) + a recessive tone; the load-bearing noun
-   phrases take 720 + --text-primary from .text-lede strong; WEIGHT carries the
-   emphasis. That is the signature and it is deliberately NOT a width move: v3 R9
-   requires anything meaningful to survive the fallback, and weight does while
-   width does not. Plain font-weight maps to the wght axis; there is no
-   font-variation-settings here and no opsz — the axis does not exist. */
+/* Hero lede: the home h1, the claim that stands alone above the proof group
+   (structure 1a amended, 13 Oct 2026). One weight and one colour until the
+   design system pass: the whole sentence rides 340 in --text-primary, so the
+   home hero spends only the LIGHT half of its 340/720 signature, the way the
+   turn's answer does. The loud half (720 on key phrases, from the retired
+   .text-lede strong rule) is unspent until that pass rules it. The signature is
+   deliberately a WEIGHT contrast and NOT a width move: v3 R9 requires anything
+   meaningful to survive the fallback, and weight does while width does not.
+   Plain font-weight maps to the wght axis; there is no font-variation-settings
+   here and no opsz, because the axis does not exist. */
 @utility text-lede {
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
@@ -794,15 +797,6 @@
      deferred. This is the home h1 — decided against real content, not by
      rounding to the nearer band. */
   text-wrap: balance;
-}
-
-/* The home hero's loud half of the 340/720 signature: the three domain nouns
-   inside the text-lede h1. Authored here, not as `font-[720]` in JSX, so
-   lint:type check 4 sees the weight and its placement (closing review, 1 Oct
-   2026). <strong> because weight IS the emphasis in this sentence. */
-.text-lede strong {
-  font-weight: 720;
-  color: var(--text-primary);
 }
 
 /* Hero entrance — three beats fade up in sequence (--beat = stagger index, set
