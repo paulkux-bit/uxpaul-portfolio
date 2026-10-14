@@ -80,8 +80,8 @@ const WORKED = [
     line: (
       <>
         Designed the UX framework for a <span className="whitespace-nowrap">mobile-first</span>{' '}
-        network management tool for enterprise IT, and built demos that helped raise a $48M Series
-        C.
+        network management tool for enterprise IT, and built product demos used in SevOne&apos;s
+        fundraising.
       </>
     ),
   },
@@ -151,10 +151,10 @@ export default function AboutPage() {
           <div className="about-actions">
             <a
               className="about-btn"
-              href="/Paul-Kali-Resume-2026.pdf"
+              href="/Paul-Kali-Resume.pdf"
               target="_blank"
               rel="noopener"
-              download
+              download="Paul Kali Resume.pdf"
             >
               Résumé (PDF)
               {/* §2: no size, no strokeWidth. 1em against the button's own
