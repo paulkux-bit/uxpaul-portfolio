@@ -151,7 +151,7 @@ export default function AboutPage() {
           <div className="about-actions">
             <a
               className="about-btn"
-              href="/Paul-Kali-Resume-2026.pdf"
+              href="/Paul-Kali-Resume.pdf"
               target="_blank"
               rel="noopener"
               download="Paul Kali Resume.pdf"
