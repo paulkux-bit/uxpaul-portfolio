@@ -74,9 +74,9 @@ design principles, accessibility floor) lives in `PRODUCT.md` at the repo root.
 Read it before making design decisions. Defer to it on every judgment call.
 
 ## Project
-Personal portfolio site for Paul Kali (Senior Product Designer with 8 years 
-of leadership experience). Goal: land a senior IC, design lead, or director 
-role.
+Personal portfolio site for Paul Kali (Senior Product Designer). Goal: land a
+senior or staff IC role (Paul, 13 Oct 2026: IC only, not management; the
+site carries no tenure number).
 
 ### Schedule — there is no hard deadline
 
@@ -804,7 +804,7 @@ The `attribute="class"` is critical — the CSS expects `.dark` on `<html>`, not
 
 ## Design intent & director frame (read before any design or content change)
 
-Portfolio for Paul Kali, senior product designer, targeting **Senior IC, Staff IC, and Design Manager** roles at mission-driven orgs (consumer/FAANG, defense, civic tech). "Best offer wins." The site itself is a portfolio piece: its craft is evidence.
+Portfolio for Paul Kali, senior product designer, targeting **senior and staff IC** roles (IC only since 13 Oct 2026; Design Manager is no longer a target) at mission-driven orgs (consumer/FAANG, defense, civic tech). "Best offer wins." The site itself is a portfolio piece: its craft is evidence.
 
 **Audience — design for these three, name them when a change affects behavior:**
 - **Dana** (Director, ~3-min skim): experiences the site as perceived performance + polish. Never opens a drawer.
