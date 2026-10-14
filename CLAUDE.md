@@ -151,7 +151,7 @@ whenever two pieces of work look equally worthy.
   list of six rows: company, title, dates and one line, no expand and collapse;
   promotions live in the title as "X to Y"; dates are written with "to") with
   the three credentials under it → What I'm looking for (Role, Location, Scope)
-  → the close (the email as the heading, then the life line). The phase
+  → the close (the email as the heading, then the life line and a thank-you line). The phase
   sections, their résumé drawers, the selected-work band and the credentials
   heading were removed. `AboutDrawer` and the drawer CSS stay on disk marked
   UNUSED, for deletion in the design system pass (`docs/unspecified-surfaces.md`).

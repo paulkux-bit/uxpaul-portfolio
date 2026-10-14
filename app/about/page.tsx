@@ -260,6 +260,9 @@ export default function AboutPage() {
         <p className="about-close__life text-small">
           I live outside Philadelphia with my wife, who teaches high school art.
         </p>
+        <p className="about-close__life text-small">
+          Thanks, sweetheart, for your love and support!
+        </p>
       </RevealSection>
     </div>
   );
