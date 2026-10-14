@@ -4521,11 +4521,11 @@ html.dark .figure-placeholder {
   gap: var(--spacing-l);
 }
 
-/* Portrait above the name on mobile (it leads in the DOM), and the right
+/* Portrait above the label on mobile (it leads in the DOM), and the right
    column from the stack point up.
 
    No max-width on mobile: it fills the content column edge to edge, so its left
-   and right edges line up with the name and the POV line. The previous
+   and right edges line up with the label and the h1. The previous
    300px cap plus left alignment left an asymmetric gap on the right that read
    as a broken crop. Not full bleed: the page container's gutters still apply. */
 .about-hero__portrait {
@@ -4561,6 +4561,9 @@ html.dark .figure-placeholder {
   }
 }
 
+/* The small "Paul Kali" label above the old title, removed from the hero.
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code). */
 .about-hero__name {
   color: var(--text-primary);
 }
@@ -4569,14 +4572,18 @@ html.dark .figure-placeholder {
   color: var(--text-muted);
 }
 
-/* The one two-tone moment on the page. Both halves live in a single <h1>, so
-   the accessible name is the whole sentence: the spans carry colour only. */
+/* The About h1, one weight and one colour until the design system pass. It
+   was the page's two-tone moment until 13 Oct 2026, a muted lead span inside
+   the one <h1> (.about-hero__pov-lead, below). */
 .about-hero__pov {
   color: var(--text-primary);
   text-wrap: balance;
   max-width: 20ch;
 }
 
+/* The h1's muted lead span and the grounding line under the h1, both removed
+   from the hero. UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code). */
 .about-hero__pov-lead {
   color: var(--text-muted);
 }
@@ -4659,6 +4666,11 @@ html.dark .figure-placeholder {
   max-width: 24ch;
 }
 
+/* The phase note ("First retail, then defense, on purpose."), removed with
+   the phases. .about-phase and .about-phase__title above stay in use: the
+   About sections and their four h2s carry them (ruling Q3-a).
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code). */
 .about-phase__note {
   color: var(--text-secondary);
   max-width: 52ch;
@@ -4818,6 +4830,13 @@ html.dark .figure-placeholder {
 }
 
 /* ── Résumé rows ──────────────────────────────────────────────────────────
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code).
+   Everything from here to the Selected-work band (.about-row*, .about-roles*)
+   styles components/about/drawer.tsx, which no route renders since About
+   became a flat list (13 Oct 2026). Its allowlist entries in lint-space and
+   lint-interaction carry the same marker.
+
    One DOM, three layouts, and the only difference is the grid definition.
 
    < 600    company owns its own line across the full width minus the mark, then
@@ -5166,10 +5185,11 @@ html.dark .figure-placeholder {
 
 /* ── Selected-work band ───────────────────────────────────────────────────
    The base band: full-width rule top and bottom, label left, arrow right, the
-   hairlines being its shape. No route renders it bare any more. Both uses
-   (About's band and the next-case-study link) carry --unruled below, which
-   takes the rules off and puts the arrow after the label's last word. The
-   base stays as the shape that modifier is defined against. */
+   hairlines being its shape. No route renders it bare any more. Its one use,
+   the next-case-study link, carries --unruled below, which takes the rules off
+   and puts the arrow after the label's last word; About's own band was removed
+   on 13 Oct 2026. The base stays as the shape that modifier is defined
+   against. */
 
 .about-work-band {
   /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
@@ -5284,6 +5304,11 @@ html.dark .figure-placeholder {
 }
 
 /* ── Credentials ──────────────────────────────────────────────────────────
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code).
+   The credentials are one wrapping line under the work list now
+   (.about-credentials).
+
    A typographic list, not chips. Label left, context right, hairline between.
    Two columns from md up; stacked below, where a right-aligned context would
    strand against the label. */
@@ -5325,7 +5350,10 @@ html.dark .figure-placeholder {
   }
 }
 
-/* ── Contact ──────────────────────────────────────────────────────────── */
+/* ── Contact ──────────────────────────────────────────────────────────────
+   UNUSED since 13 Oct 2026: delete in the design system pass
+   (docs/unspecified-surfaces.md, About's unused code).
+   The close keeps its h2 and sets the life line in .about-close__life. */
 
 .about-contact__body {
   color: var(--text-secondary);

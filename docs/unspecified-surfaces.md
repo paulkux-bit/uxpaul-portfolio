@@ -247,6 +247,41 @@ Needs: rungs and a width token from the design system pass. The email close
 sits one section break (`--spacing-section`, 74px at 390 and 128px at 1440)
 below What I'm looking for; v11 had it 48px below, inside that section.
 
+**About's unused code, and a class rename.** Joined 13 Oct 2026 from the same
+build, and the second entry to carry dead code with a deletion recipe (the
+Earlier work shelf was the first). Paul ruled log, not delete (Q2-b, Q3-a),
+so the About rebuild left these on disk, each marked "UNUSED since 13 Oct
+2026" in its comment or allowlist reason:
+
+1. **The drawer.** `components/about/drawer.tsx` and its CSS, `.about-row*`
+   and `.about-roles*`, including the `.about-row__role::after` middle dot.
+   Allowlist entries: `scripts/lint-space.mjs` (`.about-row__mark`, the four
+   `.about-row__*` S3 layout entries) and `scripts/lint-interaction.mjs`
+   (`.about-row__summary:hover`).
+2. **The hero leftovers.** `.about-hero__name`, `.about-hero__pov-lead` and
+   `.about-hero__grounding`.
+3. **The phase note, the credentials rows and the contact body.**
+   `.about-phase__note`, `.about-creds*` (with its lint-space entry,
+   `.about-creds__item` gap) and `.about-contact__*`.
+4. **The rename.** `.about-phase__title` now heads About's four sections, not
+   five phases. Renaming it to `.about-section__title` touches `globals.css`,
+   `RUNGS` in `scripts/lint-type.mjs`, `PLAIN` in `scripts/assert-bands.mjs`,
+   CLAUDE.md and this file.
+
+Not on the list: `.about-phase` (the sections still carry it) and
+`.about-work-band*` (the next-case-study link renders it on every study).
+
+Deleting is not free, which is why it waits for a pass of its own. Five
+vitest assertions in `__tests__/interaction-lint.test.mjs` guard the drawer:
+the `.about-row__mark` and `.about-row::details-content` control durations,
+the `.about-row__summary` icon stroke, the `drawer.tsx` icon-context tuple and
+the `.about-roles__step::before` radius tuple. They go with the code they
+guard. The dev scripts `check-details.mjs`, `shoot-interaction.mjs`,
+`audit-matrix.mjs` and `measure-flare-ink.mjs` also name `.about-row`.
+
+Needs: the design system pass to delete items 1 to 3 with their allowlist
+entries and the five assertions, and to rule on the rename.
+
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
 than a token one. No locked spec governs a drawn chart: not its type sizes, not

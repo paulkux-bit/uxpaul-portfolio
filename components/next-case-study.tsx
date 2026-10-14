@@ -16,8 +16,9 @@ import { isPublished } from '@/app/data/case-study-routes';
  *
  * WHAT IT LOOKS LIKE. The About page's selected-work band, reused rather than
  * copied (2a): a text-h3 label, an arrow that nudges on hover, a 1px press, all
- * in globals.css under .about-work-band. It carries the --unruled modifier, as
- * About's own band now does: no hairlines, and the label underlined at rest
+ * in globals.css under .about-work-band. About dropped its own band on 13 Oct
+ * 2026, so this link is the band's one use. It carries the --unruled modifier,
+ * as About's band did: no hairlines, and the label underlined at rest
  * like any link. That modifier is one block in globals.css, built to be tuned
  * or removed after the post-build review; dropping the class brings the
  * hairline band back. The about- prefix is now a misnomer. Renaming it reaches

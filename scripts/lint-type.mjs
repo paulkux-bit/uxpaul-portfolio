@@ -225,6 +225,9 @@ const RUNGS = [
   // in §9's list of six unbanded selectors. So there was no rung to inherit and
   // no band to read; the band below is a ruling, not a lookup.
   //
+  // (.about-phase__title has carried the page's four section headings, not five
+  // phase titles, since 13 Oct 2026; the class name and the banding stand.)
+  //
   // Banded on function: the five phase titles do structural work at 36px against
   // 16px prose, and the POV line at 51px is the largest type on the page. Both
   // are display type by what they do. Neither ruling touches where they sit on
