@@ -13,18 +13,19 @@ export const metadata = {
      who has that tab open while they read.
 
      `default` is NOT run through `template`: Next applies the template to CHILD
-     segments only, so `/` stays "uxpaul" and every child gains the suffix.
+     segments only, so `/` reads the default whole and every child gains the
+     suffix. The default carries the name and title itself for that reason; it
+     was "uxpaul" until 13 Oct 2026, a home tab with no name in it.
 
-     MIDDOT, NEVER AN EM DASH. U+2014 is a lint:prose hard fail and lint:prose now
-     gates the build (9fd0eee). The page itself stopped using the middot as a
-     separator on 1 Oct 2026 (the card labels, study eyebrows and home name line
-     went to two lines); a tab title has one line, so it keeps it. */
+     A PIPE, NEVER AN EM DASH. U+2014 is a lint:prose hard fail and lint:prose
+     gates the build (9fd0eee). The middle dot this template used until 13 Oct
+     2026 went with the site-wide rule against it (Paul, final copy v11). */
   title: {
-    default: 'uxpaul',
-    template: '%s · Paul Kali',
+    default: 'Paul Kali, Senior Product Designer',
+    template: '%s | Paul Kali',
   },
   description:
-    'Paul Kali. Senior product designer. Currently with the U.S. Navy, previously URBN. Open to senior IC, staff, and management roles.',
+    "Paul Kali, Senior Product Designer. Currently with the U.S. Navy, where I've designed intelligence tools for thousands of operators. Previously at URBN.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -7,9 +7,9 @@ import { FramedImage } from '@/components/framed-image';
 import { RevealSection } from '@/components/about/reveal-section';
 
 export const metadata = {
-  /* 'About', not 'About · uxpaul': the root layout's title template appends
-     " · Paul Kali", so the hand-rolled site name would render
-     "About · uxpaul · Paul Kali". Renders "About · Paul Kali". */
+  /* 'About' alone: the root layout's title template appends " | Paul Kali",
+     so a hand-rolled site name here would print the name twice. Renders
+     "About | Paul Kali". */
   title: 'About',
 };
 
