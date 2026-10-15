@@ -410,7 +410,7 @@
   /* Motion — interaction system v1 §3. Two speeds for interaction, not four:
      controls move at one duration, cards at another. */
   --duration-control: 180ms;  /* hover, focus, press, rotation, colour */
-  --duration-card: 300ms;     /* lift, shadow, media scale */
+  --duration-card: 300ms;     /* the card panel's hover, the dialog entrance, @utility lift */
   /* A mode transition is neither an interaction nor an entrance. §3 was written
      from an interaction audit and named no category for one, so this is a NAME
      for a speed that already ships — defined at the value body was already
@@ -1208,14 +1208,13 @@
 /* ============================================================
    INTERACTION — states, authored here rather than in .tsx (R4)
 
-   Moved from Tailwind state variants with no change in value. The transition
-   still comes from the `.lift` utility above, which stays a class on the
-   article, so nothing here declares one.
+   Moved from Tailwind state variants with no change in value. The card
+   stopped carrying `.lift` at H1b (1 Oct 2026); its one transition is declared
+   on `.case-card` below.
 
-   These are hover/focus only. The pressed state (`translateY(1px)` + a drop to
-   `--shadow-rest`) is I4's, which is why lint:interaction check 7 counts
-   `.case-card--linked` as awaiting an `:active`. The two text links below are
-   exempt under spec §5 — a text link has no surface to move.
+   Hover, focus and pressed. The pressed state is `translateY(1px)` alone (§5),
+   authored after each hover so check 7 sees it there. The two text links below
+   are exempt under spec §5: a text link has no surface to move.
    ============================================================ */
 
 /* The card box. Moved out of JSX (`rounded-2xl`) so the radius comes from this
@@ -1228,19 +1227,17 @@
    its own until now. */
 .case-card {
   border-radius: var(--radius-l);
-  /* H1b, 1 Oct 2026: the card no longer lifts or casts a shadow. Paul ruled
-     border only after the human-made review found the shadow, the 3px lift and
-     the border change firing together to be the template part of the card. One
-     surface signal is left (the border tightens) beside the title's own
-     underline. The border transition moved here from the .lift utility, which
-     the card no longer carries.
+  /* H-b (home cards T4, 14 Oct 2026), replacing H1b of 1 Oct: the card's
+     one surface signal is now its panel, which deepens on hover, so the
+     panel's colour is what moves, at the card's speed. H1b had already taken
+     away the lift and the shadow; T4 takes away the visible border. The 1px
+     border stays, transparent, so forced-colors mode still draws the edge.
 
-     TRANSFORM IS NO LONGER TRANSITIONED, and that closes interaction spec §5's
-     open item rather than adding one. Under .lift the press eased at 300ms, so
-     a ~43ms tap reached 0.53px and never the specified 1px. That duration was
-     the lift's; with no lift, the card presses the way the button, nav link,
-     toggle and work band already do: it snaps to 1px and holds. */
-  transition: border-color var(--duration-card) var(--ease-out-soft);
+     TRANSFORM IS NOT TRANSITIONED, which is interaction spec §5's closed
+     item, kept. Under .lift the press eased at 300ms, so a ~43ms tap reached
+     0.53px and never the specified 1px. The card snaps to 1px and holds, as
+     the button, nav link, toggle and work band do. */
+  transition: background-color var(--duration-card) var(--ease-out-soft);
 }
 
 /* Footer links: standalone destinations in a row, not text in a sentence, so
@@ -1288,12 +1285,37 @@
 }
 
 /* A hover response is a promise of a click target, so it is scoped to a card
-   that has one. An unpublished card keeps its resting border. Border only since
-   H1b (1 Oct 2026): no lift, no shadow; the title underlines through
-   .case-card__title-link:hover, because the stretched link covers the card. */
-.case-card--linked:hover,
-.case-card--linked:focus-within {
-  border-color: var(--border-strong);
+   that has one. An unpublished card keeps its resting panel. H-b (home cards
+   T4, 14 Oct 2026): the panel deepens from --bg-surface to
+   --bg-surface-elevated, and the question underlines through
+   .case-card__title-link:hover, because the stretched link covers the card.
+   Hover only: nothing fills on keyboard focus, which takes the halo below. */
+.case-card--linked:hover {
+  background-color: var(--bg-surface-elevated);
+}
+
+/* K3a (14 Oct 2026): the question's hover underline is 1px at a 0.18em
+   offset, the stated exception to the base link's 2px hover. Its colour is
+   still --link-hover, from a:hover. */
+.case-card__title-link:hover {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+/* One halo for the whole card (home cards T4), the Earlier work row's pattern
+   (11 Oct 2026, .shelf__row): the global :focus-visible pair, moved from the
+   title link to the card it stands for (interaction §5). Without :has() the
+   link keeps its own halo. */
+@supports selector(:has(a)) {
+  .case-card__title-link:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+  .case-card:has(.case-card__title-link:focus-visible) {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 6px var(--focus-glow);
+  }
 }
 
 /* Pressed (§5). AUTHORED AFTER THE HOVER ON PURPOSE — equal specificity means

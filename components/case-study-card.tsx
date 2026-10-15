@@ -61,9 +61,11 @@ const COVER_SIZES =
  * Putting the stretched link inside it would clip the `::after` to the cover
  * and the client line would stop being clickable.
  *
- * Hover/focus is structural, not a color wash: the border tightens (subtle to
- * strong) and the title underlines. No lift and no shadow since H1b (1 Oct
- * 2026). Server Component.
+ * Hover deepens the panel to --bg-surface-elevated and underlines the
+ * question at 1px (H-b and K3a, 14 Oct 2026); keyboard focus draws one halo
+ * round the whole card instead. No lift and no shadow since H1b (1 Oct 2026),
+ * and no visible border since T4. The states live in globals.css. Server
+ * Component.
  */
 export function CaseStudyCard({ study }: { study: CaseStudy }) {
   const art = COVER_ART[study.slug];

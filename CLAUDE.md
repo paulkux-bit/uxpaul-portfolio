@@ -747,7 +747,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
 - **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
-- **Card hover is border only** (H1b, 1 Oct 2026): `--border-strong` and the title's underline, no lift and no shadow. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
+- **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--bg-surface-elevated` over `--duration-card`, and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 - **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
 
 ### Utility classes (mirror typography pattern)

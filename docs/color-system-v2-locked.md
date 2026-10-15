@@ -298,8 +298,10 @@ Fails on:
    anywhere in the repo. Scanning lives in `scripts/color-literals.mjs`;
    fixtures in `scripts/fixtures/color-literals/`; assertions in
    `__tests__/color-literals.test.mjs`.
-8. Any underline (`text-decoration-color`) below 3:1 against `--bg-canvas` or
-   `--bg-surface`, in either mode, or one that is not a single token and so
+8. Any underline (`text-decoration-color`) below 3:1 against `--bg-canvas`,
+   `--bg-surface` or `--bg-surface-elevated` (added 14 Oct 2026, when the
+   card's hover panel became the first underline ground of its kind), in either
+   mode, or one that is not a single token and so
    cannot be checked. The underline is a link's non-colour cue; the house rule
    is that it owes 3:1 like any affordance. Added 1 Oct 2026 with ruling A2b;
    proved red with the base link back on `--border-strong` (2.03 light).
