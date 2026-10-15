@@ -29,7 +29,7 @@
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/verification--band.png",
-      "alt": "The Verification step: a five-part timeline on the left running All-Source Correlation, Intelligence Fusion, Collaborative Verification, Historical Data Analysis and Predictive Modeling, with a link to the CJADC2 doctrine guide inside the open first step. On the right, Intelligence Sources over the past 24 hours: COMINT 8, ELINT 6, FISINT 3, GEOINT 12, HUMINT 2, MASINT 0 and OSINT 4, each with a sparkline, MASINT's empty.",
+      "alt": "The Verification step: a five-part timeline on the left running All-Source Correlation, Intelligence Fusion, Collaborative Verification, Historical Data Analysis, and Predictive Modeling, with a link to the CJADC2 doctrine guide inside the open first step. On the right, Intelligence Sources over the past 24 hours: COMINT 8, ELINT 6, FISINT 3, GEOINT 12, HUMINT 2, MASINT 0, and OSINT 4, each with a sparkline, MASINT's empty.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.45
@@ -82,7 +82,7 @@
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/chat--standard.png",
-      "alt": "A chat thread named Team Wolfpack: analysts tagged JIC, DIA and NIFC trading messages about the C2 anomaly, from Seems like a high-priority target through Should we consider EW jamming, the analyst's own Let's elevate the alert level and update the COP, and ending on Agreed. Need to inform the JOC ASAP.",
+      "alt": "A chat thread named Team Wolfpack: analysts tagged JIC, DIA, and NIFC trading messages about the C2 anomaly, from Seems like a high-priority target through Should we consider EW jamming, the analyst's own Let's elevate the alert level and update the COP, and ending on Agreed. Need to inform the JOC ASAP.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.45
@@ -95,7 +95,7 @@
     },
     {
       "src": "/case-studies/us-navy-fdt-e/gate-walk/elevate--standard.png",
-      "alt": "The Elevate Alert Level step: a Disseminate Alert button beside Skip for now, an unchecked option to update the anomaly playbook to scan automatically, and a link to chat with the USEUCOM liaison. Four later steps sit collapsed below: Update COP, Initiate Countermeasures, Task Collection and Update COA Models.",
+      "alt": "The Elevate Alert Level step: a Disseminate Alert button beside Skip for now, an unchecked option to update the anomaly playbook to scan automatically, and a link to chat with the USEUCOM liaison. Four later steps sit collapsed below: Update COP, Initiate Countermeasures, Task Collection, and Update COA Models.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.4

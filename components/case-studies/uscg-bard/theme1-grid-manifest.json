@@ -32,7 +32,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/location--filter-bar-light.png",
-      "alt": "Bard incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
+      "alt": "Bard incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause, and Severity, with Location active.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -130,7 +130,7 @@
     },
     {
       "src": "/case-studies/uscg-bard/resolutions-01/location--filter-bar-dark.png",
-      "alt": "Bard incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause and Severity, with Location active.",
+      "alt": "Bard incidents view: the Accepted tab holding 358 cases, the search field, and the shared filter set of Status, Location, Event, Cause, and Severity, with Location active.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5

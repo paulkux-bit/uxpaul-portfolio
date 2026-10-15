@@ -80,7 +80,7 @@ export const templateB: readonly TemplateBPiece[] = [
       },
       {
         src: '/client-work/lionsgate/lg-3',
-        alt: 'Rep dashboard listing four buyers as business-card tiles, each with company, package count and last visit.',
+        alt: 'Rep dashboard listing four buyers as business-card tiles, each with company, package count, and last visit.',
       },
     ],
   },
@@ -126,7 +126,7 @@ export const templateB: readonly TemplateBPiece[] = [
     images: [
       {
         src: '/client-work/bbc/bbc-confusing',
-        alt: 'Problem slide: the words Politics is confusing surrounded by party names, politicians and issues such as fracking, wind farms and parking plans.',
+        alt: 'Problem slide: the words Politics is confusing surrounded by party names, politicians, and issues such as fracking, wind farms, and parking plans.',
       },
       {
         src: '/client-work/bbc/bbc-pillars',
@@ -158,7 +158,7 @@ export const templateB: readonly TemplateBPiece[] = [
       },
       {
         src: '/client-work/k-hovnanian/khov-2',
-        alt: 'Community search map with an open filter panel for home type, quick move-in and a $200K to $400K price range.',
+        alt: 'Community search map with an open filter panel for home type, quick move-in, and a $200K to $400K price range.',
       },
       {
         src: '/client-work/k-hovnanian/khov-3',
