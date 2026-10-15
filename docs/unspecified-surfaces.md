@@ -412,11 +412,18 @@ padding is a function of its label size rather than of the page rhythm.
 
 **Card meta.** Density, the type rung for the meta at the top of each
 Selected work card, and the gap between it and the drawing below it. As built
-since T4 (14 Oct 2026) it is two lines in `text-caption`: the client, at weight
-500 in `--text-primary`, then the product and its years in `text-muted`
+since T4 (14 Oct 2026) it is two lines in `text-caption`: the client, at the
+caption's 400 in `--text-secondary` (since 15 Oct 2026; it was 500 in
+`--text-primary`, which in dark read as a second headline beside the
+question), then the product and its years in `text-muted`
 ("Bard, 2025 to now"), the range held on one line by `whitespace-nowrap`. It is
 the card's top line on screen and follows the `h2` in the DOM (`order-first`),
-with a visually hidden comma after the client.
+with a visually hidden comma after the client. The client's colour is a
+recorded deviation: it is 14px in `--text-secondary`, which type v3 §3.5's
+colour-by-rung table gives to 16px support text (rung 0.5), while 14px caption
+text (rung 0) takes `--text-muted`. Paul ruled it on 15 Oct 2026 over
+`--text-muted` so the brand keeps its lead over the product line. Needs: the
+design system pass to settle the meta's rung, and with it this colour.
 
 **Pinned specimen tones.** A colour whose job is to **not** follow the theme:
 the light and dark cells of a `ModePair` comparison, and the fixed placeholder

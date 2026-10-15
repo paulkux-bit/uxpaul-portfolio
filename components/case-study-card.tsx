@@ -94,9 +94,12 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 
   const meta = (
     // The client leads: to a skimming hiring manager the institution (U.S.
-    // Navy, URBN) is the recognizable equity (B2, 3 Oct 2026), at weight 500
-    // since T4. Under it, in text-muted, the product and its years (home cards
-    // Rb and H4b, 14 Oct 2026). The range sits in its own whitespace-nowrap
+    // Navy, URBN) is the recognizable equity (B2, 3 Oct 2026). It leads by
+    // place and one step of colour, text-secondary at the caption's 400, so
+    // the question is the card's only text in --text-primary (3a ruling on
+    // the client line, a, 15 Oct 2026; it was 500 in text-primary from T4,
+    // and in dark read as a second headline). Under it, in text-muted, the
+    // product and its years (home cards Rb and H4b, 14 Oct 2026). The range sits in its own whitespace-nowrap
     // span so it never wraps (H8b).
     //
     // ON SCREEN THIS IS THE CARD'S TOP LINE; IN THE DOM IT FOLLOWS THE h2
@@ -105,7 +108,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
     // accessible name is unchanged. The sr-only comma after the client is the
     // pause a screen reader would otherwise lose between client and product.
     <p className="order-first text-caption">
-      <span className="block font-medium text-primary">
+      <span className="block text-secondary">
         {study.client}
         <span className="sr-only">,</span>
       </span>
