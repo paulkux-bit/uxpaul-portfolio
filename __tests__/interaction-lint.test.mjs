@@ -527,25 +527,54 @@ describe('§5 pressed states — the specified values, on the specified surfaces
     }
   });
 
-  // H1b, the rest and hover halves. The card rests flat (no .lift), its hover is
-  // the border alone, and it does not transition transform, so a tap reaches the
-  // full 1px like every other surface.
-  it('the card rests flat and hovers with its border only (H1b)', () => {
-    const card = readFileSync(join(REPO, 'components', 'case-study-card.tsx'), 'utf8');
-    expect(blankComments(card)).not.toMatch(/\blift\b/);
-    const hover = new Map();
+  // H-b (home cards T4, 14 Oct 2026), replacing H1b's border-only hover. The
+  // card rests flat and borderless (a transparent 1px border, kept for forced
+  // colors), its hover deepens the panel to --bg-surface-elevated at
+  // --duration-card, and its question underlines at 1px (K3a). It does not
+  // transition transform, so a tap reaches the full 1px like every other
+  // surface, and nothing fills on keyboard focus.
+  const declsOf = (selector) => {
+    const out = new Map();
     css.walkRules((r) => {
-      if (!r.selector.split(',').some((s) => s.trim() === '.case-card--linked:hover')) return;
-      for (const d of r.nodes ?? []) if (d.type === 'decl') hover.set(d.prop, d.value.trim());
+      if (!r.selector.split(',').some((s) => s.trim() === selector)) return;
+      for (const d of r.nodes ?? []) if (d.type === 'decl') out.set(d.prop, d.value.trim());
     });
-    expect([...hover.keys()]).toEqual(['border-color']);
-    let t = null;
-    css.walkRules((r) => {
-      if (r.selector.trim() !== '.case-card') return;
-      for (const d of r.nodes ?? []) if (d.type === 'decl' && d.prop === 'transition') t = d.value;
+    return out;
+  };
+  it('the card rests borderless and deepens its panel on hover (H-b)', () => {
+    const card = blankComments(readFileSync(join(REPO, 'components', 'case-study-card.tsx'), 'utf8'));
+    expect(card).not.toMatch(/\blift\b/);
+    expect(card).toMatch(/\bborder-transparent\b/);
+    expect(card).not.toMatch(/\bborder-(subtle|default|strong)\b/);
+    expect([...declsOf('.case-card--linked:hover')]).toEqual([['background-color', 'var(--bg-surface-elevated)']]);
+    expect(declsOf('.case-card--linked:focus-within').size, 'nothing fills on keyboard focus').toBe(0);
+    const t = declsOf('.case-card').get('transition');
+    expect(t).toBe('background-color var(--duration-card) var(--ease-out-soft)');
+    const u = declsOf('.case-card__title-link:hover');
+    expect(u.get('text-decoration-thickness'), 'K3a: 1px, not the base 2px').toBe('1px');
+    expect(u.get('text-underline-offset')).toBe('0.18em');
+  });
+
+  // The focus half: one halo round the card, the Earlier work row's pattern,
+  // and only where :has() can draw it, so a browser without it keeps the link's.
+  it('a focused card draws one halo round itself, not round the link', () => {
+    const inSupports = new Map();
+    css.walkAtRules('supports', (at) => {
+      if (!at.params.includes(':has(')) return;
+      at.walkRules((r) => {
+        const m = new Map();
+        for (const d of r.nodes ?? []) if (d.type === 'decl') m.set(d.prop, d.value.trim());
+        inSupports.set(r.selector.trim(), m);
+      });
     });
-    expect(t).toContain('border-color');
-    expect(t).not.toContain('transform');
+    const card = inSupports.get('.case-card:has(.case-card__title-link:focus-visible)');
+    expect(card, 'no card halo under @supports selector(:has(a))').toBeDefined();
+    expect(card.get('outline')).toBe('2px solid var(--focus-ring)');
+    expect(card.get('outline-offset')).toBe('3px');
+    expect(card.get('box-shadow')).toBe('0 0 0 6px var(--focus-glow)');
+    const link = inSupports.get('.case-card__title-link:focus-visible');
+    expect(link?.get('outline')).toBe('none');
+    expect(link?.get('box-shadow')).toBe('none');
   });
 
   // The exemptions are decisions, so they are asserted rather than left as the

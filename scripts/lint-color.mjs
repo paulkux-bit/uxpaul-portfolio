@@ -422,7 +422,9 @@ const add = (id, title, failures) =>
 // that it owes 3:1 like any other affordance; the base link and the active nav
 // link sat at 2.04 light / 2.35 dark until the closing review (A2b, 1 Oct 2026).
 // Every text-decoration-color that names a token is checked against
-// --bg-canvas and --bg-surface, in both modes. A value that is not a single
+// --bg-canvas, --bg-surface and --bg-surface-elevated, in both modes. The
+// elevated surface joined on 14 Oct 2026: the card's hover panel (T4, H-b)
+// is the first surface an underline sits on that is neither of the others. A value that is not a single
 // token cannot be checked, so it fails rather than passing unseen.
 {
   const f = [];
@@ -435,7 +437,7 @@ const add = (id, title, failures) =>
       continue;
     }
     for (const mode of ['light', 'dark']) {
-      for (const s of ['--bg-canvas', '--bg-surface']) {
+      for (const s of ['--bg-canvas', '--bg-surface', '--bg-surface-elevated']) {
         const uv = resolveOklch(byMode[mode].get(m[1]) ?? '', mode);
         const sv = resolveOklch(byMode[mode].get(s) ?? '', mode);
         if (!uv || !sv) {

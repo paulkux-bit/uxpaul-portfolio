@@ -147,16 +147,38 @@ describe('CLAUDE.md typography matches the code', () => {
 
   // The row's px range is checked against the real clamp, so a resize that
   // leaves the utility name alone still reddens this.
+  // Sizes that name a --type-* token are resolved through the token, down to
+  // rem. Until 14 Oct 2026 this read only literal rem, so every tokenised row
+  // (five, then six when T4 tokenised text-cover) was skipped as "cannot
+  // parse", and a stale text-cover row stayed green.
+  const typeTokens = new Map(
+    [...css.matchAll(/(--type-[a-z0-9-]+)\s*:\s*([^;]+);/g)].map(([, n, v]) => [n, v.trim()]),
+  );
+  const resolveType = (v, depth = 0) => {
+    const m = v.trim().match(/^var\(\s*(--type-[a-z0-9-]+)\s*\)$/);
+    return m && depth < 5 && typeTokens.has(m[1]) ? resolveType(typeTokens.get(m[1]), depth + 1) : v.trim();
+  };
+  const clampEnds = (v) => {
+    const body = v.match(/^clamp\((.*)\)$/)?.[1];
+    if (!body) return null;
+    const args = [];
+    let depth = 0, start = 0;
+    for (let i = 0; i < body.length; i++) {
+      if (body[i] === '(') depth++;
+      else if (body[i] === ')') depth--;
+      else if (body[i] === ',' && depth === 0) { args.push(body.slice(start, i)); start = i + 1; }
+    }
+    args.push(body.slice(start));
+    return args.length === 3 ? [resolveType(args[0]), resolveType(args[2])] : null;
+  };
   it('every row states the px range its utility actually renders', () => {
     const toPx = (rem) => Math.round(parseFloat(rem) * 16);
-    for (const [name, size] of utilities) {
-      const clamp = size.match(/clamp\(\s*([\d.]+)rem\s*,[^,]+,\s*([\d.]+)rem\s*\)/);
-      const flat = size.match(/^([\d.]+)rem$/);
-      const expected = clamp
-        ? [toPx(clamp[1]), toPx(clamp[2])]
-        : flat
-          ? [toPx(flat[1])]
-          : null;
+    const remOf = (v) => v.match(/^([\d.]+)rem$/)?.[1];
+    for (const [name, raw] of utilities) {
+      const size = resolveType(raw);
+      const ends = clampEnds(size) ?? [size];
+      const rems = ends.map(remOf);
+      const expected = rems.every(Boolean) ? rems.map(toPx) : null;
       if (!expected) continue; // a size this test cannot parse is not a failure to state
       const stated = (rows.get(name).match(/\d+/g) ?? []).map(Number);
       for (const px of expected) {

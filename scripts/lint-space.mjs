@@ -157,7 +157,6 @@ const ALLOWLIST = {
     // relationship nobody has measured, so these stay declared with a reason.
     { file: 'components/case-study-card.tsx', util: 'md:px-l', reason: 'S3.5 density — card inset opens 24 -> 32 at md' },
     { file: 'components/case-study-card.tsx', util: 'md:py-xl', reason: 'S3.5 density — card inset opens 32 -> 48 at md' },
-    { file: 'components/case-study-card.tsx', util: 'md:mb-l', reason: 'S3.5 density — cover art to title opens at md' },
     { file: 'components/case-study-card.tsx', util: 'md:p-8', reason: 'S3.5 density — media-tier card inset' },
     { file: 'components/site-footer.tsx', util: 'md:px-l', reason: 'S3.5 density — footer inset tracks the page container' },
     { file: 'components/site-footer.tsx', util: 'md:py-xl', reason: 'S3.5 density — footer inset tracks the page container' },

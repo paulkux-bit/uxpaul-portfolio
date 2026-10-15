@@ -70,7 +70,6 @@ const FLARED = [
  */
 const PLAIN = [
   '.about-phase__title',      // 36.4px @1440, 40px ceiling
-  '.text-cover',              // 32px
   '.friction-beat__headline', // 32px
   // The T6 question (5 Oct 2026): reading size, and the one h2 in the prose that
   // is NOT flared. It also matches `.case-study-prose h2`, so the flared read
@@ -89,6 +88,9 @@ const PLAIN = [
 
 /** Reading surfaces that must stay at 0. A leak lands here first. */
 const READING = [
+  // The card question: 21 to 24px and band read since T4 (14 Oct 2026). It
+  // sat in PLAIN as 32px display type until then.
+  '.text-cover',
   '.case-study-prose p',
   // The client work dialog's text under its flared title (11 Oct 2026). The
   // title is a span inside the h2, so a leak would have to come from a

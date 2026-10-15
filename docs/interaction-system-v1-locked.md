@@ -152,7 +152,7 @@ its own `@supports` alt-text handling and is not an icon.
 
 ```css
 --duration-control: 180ms;   /* hover, focus, press, rotation, colour */
---duration-card:    300ms;   /* lift, shadow, media scale */
+--duration-card:    300ms;   /* the card panel's hover, the dialog entrance, lift */
 --duration-theme:   450ms;   /* mode transition */
 --duration-reveal:  560ms;   /* entrance — unchanged */
 ```
@@ -287,7 +287,12 @@ other loudly instead of agreeing by shared omission.
 ## 5. States
 
 The global two-layer `:focus-visible` halo (2px ring, 3px offset, 6px glow) is
-unchanged and every control continues to inherit it.
+unchanged and every control continues to inherit it, with one variation in where
+it is drawn. **Where a link stands for a whole surface, the halo goes round the
+surface:** the Earlier work row (11 Oct 2026) and the Selected work card (T4,
+14 Oct 2026). Under `@supports selector(:has(a))` the link's own ring is removed
+and the row or card takes the same pair; without `:has()` the link keeps its own
+halo, one box. The values do not change, only the box they surround.
 
 | Surface | Hover | Pressed |
 |---|---|---|
@@ -295,7 +300,7 @@ unchanged and every control continues to inherit it.
 | Nav link | colour + underline | sink 1px |
 | Button | background `--text-primary` → `--text-secondary` | sink 1px |
 | Theme toggle | colour + border `--border-strong` | sink 1px |
-| Card | `--border-strong` + title underline (H1b, 1 Oct 2026; was `translateY(-3px)` + `--shadow-hover` + `--border-strong`) | sink 1px |
+| Card | panel `--bg-surface` → `--bg-surface-elevated` + question underline at 1px, 0.18em offset (H-b and K3a, 14 Oct 2026; was `--border-strong` + title underline at H1b, 1 Oct 2026, and `translateY(-3px)` + `--shadow-hover` + `--border-strong` before that). Nothing fills on keyboard focus | sink 1px |
 | Work band | arrow `translateX(3px)` + label underline; the unruled band (`--unruled`, 2 Oct 2026, no hairlines) is underlined at rest and the underline thickens to 2px in `--link-hover` | sink 1px, **on the band** |
 | Disclosure row | colour | none — the rotation is the feedback |
 
@@ -307,7 +312,10 @@ layout breaking, and over tint because tint nearly vanishes on the dark ground.
 (via `@utility lift`) and was the only row where the shadow half meant anything.
 Paul ruled border only after the human-made review found the shadow, the lift
 and the border change firing together to be the template part of the card. Every
-surface now sinks and does nothing else.
+surface now sinks and does nothing else. **Since T4 (14 Oct 2026) the card has no
+visible border either:** it is a `--bg-surface` panel on `--bg-canvas` with a
+transparent 1px border, kept so forced-colors mode draws its edge, and its hover
+is the panel deepening (H-b) rather than the border.
 
 **The work band sinks as a band.** It is a single `<Link>` whose hover is
 expressed on two descendants, so `lint:interaction` check 7 reports it twice; the
@@ -523,10 +531,10 @@ part that needs both other systems.
 
 **Card meta** is half closed, and the half is the container rather than the
 strip. What this document specifies belongs to the **card**: its hover, pressed
-state, elevation and radius (`--radius-l`). The `project · client` strip itself
-has no interaction to specify, and its three open questions — internal density,
-its type rung, and the gap between it and the headline above — are untouched
-here. `text-caption` is what it renders at today, named in `CLAUDE.md`'s scale
+state, elevation and radius (`--radius-l`). The meta itself (the client, then
+the product and its years, at the card's top since T4) has no interaction to
+specify, and its three open questions, internal density, its type rung, and its
+gap to the drawing below it, are untouched here. `text-caption` is what it renders at today, named in `CLAUDE.md`'s scale
 table but not assigned to this surface by any locked §-rule.
 
 **Entrance motion is unspecified in v1.** §3 governs interaction; entrance was
