@@ -35,6 +35,15 @@ import manifest from '@/app/data/client-work-images.json';
  * the keyboard, it lands on the close button, whose halo shows; opened by a
  * pointer, a deep link or Back/Forward, it lands on the panel, which draws no
  * ring (Paul's ruling, 11 Oct 2026: the ring on open is for keyboard users).
+ *
+ * EVERY CLOSE FADES FIRST (3d ruling 3b, 15 Oct 2026). The button, the scrim,
+ * Esc (its keydown) and Back all call requestClose, which marks the dialog
+ * data-closing, waits --duration-control for the CSS fade and then calls
+ * close(). Under reduced motion it closes at once. A piece opened during the
+ * fade (Back then Forward) cancels the pending close. Any other close request
+ * (the Android back gesture) arrives as a cancel event and goes the same way,
+ * except before the reader's first tap on a cold deep link, when the browser
+ * will not let the cancel be prevented and the dialog closes at once.
  */
 
 type ImageFile = { width: number; height: number };
@@ -108,6 +117,8 @@ export function ClientWorkDialog() {
   // Opened by a keyboard activation of a row (Enter fires a click with
   // detail 0). Everything else, including a cold deep link, is not.
   const keyboardRef = useRef(false);
+  // The pending close, while the dialog fades out (requestClose).
+  const closeTimerRef = useRef<number | null>(null);
   // The current image, readable from observer callbacks without a stale closure.
   const imageRef = useRef(0);
 
@@ -125,9 +136,30 @@ export function ClientWorkDialog() {
   const statementId = useId();
 
   const show = useCallback((index: number) => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+      dialogRef.current?.removeAttribute('data-closing');
+    }
     setCurrent(index);
     setImage(0);
     imageRef.current = 0;
+  }, []);
+
+  // The one way to close: fade, then close() (see EVERY CLOSE FADES FIRST).
+  const requestClose = useCallback(() => {
+    const dialog = dialogRef.current;
+    if (!dialog?.open || closeTimerRef.current !== null) return;
+    if (prefersReducedMotion()) {
+      dialog.close();
+      return;
+    }
+    dialog.setAttribute('data-closing', '');
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      dialog.removeAttribute('data-closing');
+      if (dialog.open) dialog.close();
+    }, durationMs('--duration-control', 180));
   }, []);
 
   // showModal() AFTER the content renders, not in show(): opened empty, it would
@@ -208,12 +240,12 @@ export function ClientWorkDialog() {
       const index = indexOfHash(window.location.hash);
       keyboardRef.current = false;
       if (index >= 0) show(index);
-      else if (dialogRef.current?.open) dialogRef.current.close();
+      else if (dialogRef.current?.open) requestClose();
     };
     if (indexOfHash(window.location.hash) >= 0) sync();
     window.addEventListener('popstate', sync);
     return () => window.removeEventListener('popstate', sync);
-  }, [show]);
+  }, [show, requestClose]);
 
   // Every way of closing (the button, Esc, the scrim, Back) ends here.
   const onClose = useCallback(() => {
@@ -234,7 +266,7 @@ export function ClientWorkDialog() {
     row?.focus();
   }, [current]);
 
-  const close = () => dialogRef.current?.close();
+  const close = requestClose;
 
   // Image changes, from the thumbnails, the arrow keys or a swipe.
   const goToImage = (next: number) => {
@@ -283,8 +315,8 @@ export function ClientWorkDialog() {
     window.history.replaceState(window.history.state, '', `#${templateB[next].slug}`);
     const reduce = prefersReducedMotion();
     const swap = () => {
-      // Closed while the old piece was leaving: do not reopen.
-      if (!dialogRef.current?.open) return;
+      // Closed, or closing, while the old piece was leaving: do not reopen.
+      if (!dialogRef.current?.open || closeTimerRef.current !== null) return;
       setCurrent(next);
       setImage(0);
       imageRef.current = 0;
@@ -330,6 +362,21 @@ export function ClientWorkDialog() {
       aria-labelledby={piece ? titleId : undefined}
       aria-describedby={piece ? statementId : undefined}
       onClose={onClose}
+      onKeyDown={(event) => {
+        // Esc, before it becomes a cancel event. A cancel can be prevented
+        // only after a click or key since the page loaded, so on a cold deep
+        // link Esc skipped the fade (measured in Chromium and WebKit).
+        if (event.key !== 'Escape') return;
+        event.preventDefault();
+        requestClose();
+      }}
+      onCancel={(event) => {
+        // Any other close request (the Android back gesture): fade out like
+        // every other close. If the browser closes anyway (a cancel it will
+        // not let us prevent), onClose still runs.
+        event.preventDefault();
+        requestClose();
+      }}
     >
       {piece && previous && next ? (
         <div

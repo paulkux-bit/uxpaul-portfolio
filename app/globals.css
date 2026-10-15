@@ -2110,11 +2110,11 @@ dialog.client-work::backdrop {
   }
 }
 
-/* Motion: the panel rises into place as the scrim fades in; content
-   cross-fades and moves in the direction of travel on a piece change (the
-   script waits --duration-control); the bar slides. All of it is skipped
-   under reduced motion, where the scrim and the bar are simply there and the
-   swap is instant.
+/* Motion: the panel rises into place as the scrim fades in, and closes with a
+   short fade; content cross-fades and moves in the direction of travel on a
+   piece change (the script waits --duration-control); the bar slides. All of
+   it is skipped under reduced motion, where the scrim and the bar are simply
+   there, and the swap and the close are instant.
 
    The panel is opaque from its first frame (3d ruling 2b, 15 Oct 2026). It
    used to fade in too, and while it did the page showed through it: at 33ms
@@ -2136,6 +2136,18 @@ dialog.client-work::backdrop {
     dialog.client-work[open]::backdrop {
       background-color: transparent;
     }
+  }
+  /* The close (3d ruling 3b, 15 Oct 2026). The script sets data-closing,
+     waits --duration-control and then calls close(), so the panel and the
+     scrim fade out together in every browser; it was one frame from dark to
+     bright. Esc, the close button, the scrim and Back all come through it. */
+  dialog.client-work[data-closing] .client-work__panel {
+    opacity: 0;
+    transition: opacity var(--duration-control) var(--ease-out-soft);
+  }
+  dialog.client-work[data-closing]::backdrop {
+    background-color: transparent;
+    transition-duration: var(--duration-control);
   }
   .client-work__panel > :not(.client-work__close) {
     transition:

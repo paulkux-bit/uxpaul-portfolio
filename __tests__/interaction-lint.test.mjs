@@ -379,6 +379,17 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
     expect(fade[0]).toContain('--duration-control');
   });
 
+  // 3d ruling 3b (15 Oct 2026): every close fades the panel and the scrim at
+  // --duration-control. Exit is as unspecified as entrance, so this is the
+  // only thing that would notice it drifting.
+  it('the client work dialog closes at --duration-control', () => {
+    for (const sel of ['dialog.client-work[data-closing] .client-work__panel', 'dialog.client-work[data-closing]::backdrop']) {
+      const t = transitionsFor(sel);
+      expect(t, `${sel} has no transition`).toHaveLength(1);
+      expect(t[0]).toContain('--duration-control');
+    }
+  });
+
   it('body and body::before move at --duration-theme — one mode transition, one speed', () => {
     for (const sel of ['body', 'body::before']) {
       const t = transitionsFor(sel);
