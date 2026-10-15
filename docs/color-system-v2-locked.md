@@ -316,6 +316,12 @@ Fails on:
    exception was deleted and the band had no exception left to allow for.
    Proved red in `__tests__/color-lint.test.mjs`, through the script's optional
    CSS path: the dark ground at 85, the dark glow at 81, the dark sunken at 49.
+10. A card step, `--card-hover` on `--bg-surface`, more than 0.01 from 1.10:1
+    in either mode. The step is ruled (H-b, 14 Oct 2026; 3a ruling 1b, 15 Oct
+    2026), and a dark retune that moves one of the two tokens without the
+    other changes it silently. `--card-hover` is followed through a bare
+    `var()`, since in light it names the elevated surface. Added 15 Oct 2026;
+    proved red with the dark `--card-hover` 0.012 lighter.
 
 **Prove every assertion in both directions before any value moves.** Four
 checks in the spacing migration passed for a reason other than the one

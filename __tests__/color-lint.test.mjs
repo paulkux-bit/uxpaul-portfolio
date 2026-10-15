@@ -109,3 +109,22 @@ describe('lint:color path mode', () => {
     expect(lint(CSS, 7, 'copy-7')).toMatch(/^✓ 7\./);
   });
 });
+
+describe('lint:color check 10, the card step', () => {
+  it('passes on the real palette and reports both steps', () => {
+    const block = lint(CSS, 10, 'real-step');
+    expect(block).toMatch(/^✓ 10\./);
+    expect(block).toMatch(/light 1\.\d{3}, dark 1\.\d{3}/);
+  });
+
+  it('fails with the dark --card-hover 0.012 lighter', () => {
+    const decl = /--card-hover\s*:\s+oklch\(([\d.]+) /.exec(CSS.slice(CSS.indexOf('\n.dark {')));
+    expect(decl, 'dark --card-hover has no colour value of its own').toBeTruthy();
+    const lighter = (Number(decl[1]) + 0.012).toFixed(3);
+    const css = inDark(CSS, decl[0], decl[0].replace(decl[1], lighter));
+    const block = lint(css, 10, 'step-lighter');
+    expect(block).toMatch(/^✗ 10\./);
+    expect(block).toMatch(/dark: --card-hover on --bg-surface = 1\.1[2-9]\d, ruled 1\.10 within 0\.01/);
+    expect(block).not.toMatch(/light:/);
+  });
+});

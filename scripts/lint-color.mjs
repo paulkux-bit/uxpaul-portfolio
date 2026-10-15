@@ -179,6 +179,18 @@ function resolveOklch(value, mode) {
   return resolveBody(body, mode);
 }
 
+/** A token's own oklch(), following a bare var() alias (--card-hover in light
+ *  is var(--bg-surface-elevated)) up to four links. */
+function resolveToken(tok, mode) {
+  let v = byMode[mode].get(tok) ?? '';
+  for (let i = 0; i < 4; i++) {
+    const m = /^var\(\s*(--[\w-]+)\s*\)$/.exec(v.trim());
+    if (!m) break;
+    v = byMode[mode].get(m[1]) ?? '';
+  }
+  return resolveOklch(v, mode);
+}
+
 /** Every oklch() in a value, alpha or not, as [L, C, H] or null each. Check 9
  *  needs the hue of the alpha tokens too (focus ring, glow, shadows), which
  *  resolveOklch refuses on purpose. The alpha is the part after a top-level
@@ -526,6 +538,35 @@ const add = (id, title, failures, note) =>
     }
   }
   add(9, `Every colour token sits in the warm hue band, ${HUE_MIN} to ${HUE_MAX}, accents included (hue axis)`, f, `${n} values`);
+}
+
+// 10: the card step. The Selected work card deepens from --bg-surface to
+// --card-hover on hover (H-b, 14 Oct 2026), and the step is ruled at 1.10:1 in
+// both modes: the elevated surface in light, and a token of its own in dark
+// (3a ruling 1b, 15 Oct 2026), which took light's step after the elevated
+// surface stepped 1.13:1 in dark and read brown. A dark retune that moves
+// --bg-surface or --card-hover without the other changes the step silently;
+// this holds it within 0.01. --card-hover is followed through var() to the
+// surface it names. Proved red in __tests__/color-lint.test.mjs with the dark
+// --card-hover moved 0.012 lighter.
+{
+  const f = [];
+  const STEP = 1.1;
+  const TOLERANCE = 0.01;
+  const steps = [];
+  for (const mode of ['light', 'dark']) {
+    const hv = resolveToken('--card-hover', mode);
+    const sv = resolveToken('--bg-surface', mode);
+    if (!hv || !sv) {
+      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --card-hover or --bg-surface` });
+      continue;
+    }
+    const r = contrast(hv, sv);
+    steps.push(`${mode} ${r.toFixed(3)}`);
+    if (Math.abs(r - STEP) > TOLERANCE)
+      f.push({ where: CSS_FILE, detail: `${mode}: --card-hover on --bg-surface = ${r.toFixed(3)}, ruled ${STEP.toFixed(2)} within ${TOLERANCE}` });
+  }
+  add(10, 'The card step, --card-hover on --bg-surface, is 1.10:1 in both modes (H-b, 3a ruling 1b)', f, steps.join(', '));
 }
 
 // ── Report ─────────────────────────────────────────────────────────────────
