@@ -30,7 +30,8 @@ recipe. **Header identity mark** joined the same day, the first entry on the
 site's chrome rather than its content. **Hero headings in one weight** joined on
 13 Oct 2026, the first entry that records styling deliberately withheld rather
 than missing. **Home card drawing width** joined on 14 Oct 2026, the first entry
-on a width, which no linter reads in JSX.*
+on a width, which no linter reads in JSX. **The card question's container units**
+joined the same day, the first entry on a CSS unit rather than a value.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -100,17 +101,25 @@ that pass rather than a settled answer:
 1. **The row title has no rung.** The project name and its client borrow
    `text-h3` (22 to 28px, which CLAUDE.md scopes to subsections and callouts)
    at `--wght-body` (400) instead of the role's 500. The client takes
-   `--text-secondary`, after the hero signature. It measures 25.2px at 1440, a
-   size and a weight step under the Selected work card titles (`text-cover`,
-   32/600). At 390 the two are the same size, 22px, and only weight (400
-   against 600) and the card's border separate them.
+   `--text-secondary`, after the hero signature. **Since T4 (14 Oct 2026) it
+   is larger than the Selected work card questions above it at most widths**,
+   at the same weight: the questions are regular weight at 21 to 24px
+   (`text-cover`, sized to the card). Measured, shelf against question:
+   22 against 25.2 at 390, 23.1 against 21.4 at 1024 and
+   21 against 24 at 1440. Only at 768, where each card is the
+   full column wide, is the question larger, 24 against 22. Until T4 the card
+   titles were 32/600 and the shelf sat a size and a weight step under them.
+   Needs: the design system pass to put the two on one scale.
 2. **A resting underline on touch only.** Under `@media (hover: none)` the
    project name carries the base `a` rule's resting underline (1px
    `--border-interactive`). A quiet link otherwise has no signifier at rest
    where hover cannot stand in. Interaction v1 §5 gives a text link hover and
    no pressed state, and names no input-dependent rest state. Pointer devices
    keep `.quiet-link`.
-3. **One focus halo for a whole row.** The global pair (2px `--focus-ring` at a
+3. **One focus halo for a whole row. Resolved 14 Oct 2026: interaction v1 §5
+   now names this pattern, for this row and for the Selected work card (T4),
+   so it is governed and leaves this list at the next edit of this entry.**
+   The record as it stood: the global pair (2px `--focus-ring` at a
    3px offset, 6px `--focus-glow`) is drawn on the row's `::before`, set out
    `--spacing-2xs` to the sides, while the row's link has `:focus-visible`. The
    link's own halo is suppressed inside `@supports selector(:has(a))`, so a
@@ -301,6 +310,26 @@ widths for `srcset` and has to be re-measured whenever either value moves.
 Needs: the design system pass to give the cap a token, or to rule that a
 measured literal is the right answer here.
 
+**The card question's container units (`cqi` and `lh`).** Joined 14 Oct 2026
+from the home cards T4 build. Two units no locked spec governs, both in the
+card question (`text-cover` and `.case-card__question` in `app/globals.css`):
+
+1. **A container-relative type slope.** The question is
+   `clamp(var(--type-21), 4.6cqi, var(--type-24))` (K1a), sized to the card's
+   inline size, with `.case-card` as the container (`@container`). Type v3
+   §3.6 lets a clamp outside the ladder keep its slope raw, and every slope it
+   has seen is `vw`. `lint:type` evaluates only `vw` and `rem` in a preferred
+   term, so check 3 could not walk this role if it ever joined the ladder, and
+   outside a container `cqi` falls back to the viewport.
+2. **A reserved line box.** Every question reserves `min-height: 2lh` (K2a), so
+   drawings in a row share one height. No spec governs a height reserved in
+   lines. One other rule uses `lh` (`min-height: 1lh` on a caption row in the
+   bento grid), equally ungoverned.
+
+Needs: type v3 to rule whether a container-relative slope is a sanctioned kind
+of slope (and how check 3 would measure it), and the type or spacing system to
+own reserved line boxes.
+
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
 than a token one. No locked spec governs a drawn chart: not its type sizes, not
@@ -365,11 +394,13 @@ system has an answer for and does not currently apply here.
 This is the surface most likely to want its own module rules, since a button's
 padding is a function of its label size rather than of the page rhythm.
 
-**Card meta.** Density, the type rung for the meta under each Selected work
-card's headline, and the gap between it and the headline. As built since 14 Oct
-2026 it is two lines in `text-caption`: the client, semibold in
-`--text-primary`, then the product and its years in `text-muted`
-("Bard, 2025 to now"), the range held on one line by `whitespace-nowrap`.
+**Card meta.** Density, the type rung for the meta at the top of each
+Selected work card, and the gap between it and the drawing below it. As built
+since T4 (14 Oct 2026) it is two lines in `text-caption`: the client, at weight
+500 in `--text-primary`, then the product and its years in `text-muted`
+("Bard, 2025 to now"), the range held on one line by `whitespace-nowrap`. It is
+the card's top line on screen and follows the `h2` in the DOM (`order-first`),
+with a visually hidden comma after the client.
 
 **Pinned specimen tones.** A colour whose job is to **not** follow the theme:
 the light and dark cells of a `ModePair` comparison, and the fixed placeholder
@@ -669,7 +700,7 @@ rungs and spacing steps, which is the half it does not touch.
 | **Nav** | hover, pressed (§5) | type sizes, weights, spacing between items — all of it |
 | **Footer** | its links get the text-link states (§5), by inheritance rather than by a footer rule | type, spacing, and the top-boundary relationship |
 | **Buttons** | internal padding (`--spacing-2xs / --spacing-m`), radius, gap, min-height, pressed, icon stroke (§6) | **the label's type rung** |
-| **Card meta** | the **card's** hover, pressed, elevation and radius — the container, not the strip | density, the strip's type rung, the gap to the headline |
+| **Card meta** | the **card's** hover, pressed, elevation and radius, the container, not the strip | density, the strip's type rung, its gap to the drawing |
 | **Pinned specimen tones** | nothing | all of it |
 
 **Buttons came closest and did not get there.** §6 specifies the button
@@ -689,7 +720,8 @@ should not be reopened by someone reading only the original entry.
 
 **Card meta's half is the container.** What is specified belongs to the card:
 hover, pressed, elevation, `--radius-l`. The meta (the client, then the product
-and years in `text-muted`) has no interaction of its own to specify. It renders
+and years in `text-muted`, at the card's top since T4) has no interaction of its
+own to specify. It renders
 at `text-caption`, which `CLAUDE.md`'s scale table names for this exact use, but
 no locked §-rule assigns it, so the rung is conventional rather than governed,
 which is the distinction this file exists to make.
