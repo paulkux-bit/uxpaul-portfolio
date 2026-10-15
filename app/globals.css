@@ -490,6 +490,12 @@
   --face-disc:              var(--bg-surface);
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
 
+  /* Selected work card hover panel (3a ruling 1b, 15 Oct 2026). A component
+     token on --face-disc's precedent, outside the twelve palette roles. Light
+     keeps H-b's step exactly: the elevated surface, 1.10:1 over --bg-surface.
+     No spec owns it yet: docs/unspecified-surfaces.md, card hover panel. */
+  --card-hover:             var(--bg-surface-elevated);
+
 
   /* Brand shelf tokens.
      UNUSED since 12 Oct 2026: delete in the design system pass, in the order
@@ -602,6 +608,11 @@
      (ink at 28%) all but vanishes on it, as in the approved preview. */
   --face-disc:              color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas));
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
+  /* Card hover panel, dark (3a ruling 1b, 15 Oct 2026). The elevated surface
+     stepped 1.13:1 off --bg-surface and nearly doubled its chroma, so the
+     hovered card read brown. This takes light's 1.10:1 step at 10 chroma
+     units instead of 13, between --bg-surface and --bg-surface-elevated. */
+  --card-hover:             oklch(0.243 calc(var(--chroma-unit) * 10) var(--hue-surface));
 
 
   /* Brand shelf tokens, dark.
@@ -877,7 +888,8 @@
 /* Former "Client work" shelf title.
    UNUSED since 12 Oct 2026: delete in the design system pass, in the order
    docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-   The Earlier work rows set their titles in text-h3; nothing applies this.
+   The Earlier work rows set their titles at --type-21 on .shelf__title
+   (text-h3 until 15 Oct 2026); nothing applies this.
    It carried the per-brand weight (--qh-wght, 500-650) of a §6 exception
    surface (type v3 §6). Its scale row in CLAUDE.md goes with it. */
 @utility text-qh-title {
@@ -1286,12 +1298,13 @@
 
 /* A hover response is a promise of a click target, so it is scoped to a card
    that has one. An unpublished card keeps its resting panel. H-b (home cards
-   T4, 14 Oct 2026): the panel deepens from --bg-surface to
-   --bg-surface-elevated, and the question underlines through
+   T4, 14 Oct 2026): the panel deepens from --bg-surface to --card-hover
+   (the elevated surface in light; a gentler dark step since 3a ruling 1b,
+   15 Oct 2026), and the question underlines through
    .case-card__title-link:hover, because the stretched link covers the card.
    Hover only: nothing fills on keyboard focus, which takes the halo below. */
 .case-card--linked:hover {
-  background-color: var(--bg-surface-elevated);
+  background-color: var(--card-hover);
 }
 
 /* K3a (14 Oct 2026): the question's hover underline is 1px at a 0.18em
@@ -1459,9 +1472,10 @@
    Direction A of docs/shelf-review-cc.md, ruled 11 Oct 2026. Each row is the
    hero signature's grammar: the project name, then its client in a softer
    colour, one link, with the industry at the right on the title's baseline.
-   Type and colour come from role utilities on the markup (text-h3,
-   text-primary, text-secondary, text-caption, text-muted); this carries only
-   layout, weight and states. Built from existing roles only, because the
+   Colour and the meta type come from role utilities on the markup
+   (text-primary, text-secondary, text-caption, text-muted); this carries
+   layout, weight and states, and since 3a ruling 3c (15 Oct 2026) the row
+   title's size, leading and tracking. Built from existing roles only, because the
    design system pass will revisit colour, the type scale and weight. The
    borrowings are logged in docs/unspecified-surfaces.md (Earlier work shelf).
    The list's reveal is the .reveal-list contract below, on the whole <ol>.
@@ -1484,13 +1498,18 @@
   border-top: 1px solid var(--border-subtle);
 }
 
-/* text-h3 supplies size, leading and tracking. This takes its 500 back to
-   body weight, so the shelf sits a size and a weight step under the Selected
-   work card titles (25.2/400 against 32/600 at 1440). */
+/* 21px at every width, at body weight (3a ruling 3c, 15 Oct 2026). Since the
+   T4 cards set their questions at 21 to 24px, text-h3 (22 to 25.2 here) had
+   put the shelf above them at 390, 1024 and 1440. At 21 it sits a step under
+   the questions at 768 and 1440 and level with them at 390 and 1024. Leading
+   and tracking are text-h3's, kept. */
 .shelf__title {
   flex: 0 1 auto;
   min-width: 0;
   margin: 0;
+  font-size: var(--type-21);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
   font-weight: var(--wght-body);
   text-wrap: balance;
 }

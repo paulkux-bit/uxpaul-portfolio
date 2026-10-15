@@ -24,7 +24,7 @@ export function QuickHit({ piece }: { piece: TemplateBPiece }) {
   return (
     <li className="shelf__row">
       {/* Parallel to the Selected Work card titles, so an <h2>. */}
-      <h2 className="shelf__title text-h3 text-primary">
+      <h2 className="shelf__title text-primary">
         <a
           href={`#${piece.slug}`}
           data-client-work={piece.slug}

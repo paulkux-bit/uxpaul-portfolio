@@ -341,7 +341,7 @@ real clamp, and every type-role utility must have a row.
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
-| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf sets `text-h3`). Deleted in the design system pass |
+| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf set `text-h3`, and its own 21px since 15 Oct 2026). Deleted in the design system pass |
 | `text-cover` | 21 → 24px (weight 400) | Selected work card question, sized to the card (`cqi`, T4, 14 Oct 2026). Card-only. |
 | `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
@@ -747,7 +747,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
 - **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
-- **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--bg-surface-elevated` over `--duration-card`, and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
+- **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 - **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
 
 ### Utility classes (mirror typography pattern)
