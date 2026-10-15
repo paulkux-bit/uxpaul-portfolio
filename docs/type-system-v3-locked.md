@@ -290,6 +290,8 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 
 Ladder selectors take the role tokens; every other reading-band size takes a scale token. A clamp outside the ladder takes scale tokens at both ends and keeps its slope raw, because the slope is the path between two sizes, not a size. 54 declarations were tokenized with zero rendered change, measured element by element on all seven routes at 390, 768 and 1440. Fifteen stay raw, each allowlisted in `ALLOWLIST.rawSize` with its reason: two live About sizes owned by the About pass, thirteen rules that render on no route. **Check 12 enforces it**, and it was proven red three ways before it was trusted: a raw value, a misspelled token, and a token change that broke the ladder (check 3 caught that one, because the lint resolves tokens before it measures). Display sizes above 30px are not tokenized yet.
 
+**AMENDED 14 Oct 2026: the card question (home cards T4, rulings K1a and K2a).** `text-cover` is now `clamp(var(--type-21), 4.6cqi, var(--type-24))` at weight 400 (`--wght-body`), line-height 1.25, letter-spacing -0.005em, with every question reserving two lines (`min-height: 2lh`). It sits in rung 2's size range off the ladder, the same shape as the T6 question, so `RUNGS` gives it `rung: 2, band: 'read', voice: 'plain', ladder: false`. Two things in it are not this spec's existing rules, and both are rulings rather than drift: its leading and tracking are K1a's 1.25 and -0.005em, not §3.4's rung 2 row (1.45 and 0); and its slope is container-relative (`cqi`, against `.case-card` as an inline-size container), where every other slope here is `vw`. The rule above, scale tokens at both ends and a raw slope, holds. Whether a container-relative slope is a sanctioned kind of slope, and who governs a reserved line box (`lh`), are open in `docs/unspecified-surfaces.md`. Until T4 the role was 22 to 32px at 600, display band.
+
 ## 4. The rules
 
 **R1** Never pin optical size. Two sanctioned exceptions, §6.
@@ -595,7 +597,7 @@ Free  "hierarchy seems good"
 
 `scripts/lint-type.mjs`'s `RUNGS` map is the single source, with `band` and `voice` as separate keys and check 11 reading **`voice`**.
 
-They were one key until 22 Aug, and that was a latent bug rather than a simplification. `band: 'display'` was made to mean both *what the type is* and *what it gets*, which held only while every display selector wanted flare. The 52px cut ended it: `.text-cover` and `.friction-beat__headline` are 32px display type by size, weight and rung, and the only way to take the flare off them through one key was to **relabel them as reading type** — a lie in the map.
+They were one key until 22 Aug, and that was a latent bug rather than a simplification. `band: 'display'` was made to mean both *what the type is* and *what it gets*, which held only while every display selector wanted flare. The 52px cut ended it: `.text-cover` and `.friction-beat__headline` were 32px display type by size, weight and rung (`.text-cover` is reading type since T4, 14 Oct 2026, §3.6), and the only way to take the flare off them through one key was to **relabel them as reading type**: a lie in the map.
 
 > **When one key answers two questions, the second question eventually gets the wrong answer.**
 
@@ -616,10 +618,10 @@ The same shape as check 3 conflating rung with selector, and worth stating as a 
 | 56px | `.about-hero__pov` | display | flared | **judgment** — 51.2px at 1440 |
 | 52px | `.case-study-prose h2` | display | flared | tested at 52, the boundary |
 | 40px | `.about-phase__title` | display | **plain** | **judgment** — 36.4px at 1440 |
-| 32px | `.text-cover` | display | **plain** | tested at 32 |
+| 24px | `.text-cover` | **read** since 14 Oct 2026 | **plain** | was display at 32, tested there; T4 set it at 21 to 24px |
 | 30px | `.friction-beat__headline` | display | **plain** | tested at 32 |
 
-**Every selector in that table is `band: 'display'`. Not one moved band.**
+**Every selector in that table was `band: 'display'` when the cut was taken, and none moved band for it.** One has moved since, for a different reason: `.text-cover` became the card question at 21 to 24px (T4, 14 Oct 2026, §3.6), so its band follows its ceiling to read. Its voice was plain before and is plain now.
 
 > **52px IS NOT A MEASURED CONSTANT. It is a legibility judgment taken on a render
 > at five sizes — 88, 72, 52, 32 and 18px — after a UI review found the flare

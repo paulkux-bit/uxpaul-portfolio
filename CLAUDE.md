@@ -342,7 +342,7 @@ real clamp, and every type-role utility must have a row.
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
 | `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf sets `text-h3`). Deleted in the design system pass |
-| `text-cover` | 22 → 32px (weight 600) | Case-study card cover headline (typographic tier). Card-only. |
+| `text-cover` | 21 → 24px (weight 400) | Selected work card question, sized to the card (`cqi`, T4, 14 Oct 2026). Card-only. |
 | `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
 | `text-body` | 18px | All body copy, default |
@@ -429,9 +429,10 @@ Three things about this that are easy to get wrong:
   `.about-hero__pov` is 51.2px at 1440 and is flared; `.about-phase__title` is
   36.4px and is plain.
 - **`band` and `voice` are different columns.** `band` says what the type IS;
-  `voice` says what it GETS. `.text-cover` and `.friction-beat__headline` are
-  display type and stay display type in `RUNGS` — they are simply below the size
-  at which flare carries anything.
+  `voice` says what it GETS. `.friction-beat__headline` is display type and
+  stays display type in `RUNGS`; it is simply below the size at which flare
+  carries anything. `.text-cover` was the second example until 14 Oct 2026,
+  when T4 set the card question at 21 to 24px and its band moved to read.
 
 The CSS list is derived from `RUNGS` in `scripts/lint-type.mjs`, and **check 11
 fails the build if the two stop matching**, in both directions. One list, two
@@ -443,7 +444,7 @@ for an entire judgment session while every gate stayed green.
 Registers separate on **size, weight and colour**. No register owns an axis, and
 there is no width column here any more: width is gone with the axis.
 1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340) until the design system pass.
-2. **Major** (work titles: Selected Work cards + Earlier work shelf) — size and weight.
+2. **Major** (work titles: Selected Work card questions + Earlier work shelf): size. Since T4 (14 Oct 2026) the card questions are regular weight, so weight no longer separates this register.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
 5. **Subordinate** (footer `text-caption`): quietest. The home availability line it also held was removed on 13 Oct 2026.

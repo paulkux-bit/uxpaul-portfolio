@@ -843,22 +843,35 @@
   font-weight: 500;
 }
 
-/* Case-study card cover headline. Sized between h3 and h2 and capped lower
-   than h2 so the longest first-person framings still fit the aspect-video
-   well at 360/390 without clipping; balanced wrap keeps the lines even. This
-   role is the typographic cover only — not a section heading. */
+/* The Selected work card question (home cards T4, 14 Oct 2026). Regular
+   weight, and sized to the card rather than the viewport (K1a): 4.6cqi of the
+   card's inline size, held between the scale's 21 and 24. That is rung 2's
+   size range, off the ladder, as the T6 turn question is (RUNGS: band read,
+   voice plain). The 1.25 leading and -0.005em tracking are ruled for this
+   role (K1a), not rung 2's 1.45 and 0 (type v3 §3.6, amended 14 Oct 2026).
+   cqi resolves against .case-card, the inline-size container; with no
+   container it falls back to the viewport, so the role stays card-only. No
+   locked spec governs container-relative sizing yet
+   (docs/unspecified-surfaces.md). It was 22 to 32px at 600, display band,
+   until T4. */
 @utility text-cover {
-  font-size: clamp(1.375rem, 1.4vw + 1rem, 2rem);
-  line-height: 1.12;
-  letter-spacing: -0.015em;
-  font-weight: 600;
-  /* v3 §5: 90 -> 94. Display band (32px ceiling). Card covers loosen by 4%.
-     The old note here claimed a per-module "Major register" that rhymed with
-     Also Shipped at ~90% — v3 R2 retires mood registers: width follows the
-     rung, and contrast is carried by weight. The shelf (now "Earlier work") was
-     an §6 exception surface until 12 Oct 2026 and now sets its titles in
-     text-h3, so the rhyme is no longer a constraint on this role. */
+  font-size: clamp(var(--type-21), 4.6cqi, var(--type-24));
+  line-height: 1.25;
+  letter-spacing: -0.005em;
+  font-weight: 400;
   text-wrap: balance;
+}
+
+/* Every card question reserves two of its own lines and sits at their foot
+   (home cards K2a), so a one-line question and a two-line one leave the
+   drawings beside them at one height across a row. 2lh is two lines at the
+   question's own leading. A three-line question grows the card, and the row's
+   equal height follows it. lh is ungoverned by any locked spec
+   (docs/unspecified-surfaces.md). */
+.case-card__question {
+  min-height: 2lh;
+  display: flex;
+  align-items: flex-end;
 }
 
 /* Former "Client work" shelf title.

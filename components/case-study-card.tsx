@@ -172,7 +172,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
               />
             </picture>
         ) : null}
-        <h2 className="text-cover">{title}</h2>
+        <h2 className="case-card__question text-cover">{title}</h2>
         {meta}
       </div>
     </article>

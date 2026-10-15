@@ -129,7 +129,8 @@ const ALLOWLIST = {
 // Measured against it, ceiling first:
 //   88 .milestone__date        72 .hero-block__title      60 .text-lede
 //   56 .about-hero__pov        52 .case-study-prose h2    <- flared
-//   40 .about-phase__title     32 .text-cover             32 .friction-beat__headline
+//   40 .about-phase__title     30 .friction-beat__headline
+// (.text-cover stood at 32 here until T4, 14 Oct 2026, moved it to 24, read.)
 //
 // TWO CONSUMERS, ONE LIST, AND THAT IS THE POINT. The Commissioner bench kept
 // its own hand-written band list beside this one; it named a class that does not
@@ -139,9 +140,9 @@ const ALLOWLIST = {
 //
 // Check 3 stays scoped to the CLAMPED rungs (§7.3: "computed from the clamps").
 // The fixed rungs cannot satisfy 1.15 by construction (18/16 = 1.125,
-// 16/14 = 1.143), and neither can a display role that shares a ceiling with the
-// rung below it — .text-cover ceilings at 32px, which was exactly rung 3's
-// ceiling until 28 Sep 2026, when rung 3 moved to 30. An unflagged entry still
+// 16/14 = 1.143), and neither can a role that shares a ceiling with a rung:
+// .text-cover ceilinged at 32px, rung 3's ceiling until 28 Sep 2026, and since
+// T4 (14 Oct 2026) it shares rung 2's 24. An unflagged entry still
 // computes under 1.15 and would fail a check that is green for good reason;
 // `ladder: false` is what keeps membership and ratio separable.
 const RUNGS = [
@@ -168,10 +169,11 @@ const RUNGS = [
   { rung: 5, role: 'Turn answer (T6)', selector: '.case-study-prose .turn-answer', band: 'display', voice: 'flared' /* 72px */, ladder: false },
   { rung: 2, role: 'Turn question (T6)', selector: '.case-study-prose .cs-section--turn h2', band: 'read', voice: 'plain' /* 24px, standfirst size */, ladder: false },
 
-  // ── Display roles that v3 §5 bands but §3.3 never put on the ladder ──────
-  // Mechanical additions: the spec already assigns these a band, and only the
-  // linter was missing them.
-  { rung: 3, role: 'Card cover', selector: '.text-cover', band: 'display', voice: 'plain' /* 32px: tested, cut */, ladder: false },
+  // ── The card question (T4), ruled 14 Oct 2026 ──────────────────────────
+  // Rung 2's size range, 21 to 24px, off the ladder: the T6 question's shape,
+  // so band read. Until T4 this entry was rung 3, band display, 'Card cover',
+  // at a 32px ceiling and weight 600; the flare was tested at 32 and cut.
+  { rung: 2, role: 'Card question (T4)', selector: '.text-cover', band: 'read', voice: 'plain' /* 24px ceiling, sized by cqi */, ladder: false },
 
   // ── `dead: true` — in the CSS, on no page ────────────────────────────────
   // MARKED, NOT DELETED, AND THAT IS THE WHOLE POINT. Removing an entry makes
@@ -634,7 +636,8 @@ const add = (id, title, failures, note) =>
 //
 // IT READS `voice`, NOT `band`, AS OF C5. Those were the same key until the 52px
 // cut needed .text-cover and .friction-beat__headline to keep `band: 'display'`
-// (which is true of them) while losing the flare (which is the ruling). `band`
+// (true of both then; .text-cover is read since T4) while losing the flare
+// (which is the ruling). `band`
 // is still on every entry and is deliberately not read here.
 //
 // WHAT THIS CANNOT SEE, stated rather than implied: whether any of these
