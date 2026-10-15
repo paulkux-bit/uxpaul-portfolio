@@ -1,4 +1,8 @@
-// Usage: node scripts/lint-color.mjs   (no build required — parses source)
+// Usage: node scripts/lint-color.mjs [css]   (no build required — parses source)
+//
+// The optional path replaces app/globals.css, so a mutated copy can be linted
+// to prove a check red (__tests__/color-lint.test.mjs). Checks 1 and 7 still
+// scan the repo's own files, so only the check under test is meaningful then.
 //
 // Colour gate for the v2 colour system (`docs/color-system-v2-locked.md` §7).
 // Parses app/globals.css and every .tsx/.mdx.
@@ -20,7 +24,7 @@ import { join } from 'node:path';
 import postcss from 'postcss';
 import { scanTree } from './color-literals.mjs';
 
-const CSS_FILE = 'app/globals.css';
+const CSS_FILE = process.argv[2] ?? 'app/globals.css';
 const JSX_ROOTS = ['app', 'components'];
 
 // ── The palette's shape (§4) ───────────────────────────────────────────────
@@ -83,6 +87,9 @@ const ALLOWLIST = {
     // necessity. Scoped to assertion lines, not to the file: a literal written
     // outside an expect() here is still caught.
     { file: '__tests__/color-literals.test.mjs', construct: /expect\(|toEqual|toContain/, reason: 'expected values in the check-7 fixture assertions' },
+    // Check 9's red cases rebuild one token from its parsed parts, so the
+    // replacement value is written as an oklch() template. Scoped to that call.
+    { file: '__tests__/color-lint.test.mjs', construct: /inDark\(CSS, decl\[0\], `/, reason: "check 9's red cases rebuild one token from its parsed parts" },
   ],
 };
 const inList = (l, p) => l.some(p);
@@ -168,6 +175,31 @@ function resolveOklch(value, mode) {
   const body = oklchBody(value);
   if (body === null) return null;
   if (/\//.test(body)) return null; // has alpha; assertion 2 owns it
+  return resolveBody(body, mode);
+}
+
+/** Every oklch() in a value, alpha or not, as [L, C, H] or null each. Check 9
+ *  needs the hue of the alpha tokens too (focus ring, glow, shadows), which
+ *  resolveOklch refuses on purpose. The alpha is the part after a top-level
+ *  slash, and it is dropped here, not read. */
+function resolveOklchAll(value, mode) {
+  const out = [];
+  let rest = value;
+  for (let body = oklchBody(rest); body !== null; body = oklchBody(rest)) {
+    let depth = 0;
+    let cut = body.length;
+    for (let j = 0; j < body.length; j++) {
+      if (body[j] === '(') depth++;
+      else if (body[j] === ')') depth--;
+      else if (body[j] === '/' && depth === 0) { cut = j; break; }
+    }
+    out.push(resolveBody(body.slice(0, cut), mode));
+    rest = rest.slice(rest.search(/oklch\(/i) + 6 + body.length + 1);
+  }
+  return out;
+}
+
+function resolveBody(body, mode) {
   const parts = [];
   let depth = 0;
   let cur = '';
@@ -232,8 +264,8 @@ for (const r of JSX_ROOTS) await walk(r);
 
 // ── Checks ─────────────────────────────────────────────────────────────────
 const checks = [];
-const add = (id, title, failures) =>
-  checks.push({ id, title, failures, pass: failures.length === 0 });
+const add = (id, title, failures, note) =>
+  checks.push({ id, title, failures, note, pass: failures.length === 0 });
 
 // 1 — everything is oklch.
 {
@@ -459,11 +491,43 @@ const add = (id, title, failures) =>
   add(8, 'Every underline clears 3:1 against the page (A2b, house rule)', f);
 }
 
+// 9: every colour token sits in the warm hue band, 50 to 80 inclusive, accents
+// included. The band is the system's one hue axis (CLAUDE.md, Colour, hue axis): the
+// grounds, the text ramp and the interaction moments all live inside it, and
+// the cool exceptions are gone (the brand shelf, deleted 15 Oct 2026). Every
+// oklch() in every custom property under :root and .dark is read, alpha ones
+// too, so the focus glow and the shadows cannot drift out unseen. A value that
+// cannot be resolved fails rather than passing. Proved red in
+// __tests__/color-lint.test.mjs: the dark ground at 85, the dark glow at 81,
+// the dark sunken at 49.
+{
+  const f = [];
+  const HUE_MIN = 50;
+  const HUE_MAX = 80;
+  let n = 0;
+  for (const [key, rec] of perMode) {
+    const [sel, tok] = [key.slice(0, key.lastIndexOf('|')), rec.prop];
+    const mode = sel === '.dark' || sel.startsWith('html.dark') ? 'dark' : sel === ':root' || sel.startsWith('@theme') ? 'light' : null;
+    if (!mode || !/oklch\(/i.test(rec.value)) continue;
+    for (const v of resolveOklchAll(rec.value, mode)) {
+      if (!v) {
+        f.push({ where: `${CSS_FILE}:${rec.line}`, detail: `${mode}: cannot resolve the hue of ${tok}` });
+        continue;
+      }
+      n++;
+      const h = ((v[2] % 360) + 360) % 360;
+      if (h < HUE_MIN || h > HUE_MAX)
+        f.push({ where: `${CSS_FILE}:${rec.line}`, detail: `${mode}: ${tok} hue ${+h.toFixed(2)} is outside ${HUE_MIN} to ${HUE_MAX}` });
+    }
+  }
+  add(9, `Every colour token sits in the warm hue band, ${HUE_MIN} to ${HUE_MAX}, accents included (hue axis)`, f, `${n} values`);
+}
+
 // ── Report ─────────────────────────────────────────────────────────────────
 console.log(`color-lint: ${CSS_FILE} (${allDefs.size} custom properties)\n`);
 for (const c of checks) {
   console.log(`${c.pass ? '✓' : '✗'} ${c.id}. ${c.title}`);
-  if (c.pass) console.log('    PASS');
+  if (c.pass) console.log(`    PASS${c.note ? `  (${c.note})` : ''}`);
   else {
     for (const x of c.failures.slice(0, 14)) console.log(`    ✗ ${x.where}\n        ${x.detail}`);
     if (c.failures.length > 14)

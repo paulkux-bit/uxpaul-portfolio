@@ -20,7 +20,7 @@ the other place.
 |---|---|---|
 | Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 12 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
-| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 8 checks |
+| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 9 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
 
 This table is checked against the filesystem rather than maintained by hand, by
@@ -698,7 +698,7 @@ purpose. Both are deliberate. Do not trim one to reach a round number or pad the
 **Name:** Paper & Low Light
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
-`npm run lint:color` (8 checks), which gates `npm run build`.
+`npm run lint:color` (9 checks), which gates `npm run build`.
 **Implementation and usage notes:** `docs/color-system.md` — the theme-swap
 protocol and the role map. Its token tables are
 superseded; do not read values from it.
@@ -724,7 +724,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 ### Locked decisions
 
 - **Color space:** oklch only. No hex. No rgb. Anywhere downstream.
-- **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds.
+- **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds. Every colour token, accents and alpha tokens included, is held to the band by lint:color check 9.
 - **Naming:** role-based, semantic. `--text-primary`, `--bg-surface-elevated`. Never raw color names.
 - **Light and dark tuned independently.** Same hue axis, different chroma/contrast curves. Dark is not inverted light.
 - **PopUp tokens were deleted (1 Oct 2026).** The annotation layer they were

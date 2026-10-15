@@ -308,6 +308,14 @@ Fails on:
    cannot be checked. The underline is a link's non-colour cue; the house rule
    is that it owes 3:1 like any affordance. Added 1 Oct 2026 with ruling A2b;
    proved red with the base link back on `--border-strong` (2.03 light).
+9. Any colour token whose hue falls outside the warm band, 50 to 80
+   inclusive, in either mode. Every `oklch()` in every custom property under
+   `:root` and `.dark` is read, alpha tokens and shadow layers included, so
+   the interaction accents are held to the band with the grounds. A hue that
+   cannot be resolved fails. Added 15 Oct 2026, when the brand shelf's hue 250
+   exception was deleted and the band had no exception left to allow for.
+   Proved red in `__tests__/color-lint.test.mjs`, through the script's optional
+   CSS path: the dark ground at 85, the dark glow at 81, the dark sunken at 49.
 
 **Prove every assertion in both directions before any value moves.** Four
 checks in the spacing migration passed for a reason other than the one
