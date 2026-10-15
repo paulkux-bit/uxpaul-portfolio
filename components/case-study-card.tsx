@@ -43,7 +43,7 @@ const COVER_SIZES =
 
 /**
  * One entry in the case-study index. There is one cover: **typographic**. The
- * framing IS the cover, set large, with the client beneath it. A deliberate
+ * framing IS the cover, set large, with two meta lines beneath. A deliberate
  * cover, never an empty state — no "placeholder" text anywhere.
  *
  * The motion and image tiers were removed by decision, not by accident: video
@@ -90,12 +90,15 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   );
 
   const meta = (
-    // The client only, not the project name: to a skimming hiring manager the
-    // institution (U.S. Navy, URBN) is the recognizable equity; the project
-    // name is opaque until the study explains it. B2, 3 Oct 2026, replacing
-    // H3b's two lines. The project name stays in the link's accessible name.
+    // The client leads: to a skimming hiring manager the institution (U.S.
+    // Navy, URBN) is the recognizable equity (B2, 3 Oct 2026). Under it, in
+    // text-muted, the product and its years (home cards Rb and H4b, 14 Oct
+    // 2026). The range sits in its own whitespace-nowrap span so it never
+    // wraps (H8b). The link's accessible name is unchanged and does not carry
+    // the years: the line follows the heading in reading order.
     <p className="text-caption">
       <span className="block font-semibold text-primary">{study.client}</span>
+      <span className="block text-muted">{study.projectName}, <span className="whitespace-nowrap">{study.years}</span></span>
       {published ? null : <span className="block text-secondary">Coming soon</span>}
     </p>
   );

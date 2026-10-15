@@ -1,12 +1,18 @@
 // Temporary source of truth for the case-study index until MDX-driven indexing
-// lands. Field names match the frontmatter contract.
+// lands. Field names match the frontmatter contract, except `years`, which the
+// frontmatter does not carry.
 //
 // headline / summary / role / timeframe were removed 20 Aug 2026. They were
 // placeholder tokens ('[OUTCOME METRIC]', '[ROLE]') on all five entries and
 // every consumer of this module read none of them. The SEO description that
 // looks like it uses `summary` reads MDX frontmatter through
 // app/case-studies/[slug]/page.tsx, which imports case-study-routes, not this
-// file. Do not reintroduce a field here before something renders it.
+// file.
+//
+// `years` was added 14 Oct 2026 (home cards Rb) and renders on the home card,
+// in the muted line under the client. It is not `timeframe` returning: it holds
+// Paul's own strings, and nothing else reads it. The rule the removal set still
+// stands: do not add a field here before something renders it.
 
 export interface CaseStudy {
   /** Route segment: /case-studies/[slug] */
@@ -15,6 +21,8 @@ export interface CaseStudy {
   problemFraming: string;
   projectName: string;
   client: string;
+  /** The card's year range, written with "to" ("2018 to 2019", "2025 to now"). */
+  years: string;
 }
 
 export const caseStudies: CaseStudy[] = [
@@ -23,12 +31,14 @@ export const caseStudies: CaseStudy[] = [
     problemFraming: 'How do 56 jurisdictions align without changing how they work?',
     projectName: 'Bard',
     client: 'U.S. Coast Guard',
+    years: '2025 to now',
   },
   {
     slug: 'us-navy-fdt-e',
     problemFraming: 'How do you verify what the AI thinks it saw?',
     projectName: 'FDT-E',
     client: 'U.S. Navy',
+    years: '2024 to 2025',
   },
   {
     // Written AFTER the study, per house rule 13. The framing was rewritten in the
@@ -43,6 +53,7 @@ export const caseStudies: CaseStudy[] = [
     problemFraming: 'At what altitude can they see me?',
     projectName: 'Line of Sight',
     client: 'U.S. Air Force',
+    years: '2020 to 2023',
   },
   {
     // Resolved 1 Sep, and BOTH premises the old note rested on are now false. It said
@@ -64,11 +75,13 @@ export const caseStudies: CaseStudy[] = [
     problemFraming: 'What does a missed date cost her?',
     projectName: 'Delivery Promise',
     client: 'URBN',
+    years: '2018 to 2019',
   },
   {
     slug: 'nuuly',
     problemFraming: 'How does a rented dress get back out in time?',
     projectName: 'Nuuly',
     client: 'URBN',
+    years: '2018 to 2019',
   },
 ];
