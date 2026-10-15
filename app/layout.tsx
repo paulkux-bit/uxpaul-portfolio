@@ -29,6 +29,15 @@ export const metadata = {
     "Paul Kali, Senior Product Designer. Currently with the U.S. Navy, where I've designed intelligence tools for thousands of operators. Previously at URBN.",
 };
 
+/* The page supports both schemes, so the browser can pick native controls and
+   its pre-CSS canvas from the start. No theme-color: the media-query form
+   follows the system setting, not the in-page toggle, so it would be wrong
+   whenever the toggle overrides the system, and Safari 26 on iOS takes its
+   toolbar colour from the page background instead. */
+export const viewport = {
+  colorScheme: 'light dark',
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={commissioner.variable} suppressHydrationWarning>

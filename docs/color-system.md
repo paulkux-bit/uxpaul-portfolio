@@ -235,7 +235,7 @@ Light mode carried an SVG noise overlay on `body::before` (multiply, opacity 0.5
 - **Focus uses `outline` + `box-shadow`**, never `border-color`. Layout never shifts on focus. The halo extends the ring's visual presence without expanding hit areas.
 - **Selection contrast verified** in both modes: `selection-text` on `selection-bg` hits AAA in light (~10:1) and ~7:1 in dark.
 - **Link affordance is multi-channel.** Underline at rest, thicker + warmer on hover. Color alone is never the only signal.
-- **`color-scheme`** is set per mode so native form controls and scrollbars adopt the right palette.
+- **`color-scheme`** is set per mode so native form controls and scrollbars adopt the right palette, and the layout's `viewport` export emits `<meta name="color-scheme" content="light dark">` (15 Oct 2026) so the browser knows both are supported before the stylesheet loads. There is no `theme-color`: its media-query form follows the system setting, not the in-page toggle.
 - **`prefers-reduced-motion`** is respected globally — transitions reduce to near-instant.
 
 ---
