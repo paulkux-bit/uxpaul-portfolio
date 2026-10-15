@@ -3,6 +3,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { SiteHeader } from '@/components/site-header';
 import { SiteFooter } from '@/components/site-footer';
 import { FontLoadProbe } from '@/components/font-load-probe';
+import { THEME_ATTRIBUTE, THEME_DEFAULT, THEME_STORAGE_KEY, themeInitScript } from '@/lib/theme';
 import './globals.css';
 
 export const metadata = {
@@ -31,8 +32,17 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={commissioner.variable} suppressHydrationWarning>
+      <head>
+        {/* Sets the theme class before the body is parsed. See lib/theme.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body suppressHydrationWarning>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider
+          attribute={THEME_ATTRIBUTE}
+          defaultTheme={THEME_DEFAULT}
+          storageKey={THEME_STORAGE_KEY}
+          enableSystem
+        >
           {/* Renders nothing; asserts at runtime that the variable font and its
               FLAR axis actually arrived. See components/font-load-probe.tsx —
               it probed wdth until 21 Aug 2026, an axis Commissioner does not have. */}

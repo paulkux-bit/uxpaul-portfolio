@@ -791,10 +791,10 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 ### Theming wiring
 
 ```tsx
-// app/layout.tsx
-import { ThemeProvider } from 'next-themes';
-
-<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+// app/layout.tsx (settings shared with the head script, lib/theme.ts)
+<head><script dangerouslySetInnerHTML={{ __html: themeInitScript }} /></head>
+<ThemeProvider attribute={THEME_ATTRIBUTE} defaultTheme={THEME_DEFAULT}
+  storageKey={THEME_STORAGE_KEY} enableSystem>
   {children}
 </ThemeProvider>
 ```

@@ -263,7 +263,7 @@ When the user toggles, `next-themes` adds/removes `.dark` on `<html>`. All token
 
 ### First paint
 
-`next-themes` injects an inline script that sets the class before paint, preventing flash-of-incorrect-theme. Keep `disableTransitionOnChange` off (default) so the user-initiated swap still gets the soft fade.
+An inline script at the top of `<head>` (`themeInitScript`, `lib/theme.ts`, 15 Oct 2026) sets the class before the body is parsed, preventing flash-of-incorrect-theme. `next-themes` renders its own copy as the first child of `<body>` and owns every change after first paint; both read the same settings from `lib/theme.ts`, and `__tests__/theme-script.test.mjs` runs the script in jsdom. Keep `disableTransitionOnChange` off (default) so the user-initiated swap still gets the soft fade.
 
 ### Edge cases
 
