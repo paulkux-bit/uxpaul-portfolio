@@ -76,8 +76,10 @@ answer:
    panel takes the card's radius or a control's.
 
 4. **Entrance motion.** Interaction v1 leaves entrance unspecified. The panel's
-   fade and rise takes `--duration-card` (written for lift, shadow and media
-   scale; Paul ruled it over `--duration-reveal`, 11 Oct 2026) and the content
+   rise takes `--duration-card` (written for lift, shadow and media scale;
+   Paul ruled it over `--duration-reveal`, 11 Oct 2026), and the panel is
+   opaque from its first frame: only the scrim fades in (3d ruling 2b, 15 Oct
+   2026; while the panel faded too, the page showed through it). The content
    cross-fade waits `--duration-control`. What a spec would need to say: an
    entrance category, which the reveal containers also lack.
 
