@@ -75,7 +75,7 @@ const ALLOWLIST = {
   // (check 13, 1 Oct 2026). Each is either the brand shelf's sanctioned per-brand
   // character or a rule that renders on no route.
   weights: [
-    { selector: '.text-qh-title', reason: 'UNUSED since 12 Oct 2026 (the Earlier work shelf sets text-h3): the former shelf title\'s per-brand weight through --qh-wght (500 to 650). Delete with the utility and the brand tokens in the design system pass (docs/unspecified-surfaces.md, Earlier work shelf, item 4)' },
+    { selector: '.text-qh-title', reason: 'UNUSED since 12 Oct 2026 (the Earlier work shelf set text-h3, and its own 21px since 15 Oct 2026): the former shelf title\'s per-brand weight through --qh-wght (500 to 650). Delete with the utility and the brand tokens in the design system pass (docs/unspecified-surfaces.md, Earlier work shelf, item 4)' },
     { selector: '.mark', reason: 'Off the clock wall, rendered on no route (CLAUDE.md): --mark-weight 700 / 650; Phase 12' },
     { selector: '.comp-mark-dominant .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },
     { selector: '.comp-mark-watermark .mark', reason: 'Off the clock wall, rendered on no route; Phase 12' },

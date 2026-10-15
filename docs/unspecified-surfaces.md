@@ -100,18 +100,16 @@ roles only, because the design system pass will revisit colour, the type scale
 and weight. Each item below borrows the nearest role, and each is an input to
 that pass rather than a settled answer:
 
-1. **The row title has no rung.** The project name and its client borrow
-   `text-h3` (22 to 28px, which CLAUDE.md scopes to subsections and callouts)
-   at `--wght-body` (400) instead of the role's 500. The client takes
-   `--text-secondary`, after the hero signature. **Since T4 (14 Oct 2026) it
-   is larger than the Selected work card questions above it at most widths**,
-   at the same weight: the questions are regular weight at 21 to 24px
-   (`text-cover`, sized to the card). Measured, shelf against question:
-   22 against 25.2 at 390, 23.1 against 21.4 at 1024 and
-   21 against 24 at 1440. Only at 768, where each card is the
-   full column wide, is the question larger, 24 against 22. Until T4 the card
-   titles were 32/600 and the shelf sat a size and a weight step under them.
-   Needs: the design system pass to put the two on one scale.
+1. **The row title has no rung.** The project name and its client set
+   `--type-21` at `--wght-body` (400), with `text-h3`'s 1.25 leading and
+   -0.01em tracking, on `.shelf__title` (3a ruling 3c, 15 Oct 2026). Until then
+   they borrowed `text-h3` (22 to 25.2px here), which T4 (14 Oct) had left
+   larger than the Selected work card questions (21 to 24px, `text-cover`,
+   sized to the card) at 390, 1024 and 1440. At 21 the shelf sits a step under
+   the questions at 768 and 1440 and level with them at 390 and 1024. Chosen
+   over keeping text-h3, 21 to 24px, and 18px, rendered side by side. The client
+   takes `--text-secondary`, after the hero signature. Needs: the design
+   system pass to give the row title a rung of its own.
 2. **A resting underline on touch only.** Under `@media (hover: none)` the
    project name carries the base `a` rule's resting underline (1px
    `--border-interactive`). A quiet link otherwise has no signifier at rest

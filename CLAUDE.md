@@ -341,7 +341,7 @@ real clamp, and every type-role utility must have a row.
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
-| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf sets `text-h3`). Deleted in the design system pass |
+| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf set `text-h3`, and its own 21px since 15 Oct 2026). Deleted in the design system pass |
 | `text-cover` | 21 → 24px (weight 400) | Selected work card question, sized to the card (`cqi`, T4, 14 Oct 2026). Card-only. |
 | `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
