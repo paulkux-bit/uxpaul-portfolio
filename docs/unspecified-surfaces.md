@@ -29,7 +29,8 @@ joined on 12 Oct 2026, the first entry to carry dead code with a deletion
 recipe. **Header identity mark** joined the same day, the first entry on the
 site's chrome rather than its content. **Hero headings in one weight** joined on
 13 Oct 2026, the first entry that records styling deliberately withheld rather
-than missing.*
+than missing. **Home card drawing width** joined on 14 Oct 2026, the first entry
+on a width, which no linter reads in JSX.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -282,6 +283,24 @@ guard. The dev scripts `check-details.mjs`, `shoot-interaction.mjs`,
 Needs: the design system pass to delete items 1 to 3 with their allowlist
 entries and the five assertions, and to rule on the rename.
 
+**The home card drawing's width.** Joined 14 Oct 2026 from the home cards
+build. Each Selected work card's cover drawing is
+`w-[44%] max-w-[210px]` on its `<picture>` in `components/case-study-card.tsx`
+(home cards H1b, Paul, 14 Oct 2026; it was 55% and 280px). The 210px cap is a
+literal: no token names it, no locked spec governs how wide a decorative image
+may be, and no gate sees it, because `lint:space` reads spacing utilities and
+nothing reads a width utility in JSX. It lints clean, which is why it is
+logged. The cap binds only from a 576px viewport to 1023; from 1024 the two
+columns hold the drawing at 176.6 to 203.7px, under it.
+
+What a spec would need to say: whether decorative card art takes a width token
+(and whether the same token should serve the percentage), whether the cap is
+`px` or `rem`, and that `COVER_SIZES` in the same file states the rendered
+widths for `srcset` and has to be re-measured whenever either value moves.
+
+Needs: the design system pass to give the cap a token, or to rule that a
+measured literal is the right answer here.
+
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
 than a token one. No locked spec governs a drawn chart: not its type sizes, not
@@ -346,8 +365,11 @@ system has an answer for and does not currently apply here.
 This is the surface most likely to want its own module rules, since a button's
 padding is a function of its label size rather than of the page rhythm.
 
-**Card meta.** Density, the type rung for the `project · client` strip, and the
-gap between the strip and the headline above it.
+**Card meta.** Density, the type rung for the meta under each Selected work
+card's headline, and the gap between it and the headline. As built since 14 Oct
+2026 it is two lines in `text-caption`: the client, semibold in
+`--text-primary`, then the product and its years in `text-muted`
+("Bard, 2025 to now"), the range held on one line by `whitespace-nowrap`.
 
 **Pinned specimen tones.** A colour whose job is to **not** follow the theme:
 the light and dark cells of a `ModePair` comparison, and the fixed placeholder
@@ -666,11 +688,11 @@ after all. Not a gap; a resolved question with the opposite answer, and it
 should not be reopened by someone reading only the original entry.
 
 **Card meta's half is the container.** What is specified belongs to the card:
-hover, pressed, elevation, `--radius-l`. The `project · client` strip has no
-interaction of its own to specify. It renders at `text-caption`, which
-`CLAUDE.md`'s scale table names for this exact use, but no locked §-rule assigns
-it — so the rung is conventional rather than governed, which is the distinction
-this file exists to make.
+hover, pressed, elevation, `--radius-l`. The meta (the client, then the product
+and years in `text-muted`) has no interaction of its own to specify. It renders
+at `text-caption`, which `CLAUDE.md`'s scale table names for this exact use, but
+no locked §-rule assigns it, so the rung is conventional rather than governed,
+which is the distinction this file exists to make.
 
 ---
 
