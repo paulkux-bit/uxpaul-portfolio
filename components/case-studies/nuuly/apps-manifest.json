@@ -3,7 +3,7 @@
   "images": [
     {
       "src": "/case-studies/nuuly/apps/apps-01-menu.png",
-      "alt": "The launcher: circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns and Packing, with Returns marked offline.",
+      "alt": "The launcher: circular tiles for Fingerprint, Test wash, Measure, Inspections, Returns, and Packing, with Returns marked offline.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
@@ -55,7 +55,7 @@
     },
     {
       "src": "/case-studies/nuuly/apps/apps-05-packing.png",
-      "alt": "Packing: Pick a garment bag, with small, medium and large bags and the large one chosen, above Weigh this package.",
+      "alt": "Packing: Pick a garment bag, with small, medium, and large bags and the large one chosen, above Weigh this package.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5

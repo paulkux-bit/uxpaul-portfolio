@@ -13,7 +13,7 @@
   "images": [
     {
       "src": "/case-studies/us-navy-dagr/05-11-equipment-tree.png",
-      "alt": "The FILTERS tab with the Equipment group open: AAA at 132, Mobile at 32 beneath it, and four types under that reading 8, 8, 15 and 1, then Stationery at 100. RADARs, SAMs and Other stay collapsed, with Facilities and Units below them.",
+      "alt": "The FILTERS tab with the Equipment group open: AAA at 132, Mobile at 32 beneath it, and four types under that reading 8, 8, 15, and 1, then Stationery at 100. RADARs, SAMs, and Other stay collapsed, with Facilities and Units below them.",
       "focalPoint": {
         "x": 0.4,
         "y": 0.35
@@ -45,7 +45,7 @@
     },
     {
       "src": "/case-studies/us-navy-dagr/05-14-tailored.png",
-      "alt": "A design for the analysis screen: 22 Threats in AOR above a Threat Matrix reading High Priority 6, Mobile 12, Recently Active 2 and Unknown 7, with the view set to threats tailored to an F-22 escort. A blue route curves down the map past red threat symbols, one of them boxed in orange.",
+      "alt": "A design for the analysis screen: 22 Threats in AOR above a Threat Matrix reading High Priority 6, Mobile 12, Recently Active 2, and Unknown 7, with the view set to threats tailored to an F-22 escort. A blue route curves down the map past red threat symbols, one of them boxed in orange.",
       "focalPoint": {
         "x": 0.5,
         "y": 0.5
