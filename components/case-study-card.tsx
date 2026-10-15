@@ -43,7 +43,7 @@ const COVER_SIZES =
 
 /**
  * One entry in the case-study index. There is one cover: **typographic**. The
- * framing IS the cover, set large, with two meta lines beneath. A deliberate
+ * framing IS the cover, at the card's foot, under two meta lines. A deliberate
  * cover, never an empty state — no "placeholder" text anywhere.
  *
  * The motion and image tiers were removed by decision, not by accident: video
@@ -91,13 +91,21 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
 
   const meta = (
     // The client leads: to a skimming hiring manager the institution (U.S.
-    // Navy, URBN) is the recognizable equity (B2, 3 Oct 2026). Under it, in
-    // text-muted, the product and its years (home cards Rb and H4b, 14 Oct
-    // 2026). The range sits in its own whitespace-nowrap span so it never
-    // wraps (H8b). The link's accessible name is unchanged and does not carry
-    // the years: the line follows the heading in reading order.
-    <p className="text-caption">
-      <span className="block font-semibold text-primary">{study.client}</span>
+    // Navy, URBN) is the recognizable equity (B2, 3 Oct 2026), at weight 500
+    // since T4. Under it, in text-muted, the product and its years (home cards
+    // Rb and H4b, 14 Oct 2026). The range sits in its own whitespace-nowrap
+    // span so it never wraps (H8b).
+    //
+    // ON SCREEN THIS IS THE CARD'S TOP LINE; IN THE DOM IT FOLLOWS THE h2
+    // (home cards T4, 14 Oct 2026). order-first lifts it in the flex column,
+    // so a screen reader still meets the question first and the link's
+    // accessible name is unchanged. The sr-only comma after the client is the
+    // pause a screen reader would otherwise lose between client and product.
+    <p className="order-first text-caption">
+      <span className="block font-medium text-primary">
+        {study.client}
+        <span className="sr-only">,</span>
+      </span>
       <span className="block text-muted">{study.projectName}, <span className="whitespace-nowrap">{study.years}</span></span>
       {published ? null : <span className="block text-secondary">Coming soon</span>}
     </p>
@@ -106,7 +114,11 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <article
       className={[
-        'case-card relative isolate flex h-full flex-col overflow-hidden border border-subtle bg-surface',
+        // The border is transparent, not removed (T4): the card is a panel of
+        // --bg-surface on --bg-canvas, and the 1px edge stays so forced-colors
+        // mode still draws it. @container makes the card the inline-size
+        // container the question's cqi size resolves against (text-cover).
+        'case-card @container relative isolate flex h-full flex-col overflow-hidden border border-transparent bg-surface',
         // Hover/focus response is a promise of a click target. An unpublished
         // card has none, so it rests: same border, no response.
         // The states themselves live in globals.css (R4); this modifier is the
@@ -116,22 +128,22 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         .filter(Boolean)
         .join(' ')}
     >
-      {/* One cream surface: a centered illustration over the question (left)
-          and the meta. The text follows the drawing (home cards H3c, 14 Oct
-          2026): it is no longer pinned to the bottom, and the grid no longer
-          sizes every row to the tallest card. The two cards in a row still
-          match, because a grid item stretches within its row and the <li> and
-          this article carry h-full; the shorter card's spare height sits below
-          its meta. */}
-      <div className="flex flex-1 flex-col px-m py-l md:px-l md:py-xl">
+      {/* One cream panel, top to bottom: the meta, the drawing, the question
+          (home cards T4, 14 Oct 2026). Equal heights again: the grid sets every
+          row to the tallest card (grid-auto-rows: 1fr in app/page.tsx), which
+          reverses round 1's text-follows-the-drawing (H3c). The column's gap-l
+          spaces the three, and the drawing's my-auto takes the spare height
+          above and below it, so the meta holds the top and the question the
+          foot. */}
+      <div className="flex flex-1 flex-col gap-l px-m py-l md:px-l md:py-xl">
         {art ? (
           /* Decorative, pre-sized, mix-blended asset served directly via
                <picture> (webp + png). next/image would re-encode and strip the
                fixed dimensions the blend relies on. The <picture> is the block
                sizing box (percentage width on an inline picture's <img> misresolves);
                44% of the card's content width, capped at 210px (home cards H1b,
-               14 Oct 2026), centered over the question. */
-            <picture className="mx-auto mb-m block w-[44%] max-w-[210px] md:mb-l">
+               14 Oct 2026), centred between the meta and the question. */
+            <picture className="mx-auto my-auto block w-[44%] max-w-[210px]">
               {/* One <source> and one <img>, direct children: a fragment between
                   them and <picture> loses @next/next/no-img-element's picture
                   exemption. Only the four 1200 covers get srcset and sizes. */}
@@ -160,10 +172,8 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
               />
             </picture>
         ) : null}
-        <div>
-          <h2 className="text-cover">{title}</h2>
-          <div className="mt-xs">{meta}</div>
-        </div>
+        <h2 className="text-cover">{title}</h2>
+        {meta}
       </div>
     </article>
   );

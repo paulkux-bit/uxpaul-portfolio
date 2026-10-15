@@ -68,7 +68,7 @@ export default function Home() {
         </p>
         {/* 32 across, 48 down, on purpose (closing review A5a, 1 Oct 2026): 48 lets
             each card read as its own entry, 32 holds the pair together. */}
-        <RevealGrid className="grid gap-x-l gap-y-xl lg:grid-cols-2">
+        <RevealGrid className="grid gap-x-l gap-y-xl lg:grid-cols-2 lg:[grid-auto-rows:1fr]">
           {caseStudies.map((study) => (
             <li key={study.slug} className="h-full">
               <CaseStudyCard study={study} />
