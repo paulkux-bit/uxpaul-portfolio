@@ -32,7 +32,7 @@ resolve a failure by deleting the row or the spec.
 Superseded or scoped, kept for their history and their non-value material, and
 **never** to be implemented from: `docs/typography-system.md` (superseded in
 full) and `docs/color-system.md` (palette superseded; still owns the `--qh-*`
-brand shelf, paper grain, the swap protocol and the role map).
+brand shelf, the swap protocol and the role map).
 
 ### 2. Every value comes from a token
 
@@ -699,7 +699,7 @@ purpose. Both are deliberate. Do not trim one to reach a round number or pad the
 architecture, the rules and every measured ratio. Enforced by
 `npm run lint:color` (8 checks), which gates `npm run build`.
 **Implementation and usage notes:** `docs/color-system.md` — the `--qh-*` brand
-shelf, paper grain, the theme-swap protocol, the role map. Its token tables are
+shelf, the theme-swap protocol, the role map. Its token tables are
 superseded; do not read values from it.
 **Implementation:** `app/globals.css`
 **Toggle:** `next-themes`, class-based (`.dark` on `<html>`)
@@ -748,7 +748,6 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
 - **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
 - **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
-- **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
 
 ### Utility classes (mirror typography pattern)
 
@@ -786,7 +785,7 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 - ❌ Don't reintroduce PopUp tokens. The annotation layer is retired and
   persimmon is not an accent.
 - ❌ Don't extend `--focus-glow`, `--selection-bg`, or `--link-hover` to resting roles.
-- ❌ No paper grain in dark mode.
+- ❌ No texture or noise overlay on the page, in either mode. The paper grain was removed on 15 Oct 2026 (design system pass, ruling 2d): at 4 of 255 levels it was invisible, and its blended layer was redrawn on every frame.
 - ❌ Don't add tokens inline. Extend `docs/color-system-v2-locked.md` first.
 
 ### Theming wiring

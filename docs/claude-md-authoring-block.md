@@ -30,7 +30,7 @@ deleting the row or the spec.
 Superseded, kept for their history and their non-value material, and **never**
 to be implemented from: `docs/typography-system.md` (superseded in full) and
 `docs/color-system.md` (palette superseded; still owns the `--qh-*` brand
-shelf, paper grain, the swap protocol and the role map).
+shelf, the swap protocol and the role map).
 
 ### 2. Every value comes from a token
 

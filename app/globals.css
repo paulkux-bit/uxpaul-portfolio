@@ -632,8 +632,8 @@
 }
 
 /* ============================================================
-   BASE — typography defaults + color-scheme + body + paper
-   grain + selection + focus halo + link affordance + em/i map
+   BASE — typography defaults + color-scheme + body + selection
+   + focus halo + link affordance + em/i map
    ============================================================ */
 
 @layer base {
@@ -669,25 +669,13 @@
       color var(--duration-theme) var(--ease-out-soft);
   }
 
-  /* Paper grain overlay — light mode only. Fixed, non-interactive,
-     SVG noise via multiply blend. Drops to opacity 0 in dark mode. */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.55;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    transition: opacity var(--duration-theme) var(--ease-out-soft);
-  }
-  html.dark body::before { opacity: 0; }
-
   /* The slack half of the sticky footer above. */
   body > main { flex: 1 0 auto; }
 
-  /* Lift content above the grain layer */
+  /* Each child of body is its own stacking context. This lifted content above
+     the paper grain, which was removed on 15 Oct 2026 (design system pass,
+     ruling 2d); the rule stays until the cover-art blends are checked without
+     it. */
   body > * { position: relative; z-index: 2; }
 
   /* The shipped face has no italics — map em/i to weight emphasis instead.
@@ -1050,7 +1038,7 @@
 
 .site-header {
   /* Own the positioning here (unlayered → reliably beats the
-     `body > *` paper-grain rule and doesn't depend on Tailwind utilities
+     `body > *` stacking rule and doesn't depend on Tailwind utilities
      being generated in dev). */
   position: sticky;
   top: 0;
@@ -3223,13 +3211,13 @@ html.dark .framed-pair__cell .framed-pair__ink-mask {
 
    ON THE PAGE THERE IS NO BACKDROP TO BLEND WITH, which is why the section 1
    drawings of Line of Sight and FDT-E (FramedPair's `ink`, 8 Oct 2026) are shipped
-   differently. `body > *` lifts content into its own stacking context above the
-   grain, so inside it the backdrop is transparent and multiply/screen change
+   differently. `body > *` lifts content into its own stacking context, so
+   inside it the backdrop is transparent and multiply/screen change
    nothing: measured, the drawing's ground rendered 255,255,255 in light and
    0,0,0 in dark, a black box. Those two files are ink on TRANSPARENT instead
    (alpha = 255 - luminance, ink black), which is pixel-identical to multiply over
-   any page and, after invert(1), to screen, and lets the canvas and the grain show
-   through. They still carry this class for the invert. */
+   any page and, after invert(1), to screen, and lets the canvas show through.
+   They still carry this class for the invert. */
 .cover-art {
   display: block;
   mix-blend-mode: multiply;
@@ -4701,7 +4689,7 @@ html.dark .figure-placeholder {
 }
 
 /* A token step, not opacity. opacity:0.88 made the whole button translucent, so
-   the light-mode paper grain read through a solid fill. --text-secondary holds
+   the page read through a solid fill. --text-secondary holds
    the surface opaque: 10.4:1 light and 11.2:1 dark against --bg-canvas. */
 .about-btn:hover {
   background: var(--text-secondary);

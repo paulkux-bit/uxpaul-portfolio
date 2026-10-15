@@ -13,7 +13,7 @@
 > already produced two wrong accessibility floors — the pt-for-px substitution
 > caught during the type migration, and `--text-subtle` at "~3.5–4:1" when the
 > real value was 2.78 and failing. But a bare pointer would delete live material
-> v2 does not cover: the `--qh-*` brand shelf, the paper grain, the theme-swap
+> v2 does not cover: the `--qh-*` brand shelf, the theme-swap
 > protocol, the role map, and the non-text accessibility decisions. Those
 > sections are the reason this file survives.
 >
@@ -30,7 +30,7 @@
 
 ## Concept
 
-Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks, and a whisper of grain. Dark mode is **low light** — warm espresso canvas, warm cream text, ambient and lampt rather than printed. Both modes share the same hue axis (50–80, warm amber/sepia) so the swap reads as one world under different lighting.
+Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **low light** — warm espresso canvas, warm cream text, ambient and lampt rather than printed. Both modes share the same hue axis (50–80, warm amber/sepia) so the swap reads as one world under different lighting.
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
@@ -42,7 +42,7 @@ The **PopUp annotation layer** once carried a chromatic identity at rest. It is 
 
 1. **No accent at rest.** A page sitting still should have no chromatic noise demanding attention. Brand color is not the differentiator; typography, scale, and craft are.
 2. **Interaction earns color.** Hover, focus, selection, and active states are *moments*, not roles. They get warm chromatic treatment because they're functional signals — not decoration.
-3. **Paper has character.** The canvas isn't white. It's cream with real chroma (0.018), layered surfaces with visible lightness steps, and a subtle SVG grain in light mode only.
+3. **Paper has character.** The canvas isn't white. It's cream with real chroma (0.018), layered surfaces with visible lightness steps, with no texture overlay (the light-mode grain was removed on 15 Oct 2026).
 4. **Same world, different lighting.** Light and dark share the hue axis but are tuned independently. Dark mode is not inverted light mode.
 5. **Chromatic restraint scales up at the moment of attention.** Selection is a real highlighter. Focus has a halo. Hover does two things at once. The system whispers until it needs to speak.
 
@@ -213,16 +213,9 @@ The six PopUp utilities were deleted with their tokens on 1 Oct 2026.
 
 ---
 
-## Paper grain
+## Paper grain (removed 15 Oct 2026)
 
-Light mode includes a subtle SVG noise overlay on `<body>::before`, blended with `mix-blend-mode: multiply` at opacity 0.55. The grain is fixed-position so it doesn't scroll, pointer-events-none, and sits at `z-index: 1` (content above at `z-index: 2`).
-
-Dark mode transitions the overlay to opacity 0 — dark mode is ambient warm light, not paper. Do not add grain to dark mode.
-
-Knobs (set in `globals.css`):
-- Opacity 0.35 → almost subliminal
-- Opacity 0.55 → current, "you can feel it"
-- Opacity 0.75 → printerly
+Light mode carried an SVG noise overlay on `body::before` (multiply, opacity 0.55) until the design system pass. It was removed by ruling 2d: measured on the canvas it darkened the page by 2 of 255 levels with a spread of 4, so no reader could see it, and its fixed, blended layer was composited on every frame in both modes (the layer stayed active in dark at opacity 0). Record: `docs/colour-texture-review-cc.md`. Do not reintroduce a texture overlay.
 
 ---
 
@@ -266,7 +259,7 @@ When the user toggles, `next-themes` adds/removes `.dark` on `<html>`. All token
 
 ### Transition
 
-`body` has a 450ms transition on `background-color` and `color` for the soft fade. The paper-grain overlay (`body::before`) has its own opacity transition so it fades cleanly when toggling to dark. Other elements inherit values without transition — preventing dozens of staggered fades from feeling chaotic.
+`body` has a 450ms transition on `background-color` and `color` for the soft fade. Other elements inherit values without transition — preventing dozens of staggered fades from feeling chaotic.
 
 ### First paint
 
@@ -290,7 +283,7 @@ The decisions, in order of forking:
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
 5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Client work" shelf is the one resting exception now.)
 6. **(v2) Interaction earns color** — hover, focus, selection get warm chromatic treatment as *moments*, not roles. Defensible because nothing chromatic sits at rest.
-7. **(v2) Paper has real character** — visible chroma, layered surfaces, SVG grain. The canvas is cream stock, not generated white.
+7. **(v2) Paper has real character** — visible chroma, layered surfaces. The canvas is cream stock, not generated white.
 
 ---
 
@@ -304,7 +297,7 @@ The decisions, in order of forking:
 - ❌ **Dark mode is not inverted light mode.** Tune chroma and contrast independently.
 - ❌ **Don't reintroduce PopUp tokens.** The annotation layer is retired; its tokens were deleted on 1 Oct 2026.
 - ❌ **Don't extend interaction-state tokens (`--focus-glow`, `--selection-bg`, `--link-hover`) to resting roles.** They're moments, not paint.
-- ❌ **No paper grain in dark mode.** Dark mode is ambient light, not paper.
+- ❌ **No texture or noise overlay, in either mode.** The paper grain was removed on 15 Oct 2026.
 - ❌ **Don't add tokens inline.** Extend this doc first, then add to `globals.css`.
 
 ---
