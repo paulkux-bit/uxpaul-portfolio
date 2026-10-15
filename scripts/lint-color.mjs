@@ -122,6 +122,20 @@ function contrast(a, b) {
   return (hi + 0.05) / (lo + 0.05);
 }
 
+// Alpha compositing, for check 8's ring over glow. Browsers blend in
+// gamma-encoded sRGB, so the layers are encoded, mixed, and decoded back to
+// linear for the luminance.
+const encode = (v) => (v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055);
+const decode = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+/** Lay `top` (linear rgb) at `alpha` over `under` (linear rgb). */
+const over = (top, alpha, under) =>
+  top.map((t, i) => decode(alpha * encode(t) + (1 - alpha) * encode(under[i])));
+const contrastLinear = (a, b) => {
+  const [la, lb] = [relLuminance(a), relLuminance(b)];
+  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+  return (hi + 0.05) / (lo + 0.05);
+};
+
 // ── Parse ──────────────────────────────────────────────────────────────────
 const css = await readFile(CSS_FILE, 'utf8');
 const root = postcss.parse(css, { from: CSS_FILE });
@@ -177,6 +191,17 @@ function resolveOklch(value, mode) {
   if (body === null) return null;
   if (/\//.test(body)) return null; // has alpha; assertion 2 owns it
   return resolveBody(body, mode);
+}
+
+/** [L, C, H, alpha] for a token written as one oklch() with an alpha, or null. */
+function resolveOklchAlpha(tok, mode) {
+  const value = byMode[mode].get(tok) ?? '';
+  const body = oklchBody(value);
+  if (body === null) return null;
+  const m = /^(.*)\/\s*([\d.]+)\s*$/s.exec(body);
+  if (!m) return null;
+  const lch = resolveBody(m[1], mode);
+  return lch ? [...lch, Number(m[2])] : null;
 }
 
 /** A token's own oklch(), following a bare var() alias (--card-hover in light
@@ -466,21 +491,31 @@ const add = (id, title, failures, note) =>
   add(7, 'No colour literal outside the token definitions (R4, §7.7)', f);
 }
 
-// 8: every underline clears 3:1 against the page. The underline is a link's
-// non-colour cue (WCAG 1.4.1). The house rule, first written on .about-link, is
-// that it owes 3:1 like any other affordance; the base link and the active nav
-// link sat at 2.04 light / 2.35 dark until the closing review (A2b, 1 Oct 2026).
-// Every text-decoration-color that names a token is checked against
-// --bg-canvas, --bg-surface and --bg-surface-elevated, in both modes. The
-// elevated surface joined on 14 Oct 2026: the card's hover panel (T4, H-b)
-// is the first surface an underline sits on that is neither of the others.
-// Since 15 Oct 2026 that panel is --card-hover: the elevated surface in light,
-// and between --bg-surface and --bg-surface-elevated in dark, so the two
-// bracket it. --card-hover itself is not resolved here. A value that is not a single
-// token cannot be checked, so it fails rather than passing unseen.
+// 8: every underline, and the focus ring, clears 3:1 against the page. The
+// underline is a link's non-colour cue (WCAG 1.4.1). The house rule, first
+// written on .about-link, is that it owes 3:1 like any other affordance; the
+// base link and the active nav link sat at 2.04 light / 2.35 dark until the
+// closing review (A2b, 1 Oct 2026).
+//
+// Every text-decoration-color that names a token is checked against five
+// grounds in both modes: --bg-canvas, --bg-surface, --bg-surface-elevated,
+// --bg-sunken and --card-hover. Until 15 Oct 2026 it read only the first
+// three and bracketed --card-hover between surface and elevated; the walnut
+// retune breaks that bracket (dark --card-hover is 11 chroma units, elevated
+// 14), so the hover panel is read as itself now, and the sunken well with it.
+// A value that is not a single token cannot be checked, so it fails rather
+// than passing unseen.
+//
+// The focus ring is the other 3:1 affordance (WCAG 2.4.11). It is drawn at
+// 0.55 alpha over the 6px glow, which is itself alpha over the ground, so the
+// measurement composites both: the ring over (glow over ground) against the
+// glow over ground beside it. Proved red with the dark glow at alpha 0.40.
 {
   const f = [];
-  const UNDERLINE_FLOOR = 3.0;
+  const FLOOR = 3.0;
+  const GROUNDS = ['--bg-canvas', '--bg-surface', '--bg-surface-elevated', '--bg-sunken', '--card-hover'];
+  let minUnderline = Infinity;
+  let minRing = Infinity;
   for (const d of decls) {
     if (d.prop !== 'text-decoration-color') continue;
     const m = d.value.match(/^var\(\s*(--[\w-]+)\s*\)$/);
@@ -489,15 +524,16 @@ const add = (id, title, failures, note) =>
       continue;
     }
     for (const mode of ['light', 'dark']) {
-      for (const s of ['--bg-canvas', '--bg-surface', '--bg-surface-elevated']) {
-        const uv = resolveOklch(byMode[mode].get(m[1]) ?? '', mode);
-        const sv = resolveOklch(byMode[mode].get(s) ?? '', mode);
+      for (const s of GROUNDS) {
+        const uv = resolveToken(m[1], mode);
+        const sv = resolveToken(s, mode);
         if (!uv || !sv) {
           f.push({ where: `${CSS_FILE}:${d.line}`, detail: `${mode}: cannot resolve ${m[1]} on ${s}` });
           continue;
         }
         const r = contrast(uv, sv);
-        if (r < UNDERLINE_FLOOR)
+        minUnderline = Math.min(minUnderline, r);
+        if (r < FLOOR)
           f.push({
             where: `${CSS_FILE}:${d.line}`,
             detail: `${mode}: ${d.sel} underline ${m[1]} on ${s} = ${r.toFixed(2)}, floor 3.0`,
@@ -505,7 +541,30 @@ const add = (id, title, failures, note) =>
       }
     }
   }
-  add(8, 'Every underline clears 3:1 against the page (A2b, house rule)', f);
+  for (const mode of ['light', 'dark']) {
+    const ring = resolveOklchAlpha('--focus-ring', mode);
+    const glow = resolveOklchAlpha('--focus-glow', mode);
+    if (!ring || !glow) {
+      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --focus-ring or --focus-glow as one colour with an alpha` });
+      continue;
+    }
+    for (const s of GROUNDS) {
+      const sv = resolveToken(s, mode);
+      if (!sv) {
+        f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve ${s}` });
+        continue;
+      }
+      const ground = oklchToLinearRgb(...sv);
+      const glowOn = over(oklchToLinearRgb(...glow.slice(0, 3)), glow[3], ground);
+      const ringOn = over(oklchToLinearRgb(...ring.slice(0, 3)), ring[3], glowOn);
+      const r = contrastLinear(ringOn, glowOn);
+      minRing = Math.min(minRing, r);
+      if (r < FLOOR)
+        f.push({ where: CSS_FILE, detail: `${mode}: --focus-ring over --focus-glow on ${s} = ${r.toFixed(2)}, floor 3.0` });
+    }
+  }
+  add(8, 'Every underline and the focus ring clear 3:1 against the page (A2b, house rule)', f,
+    `lowest underline ${minUnderline.toFixed(2)}, lowest ring ${minRing.toFixed(2)}`);
 }
 
 // 9: every colour token sits in the warm hue band, 50 to 80 inclusive, accents

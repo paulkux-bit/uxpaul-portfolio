@@ -308,6 +308,13 @@ Fails on:
    cannot be checked. The underline is a link's non-colour cue; the house rule
    is that it owes 3:1 like any affordance. Added 1 Oct 2026 with ruling A2b;
    proved red with the base link back on `--border-strong` (2.03 light).
+   **Extended 15 Oct 2026** to five grounds, adding `--bg-sunken` and
+   `--card-hover` read as itself (the walnut retune breaks the surface-to-
+   elevated bracket), and to the focus ring: the 0.55-alpha ring composited
+   over the glow, which is composited over each ground, owes 3:1 against the
+   glow beside it, in both modes. Compositing is in encoded sRGB, as browsers
+   blend. Proved red with the dark glow at alpha 0.70, and with the dark
+   `--card-hover` lifted to L 0.56.
 9. Any colour token whose hue falls outside the warm band, 50 to 80
    inclusive, in either mode. Every `oklch()` in every custom property under
    `:root` and `.dark` is read, alpha tokens and shadow layers included, so

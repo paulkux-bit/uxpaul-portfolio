@@ -128,3 +128,33 @@ describe('lint:color check 10, the card step', () => {
     expect(block).not.toMatch(/light:/);
   });
 });
+
+describe('lint:color check 8, underlines and the focus ring', () => {
+  it('passes on the real palette and reports its lowest margins', () => {
+    const block = lint(CSS, 8, 'real-ring');
+    expect(block).toMatch(/^✓ 8\./);
+    expect(block).toMatch(/lowest underline \d\.\d\d, lowest ring \d\.\d\d/);
+  });
+
+  it('fails with the dark focus glow at alpha 0.70', () => {
+    const decl = /--focus-glow:\s+oklch\(([\d.]+ [\d.]+ [\d.]+) \/ ([\d.]+)\);/.exec(CSS.slice(CSS.indexOf('\n.dark {')));
+    expect(decl, 'dark --focus-glow is not a literal with alpha').toBeTruthy();
+    const css = inDark(CSS, decl[0], decl[0].replace(`/ ${decl[2]})`, '/ 0.70)'));
+    const block = lint(css, 8, 'glow-070');
+    expect(block).toMatch(/^✗ 8\./);
+    expect(block).toMatch(/dark: --focus-ring over --focus-glow on --bg-[\w-]+ = [0-2]\.\d\d, floor 3\.0/);
+    expect(block).not.toMatch(/light:/);
+  });
+
+  it('reads --card-hover as an underline ground of its own', () => {
+    // Lift the dark --card-hover to L 0.56, near the resting underline, so
+    // only the hover panel fails. Before 15 Oct 2026 check 8 read three
+    // grounds and would have passed this.
+    const decl = /--card-hover\s*:\s+oklch\(([\d.]+) /.exec(CSS.slice(CSS.indexOf('\n.dark {')));
+    const css = inDark(CSS, decl[0], decl[0].replace(decl[1], '0.560'));
+    const block = lint(css, 8, 'underline-card');
+    expect(block).toMatch(/^✗ 8\./);
+    expect(block).toMatch(/dark: .* underline --[\w-]+ on --card-hover = /);
+    expect(block).not.toMatch(/on --bg-(canvas|surface|surface-elevated|sunken) = /);
+  });
+});
