@@ -497,23 +497,6 @@
   --card-hover:             var(--bg-surface-elevated);
 
 
-  /* Brand shelf tokens.
-     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-     Nothing reads them: the shelf became "Earlier work" and dropped its brand
-     border and fill. They were the per-brand 1.5px border (--base) and faint
-     fill (--fill), the site's one sanctioned resting colour, --qh-bbc-* at
-     hue 250 included (docs/color-system.md). Do not use them. */
-  --qh-lionsgate-base:      oklch(0.40 0.10 80);
-  --qh-red-cross-base:      oklch(0.39 0.13 25);
-  --qh-bbc-base:            oklch(0.30 0.10 250);
-  --qh-k-hovnanian-base:    oklch(0.39 0.07 60);
-  --qh-lionsgate-fill:      oklch(0.93 0.016 85);
-  --qh-red-cross-fill:      oklch(0.93 0.016 30);
-  --qh-bbc-fill:            oklch(0.93 0.012 250);
-  --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
-  --qh-border-width:        1.5px;
-
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
      because heavy weight reads heavier on the espresso canvas. */
   --mark-weight:            700;
@@ -613,20 +596,6 @@
      hovered card read brown. This takes light's 1.10:1 step at 10 chroma
      units instead of 13, between --bg-surface and --bg-surface-elevated. */
   --card-hover:             oklch(0.243 calc(var(--chroma-unit) * 10) var(--hue-surface));
-
-
-  /* Brand shelf tokens, dark.
-     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-     Chroma matched light mode (closing review A8b, 1 Oct 2026). */
-  --qh-lionsgate-base:      oklch(0.62 0.10 80);
-  --qh-red-cross-base:      oklch(0.58 0.13 25);
-  --qh-bbc-base:            oklch(0.58 0.10 250);
-  --qh-k-hovnanian-base:    oklch(0.60 0.07 62);
-  --qh-lionsgate-fill:      oklch(0.22 0.018 85);
-  --qh-red-cross-fill:      oklch(0.22 0.018 30);
-  --qh-bbc-fill:            oklch(0.22 0.014 250);
-  --qh-k-hovnanian-fill:    oklch(0.22 0.016 62);
 
   --mark-weight:            650;
 }
@@ -866,20 +835,6 @@
   min-height: 2lh;
   display: flex;
   align-items: flex-end;
-}
-
-/* Former "Client work" shelf title.
-   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-   The Earlier work rows set their titles at --type-21 on .shelf__title
-   (text-h3 until 15 Oct 2026); nothing applies this.
-   It carried the per-brand weight (--qh-wght, 500-650) of a §6 exception
-   surface (type v3 §6). Its scale row in CLAUDE.md goes with it. */
-@utility text-qh-title {
-  font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  font-weight: var(--qh-wght, 550);
 }
 
 /* Resolutions numbered-block headline (uscg-bard "How you file/see/count"). Type only —
@@ -1578,55 +1533,6 @@
    is the link's (.quiet-link), so nothing here outranks it. */
 .shelf__row:active {
   transform: translateY(1px);
-}
-
-/* ============================================================
-   FORMER "CLIENT WORK" shelf (brand blocks and .quick-hit).
-   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-   No element carries data-brand or .quick-hit since the shelf became
-   "Earlier work" (the EARLIER WORK shelf section above). Kept so that build
-   changed no token and no test input: __tests__/interaction-lint.test.mjs
-   still reads .quick-hit's radius. Delete the blocks, .quick-hit and
-   @utility text-qh-title together, before the tokens, or lint:color check 6
-   fails.
-   ============================================================ */
-[data-brand="lionsgate"] {
-  --base: var(--qh-lionsgate-base); --fill: var(--qh-lionsgate-fill);
-  --qh-wght: 600;  /* cinematic: compressed, bold, display */
-}
-[data-brand="red-cross"] {
-  --base: var(--qh-red-cross-base); --fill: var(--qh-red-cross-fill);
-  --qh-wght: 500;  /* classic/humane: open, light, readable cut */
-}
-[data-brand="bbc"] {
-  --base: var(--qh-bbc-base); --fill: var(--qh-bbc-fill);
-  --qh-wght: 650;  /* newspaper: narrowest, heaviest, display */
-}
-[data-brand="k-hovnanian"] {
-  --base: var(--qh-k-hovnanian-base); --fill: var(--qh-k-hovnanian-fill);
-  --qh-wght: 540;  /* architectural: full width, grounded */
-}
-
-.quick-hit {
-  border-radius: var(--radius-m);
-  border-width: var(--qh-border-width);
-  display: grid;
-  align-items: center;
-  column-gap: var(--spacing-s);
-  row-gap: var(--spacing-2xs);
-  grid-template-columns: 1fr auto;
-  grid-template-areas: 'brand industry' 'title title';
-}
-.quick-hit > .qh-brand    { grid-area: brand; }
-.quick-hit > .qh-title    { grid-area: title; }
-.quick-hit > .qh-industry { grid-area: industry; }
-@media (min-width: 768px) {
-  .quick-hit {
-    column-gap: var(--spacing-l);
-    grid-template-columns: 12rem 1fr 8rem;
-    grid-template-areas: 'brand title industry';
-  }
 }
 
 /* ============================================================

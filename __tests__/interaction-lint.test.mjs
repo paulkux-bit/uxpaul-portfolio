@@ -632,7 +632,6 @@ describe('§4 radius mapping — the right step, not merely a token', () => {
     ['.mode-pair__cell', '--radius-s'],
     ['.hero-block__callout', '--radius-s'],
     ['.about-btn', '--radius-m'],        // the button
-    ['.quick-hit', '--radius-m'],
     ['.case-card', '--radius-l'],        // the card sits a step above the button
     ['.about-roles__step::before', '--radius-full'],
   ];

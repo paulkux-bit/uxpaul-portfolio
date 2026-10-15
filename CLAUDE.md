@@ -31,8 +31,8 @@ resolve a failure by deleting the row or the spec.
 
 Superseded or scoped, kept for their history and their non-value material, and
 **never** to be implemented from: `docs/typography-system.md` (superseded in
-full) and `docs/color-system.md` (palette superseded; still owns the `--qh-*`
-brand shelf, the swap protocol and the role map).
+full) and `docs/color-system.md` (palette superseded; still owns the swap protocol and
+the role map).
 
 ### 2. Every value comes from a token
 
@@ -341,7 +341,6 @@ real clamp, and every type-role utility must have a row.
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
-| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf set `text-h3`, and its own 21px since 15 Oct 2026). Deleted in the design system pass |
 | `text-cover` | 21 → 24px (weight 400) | Selected work card question, sized to the card (`cqi`, T4, 14 Oct 2026). Card-only. |
 | `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
@@ -700,8 +699,8 @@ purpose. Both are deliberate. Do not trim one to reach a round number or pad the
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
 `npm run lint:color` (8 checks), which gates `npm run build`.
-**Implementation and usage notes:** `docs/color-system.md` — the `--qh-*` brand
-shelf, the theme-swap protocol, the role map. Its token tables are
+**Implementation and usage notes:** `docs/color-system.md` — the theme-swap
+protocol and the role map. Its token tables are
 superseded; do not read values from it.
 **Implementation:** `app/globals.css`
 **Toggle:** `next-themes`, class-based (`.dark` on `<html>`)
@@ -714,10 +713,9 @@ Nothing chromatic sits on the page idle. But when the user *does* something — 
 
 **No exception is in use.** The "Client work" brand shelf was the one
 sanctioned exception until 12 Oct 2026, when it became "Earlier work" and
-dropped its brand border and fill. Its `--qh-*` tokens, `--qh-bbc-base` at hue
-250 included, are still defined in `globals.css` and consumed by nothing,
-scheduled for deletion in the design system pass
-(`docs/unspecified-surfaces.md`, Earlier work shelf). Do not use them. The
+dropped its brand border and fill. Its tokens, the one cool hue (250) among
+them, were consumed by nothing from then and deleted on 15 Oct 2026 in the
+design system pass. The
 PopUp annotation layer used to be a second exception; that system is retired.
 Nothing chromatic sits at rest anywhere on the site. (Corrected 1 Oct 2026, when
 this paragraph said "no exception" while the shelf shipped one. True again from
@@ -742,7 +740,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
 - ~~**PopUp**: six surface and text tokens~~ **DELETED** 1 Oct 2026 (system retired, consumed by nothing)
-- **Brand shelf (unused since 12 Oct 2026, deleted in the design system pass)**: `--qh-*-base`, `--qh-*-fill`, `--qh-border-width`; see `docs/color-system.md`
+- ~~**Brand shelf**: per-brand border and fill tokens~~ **DELETED** 15 Oct 2026 (consumed by nothing since 12 Oct 2026)
 
 ### Signature treatments
 
@@ -779,9 +777,9 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 
 ### Anti-patterns (extension of existing list)
 
-- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (No exception is in use, and the brand shelf's tokens await deletion. See Core principle.)
+- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (No exception is in use. See Core principle.)
 - ❌ No raw color tokens (e.g., `--color-blue-500`). All color is role-based.
-- ❌ No cool grays (hue ≥ 200) anywhere. (`--qh-bbc-base`, hue 250, is still defined but used by nothing since 12 Oct 2026.)
+- ❌ No cool grays (hue ≥ 200) anywhere.
 - ❌ No pure black or pure white.
 - ❌ Dark mode is not inverted light mode.
 - ❌ Don't reintroduce PopUp tokens. The annotation layer is retired and

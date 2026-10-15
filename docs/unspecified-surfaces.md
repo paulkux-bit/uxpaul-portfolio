@@ -134,30 +134,14 @@ that pass rather than a settled answer:
    browser without `:has()` keeps it. Interaction v1 §5 has every control
    inherit the global halo, and this redraws it around the target rather than
    the text.
-4. **The brand shelf's code is dead, and scheduled for deletion.** The `--qh-*`
-   tokens (light and dark), the four `[data-brand]` blocks, `.quick-hit` and its
-   area rules, `@utility text-qh-title`, and the `brand` field and
-   `QuickHitBrand` type in `app/data/template-b.ts` have been consumed by
-   nothing since this build. They stayed so the build changed no token and no
-   test input (Paul, option i, 12 Oct 2026). Delete them in the design system
-   pass, in one commit, in this order:
-   1. the `[data-brand]` blocks, `.quick-hit` and `@utility text-qh-title`,
-      together
-   2. the tokens
-   3. `ALLOWLIST.weights` `.text-qh-title` in `scripts/lint-type.mjs` and
-      `ALLOWLIST.media` `.quick-hit` in `scripts/lint-space.mjs`
-   4. the `['.quick-hit', '--radius-m']` row in
-      `__tests__/interaction-lint.test.mjs`
-   5. the data field and type
-   6. the CLAUDE.md scale row and every backticked `--qh-` token
-   7. the sanction text in type v3 §6, colour v2 §9 and `docs/color-system.md`.
-
-   Deleting the tokens before the blocks, or the blocks before the utility,
-   fails `lint:color` check 6.
+4. **The brand shelf's dead code. Resolved 15 Oct 2026: deleted in the
+   design system pass, in one commit, in the order this entry set (blocks,
+   `.quick-hit` and the utility first, then the tokens, the two lint allowlist
+   entries, the radius test row, the data field and type, and the CLAUDE.md and
+   spec text). It leaves this list at the next edit of this entry.**
 
 Needs: rulings from the design system pass on a list-title rung, on whether
-touch gets a rest signifier site-wide, and on the row halo. Then item 4 is
-deleted and leaves this file.
+touch gets a rest signifier site-wide, and on the row halo. (Item 4 is done.)
 
 **The header identity mark (wordmark to face).** Joined 12 Oct 2026 from the
 header handoff build (`docs/cc-prompt-header-handoff-build.md`, Paul's

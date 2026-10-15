@@ -1,22 +1,15 @@
 // Source of truth for the home page's "Earlier work" shelf and the dialog each
 // row opens (Template B: four agency-era client pieces). The shelf reads
-// title, byline, name and industry; the dialog reads everything but brand. It
+// title, byline, name and industry; the dialog reads every field. It
 // replaced app/data/quick-hits.ts, which held the shelf's four fields alone.
 //
 // Copy and alt text are locked (docs/cc-prompt-template-b-build.md, rulings of
 // 11 Oct 2026). Do not edit the words here without Paul. No agency name appears
 // anywhere in this file or on either surface.
 //
-// `brand` is UNUSED since 12 Oct 2026: the shelf dropped its brand colour and
-// nothing reads the field. It stays, with QuickHitBrand, until the design
-// system pass deletes the brand tokens (docs/unspecified-surfaces.md, Earlier
-// work shelf, item 4).
-//
 // NO RUNTIME IMPORTS, ON PURPOSE. scripts/build-client-work.mjs imports this
 // file directly under Node's built-in type stripping, so it must stay plain
 // erasable TypeScript with nothing to resolve.
-
-export type QuickHitBrand = 'lionsgate' | 'red-cross' | 'bbc' | 'k-hovnanian';
 
 export interface TemplateBImage {
   /** Path stem under public/, without width or extension. The delivery files
@@ -32,8 +25,6 @@ export interface TemplateBImage {
 export interface TemplateBPiece {
   /** The URL hash that opens this piece: /#lionsgate. */
   slug: 'lionsgate' | 'american-red-cross' | 'bbc' | 'k-hovnanian';
-  /** Unused since 12 Oct 2026, deleted with the brand tokens. */
-  brand: QuickHitBrand;
   /** The client's name: the visible label of the dialog's previous and next
    *  links. It no longer appears on the shelf, where `byline` names the client. */
   wordmark: string;
@@ -59,7 +50,6 @@ export const role = 'Lead UX Designer';
 export const templateB: readonly TemplateBPiece[] = [
   {
     slug: 'lionsgate',
-    brand: 'lionsgate',
     wordmark: 'Lionsgate',
     industry: 'Media',
     title: 'Broadcast Rights Sales',
@@ -86,7 +76,6 @@ export const templateB: readonly TemplateBPiece[] = [
   },
   {
     slug: 'american-red-cross',
-    brand: 'red-cross',
     wordmark: 'American Red Cross',
     industry: 'Nonprofit',
     title: '1-Click Donation',
@@ -113,7 +102,6 @@ export const templateB: readonly TemplateBPiece[] = [
   },
   {
     slug: 'bbc',
-    brand: 'bbc',
     wordmark: 'BBC',
     industry: 'Media',
     title: 'Connected Politics',
@@ -140,7 +128,6 @@ export const templateB: readonly TemplateBPiece[] = [
   },
   {
     slug: 'k-hovnanian',
-    brand: 'k-hovnanian',
     wordmark: 'K. Hovnanian',
     industry: 'Real Estate',
     title: 'Website Redesign',

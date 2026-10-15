@@ -558,7 +558,7 @@ migration is the wrong place to make that call.
 
 **Pinned specimen tones** are untouched and stay on that list.
 
-**`--qh-*`** brand tokens are unaffected and remain the open colour question.
+**`--qh-*`** brand tokens were unaffected here. They were deleted on 15 Oct 2026, consumed by nothing since 12 Oct.
 
 **Dark mode has no stated position on optical weight gain for icons.** Geometry
 is proven identical across modes on all five icon nodes — computed width, height

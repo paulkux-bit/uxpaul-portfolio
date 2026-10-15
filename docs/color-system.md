@@ -13,8 +13,7 @@
 > already produced two wrong accessibility floors — the pt-for-px substitution
 > caught during the type migration, and `--text-subtle` at "~3.5–4:1" when the
 > real value was 2.78 and failing. But a bare pointer would delete live material
-> v2 does not cover: the `--qh-*` brand shelf, the theme-swap
-> protocol, the role map, and the non-text accessibility decisions. Those
+> v2 does not cover: the theme-swap protocol, the role map, and the non-text accessibility decisions. Those
 > sections are the reason this file survives.
 >
 > **The token tables below are superseded and were not updated.** Read §4 of the
@@ -99,43 +98,13 @@ All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma st
 
 Deleted from `globals.css` on 1 Oct 2026, consumed by nothing since the layer was retired. The six tokens and their values are in git history at `29ae8ab`.
 
-### Brand identity — the "Client work" shelf
+### Brand shelf (deleted)
 
-Each brief-work entry is a **calm bordered row** (Wise-register): a faint near-canvas brand **fill**
-(`--qh-*-fill`) + a 1.5px brand-color **border** (`--qh-*-base`) carrying the identity; typography
-does the work. This is **two sanctioned exceptions** to the system rules, per the
-per-case-study-color decision (attribution only, not a second interactive accent):
-
-1. **Chromatic color at rest** — the brand-color border + faint fill sit idle on this shelf.
-2. **`--qh-bbc-base` at hue 250** — a cool hue outside the warm 50–80 band, for BBC brand attribution.
-
-What keeps it disciplined: the **fill is faint** (near-canvas, calm — does not compete with Selected
-Work); **title + labels reuse `--text-primary` / `--text-secondary`** (theme-flipping; AAA on the
-fill — title 14–15:1, labels 9–10:1, both modes); the **border is tuned independently per mode**
-(dark-on-light fill in light, **brighter** bright-on-dark in dark — *not* inverted — so it carries
-identity at ≥3.7:1 in dark); **persimmon-clear** (off-hue and/or off-L from 0.68/0.16/45). No grain,
-no foil — the calm container is clean. `data-brand` aliases each pair onto `--base` / `--fill`.
-
-| Token | Light | Dark |
-|---|---|---|
-| `--qh-lionsgate-base` (border) | `oklch(0.40 0.10 80)` | `oklch(0.62 0.12 80)` |
-| `--qh-red-cross-base` | `oklch(0.39 0.13 25)` | `oklch(0.58 0.15 25)` |
-| `--qh-bbc-base` | `oklch(0.30 0.10 250)` | `oklch(0.58 0.12 250)` |
-| `--qh-k-hovnanian-base` | `oklch(0.39 0.07 60)` | `oklch(0.60 0.09 62)` |
-| `--qh-lionsgate-fill` | `oklch(0.93 0.016 85)` | `oklch(0.22 0.018 85)` |
-| `--qh-red-cross-fill` | `oklch(0.93 0.016 30)` | `oklch(0.22 0.018 30)` |
-| `--qh-bbc-fill` | `oklch(0.93 0.012 250)` | `oklch(0.22 0.014 250)` |
-| `--qh-k-hovnanian-fill` | `oklch(0.93 0.016 62)` | `oklch(0.22 0.016 62)` |
-
-Fills are deliberately **aged-stock muted** (chroma ≤0.018), not pastel — the border carries the
-brand, so the fill is near-parchment. The 1.5px brand border is the primary identity element, so it
-survives forced-colors mode (where the fill drops to system canvas) — the row still reads bounded.
-
-**Per-module title character.** Each `data-brand` also sets `--qh-wght`: Lionsgate 600 (cinematic),
-Red Cross 500 (humane), BBC 650 (newspaper), K. Hovnanian 540 (architectural). Weight and colour carry
-the four personalities. (Updated 1 Oct 2026: the per-brand width and optical-size values addressed axes
-Commissioner does not have and were deleted; see type system v3 §6.) The border width is
-`--qh-border-width` (1.5px).
+The "Client work" shelf's per-brand border and fill tokens, its `data-brand`
+blocks and its per-brand title weight were consumed by nothing from 12 Oct 2026,
+when the shelf became "Earlier work" and dropped its brand colour. They were
+deleted on 15 Oct 2026 in the design system pass. The values and the rationale
+are in git history at `a11e8b7`.
 
 ---
 
@@ -289,10 +258,10 @@ The decisions, in order of forking:
 
 ## Anti-patterns (no-fly list)
 
-- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. **One sanctioned exception:** the `--qh-*` brand border + faint fill on the "Client work" shelf (persimmon-clear, attribution-only — see the Brand identity token section). This is not a license for further resting color.
+- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. No exception is in use: the "Client work" shelf's brand border and fill, the one sanctioned exception, were deleted on 15 Oct 2026.
 - ❌ **No purple gradients.** Anywhere.
 - ❌ **No raw color tokens** (e.g., `--color-blue-500`). All tokens are role-based.
-- ❌ **No cool grays** (hue ≥ 200). The system is warm only. **One sanctioned exception:** `--qh-bbc-base` (hue 250) on the "Client work" shelf, for BBC brand attribution — see the Brand identity token section. Not a license for cool hues elsewhere.
+- ❌ **No cool grays** (hue ≥ 200). The system is warm only. The one exception, a hue 250 brand border on the "Client work" shelf, was deleted on 15 Oct 2026.
 - ❌ **No pure black or pure white.** Warmth lives in the neutrals.
 - ❌ **Dark mode is not inverted light mode.** Tune chroma and contrast independently.
 - ❌ **Don't reintroduce PopUp tokens.** The annotation layer is retired; its tokens were deleted on 1 Oct 2026.
