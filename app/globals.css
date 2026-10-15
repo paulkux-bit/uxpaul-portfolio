@@ -672,11 +672,6 @@
   /* The slack half of the sticky footer above. */
   body > main { flex: 1 0 auto; }
 
-  /* Each child of body is its own stacking context. This lifted content above
-     the paper grain, which was removed on 15 Oct 2026 (design system pass,
-     ruling 2d); the rule stays until the cover-art blends are checked without
-     it. */
-  body > * { position: relative; z-index: 2; }
 
   /* The shipped face has no italics — map em/i to weight emphasis instead.
      (True of Bricolage before and of Commissioner now: the designer ships an
@@ -1037,9 +1032,8 @@
    ============================================================ */
 
 .site-header {
-  /* Own the positioning here (unlayered → reliably beats the
-     `body > *` stacking rule and doesn't depend on Tailwind utilities
-     being generated in dev). */
+  /* Own the positioning here (unlayered, so it doesn't depend on Tailwind
+     utilities being generated in dev). */
   position: sticky;
   top: 0;
   z-index: 50;
@@ -3209,15 +3203,14 @@ html.dark .framed-pair__cell .framed-pair__ink-mask {
    card covers it composites against the card's opaque bg-surface (the card is
    `isolate`).
 
-   ON THE PAGE THERE IS NO BACKDROP TO BLEND WITH, which is why the section 1
-   drawings of Line of Sight and FDT-E (FramedPair's `ink`, 8 Oct 2026) are shipped
-   differently. `body > *` lifts content into its own stacking context, so
-   inside it the backdrop is transparent and multiply/screen change
-   nothing: measured, the drawing's ground rendered 255,255,255 in light and
-   0,0,0 in dark, a black box. Those two files are ink on TRANSPARENT instead
-   (alpha = 255 - luminance, ink black), which is pixel-identical to multiply over
-   any page and, after invert(1), to screen, and lets the canvas show through.
-   They still carry this class for the invert. */
+   ON THE PAGE the section 1 drawings of Line of Sight and FDT-E (FramedPair's
+   `ink`, 8 Oct 2026) are shipped differently. Until 15 Oct 2026 `body > *` made
+   every child of body its own stacking context, so there was no backdrop to
+   blend with and a white-ground drawing rendered as a white box in light and a
+   black box in dark. Those two files are ink on TRANSPARENT instead (alpha = 255
+   - luminance, ink black), which is pixel-identical to multiply over any page
+   and, after invert(1), to screen, with or without a stacking context. They
+   still carry this class for the invert. */
 .cover-art {
   display: block;
   mix-blend-mode: multiply;

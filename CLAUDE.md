@@ -602,10 +602,10 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
   `regen:*` scripts) were retired with the friction beats on 8 Oct 2026. Raster ink
   drawings take `.cover-art`: multiply in light, invert plus screen in dark. On the
   card covers the ground is white and the opaque, isolated card is the backdrop. On
-  the page there is no backdrop to blend with (`body > *` is its own stacking
-  context), so the section 1 drawings on Line of Sight and FDT-E (FramedPair's
-  `ink`) ship as ink on a transparent ground; a white-ground file there renders as
-  a white box in light and a black box in dark. In dark mode those two tiles show no
+  the page the section 1 drawings on Line of Sight and FDT-E (FramedPair's `ink`)
+  ship as ink on a transparent ground, which renders the same with or without a
+  backdrop to blend with (`body > *` made every child of body its own stacking
+  context until 15 Oct 2026). In dark mode those two tiles show no
   image: a block of `--text-secondary` masked by a simplified drawing (`darkMask`,
   faintest strokes dropped), toggled by `html.dark`.
 - `.case-study-prose p` is wrapped `:where(.case-study-prose) p` so component margins win.
