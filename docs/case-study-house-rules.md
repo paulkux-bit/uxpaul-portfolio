@@ -289,7 +289,8 @@ for the quotes was rejected during design.
 
 - `lint:type`, `lint:space`, `lint:color` — any time
 - `next build` -> then `lint:interaction` and `lint:prose`
-- `npm test` (vitest) — 9 files, 156 assertions as of 1 Sep
+- `npm test` (vitest) — 9 files, 156 assertions as of 1 Sep; `vitest run` is the last
+  step of `npm run build` since 15 Oct 2026
 
 **`lint:prose` joined `npm run build` on 1 Sep 2026** (`9fd0eee`), after
 `next build` because it scans rendered `.next` HTML. Before that it was the only
@@ -335,10 +336,10 @@ Traps:
   repo has no utility at 18px or 15px, and `InversionChart` carries raw values in
   its manifest for the same reason. Settled 25 Aug: the criterion was worded too
   broadly, not the practice.
-- **The vitest suite does not run on Vercel.** The deploy runs the linters and
-  `next build`. So `cover-art.test.mjs` and `testimony-leads.test.mjs` — the two
-  guards written in response to real defects — protect the repo and not the
-  deploy. Recorded in the systems backlog; unfixed.
+- **The vitest suite did not run on Vercel until 15 Oct 2026.** The deploy ran the
+  linters and `next build` only, so `cover-art.test.mjs` and `testimony-leads.test.mjs`,
+  the two guards written in response to real defects, protected the repo and not the
+  deploy. Fixed: `vitest run` is now the last step of `npm run build`.
 - **Tailwind v4 preflight emits `ol,ul,menu{list-style:none}`**, so **every** list
   on the site loses its list role in WebKit, not only the classed ones. Fifteen
   lists exist; seven needed `role="list"` added on 1 Sep. Four are correctly
