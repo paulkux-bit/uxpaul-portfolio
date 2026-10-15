@@ -244,14 +244,18 @@ governs a label-and-line list, a résumé table or a definition list:
    `text-small`, `--text-muted`. What a spec would need: the row's rung for
    company against title, and how a long promotion title should wrap.
 3. **The looking-for label column.** A `dl` whose rows put the term (Role,
-   Location, Scope; `--text-muted`) in a `6.5rem` column beside its value, at
-   every width. Role carries a second `dd` in `--text-secondary`. The `6.5rem`
+   Location, Scope; `--text-muted`) in a `6.5rem` column beside its value below
+   900px; from 900px it takes the shared tracks (item 4). Role carries a second
+   `dd` in `--text-secondary`. The `6.5rem`
    track is sized to "Location" at `text-body` and is a raw width, like the
    résumé rows' `7.5rem` date track. What a spec would need: a width token for
    a label column.
-4. **Shared tracks.** What I bring and Where I've worked share one track set
-   from 900px (`minmax(0, 1fr) minmax(0, 1.3fr) 7.5rem`, ruling Q8-a), so the
-   label and the company share an edge, as do the line and the title.
+4. **Shared tracks.** What I bring, Where I've worked and What I'm looking for
+   share one track set from 900px (`minmax(0, 1fr) minmax(0, 1.3fr) 7.5rem`,
+   ruling Q8-a; What I'm looking for joined in 3c, ruling 1b, 15 Oct 2026), so
+   the label and the company share an edge, as do the line, the title and the
+   looking-for value. The track set is written in two rules; a spec would make
+   it one.
 
 Needs: rungs and a width token from the design system pass. The email close
 sits one section break (`--spacing-section`, 74px at 390 and 128px at 1440)

@@ -4737,7 +4737,9 @@ html.dark .figure-placeholder {
 
    ONE TRACK SET FROM 900 (Q8-a): What I bring's label and Where I've worked's
    company share column 1, and the line and the job title share column 2, so
-   the two lists read down one edge. 7.5rem is the résumé rows' date track.
+   the lists read down one edge. What I'm looking for joins them from 900 in
+   its own rule below (3c, 15 Oct 2026): its label takes column 1 and its value
+   column 2. 7.5rem is the résumé rows' date track.
 
    Every gap is declared outside the media query, so the layout switch changes
    only the grid, never the spacing (lint:space check 4). */
@@ -4843,7 +4845,9 @@ html.dark .figure-placeholder {
 }
 
 /* What I'm looking for: a label column and a value column at every width.
-   The 6.5rem label track fits "Location" at text-body. */
+   The 6.5rem label track fits "Location" at text-body. From 900px up the row
+   takes the What I bring and Where I've worked tracks, so its values start on
+   their second column (3c, 15 Oct 2026). */
 .about-looking__row {
   display: grid;
   grid-template-columns: minmax(0, 6.5rem) minmax(0, 1fr);
@@ -4875,6 +4879,16 @@ html.dark .figure-placeholder {
 
 .about-looking__note {
   color: var(--text-secondary);
+}
+
+@media (min-width: 900px) {
+  .about-looking__row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) 7.5rem;
+  }
+  .about-looking__value,
+  .about-looking__note {
+    grid-column: 2 / -1;
+  }
 }
 
 /* The close: the email heading, then the life line. */
