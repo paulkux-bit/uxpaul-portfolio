@@ -300,7 +300,7 @@ halo, one box. The values do not change, only the box they surround.
 | Nav link | colour + underline | sink 1px |
 | Button | background `--text-primary` → `--text-secondary` | sink 1px |
 | Theme toggle | colour + border `--border-strong` | sink 1px |
-| Card | panel `--bg-surface` → `--bg-surface-elevated` + question underline at 1px, 0.18em offset (H-b and K3a, 14 Oct 2026; was `--border-strong` + title underline at H1b, 1 Oct 2026, and `translateY(-3px)` + `--shadow-hover` + `--border-strong` before that). Nothing fills on keyboard focus | sink 1px |
+| Card | panel `--bg-surface` → `--card-hover` (the elevated surface in light; 0.243 in dark, 3a ruling 1b, 15 Oct 2026) + question underline at 1px, 0.18em offset (H-b and K3a, 14 Oct 2026; was `--border-strong` + title underline at H1b, 1 Oct 2026, and `translateY(-3px)` + `--shadow-hover` + `--border-strong` before that). Nothing fills on keyboard focus | sink 1px |
 | Work band | arrow `translateX(3px)` + label underline; the unruled band (`--unruled`, 2 Oct 2026, no hairlines) is underlined at rest and the underline thickens to 2px in `--link-hover` | sink 1px, **on the band** |
 | Disclosure row | colour | none — the rotation is the feedback |
 

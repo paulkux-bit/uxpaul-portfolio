@@ -529,7 +529,7 @@ describe('§5 pressed states — the specified values, on the specified surfaces
 
   // H-b (home cards T4, 14 Oct 2026), replacing H1b's border-only hover. The
   // card rests flat and borderless (a transparent 1px border, kept for forced
-  // colors), its hover deepens the panel to --bg-surface-elevated at
+  // colors), its hover deepens the panel to --card-hover (3a ruling 1b) at
   // --duration-card, and its question underlines at 1px (K3a). It does not
   // transition transform, so a tap reaches the full 1px like every other
   // surface, and nothing fills on keyboard focus.
@@ -546,7 +546,7 @@ describe('§5 pressed states — the specified values, on the specified surfaces
     expect(card).not.toMatch(/\blift\b/);
     expect(card).toMatch(/\bborder-transparent\b/);
     expect(card).not.toMatch(/\bborder-(subtle|default|strong)\b/);
-    expect([...declsOf('.case-card--linked:hover')]).toEqual([['background-color', 'var(--bg-surface-elevated)']]);
+    expect([...declsOf('.case-card--linked:hover')]).toEqual([['background-color', 'var(--card-hover)']]);
     expect(declsOf('.case-card--linked:focus-within').size, 'nothing fills on keyboard focus').toBe(0);
     const t = declsOf('.case-card').get('transition');
     expect(t).toBe('background-color var(--duration-card) var(--ease-out-soft)');

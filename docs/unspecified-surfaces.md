@@ -31,7 +31,9 @@ site's chrome rather than its content. **Hero headings in one weight** joined on
 13 Oct 2026, the first entry that records styling deliberately withheld rather
 than missing. **Home card drawing width** joined on 14 Oct 2026, the first entry
 on a width, which no linter reads in JSX. **The card question's container units**
-joined the same day, the first entry on a CSS unit rather than a value.*
+joined the same day, the first entry on a CSS unit rather than a value. **The
+card hover panel** joined on 15 Oct 2026, the first entry for a surface that
+was right in one mode and wrong in the other.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -202,8 +204,8 @@ input to the design system pass:
    describe a child rather than the control.
 
 Needs: rulings from the design system pass on all three. Until then
-`--face-disc` and `--face-ring` are the only component colour tokens besides
-`--scrim`.
+`--face-disc`, `--face-ring` and `--card-hover` are the only component colour
+tokens besides `--scrim`.
 
 **Hero headings in one weight and one colour.** Joined 13 Oct 2026 from the
 home and About copy build (`docs/cc-prompt-hero-about-build.md`, Paul's final
@@ -329,6 +331,22 @@ card question (`text-cover` and `.case-card__question` in `app/globals.css`):
 Needs: type v3 to rule whether a container-relative slope is a sanctioned kind
 of slope (and how check 3 would measure it), and the type or spacing system to
 own reserved line boxes.
+
+**The card hover panel.** Joined 15 Oct 2026 from the home page finesse pass (3a,
+ruling 1b). The Selected work card's hover panel was `--bg-surface-elevated`
+in both modes (H-b, 14 Oct). In dark that stepped 1.13:1 off `--bg-surface`
+and took chroma from 7 units to 13, so the hovered card read brown; light's
+step is 1.10:1. `--card-hover` is a component token on `--face-disc`'s
+precedent: `--bg-surface-elevated` in light, unchanged, and
+`oklch(0.243 calc(var(--chroma-unit) * 10) var(--hue-surface))` in dark, a
+1.10:1 step. It sits between `--bg-surface` and `--bg-surface-elevated`, both
+of which lint:color checks 4 and 8 measure; on the new dark value itself,
+measured 15 Oct: `--text-primary` 13.93, `--text-secondary` 9.53,
+`--text-muted` 6.23. lint:color does not measure `--card-hover` itself; its
+dark value sits between two surfaces the checks do measure, but nothing fails
+if a later edit moves it out of that range. What a spec would need: whether a
+hover panel is a palette role, and whether its dark value should become a
+derived step (light's ratio) rather than a written lightness.
 
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather

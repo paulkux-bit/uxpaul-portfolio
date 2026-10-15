@@ -424,7 +424,10 @@ const add = (id, title, failures) =>
 // Every text-decoration-color that names a token is checked against
 // --bg-canvas, --bg-surface and --bg-surface-elevated, in both modes. The
 // elevated surface joined on 14 Oct 2026: the card's hover panel (T4, H-b)
-// is the first surface an underline sits on that is neither of the others. A value that is not a single
+// is the first surface an underline sits on that is neither of the others.
+// Since 15 Oct 2026 that panel is --card-hover: the elevated surface in light,
+// and between --bg-surface and --bg-surface-elevated in dark, so the two
+// bracket it. --card-hover itself is not resolved here. A value that is not a single
 // token cannot be checked, so it fails rather than passing unseen.
 {
   const f = [];
