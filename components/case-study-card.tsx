@@ -113,10 +113,13 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         .filter(Boolean)
         .join(' ')}
     >
-      {/* One cream surface: a floating centered illustration over the question
-          (left) and the muted meta. flex-col + the mt-auto text block pin the
-          question/meta to the bottom so the cards equalize height (grid-auto-rows:1fr
-          on the grid) with the illustration floating above. */}
+      {/* One cream surface: a centered illustration over the question (left)
+          and the meta. The text follows the drawing (home cards H3c, 14 Oct
+          2026): it is no longer pinned to the bottom, and the grid no longer
+          sizes every row to the tallest card. The two cards in a row still
+          match, because a grid item stretches within its row and the <li> and
+          this article carry h-full; the shorter card's spare height sits below
+          its meta. */}
       <div className="flex flex-1 flex-col px-m py-l md:px-l md:py-xl">
         {art ? (
           /* Decorative, pre-sized, mix-blended asset served directly via
@@ -154,7 +157,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
               />
             </picture>
         ) : null}
-        <div className="mt-auto">
+        <div>
           <h2 className="text-cover">{title}</h2>
           <div className="mt-xs">{meta}</div>
         </div>
