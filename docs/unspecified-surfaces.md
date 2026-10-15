@@ -75,11 +75,19 @@ answer:
    each mode, whether a modal surface owes an edge in dark, and whether a modal
    panel takes the card's radius or a control's.
 
-4. **Entrance motion.** Interaction v1 leaves entrance unspecified. The panel's
-   fade and rise takes `--duration-card` (written for lift, shadow and media
-   scale; Paul ruled it over `--duration-reveal`, 11 Oct 2026) and the content
-   cross-fade waits `--duration-control`. What a spec would need to say: an
-   entrance category, which the reveal containers also lack.
+4. **Entrance and exit motion.** Interaction v1 leaves both unspecified. The panel's
+   rise takes `--duration-card` (written for lift, shadow and media scale;
+   Paul ruled it over `--duration-reveal`, 11 Oct 2026), and the panel is
+   opaque from its first frame: only the scrim fades in (3d ruling 2b, 15 Oct
+   2026; while the panel faded too, the page showed through it). The content
+   cross-fade waits `--duration-control`. Every close fades the panel and the
+   scrim out over `--duration-control` (3d ruling 3b, 15 Oct 2026); the script
+   marks the dialog `data-closing` and waits for it before calling `close()`,
+   and reduced motion closes at once. The one exception is the Android back
+   gesture before a first tap on a cold deep link, which the browser does not
+   let a page delay. For about the first 40ms of that fade the
+   panel and the page blend, as any fade must. What a spec would need to say:
+   an entrance and exit category, which the reveal containers also lack.
 
 5. **Sheet chrome and two firsts.** The prototype gave the close button a
    `--bg-sunken` hover and, below 768px, a resting `--shadow-hover`. Paul ruled
