@@ -4202,7 +4202,7 @@ html.dark .cover-art {
 .bento-band__track:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
-  box-shadow: var(--focus-glow);
+  box-shadow: 0 0 0 6px var(--focus-glow);
   border-radius: var(--radius-xs);
 }
 
