@@ -459,7 +459,13 @@ of 10 or more from the canvas and 7 or more from the surface, the elevated
 surface and the card hover; the sunken well is exempt. Measured light: canvas
 11.50, surface 8.96, elevated and card hover 7.06, sunken 6.40; dark 15.15 at
 the least. `--selection-text` on it measures 13.48 light and 7.86 dark. All by
-lint arithmetic, not rasterised. Charts and status colours, which do not exist yet and should be
+lint arithmetic, not rasterised.
+
+**15 Oct 2026, v2.1: the screenshot frame (ruling 6b).** In dark only, product
+screenshots sit in a 6px frame, `--shot-frame` `oklch(0.255 0.026 55)`
+(13 units, ground + 3), drawn as an outer box-shadow so no box moves. It is a
+component token beside `--scrim` and `--face-disc`, not a palette role, and
+check 9 holds its hue. Light has no frame (ruling 4a). Charts and status colours, which do not exist yet and should be
 added deliberately rather than pre-emptively.
 
 **12 Oct 2026:** the shelf (now "Earlier work") no longer uses the `--qh-*` exception. **15 Oct 2026:** the tokens, consumed by nothing since, were deleted in the design system pass, so the first item above is closed.

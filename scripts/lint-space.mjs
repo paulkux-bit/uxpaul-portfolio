@@ -79,6 +79,22 @@ const ALLOWLIST = {
       reason:
         'UNUSED since 13 Oct 2026, delete in the design system pass: the drawer mark renders on no route. S1: optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Since I5 the mark is 1em of the same rung, so both terms are one font-size and this is text-h3’s clamp × 0.125, still the type system’s number, still not on the spacing scale. It reads as `em` arithmetic because it is; it is written in rem because check 2 bans em on block-level spacing and does not consult this list (finding #19).',
     },
+    // Not spacing: room for a frame. The 6b screenshot frame (colour v2.1,
+    // 15 Oct 2026) is a 6px outer ring, which a scroll container clips at its
+    // padding box. The track pads out by the ring width and pulls back by the
+    // same negative margin, so nothing moves; in light the width is 0rem. 6px
+    // is the ruled frame, off the 4px grid by design, and it follows the ring
+    // token rather than the spacing scale so the two cannot drift apart.
+    {
+      selector: '.bento-band__track',
+      prop: 'margin',
+      reason: 'ROOM FOR THE 6b FRAME: the negative of --shot-ring-width (6px dark, 0 light), cancelling the padding below so the media keeps its box. Not rhythm; it tracks the ring, not the scale.',
+    },
+    {
+      selector: '.bento-band__track',
+      prop: 'padding',
+      reason: 'ROOM FOR THE 6b FRAME: --shot-ring-width (6px dark, 0 light), so the scroll container does not clip the dark screenshot frame. Not rhythm; it tracks the ring, not the scale.',
+    },
   ], // literals that may stay: { selector, prop, value, reason }
   media: [
     // LAYOUT, not rhythm. Each of these does something no spacing token can

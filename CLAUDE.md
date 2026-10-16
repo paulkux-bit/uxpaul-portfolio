@@ -594,9 +594,17 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
   width came from three band tokens, and that new FVS went in `ALLOWLIST.fvs`;
   Commissioner has neither axis, `25011cc` deleted both properties, and the
   allowlist key does not exist. See Typography above for what replaced all of it.
-- Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
-  `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
-  light-only to `--border-default` — never change the base token.
+- Image-edge hairline lives on base rules (both modes) via `--border-subtle`, written
+  as the token `--shot-edge` (`inset 0 0 0 1px var(--border-subtle)`). If light reads
+  faint, override light-only to `--border-default` — never change the base token.
+- **The 6b screenshot frame** (15 Oct 2026): in dark, every product screenshot sits in
+  a 6px walnut frame (`--shot-frame`) drawn outside its box by `--shot-ring`, so nothing
+  moves or resizes; light's ring is zero-width and transparent. Images write
+  `box-shadow: var(--shot-edge), var(--shot-ring)` as ONE list (a second box-shadow
+  would overwrite the hairline); the bento wrappers take `var(--shot-ring)` and keep the
+  hairline on their `::after`. Not on the paintings, the About portrait, `.cover-art`
+  (which zeroes the ring) or the client work dialog. A scroll container clips it, so
+  `.bento-band__track` pads out by `--shot-ring-width` and pulls back by the same.
 - The traced SVG beat figures (`.oku-figure` and its siblings, regenerated from .svg by
   `regen:*` scripts) were retired with the friction beats on 8 Oct 2026. Raster ink
   drawings take `.cover-art`: multiply in light, invert plus screen in dark. On the
