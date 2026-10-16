@@ -1,4 +1,5 @@
 import manifest from './inversion-manifest.json';
+import { bindAfter } from '@/lib/rehype-bind-openers.mjs';
 
 /**
  * Missed delivery dates against price, across the whole network. One line, three
@@ -77,7 +78,7 @@ export default function TierChart() {
 
       <figcaption className="bento-theme__caption">
         <strong className="bento-theme__lead">{caption.lead}</strong>{' '}
-        <span className="bento-theme__gloss">{caption.gloss}</span>
+        <span className="bento-theme__gloss">{bindAfter(caption.lead, caption.gloss)}</span>
       </figcaption>
     </figure>
   );

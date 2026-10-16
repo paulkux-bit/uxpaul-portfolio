@@ -1,4 +1,5 @@
 import manifest from './roadmap-manifest.json';
+import { bindAfter } from '@/lib/rehype-bind-openers.mjs';
 
 /**
  * The roadmap, as six numbered items across one horizon.
@@ -70,7 +71,7 @@ export default function RoadmapList() {
 
       <figcaption className="bento-theme__caption">
         <strong className="bento-theme__lead">{caption.lead}</strong>{' '}
-        <span className="bento-theme__gloss">{caption.gloss}</span>
+        <span className="bento-theme__gloss">{bindAfter(caption.lead, caption.gloss)}</span>
       </figcaption>
     </figure>
   );

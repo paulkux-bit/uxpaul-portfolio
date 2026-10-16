@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import rehypeBindOpeners, { bindOpeners } from '../lib/rehype-bind-openers.mjs';
+import rehypeBindOpeners, { bindAfter, bindOpeners } from '../lib/rehype-bind-openers.mjs';
 
 const NBSP = ' ';
 
@@ -63,5 +63,20 @@ describe('rehypeBindOpeners', () => {
     rehypeBindOpeners()(tree);
     expect(tree.children[0].children[0].value).toBe(`Done. I${NBSP}was proud.`);
     expect(tree.children[1].children[0].value).toBe('x. I y');
+  });
+});
+
+// Ruling B1a (16 Oct 2026): a caption gloss is its own span after a bold lead.
+describe('bindAfter', () => {
+  it('binds the first word after a lead that ends a sentence', () => {
+    expect(bindAfter('Grouped by antenna height.', 'He tries a new height.')).toBe(`He${NBSP}tries a new height.`);
+  });
+
+  it('leaves the first word alone after a lead that does not end a sentence', () => {
+    expect(bindAfter('Grouped by antenna height', 'He tries a new height.')).toBe('He tries a new height.');
+  });
+
+  it('still binds an opener inside the gloss, and adds no leading space', () => {
+    expect(bindAfter('Cart.', 'Same promise. She sees it.')).toBe(`Same promise. She${NBSP}sees it.`);
   });
 });
