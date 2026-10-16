@@ -141,7 +141,9 @@ whenever two pieces of work look equally worthy.
   and URBN paragraph. Every line is one weight and one colour until the design
   system pass: the h1 is `text-lede`'s 340 in `--text-primary`, with no
   `<strong>` inside it. No availability line, no tenure number, no geographic
-  qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`.
+  qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`,
+  except the h1, re-ruled 15 Oct 2026: "I take on the parts of a product no one
+  can afford to get wrong." (`app/page.tsx`).
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
