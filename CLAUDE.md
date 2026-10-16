@@ -693,9 +693,9 @@ samples, and both ends moved in a single pass. Do not treat it as a gate. Dagr's
 5 sits at **109** house-basis after the 26 Sep trim, and BARD's Role at **29** is short on
 purpose. Both are deliberate. Do not trim one to reach a round number or pad the other.
 
-## Color system — locked (v2)
+## Color system — locked (v2.1)
 
-**Name:** Paper & Low Light
+**Name:** Paper & Walnut (dark was Low Light until 15 Oct 2026)
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
 `npm run lint:color` (10 checks), which gates `npm run build`.
@@ -814,7 +814,7 @@ Portfolio for Paul Kali, senior product designer, targeting **senior and staff I
 **Governing principle:** signal and craft with restraint. Do NOT add things for the sake of adding. Elegance is subtraction. References: Titan, Karolis Kosas, Madeline Snow.
 
 **Locked constraints:**
-- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**, with no exception in use (the brand shelf's colour was dropped on 12 Oct 2026). The PopUp system is retired and its tokens deleted; persimmon is not an accent.
+- Monochrome-warm ("Paper & Walnut"); the site is **accent-free at rest**, with no exception in use (the brand shelf's colour was dropped on 12 Oct 2026). The PopUp system is retired and its tokens deleted; persimmon is not an accent.
 - Commissioner, self-hosted; **never animate its axes** (gimmicky) — `wght` and `FLAR` are the two it has. Semantic oklch tokens only; no raw hex/rgb.
 - **em-dashes (U+2014) are hard-banned** by lint:prose; en-dashes (U+2013) in date ranges are fine.
 - **No company or client logos** anywhere (endorsement risk + palette break).

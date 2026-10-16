@@ -498,7 +498,7 @@
 
 
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
-     because heavy weight reads heavier on the espresso canvas. */
+     because heavy weight reads heavier on the walnut canvas. */
   --mark-weight:            700;
 
   /* Radius — interaction system v1 §4. Five steps, so radius scales with
@@ -524,45 +524,50 @@
 }
 
 /* ============================================================
-   COLOR — Dark (Low Light)
+   COLOR — Dark (Walnut, colour v2.1, 15 Oct 2026; Low Light until then)
    ============================================================ */
 
 .dark {
   /* Layer 1, per-mode. The bands SWAP: light text is 55 against grounds at
-     66-76; dark text is 68-78 against grounds at 55-60. Same names, inverted
+     66-76; dark text is 70-80 against grounds at 50-56. Same names, inverted
      settings — that is the point of one vocabulary. --chroma-unit is not
      redefined; warmth intensity is one knob for both modes. */
-  --hue-ground:   55;
-  --hue-surface:  60;
-  --hue-text:     74;
+  --hue-ground:   52;
+  --hue-surface:  56;
+  --hue-text:     76;
 
-  /* Ruling 3: the ground goes quiet so the raised surface can carry warmth.
-     Lightness is untouched from v1 — every change here is chroma and hue.
-     The canvas drops to 3 units and the sunken to 2, which is what pulls
-     channel bias down to 1.33x; the elevated surface holds 13, so chroma
-     now climbs 4.33x from canvas to card instead of 1.40x. */
-  --bg-canvas:              oklch(0.165 calc(var(--chroma-unit) * 3) var(--hue-ground));
-  --bg-surface:             oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
-  --bg-surface-elevated:    oklch(0.255 calc(var(--chroma-unit) * 13) var(--hue-surface));
-  --bg-sunken:              oklch(0.130 calc(var(--chroma-unit) * 2) var(--hue-ground));
+  /* Walnut (ruling 9b, colour v2.1). The quiet ground (canvas 0.165 at 3
+     units) read as generic near-black; walnut lifts every ground 0.015 to
+     0.020 and gives the canvas 7 units at hue 52. Warmth still climbs with
+     elevation (R3): sunken 4, canvas 7, surface 11, elevated 14. Channel bias
+     at the canvas is 1.92x (8-bit 23, 16, 12), up from 1.33x; the locked doc
+     section 1 records why that was accepted. */
+  --bg-canvas:              oklch(0.180 calc(var(--chroma-unit) * 7) var(--hue-ground));
+  --bg-surface:             oklch(0.225 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+  --bg-surface-elevated:    oklch(0.275 calc(var(--chroma-unit) * 14) var(--hue-surface));
+  --bg-sunken:              oklch(0.150 calc(var(--chroma-unit) * 4) calc(var(--hue-ground) - 2));
 
-  --text-primary:           oklch(0.945 calc(var(--chroma-unit) * 6) calc(var(--hue-text) + 4));
-  --text-secondary:         oklch(0.825 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 2));
-  --text-muted:             oklch(0.705 calc(var(--chroma-unit) * 8) calc(var(--hue-text) - 2));
-  --text-subtle:            oklch(0.565 calc(var(--chroma-unit) * 9) calc(var(--hue-text) - 6));
+  --text-primary:           oklch(0.940 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 4));
+  --text-secondary:         oklch(0.830 calc(var(--chroma-unit) * 9) calc(var(--hue-text) + 2));
+  --text-muted:             oklch(0.720 calc(var(--chroma-unit) * 11) calc(var(--hue-text) - 2));
+  --text-subtle:            oklch(0.600 calc(var(--chroma-unit) * 12) calc(var(--hue-text) - 6));
 
-  /* The borders follow the grounds down, or they read as warm lines drawn on a
-     neutral page. Subtle tracks --bg-surface exactly, at 7 units and +2. */
-  --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
-  --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
-  --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
+  /* The borders follow the grounds, or they read as warm lines drawn on a
+     different page. Subtle tracks --bg-surface's chroma and hue, 11 units
+     and +2, a step lighter. */
+  --border-subtle:          oklch(0.270 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+  --border-default:         oklch(0.330 calc(var(--chroma-unit) * 12) calc(var(--hue-ground) + 3));
+  --border-strong:          oklch(0.440 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 2));
   /* THE BASIS CHANGED, WHICH IS WHY THE DIRECTION DID. This used to read "dark needs
      MORE of the text colour to read at the same weight", and at 26/32 that was true:
      the pair was matched by eye. It is now matched against a measured floor, and on
-     that basis dark needs LESS - 44 gives 3.32 where light's 46 gives 3.33, so both
-     modes carry the same headroom over the 3:1 graphics floor rather than the same
-     apparent weight. Still tuned per mode, like every other pair here; only the
-     instrument moved. */
+     that basis dark needs LESS - 44 gives 3.33 on the walnut canvas (3.32 on the
+     quiet one) where light's 46 gives 3.33, so both modes carry the same headroom
+     over the 3:1 graphics floor rather than the same apparent weight. Still tuned
+     per mode, like every other pair here; only the instrument moved.
+     CANVAS ONLY. The mix is taken against the canvas and the 3:1 is measured
+     there. On --bg-surface-elevated it is 2.64 (light 2.78), so the node chart's
+     bars must not move onto a card or a raised panel. */
   --fill-quiet:             color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
@@ -587,15 +592,18 @@
   --scrim:                  color-mix(in oklch, var(--bg-sunken) 60%, transparent);
   /* Header identity mark, dark: one coin in both modes, so the disc is a
      dimmed cream, the text ink mixed 92% toward the canvas (about
-     oklch(0.883 0.012 76)). Its edge draws the circle at 13.5:1; the ring
+     oklch(0.879 0.014 78) on walnut). Its edge draws the circle at about
+     13.0:1 (13.5:1 on the quiet canvas); the ring
      (ink at 28%) all but vanishes on it, as in the approved preview. */
   --face-disc:              color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas));
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
-  /* Card hover panel, dark (3a ruling 1b, 15 Oct 2026). The elevated surface
-     stepped 1.13:1 off --bg-surface and nearly doubled its chroma, so the
-     hovered card read brown. This takes light's 1.10:1 step at 10 chroma
-     units instead of 13, between --bg-surface and --bg-surface-elevated. */
-  --card-hover:             oklch(0.243 calc(var(--chroma-unit) * 10) var(--hue-surface));
+  /* Card hover panel, dark (3a ruling 1b; walnut values, ruling 11b, both
+     15 Oct 2026). The elevated surface steps too far off --bg-surface and
+     carries more chroma, so a hovered card read brown. This takes light's
+     1.10:1 step at 11 chroma units, level with the surface, at hue 55
+     between the surface (54) and the elevated surface (56). lint:color
+     check 10 holds the step within 0.01. */
+  --card-hover:             oklch(0.260 calc(var(--chroma-unit) * 11) calc(var(--hue-surface) - 1));
 
   --mark-weight:            650;
 }
@@ -982,7 +990,7 @@
    Transparent at rest; a hairline border + canvas fill fade in
    once scrolled (data-scrolled). Appearance-only, 160ms — the
    reduced-motion block collapses the transition to instant.
-   Dark parity: a shadow on espresso is invisible, so dark uses a
+   Dark parity: a shadow on walnut is invisible, so dark uses a
    stronger border instead.
    ============================================================ */
 
@@ -2884,7 +2892,7 @@ dialog.client-work::backdrop {
 /* PROBLEM legacy screenshots: same containment as the hero dashboard image so the
    two bright UI captures read as one system — shared radius token, and an inset
    hairline in BOTH modes (parity) so the panels keep a defined edge against cream
-   (Paper) and espresso (Low Light). Mode-aware via --border-subtle; no recolor. */
+   (Paper) and walnut. Mode-aware via --border-subtle; no recolor. */
 .cs-section--problem .framed-pair__cell .figure__image {
   border-radius: var(--radius-image);
   box-shadow: inset 0 0 0 1px var(--border-subtle);
@@ -4371,14 +4379,14 @@ html.dark .figure-placeholder {
      that overlaps this frame renders on time over nothing.
      --bg-sunken by the role map: "inset against bg-canvas". It is the only
      surface token darker than the canvas in BOTH modes (0.900 vs 0.978 light,
-     0.130 vs 0.165 dark), so it recedes either way and reads as a well waiting
+     0.150 vs 0.180 dark), so it recedes either way and reads as a well waiting
      to be filled rather than as a finished panel that then swaps — which is what
      --bg-surface, "default panel: cards, content modules, footer", would do.
      Invisible once the image lands: both heroes are fully opaque (no alpha, no
      tRNS) and object-fit: cover leaves no letterbox. */
   background-color: var(--bg-sunken);
   /* Hairline defines the screenshot's edge in BOTH modes (parity): the light panel
-     against cream (Paper) and against espresso (Low Light). Mode-aware via
+     against cream (Paper) and against walnut. Mode-aware via
      --border-subtle; inset → no layout shift, follows the radius. */
   box-shadow: inset 0 0 0 1px var(--border-subtle);
 }

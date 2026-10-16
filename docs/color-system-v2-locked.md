@@ -1,6 +1,11 @@
-# The uxpaul.com colour system — v2, locked
+# The uxpaul.com colour system — v2.1, locked
 
-Decided 8 Aug 2026. Supersedes the palette values in `docs/color-system.md`,
+Decided 8 Aug 2026. **Amended 15 Oct 2026 (v2.1)** in the design system pass:
+the dark mode moves from quiet ground to **walnut** (ruling 9b). The sections
+below carry the amended values and say where v2 stood; the v2 values are in git
+history at `a11e8b7`.
+
+v2 was decided 8 Aug 2026. Supersedes the palette values in `docs/color-system.md`,
 which remains the owner of the palette's *rationale* and its accessibility
 floors. Where the two disagree on a value, this document wins.
 
@@ -13,7 +18,7 @@ That is a constraint, not a coincidence — see §2.
 
 | # | Decision | Ruling |
 |---|---|---|
-| 1 | Dark ground | **Quiet.** Near-neutral at the base, warmth rising with elevation |
+| 1 | Dark ground | **Walnut** (v2.1, 15 Oct 2026). A warm wood-dark base, warmth still rising with elevation. Was **quiet**: near-neutral at the base |
 | 2 | Light surfaces | **Deepened.** Canvas held; the three below it dropped for separation |
 | 3 | Where warmth lives | **On the objects, not in the air** |
 | 4 | Opacity | **None, anywhere in the palette.** Solid tokens only |
@@ -49,6 +54,18 @@ base, and let warmth rise with elevation. Quiet ground was chosen: it is the
 "slightly warm near-black" that reads cozy and editorial, and it is subtraction
 rather than addition, which the project's governing principle asks for.
 
+**v2.1, 15 Oct 2026: walnut.** Quiet ground read as the generic near-black of
+most dark sites, against a brief of warm mid-century luxury. Walnut moves part
+way toward the espresso direction set aside above: every dark ground lifts by
+0.015 to 0.020 in `L`, the canvas from 3 to 7 chroma units, and the ground hue
+from 55 to 52. The text ramp gains chroma (7 to 12 units) and its hue band
+moves to 70 to 80. Channel bias at the canvas rises from 1.33x to **1.92x**
+(8-bit `23, 16, 12`), and the surface reaches 2.00x, at the bottom of the 2 to
+4x range this section calls contamination. The ground still stops short of the
+wood references: L 0.150 to 0.275 against their 0.25 to 0.39. Paul ruled on
+the rendered board (`docs/previews/design-system/walnut-brass-v1.html` and its
+eye check) with these numbers in hand.
+
 ---
 
 ## 2. The constraint that shaped every value
@@ -56,9 +73,14 @@ rather than addition, which the project's governing principle asks for.
 **No change may weaken the type system's contrast guarantees.** Type §3.5
 assigns a colour role to every rung and records a measured ratio for each.
 
-Two properties keep that safe. In dark, the correction is **chroma-only** —
-lightness is untouched, so contrast moves by at most 0.04. In light, the
-surfaces get **darker**, which can only increase contrast against dark text.
+Two properties kept v2 safe. In dark, the correction was **chroma-only** —
+lightness was untouched, so contrast moved by at most 0.04. In light, the
+surfaces got **darker**, which can only increase contrast against dark text.
+
+**v2.1 is not chroma-only in dark.** Walnut lifts every dark ground and moves
+the text ramp's lightness by up to 0.035, so no v2 dark ratio carries over.
+Every pair is re-measured in §5, and `lint:color` checks 4, 8 and 10 hold the
+floors and the card step.
 
 Every text-on-surface pair was measured, not assumed. See §5.
 
@@ -84,12 +106,13 @@ value.**
 
 **Hue is a band primitive plus a signed degree offset.** Chroma does not need
 offsets; hue does, because the bands carry real internal variance — light
-grounds span 66–76, dark grounds 55–60.
+grounds span 66–76, dark grounds 50–56 (55–60 in v2).
 
 **Primitives use the same names in both modes, redefined in `.dark`.** Not
 separate `-light` and `-dark` names. The decisive evidence is that **the bands
 swap between modes**: light text sits at hue 55 while light grounds run 66–76,
-and dark text is 68–78 while dark grounds run 55–60. One vocabulary makes that
+and dark text is 70–80 while dark grounds run 50–56 (v2.1; 68–78 and 55–60 in
+v2). One vocabulary makes that
 inversion legible as a per-mode setting of the same role. Two vocabularies
 would hide it and let the modes drift apart silently.
 
@@ -100,17 +123,17 @@ would hide it and let the modes drift apart silently.
   --hue-surface:  68;      /* raised surfaces */
   --hue-text:     55;      /* the text ramp */
 }
-.dark {
-  --hue-ground:   55;
-  --hue-surface:  60;
-  --hue-text:     74;
+.dark {             /* v2.1, walnut */
+  --hue-ground:   52;
+  --hue-surface:  56;
+  --hue-text:     76;
 }
 ```
 
 ```css
 /* Layer 2 — roles. Composed, never independent. */
---bg-canvas:     oklch(0.165 calc(var(--chroma-unit) *  3) var(--hue-ground));
---border-default: oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
+--bg-canvas:     oklch(0.180 calc(var(--chroma-unit) *  7) var(--hue-ground));
+--border-default: oklch(0.330 calc(var(--chroma-unit) * 12) calc(var(--hue-ground) + 3));
 ```
 
 **R4 is about dependence, not about literals.** A literal *value* makes a token
@@ -152,31 +175,40 @@ from `0.023 / 0.022 / 0.015` to `0.030 / 0.030 / 0.018`, so a card reads as an
 object rather than as a slightly different patch of page — without the canvas
 itself getting heavier.
 
-### Dark — quiet ground
+### Dark: walnut (v2.1, 15 Oct 2026)
 
-| Token | oklch | hex | |
+| Token | oklch | hex | composed as |
 |---|---|---|---|
-| `--bg-canvas` | `0.165 0.006 55` | `#100e0c` | changed |
-| `--bg-surface` | `0.205 0.014 57` | `#1c1611` | changed |
-| `--bg-surface-elevated` | `0.255 0.026 60` | `#2c2016` | changed |
-| `--bg-sunken` | `0.130 0.004 55` | `#080706` | changed |
-| `--text-primary` | `0.945 0.012 78` | `#f1ece4` | |
-| `--text-secondary` | `0.825 0.014 76` | `#cbc5bc` | |
-| `--text-muted` | `0.705 0.016 72` | `#a69f95` | |
-| `--text-subtle` | `0.565 0.018 68` | `#7d746b` | |
-| `--border-subtle` | `0.245 0.014 57` | `#261f1a` | changed |
-| `--border-default` | `0.310 0.020 58` | `#382e26` | changed |
-| `--border-strong` | `0.430 0.026 55` | `#5b4c42` | changed |
-| `--border-interactive` | `0.620 0.020 60` | `#90847a` | |
+| `--bg-canvas` | `0.180 0.014 52` | `#17100c` | 7 units, ground |
+| `--bg-surface` | `0.225 0.022 54` | `#241912` | 11 units, ground + 2 |
+| `--bg-surface-elevated` | `0.275 0.028 56` | `#32241a` | 14 units, surface |
+| `--bg-sunken` | `0.150 0.008 50` | `#0e0a08` | 4 units, ground - 2 |
+| `--card-hover` | `0.260 0.022 55` | `#2d211a` | 11 units, surface - 1 |
+| `--text-primary` | `0.940 0.014 80` | `#f0eae1` | 7 units, text + 4 |
+| `--text-secondary` | `0.830 0.018 78` | `#cec6bb` | 9 units, text + 2 |
+| `--text-muted` | `0.720 0.022 74` | `#ada396` | 11 units, text - 2 |
+| `--text-subtle` | `0.600 0.024 70` | `#8a7e71` | 12 units, text - 6 |
+| `--border-subtle` | `0.270 0.022 54` | `#2f241c` | 11 units, ground + 2 |
+| `--border-default` | `0.330 0.024 55` | `#3f322a` | 12 units, ground + 3 |
+| `--border-strong` | `0.440 0.026 54` | `#5e4f45` | 13 units, ground + 2 |
+| `--border-interactive` | `0.620 0.020 57` | `#90837b` | 10 units, ground + 5 |
 
-**Lightness is untouched.** Every dark change is chroma and hue only. Channel
-bias falls from 3.0× to 1.33× at the canvas, while chroma climbs **4.33× from
-the canvas to elevated (6.5× measured from the sunken floor)** — so the page
-steps back toward neutral and the card, the elevated surface and the warm cream
-text carry the warmth. That is ruling 3.
+Primitives: `--hue-ground` 52, `--hue-surface` 56, `--hue-text` 76;
+`--chroma-unit` is shared with light and unchanged. Hex is the 8-bit sRGB of the
+oklch, for reference.
 
-"Untouched" here means untouched **in oklch**, which is not the same as
-untouched in contrast — see §5, which owns measurement claims.
+Chroma still climbs with elevation (R3): 4 units at the sunken well, 7 at the
+canvas, 11 at the surface, 14 at the elevated surface, 2x from canvas to card
+where v2 climbed 4.33x. The canvas is no longer near-neutral; walnut puts the
+warmth in the ground as well as on the objects, and keeps the objects warmer.
+The card hover takes 11 units at L 0.260, which holds the ruled 1.10:1 step
+off `--bg-surface` (check 10) with chroma level with the surface, so a hovered
+card deepens rather than turning brown (ruling 11b).
+
+**v2, quiet ground (8 Aug to 15 Oct 2026).** Canvas `0.165 0.006 55`, surface
+`0.205 0.014 57`, elevated `0.255 0.026 60`, sunken `0.130 0.004 55`; channel
+bias 1.33x at the canvas and chroma climbing 4.33x to the elevated surface.
+Lightness was untouched from v1, which held in oklch and not in contrast (§5).
 
 ---
 
@@ -200,8 +232,12 @@ moving chroma or hue moves those channels. K2 held every dark `L` byte-identical
 and still shifted `--text-primary` on `--bg-surface` by 0.0645 (15.299 →
 15.235). Read every "lightness untouched" claim in this document that way.
 
-**Dark — zero failures.** Worst case is `--text-subtle` on `elevated` at 3.46.
-`--text-primary` ranges 13.48–17.12.
+**Dark (v2.1, walnut): zero failures.** Measured by `lint:color`'s arithmetic
+on 15 Oct 2026, not rasterised, across five grounds (canvas, surface,
+elevated, sunken and `--card-hover`). Worst case is `--text-subtle` on
+`elevated` at 3.77, a large-only role clearing 3.0. `--text-muted` is 6.00 at
+worst and `--text-primary` ranges 12.51–16.50. (v2, quiet ground: worst
+`--text-subtle` on `elevated` at 3.46; `--text-primary` 13.48–17.12.)
 
 **Light — one failure, and it is pre-existing. Corrected 8 Aug 2026.**
 
@@ -245,8 +281,10 @@ a border may.
 **R2** No accent at rest. The warmth is the colour. The retired persimmon
 stays retired.
 
-**R3** Warmth rises with elevation. Chroma at a ground is a liability; chroma
-on a raised surface is the design. Any new surface token continues the climb.
+**R3** Warmth rises with elevation. Chroma on a raised surface is the design;
+chroma at a ground is held below it. Any new surface token continues the climb.
+(v2.1: walnut gives the dark canvas 7 units, where v2 treated any chroma at a
+ground as a liability, and the climb continues above it to 14.)
 
 **R4** No semantic token may be **independent of the primitives.** Compose every
 one from layer 1: chroma as `calc(var(--chroma-unit) * n)`, hue as the band
@@ -385,7 +423,7 @@ a literal added *elsewhere in the same file* is still caught.
 
 ## 8. Anti-patterns
 
-Chroma at a ground. Opacity as a colour. An accent chosen because the palette
+Chroma at a ground that equals or passes the surfaces above it. Opacity as a colour. An accent chosen because the palette
 felt plain. Inverting light to make dark. Hand-authoring a semantic token.
 Matching light and dark chroma values and expecting matching results — that is
 the exact error this version corrects.

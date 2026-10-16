@@ -449,9 +449,9 @@ palette:
 | | literal | v2 equivalent | drift |
 |---|---|---|---|
 | light cell | `0.985 0.004 75` | canvas `0.978 0.016 76` | ¼ the chroma |
-| dark cell | `0.170 0.012 55` | canvas `0.165 0.006 55` | 2× the chroma |
+| dark cell | `0.170 0.012 55` | canvas `0.165 0.006 55` (v2.1 walnut: `0.180 0.014 52`) | 2× the chroma (v2) |
 | light placeholder | `0.970 0.008 80` | canvas `0.978 0.016 76` | ½ the chroma |
-| dark placeholder | `0.220 0.012 60` | surface `0.205 0.014 57` | drifting |
+| dark placeholder | `0.220 0.012 60` | surface `0.205 0.014 57` (v2.1 walnut: `0.225 0.022 54`) | drifting |
 
 Lightness is nearly right in every case and chroma is wrong in both directions,
 so together they depict a light mode that is almost neutral and a dark mode

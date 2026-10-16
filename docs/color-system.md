@@ -1,4 +1,4 @@
-# Color system — Paper & Low Light
+# Color system — Paper & Walnut
 
 > **`docs/color-system-v2-locked.md` owns the palette.** Every token value,
 > the two-layer architecture, the rules and every measured ratio live there and
@@ -29,7 +29,7 @@
 
 ## Concept
 
-Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **low light** — warm espresso canvas, warm cream text, ambient and lampt rather than printed. Both modes share the same hue axis (50–80, warm amber/sepia) so the swap reads as one world under different lighting.
+Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **walnut** (low light until 15 Oct 2026) — a warm wood-dark canvas, warm cream text, ambient and lamplit rather than printed. Both modes share the same hue axis (50–80, warm amber/sepia) so the swap reads as one world under different lighting.
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
@@ -193,7 +193,7 @@ Light mode carried an SVG noise overlay on `body::before` (multiply, opacity 0.5
 - **Body text hits AAA** in both modes. `text-primary` on `bg-canvas` measures ~14–15:1.
 - **`text-muted` hits AA normal** (~5.5–6:1) at all body sizes.
 - **`text-subtle` is AA-large only** (**3.04–3.86:1**, measured in K3 across the four
-  light surfaces; 3.46–4.41 in dark). Never use below 24px or 18.66px bold. `lint:color`
+  light surfaces; 3.77–4.97 in dark, walnut, by lint arithmetic). Never use below 24px or 18.66px bold. `lint:color`
   check 4 enforces it. The earlier "~3.5–4:1" here was an estimate, and it was wrong at
   the bottom: the real floor-adjacent value was 2.78, a live WCAG failure that shipped
   until K3 moved the token to `L 0.590`.
@@ -246,7 +246,7 @@ An inline script at the top of `<head>` (`themeInitScript`, `lib/theme.ts`, 15 O
 
 The decisions, in order of forking:
 
-1. **Build on Paper & Low Light** — Bricolage Grotesque was designed for editorial typesetting and lives most naturally in warm neutrals.
+1. **Build on Paper & Walnut** (Paper & Low Light when written) — Bricolage Grotesque was designed for editorial typesetting and lives most naturally in warm neutrals.
 2. **Warm-leaning hue axis** (50–80) — amber/sepia reads as studio, not corporate.
 3. **No accent at rest** — chromatic restraint is the senior move. Forces typography, scale, and craft to do the work.
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
