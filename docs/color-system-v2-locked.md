@@ -353,7 +353,7 @@ Fails on:
    elevated bracket), and to the focus ring: the 0.55-alpha ring composited
    over the glow, which is composited over each ground, owes 3:1 against the
    glow beside it, in both modes. Compositing is in encoded sRGB, as browsers
-   blend. Proved red with the dark glow at alpha 0.70, and with the dark
+   blend. Proved red with the dark glow at alpha 0.40 (0.70 under amber), and with the dark
    `--card-hover` lifted to L 0.56.
 9. Any colour token whose hue falls outside the warm band, 50 to 80
    inclusive, in either mode. Every `oklch()` in every custom property under
@@ -438,7 +438,8 @@ The `--qh-*` brand shelf colours, which are the one place chromatic colour is
 sanctioned and have not been re-derived against the new grounds. Selection and
 link-hover colours. Focus ring and glow, which currently use alpha and are the
 one legitimate exception to R1 — this should be stated explicitly rather than
-tolerated.
+tolerated. Charts and status colours, which do not exist yet and should be
+added deliberately rather than pre-emptively.
 
 **15 Oct 2026, v2.1: brass closes the selection, link-hover and glow items.**
 
@@ -465,8 +466,7 @@ lint arithmetic, not rasterised.
 screenshots sit in a 6px frame, `--shot-frame` `oklch(0.255 0.026 55)`
 (13 units, ground + 3), drawn as an outer box-shadow so no box moves. It is a
 component token beside `--scrim` and `--face-disc`, not a palette role, and
-check 9 holds its hue. Light has no frame (ruling 4a). Charts and status colours, which do not exist yet and should be
-added deliberately rather than pre-emptively.
+check 9 holds its hue. Light has no frame (ruling 4a).
 
 **12 Oct 2026:** the shelf (now "Earlier work") no longer uses the `--qh-*` exception. **15 Oct 2026:** the tokens, consumed by nothing since, were deleted in the design system pass, so the first item above is closed.
 

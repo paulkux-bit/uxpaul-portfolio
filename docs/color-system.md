@@ -29,7 +29,7 @@
 
 ## Concept
 
-Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **walnut** (low light until 15 Oct 2026) — a warm wood-dark canvas, warm cream text, ambient and lamplit rather than printed. Both modes share the same hue axis (50–80, warm amber/sepia) so the swap reads as one world under different lighting.
+Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **walnut** (low light until 15 Oct 2026) — a warm wood-dark canvas, warm cream text, ambient and lamplit rather than printed. Both modes share the same hue axis (50–80, walnut to brass; warm amber/sepia until 15 Oct 2026) so the swap reads as one world under different lighting.
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
@@ -247,7 +247,7 @@ An inline script at the top of `<head>` (`themeInitScript`, `lib/theme.ts`, 15 O
 The decisions, in order of forking:
 
 1. **Build on Paper & Walnut** (Paper & Low Light when written) — Bricolage Grotesque was designed for editorial typesetting and lives most naturally in warm neutrals.
-2. **Warm-leaning hue axis** (50–80) — amber/sepia reads as studio, not corporate.
+2. **Warm-leaning hue axis** (50–80) — walnut to brass reads as studio, not corporate (amber/sepia until 15 Oct 2026).
 3. **No accent at rest** — chromatic restraint is the senior move. Forces typography, scale, and craft to do the work.
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
 5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Client work" shelf is the one resting exception now.)
