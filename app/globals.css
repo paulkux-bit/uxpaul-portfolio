@@ -4801,6 +4801,10 @@ html.dark .figure-placeholder {
   grid-area: 1 / 1;
   color: var(--text-primary);
   font-weight: var(--wght-credit);
+  /* Balanced, so a two-line name breaks in the middle rather than leaving
+     one word on line two ("U.S. Navy, NIWC / Pacific", "Empathy Lab, now /
+     EPAM" at 390). Ruling 5b, 16 Oct 2026. */
+  text-wrap: balance;
 }
 
 .about-cv__title {

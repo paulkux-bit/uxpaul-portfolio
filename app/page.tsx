@@ -51,7 +51,7 @@ export default function Home() {
             style={{ ['--beat' as string]: 2 }}
           >
             For the U.S. Navy, I design intelligence tools for operators on systems with no
-            internet. At URBN, I led UX strategy for the platform behind{' '}
+            internet. At&nbsp;URBN, I led UX strategy for the platform behind{' '}
             <span className="whitespace-nowrap">Urban Outfitters</span>, Anthropologie, and{' '}
             <span className="whitespace-nowrap">Free People</span>, and was the sole designer on
             Nuuly&apos;s warehouse apps at launch.
