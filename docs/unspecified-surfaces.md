@@ -124,6 +124,7 @@ that pass rather than a settled answer:
    where hover cannot stand in. Interaction v1 §5 gives a text link hover and
    no pressed state, and names no input-dependent rest state. Pointer devices
    keep `.quiet-link`.
+
 Needs: rulings from the design system pass on a list-title rung and on whether
 touch gets a rest signifier site-wide. (The row halo, governed by interaction
 v1 §5 since 14 Oct 2026, and the brand shelf's dead code, deleted 15 Oct 2026,
