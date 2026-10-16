@@ -662,7 +662,9 @@ order, failing on the first) -> detector (visual, external)**.
   pages after `next build`: every Template A study renders exactly one friction moment,
   each from a record in `app/data/works.json` with non-empty alt, caption, credit fields
   and licence, and every delivery file exists at its recorded size (and is in the git
-  index when `.git` is present).
+  index when `.git` is present). Check 6 is the evidence guard (15 Oct 2026): no product
+  screenshot is filtered, faded, blended or given a dark-only source in dark mode; the
+  theme may only frame it.
 
 - **motion** = `npm run lint:motion` (`scripts/lint-motion.mjs`). Maps every animation
   and transition in `globals.css` to the guard covering it, and names any selector with

@@ -33,9 +33,21 @@ const RECORD = {
 const PAGE = (src = '/fine-art/test-work-640.webp', alt = 'A boat&#x27;s crew in a swell.') =>
   `<main><figure class="friction-moment"><picture><img class="friction-moment__image" src="${src}" alt="${alt}"/></picture></figure></main>`;
 
-async function tree({ record = RECORD, page = PAGE(), skip = [], sizes = {}, tracked } = {}) {
+// Check 6's clean stylesheet: the 6b frame on a screenshot (box-shadow, allowed)
+// and the ink art's dark invert (art, allowed). Both must stay green.
+const CLEAN_CSS = `.dark { --shot-ring: 0 0 0 6px red; }
+.bento-theme__media { box-shadow: var(--shot-ring); }
+html.dark .cover-art { filter: invert(1); mix-blend-mode: screen; }
+html.dark .framed-pair__cell .framed-pair__ink-light { opacity: 0; }
+.figure__image { opacity: 1; }`;
+
+async function tree({ record = RECORD, page = PAGE(), skip = [], sizes = {}, tracked, css = CLEAN_CSS, src = {} } = {}) {
   const root = mkdtempSync(join(tmpdir(), 'lint-works-'));
-  for (const d of ['data', 'mdx', 'html', 'public/fine-art']) mkdirSync(join(root, d), { recursive: true });
+  for (const d of ['data', 'mdx', 'html', 'public/fine-art', 'app', 'components']) mkdirSync(join(root, d), { recursive: true });
+  writeFileSync(join(root, 'app/globals.css'), css);
+  // A comment naming the prop must not trip the scan (the self-reference trap).
+  writeFileSync(join(root, 'components/bento.tsx'), '// Images never swap with theme (no srcDark).\nexport const x = 1;\n');
+  for (const [file, body] of Object.entries(src)) writeFileSync(join(root, file), body);
   writeFileSync(join(root, 'data/works.json'), JSON.stringify({ works: [record] }));
   writeFileSync(join(root, 'mdx/test-study.mdx'), '---\nslug: "test-study"\ntemplate: "A"\n---\n');
   if (page !== null) writeFileSync(join(root, 'html/test-study.html'), page);
@@ -61,9 +73,9 @@ async function tree({ record = RECORD, page = PAGE(), skip = [], sizes = {}, tra
 }
 
 describe('lint:works', () => {
-  it('passes a clean tree on all five checks', async () => {
+  it('passes a clean tree on all six checks', async () => {
     const { checks, failing } = await tree();
-    expect(checks.map((c) => c.id)).toEqual([1, 2, 3, 4, 5]);
+    expect(checks.map((c) => c.id)).toEqual([1, 2, 3, 4, 5, 6]);
     expect(failing).toEqual([]);
   });
 
@@ -128,5 +140,23 @@ describe('lint:works', () => {
     expect(r.failing).toEqual([5]);
     expect(r.text).toContain('exceeds the 640 box');
     expect(r.text).toContain("not the master's aspect");
+  });
+
+  it('check 6: a dark-scoped filter on a screenshot', async () => {
+    const r = await tree({ css: `${CLEAN_CSS}\nhtml.dark .bento-theme__img { filter: brightness(0.85); }` });
+    expect(r.failing).toEqual([6]);
+    expect(r.text).toContain('sets filter on evidence (.bento-theme__img) in dark only');
+  });
+
+  it('check 6: opacity on a screenshot under prefers-color-scheme: dark', async () => {
+    const r = await tree({ css: `${CLEAN_CSS}\n@media (prefers-color-scheme: dark) { .figure__image { opacity: 0.9; } }` });
+    expect(r.failing).toEqual([6]);
+    expect(r.text).toContain('sets opacity on evidence (.figure__image)');
+  });
+
+  it('check 6: a dark-only image source', async () => {
+    const r = await tree({ src: { 'app/study.tsx': '<BentoItem src="/a.png" srcDark="/a-dark.png" alt="" />\n' } });
+    expect(r.failing).toEqual([6]);
+    expect(r.text).toContain('study.tsx:1: a dark-only image source');
   });
 });
