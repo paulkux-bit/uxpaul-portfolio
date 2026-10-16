@@ -724,7 +724,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 ### Locked decisions
 
 - **Color space:** oklch only. No hex. No rgb. Anywhere downstream.
-- **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds. Every colour token, accents and alpha tokens included, is held to the band by lint:color check 9.
+- **Hue axis:** warm, 50–80 (walnut to brass). True neutral and cool grays are out of bounds. Every colour token, accents and alpha tokens included, is held to the band by lint:color check 9.
 - **Naming:** role-based, semantic. `--text-primary`, `--bg-surface-elevated`. Never raw color names.
 - **Light and dark tuned independently.** Same hue axis, different chroma/contrast curves. Dark is not inverted light.
 - **PopUp tokens were deleted (1 Oct 2026).** The annotation layer they were
@@ -745,8 +745,8 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 ### Signature treatments
 
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
-- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 on all five grounds, and the focus ring 3:1 over its glow (lint:color check 8).
-- **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
+- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. In light the brass hover (L 0.52) sits near the resting underline's lightness (0.50), so the thickness carries the hover and the colour shifts hue, not brightness (ruling 13a, 15 Oct 2026). The resting underline owes 3:1 on all five grounds, and the focus ring 3:1 over its glow (lint:color check 8).
+- **Straw selection** (brass, ruling 12c, 15 Oct 2026; warm peach before) — `oklch(0.89 0.09 80)` light, `oklch(0.42 0.07 72)` dark. Its floor is a distance, not a contrast: OKLab dE 10 or more from the canvas and 7 or more from the surface, elevated and card hover (sunken exempt). This is the most-felt moment; never tune to a whisper.
 - **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026; lint:color check 10 holds both modes within 0.01 of 1.10), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 
 ### Utility classes (mirror typography pattern)
@@ -770,9 +770,10 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
   normal-size text that carries meaning takes `--text-muted` or stronger. (An earlier
   line here said "18px, or 14px bold"; that was too permissive and disagreed with this
   file's own contrast-floor bullet. Reconciled 8 Aug 2026: `docs/color-system.md`
-  now records the measured range, 3.04-3.86 in light and 3.46-4.41 in dark.)
+  now records the measured range, 3.04-3.86 in light and 3.46-4.41 in dark; 3.77-4.97
+  in dark since walnut, 15 Oct 2026.)
 - Focus uses `outline` + `box-shadow` (never `border-color`). Layout never shifts.
-- Link affordance is multi-channel — underline at rest, thicker + warmer on hover. Color alone is never the only signal.
+- Link affordance is multi-channel — underline at rest, thicker + brass on hover. Thickness carries it in light, where the brass sits near the resting underline's lightness. Color alone is never the only signal.
 - `color-scheme` set per mode so native controls theme correctly.
 
 ### Anti-patterns (extension of existing list)

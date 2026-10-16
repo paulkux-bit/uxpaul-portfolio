@@ -141,8 +141,8 @@ contrast only increases over the spec.
 
 - **`focus-ring`** — applied as `outline`, never `border`. Layered with `focus-glow` via `box-shadow` to form the halo.
 - **`focus-glow`** — warm outer halo around the focus ring. The two-layer treatment makes focus *present* without introducing a brand accent.
-- **`selection-bg` / `selection-text`** — warm peach highlighter band. This is the most-felt moment in the system; never tune it down to a whisper.
-- **`link-hover`** — warm-tinted underline on hover. Paired with a thickness change (1px → 2px) for a two-channel signal.
+- **`selection-bg` / `selection-text`** — a brass straw highlighter band (warm peach until 15 Oct 2026). This is the most-felt moment in the system; never tune it down to a whisper.
+- **`link-hover`** — brass underline on hover (amber until 15 Oct 2026). Paired with a thickness change (1px → 2px) for a two-channel signal; in light the thickness carries it.
 
 ### Shadows
 
@@ -202,8 +202,8 @@ Light mode carried an SVG noise overlay on `body::before` (multiply, opacity 0.5
   authorised a 3:1 colour six pixels under the real floor. That is the error that once put
   `text-subtle` on the 16px friction markers.
 - **Focus uses `outline` + `box-shadow`**, never `border-color`. Layout never shifts on focus. The halo extends the ring's visual presence without expanding hit areas.
-- **Selection contrast verified** in both modes: `selection-text` on `selection-bg` hits AAA in light (~10:1) and ~7:1 in dark.
-- **Link affordance is multi-channel.** Underline at rest, thicker + warmer on hover. Color alone is never the only signal.
+- **Selection contrast verified** in both modes: `selection-text` on the brass straw `selection-bg` measures 13.48 in light and 7.86 in dark (15 Oct 2026, lint arithmetic). Its floor against the grounds is a distance, not a contrast; see the locked doc §9.
+- **Link affordance is multi-channel.** Underline at rest, thicker + brass on hover. Color alone is never the only signal.
 - **`color-scheme`** is set per mode so native form controls and scrollbars adopt the right palette, and the layout's `viewport` export emits `<meta name="color-scheme" content="light dark">` (15 Oct 2026) so the browser knows both are supported before the stylesheet loads. There is no `theme-color`: its media-query form follows the system setting, not the in-page toggle.
 - **`prefers-reduced-motion`** is respected globally — transitions reduce to near-instant.
 

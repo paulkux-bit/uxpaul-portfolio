@@ -136,11 +136,11 @@ describe('lint:color check 8, underlines and the focus ring', () => {
     expect(block).toMatch(/lowest underline \d\.\d\d, lowest ring \d\.\d\d/);
   });
 
-  it('fails with the dark focus glow at alpha 0.70', () => {
+  it('fails with the dark focus glow at alpha 0.40', () => {
     const decl = /--focus-glow:\s+oklch\(([\d.]+ [\d.]+ [\d.]+) \/ ([\d.]+)\);/.exec(CSS.slice(CSS.indexOf('\n.dark {')));
     expect(decl, 'dark --focus-glow is not a literal with alpha').toBeTruthy();
-    const css = inDark(CSS, decl[0], decl[0].replace(`/ ${decl[2]})`, '/ 0.70)'));
-    const block = lint(css, 8, 'glow-070');
+    const css = inDark(CSS, decl[0], decl[0].replace(`/ ${decl[2]})`, '/ 0.40)'));
+    const block = lint(css, 8, 'glow-040');
     expect(block).toMatch(/^✗ 8\./);
     expect(block).toMatch(/dark: --focus-ring over --focus-glow on --bg-[\w-]+ = [0-2]\.\d\d, floor 3\.0/);
     expect(block).not.toMatch(/light:/);

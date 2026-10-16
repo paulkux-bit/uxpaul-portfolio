@@ -465,10 +465,18 @@
   --border-interactive:     oklch(0.500 calc(var(--chroma-unit) * 9) calc(var(--hue-ground) - 20));
 
   --focus-ring:             oklch(0.220 0.018 55 / 0.55);
-  --focus-glow:             oklch(0.700 0.140 60 / 0.22);
-  --selection-bg:           oklch(0.860 0.100 65);
+  /* Brass (ruling 10b, colour v2.1, 15 Oct 2026), replacing amber. The
+     hover, the glow and the selection share hue 78 to 80, the warm end of the
+     band. The light hover sits at L 0.52, close to the resting underline's
+     0.50 (ruling 13a), so on hover the thickness carries the change and the
+     colour turns brass rather than brightening. The selection is a straw
+     band (ruling 12c), held to a distance floor rather than a hue: OKLab dE
+     10 or more from the canvas, 7 or more from surface, elevated and card
+     hover (sunken exempt). */
+  --focus-glow:             oklch(0.720 0.120 80 / 0.24);
+  --selection-bg:           oklch(0.890 0.090 80);
   --selection-text:         oklch(0.180 0.020 50);
-  --link-hover:             oklch(0.580 0.150 55);
+  --link-hover:             oklch(0.520 0.105 78);
 
   --shadow-rest:            0 1px 2px oklch(0.30 0.04 50 / 0.05);
   --shadow-hover:           0 2px 4px oklch(0.30 0.04 50 / 0.06),
@@ -574,10 +582,13 @@
   --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
 
   --focus-ring:             oklch(0.945 0.012 78 / 0.55);
-  --focus-glow:             oklch(0.720 0.150 60 / 0.30);
-  --selection-bg:           oklch(0.380 0.090 55);
+  /* Brass, dark (ruling 10b). Brighter than light's, since the canvas is
+     the dark side; the glow drops from 0.30 to 0.24 alpha with it, and the
+     ring over it still clears 3:1 (lint:color check 8). */
+  --focus-glow:             oklch(0.780 0.110 80 / 0.24);
+  --selection-bg:           oklch(0.420 0.070 72);
   --selection-text:         oklch(0.970 0.012 78);
-  --link-hover:             oklch(0.780 0.140 60);
+  --link-hover:             oklch(0.800 0.115 80);
 
   /* Warm near-black, not pure black, at the same alpha (closing review A3b,
      1 Oct 2026): CLAUDE.md asks for warm-toned shadows in both modes. */

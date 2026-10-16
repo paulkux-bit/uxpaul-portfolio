@@ -1,7 +1,8 @@
 # The uxpaul.com colour system — v2.1, locked
 
 Decided 8 Aug 2026. **Amended 15 Oct 2026 (v2.1)** in the design system pass:
-the dark mode moves from quiet ground to **walnut** (ruling 9b). The sections
+the dark mode moves from quiet ground to **walnut** (ruling 9b), and the
+interaction accents from amber to **brass** (ruling 10b). The sections
 below carry the amended values and say where v2 stood; the v2 values are in git
 history at `a11e8b7`.
 
@@ -25,6 +26,7 @@ That is a constraint, not a coincidence — see §2.
 | 5 | Accent | **None at rest.** The warmth is the colour |
 | 6 | Architecture | **Two layers.** Tuning primitives, then semantic roles |
 | 7 | Enforcement | **`npm run lint:color`**, beside `lint:type` and `lint:space` |
+| 8 | Interaction accent | **Brass** (v2.1, 15 Oct 2026). Hover, glow and selection at hue 72 to 80. Was amber, hue 55 to 65 |
 
 ---
 
@@ -436,7 +438,28 @@ The `--qh-*` brand shelf colours, which are the one place chromatic colour is
 sanctioned and have not been re-derived against the new grounds. Selection and
 link-hover colours. Focus ring and glow, which currently use alpha and are the
 one legitimate exception to R1 — this should be stated explicitly rather than
-tolerated. Charts and status colours, which do not exist yet and should be
+tolerated.
+
+**15 Oct 2026, v2.1: brass closes the selection, link-hover and glow items.**
+
+| Token | Light | Dark |
+|---|---|---|
+| `--link-hover` | `oklch(0.52 0.105 78)` | `oklch(0.80 0.115 80)` |
+| `--focus-glow` | `oklch(0.72 0.12 80 / 0.24)` | `oklch(0.78 0.11 80 / 0.24)` |
+| `--selection-bg` | `oklch(0.89 0.09 80)` | `oklch(0.42 0.07 72)` |
+
+`--focus-ring` and `--selection-text` are unchanged. The ring and glow keep
+their alpha, which R1 permits as state layers; check 8 now measures the ring
+composited over the glow on all five grounds (lowest 3.39). The light hover at
+L 0.52 sits close to the resting underline's 0.50 (ruling 13a), so on hover the
+thickness carries the change and the colour turns brass rather than brighter;
+it clears 3:1 on every ground (4.14 at worst, sunken). The selection is a straw
+band (ruling 12c) held to a **distance floor**, not a contrast floor: OKLab dE
+of 10 or more from the canvas and 7 or more from the surface, the elevated
+surface and the card hover; the sunken well is exempt. Measured light: canvas
+11.50, surface 8.96, elevated and card hover 7.06, sunken 6.40; dark 15.15 at
+the least. `--selection-text` on it measures 13.48 light and 7.86 dark. All by
+lint arithmetic, not rasterised. Charts and status colours, which do not exist yet and should be
 added deliberately rather than pre-emptively.
 
 **12 Oct 2026:** the shelf (now "Earlier work") no longer uses the `--qh-*` exception. **15 Oct 2026:** the tokens, consumed by nothing since, were deleted in the design system pass, so the first item above is closed.
