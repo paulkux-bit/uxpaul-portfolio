@@ -726,8 +726,10 @@
   /* v3 R4: emphasis is AUTHORED. Tailwind preflight ships
      `b, strong { font-weight: bolder }`, which resolves against the 400 body
      to the browser's 700 — nobody chose it, and it made an inline emphasis in
-     18px body the heaviest thing on the page. 600 is --wght-display, so a
-     strong now matches the headings rather than out-shouting them. Scoped
+     18px body the heaviest thing on the page. 600 is --wght-display. Since
+     ruling 8b (16 Oct 2026) the study headings are 400, so a run-in strong is
+     denser per stroke than the heading above it; size carries the hierarchy
+     there, and the reviewers judged the heading still leads by eye. Scoped
      rules that already author 600 (.case-study-meta, .case-study-numbers,
      .figure__caption) are unaffected; they now agree with the base instead of
      each patching it locally. */
@@ -2457,7 +2459,9 @@ dialog.client-work::backdrop {
    .case-study-numbers h3. */
 .case-study-prose h2 {
   font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
-  font-weight: 600; /* v3 §5: 96 -> 94. Rung 4. */
+  /* Rung 4 at body weight (ruling 8b, 16 Oct 2026). Size carries the heading;
+     the only 600 display line in a study is the turn's key phrase. */
+  font-weight: var(--wght-body);
   line-height: 1.08;
   letter-spacing: -0.02em;
   /* Bottom 24 to whatever opens the section (ruling 7b, 5 Oct 2026; spacing v1
@@ -2778,13 +2782,13 @@ dialog.client-work::backdrop {
   padding-block: var(--spacing-xl) var(--spacing-l);
 }
 
-/* The question: standfirst size and colour, weight 400, plain. --flar: 0 is an
-   override, not a restatement of the initial value: `.case-study-prose h2`
-   flares every section heading and this one must not. */
+/* The question: standfirst size and colour, plain. --flar: 0 is an override,
+   not a restatement of the initial value: `.case-study-prose h2` flares every
+   section heading and this one must not. Its weight is the h2's own 400 since
+   ruling 8b (16 Oct 2026), so it no longer states one. */
 .case-study-prose .cs-section--turn h2 {
   --flar: 0;
   font-size: var(--type-standfirst);
-  font-weight: 400;
   line-height: 1.45;
   letter-spacing: 0;
   color: var(--text-secondary);
@@ -2892,8 +2896,12 @@ dialog.client-work::backdrop {
      the section defended hardest: a real 44-unit push at 52-88px, the single
      place Bricolage's drawn display cut actually showed. Commissioner has one
      drawing at every size, so there is nothing to pin and nothing to defend.
-     What replaces the display cut is FLAR, and it arrives in C4. */
-  font-weight: var(--wght-display);
+     What replaces the display cut is FLAR, and it arrives in C4.
+
+     RULING 5 AMENDED, 16 Oct 2026 (8b): the date is 400, not 600. At 600 it
+     was the darkest line on the page and outweighed the turn's key phrase,
+     which is now the only 600 display line in a study. */
+  font-weight: var(--wght-body);
 }
 .milestone__sub {
   margin: var(--spacing-s) 0 0;
@@ -4394,7 +4402,7 @@ html.dark .figure-placeholder {
    was never the thing expressing it. */
 .hero-block__sentence--open {
   letter-spacing: -0.020em; /* -0.025 -> -0.020, and now equal to --anxious */
-  font-weight: 600;
+  font-weight: var(--wght-body); /* 600 -> 400, ruling 8b, 16 Oct 2026 */
 }
 
 .hero-block__sentence--anxious {
@@ -4403,7 +4411,7 @@ html.dark .figure-placeholder {
      time; carrying that offset into the shipped value would have moved this
      rule to -0.015 and off the number the evidence had just proved right. */
   letter-spacing: -0.02em; /* 88, unchanged */
-  font-weight: 600;
+  font-weight: var(--wght-body); /* 600 -> 400, ruling 8b, 16 Oct 2026 */
 }
 
 .hero-block__role {
