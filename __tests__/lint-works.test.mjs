@@ -33,11 +33,16 @@ const RECORD = {
 const PAGE = (src = '/fine-art/test-work-640.webp', alt = 'A boat&#x27;s crew in a swell.') =>
   `<main><figure class="friction-moment"><picture><img class="friction-moment__image" src="${src}" alt="${alt}"/></picture></figure></main>`;
 
-// Check 6's clean stylesheet: the 6b frame on a screenshot (box-shadow, allowed)
-// and the ink art's dark invert (art, allowed). Both must stay green.
+// Check 6's clean stylesheet: the 6b frame on a screenshot (box-shadow, allowed),
+// in its token form and written dark-scoped on an evidence class, and the ink
+// art's dark invert (art, allowed). The ink art line names an evidence class
+// too, as the FramedPair ink does in globals.css, so the ART exemption is
+// load-bearing here: without it this stylesheet goes red. All must stay green.
 const CLEAN_CSS = `.dark { --shot-ring: 0 0 0 6px red; }
 .bento-theme__media { box-shadow: var(--shot-ring); }
+html.dark .figure__image { box-shadow: inset 0 0 0 1px red, 0 0 0 6px red; }
 html.dark .cover-art { filter: invert(1); mix-blend-mode: screen; }
+html.dark .framed-pair__cell .figure__image.cover-art { filter: invert(1); }
 html.dark .framed-pair__cell .framed-pair__ink-light { opacity: 0; }
 .figure__image { opacity: 1; }`;
 
@@ -152,6 +157,18 @@ describe('lint:works', () => {
     const r = await tree({ css: `${CLEAN_CSS}\n@media (prefers-color-scheme: dark) { .figure__image { opacity: 0.9; } }` });
     expect(r.failing).toEqual([6]);
     expect(r.text).toContain('sets opacity on evidence (.figure__image)');
+  });
+
+  it('check 6: a dark-scoped filter on the hero image itself', async () => {
+    const r = await tree({ css: `${CLEAN_CSS}\nhtml.dark .hero-block__image-img { filter: grayscale(1); }` });
+    expect(r.failing).toEqual([6]);
+    expect(r.text).toContain('sets filter on evidence (.hero-block__image-img) in dark only');
+  });
+
+  it('check 6: a dark-only background image on a screenshot box', async () => {
+    const r = await tree({ css: `${CLEAN_CSS}\nhtml.dark .bento-theme__media { background-image: url(/a-dark.png); }` });
+    expect(r.failing).toEqual([6]);
+    expect(r.text).toContain('sets background-image on evidence (.bento-theme__media) in dark only');
   });
 
   it('check 6: a dark-only image source', async () => {

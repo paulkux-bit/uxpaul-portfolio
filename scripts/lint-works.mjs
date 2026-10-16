@@ -52,10 +52,12 @@ const decode = (s) =>
  *  product capture. Paintings, the About portrait and ink art are not here. */
 export const EVIDENCE = [
   '.bento-theme__img', '.bento-theme__media', '.bento-band__media', '.bento-ribbon__canvas',
-  '.figure__image', '.hero-block__image-frame', '.hero-block__image', '.promise-walk__img',
+  '.figure__image', '.hero-block__image-frame', '.hero-block__image', '.hero-block__image-img', '.promise-walk__img',
   '.client-work__media', '.client-work__track', '.client-work__slide',
 ];
-const ALTERING = /^(-webkit-)?(filter|opacity|mix-blend-mode|backdrop-filter)$/;
+// background-image is here because a dark-only background is a dark-only image
+// by another route, which the srcDark half of the check cannot see.
+const ALTERING = /^(-webkit-)?(filter|opacity|mix-blend-mode|backdrop-filter|background-image)$/;
 const ART = /\.cover-art|\.framed-pair__ink/;
 const DARK = /(^|[\s>+~(,])(html)?\.dark\b/;
 
