@@ -4344,7 +4344,11 @@ html.dark .figure-placeholder {
 .hero-block__type {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-s);
+  /* Title to role line: 24, the gap every other heading takes to its first
+     block (ruling 4b, 16 Oct 2026, spacing v1 §13; 7b, 5 Oct). It was 16, so
+     the biggest type on the page had the smallest gap: 31px baseline to cap
+     at 1440, now 39. */
+  gap: var(--spacing-m);
 }
 
 /* ── Typographic register ────────────────────────────────────────────── */
