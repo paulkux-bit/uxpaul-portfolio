@@ -4420,9 +4420,11 @@ html.dark .figure-placeholder {
   max-width: 38ch;
   color: var(--text-primary);
   margin: 0; /* 100, unchanged — 18px, rung 1 */
-  /* wght 500 — authored credit register, not body prose */
-  font-weight: 500;
-  text-wrap: pretty;               /* credit line: no one-word last line at 38ch (body→pretty register) */
+  /* Body weight under the title (ruling 10a, 16 Oct 2026). It was 500, a credit
+     register of its own, and read heavier than the title above it once the
+     title moved to 400 (8b); every reviewer dropped it to 400. */
+  font-weight: var(--wght-body);
+  text-wrap: pretty;               /* no one-word last line at 38ch */
 }
 
 /* ── Image cell ──────────────────────────────────────────────────────── */
