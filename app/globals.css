@@ -96,6 +96,13 @@
   --wght-display: 600;
   --wght-loud:    720;
 
+  /* Tracking for every live display role (ruling 3b, 16 Oct 2026): one value,
+     -0.012em, inside the -0.003 to -0.015em that Apple's, Carbon's and
+     Material's display type use. It replaces five values (-0.015 to -0.025)
+     and the rung 6 / rung 5 inversion v3 §3.4 recorded. lint:type check 14
+     holds every live display role to it. */
+  --track-display: -0.012em;
+
   /* Size, the reading band (ruling 7 d-c, 28 Sep 2026; tokens ruled 1a 2a 3a the
      same day). Two layers, the way colour works: the scale, named by value, and
      the ladder's roles, pointing at the scale. Every reading-band font-size in
@@ -809,7 +816,7 @@
 @utility text-lede {
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-display);
   font-weight: 340;
   /* NOT tokenised, deliberately. v3 §9: this role's 60px ceiling sits in the
      53-71px gap between the display and large-display bands, so §3.1 returns
@@ -846,14 +853,14 @@
 @utility text-h1 {
   font-size: clamp(2.25rem, 1.75vw + 1.625rem, 3.5rem);
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-display);
   font-weight: 600;
 }
 
 @utility text-h2 {
   font-size: clamp(1.75rem, 1vw + 1.375rem, 2.5rem);
   line-height: 1.15;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--track-display);
   font-weight: 600;
 }
 
@@ -2463,7 +2470,7 @@ dialog.client-work::backdrop {
      the only 600 display line in a study is the turn's key phrase. */
   font-weight: var(--wght-body);
   line-height: 1.08;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-display);
   /* Bottom 24 to whatever opens the section (ruling 7b, 5 Oct 2026; spacing v1
      §12). The standfirst takes 16 instead (rule below), and a milestone keeps its
      own 32 (2a). Was 32 here, with a 16 override for body paragraphs (A1c,
@@ -2797,12 +2804,13 @@ dialog.client-work::backdrop {
 
 /* The answer: rung 5 size, leading and flare, weight 340, primary. The 340 spends
    the "one moment per case study" signature placement (§3.2; allowlisted in
-   lint:type). Tracking is the test page's -0.025em, not the -0.020 rung 5 took on
-   22 Aug 2026. S3b: 48 to the paragraph after it. */
+   lint:type). Tracking is the display value, --track-display (ruling 3b,
+   16 Oct 2026; it was the test page's -0.025em). S3b: 48 to the paragraph
+   after it. */
 .case-study-prose .turn-answer {
   font-size: var(--type-case-study-hero);
   line-height: 1;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--track-display);
   font-weight: 340;
   color: var(--text-primary);
   max-width: 18ch;
@@ -2880,7 +2888,7 @@ dialog.client-work::backdrop {
   margin: var(--spacing-2xs) 0 0;
   font-size: var(--ms-date-size, clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)); /* rung 6, ratio B */
   line-height: 0.98;
-  letter-spacing: -0.015em; /* -0.020 -> -0.015; rung 6, on eye alone */
+  letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.015, looser than rung 5 */
   color: var(--text-primary);
   /* Rung 6, the arrival crescendo. Weight and nothing else now.
 
@@ -4399,18 +4407,20 @@ html.dark .figure-placeholder {
    The two rules stay separate because they are semantically distinct and may
    diverge again. What they no longer carry is 0.005em of differentiation
    nobody could name: the split is content and module semantics, and tracking
-   was never the thing expressing it. */
+   was never the thing expressing it.
+
+   16 OCT 2026: both take --track-display (ruling 3b), the one value every live
+   display role now shares, and both are 400 (ruling 8b). */
 .hero-block__sentence--open {
-  letter-spacing: -0.020em; /* -0.025 -> -0.020, and now equal to --anxious */
+  letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.020 */
   font-weight: var(--wght-body); /* 600 -> 400, ruling 8b, 16 Oct 2026 */
 }
 
 .hero-block__sentence--anxious {
-  /* Unchanged, and unchanged ON PURPOSE. The benched step preserved a 0.005em
-     offset between the clauses because a comparison moves one variable at a
-     time; carrying that offset into the shipped value would have moved this
-     rule to -0.015 and off the number the evidence had just proved right. */
-  letter-spacing: -0.02em; /* 88, unchanged */
+  /* Kept separate from --open on purpose (see above). Its tracking held at
+     -0.02 through 21 Aug 2026 and moved with every display role to
+     --track-display on 16 Oct 2026. */
+  letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.02 */
   font-weight: var(--wght-body); /* 600 -> 400, ruling 8b, 16 Oct 2026 */
 }
 
