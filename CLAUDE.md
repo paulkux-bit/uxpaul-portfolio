@@ -165,8 +165,9 @@ whenever two pieces of work look equally worthy.
   **The career timeline was deleted** in v4; no `about-timeline` or `ERAS`
   references remain, and its CSS went with it.
 - About's hero: the portrait (the header handoff anchor), then the label
-  "Senior Product Designer", then the `<h1>` in one weight and one colour until
-  the design system pass (it was split two-tone until 13 Oct 2026), then the
+  "Senior Product Designer", then the `<h1>` in one weight (600) and one colour,
+  confirmed by the type and rhythm pass on 16 Oct 2026 (ruling 8b left About
+  unchanged; it was split two-tone until 13 Oct 2026), then the
   Résumé (PDF) button and LinkedIn. The title above the h1 is a label, not the
   heading.
 
@@ -349,7 +350,7 @@ real clamp, and every type-role utility must have a row.
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
-| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour until the design system pass; the signature's 720 half is unspent. |
+| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour, ruled 16 Oct 2026 (1a): no heavy half on home; the signature's heavy half lives on the turns. |
 | `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
@@ -455,7 +456,7 @@ for an entire judgment session while every gate stayed green.
 ### Page typographic arc + spacing (Phase 2)
 Registers separate on **size, weight and colour**. No register owns an axis, and
 there is no width column here any more: width is gone with the axis.
-1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340) until the design system pass.
+1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340), ruled 16 Oct 2026 (1a). On the studies, titles, section headings and the milestone date are 400 (8b), so the turn's key phrase is the only 600 display line; every live display role tracks at `--track-display` (3b). `lint:type` check 14 holds both.
 2. **Major** (work titles: Selected Work card questions + Earlier work shelf): size. Since T4 (14 Oct 2026) the card questions are regular weight, so weight no longer separates this register.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.

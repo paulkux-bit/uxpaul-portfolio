@@ -623,3 +623,7 @@ this section as its resolution.
 every prose-to-evidence and evidence-to-prose gap is 48, heading to standfirst
 16, heading to body and note 24, heading to milestone 32 (2a), and the section gaps are unchanged
 (73.8 at 390, 96 at 768, 114.9 at 1024, 127.9 at 1440).
+
+## 13. Study title to role line, 16 Oct 2026
+
+Ruling 4b (type v3 §11): `.hero-block__type`'s gap moves from `--spacing-s` (16) to `--spacing-m` (24), the gap ruling 7b gives every other heading to its first block. At 16 the 72px title sat 31px baseline to cap above its role line, less than a 52px section heading's 41; at 24 it is 39 at 1440 and 36 at 390. An existing step; nothing added.
