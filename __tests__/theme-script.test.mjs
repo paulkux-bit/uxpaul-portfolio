@@ -29,6 +29,21 @@ describe('head theme script', () => {
   it('"system" stored behaves as nothing stored', () => {
     expect(run('system', true).cls).toBe('dark');
   });
+  it('still follows the system when localStorage throws', () => {
+    const real = Object.getOwnPropertyDescriptor(window, 'localStorage');
+    const html = document.documentElement;
+    html.className = '';
+    html.style.colorScheme = '';
+    Object.defineProperty(window, 'localStorage', { configurable: true, get() { throw new Error('SecurityError'); } });
+    try {
+      window.matchMedia = () => ({ matches: true, addListener() {}, removeListener() {} });
+      new Function(themeInitScript)();
+      expect({ cls: html.className, scheme: html.style.colorScheme }).toEqual({ cls: 'dark', scheme: 'dark' });
+    } finally {
+      if (real) Object.defineProperty(window, 'localStorage', real);
+      else delete window.localStorage;
+    }
+  });
   it('the layout passes the same settings to the head script and the ThemeProvider', () => {
     const layout = readFileSync('app/layout.tsx', 'utf8');
     expect(layout).toMatch(/<head>[\s\S]*themeInitScript[\s\S]*<\/head>/);

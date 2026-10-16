@@ -799,7 +799,7 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 </ThemeProvider>
 ```
 
-The `attribute="class"` is critical — the CSS expects `.dark` on `<html>`, not `data-theme="dark"`.
+`THEME_ATTRIBUTE` in `lib/theme.ts` must stay `'class'`, and it is critical: the CSS expects `.dark` on `<html>`, not `data-theme="dark"`. The head script reads the same constant, so the two cannot drift.
 ---
 
 ## Design intent & director frame (read before any design or content change)

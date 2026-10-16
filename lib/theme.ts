@@ -15,5 +15,8 @@ export const THEME_ATTRIBUTE = 'class';
 export const THEME_DEFAULT = 'system';
 export const THEMES = ['light', 'dark'] as const;
 
-/** Mirrors next-themes 0.4.6 for attribute="class", enableSystem, enableColorScheme. */
-export const themeInitScript = `(function(){try{var d=document.documentElement,t=localStorage.getItem('${THEME_STORAGE_KEY}')||'${THEME_DEFAULT}',r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;d.classList.remove('${THEMES[0]}','${THEMES[1]}');d.classList.add(r);if(r==='${THEMES[0]}'||r==='${THEMES[1]}')d.style.colorScheme=r}catch(e){}})();`;
+/** Mirrors next-themes 0.4.6 for attribute="class", enableSystem, enableColorScheme.
+ *  One difference: the storage read has its own try, so a browser that throws on
+ *  localStorage (Safari with site data blocked) still gets the system mode at first
+ *  paint, rather than no class and then a 450ms fade once the provider hydrates. */
+export const themeInitScript = `(function(){var t;try{t=localStorage.getItem('${THEME_STORAGE_KEY}')}catch(e){}try{var d=document.documentElement;t=t||'${THEME_DEFAULT}';var r=t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t;d.classList.remove('${THEMES[0]}','${THEMES[1]}');d.classList.add(r);if(r==='${THEMES[0]}'||r==='${THEMES[1]}')d.style.colorScheme=r}catch(e){}})();`;
