@@ -143,7 +143,12 @@ whenever two pieces of work look equally worthy.
   `<strong>` inside it. No availability line, no tenure number, no geographic
   qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`,
   except the h1, re-ruled 15 Oct 2026: "I take on the parts of a product no one
-  can afford to get wrong." (`app/page.tsx`).
+  can afford to get wrong.", and the proof paragraph, re-ruled 16 Oct 2026 (4a):
+  "For the U.S. Navy, I design intelligence tools for operators on systems with
+  no internet. At URBN, I led UX strategy for the platform behind Urban
+  Outfitters, Anthropologie, and Free People, and was the sole designer on
+  Nuuly's warehouse apps at launch." (both in `app/page.tsx`). The "hands-on"
+  line is gone: "sole designer" carries the IC signal.
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
