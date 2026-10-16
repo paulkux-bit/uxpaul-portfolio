@@ -815,6 +815,49 @@ const add = (id, title, failures, note) =>
   add('13', 'Every font-weight is one of the five declared weights (§3.2)', failures);
 }
 
+// 14. EVERY LIVE DISPLAY ROLE CARRIES ITS RULED WEIGHT AND TRACKING (16 Oct 2026).
+// Checks 4 and 13 test that a weight is legal; neither tests that a heading has
+// the weight it was ruled. Ruling 8b moved the study title, section headings and
+// milestone date to 400, so the turn's key phrase is the only 600 display line in
+// a study, and nothing would have caught half of that landing: a heading left at
+// 600 is a legal weight. Ruling 3b put every live display role on one tracking
+// token. This table is the ruling, selector by selector: the weight and the
+// letter-spacing each declaration must resolve to. Dead display selectors
+// (RUNGS `dead: true`, and the comment-only ones) are not listed.
+{
+  const failures = [];
+  const WGHT = { 'var(--wght-thin)': 340, 'var(--wght-body)': 400, 'var(--wght-credit)': 500, 'var(--wght-display)': 600, 'var(--wght-loud)': 720 };
+  const weightOf = (v) => {
+    const s = v.replace(/!important/g, '').trim();
+    return s in WGHT ? WGHT[s] : Number(s);
+  };
+  const DISPLAY = [
+    { selector: '.text-lede', weight: 340, track: true, why: 'home h1, the signature light half (1a: one weight)' },
+    { selector: '.text-h1', weight: 600, track: true, why: 'About h1, client work dialog title, 404 (8b leaves About unchanged)' },
+    { selector: '.text-h2', weight: 600, track: true, why: 'About section headings (8b leaves About unchanged)' },
+    { selector: '.hero-block__sentence--open', weight: 400, track: true, why: 'study title, first sentence (8b)' },
+    { selector: '.hero-block__sentence--anxious', weight: 400, track: true, why: 'study title, second sentence (8b)' },
+    { selector: '.case-study-prose h2', weight: 400, track: true, why: 'study section headings (8b)' },
+    { selector: '.milestone__date', weight: 400, track: true, why: 'milestone date (8b, amends ruling 5)' },
+    { selector: '.case-study-prose .turn-answer', weight: 340, track: true, why: 'the turn, light setup' },
+    { selector: '.case-study-prose .turn-answer__key', weight: 600, track: false, why: 'the turn key phrase, the one 600 display line in a study' },
+  ];
+  for (const e of DISPLAY) {
+    const ws = byProp('font-weight').filter((d) => d.selector === e.selector);
+    if (!ws.length) failures.push({ selector: e.selector, line: 0, detail: `declares no font-weight; ruled ${e.weight} (${e.why})` });
+    for (const d of ws)
+      if (weightOf(d.value) !== e.weight)
+        failures.push({ selector: e.selector, line: d.line, detail: `font-weight ${d.value.trim()} resolves to ${weightOf(d.value)}; ruled ${e.weight} (${e.why})` });
+    if (!e.track) continue;
+    const ls = byProp('letter-spacing').filter((d) => d.selector === e.selector);
+    if (!ls.length) failures.push({ selector: e.selector, line: 0, detail: 'declares no letter-spacing; ruled var(--track-display) (3b)' });
+    for (const d of ls)
+      if (d.value.replace(/!important/g, '').trim() !== 'var(--track-display)')
+        failures.push({ selector: e.selector, line: d.line, detail: `letter-spacing ${d.value.trim()}; ruled var(--track-display) (3b)` });
+  }
+  add('14', 'Every live display role carries its ruled weight and tracking (§3.2, §3.4)', failures);
+}
+
 // ── Known gap, surfaced rather than silently passed ────────────────────────
 // A signature weight authored as a Tailwind arbitrary utility in JSX
 // (font-[720]) is invisible to a globals.css-only parser. The home hero's 720
