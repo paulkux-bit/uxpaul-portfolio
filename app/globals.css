@@ -4673,14 +4673,16 @@ html.dark .figure-placeholder {
   transform: translateY(1px);
 }
 
-/* Text links beside the button. --border-interactive rather than
-   --border-default: an underline is the affordance, so it owes 3:1. */
+/* The LinkedIn link beside the button. Its underline is the base `a` rule's,
+   --border-interactive at rest (3:1) and --link-hover on hover. It used to
+   restate the resting colour here, outside the base layer, which beat the
+   layered a:hover, so the link thickened on hover but never turned brass
+   (part 2b, 15 Oct 2026). */
 .about-link {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   color: var(--text-primary);
-  text-decoration-color: var(--border-interactive);
 }
 
 /* ── Phases ───────────────────────────────────────────────────────────── */
