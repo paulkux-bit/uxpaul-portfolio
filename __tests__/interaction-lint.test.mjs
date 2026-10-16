@@ -395,6 +395,25 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
     }
   });
 
+  // Part 2a (15 Oct 2026): the 6b frame is a mode transition too, so every
+  // element that draws --shot-ring fades its box-shadow at --duration-theme.
+  // Read from the stylesheet, so a new framed selector without the fade fails.
+  it('the 6b frame fades at --duration-theme on every element that draws it', () => {
+    const framed = new Set();
+    css.walkDecls('box-shadow', (d) => {
+      if (/--shot-ring\b/.test(d.value) && d.parent?.selector) {
+        const last = d.parent.selector.trim().split(/\s+/).pop();
+        framed.add(last);
+      }
+    });
+    expect(framed.size).toBeGreaterThan(0);
+    for (const sel of framed) {
+      const t = transitionsFor(sel);
+      expect(t, `${sel} draws the frame but has no transition`).not.toHaveLength(0);
+      expect(t.join(' ')).toMatch(/box-shadow\s+var\(--duration-theme\)/);
+    }
+  });
+
   it('the card lift moves at --duration-card', () => {
     // @utility lift is an at-rule, not a selector rule — walk it by name.
     let value = null;

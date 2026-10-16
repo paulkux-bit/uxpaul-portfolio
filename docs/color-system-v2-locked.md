@@ -477,7 +477,10 @@ lint arithmetic, not rasterised.
 screenshots sit in a 6px frame, `--shot-frame` `oklch(0.255 0.026 55)`
 (13 units, ground + 3), drawn as an outer box-shadow so no box moves. It is a
 component token beside `--scrim` and `--face-disc`, not a palette role, and
-check 9 holds its hue. Light has no frame (ruling 4a).
+check 9 holds its hue. Light has no frame (ruling 4a): its ring is the same
+width in transparent, so a theme swap fades the frame's colour with the page
+over `--duration-theme` rather than drawing it before the page has darkened
+(part 2a, 15 Oct 2026).
 
 **12 Oct 2026:** the shelf (now "Earlier work") no longer uses the `--qh-*` exception. **15 Oct 2026:** the tokens, consumed by nothing since, were deleted in the design system pass, so the first item above is closed.
 

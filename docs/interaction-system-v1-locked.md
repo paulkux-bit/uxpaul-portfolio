@@ -177,7 +177,7 @@ already using, so nothing renders differently.
 | 220ms | 1 | `a` — the link-hover underline, **unlisted originally** |
 | 240ms | 2 | `.about-row__mark`, `.about-row::details-content` |
 | 320ms | 1 | `@utility lift` → `--duration-card` (the card stopped carrying `lift` at H1b; the utility stays for the sandbox video card) |
-| 450ms | 2 | `body`, `body::before` → `--duration-theme` (`body::before` was the paper grain, removed 15 Oct 2026; `body` is the one site now) |
+| 450ms | 2 | `body`, `body::before` → `--duration-theme` (`body::before` was the paper grain, removed 15 Oct 2026; `body` is the one site now, with the 6b screenshot frame's box-shadow beside it since 15 Oct 2026, so the frame fades with the page) |
 
 The paper-grain fade at 450ms was described here as "an entrance, not an
 interaction". **That was false.** The grain's opacity is 0.55 in light and 0 in

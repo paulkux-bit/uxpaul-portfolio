@@ -82,18 +82,18 @@ const ALLOWLIST = {
     // Not spacing: room for a frame. The 6b screenshot frame (colour v2.1,
     // 15 Oct 2026) is a 6px outer ring, which a scroll container clips at its
     // padding box. The track pads out by the ring width and pulls back by the
-    // same negative margin, so nothing moves; in light the width is 0rem. 6px
+    // same negative margin, so nothing moves; in light the room is 0rem. 6px
     // is the ruled frame, off the 4px grid by design, and it follows the ring
     // token rather than the spacing scale so the two cannot drift apart.
     {
       selector: '.bento-band__track',
       prop: 'margin',
-      reason: 'ROOM FOR THE 6b FRAME: the negative of --shot-ring-width (6px dark, 0 light), cancelling the padding below so the media keeps its box. Not rhythm; it tracks the ring, not the scale.',
+      reason: 'ROOM FOR THE 6b FRAME: the negative of --shot-ring-room (the 6px ring width in dark, 0 in light), cancelling the padding below so the media keeps its box. Not rhythm; it tracks the ring, not the scale.',
     },
     {
       selector: '.bento-band__track',
       prop: 'padding',
-      reason: 'ROOM FOR THE 6b FRAME: --shot-ring-width (6px dark, 0 light), so the scroll container does not clip the dark screenshot frame. Not rhythm; it tracks the ring, not the scale.',
+      reason: 'ROOM FOR THE 6b FRAME: --shot-ring-room (the 6px ring width in dark, 0 in light), so the scroll container does not clip the dark screenshot frame. Not rhythm; it tracks the ring, not the scale.',
     },
   ], // literals that may stay: { selector, prop, value, reason }
   media: [

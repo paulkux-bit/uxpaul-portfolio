@@ -601,12 +601,14 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
   faint, override light-only to `--border-default` — never change the base token.
 - **The 6b screenshot frame** (15 Oct 2026): in dark, every product screenshot sits in
   a 6px walnut frame (`--shot-frame`) drawn outside its box by `--shot-ring`, so nothing
-  moves or resizes; light's ring is zero-width and transparent. Images write
+  moves or resizes; light's ring is the same width in transparent, so a theme swap fades
+  the frame with the page over `--duration-theme` (15 Oct 2026). Images write
   `box-shadow: var(--shot-edge), var(--shot-ring)` as ONE list (a second box-shadow
   would overwrite the hairline); the bento wrappers take `var(--shot-ring)` and keep the
   hairline on their `::after`. Not on the paintings, the About portrait, `.cover-art`
   (which zeroes the ring) or the client work dialog. A scroll container clips it, so
-  `.bento-band__track` pads out by `--shot-ring-width` and pulls back by the same.
+  `.bento-band__track` pads out by `--shot-ring-room` (the ring width in dark, none in
+  light) and pulls back by the same.
 - The traced SVG beat figures (`.oku-figure` and its siblings, regenerated from .svg by
   `regen:*` scripts) were retired with the friction beats on 8 Oct 2026. Raster ink
   drawings take `.cover-art`: multiply in light, invert plus screen in dark. On the
