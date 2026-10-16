@@ -95,8 +95,9 @@ twenty-four times over. Warming the whole thing meant editing twenty-four
 values by hand and hoping they stayed coherent — which is how it drifted into
 muddiness in the first place.
 
-Type and spacing are already two-layer: `--wdth-display: 94` is a primitive and
-selectors consume it, which is why width migrated in one commit. Colour was the
+Type and spacing were already two-layer: `--wdth-display: 94` was a primitive and
+selectors consumed it, which is why width migrated in one commit. (The token
+went with the width axis when the site moved to Commissioner, 22 Aug 2026.) Colour was the
 only system where the semantic token *was* the raw value.
 
 **Chroma is a unit and integer multipliers — no offsets needed.** Measured

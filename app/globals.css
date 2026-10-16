@@ -698,7 +698,6 @@
   /* The slack half of the sticky footer above. */
   body > main { flex: 1 0 auto; }
 
-
   /* The shipped face has no italics — map em/i to weight emphasis instead.
      (True of Bricolage before and of Commissioner now: the designer ships an
      italic as a SEPARATE binary, and it is not in app/_fonts/.) */

@@ -124,24 +124,10 @@ that pass rather than a settled answer:
    where hover cannot stand in. Interaction v1 §5 gives a text link hover and
    no pressed state, and names no input-dependent rest state. Pointer devices
    keep `.quiet-link`.
-3. **One focus halo for a whole row. Resolved 14 Oct 2026: interaction v1 §5
-   now names this pattern, for this row and for the Selected work card (T4),
-   so it is governed and leaves this list at the next edit of this entry.**
-   The record as it stood: the global pair (2px `--focus-ring` at a
-   3px offset, 6px `--focus-glow`) is drawn on the row's `::before`, set out
-   `--spacing-2xs` to the sides, while the row's link has `:focus-visible`. The
-   link's own halo is suppressed inside `@supports selector(:has(a))`, so a
-   browser without `:has()` keeps it. Interaction v1 §5 has every control
-   inherit the global halo, and this redraws it around the target rather than
-   the text.
-4. **The brand shelf's dead code. Resolved 15 Oct 2026: deleted in the
-   design system pass, in one commit, in the order this entry set (blocks,
-   `.quick-hit` and the utility first, then the tokens, the two lint allowlist
-   entries, the radius test row, the data field and type, and the CLAUDE.md and
-   spec text). It leaves this list at the next edit of this entry.**
-
-Needs: rulings from the design system pass on a list-title rung, on whether
-touch gets a rest signifier site-wide, and on the row halo. (Item 4 is done.)
+Needs: rulings from the design system pass on a list-title rung and on whether
+touch gets a rest signifier site-wide. (The row halo, governed by interaction
+v1 §5 since 14 Oct 2026, and the brand shelf's dead code, deleted 15 Oct 2026,
+left this list on 15 Oct 2026.)
 
 **The header identity mark (wordmark to face).** Joined 12 Oct 2026 from the
 header handoff build (`docs/cc-prompt-header-handoff-build.md`, Paul's

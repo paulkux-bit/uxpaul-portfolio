@@ -62,7 +62,7 @@ export default function HomeVideoSandbox() {
 
       <section aria-labelledby="selected-work" className="space-y-6">
         <p id="selected-work" className="text-caption font-semibold text-muted tracking-wide">
-          Selected work <span className="font-normal text-muted">· sandbox: Bard card = video</span>
+          Selected work <span className="font-normal">· sandbox: Bard card = video</span>
         </p>
         <RevealGrid className="grid gap-x-8 gap-y-12 lg:grid-cols-2">
           {caseStudies.map((study) => (
