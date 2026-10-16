@@ -313,10 +313,16 @@ code. If you change one, the other reddens. That is deliberate: see
   - Instanced to `weight: '340 720'` in two independent places, the CSS and the
     binary, so a request outside the range clamps twice and the lint gets the
     same answer from the stylesheet and from the file.
-  - The binary's **default instance is repositioned to 400**. next/font derives
+  - The binary's **default instance is repositioned to 400**. next/font derived
     its Arial-fallback metrics from the default instance, and Commissioner's
     source defaults to Thin; shipping that would have computed every fallback
     measurement against a hairline.
+  - **The fallback family is declared in `app/globals.css`, not generated**
+    (ruling 9a, 16 Oct 2026): `adjustFontFallback: false` in `app/fonts.ts`, and
+    two "Commissioner Fallback" faces, regular (next/font's own metrics, carried
+    over) and bold (Arial Bold for 600 to 720). The generated face had no bold,
+    and `font-synthesis: none` forbids a synthetic one, so every 600 rendered
+    regular during swap on a Mac or Windows machine.
 - **Mono:** None. Add only if a real need appears (code blocks in case studies).
 
 ### Hard constraints

@@ -13,8 +13,42 @@
    Resolved at build time (no var() at runtime, no swap).
    ============================================================ */
 
+/* The fallback family, regular and bold (ruling 9a, 16 Oct 2026). Painted while
+   Commissioner loads (display: swap) and if it fails. next/font used to generate
+   one local(Arial) face with no weight descriptor, and with font-synthesis: none
+   that meant no bold at all on a Mac or Windows machine. app/fonts.ts now sets
+   adjustFontFallback: false and these two faces replace it.
+
+   Regular: next/font's own numbers, carried over unchanged (derived from
+   Commissioner's 400 default instance against Arial).
+   Bold: Arial Bold for 600 to 720. size-adjust 95.87% is next's 101.44% scaled
+   by the measured width ratio of Commissioner 600 to Arial Bold against
+   Commissioner 400 to Arial (93.73 / 99.17, a 200-character sample of the site's
+   own headings, Liberation Sans standing in for Arial); ascent and descent are
+   Commissioner's 1.017 and 0.206 em divided by that size-adjust, as next/font
+   computes them. Machines without Arial (Linux, Android) fall through to
+   system-ui, which has a bold of its own. */
+@font-face {
+  font-family: "Commissioner Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 340 599;
+  ascent-override: 100.26%;
+  descent-override: 20.31%;
+  line-gap-override: 0%;
+  size-adjust: 101.44%;
+}
+@font-face {
+  font-family: "Commissioner Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 720;
+  ascent-override: 106.08%;
+  descent-override: 21.49%;
+  line-gap-override: 0%;
+  size-adjust: 95.87%;
+}
+
 @theme {
-  --font-sans: var(--font-commissioner), system-ui, sans-serif;
+  --font-sans: var(--font-commissioner), "Commissioner Fallback", system-ui, sans-serif;
 
   /* Breakpoints — wired to the project's documented design targets (CLAUDE.md).
      Without these, Tailwind's defaults were active (sm 640 / xl 1280 / 2xl 1536).
@@ -721,11 +755,15 @@
      and notices. Audited at C3: zero italic usage on the site today, so this
      changes nothing rendered and exists to keep it that way.
 
-     Synthetic BOLD is disabled too, and that is safe rather than incidental:
-     @font-face declares font-weight: 340 720, so an out-of-range request clamps
-     to a real instance instead of synthesising, and the Arial fallback carries
-     genuine bold faces. Verified rather than assumed — the only weight outside
-     340-720 in this file is the unmounted takes wall's 800. */
+     Synthetic BOLD is disabled too. @font-face declares font-weight: 340 720,
+     so an out-of-range request clamps to a real instance instead of
+     synthesising. The fallback needs a real bold face for the same reason, and
+     until 16 Oct 2026 it had none: next/font's generated fallback was one
+     regular Arial face, so this rule silently removed every bold during swap
+     on a Mac or Windows machine (found by CC's accessibility pass). The
+     "Commissioner Fallback" family at the top of this file now carries a bold
+     face (ruling 9a). The only weight outside 340-720 in this file is the
+     unmounted takes wall's 800. */
   html {
     font-synthesis: none;
   }
