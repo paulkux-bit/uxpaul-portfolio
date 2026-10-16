@@ -1,8 +1,9 @@
 // Usage: node scripts/lint-color.mjs [css]   (no build required — parses source)
 //
 // The optional path replaces app/globals.css, so a mutated copy can be linted
-// to prove a check red (__tests__/color-lint.test.mjs). Checks 1 and 7 still
-// scan the repo's own files, so only the check under test is meaningful then.
+// to prove a check red (__tests__/color-lint.test.mjs). Check 7 always judges
+// the repo's own files, app/globals.css included, whatever path is given, and
+// check 1's JSX half scans the repo too; every other check reads the path.
 //
 // Colour gate for the v2 colour system (`docs/color-system-v2-locked.md` §7).
 // Parses app/globals.css and every .tsx/.mdx.
@@ -399,19 +400,23 @@ const add = (id, title, failures, note) =>
 {
   const f = [];
   const results = await scanTree(process.cwd(), { skip: ['scripts/fixtures'] });
+  // The sweep reads the repo, so its token-definition lines must come from the
+  // repo's globals.css too. Reading CSS_FILE here made check 7 red on any path,
+  // even ./app/globals.css: the scan's file names never equalled it.
+  const REPO_CSS = 'app/globals.css';
 
   // Token DEFINITIONS in globals.css are the source of truth, not literals to
   // sweep; checks 1, 2 and 3 already govern them. Only literals at the point of
   // USE belong to check 7.
   const defLines = new Set();
-  postcss.parse(await readFile(CSS_FILE, 'utf8'), { from: CSS_FILE }).walkDecls((d) => {
+  postcss.parse(await readFile(REPO_CSS, 'utf8'), { from: REPO_CSS }).walkDecls((d) => {
     if (!d.prop.startsWith('--')) return;
     for (let i = d.source?.start?.line ?? 0; i <= (d.source?.end?.line ?? 0); i++) defLines.add(i);
   });
   // line → { selector, prop }, so a specimen can be allowlisted by what it IS
   // rather than by where it happens to sit.
   const declAt = new Map();
-  postcss.parse(await readFile(CSS_FILE, 'utf8'), { from: CSS_FILE }).walkDecls((d) => {
+  postcss.parse(await readFile(REPO_CSS, 'utf8'), { from: REPO_CSS }).walkDecls((d) => {
     const sel = d.parent?.selector?.replace(/\s+/g, ' ').trim() ?? '';
     for (let i = d.source?.start?.line ?? 0; i <= (d.source?.end?.line ?? 0); i++)
       declAt.set(i, { selector: sel, prop: d.prop });
@@ -419,7 +424,7 @@ const add = (id, title, failures, note) =>
 
   for (const r of results) {
     for (const h of r.accepted) {
-      if (r.file === CSS_FILE) {
+      if (r.file === REPO_CSS) {
         if (defLines.has(h.line)) continue; // owned by checks 1–3
         const d = declAt.get(h.line);
         // THE DEFERRAL RECORD. Each of the eight is excluded by its own entry,

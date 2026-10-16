@@ -83,4 +83,29 @@ describe('lint:color check 9, the hue band', () => {
     expect(block).toMatch(/^✗ 9\./);
     expect(block).toMatch(/dark: --bg-sunken hue 49 is outside 50 to 80/);
   });
+
+  // The band is inclusive. Both edges are proved green on purpose, not left to
+  // whichever tokens happen to sit on them today.
+  it('passes with the dark sunken at hue 50', () => {
+    const dark = CSS.slice(CSS.indexOf('\n.dark {'));
+    const ground = Number(/--hue-ground:\s+(\d+);/.exec(dark)[1]);
+    const decl = /--bg-sunken:\s+oklch\(([\d.]+) (calc\(var\(--chroma-unit\) \* \d+\)) [^;]+\);/.exec(dark);
+    const css = inDark(CSS, decl[0], `--bg-sunken: oklch(${decl[1]} ${decl[2]} calc(var(--hue-ground) - ${ground - 50}));`);
+    expect(lint(css, 9, 'sunken-50')).toMatch(/^✓ 9\./);
+  });
+
+  it('passes with the dark focus glow at hue 80', () => {
+    const decl = /--focus-glow:\s+oklch\(([\d.]+) ([\d.]+) ([\d.]+) \/ ([\d.]+)\);/.exec(CSS.slice(CSS.indexOf('\n.dark {')));
+    const css = inDark(CSS, decl[0], `--focus-glow: oklch(${decl[1]} ${decl[2]} 80 / ${decl[4]});`);
+    expect(lint(css, 9, 'glow-80')).toMatch(/^✓ 9\./);
+  });
+});
+
+describe('lint:color path mode', () => {
+  // Every red case above lints a copy through the path argument. Check 7 must
+  // still pass on an unmodified copy, or path mode is red for a reason that has
+  // nothing to do with the check under test.
+  it('check 7 passes on an unmodified copy given as a path', () => {
+    expect(lint(CSS, 7, 'copy-7')).toMatch(/^✓ 7\./);
+  });
 });
