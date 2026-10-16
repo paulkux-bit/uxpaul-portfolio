@@ -26,6 +26,32 @@ describe('bindOpeners', () => {
 });
 
 describe('rehypeBindOpeners', () => {
+  it('binds an opener that starts a node after a sentence ends in the node before', () => {
+    const tree = {
+      type: 'element',
+      tagName: 'p',
+      children: [
+        { type: 'element', tagName: 'strong', children: [{ type: 'text', value: 'A kept date was invisible.' }] },
+        { type: 'text', value: ' A missed one had a price.' },
+      ],
+    };
+    rehypeBindOpeners()(tree);
+    expect(tree.children[1].value).toBe(` A${NBSP}missed one had a price.`);
+  });
+
+  it('does not bind a node-initial word when the node before ended mid-sentence', () => {
+    const tree = {
+      type: 'element',
+      tagName: 'p',
+      children: [
+        { type: 'element', tagName: 'strong', children: [{ type: 'text', value: 'right on' }] },
+        { type: 'text', value: ' the day it said.' },
+      ],
+    };
+    rehypeBindOpeners()(tree);
+    expect(tree.children[1].value).toBe(' the day it said.');
+  });
+
   it('rewrites text nodes and skips code', () => {
     const tree = {
       type: 'root',

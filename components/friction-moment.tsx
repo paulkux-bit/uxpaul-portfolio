@@ -1,14 +1,17 @@
 import { getWork, type Work } from '@/app/data/works';
+import { bindOpeners } from '@/lib/rehype-bind-openers.mjs';
 
 /** The credit line, generated from the record so the two cannot disagree. The
  *  title takes quotation marks, not a type style (CLAUDE.md, emphasis strategy;
  *  ruling A1, 8 Oct 2026): the face has no italic and synthesis is off, so an
  *  "italic" title renders upright and indistinguishable from the rest. <cite>
- *  carries the semantics; the comma sits inside the closing mark. */
+ *  carries the semantics; the comma sits inside the closing mark. The date and
+ *  institution go through bindOpeners (ruling 5b, 16 Oct 2026), so a short first
+ *  word ("Art Institute", "The Metropolitan") never ends a line after the date. */
 function Credit({ work }: { work: Work }) {
   return (
     <p className="friction-moment__credit">
-      {work.artist}, <cite>“{work.title},”</cite> {work.date}. {work.institution}, public domain.
+      {work.artist}, <cite>“{work.title},”</cite> {bindOpeners(`${work.date}. ${work.institution}, public domain.`)}
     </p>
   );
 }
