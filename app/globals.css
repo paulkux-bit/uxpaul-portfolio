@@ -6029,6 +6029,23 @@ html.dark .figure-placeholder {
   background: var(--text-primary);
 }
 
+/* Forced colours: the bars and the average marker are backgrounds, which the
+   browser resets to Canvas, so the chart drew nothing but its labels. They keep
+   their roles as system colours: GrayText for the quiet bars, CanvasText for the
+   highlighted bar and the average marker. Same pattern as the client work
+   thumbnail bar. */
+@media (forced-colors: active) {
+  .node-chart__fill,
+  .node-chart__track::after {
+    forced-color-adjust: none;
+    background: GrayText;
+  }
+  .node-chart__fill--hi,
+  .node-chart__track::after {
+    background: CanvasText;
+  }
+}
+
 /* 1.25rem, NOT 1.125rem, TO MATCH .tier-chart__value. The two charts sit side by
    side and their quiet values were 20px and 18px, which is a difference a reader
    reads as meaning and which means nothing. Both --hi/--end values are 1.75rem, so
