@@ -56,8 +56,8 @@ const WORKED = [
       <>
         Managed eight designers on the platform behind{' '}
         <span className="whitespace-nowrap">Urban Outfitters</span>, Anthropologie, and{' '}
-        <span className="whitespace-nowrap">Free People</span>, and designed Nuuly&apos;s first
-        warehouse tools myself.
+        <span className="whitespace-nowrap">Free People</span>, and was the sole designer on
+        Nuuly&apos;s warehouse apps at launch.
       </>
     ),
   },

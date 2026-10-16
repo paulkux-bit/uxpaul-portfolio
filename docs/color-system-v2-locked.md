@@ -95,8 +95,9 @@ twenty-four times over. Warming the whole thing meant editing twenty-four
 values by hand and hoping they stayed coherent — which is how it drifted into
 muddiness in the first place.
 
-Type and spacing are already two-layer: `--wdth-display: 94` is a primitive and
-selectors consume it, which is why width migrated in one commit. Colour was the
+Type and spacing were already two-layer: `--wdth-display: 94` was a primitive and
+selectors consumed it, which is why width migrated in one commit. (The token
+went with the width axis when the site moved to Commissioner, 22 Aug 2026.) Colour was the
 only system where the semantic token *was* the raw value.
 
 **Chroma is a unit and integer multipliers — no offsets needed.** Measured
@@ -477,7 +478,10 @@ lint arithmetic, not rasterised.
 screenshots sit in a 6px frame, `--shot-frame` `oklch(0.255 0.026 55)`
 (13 units, ground + 3), drawn as an outer box-shadow so no box moves. It is a
 component token beside `--scrim` and `--face-disc`, not a palette role, and
-check 9 holds its hue. Light has no frame (ruling 4a).
+check 9 holds its hue. Light has no frame (ruling 4a): its ring is the same
+width in transparent, so a theme swap fades the frame's colour with the page
+over `--duration-theme` rather than drawing it before the page has darkened
+(part 2a, 15 Oct 2026).
 
 **12 Oct 2026:** the shelf (now "Earlier work") no longer uses the `--qh-*` exception. **15 Oct 2026:** the tokens, consumed by nothing since, were deleted in the design system pass, so the first item above is closed.
 

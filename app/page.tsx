@@ -42,18 +42,19 @@ export default function Home() {
             <span className="block text-secondary">Senior Product Designer</span>
           </p>
 
-          {/* Proof: Navy, then URBN. Brand names and "hands-on" are wrapped in
-              whitespace-nowrap so none breaks mid-name or at its hyphen. */}
+          {/* Proof: Navy, then URBN (re-ruled 16 Oct 2026, 4a: Paul's three
+              facts; "UX strategy" matches the Delivery Promise Role). The two
+              two-word brand names are wrapped in whitespace-nowrap so neither
+              breaks mid-name. */}
           <p
             className="hero-beat text-body text-primary max-w-[62ch]"
             style={{ ['--beat' as string]: 2 }}
           >
-            I currently work for the U.S. Navy, where I&apos;ve designed intelligence tools for
-            thousands of operators. Previously at URBN, I designed Nuuly&apos;s first warehouse
-            tools and led design across{' '}
+            For the U.S. Navy, I design intelligence tools for operators on systems with no
+            internet. At URBN, I led UX strategy for the platform behind{' '}
             <span className="whitespace-nowrap">Urban Outfitters</span>, Anthropologie, and{' '}
-            <span className="whitespace-nowrap">Free People</span>. I&nbsp;work{' '}
-            <span className="whitespace-nowrap">hands-on</span>, from research to delivery.
+            <span className="whitespace-nowrap">Free People</span>, and was the sole designer on
+            Nuuly&apos;s warehouse apps at launch.
           </p>
         </div>
       </section>

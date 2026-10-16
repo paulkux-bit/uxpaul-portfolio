@@ -503,12 +503,18 @@
      dark it also gets a 6px walnut frame drawn OUTSIDE its box (--shot-ring),
      so a bright capture sits in a mount rather than glaring on the page, and
      nothing moves or resizes: an outer box-shadow takes no layout. Light has
-     no frame (ruling 4a); its ring is zero-width and transparent, so light
-     renders as before. One list, one token pair, because a second box-shadow
-     declaration would overwrite the hairline. Not on the paintings, the About
-     portrait, the ink cover art or the client work dialog (ruling 14a). */
+     no frame (ruling 4a); its ring is the same width in transparent, so light
+     paints nothing and a theme swap fades the colour alone, with the page,
+     over --duration-theme (part 2a, 15 Oct 2026; until then the ring was
+     zero-width in light and snapped on before the page had darkened). One
+     list, one token pair, because a second box-shadow declaration would
+     overwrite the hairline. Not on the paintings, the About portrait, the ink
+     cover art or the client work dialog (ruling 14a).
+     --shot-ring-room is the space a scroll container leaves for the ring:
+     none in light, so light's geometry is exactly as it was. */
   --shot-edge:              inset 0 0 0 1px var(--border-subtle);
-  --shot-ring-width:        0rem;
+  --shot-ring-width:        0.375rem;
+  --shot-ring-room:         0rem;
   --shot-ring:              0 0 0 var(--shot-ring-width) transparent;
 
   /* Selected work card hover panel (3a ruling 1b, 15 Oct 2026). A component
@@ -623,7 +629,7 @@
   /* The 6b frame, dark: a step above the surface, at the elevated surface's
      chroma less one unit, so it reads as a walnut mount, not a border. */
   --shot-frame:             oklch(0.255 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 3));
-  --shot-ring-width:        0.375rem;
+  --shot-ring-room:         var(--shot-ring-width);
   --shot-ring:              0 0 0 var(--shot-ring-width) var(--shot-frame);
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
   /* Card hover panel, dark (3a ruling 1b; walnut values, ruling 11b, both
@@ -675,9 +681,22 @@
       color var(--duration-theme) var(--ease-out-soft);
   }
 
+  /* The 6b frame fades with the page (part 2a, 15 Oct 2026). Every element
+     that draws --shot-ring transitions its box-shadow at the body's speed and
+     curve, so on a theme swap the frame and the page change together instead
+     of the frame landing first. Only the mode changes these box-shadows, so
+     only a swap animates them; reduced motion collapses it with the body fade
+     (the blanket reduce rule). */
+  .figure__image,
+  .bento-theme__media,
+  .bento-band__media,
+  .hero-block__image-frame,
+  .promise-walk__img {
+    transition: box-shadow var(--duration-theme) var(--ease-out-soft);
+  }
+
   /* The slack half of the sticky footer above. */
   body > main { flex: 1 0 auto; }
-
 
   /* The shipped face has no italics — map em/i to weight emphasis instead.
      (True of Bricolage before and of Commissioner now: the designer ships an
@@ -4091,10 +4110,13 @@ html.dark .cover-art {
   /* Room for the 6b frame. A scroll container clips at its padding box, so
      the 6px ring round the media would be cut on every side. The track grows
      by the ring width each way and pads back in by the same amount, so the
-     media keeps its size and position exactly; in light the width is zero. */
+     media keeps its size and position exactly; in light the room is zero.
+     The room switches with the mode at once, so on a swap to light this one
+     band's ring is cut while it fades; the frame used to vanish at once
+     everywhere on that swap. */
   width: auto;
-  margin: calc(var(--shot-ring-width) * -1);
-  padding: var(--shot-ring-width);
+  margin: calc(var(--shot-ring-room) * -1);
+  padding: var(--shot-ring-room);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -4650,14 +4672,16 @@ html.dark .figure-placeholder {
   transform: translateY(1px);
 }
 
-/* Text links beside the button. --border-interactive rather than
-   --border-default: an underline is the affordance, so it owes 3:1. */
+/* The LinkedIn link beside the button. Its underline is the base `a` rule's,
+   --border-interactive at rest (3:1) and --link-hover on hover. It used to
+   restate the resting colour here, outside the base layer, which beat the
+   layered a:hover, so the link thickened on hover but never turned brass
+   (part 2b, 15 Oct 2026). */
 .about-link {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   color: var(--text-primary);
-  text-decoration-color: var(--border-interactive);
 }
 
 /* ── Phases ───────────────────────────────────────────────────────────── */
@@ -6033,7 +6057,10 @@ html.dark .figure-placeholder {
    browser resets to Canvas, so the chart drew nothing but its labels. They keep
    their roles as system colours: GrayText for the quiet bars, CanvasText for the
    highlighted bar and the average marker. Same pattern as the client work
-   thumbnail bar. */
+   thumbnail bar. The marker and the highlighted bar are both CanvasText, so
+   where the marker crosses that bar it vanished; a 1px Canvas gap either side
+   keeps it visible there (part 2c, 15 Oct 2026). It already paints above the
+   bar: the marker is positioned, the fill is not. */
 @media (forced-colors: active) {
   .node-chart__fill,
   .node-chart__track::after {
@@ -6043,6 +6070,9 @@ html.dark .figure-placeholder {
   .node-chart__fill--hi,
   .node-chart__track::after {
     background: CanvasText;
+  }
+  .node-chart__track::after {
+    box-shadow: 0 0 0 1px Canvas;
   }
 }
 
