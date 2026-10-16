@@ -1,4 +1,9 @@
-// Usage: node scripts/lint-color.mjs   (no build required — parses source)
+// Usage: node scripts/lint-color.mjs [css]   (no build required — parses source)
+//
+// The optional path replaces app/globals.css, so a mutated copy can be linted
+// to prove a check red (__tests__/color-lint.test.mjs). Check 7 always judges
+// the repo's own files, app/globals.css included, whatever path is given, and
+// check 1's JSX half scans the repo too; every other check reads the path.
 //
 // Colour gate for the v2 colour system (`docs/color-system-v2-locked.md` §7).
 // Parses app/globals.css and every .tsx/.mdx.
@@ -20,7 +25,7 @@ import { join } from 'node:path';
 import postcss from 'postcss';
 import { scanTree } from './color-literals.mjs';
 
-const CSS_FILE = 'app/globals.css';
+const CSS_FILE = process.argv[2] ?? 'app/globals.css';
 const JSX_ROOTS = ['app', 'components'];
 
 // ── The palette's shape (§4) ───────────────────────────────────────────────
@@ -83,6 +88,9 @@ const ALLOWLIST = {
     // necessity. Scoped to assertion lines, not to the file: a literal written
     // outside an expect() here is still caught.
     { file: '__tests__/color-literals.test.mjs', construct: /expect\(|toEqual|toContain/, reason: 'expected values in the check-7 fixture assertions' },
+    // Check 9's red cases rebuild one token from its parsed parts, so the
+    // replacement value is written as an oklch() template. Scoped to that call.
+    { file: '__tests__/color-lint.test.mjs', construct: /inDark\(CSS, decl\[0\], `/, reason: "check 9's red cases rebuild one token from its parsed parts" },
   ],
 };
 const inList = (l, p) => l.some(p);
@@ -113,6 +121,20 @@ function contrast(a, b) {
   const [hi, lo] = la > lb ? [la, lb] : [lb, la];
   return (hi + 0.05) / (lo + 0.05);
 }
+
+// Alpha compositing, for check 8's ring over glow. Browsers blend in
+// gamma-encoded sRGB, so the layers are encoded, mixed, and decoded back to
+// linear for the luminance.
+const encode = (v) => (v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055);
+const decode = (v) => (v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+/** Lay `top` (linear rgb) at `alpha` over `under` (linear rgb). */
+const over = (top, alpha, under) =>
+  top.map((t, i) => decode(alpha * encode(t) + (1 - alpha) * encode(under[i])));
+const contrastLinear = (a, b) => {
+  const [la, lb] = [relLuminance(a), relLuminance(b)];
+  const [hi, lo] = la > lb ? [la, lb] : [lb, la];
+  return (hi + 0.05) / (lo + 0.05);
+};
 
 // ── Parse ──────────────────────────────────────────────────────────────────
 const css = await readFile(CSS_FILE, 'utf8');
@@ -168,6 +190,54 @@ function resolveOklch(value, mode) {
   const body = oklchBody(value);
   if (body === null) return null;
   if (/\//.test(body)) return null; // has alpha; assertion 2 owns it
+  return resolveBody(body, mode);
+}
+
+/** [L, C, H, alpha] for a token written as one oklch() with an alpha, or null. */
+function resolveOklchAlpha(tok, mode) {
+  const value = byMode[mode].get(tok) ?? '';
+  const body = oklchBody(value);
+  if (body === null) return null;
+  const m = /^(.*)\/\s*([\d.]+)\s*$/s.exec(body);
+  if (!m) return null;
+  const lch = resolveBody(m[1], mode);
+  return lch ? [...lch, Number(m[2])] : null;
+}
+
+/** A token's own oklch(), following a bare var() alias (--card-hover in light
+ *  is var(--bg-surface-elevated)) up to four links. */
+function resolveToken(tok, mode) {
+  let v = byMode[mode].get(tok) ?? '';
+  for (let i = 0; i < 4; i++) {
+    const m = /^var\(\s*(--[\w-]+)\s*\)$/.exec(v.trim());
+    if (!m) break;
+    v = byMode[mode].get(m[1]) ?? '';
+  }
+  return resolveOklch(v, mode);
+}
+
+/** Every oklch() in a value, alpha or not, as [L, C, H] or null each. Check 9
+ *  needs the hue of the alpha tokens too (focus ring, glow, shadows), which
+ *  resolveOklch refuses on purpose. The alpha is the part after a top-level
+ *  slash, and it is dropped here, not read. */
+function resolveOklchAll(value, mode) {
+  const out = [];
+  let rest = value;
+  for (let body = oklchBody(rest); body !== null; body = oklchBody(rest)) {
+    let depth = 0;
+    let cut = body.length;
+    for (let j = 0; j < body.length; j++) {
+      if (body[j] === '(') depth++;
+      else if (body[j] === ')') depth--;
+      else if (body[j] === '/' && depth === 0) { cut = j; break; }
+    }
+    out.push(resolveBody(body.slice(0, cut), mode));
+    rest = rest.slice(rest.search(/oklch\(/i) + 6 + body.length + 1);
+  }
+  return out;
+}
+
+function resolveBody(body, mode) {
   const parts = [];
   let depth = 0;
   let cur = '';
@@ -208,6 +278,9 @@ function resolveOklch(value, mode) {
 
 // JSX/MDX scan
 const jsxHits = [];
+// bg-sunken in JSX, for check 11's exemption guard. The sandbox is skipped by
+// name: its routes 404 in production (app/sandbox/*), so nothing there ships.
+const jsxSunken = [];
 async function walk(dir) {
   let entries;
   try {
@@ -224,6 +297,8 @@ async function walk(dir) {
       src.split('\n').forEach((line, i) => {
         for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/g))
           jsxHits.push({ where: `${p}:${i + 1}`, detail: m[0] });
+        if (/\bbg-sunken\b|--bg-sunken\b/.test(line) && !/(^|\/)(app|components)\/sandbox\//.test(p))
+          jsxSunken.push({ where: `${p}:${i + 1}` });
       });
     }
   }
@@ -232,8 +307,8 @@ for (const r of JSX_ROOTS) await walk(r);
 
 // ── Checks ─────────────────────────────────────────────────────────────────
 const checks = [];
-const add = (id, title, failures) =>
-  checks.push({ id, title, failures, pass: failures.length === 0 });
+const add = (id, title, failures, note) =>
+  checks.push({ id, title, failures, note, pass: failures.length === 0 });
 
 // 1 — everything is oklch.
 {
@@ -367,19 +442,23 @@ const add = (id, title, failures) =>
 {
   const f = [];
   const results = await scanTree(process.cwd(), { skip: ['scripts/fixtures'] });
+  // The sweep reads the repo, so its token-definition lines must come from the
+  // repo's globals.css too. Reading CSS_FILE here made check 7 red on any path,
+  // even ./app/globals.css: the scan's file names never equalled it.
+  const REPO_CSS = 'app/globals.css';
 
   // Token DEFINITIONS in globals.css are the source of truth, not literals to
   // sweep; checks 1, 2 and 3 already govern them. Only literals at the point of
   // USE belong to check 7.
   const defLines = new Set();
-  postcss.parse(await readFile(CSS_FILE, 'utf8'), { from: CSS_FILE }).walkDecls((d) => {
+  postcss.parse(await readFile(REPO_CSS, 'utf8'), { from: REPO_CSS }).walkDecls((d) => {
     if (!d.prop.startsWith('--')) return;
     for (let i = d.source?.start?.line ?? 0; i <= (d.source?.end?.line ?? 0); i++) defLines.add(i);
   });
   // line → { selector, prop }, so a specimen can be allowlisted by what it IS
   // rather than by where it happens to sit.
   const declAt = new Map();
-  postcss.parse(await readFile(CSS_FILE, 'utf8'), { from: CSS_FILE }).walkDecls((d) => {
+  postcss.parse(await readFile(REPO_CSS, 'utf8'), { from: REPO_CSS }).walkDecls((d) => {
     const sel = d.parent?.selector?.replace(/\s+/g, ' ').trim() ?? '';
     for (let i = d.source?.start?.line ?? 0; i <= (d.source?.end?.line ?? 0); i++)
       declAt.set(i, { selector: sel, prop: d.prop });
@@ -387,7 +466,7 @@ const add = (id, title, failures) =>
 
   for (const r of results) {
     for (const h of r.accepted) {
-      if (r.file === CSS_FILE) {
+      if (r.file === REPO_CSS) {
         if (defLines.has(h.line)) continue; // owned by checks 1–3
         const d = declAt.get(h.line);
         // THE DEFERRAL RECORD. Each of the eight is excluded by its own entry,
@@ -417,21 +496,31 @@ const add = (id, title, failures) =>
   add(7, 'No colour literal outside the token definitions (R4, §7.7)', f);
 }
 
-// 8: every underline clears 3:1 against the page. The underline is a link's
-// non-colour cue (WCAG 1.4.1). The house rule, first written on .about-link, is
-// that it owes 3:1 like any other affordance; the base link and the active nav
-// link sat at 2.04 light / 2.35 dark until the closing review (A2b, 1 Oct 2026).
-// Every text-decoration-color that names a token is checked against
-// --bg-canvas, --bg-surface and --bg-surface-elevated, in both modes. The
-// elevated surface joined on 14 Oct 2026: the card's hover panel (T4, H-b)
-// is the first surface an underline sits on that is neither of the others.
-// Since 15 Oct 2026 that panel is --card-hover: the elevated surface in light,
-// and between --bg-surface and --bg-surface-elevated in dark, so the two
-// bracket it. --card-hover itself is not resolved here. A value that is not a single
-// token cannot be checked, so it fails rather than passing unseen.
+// 8: every underline, and the focus ring, clears 3:1 against the page. The
+// underline is a link's non-colour cue (WCAG 1.4.1). The house rule, first
+// written on .about-link, is that it owes 3:1 like any other affordance; the
+// base link and the active nav link sat at 2.04 light / 2.35 dark until the
+// closing review (A2b, 1 Oct 2026).
+//
+// Every text-decoration-color that names a token is checked against five
+// grounds in both modes: --bg-canvas, --bg-surface, --bg-surface-elevated,
+// --bg-sunken and --card-hover. Until 15 Oct 2026 it read only the first
+// three and bracketed --card-hover between surface and elevated; the walnut
+// retune breaks that bracket (dark --card-hover is 11 chroma units, elevated
+// 14), so the hover panel is read as itself now, and the sunken well with it.
+// A value that is not a single token cannot be checked, so it fails rather
+// than passing unseen.
+//
+// The focus ring is the other 3:1 affordance (WCAG 2.4.11). It is drawn at
+// 0.55 alpha over the 6px glow, which is itself alpha over the ground, so the
+// measurement composites both: the ring over (glow over ground) against the
+// glow over ground beside it. Proved red with the dark glow at alpha 0.40.
 {
   const f = [];
-  const UNDERLINE_FLOOR = 3.0;
+  const FLOOR = 3.0;
+  const GROUNDS = ['--bg-canvas', '--bg-surface', '--bg-surface-elevated', '--bg-sunken', '--card-hover'];
+  let minUnderline = Infinity;
+  let minRing = Infinity;
   for (const d of decls) {
     if (d.prop !== 'text-decoration-color') continue;
     const m = d.value.match(/^var\(\s*(--[\w-]+)\s*\)$/);
@@ -440,15 +529,16 @@ const add = (id, title, failures) =>
       continue;
     }
     for (const mode of ['light', 'dark']) {
-      for (const s of ['--bg-canvas', '--bg-surface', '--bg-surface-elevated']) {
-        const uv = resolveOklch(byMode[mode].get(m[1]) ?? '', mode);
-        const sv = resolveOklch(byMode[mode].get(s) ?? '', mode);
+      for (const s of GROUNDS) {
+        const uv = resolveToken(m[1], mode);
+        const sv = resolveToken(s, mode);
         if (!uv || !sv) {
           f.push({ where: `${CSS_FILE}:${d.line}`, detail: `${mode}: cannot resolve ${m[1]} on ${s}` });
           continue;
         }
         const r = contrast(uv, sv);
-        if (r < UNDERLINE_FLOOR)
+        minUnderline = Math.min(minUnderline, r);
+        if (r < FLOOR)
           f.push({
             where: `${CSS_FILE}:${d.line}`,
             detail: `${mode}: ${d.sel} underline ${m[1]} on ${s} = ${r.toFixed(2)}, floor 3.0`,
@@ -456,14 +546,148 @@ const add = (id, title, failures) =>
       }
     }
   }
-  add(8, 'Every underline clears 3:1 against the page (A2b, house rule)', f);
+  for (const mode of ['light', 'dark']) {
+    const ring = resolveOklchAlpha('--focus-ring', mode);
+    const glow = resolveOklchAlpha('--focus-glow', mode);
+    if (!ring || !glow) {
+      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --focus-ring or --focus-glow as one colour with an alpha` });
+      continue;
+    }
+    for (const s of GROUNDS) {
+      const sv = resolveToken(s, mode);
+      if (!sv) {
+        f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve ${s}` });
+        continue;
+      }
+      const ground = oklchToLinearRgb(...sv);
+      const glowOn = over(oklchToLinearRgb(...glow.slice(0, 3)), glow[3], ground);
+      const ringOn = over(oklchToLinearRgb(...ring.slice(0, 3)), ring[3], glowOn);
+      const r = contrastLinear(ringOn, glowOn);
+      minRing = Math.min(minRing, r);
+      if (r < FLOOR)
+        f.push({ where: CSS_FILE, detail: `${mode}: --focus-ring over --focus-glow on ${s} = ${r.toFixed(2)}, floor 3.0` });
+    }
+  }
+  add(8, 'Every underline and the focus ring clear 3:1 against the page (A2b, house rule)', f,
+    `lowest underline ${minUnderline.toFixed(2)}, lowest ring ${minRing.toFixed(2)}`);
+}
+
+// 9: every colour token sits in the warm hue band, 50 to 80 inclusive, accents
+// included. The band is the system's one hue axis (CLAUDE.md, Colour, hue axis): the
+// grounds, the text ramp and the interaction moments all live inside it, and
+// the cool exceptions are gone (the brand shelf, deleted 15 Oct 2026). Every
+// oklch() in every custom property under :root and .dark is read, alpha ones
+// too, so the focus glow and the shadows cannot drift out unseen. A value that
+// cannot be resolved fails rather than passing. Proved red in
+// __tests__/color-lint.test.mjs: the dark ground at 85, the dark glow at 81,
+// the dark sunken at 49.
+{
+  const f = [];
+  const HUE_MIN = 50;
+  const HUE_MAX = 80;
+  let n = 0;
+  for (const [key, rec] of perMode) {
+    const [sel, tok] = [key.slice(0, key.lastIndexOf('|')), rec.prop];
+    const mode = sel === '.dark' || sel.startsWith('html.dark') ? 'dark' : sel === ':root' || sel.startsWith('@theme') ? 'light' : null;
+    if (!mode || !/oklch\(/i.test(rec.value)) continue;
+    for (const v of resolveOklchAll(rec.value, mode)) {
+      if (!v) {
+        f.push({ where: `${CSS_FILE}:${rec.line}`, detail: `${mode}: cannot resolve the hue of ${tok}` });
+        continue;
+      }
+      n++;
+      const h = ((v[2] % 360) + 360) % 360;
+      if (h < HUE_MIN || h > HUE_MAX)
+        f.push({ where: `${CSS_FILE}:${rec.line}`, detail: `${mode}: ${tok} hue ${+h.toFixed(2)} is outside ${HUE_MIN} to ${HUE_MAX}` });
+    }
+  }
+  add(9, `Every colour token sits in the warm hue band, ${HUE_MIN} to ${HUE_MAX}, accents included (hue axis)`, f, `${n} values`);
+}
+
+// 10: the card step. The Selected work card deepens from --bg-surface to
+// --card-hover on hover (H-b, 14 Oct 2026), and the step is ruled at 1.10:1 in
+// both modes: the elevated surface in light, and a token of its own in dark
+// (3a ruling 1b, 15 Oct 2026), which took light's step after the elevated
+// surface stepped 1.13:1 in dark and read brown. A dark retune that moves
+// --bg-surface or --card-hover without the other changes the step silently;
+// this holds it within 0.01. --card-hover is followed through var() to the
+// surface it names. Proved red in __tests__/color-lint.test.mjs with the dark
+// --card-hover moved 0.012 lighter.
+{
+  const f = [];
+  const STEP = 1.1;
+  const TOLERANCE = 0.01;
+  const steps = [];
+  for (const mode of ['light', 'dark']) {
+    const hv = resolveToken('--card-hover', mode);
+    const sv = resolveToken('--bg-surface', mode);
+    if (!hv || !sv) {
+      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --card-hover or --bg-surface` });
+      continue;
+    }
+    const r = contrast(hv, sv);
+    steps.push(`${mode} ${r.toFixed(3)}`);
+    if (Math.abs(r - STEP) > TOLERANCE)
+      f.push({ where: CSS_FILE, detail: `${mode}: --card-hover on --bg-surface = ${r.toFixed(3)}, ruled ${STEP.toFixed(2)} within ${TOLERANCE}` });
+  }
+  add(10, 'The card step, --card-hover on --bg-surface, is 1.10:1 in both modes (H-b, 3a ruling 1b)', f, steps.join(', '));
+}
+
+// 11: the selection's distance floor (brass, ruling 12c, 15 Oct 2026). The
+// straw selection is a highlighter band, so what it owes the page is to be seen
+// as a band, not text contrast (--selection-text on it is a separate pair). The
+// floor is OKLab distance x100 from every ground text can sit on: 10 from the
+// light canvas, 7 from every other ground in both modes. The sunken well is
+// exempt by name: it sits under the hero image, and no selectable text lies on
+// it. Proved red in __tests__/color-lint.test.mjs with the light selection at
+// L 0.91.
+//
+// THE EXEMPTION IS GUARDED, not assumed. Any rule outside the hero frame (and
+// the bg-sunken utility's own definition) that paints --bg-sunken, and any
+// bg-sunken in shipped JSX, fails here, because text could then sit on the one
+// ground the floor does not measure (6.40 in light today). Proved red with a
+// .milestone painted sunken.
+{
+  const f = [];
+  const lab = ([L, C, H]) => [L, C * Math.cos((H * Math.PI) / 180), C * Math.sin((H * Math.PI) / 180)];
+  const FLOORS = {
+    light: { '--bg-canvas': 10, '--bg-surface': 7, '--bg-surface-elevated': 7, '--card-hover': 7 },
+    dark: { '--bg-canvas': 7, '--bg-surface': 7, '--bg-surface-elevated': 7, '--card-hover': 7 },
+  };
+  let low = Infinity;
+  for (const mode of ['light', 'dark']) {
+    const sel = resolveToken('--selection-bg', mode);
+    if (!sel) {
+      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --selection-bg` });
+      continue;
+    }
+    for (const [g, floor] of Object.entries(FLOORS[mode])) {
+      const gv = resolveToken(g, mode);
+      if (!gv) {
+        f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve ${g}` });
+        continue;
+      }
+      const [a, b] = [lab(sel), lab(gv)];
+      const dE = 100 * Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+      low = Math.min(low, dE);
+      if (dE < floor)
+        f.push({ where: CSS_FILE, detail: `${mode}: --selection-bg is dE ${dE.toFixed(2)} from ${g}, floor ${floor}` });
+    }
+  }
+  const SUNKEN_OK = new Set(['.hero-block__image-frame', '@utility bg-sunken']);
+  for (const d of decls)
+    if (!d.prop.startsWith('--') && /var\(\s*--bg-sunken\s*\)/.test(d.value) && !SUNKEN_OK.has(d.sel))
+      f.push({ where: `${CSS_FILE}:${d.line}`, detail: `${d.sel} paints --bg-sunken; the sunken exemption assumes no text sits on it` });
+  for (const h of jsxSunken)
+    f.push({ where: h.where, detail: 'bg-sunken in shipped JSX; the sunken exemption assumes no text sits on it' });
+  add(11, 'The selection stands apart from every text ground, by OKLab distance (ruling 12c)', f, `lowest dE ${low.toFixed(2)}`);
 }
 
 // ── Report ─────────────────────────────────────────────────────────────────
 console.log(`color-lint: ${CSS_FILE} (${allDefs.size} custom properties)\n`);
 for (const c of checks) {
   console.log(`${c.pass ? '✓' : '✗'} ${c.id}. ${c.title}`);
-  if (c.pass) console.log('    PASS');
+  if (c.pass) console.log(`    PASS${c.note ? `  (${c.note})` : ''}`);
   else {
     for (const x of c.failures.slice(0, 14)) console.log(`    ✗ ${x.where}\n        ${x.detail}`);
     if (c.failures.length > 14)

@@ -33,7 +33,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { join, relative, extname } from 'node:path';
 import { createRequire } from 'node:module';
-import { isArtworkPath, isFixturePath, isArtworkSnippet, artworkReason } from './artwork-allowlist.mjs';
+import { isArtworkPath, isFixturePath, artworkReason } from './artwork-allowlist.mjs';
 // Shared with lint:color rather than reimplemented. A `hover:` or an `<svg` in a
 // comment is documentation, not authored markup, and offsets are preserved so
 // reported line numbers stay true.
@@ -46,11 +46,10 @@ export const ALLOWLIST = {
   // check 1: literal durations that are not interaction durations
   //
   // body::before's 450ms used to sit here as "paper-grain fade is an entrance,
-  // not an interaction". That reason was FALSE: the grain's opacity is 0.55 in
-  // light and 0 in dark and nothing else touches it, so that transition fires
-  // only on a mode swap — the same mode transition as body's, at the same
-  // 450ms. I2 gave it --duration-theme and the entry went with it. An exception
-  // whose justification no longer holds is the stale-exception problem.
+  // not an interaction". That reason was false (the fade fired only on a mode
+  // swap), I2 gave it --duration-theme, and the grain itself was removed on
+  // 15 Oct 2026. An exception whose justification no longer holds is the
+  // stale-exception problem.
   durations: [
     { value: '0.01ms', selector: null, reason: 'prefers-reduced-motion kill switch — the point is that it is not a token' },
   ],
@@ -430,18 +429,16 @@ export async function run(root = process.cwd(), { includeFixtures = false } = {}
           continue;
         }
         if (isArtworkPath(file)) { ex.push({ where: `${file}:${line}`, detail: artworkReason(file), reason: 'artwork' }); continue; }
-        if (isArtworkSnippet(raw)) { ex.push({ where: `${file}:${line}`, detail: 'generated texture', reason: 'artwork' }); continue; }
         if (patternExempt(file, lineText)) { ex.push({ where: `${file}:${line}`, detail: 'pattern definition', reason: 'pattern-construct' }); continue; }
         f.push({ where: `${file}:${line}`, detail: `hand-authored <svg> — R3 says Lucide is the only icon source` });
       }
     }
-    // the paper-grain data URI lives in CSS, not tsx
+    // an <svg> data URI in CSS is a drawn payload too
     for (const s of sheets) {
       s.root.walkDecls((d) => {
         if (!/<svg|%3Csvg/i.test(d.value)) return;
         const line = d.source?.start?.line ?? 0;
-        if (isArtworkSnippet(d.value)) ex.push({ where: `${s.file}:${line}`, detail: 'paper grain — generated texture, not a drawn icon', reason: 'artwork' });
-        else f.push({ where: `${s.file}:${line}`, detail: `inline <svg> payload in CSS — ${d.prop}` });
+        f.push({ where: `${s.file}:${line}`, detail: `inline <svg> payload in CSS — ${d.prop}` });
       });
     }
     add(4, 'No hand-authored <svg> icon outside the artwork allowlist', f, ex);

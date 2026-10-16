@@ -20,7 +20,7 @@ the other place.
 |---|---|---|
 | Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 12 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
-| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 8 checks |
+| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 11 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
 
 This table is checked against the filesystem rather than maintained by hand, by
@@ -31,8 +31,8 @@ resolve a failure by deleting the row or the spec.
 
 Superseded or scoped, kept for their history and their non-value material, and
 **never** to be implemented from: `docs/typography-system.md` (superseded in
-full) and `docs/color-system.md` (palette superseded; still owns the `--qh-*`
-brand shelf, paper grain, the swap protocol and the role map).
+full) and `docs/color-system.md` (palette superseded; still owns the swap protocol and
+the role map).
 
 ### 2. Every value comes from a token
 
@@ -141,7 +141,9 @@ whenever two pieces of work look equally worthy.
   and URBN paragraph. Every line is one weight and one colour until the design
   system pass: the h1 is `text-lede`'s 340 in `--text-primary`, with no
   `<strong>` inside it. No availability line, no tenure number, no geographic
-  qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`.
+  qualifier. The ruled strings live in `docs/previews/hero/final-copy-v11.md`,
+  except the h1, re-ruled 15 Oct 2026: "I take on the parts of a product no one
+  can afford to get wrong." (`app/page.tsx`).
 - "Off the clock" (the personal-takes typographic wall, `components/takes/*`)
   is currently rendered on **no route**. It was pulled from `/about` when that
   page was rebuilt around the career arc; the components stay on disk, intact
@@ -341,7 +343,6 @@ real clamp, and every type-role utility must have a row.
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
 | `text-h3` | 22 → 28px (weight 500) | Subsections, callouts |
-| `text-qh-title` | 28 → 36px (weight `--qh-wght`, 550 default) | Unused since 12 Oct 2026 (the Earlier work shelf set `text-h3`, and its own 21px since 15 Oct 2026). Deleted in the design system pass |
 | `text-cover` | 21 → 24px (weight 400) | Selected work card question, sized to the card (`cqi`, T4, 14 Oct 2026). Card-only. |
 | `text-resolution-headline` | 26 → 30px (weight 600) | Resolution block headline |
 | `text-lead` | 22px | Intro paragraph, project tagline |
@@ -595,17 +596,25 @@ token value. `docs/color-system.md` no longer specifies values: it was scoped on
   width came from three band tokens, and that new FVS went in `ALLOWLIST.fvs`;
   Commissioner has neither axis, `25011cc` deleted both properties, and the
   allowlist key does not exist. See Typography above for what replaced all of it.
-- Image-edge hairline lives on base rules (both modes) via `--border-subtle`:
-  `box-shadow: inset 0 0 0 1px var(--border-subtle)`. If light reads faint, override
-  light-only to `--border-default` — never change the base token.
+- Image-edge hairline lives on base rules (both modes) via `--border-subtle`, written
+  as the token `--shot-edge` (`inset 0 0 0 1px var(--border-subtle)`). If light reads
+  faint, override light-only to `--border-default` — never change the base token.
+- **The 6b screenshot frame** (15 Oct 2026): in dark, every product screenshot sits in
+  a 6px walnut frame (`--shot-frame`) drawn outside its box by `--shot-ring`, so nothing
+  moves or resizes; light's ring is zero-width and transparent. Images write
+  `box-shadow: var(--shot-edge), var(--shot-ring)` as ONE list (a second box-shadow
+  would overwrite the hairline); the bento wrappers take `var(--shot-ring)` and keep the
+  hairline on their `::after`. Not on the paintings, the About portrait, `.cover-art`
+  (which zeroes the ring) or the client work dialog. A scroll container clips it, so
+  `.bento-band__track` pads out by `--shot-ring-width` and pulls back by the same.
 - The traced SVG beat figures (`.oku-figure` and its siblings, regenerated from .svg by
   `regen:*` scripts) were retired with the friction beats on 8 Oct 2026. Raster ink
   drawings take `.cover-art`: multiply in light, invert plus screen in dark. On the
   card covers the ground is white and the opaque, isolated card is the backdrop. On
-  the page there is no backdrop to blend with (`body > *` is its own stacking
-  context), so the section 1 drawings on Line of Sight and FDT-E (FramedPair's
-  `ink`) ship as ink on a transparent ground; a white-ground file there renders as
-  a white box in light and a black box in dark. In dark mode those two tiles show no
+  the page the section 1 drawings on Line of Sight and FDT-E (FramedPair's `ink`)
+  ship as ink on a transparent ground, which renders the same with or without a
+  backdrop to blend with (`body > *` made every child of body its own stacking
+  context until 15 Oct 2026). In dark mode those two tiles show no
   image: a block of `--text-secondary` masked by a simplified drawing (`darkMask`,
   faintest strokes dropped), toggled by `html.dark`.
 - `.case-study-prose p` is wrapped `:where(.case-study-prose) p` so component margins win.
@@ -648,14 +657,17 @@ The named gates are three different tools; two are external and do NOT read pros
   project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
 
 Full chain: **tsc -> eslint -> build (runs lint:type, lint:space, lint:color,
-next build, lint:works, lint:interaction, lint:prose and lint:motion, in that order,
-failing on the first) -> detector (visual, external)**.
+next build, lint:works, lint:interaction, lint:prose, lint:motion and
+`NODE_ENV=test vitest run`, in that order, failing on the first) -> detector (visual,
+external)**.
 
 - **works** = `npm run lint:works` (`scripts/lint-works.mjs`). Reads the rendered study
   pages after `next build`: every Template A study renders exactly one friction moment,
   each from a record in `app/data/works.json` with non-empty alt, caption, credit fields
   and licence, and every delivery file exists at its recorded size (and is in the git
-  index when `.git` is present).
+  index when `.git` is present). Check 6 is the evidence guard (15 Oct 2026): no product
+  screenshot is filtered, faded, blended or given a dark-only source in dark mode; the
+  theme may only frame it.
 
 - **motion** = `npm run lint:motion` (`scripts/lint-motion.mjs`). Maps every animation
   and transition in `globals.css` to the guard covering it, and names any selector with
@@ -664,10 +676,14 @@ failing on the first) -> detector (visual, external)**.
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
 `npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
-`lint:works`, `lint:interaction`, `lint:prose` and `lint:motion`. It does NOT run vitest, so no vitest assertion can be described as
-"green in the deploy". `__tests__/noindex.test.mjs` is the case that matters: it asserts
+`lint:works`, `lint:interaction`, `lint:prose`, `lint:motion` and `NODE_ENV=test vitest
+run`. The `NODE_ENV=test` is load-bearing: Vercel sets `NODE_ENV=production` for the whole
+build and vitest keeps an existing value, so without it React loads its production build,
+which has no `act()`, and the suite fails on Vercel while passing locally. Check a build
+change with `NODE_ENV=production npm run build`, as Vercel runs it. Since 15 Oct 2026 a
+red vitest assertion fails the deploy, but a green one still only proves the source. `__tests__/noindex.test.mjs` is the case that matters: it asserts
 `BLOCK_INDEXING`, `app/robots.ts` and the `next.config.mjs` header rule, all from source.
-A green suite here with a missing header on the live site is the failure that would
+A green suite with a missing header on the live site is the failure that would
 actually cost something, and only a request to the deployed URL can see it:
 
 ```
@@ -676,7 +692,8 @@ curl -s  https://uxpaul-portfolio.vercel.app/robots.txt
 ```
 
 Verify the behaviour where it ships. Recorded 21 Aug 2026, after a verification request
-asked for a vitest result "in the deploy", which cannot exist.
+asked for a vitest result "in the deploy"; vitest joined the build on 15 Oct 2026, which
+makes the suite a deploy gate but still not a check of deployed behaviour.
 
 **Section word counts have one instrument.** House rule 1 counts the section lede plus
 body prose. The count is taken with `innerText` off the rendered DOM, never from a parse
@@ -692,14 +709,14 @@ samples, and both ends moved in a single pass. Do not treat it as a gate. Dagr's
 5 sits at **109** house-basis after the 26 Sep trim, and BARD's Role at **29** is short on
 purpose. Both are deliberate. Do not trim one to reach a round number or pad the other.
 
-## Color system — locked (v2)
+## Color system — locked (v2.1)
 
-**Name:** Paper & Low Light
+**Name:** Paper & Walnut (dark was Low Light until 15 Oct 2026)
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
-`npm run lint:color` (8 checks), which gates `npm run build`.
-**Implementation and usage notes:** `docs/color-system.md` — the `--qh-*` brand
-shelf, paper grain, the theme-swap protocol, the role map. Its token tables are
+`npm run lint:color` (11 checks), which gates `npm run build`.
+**Implementation and usage notes:** `docs/color-system.md` — the theme-swap
+protocol and the role map. Its token tables are
 superseded; do not read values from it.
 **Implementation:** `app/globals.css`
 **Toggle:** `next-themes`, class-based (`.dark` on `<html>`)
@@ -712,10 +729,9 @@ Nothing chromatic sits on the page idle. But when the user *does* something — 
 
 **No exception is in use.** The "Client work" brand shelf was the one
 sanctioned exception until 12 Oct 2026, when it became "Earlier work" and
-dropped its brand border and fill. Its `--qh-*` tokens, `--qh-bbc-base` at hue
-250 included, are still defined in `globals.css` and consumed by nothing,
-scheduled for deletion in the design system pass
-(`docs/unspecified-surfaces.md`, Earlier work shelf). Do not use them. The
+dropped its brand border and fill. Its tokens, the one cool hue (250) among
+them, were consumed by nothing from then and deleted on 15 Oct 2026 in the
+design system pass. The
 PopUp annotation layer used to be a second exception; that system is retired.
 Nothing chromatic sits at rest anywhere on the site. (Corrected 1 Oct 2026, when
 this paragraph said "no exception" while the shelf shipped one. True again from
@@ -724,7 +740,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 ### Locked decisions
 
 - **Color space:** oklch only. No hex. No rgb. Anywhere downstream.
-- **Hue axis:** warm, 50–80 (amber/sepia). True neutral and cool grays are out of bounds.
+- **Hue axis:** warm, 50–80 (walnut to brass). True neutral and cool grays are out of bounds. Every colour token, accents and alpha tokens included, is held to the band by lint:color check 9.
 - **Naming:** role-based, semantic. `--text-primary`, `--bg-surface-elevated`. Never raw color names.
 - **Light and dark tuned independently.** Same hue axis, different chroma/contrast curves. Dark is not inverted light.
 - **PopUp tokens were deleted (1 Oct 2026).** The annotation layer they were
@@ -740,15 +756,14 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
 - ~~**PopUp**: six surface and text tokens~~ **DELETED** 1 Oct 2026 (system retired, consumed by nothing)
-- **Brand shelf (unused since 12 Oct 2026, deleted in the design system pass)**: `--qh-*-base`, `--qh-*-fill`, `--qh-border-width`; see `docs/color-system.md`
+- ~~**Brand shelf**: per-brand border and fill tokens~~ **DELETED** 15 Oct 2026 (consumed by nothing since 12 Oct 2026)
 
 ### Signature treatments
 
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
-- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. The resting underline owes 3:1 (lint:color check 8).
-- **Warm peach selection** — chroma 0.10 in light, 0.09 in dark. This is the most-felt moment; never tune to a whisper.
-- **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
-- **Paper grain** — SVG noise overlay on `body::before` in light mode only (opacity 0.55, mix-blend-multiply). Dark mode opacity 0.
+- **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. In light the brass hover (L 0.52) sits near the resting underline's lightness (0.50), so the thickness carries the hover and the colour shifts hue, not brightness (ruling 13a, 15 Oct 2026). The resting underline owes 3:1 on all five grounds, and the focus ring 3:1 over its glow (lint:color check 8).
+- **Straw selection** (brass, ruling 12c, 15 Oct 2026; warm peach before) — `oklch(0.89 0.09 80)` light, `oklch(0.42 0.07 72)` dark. Its floor is a distance, not a contrast: OKLab dE 10 or more from the light canvas and 7 or more from every other text ground in both modes (sunken exempt), held by lint:color check 11. This is the most-felt moment; never tune to a whisper.
+- **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026; lint:color check 10 holds both modes within 0.01 of 1.10), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 
 ### Utility classes (mirror typography pattern)
 
@@ -771,36 +786,37 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
   normal-size text that carries meaning takes `--text-muted` or stronger. (An earlier
   line here said "18px, or 14px bold"; that was too permissive and disagreed with this
   file's own contrast-floor bullet. Reconciled 8 Aug 2026: `docs/color-system.md`
-  now records the measured range, 3.04-3.86 in light and 3.46-4.41 in dark.)
+  now records the measured range, 3.04-3.86 in light and 3.46-4.41 in dark; 3.77-4.97
+  in dark since walnut, 15 Oct 2026.)
 - Focus uses `outline` + `box-shadow` (never `border-color`). Layout never shifts.
-- Link affordance is multi-channel — underline at rest, thicker + warmer on hover. Color alone is never the only signal.
+- Link affordance is multi-channel — underline at rest, thicker + brass on hover. Thickness carries it in light, where the brass sits near the resting underline's lightness. Color alone is never the only signal.
 - `color-scheme` set per mode so native controls theme correctly.
 
 ### Anti-patterns (extension of existing list)
 
-- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (No exception is in use, and the brand shelf's tokens await deletion. See Core principle.)
+- ❌ No accent color at rest. If something seems to need one, use weight, scale, position, or motion. (No exception is in use. See Core principle.)
 - ❌ No raw color tokens (e.g., `--color-blue-500`). All color is role-based.
-- ❌ No cool grays (hue ≥ 200) anywhere. (`--qh-bbc-base`, hue 250, is still defined but used by nothing since 12 Oct 2026.)
+- ❌ No cool grays (hue ≥ 200) anywhere.
 - ❌ No pure black or pure white.
 - ❌ Dark mode is not inverted light mode.
 - ❌ Don't reintroduce PopUp tokens. The annotation layer is retired and
   persimmon is not an accent.
 - ❌ Don't extend `--focus-glow`, `--selection-bg`, or `--link-hover` to resting roles.
-- ❌ No paper grain in dark mode.
+- ❌ No texture or noise overlay on the page, in either mode. The paper grain was removed on 15 Oct 2026 (design system pass, ruling 2d): at 4 of 255 levels it was invisible, and its blended layer was redrawn on every frame.
 - ❌ Don't add tokens inline. Extend `docs/color-system-v2-locked.md` first.
 
 ### Theming wiring
 
 ```tsx
-// app/layout.tsx
-import { ThemeProvider } from 'next-themes';
-
-<ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+// app/layout.tsx (settings shared with the head script, lib/theme.ts)
+<head><script dangerouslySetInnerHTML={{ __html: themeInitScript }} /></head>
+<ThemeProvider attribute={THEME_ATTRIBUTE} defaultTheme={THEME_DEFAULT}
+  storageKey={THEME_STORAGE_KEY} enableSystem>
   {children}
 </ThemeProvider>
 ```
 
-The `attribute="class"` is critical — the CSS expects `.dark` on `<html>`, not `data-theme="dark"`.
+`THEME_ATTRIBUTE` in `lib/theme.ts` must stay `'class'`, and it is critical: the CSS expects `.dark` on `<html>`, not `data-theme="dark"`. The head script reads the same constant, so the two cannot drift.
 ---
 
 ## Design intent & director frame (read before any design or content change)
@@ -815,7 +831,7 @@ Portfolio for Paul Kali, senior product designer, targeting **senior and staff I
 **Governing principle:** signal and craft with restraint. Do NOT add things for the sake of adding. Elegance is subtraction. References: Titan, Karolis Kosas, Madeline Snow.
 
 **Locked constraints:**
-- Monochrome-warm ("Paper & Low Light"); the site is **accent-free at rest**, with no exception in use (the brand shelf's colour was dropped on 12 Oct 2026). The PopUp system is retired and its tokens deleted; persimmon is not an accent.
+- Monochrome-warm ("Paper & Walnut"); the site is **accent-free at rest**, with no exception in use (the brand shelf's colour was dropped on 12 Oct 2026). The PopUp system is retired and its tokens deleted; persimmon is not an accent.
 - Commissioner, self-hosted; **never animate its axes** (gimmicky) — `wght` and `FLAR` are the two it has. Semantic oklch tokens only; no raw hex/rgb.
 - **em-dashes (U+2014) are hard-banned** by lint:prose; en-dashes (U+2013) in date ranges are fine.
 - **No company or client logos** anywhere (endorsement risk + palette break).

@@ -28,7 +28,7 @@
   border-radius: 6px;
 }
 
-/* check 4 — an inline <svg> payload in CSS that is NOT the paper grain (1) */
+/* check 4 — an inline <svg> payload in CSS (1) */
 .v-svg-in-css {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h4v4H0z'/%3E%3C/svg%3E");
 }

@@ -465,10 +465,18 @@
   --border-interactive:     oklch(0.500 calc(var(--chroma-unit) * 9) calc(var(--hue-ground) - 20));
 
   --focus-ring:             oklch(0.220 0.018 55 / 0.55);
-  --focus-glow:             oklch(0.700 0.140 60 / 0.22);
-  --selection-bg:           oklch(0.860 0.100 65);
+  /* Brass (ruling 10b, colour v2.1, 15 Oct 2026), replacing amber. The
+     hover, the glow and the selection share hue 78 to 80, the warm end of the
+     band. The light hover sits at L 0.52, close to the resting underline's
+     0.50 (ruling 13a), so on hover the thickness carries the change and the
+     colour turns brass rather than brightening. The selection is a straw
+     band (ruling 12c), held to a distance floor rather than a hue: OKLab dE
+     10 or more from the canvas, 7 or more from surface, elevated and card
+     hover (sunken exempt). */
+  --focus-glow:             oklch(0.720 0.120 80 / 0.24);
+  --selection-bg:           oklch(0.890 0.090 80);
   --selection-text:         oklch(0.180 0.020 50);
-  --link-hover:             oklch(0.580 0.150 55);
+  --link-hover:             oklch(0.520 0.105 78);
 
   --shadow-rest:            0 1px 2px oklch(0.30 0.04 50 / 0.05);
   --shadow-hover:           0 2px 4px oklch(0.30 0.04 50 / 0.06),
@@ -490,6 +498,19 @@
   --face-disc:              var(--bg-surface);
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
 
+  /* Screenshot edge and frame (ruling 6b, 15 Oct 2026). Every product
+     screenshot keeps the house hairline (--shot-edge, inset, both modes). In
+     dark it also gets a 6px walnut frame drawn OUTSIDE its box (--shot-ring),
+     so a bright capture sits in a mount rather than glaring on the page, and
+     nothing moves or resizes: an outer box-shadow takes no layout. Light has
+     no frame (ruling 4a); its ring is zero-width and transparent, so light
+     renders as before. One list, one token pair, because a second box-shadow
+     declaration would overwrite the hairline. Not on the paintings, the About
+     portrait, the ink cover art or the client work dialog (ruling 14a). */
+  --shot-edge:              inset 0 0 0 1px var(--border-subtle);
+  --shot-ring-width:        0rem;
+  --shot-ring:              0 0 0 var(--shot-ring-width) transparent;
+
   /* Selected work card hover panel (3a ruling 1b, 15 Oct 2026). A component
      token on --face-disc's precedent, outside the twelve palette roles. Light
      keeps H-b's step exactly: the elevated surface, 1.10:1 over --bg-surface.
@@ -497,25 +518,8 @@
   --card-hover:             var(--bg-surface-elevated);
 
 
-  /* Brand shelf tokens.
-     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-     Nothing reads them: the shelf became "Earlier work" and dropped its brand
-     border and fill. They were the per-brand 1.5px border (--base) and faint
-     fill (--fill), the site's one sanctioned resting colour, --qh-bbc-* at
-     hue 250 included (docs/color-system.md). Do not use them. */
-  --qh-lionsgate-base:      oklch(0.40 0.10 80);
-  --qh-red-cross-base:      oklch(0.39 0.13 25);
-  --qh-bbc-base:            oklch(0.30 0.10 250);
-  --qh-k-hovnanian-base:    oklch(0.39 0.07 60);
-  --qh-lionsgate-fill:      oklch(0.93 0.016 85);
-  --qh-red-cross-fill:      oklch(0.93 0.016 30);
-  --qh-bbc-fill:            oklch(0.93 0.012 250);
-  --qh-k-hovnanian-fill:    oklch(0.93 0.016 62);
-  --qh-border-width:        1.5px;
-
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
-     because heavy weight reads heavier on the espresso canvas. */
+     because heavy weight reads heavier on the walnut canvas. */
   --mark-weight:            700;
 
   /* Radius — interaction system v1 §4. Five steps, so radius scales with
@@ -541,55 +545,63 @@
 }
 
 /* ============================================================
-   COLOR — Dark (Low Light)
+   COLOR — Dark (Walnut, colour v2.1, 15 Oct 2026; Low Light until then)
    ============================================================ */
 
 .dark {
   /* Layer 1, per-mode. The bands SWAP: light text is 55 against grounds at
-     66-76; dark text is 68-78 against grounds at 55-60. Same names, inverted
+     66-76; dark text is 70-80 against grounds at 50-56. Same names, inverted
      settings — that is the point of one vocabulary. --chroma-unit is not
      redefined; warmth intensity is one knob for both modes. */
-  --hue-ground:   55;
-  --hue-surface:  60;
-  --hue-text:     74;
+  --hue-ground:   52;
+  --hue-surface:  56;
+  --hue-text:     76;
 
-  /* Ruling 3: the ground goes quiet so the raised surface can carry warmth.
-     Lightness is untouched from v1 — every change here is chroma and hue.
-     The canvas drops to 3 units and the sunken to 2, which is what pulls
-     channel bias down to 1.33x; the elevated surface holds 13, so chroma
-     now climbs 4.33x from canvas to card instead of 1.40x. */
-  --bg-canvas:              oklch(0.165 calc(var(--chroma-unit) * 3) var(--hue-ground));
-  --bg-surface:             oklch(0.205 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
-  --bg-surface-elevated:    oklch(0.255 calc(var(--chroma-unit) * 13) var(--hue-surface));
-  --bg-sunken:              oklch(0.130 calc(var(--chroma-unit) * 2) var(--hue-ground));
+  /* Walnut (ruling 9b, colour v2.1). The quiet ground (canvas 0.165 at 3
+     units) read as generic near-black; walnut lifts every ground 0.015 to
+     0.020 and gives the canvas 7 units at hue 52. Warmth still climbs with
+     elevation (R3): sunken 4, canvas 7, surface 11, elevated 14. Channel bias
+     at the canvas is 1.92x (8-bit 23, 16, 12), up from 1.33x; the locked doc
+     section 1 records why that was accepted. */
+  --bg-canvas:              oklch(0.180 calc(var(--chroma-unit) * 7) var(--hue-ground));
+  --bg-surface:             oklch(0.225 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+  --bg-surface-elevated:    oklch(0.275 calc(var(--chroma-unit) * 14) var(--hue-surface));
+  --bg-sunken:              oklch(0.150 calc(var(--chroma-unit) * 4) calc(var(--hue-ground) - 2));
 
-  --text-primary:           oklch(0.945 calc(var(--chroma-unit) * 6) calc(var(--hue-text) + 4));
-  --text-secondary:         oklch(0.825 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 2));
-  --text-muted:             oklch(0.705 calc(var(--chroma-unit) * 8) calc(var(--hue-text) - 2));
-  --text-subtle:            oklch(0.565 calc(var(--chroma-unit) * 9) calc(var(--hue-text) - 6));
+  --text-primary:           oklch(0.940 calc(var(--chroma-unit) * 7) calc(var(--hue-text) + 4));
+  --text-secondary:         oklch(0.830 calc(var(--chroma-unit) * 9) calc(var(--hue-text) + 2));
+  --text-muted:             oklch(0.720 calc(var(--chroma-unit) * 11) calc(var(--hue-text) - 2));
+  --text-subtle:            oklch(0.600 calc(var(--chroma-unit) * 12) calc(var(--hue-text) - 6));
 
-  /* The borders follow the grounds down, or they read as warm lines drawn on a
-     neutral page. Subtle tracks --bg-surface exactly, at 7 units and +2. */
-  --border-subtle:          oklch(0.245 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) + 2));
-  --border-default:         oklch(0.310 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 3));
-  --border-strong:          oklch(0.430 calc(var(--chroma-unit) * 13) var(--hue-ground));
+  /* The borders follow the grounds, or they read as warm lines drawn on a
+     different page. Subtle tracks --bg-surface's chroma and hue, 11 units
+     and +2, a step lighter. */
+  --border-subtle:          oklch(0.270 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
+  --border-default:         oklch(0.330 calc(var(--chroma-unit) * 12) calc(var(--hue-ground) + 3));
+  --border-strong:          oklch(0.440 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 2));
   /* THE BASIS CHANGED, WHICH IS WHY THE DIRECTION DID. This used to read "dark needs
      MORE of the text colour to read at the same weight", and at 26/32 that was true:
      the pair was matched by eye. It is now matched against a measured floor, and on
-     that basis dark needs LESS - 44 gives 3.32 where light's 46 gives 3.33, so both
-     modes carry the same headroom over the 3:1 graphics floor rather than the same
-     apparent weight. Still tuned per mode, like every other pair here; only the
-     instrument moved. */
+     that basis dark needs LESS - 44 gives 3.33 on the walnut canvas (3.32 on the
+     quiet one) where light's 46 gives 3.33, so both modes carry the same headroom
+     over the 3:1 graphics floor rather than the same apparent weight. Still tuned
+     per mode, like every other pair here; only the instrument moved.
+     CANVAS ONLY. The mix is taken against the canvas and the 3:1 is measured
+     there. On --bg-surface-elevated it is 2.64 (light 2.78), so the node chart's
+     bars must not move onto a card or a raised panel. */
   --fill-quiet:             color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas));
   /* Dark counterpart: lighter, because the canvas is the dark side here.
      Same job, same >=3:1 floor. */
   --border-interactive:     oklch(0.620 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) + 5));
 
   --focus-ring:             oklch(0.945 0.012 78 / 0.55);
-  --focus-glow:             oklch(0.720 0.150 60 / 0.30);
-  --selection-bg:           oklch(0.380 0.090 55);
+  /* Brass, dark (ruling 10b). Brighter than light's, since the canvas is
+     the dark side; the glow drops from 0.30 to 0.24 alpha with it, and the
+     ring over it still clears 3:1 (lint:color check 8). */
+  --focus-glow:             oklch(0.780 0.110 80 / 0.24);
+  --selection-bg:           oklch(0.420 0.070 72);
   --selection-text:         oklch(0.970 0.012 78);
-  --link-hover:             oklch(0.780 0.140 60);
+  --link-hover:             oklch(0.800 0.115 80);
 
   /* Warm near-black, not pure black, at the same alpha (closing review A3b,
      1 Oct 2026): CLAUDE.md asks for warm-toned shadows in both modes. */
@@ -604,36 +616,30 @@
   --scrim:                  color-mix(in oklch, var(--bg-sunken) 60%, transparent);
   /* Header identity mark, dark: one coin in both modes, so the disc is a
      dimmed cream, the text ink mixed 92% toward the canvas (about
-     oklch(0.883 0.012 76)). Its edge draws the circle at 13.5:1; the ring
+     oklch(0.879 0.014 78) on walnut). Its edge draws the circle at about
+     13.0:1 (13.5:1 on the quiet canvas); the ring
      (ink at 28%) all but vanishes on it, as in the approved preview. */
   --face-disc:              color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas));
+  /* The 6b frame, dark: a step above the surface, at the elevated surface's
+     chroma less one unit, so it reads as a walnut mount, not a border. */
+  --shot-frame:             oklch(0.255 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 3));
+  --shot-ring-width:        0.375rem;
+  --shot-ring:              0 0 0 var(--shot-ring-width) var(--shot-frame);
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
-  /* Card hover panel, dark (3a ruling 1b, 15 Oct 2026). The elevated surface
-     stepped 1.13:1 off --bg-surface and nearly doubled its chroma, so the
-     hovered card read brown. This takes light's 1.10:1 step at 10 chroma
-     units instead of 13, between --bg-surface and --bg-surface-elevated. */
-  --card-hover:             oklch(0.243 calc(var(--chroma-unit) * 10) var(--hue-surface));
-
-
-  /* Brand shelf tokens, dark.
-     UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-     docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-     Chroma matched light mode (closing review A8b, 1 Oct 2026). */
-  --qh-lionsgate-base:      oklch(0.62 0.10 80);
-  --qh-red-cross-base:      oklch(0.58 0.13 25);
-  --qh-bbc-base:            oklch(0.58 0.10 250);
-  --qh-k-hovnanian-base:    oklch(0.60 0.07 62);
-  --qh-lionsgate-fill:      oklch(0.22 0.018 85);
-  --qh-red-cross-fill:      oklch(0.22 0.018 30);
-  --qh-bbc-fill:            oklch(0.22 0.014 250);
-  --qh-k-hovnanian-fill:    oklch(0.22 0.016 62);
+  /* Card hover panel, dark (3a ruling 1b; walnut values, ruling 11b, both
+     15 Oct 2026). The elevated surface steps too far off --bg-surface and
+     carries more chroma, so a hovered card read brown. This takes light's
+     1.10:1 step at 11 chroma units, level with the surface, at hue 55
+     between the surface (54) and the elevated surface (56). lint:color
+     check 10 holds the step within 0.01. */
+  --card-hover:             oklch(0.260 calc(var(--chroma-unit) * 11) calc(var(--hue-surface) - 1));
 
   --mark-weight:            650;
 }
 
 /* ============================================================
-   BASE — typography defaults + color-scheme + body + paper
-   grain + selection + focus halo + link affordance + em/i map
+   BASE — typography defaults + color-scheme + body + selection
+   + focus halo + link affordance + em/i map
    ============================================================ */
 
 @layer base {
@@ -669,26 +675,9 @@
       color var(--duration-theme) var(--ease-out-soft);
   }
 
-  /* Paper grain overlay — light mode only. Fixed, non-interactive,
-     SVG noise via multiply blend. Drops to opacity 0 in dark mode. */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0.55;
-    mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.12  0 0 0 0 0.08  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    transition: opacity var(--duration-theme) var(--ease-out-soft);
-  }
-  html.dark body::before { opacity: 0; }
-
   /* The slack half of the sticky footer above. */
   body > main { flex: 1 0 auto; }
 
-  /* Lift content above the grain layer */
-  body > * { position: relative; z-index: 2; }
 
   /* The shipped face has no italics — map em/i to weight emphasis instead.
      (True of Bricolage before and of Commissioner now: the designer ships an
@@ -885,20 +874,6 @@
   align-items: flex-end;
 }
 
-/* Former "Client work" shelf title.
-   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-   The Earlier work rows set their titles at --type-21 on .shelf__title
-   (text-h3 until 15 Oct 2026); nothing applies this.
-   It carried the per-brand weight (--qh-wght, 500-650) of a §6 exception
-   surface (type v3 §6). Its scale row in CLAUDE.md goes with it. */
-@utility text-qh-title {
-  font-size: clamp(1.75rem, 1.5vw + 1.25rem, 2.25rem);
-  line-height: 1.1;
-  letter-spacing: -0.015em;
-  font-weight: var(--qh-wght, 550);
-}
-
 /* Resolutions numbered-block headline (uscg-bard "How you file/see/count"). Type only —
    margins stay on the authoring markup so this can't drift the block's spacing. Distinct
    from text-h3 (bigger, heavier). Standard properties only; the font-stretch
@@ -1044,14 +1019,13 @@
    Transparent at rest; a hairline border + canvas fill fade in
    once scrolled (data-scrolled). Appearance-only, 160ms — the
    reduced-motion block collapses the transition to instant.
-   Dark parity: a shadow on espresso is invisible, so dark uses a
+   Dark parity: a shadow on walnut is invisible, so dark uses a
    stronger border instead.
    ============================================================ */
 
 .site-header {
-  /* Own the positioning here (unlayered → reliably beats the
-     `body > *` paper-grain rule and doesn't depend on Tailwind utilities
-     being generated in dev). */
+  /* Own the positioning here (unlayered, so it doesn't depend on Tailwind
+     utilities being generated in dev). */
   position: sticky;
   top: 0;
   z-index: 50;
@@ -1596,55 +1570,6 @@
    is the link's (.quiet-link), so nothing here outranks it. */
 .shelf__row:active {
   transform: translateY(1px);
-}
-
-/* ============================================================
-   FORMER "CLIENT WORK" shelf (brand blocks and .quick-hit).
-   UNUSED since 12 Oct 2026: delete in the design system pass, in the order
-   docs/unspecified-surfaces.md gives (Earlier work shelf, item 4).
-   No element carries data-brand or .quick-hit since the shelf became
-   "Earlier work" (the EARLIER WORK shelf section above). Kept so that build
-   changed no token and no test input: __tests__/interaction-lint.test.mjs
-   still reads .quick-hit's radius. Delete the blocks, .quick-hit and
-   @utility text-qh-title together, before the tokens, or lint:color check 6
-   fails.
-   ============================================================ */
-[data-brand="lionsgate"] {
-  --base: var(--qh-lionsgate-base); --fill: var(--qh-lionsgate-fill);
-  --qh-wght: 600;  /* cinematic: compressed, bold, display */
-}
-[data-brand="red-cross"] {
-  --base: var(--qh-red-cross-base); --fill: var(--qh-red-cross-fill);
-  --qh-wght: 500;  /* classic/humane: open, light, readable cut */
-}
-[data-brand="bbc"] {
-  --base: var(--qh-bbc-base); --fill: var(--qh-bbc-fill);
-  --qh-wght: 650;  /* newspaper: narrowest, heaviest, display */
-}
-[data-brand="k-hovnanian"] {
-  --base: var(--qh-k-hovnanian-base); --fill: var(--qh-k-hovnanian-fill);
-  --qh-wght: 540;  /* architectural: full width, grounded */
-}
-
-.quick-hit {
-  border-radius: var(--radius-m);
-  border-width: var(--qh-border-width);
-  display: grid;
-  align-items: center;
-  column-gap: var(--spacing-s);
-  row-gap: var(--spacing-2xs);
-  grid-template-columns: 1fr auto;
-  grid-template-areas: 'brand industry' 'title title';
-}
-.quick-hit > .qh-brand    { grid-area: brand; }
-.quick-hit > .qh-title    { grid-area: title; }
-.quick-hit > .qh-industry { grid-area: industry; }
-@media (min-width: 768px) {
-  .quick-hit {
-    column-gap: var(--spacing-l);
-    grid-template-columns: 12rem 1fr 8rem;
-    grid-template-areas: 'brand title industry';
-  }
 }
 
 /* ============================================================
@@ -2996,10 +2921,10 @@ dialog.client-work::backdrop {
 /* PROBLEM legacy screenshots: same containment as the hero dashboard image so the
    two bright UI captures read as one system — shared radius token, and an inset
    hairline in BOTH modes (parity) so the panels keep a defined edge against cream
-   (Paper) and espresso (Low Light). Mode-aware via --border-subtle; no recolor. */
+   (Paper) and walnut. Mode-aware via --border-subtle; no recolor. */
 .cs-section--problem .framed-pair__cell .figure__image {
   border-radius: var(--radius-image);
-  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  box-shadow: var(--shot-edge), var(--shot-ring);
 }
 
 /* An ink drawing (FramedPair `ink`) floats on the page the way the card covers do.
@@ -3221,18 +3146,18 @@ html.dark .framed-pair__cell .framed-pair__ink-mask {
    card covers it composites against the card's opaque bg-surface (the card is
    `isolate`).
 
-   ON THE PAGE THERE IS NO BACKDROP TO BLEND WITH, which is why the section 1
-   drawings of Line of Sight and FDT-E (FramedPair's `ink`, 8 Oct 2026) are shipped
-   differently. `body > *` lifts content into its own stacking context above the
-   grain, so inside it the backdrop is transparent and multiply/screen change
-   nothing: measured, the drawing's ground rendered 255,255,255 in light and
-   0,0,0 in dark, a black box. Those two files are ink on TRANSPARENT instead
-   (alpha = 255 - luminance, ink black), which is pixel-identical to multiply over
-   any page and, after invert(1), to screen, and lets the canvas and the grain show
-   through. They still carry this class for the invert. */
+   ON THE PAGE the section 1 drawings of Line of Sight and FDT-E (FramedPair's
+   `ink`, 8 Oct 2026) are shipped differently. Until 15 Oct 2026 `body > *` made
+   every child of body its own stacking context, so there was no backdrop to
+   blend with and a white-ground drawing rendered as a white box in light and a
+   black box in dark. Those two files are ink on TRANSPARENT instead (alpha = 255
+   - luminance, ink black), which is pixel-identical to multiply over any page
+   and, after invert(1), to screen, with or without a stacking context. They
+   still carry this class for the invert. */
 .cover-art {
   display: block;
   mix-blend-mode: multiply;
+  --shot-ring: 0 0 0 0rem transparent; /* ink art floats; no 6b frame */
 }
 html.dark .cover-art {
   filter: invert(1);
@@ -3469,7 +3394,7 @@ html.dark .cover-art {
   width: 100%;
   height: auto;
   border-radius: var(--radius-s);
-  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  box-shadow: var(--shot-edge), var(--shot-ring);
 }
 
 /* AN IN-COLUMN FIGURE INSIDE A BREAKOUT SECTION HAS TO BE RE-CAPPED, and without
@@ -3995,6 +3920,7 @@ html.dark .cover-art {
   aspect-ratio: var(--bento-aspect, 3 / 4); /* slot aspect; reserves the box pre-paint (CLS) */
   overflow: hidden;
   border-radius: var(--radius-xs);
+  box-shadow: var(--shot-ring); /* 6b: outer, so its own overflow does not clip it; the hairline is the ::after */
 }
 
 /* Image-edge parity hairline as an OVERLAY above the next/image fill child — a
@@ -4009,7 +3935,7 @@ html.dark .cover-art {
   position: absolute;
   inset: 0;
   border-radius: var(--radius-xs);
-  box-shadow: inset 0 0 0 1px var(--border-subtle);
+  box-shadow: var(--shot-edge);
   pointer-events: none;
 }
 
@@ -4151,6 +4077,7 @@ html.dark .cover-art {
   aspect-ratio: var(--band-aspect, 4.9 / 1); /* reserves the box pre-paint (CLS) */
   overflow: hidden;
   border-radius: var(--radius-xs);
+  box-shadow: var(--shot-ring); /* 6b, as .bento-theme__media */
 }
 
 /* Band scroll track (opt-in via BentoBand's `scrollFloor`, e.g. the dense product form
@@ -4161,7 +4088,13 @@ html.dark .cover-art {
    exactly as the ribbon track is on desktop. */
 .bento-band__track {
   position: relative;
-  width: 100%;
+  /* Room for the 6b frame. A scroll container clips at its padding box, so
+     the 6px ring round the media would be cut on every side. The track grows
+     by the ring width each way and pads back in by the same amount, so the
+     media keeps its size and position exactly; in light the width is zero. */
+  width: auto;
+  margin: calc(var(--shot-ring-width) * -1);
+  padding: var(--shot-ring-width);
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -4202,7 +4135,7 @@ html.dark .cover-art {
 .bento-band__track:focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 3px;
-  box-shadow: var(--focus-glow);
+  box-shadow: 0 0 0 6px var(--focus-glow);
   border-radius: var(--radius-xs);
 }
 
@@ -4484,16 +4417,17 @@ html.dark .figure-placeholder {
      that overlaps this frame renders on time over nothing.
      --bg-sunken by the role map: "inset against bg-canvas". It is the only
      surface token darker than the canvas in BOTH modes (0.900 vs 0.978 light,
-     0.130 vs 0.165 dark), so it recedes either way and reads as a well waiting
+     0.150 vs 0.180 dark), so it recedes either way and reads as a well waiting
      to be filled rather than as a finished panel that then swaps — which is what
      --bg-surface, "default panel: cards, content modules, footer", would do.
      Invisible once the image lands: both heroes are fully opaque (no alpha, no
      tRNS) and object-fit: cover leaves no letterbox. */
   background-color: var(--bg-sunken);
   /* Hairline defines the screenshot's edge in BOTH modes (parity): the light panel
-     against cream (Paper) and against espresso (Low Light). Mode-aware via
-     --border-subtle; inset → no layout shift, follows the radius. */
-  box-shadow: inset 0 0 0 1px var(--border-subtle);
+     against cream (Paper) and against walnut. Mode-aware via
+     --border-subtle; inset → no layout shift, follows the radius. Plus the
+     6b frame, outside the box, in dark. */
+  box-shadow: var(--shot-edge), var(--shot-ring);
 }
 
 .hero-block__image-img {
@@ -4701,7 +4635,7 @@ html.dark .figure-placeholder {
 }
 
 /* A token step, not opacity. opacity:0.88 made the whole button translucent, so
-   the light-mode paper grain read through a solid fill. --text-secondary holds
+   the page read through a solid fill. --text-secondary holds
    the surface opaque: 10.4:1 light and 11.2:1 dark against --bg-canvas. */
 .about-btn:hover {
   background: var(--text-secondary);
@@ -6095,6 +6029,23 @@ html.dark .figure-placeholder {
   background: var(--text-primary);
 }
 
+/* Forced colours: the bars and the average marker are backgrounds, which the
+   browser resets to Canvas, so the chart drew nothing but its labels. They keep
+   their roles as system colours: GrayText for the quiet bars, CanvasText for the
+   highlighted bar and the average marker. Same pattern as the client work
+   thumbnail bar. */
+@media (forced-colors: active) {
+  .node-chart__fill,
+  .node-chart__track::after {
+    forced-color-adjust: none;
+    background: GrayText;
+  }
+  .node-chart__fill--hi,
+  .node-chart__track::after {
+    background: CanvasText;
+  }
+}
+
 /* 1.25rem, NOT 1.125rem, TO MATCH .tier-chart__value. The two charts sit side by
    side and their quiet values were 20px and 18px, which is a difference a reader
    reads as meaning and which means nothing. Both --hi/--end values are 1.75rem, so
@@ -6352,8 +6303,9 @@ html.dark .figure-placeholder {
   height: auto;
   border-radius: var(--radius-xs);
   /* The house hairline: inset so the line sits inside the box and cannot add a pixel
-     to the layout. Same mechanism as .bento-theme__media and .figure__image. */
-  box-shadow: inset 0 0 0 1px var(--border-subtle);
+     to the layout. Same mechanism as .bento-theme__media and .figure__image. Plus
+     the 6b frame, outside the box, in dark. */
+  box-shadow: var(--shot-edge), var(--shot-ring);
 }
 
 /* ── Delivery Promise (URBN): RoadmapList ─────────────────────────────────────

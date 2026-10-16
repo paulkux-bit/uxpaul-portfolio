@@ -79,6 +79,22 @@ const ALLOWLIST = {
       reason:
         'UNUSED since 13 Oct 2026, delete in the design system pass: the drawer mark renders on no route. S1: optical centring, not a spacing choice: (line-height − mark height) / 2 against the company name’s first line. Since I5 the mark is 1em of the same rung, so both terms are one font-size and this is text-h3’s clamp × 0.125, still the type system’s number, still not on the spacing scale. It reads as `em` arithmetic because it is; it is written in rem because check 2 bans em on block-level spacing and does not consult this list (finding #19).',
     },
+    // Not spacing: room for a frame. The 6b screenshot frame (colour v2.1,
+    // 15 Oct 2026) is a 6px outer ring, which a scroll container clips at its
+    // padding box. The track pads out by the ring width and pulls back by the
+    // same negative margin, so nothing moves; in light the width is 0rem. 6px
+    // is the ruled frame, off the 4px grid by design, and it follows the ring
+    // token rather than the spacing scale so the two cannot drift apart.
+    {
+      selector: '.bento-band__track',
+      prop: 'margin',
+      reason: 'ROOM FOR THE 6b FRAME: the negative of --shot-ring-width (6px dark, 0 light), cancelling the padding below so the media keeps its box. Not rhythm; it tracks the ring, not the scale.',
+    },
+    {
+      selector: '.bento-band__track',
+      prop: 'padding',
+      reason: 'ROOM FOR THE 6b FRAME: --shot-ring-width (6px dark, 0 light), so the scroll container does not clip the dark screenshot frame. Not rhythm; it tracks the ring, not the scale.',
+    },
   ], // literals that may stay: { selector, prop, value, reason }
   media: [
     // LAYOUT, not rhythm. Each of these does something no spacing token can
@@ -121,7 +137,6 @@ const ALLOWLIST = {
     // fluid pair later (S5 measures; §3.1 forbids inventing pairs), and until
     // one is measured they stay, declared, with a reason.
     { selector: '.shelf__row', prop: 'padding-block', reason: 'S3 density: the Earlier work row opens from 24 to 32 once it is one line at 768, with no measured pair yet' },
-    { selector: '.quick-hit', prop: 'column-gap', reason: 'UNUSED since 12 Oct 2026: .quick-hit is applied to nothing since the shelf became Earlier work. It loosened the old row from 16 to 32 at 768. Delete with the rule in the design system pass (docs/unspecified-surfaces.md, Earlier work shelf, item 4)' },
     { selector: '.take-card', prop: 'padding', reason: 'S3 density — tighter card inset below 767; unmounted surface, no measured pair' },
     { selector: '.case-study-meta', prop: 'column-gap', reason: 'S3 density — meta columns separate widely once they sit on one line at 640' },
     { selector: '.transformation', prop: 'gap', reason: 'S3 density — before/after tighten when they stack below 640' },

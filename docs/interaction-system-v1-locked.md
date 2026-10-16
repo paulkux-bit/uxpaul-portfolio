@@ -142,8 +142,8 @@ icon through `.icon` or not at all.
 
 ### 2.4 Out of scope
 
-Case-study illustrations (`components/fdte/*`, `components/oku/*`), the paper
-grain texture, and the `·` interpunct, which is a typographic separator with
+Case-study illustrations (`components/fdte/*`, `components/oku/*`) and the `·`
+interpunct, which is a typographic separator with
 its own `@supports` alt-text handling and is not an icon.
 
 ---
@@ -177,13 +177,14 @@ already using, so nothing renders differently.
 | 220ms | 1 | `a` — the link-hover underline, **unlisted originally** |
 | 240ms | 2 | `.about-row__mark`, `.about-row::details-content` |
 | 320ms | 1 | `@utility lift` → `--duration-card` (the card stopped carrying `lift` at H1b; the utility stays for the sandbox video card) |
-| 450ms | 2 | `body`, `body::before` → `--duration-theme` |
+| 450ms | 2 | `body`, `body::before` → `--duration-theme` (`body::before` was the paper grain, removed 15 Oct 2026; `body` is the one site now) |
 
 The paper-grain fade at 450ms was described here as "an entrance, not an
 interaction". **That was false.** The grain's opacity is 0.55 in light and 0 in
 dark and nothing else changes it, so the transition fires only on a mode swap —
 the same mode transition as `body`'s, at the same duration. It takes
-`--duration-theme` and its allowlist entry is deleted.
+`--duration-theme` and its allowlist entry is deleted. The grain itself was
+removed on 15 Oct 2026 (design system pass, ruling 2d).
 
 ---
 
@@ -557,7 +558,7 @@ migration is the wrong place to make that call.
 
 **Pinned specimen tones** are untouched and stay on that list.
 
-**`--qh-*`** brand tokens are unaffected and remain the open colour question.
+**`--qh-*`** brand tokens were unaffected here. They were deleted on 15 Oct 2026, consumed by nothing since 12 Oct.
 
 **Dark mode has no stated position on optical weight gain for icons.** Geometry
 is proven identical across modes on all five icon nodes — computed width, height

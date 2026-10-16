@@ -28,8 +28,11 @@ import { type Slot, SLOT_ASPECT, SLOT_COLS } from '@/lib/bento-slots';
  * only standard items for the preset and interleaves breakouts at their document
  * position.
  *
- * Images never swap with theme (no srcDark): a light-design or dark-design screen
- * stays as-is on either canvas. Server component, zero JS. `.bento-theme__*`
+ * Images never change with theme. A screenshot is evidence: a light-design or
+ * dark-design screen shows the product as it shipped, on either canvas. No dark
+ * source, and no dark-scoped filter, opacity or blend on it; dark mode may only
+ * frame it, outside its box (the 6b frame, --shot-ring). lint:works check 6
+ * holds this (15 Oct 2026). Server component, zero JS. `.bento-theme__*`
  * namespace (`.bento__*` belongs to the unrelated <BentoGrid>).
  */
 

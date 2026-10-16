@@ -3,9 +3,9 @@
 // Created for lint:interaction check 4 (no hand-authored <svg> icons), which is
 // the first check that actually needs it. The colour system draws the same line
 // in prose — its check 7 exempts "artwork" — but encodes no list, because it
-// never had to: the illustrations were regenerated to `currentColor` fills and
-// the paper grain is an feColorMatrix, so none of them contains a colour
-// literal and there was nothing for check 7 to exclude.
+// never had to: the illustrations were regenerated to `currentColor` fills, so
+// none of them contains a colour literal and there was nothing for check 7 to
+// exclude.
 //
 // It lives in its own module so that when a second linter needs the same line
 // drawn, it imports this rather than writing a second list. Two lists
@@ -50,14 +50,6 @@ export const ARTWORK_FILES = [
   },
 ];
 
-/** Individual non-icon SVG payloads, matched by a distinctive substring. */
-export const ARTWORK_SNIPPETS = [
-  {
-    snippet: 'feTurbulence',
-    reason: 'the paper-grain noise texture on body::before — a generated texture, not a drawn icon (spec §2.4)',
-  },
-];
-
 /** Fixture trees: test data for the linters themselves, never product code. */
 export const FIXTURE_DIRS = ['scripts/fixtures'];
 
@@ -74,5 +66,3 @@ export const artworkReason = (rel) =>
 export const isFixturePath = (rel) =>
   FIXTURE_DIRS.some((d) => rel === d || rel.startsWith(`${d}/`));
 
-export const isArtworkSnippet = (text) =>
-  ARTWORK_SNIPPETS.some((s) => text.includes(s.snippet));

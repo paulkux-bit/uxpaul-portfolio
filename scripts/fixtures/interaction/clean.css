@@ -61,12 +61,6 @@
   --duration-card: 300ms;
 }
 
-/* check 4 — the paper grain is a generated texture, not a drawn icon (§2.4).
-   Matched by feTurbulence through the shared artwork allowlist. */
-.c-paper-grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85'/%3E%3C/filter%3E%3C/svg%3E");
-}
-
 /* check 6 — a value from the §2.1 table */
 .c-icon-stroke {
   --icon-stroke: 1.70;

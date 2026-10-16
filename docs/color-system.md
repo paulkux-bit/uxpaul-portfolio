@@ -1,4 +1,4 @@
-# Color system — Paper & Low Light
+# Color system — Paper & Walnut
 
 > **`docs/color-system-v2-locked.md` owns the palette.** Every token value,
 > the two-layer architecture, the rules and every measured ratio live there and
@@ -13,8 +13,7 @@
 > already produced two wrong accessibility floors — the pt-for-px substitution
 > caught during the type migration, and `--text-subtle` at "~3.5–4:1" when the
 > real value was 2.78 and failing. But a bare pointer would delete live material
-> v2 does not cover: the `--qh-*` brand shelf, the paper grain, the theme-swap
-> protocol, the role map, and the non-text accessibility decisions. Those
+> v2 does not cover: the theme-swap protocol, the role map, and the non-text accessibility decisions. Those
 > sections are the reason this file survives.
 >
 > **The token tables below are superseded and were not updated.** Read §4 of the
@@ -30,7 +29,7 @@
 
 ## Concept
 
-Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks, and a whisper of grain. Dark mode is **low light** — warm espresso canvas, warm cream text, ambient and lampt rather than printed. Both modes share the same hue axis (50–80, warm amber/sepia) so the swap reads as one world under different lighting.
+Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **walnut** (low light until 15 Oct 2026) — a warm wood-dark canvas, warm cream text, ambient and lamplit rather than printed. Both modes share the same hue axis (50–80, walnut to brass; warm amber/sepia until 15 Oct 2026) so the swap reads as one world under different lighting.
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
@@ -42,7 +41,7 @@ The **PopUp annotation layer** once carried a chromatic identity at rest. It is 
 
 1. **No accent at rest.** A page sitting still should have no chromatic noise demanding attention. Brand color is not the differentiator; typography, scale, and craft are.
 2. **Interaction earns color.** Hover, focus, selection, and active states are *moments*, not roles. They get warm chromatic treatment because they're functional signals — not decoration.
-3. **Paper has character.** The canvas isn't white. It's cream with real chroma (0.018), layered surfaces with visible lightness steps, and a subtle SVG grain in light mode only.
+3. **Paper has character.** The canvas isn't white. It's cream with real chroma (0.018), layered surfaces with visible lightness steps, with no texture overlay (the light-mode grain was removed on 15 Oct 2026).
 4. **Same world, different lighting.** Light and dark share the hue axis but are tuned independently. Dark mode is not inverted light mode.
 5. **Chromatic restraint scales up at the moment of attention.** Selection is a real highlighter. Focus has a halo. Hover does two things at once. The system whispers until it needs to speak.
 
@@ -99,43 +98,13 @@ All values are oklch. Hue stays in the 50–80 warm band. Base palette chroma st
 
 Deleted from `globals.css` on 1 Oct 2026, consumed by nothing since the layer was retired. The six tokens and their values are in git history at `29ae8ab`.
 
-### Brand identity — the "Client work" shelf
+### Brand shelf (deleted)
 
-Each brief-work entry is a **calm bordered row** (Wise-register): a faint near-canvas brand **fill**
-(`--qh-*-fill`) + a 1.5px brand-color **border** (`--qh-*-base`) carrying the identity; typography
-does the work. This is **two sanctioned exceptions** to the system rules, per the
-per-case-study-color decision (attribution only, not a second interactive accent):
-
-1. **Chromatic color at rest** — the brand-color border + faint fill sit idle on this shelf.
-2. **`--qh-bbc-base` at hue 250** — a cool hue outside the warm 50–80 band, for BBC brand attribution.
-
-What keeps it disciplined: the **fill is faint** (near-canvas, calm — does not compete with Selected
-Work); **title + labels reuse `--text-primary` / `--text-secondary`** (theme-flipping; AAA on the
-fill — title 14–15:1, labels 9–10:1, both modes); the **border is tuned independently per mode**
-(dark-on-light fill in light, **brighter** bright-on-dark in dark — *not* inverted — so it carries
-identity at ≥3.7:1 in dark); **persimmon-clear** (off-hue and/or off-L from 0.68/0.16/45). No grain,
-no foil — the calm container is clean. `data-brand` aliases each pair onto `--base` / `--fill`.
-
-| Token | Light | Dark |
-|---|---|---|
-| `--qh-lionsgate-base` (border) | `oklch(0.40 0.10 80)` | `oklch(0.62 0.12 80)` |
-| `--qh-red-cross-base` | `oklch(0.39 0.13 25)` | `oklch(0.58 0.15 25)` |
-| `--qh-bbc-base` | `oklch(0.30 0.10 250)` | `oklch(0.58 0.12 250)` |
-| `--qh-k-hovnanian-base` | `oklch(0.39 0.07 60)` | `oklch(0.60 0.09 62)` |
-| `--qh-lionsgate-fill` | `oklch(0.93 0.016 85)` | `oklch(0.22 0.018 85)` |
-| `--qh-red-cross-fill` | `oklch(0.93 0.016 30)` | `oklch(0.22 0.018 30)` |
-| `--qh-bbc-fill` | `oklch(0.93 0.012 250)` | `oklch(0.22 0.014 250)` |
-| `--qh-k-hovnanian-fill` | `oklch(0.93 0.016 62)` | `oklch(0.22 0.016 62)` |
-
-Fills are deliberately **aged-stock muted** (chroma ≤0.018), not pastel — the border carries the
-brand, so the fill is near-parchment. The 1.5px brand border is the primary identity element, so it
-survives forced-colors mode (where the fill drops to system canvas) — the row still reads bounded.
-
-**Per-module title character.** Each `data-brand` also sets `--qh-wght`: Lionsgate 600 (cinematic),
-Red Cross 500 (humane), BBC 650 (newspaper), K. Hovnanian 540 (architectural). Weight and colour carry
-the four personalities. (Updated 1 Oct 2026: the per-brand width and optical-size values addressed axes
-Commissioner does not have and were deleted; see type system v3 §6.) The border width is
-`--qh-border-width` (1.5px).
+The "Client work" shelf's per-brand border and fill tokens, its `data-brand`
+blocks and its per-brand title weight were consumed by nothing from 12 Oct 2026,
+when the shelf became "Earlier work" and dropped its brand colour. They were
+deleted on 15 Oct 2026 in the design system pass. The values and the rationale
+are in git history at `a11e8b7`.
 
 ---
 
@@ -172,8 +141,8 @@ contrast only increases over the spec.
 
 - **`focus-ring`** — applied as `outline`, never `border`. Layered with `focus-glow` via `box-shadow` to form the halo.
 - **`focus-glow`** — warm outer halo around the focus ring. The two-layer treatment makes focus *present* without introducing a brand accent.
-- **`selection-bg` / `selection-text`** — warm peach highlighter band. This is the most-felt moment in the system; never tune it down to a whisper.
-- **`link-hover`** — warm-tinted underline on hover. Paired with a thickness change (1px → 2px) for a two-channel signal.
+- **`selection-bg` / `selection-text`** — a brass straw highlighter band (warm peach until 15 Oct 2026). This is the most-felt moment in the system; never tune it down to a whisper.
+- **`link-hover`** — brass underline on hover (amber until 15 Oct 2026). Paired with a thickness change (1px → 2px) for a two-channel signal; in light the thickness carries it.
 
 ### Shadows
 
@@ -213,16 +182,9 @@ The six PopUp utilities were deleted with their tokens on 1 Oct 2026.
 
 ---
 
-## Paper grain
+## Paper grain (removed 15 Oct 2026)
 
-Light mode includes a subtle SVG noise overlay on `<body>::before`, blended with `mix-blend-mode: multiply` at opacity 0.55. The grain is fixed-position so it doesn't scroll, pointer-events-none, and sits at `z-index: 1` (content above at `z-index: 2`).
-
-Dark mode transitions the overlay to opacity 0 — dark mode is ambient warm light, not paper. Do not add grain to dark mode.
-
-Knobs (set in `globals.css`):
-- Opacity 0.35 → almost subliminal
-- Opacity 0.55 → current, "you can feel it"
-- Opacity 0.75 → printerly
+Light mode carried an SVG noise overlay on `body::before` (multiply, opacity 0.55) until the design system pass. It was removed by ruling 2d: measured on the canvas it darkened the page by 2 of 255 levels with a spread of 4, so no reader could see it, and its fixed, blended layer was composited on every frame in both modes (the layer stayed active in dark at opacity 0). Record: `docs/colour-texture-review-cc.md`. Do not reintroduce a texture overlay.
 
 ---
 
@@ -231,7 +193,7 @@ Knobs (set in `globals.css`):
 - **Body text hits AAA** in both modes. `text-primary` on `bg-canvas` measures ~14–15:1.
 - **`text-muted` hits AA normal** (~5.5–6:1) at all body sizes.
 - **`text-subtle` is AA-large only** (**3.04–3.86:1**, measured in K3 across the four
-  light surfaces; 3.46–4.41 in dark). Never use below 24px or 18.66px bold. `lint:color`
+  light surfaces; 3.77–4.97 in dark, walnut, by lint arithmetic). Never use below 24px or 18.66px bold. `lint:color`
   check 4 enforces it. The earlier "~3.5–4:1" here was an estimate, and it was wrong at
   the bottom: the real floor-adjacent value was 2.78, a live WCAG failure that shipped
   until K3 moved the token to `L 0.590`.
@@ -240,9 +202,9 @@ Knobs (set in `globals.css`):
   authorised a 3:1 colour six pixels under the real floor. That is the error that once put
   `text-subtle` on the 16px friction markers.
 - **Focus uses `outline` + `box-shadow`**, never `border-color`. Layout never shifts on focus. The halo extends the ring's visual presence without expanding hit areas.
-- **Selection contrast verified** in both modes: `selection-text` on `selection-bg` hits AAA in light (~10:1) and ~7:1 in dark.
-- **Link affordance is multi-channel.** Underline at rest, thicker + warmer on hover. Color alone is never the only signal.
-- **`color-scheme`** is set per mode so native form controls and scrollbars adopt the right palette.
+- **Selection contrast verified** in both modes: `selection-text` on the brass straw `selection-bg` measures 13.48 in light and 7.86 in dark (15 Oct 2026, lint arithmetic). Its floor against the grounds is a distance, not a contrast; see the locked doc §9.
+- **Link affordance is multi-channel.** Underline at rest, thicker + brass on hover. Color alone is never the only signal.
+- **`color-scheme`** is set per mode so native form controls and scrollbars adopt the right palette, and the layout's `viewport` export emits `<meta name="color-scheme" content="light dark">` (15 Oct 2026) so the browser knows both are supported before the stylesheet loads. There is no `theme-color`: its media-query form follows the system setting, not the in-page toggle.
 - **`prefers-reduced-motion`** is respected globally — transitions reduce to near-instant.
 
 ---
@@ -266,11 +228,11 @@ When the user toggles, `next-themes` adds/removes `.dark` on `<html>`. All token
 
 ### Transition
 
-`body` has a 450ms transition on `background-color` and `color` for the soft fade. The paper-grain overlay (`body::before`) has its own opacity transition so it fades cleanly when toggling to dark. Other elements inherit values without transition — preventing dozens of staggered fades from feeling chaotic.
+`body` has a 450ms transition on `background-color` and `color` for the soft fade. Other elements inherit values without transition — preventing dozens of staggered fades from feeling chaotic.
 
 ### First paint
 
-`next-themes` injects an inline script that sets the class before paint, preventing flash-of-incorrect-theme. Keep `disableTransitionOnChange` off (default) so the user-initiated swap still gets the soft fade.
+An inline script at the top of `<head>` (`themeInitScript`, `lib/theme.ts`, 15 Oct 2026) sets the class before the body is parsed, preventing flash-of-incorrect-theme. `next-themes` renders its own copy as the first child of `<body>` and owns every change after first paint; both read the same settings from `lib/theme.ts`, and `__tests__/theme-script.test.mjs` runs the script in jsdom. Keep `disableTransitionOnChange` off (default) so the user-initiated swap still gets the soft fade.
 
 ### Edge cases
 
@@ -284,27 +246,27 @@ When the user toggles, `next-themes` adds/removes `.dark` on `<html>`. All token
 
 The decisions, in order of forking:
 
-1. **Build on Paper & Low Light** — Bricolage Grotesque was designed for editorial typesetting and lives most naturally in warm neutrals.
-2. **Warm-leaning hue axis** (50–80) — amber/sepia reads as studio, not corporate.
+1. **Build on Paper & Walnut** (Paper & Low Light when written) — Bricolage Grotesque was designed for editorial typesetting and lives most naturally in warm neutrals.
+2. **Warm-leaning hue axis** (50–80) — walnut to brass reads as studio, not corporate (amber/sepia until 15 Oct 2026).
 3. **No accent at rest** — chromatic restraint is the senior move. Forces typography, scale, and craft to do the work.
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
 5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Client work" shelf is the one resting exception now.)
 6. **(v2) Interaction earns color** — hover, focus, selection get warm chromatic treatment as *moments*, not roles. Defensible because nothing chromatic sits at rest.
-7. **(v2) Paper has real character** — visible chroma, layered surfaces, SVG grain. The canvas is cream stock, not generated white.
+7. **(v2) Paper has real character** — visible chroma, layered surfaces. The canvas is cream stock, not generated white.
 
 ---
 
 ## Anti-patterns (no-fly list)
 
-- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. **One sanctioned exception:** the `--qh-*` brand border + faint fill on the "Client work" shelf (persimmon-clear, attribution-only — see the Brand identity token section). This is not a license for further resting color.
+- ❌ **No accent color at rest.** Nothing in the base palette sits on the page chromatic and idle. If a future feature seems to need a resting accent, the answer is weight, scale, position, or motion. No exception is in use: the "Client work" shelf's brand border and fill, the one sanctioned exception, were deleted on 15 Oct 2026.
 - ❌ **No purple gradients.** Anywhere.
 - ❌ **No raw color tokens** (e.g., `--color-blue-500`). All tokens are role-based.
-- ❌ **No cool grays** (hue ≥ 200). The system is warm only. **One sanctioned exception:** `--qh-bbc-base` (hue 250) on the "Client work" shelf, for BBC brand attribution — see the Brand identity token section. Not a license for cool hues elsewhere.
+- ❌ **No cool grays** (hue ≥ 200). The system is warm only. The one exception, a hue 250 brand border on the "Client work" shelf, was deleted on 15 Oct 2026.
 - ❌ **No pure black or pure white.** Warmth lives in the neutrals.
 - ❌ **Dark mode is not inverted light mode.** Tune chroma and contrast independently.
 - ❌ **Don't reintroduce PopUp tokens.** The annotation layer is retired; its tokens were deleted on 1 Oct 2026.
 - ❌ **Don't extend interaction-state tokens (`--focus-glow`, `--selection-bg`, `--link-hover`) to resting roles.** They're moments, not paint.
-- ❌ **No paper grain in dark mode.** Dark mode is ambient light, not paper.
+- ❌ **No texture or noise overlay, in either mode.** The paper grain was removed on 15 Oct 2026.
 - ❌ **Don't add tokens inline.** Extend this doc first, then add to `globals.css`.
 
 ---

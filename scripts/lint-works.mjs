@@ -18,7 +18,17 @@
 // (a deploy checkout may not carry one) the disk half still runs, and an
 // untracked file is missing from that disk, so the deploy fails here instead of
 // shipping a broken figure. The skip is printed, never silent.
-import { existsSync, readFileSync, readdirSync } from 'node:fs';
+//
+// CHECK 6 IS THE EVIDENCE GUARD (15 Oct 2026). A product screenshot is evidence:
+// it shows the product as it shipped, on either canvas, so the theme may frame it
+// but never alter it. components/bento.tsx states the rule; this makes it
+// checkable. It fails on a dark-scoped filter, opacity or blend on a screenshot
+// class, and on a srcDark-style prop anywhere in components/ or app/. It does NOT
+// fail on box-shadow, so the 6b frame (--shot-ring) passes. Ink drawings
+// (.cover-art and the FramedPair ink masks) are art, not evidence, and invert by
+// design.
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import postcss from 'postcss';
 import { execFileSync } from 'node:child_process';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -37,6 +47,57 @@ const decode = (s) =>
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&amp;/g, '&');
+
+/** The screenshot classes check 6 guards: every wrapper or image that carries a
+ *  product capture. Paintings, the About portrait and ink art are not here. */
+export const EVIDENCE = [
+  '.bento-theme__img', '.bento-theme__media', '.bento-band__media', '.bento-ribbon__canvas',
+  '.figure__image', '.hero-block__image-frame', '.hero-block__image', '.hero-block__image-img', '.promise-walk__img',
+  '.client-work__media', '.client-work__track', '.client-work__slide',
+];
+// background-image is here because a dark-only background is a dark-only image
+// by another route, which the srcDark half of the check cannot see.
+const ALTERING = /^(-webkit-)?(filter|opacity|mix-blend-mode|backdrop-filter|background-image)$/;
+const ART = /\.cover-art|\.framed-pair__ink/;
+const DARK = /(^|[\s>+~(,])(html)?\.dark\b/;
+
+/** Check 6's two halves: dark-scoped altering rules on evidence, and dark sources. */
+function evidenceFailures(cssPath, srcRoots) {
+  const f = [];
+  if (!existsSync(cssPath)) return [`${cssPath}: no stylesheet to check`];
+  const root = postcss.parse(readFileSync(cssPath, 'utf8'), { from: cssPath });
+  root.walkRules((rule) => {
+    let darkMedia = false;
+    for (let p = rule.parent; p; p = p.parent)
+      if (p.type === 'atrule' && /prefers-color-scheme:\s*dark/.test(p.params)) darkMedia = true;
+    for (const sel of rule.selectors) {
+      if (!darkMedia && !DARK.test(sel)) continue;
+      if (ART.test(sel)) continue;
+      const hit = EVIDENCE.find((c) => new RegExp(`${c.replace(/[.]/g, '\\.')}(?![\\w-])`).test(sel));
+      if (!hit) continue;
+      rule.walkDecls((d) => {
+        if (ALTERING.test(d.prop))
+          f.push(`${cssPath}:${d.source?.start?.line ?? 0}: ${sel} sets ${d.prop} on evidence (${hit}) in dark only`);
+      });
+    }
+  });
+  const walk = (dir) => {
+    if (!existsSync(dir)) return;
+    for (const e of readdirSync(dir)) {
+      if (e === 'node_modules' || e.startsWith('.')) continue;
+      const p = join(dir, e);
+      if (statSync(p).isDirectory()) walk(p);
+      else if (/\.(tsx|ts|mdx|json)$/.test(e)) {
+        readFileSync(p, 'utf8').split('\n').forEach((line, i) => {
+          if (/\b(srcDark|darkSrc|src_dark|dark_src)\b\s*[=:?]|"(srcDark|darkSrc)"\s*:/.test(line))
+            f.push(`${p}:${i + 1}: a dark-only image source; evidence never swaps with theme`);
+        });
+      }
+    }
+  };
+  for (const r of srcRoots) walk(r);
+  return f;
+}
 
 /** Template A slugs, from the MDX frontmatter. */
 function templateASlugs(mdxDir) {
@@ -74,6 +135,8 @@ export async function run({
   htmlDir = join(root, '.next/server/app/case-studies'),
   publicDir = join(root, 'public'),
   tracked = trackedPaths(root),
+  cssPath = join(root, 'app/globals.css'),
+  srcRoots = [join(root, 'components'), join(root, 'app')],
 } = {}) {
   const { works } = JSON.parse(readFileSync(worksPath, 'utf8'));
   const checks = [];
@@ -161,6 +224,9 @@ export async function run({
     if (Math.abs(expectH - height) > 1) f5.push(`${w.slug}: ${width}x${height} is not the master's aspect (height ${expectH.toFixed(1)})`);
   }
   add(5, `Every work fits the ${BOX} x ${BOX} box at its natural aspect`, f5);
+
+  // 6. Evidence never changes with theme (see the header).
+  add(6, 'No screenshot is filtered, faded, blended or swapped in dark mode (evidence guard)', evidenceFailures(cssPath, srcRoots));
 
   return { checks };
 }

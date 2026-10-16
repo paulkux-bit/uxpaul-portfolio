@@ -133,16 +133,13 @@ describe('check 4 — hand-authored svg', () => {
   it('catches a hand-drawn icon in .tsx', () => {
     expect(failFiles(c())).toContain('violations.tsx');
   });
-  it('catches a non-grain svg payload in CSS', () => {
+  it('catches an svg payload in CSS', () => {
     expect(failFiles(c())).toContain('violations.css');
   });
   it('excludes case-study artwork via the SHARED allowlist, not a second list', () => {
     const art = c().excluded.filter((x) => x.where.startsWith('components/case-studies/urbn-delivery-promise/JourneyLine.tsx'));
     expect(art.length).toBeGreaterThan(0);
     expect(art.every((x) => x.reason === 'artwork')).toBe(true);
-  });
-  it('excludes the paper grain as artwork', () => {
-    expect(c().excluded.some((x) => x.where.startsWith('clean.css') && x.reason === 'artwork')).toBe(true);
   });
 });
 
@@ -390,8 +387,8 @@ describe('§3 motion mapping — the right token, not merely a token', () => {
     }
   });
 
-  it('body and body::before move at --duration-theme — one mode transition, one speed', () => {
-    for (const sel of ['body', 'body::before']) {
+  it('body moves at --duration-theme — one mode transition, one speed', () => {
+    for (const sel of ['body']) {
       const t = transitionsFor(sel);
       expect(t, `${sel} has no transition`).not.toHaveLength(0);
       for (const v of t) expect(v).toContain('--duration-theme');
@@ -635,7 +632,6 @@ describe('§4 radius mapping — the right step, not merely a token', () => {
     ['.mode-pair__cell', '--radius-s'],
     ['.hero-block__callout', '--radius-s'],
     ['.about-btn', '--radius-m'],        // the button
-    ['.quick-hit', '--radius-m'],
     ['.case-card', '--radius-l'],        // the card sits a step above the button
     ['.about-roles__step::before', '--radius-full'],
   ];
