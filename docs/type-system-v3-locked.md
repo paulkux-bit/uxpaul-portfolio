@@ -183,7 +183,7 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 | role | selector | size | weight | colour | line-height | tracking | max-width | wrap | voice |
 |---|---|---|---|---|---|---|---|---|---|
 | question | `.case-study-prose .cs-section--turn h2` | rung 2, `--type-standfirst` (21 to 24) | 400 | `--text-secondary` | 1.45 | 0 | 40ch | balance (inherited from the h2) | plain, `--flar: 0` |
-| answer | `.case-study-prose .turn-answer` | rung 5, `--type-case-study-hero` (40 to 72) | 340 | `--text-primary` | 1.00 | −0.025em | 18ch | balance | flared |
+| answer | `.case-study-prose .turn-answer` | rung 5, `--type-case-study-hero` (40 to 72) | 340 | `--text-primary` | 1.00 | `var(--track-display)` (−0.012em, ruling 3b) | 19ch (ruling T1a, 16 Oct 2026) | balance | flared |
 | key phrase | `.case-study-prose .turn-answer__key` | inherits | 600 (K1) | inherits | inherits | inherits | own line (`display: block`) | | flared (inherits) |
 
 - **Both are off the ladder.** They share a rung's clamp with that rung's own selector (answer with `.hero-block__title`, question with the standfirst), so a ladder entry would compute 1.00 against its twin. In `RUNGS` both carry `ladder: false`.

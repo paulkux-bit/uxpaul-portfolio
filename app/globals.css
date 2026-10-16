@@ -2844,14 +2844,20 @@ dialog.client-work::backdrop {
    the "one moment per case study" signature placement (§3.2; allowlisted in
    lint:type). Tracking is the display value, --track-display (ruling 3b,
    16 Oct 2026; it was the test page's -0.025em). S3b: 48 to the paragraph
-   after it. */
+   after it.
+
+   Measure 19ch, not 18 (ruling T1a, 16 Oct 2026). At --track-display, FDT-E's
+   key phrase "You make it show its work." was 7px wider than 18ch from 768 up,
+   so the line K1 puts on its own broke in two. Cowork measured 19ch: FDT-E
+   39px spare at 1440, 36 at 1024 and 17 at 768; no other turn's breaks
+   change, and 390 is unchanged. */
 .case-study-prose .turn-answer {
   font-size: var(--type-case-study-hero);
   line-height: 1;
   letter-spacing: var(--track-display);
   font-weight: 340;
   color: var(--text-primary);
-  max-width: 18ch;
+  max-width: 19ch;
   text-wrap: balance;
   margin: var(--spacing-s) 0 var(--spacing-xl);
 }
