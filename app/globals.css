@@ -6058,7 +6058,10 @@ html.dark .figure-placeholder {
    browser resets to Canvas, so the chart drew nothing but its labels. They keep
    their roles as system colours: GrayText for the quiet bars, CanvasText for the
    highlighted bar and the average marker. Same pattern as the client work
-   thumbnail bar. */
+   thumbnail bar. The marker and the highlighted bar are both CanvasText, so
+   where the marker crosses that bar it vanished; a 1px Canvas gap either side
+   keeps it visible there (part 2c, 15 Oct 2026). It already paints above the
+   bar: the marker is positioned, the fill is not. */
 @media (forced-colors: active) {
   .node-chart__fill,
   .node-chart__track::after {
@@ -6068,6 +6071,9 @@ html.dark .figure-placeholder {
   .node-chart__fill--hi,
   .node-chart__track::after {
     background: CanvasText;
+  }
+  .node-chart__track::after {
+    box-shadow: 0 0 0 1px Canvas;
   }
 }
 
