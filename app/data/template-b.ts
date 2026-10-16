@@ -130,9 +130,9 @@ export const templateB: readonly TemplateBPiece[] = [
     slug: 'k-hovnanian',
     wordmark: 'K. Hovnanian',
     industry: 'Real Estate',
-    title: 'Website Redesign',
+    title: 'New Home Search',
     byline: 'for K. Hovnanian',
-    name: 'Website Redesign for K. Hovnanian',
+    name: 'New Home Search for K. Hovnanian',
     statement:
       'We rebuilt the site for phones first, with tools marketing could update on their own.',
     paragraph:

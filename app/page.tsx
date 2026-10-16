@@ -23,7 +23,7 @@ export default function Home() {
           className="hero-beat text-lede text-primary max-w-[18ch] min-[1280px]:max-w-[30ch]"
           style={{ ['--beat' as string]: 0 }}
         >
-          I design the parts of products that people can&apos;t afford to get&nbsp;wrong.
+          I take on the parts of a product no one can afford to get&nbsp;wrong.
         </h1>
 
         <div className="space-y-m">
