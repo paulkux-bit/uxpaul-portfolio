@@ -4375,6 +4375,15 @@ html.dark .figure-placeholder {
   font-weight: var(--wght-credit);
 }
 
+/* The home proof paragraph: the reading measure, as in the studies (ruling 2b,
+   16 Oct 2026). It was max-w-[62ch], the same ch trap the type spec found in
+   the studies on 22 Aug: 1ch in Commissioner is 0.652em, so 62ch was 728px and
+   lines ran 92, 85 and 76 characters at 1440. At 32em (576px) they run 71, 68,
+   68 and 45. Below about 620px the column, not the token, sets the measure. */
+.hero-proof {
+  max-width: var(--measure-reading);
+}
+
 .hero-block__title {
   /* Rung 5. Endpoints unchanged at 40 and 72; the slope is retuned so its
      crossovers land on rung 4's, at 430 and 1180 (v3 §3.3). */

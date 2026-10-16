@@ -47,7 +47,7 @@ export default function Home() {
               two-word brand names are wrapped in whitespace-nowrap so neither
               breaks mid-name. */}
           <p
-            className="hero-beat text-body text-primary max-w-[62ch]"
+            className="hero-beat hero-proof text-body text-primary"
             style={{ ['--beat' as string]: 2 }}
           >
             For the U.S. Navy, I design intelligence tools for operators on systems with no
