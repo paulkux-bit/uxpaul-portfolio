@@ -373,9 +373,13 @@ Fails on:
     dE x100 of 10 from the light canvas, 7 from every other ground in both
     modes, the sunken well exempt by name (no selectable text sits on it).
     Added 15 Oct 2026 with the brass selection (ruling 12c); proved red with
-    the light selection at L 0.91. Its companion, the hover thicker than the
-    rest (the light brass hover sits near the resting underline's lightness),
-    is asserted from the rules in `__tests__/color-lint.test.mjs`.
+    the light selection at L 0.91. The exemption is guarded: any rule but the
+    hero frame that paints `--bg-sunken`, or any `bg-sunken` in shipped JSX
+    (the sandbox, which 404s in production, aside), fails the check; proved red
+    with a `.milestone` painted sunken. Its companion, the hover thicker than
+    the rest (the light brass hover sits near the resting underline's
+    lightness), is asserted in `__tests__/color-lint.test.mjs` for every rule
+    that turns an underline brass on hover, found from the CSS.
 
 **Prove every assertion in both directions before any value moves.** Four
 checks in the spacing migration passed for a reason other than the one

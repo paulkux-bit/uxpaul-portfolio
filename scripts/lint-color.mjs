@@ -278,6 +278,9 @@ function resolveBody(body, mode) {
 
 // JSX/MDX scan
 const jsxHits = [];
+// bg-sunken in JSX, for check 11's exemption guard. The sandbox is skipped by
+// name: its routes 404 in production (app/sandbox/*), so nothing there ships.
+const jsxSunken = [];
 async function walk(dir) {
   let entries;
   try {
@@ -294,6 +297,8 @@ async function walk(dir) {
       src.split('\n').forEach((line, i) => {
         for (const m of line.matchAll(/#[0-9a-fA-F]{3,8}\b|\brgba?\(|\bhsla?\(/g))
           jsxHits.push({ where: `${p}:${i + 1}`, detail: m[0] });
+        if (/\bbg-sunken\b|--bg-sunken\b/.test(line) && !/(^|\/)(app|components)\/sandbox\//.test(p))
+          jsxSunken.push({ where: `${p}:${i + 1}` });
       });
     }
   }
@@ -636,6 +641,12 @@ const add = (id, title, failures, note) =>
 // exempt by name: it sits under the hero image, and no selectable text lies on
 // it. Proved red in __tests__/color-lint.test.mjs with the light selection at
 // L 0.91.
+//
+// THE EXEMPTION IS GUARDED, not assumed. Any rule outside the hero frame (and
+// the bg-sunken utility's own definition) that paints --bg-sunken, and any
+// bg-sunken in shipped JSX, fails here, because text could then sit on the one
+// ground the floor does not measure (6.40 in light today). Proved red with a
+// .milestone painted sunken.
 {
   const f = [];
   const lab = ([L, C, H]) => [L, C * Math.cos((H * Math.PI) / 180), C * Math.sin((H * Math.PI) / 180)];
@@ -663,6 +674,12 @@ const add = (id, title, failures, note) =>
         f.push({ where: CSS_FILE, detail: `${mode}: --selection-bg is dE ${dE.toFixed(2)} from ${g}, floor ${floor}` });
     }
   }
+  const SUNKEN_OK = new Set(['.hero-block__image-frame', '@utility bg-sunken']);
+  for (const d of decls)
+    if (!d.prop.startsWith('--') && /var\(\s*--bg-sunken\s*\)/.test(d.value) && !SUNKEN_OK.has(d.sel))
+      f.push({ where: `${CSS_FILE}:${d.line}`, detail: `${d.sel} paints --bg-sunken; the sunken exemption assumes no text sits on it` });
+  for (const h of jsxSunken)
+    f.push({ where: h.where, detail: 'bg-sunken in shipped JSX; the sunken exemption assumes no text sits on it' });
   add(11, 'The selection stands apart from every text ground, by OKLab distance (ruling 12c)', f, `lowest dE ${low.toFixed(2)}`);
 }
 

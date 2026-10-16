@@ -9,6 +9,7 @@
 // its own would also be what an unresolvable file produces, which is the
 // wrong-reason pass the locked doc (section 7) warns about.
 import { describe, expect, it } from 'vitest';
+import postcss from 'postcss';
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -184,18 +185,38 @@ describe('lint:color check 11, the selection distance floor', () => {
 // thickness carries it (ruling 13a). That only holds while hover is thicker than
 // rest, so it is asserted from the rules themselves.
 describe('the link hover is thicker than its rest', () => {
-  const thickness = (selector) => {
-    const m = new RegExp(`(?:^|\\n)\\s*${selector.replace(/[.:]/g, (c) => `\\${c}`)}\\s*\\{([^}]*)\\}`).exec(CSS);
-    expect(m, `${selector} not found`).toBeTruthy();
-    const t = /text-decoration-thickness:\s*([\d.]+)px/.exec(m[1]);
-    expect(t, `${selector} sets no px thickness`).toBeTruthy();
-    return Number(t[1]);
-  };
-  it('base link: a:hover over a', () => {
-    expect(thickness('a:hover')).toBeGreaterThan(thickness('a'));
+  // Every rule that turns an underline brass on hover is found from the CSS,
+  // not listed by hand, so a third one cannot ship thinner than its rest. Its
+  // rest rule is the same selector with :hover removed.
+  const rules = new Map();
+  postcss.parse(CSS).walkRules((r) => {
+    const sel = r.selector.replace(/\s+/g, ' ').trim();
+    const decl = (prop) => r.nodes.find((n) => n.type === 'decl' && n.prop === prop)?.value;
+    rules.set(sel, { colour: decl('text-decoration-color'), thickness: decl('text-decoration-thickness') });
   });
-  it('the unruled band label', () => {
-    expect(thickness('.about-work-band--unruled:hover .about-work-band__label'))
-      .toBeGreaterThan(thickness('.about-work-band--unruled .about-work-band__label'));
+  const px = (v) => Number(/^([\d.]+)px$/.exec(v ?? '')?.[1]);
+  const hovers = [...rules].filter(([sel, r]) => sel.includes(':hover') && r.colour === 'var(--link-hover)');
+
+  it('finds the brass hover rules', () => {
+    expect(hovers.length).toBeGreaterThanOrEqual(2);
+  });
+  it('each is thicker than its rest', () => {
+    for (const [sel, r] of hovers) {
+      const rest = rules.get(sel.replace(/:hover/g, ''));
+      expect(rest, `${sel} has no rest rule`).toBeTruthy();
+      expect(px(r.thickness), `${sel} sets no px thickness`).toBeGreaterThan(0);
+      expect(px(r.thickness), `${sel} is not thicker than its rest`).toBeGreaterThan(px(rest.thickness));
+    }
+  });
+});
+
+describe('lint:color check 11, the sunken exemption is guarded', () => {
+  it('passes on the real palette', () => {
+    expect(lint(CSS, 11, 'sunken-real')).toMatch(/^✓ 11\./);
+  });
+  it('fails when a text surface is painted sunken', () => {
+    const block = lint(`${CSS}\n.milestone { background: var(--bg-sunken); }\n`, 11, 'sunken-milestone');
+    expect(block).toMatch(/^✗ 11\./);
+    expect(block).toMatch(/\.milestone paints --bg-sunken/);
   });
 });
