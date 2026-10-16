@@ -369,6 +369,13 @@ Fails on:
     other changes it silently. `--card-hover` is followed through a bare
     `var()`, since in light it names the elevated surface. Added 15 Oct 2026;
     proved red with the dark `--card-hover` 0.012 lighter.
+11. A `--selection-bg` closer than its distance floor to a text ground: OKLab
+    dE x100 of 10 from the light canvas, 7 from every other ground in both
+    modes, the sunken well exempt by name (no selectable text sits on it).
+    Added 15 Oct 2026 with the brass selection (ruling 12c); proved red with
+    the light selection at L 0.91. Its companion, the hover thicker than the
+    rest (the light brass hover sits near the resting underline's lightness),
+    is asserted from the rules in `__tests__/color-lint.test.mjs`.
 
 **Prove every assertion in both directions before any value moves.** Four
 checks in the spacing migration passed for a reason other than the one

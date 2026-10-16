@@ -628,6 +628,44 @@ const add = (id, title, failures, note) =>
   add(10, 'The card step, --card-hover on --bg-surface, is 1.10:1 in both modes (H-b, 3a ruling 1b)', f, steps.join(', '));
 }
 
+// 11: the selection's distance floor (brass, ruling 12c, 15 Oct 2026). The
+// straw selection is a highlighter band, so what it owes the page is to be seen
+// as a band, not text contrast (--selection-text on it is a separate pair). The
+// floor is OKLab distance x100 from every ground text can sit on: 10 from the
+// light canvas, 7 from every other ground in both modes. The sunken well is
+// exempt by name: it sits under the hero image, and no selectable text lies on
+// it. Proved red in __tests__/color-lint.test.mjs with the light selection at
+// L 0.91.
+{
+  const f = [];
+  const lab = ([L, C, H]) => [L, C * Math.cos((H * Math.PI) / 180), C * Math.sin((H * Math.PI) / 180)];
+  const FLOORS = {
+    light: { '--bg-canvas': 10, '--bg-surface': 7, '--bg-surface-elevated': 7, '--card-hover': 7 },
+    dark: { '--bg-canvas': 7, '--bg-surface': 7, '--bg-surface-elevated': 7, '--card-hover': 7 },
+  };
+  let low = Infinity;
+  for (const mode of ['light', 'dark']) {
+    const sel = resolveToken('--selection-bg', mode);
+    if (!sel) {
+      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --selection-bg` });
+      continue;
+    }
+    for (const [g, floor] of Object.entries(FLOORS[mode])) {
+      const gv = resolveToken(g, mode);
+      if (!gv) {
+        f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve ${g}` });
+        continue;
+      }
+      const [a, b] = [lab(sel), lab(gv)];
+      const dE = 100 * Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+      low = Math.min(low, dE);
+      if (dE < floor)
+        f.push({ where: CSS_FILE, detail: `${mode}: --selection-bg is dE ${dE.toFixed(2)} from ${g}, floor ${floor}` });
+    }
+  }
+  add(11, 'The selection stands apart from every text ground, by OKLab distance (ruling 12c)', f, `lowest dE ${low.toFixed(2)}`);
+}
+
 // ── Report ─────────────────────────────────────────────────────────────────
 console.log(`color-lint: ${CSS_FILE} (${allDefs.size} custom properties)\n`);
 for (const c of checks) {

@@ -158,3 +158,44 @@ describe('lint:color check 8, underlines and the focus ring', () => {
     expect(block).not.toMatch(/on --bg-(canvas|surface|surface-elevated|sunken) = /);
   });
 });
+
+describe('lint:color check 11, the selection distance floor', () => {
+  it('passes on the real palette and reports the lowest distance', () => {
+    const block = lint(CSS, 11, 'real-selection');
+    expect(block).toMatch(/^✓ 11\./);
+    expect(block).toMatch(/lowest dE \d+\.\d\d/);
+  });
+
+  it('fails with the light selection lifted to L 0.91, toward the elevated surface', () => {
+    const root = CSS.slice(0, CSS.indexOf('\n.dark {'));
+    const decl = /--selection-bg\s*:\s+oklch\(([\d.]+) /.exec(root);
+    expect(decl, 'light --selection-bg has no colour value of its own').toBeTruthy();
+    const at = CSS.indexOf(decl[0]);
+    const css = CSS.slice(0, at) + decl[0].replace(decl[1], '0.910') + CSS.slice(at + decl[0].length);
+    const block = lint(css, 11, 'selection-091');
+    expect(block).toMatch(/^✗ 11\./);
+    expect(block).toMatch(/light: --selection-bg is dE \d\.\d\d from --bg-surface-elevated, floor 7/);
+    expect(block).not.toMatch(/dark:/);
+  });
+});
+
+// The brass hover in light (L 0.52) sits near the resting underline's lightness
+// (--border-interactive, L 0.50), so colour alone barely moves on hover and the
+// thickness carries it (ruling 13a). That only holds while hover is thicker than
+// rest, so it is asserted from the rules themselves.
+describe('the link hover is thicker than its rest', () => {
+  const thickness = (selector) => {
+    const m = new RegExp(`(?:^|\\n)\\s*${selector.replace(/[.:]/g, (c) => `\\${c}`)}\\s*\\{([^}]*)\\}`).exec(CSS);
+    expect(m, `${selector} not found`).toBeTruthy();
+    const t = /text-decoration-thickness:\s*([\d.]+)px/.exec(m[1]);
+    expect(t, `${selector} sets no px thickness`).toBeTruthy();
+    return Number(t[1]);
+  };
+  it('base link: a:hover over a', () => {
+    expect(thickness('a:hover')).toBeGreaterThan(thickness('a'));
+  });
+  it('the unruled band label', () => {
+    expect(thickness('.about-work-band--unruled:hover .about-work-band__label'))
+      .toBeGreaterThan(thickness('.about-work-band--unruled .about-work-band__label'));
+  });
+});

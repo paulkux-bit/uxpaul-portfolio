@@ -20,7 +20,7 @@ the other place.
 |---|---|---|
 | Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 12 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
-| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 10 checks |
+| Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 11 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
 
 This table is checked against the filesystem rather than maintained by hand, by
@@ -708,7 +708,7 @@ purpose. Both are deliberate. Do not trim one to reach a round number or pad the
 **Name:** Paper & Walnut (dark was Low Light until 15 Oct 2026)
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
-`npm run lint:color` (10 checks), which gates `npm run build`.
+`npm run lint:color` (11 checks), which gates `npm run build`.
 **Implementation and usage notes:** `docs/color-system.md` — the theme-swap
 protocol and the role map. Its token tables are
 superseded; do not read values from it.
@@ -756,7 +756,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. In light the brass hover (L 0.52) sits near the resting underline's lightness (0.50), so the thickness carries the hover and the colour shifts hue, not brightness (ruling 13a, 15 Oct 2026). The resting underline owes 3:1 on all five grounds, and the focus ring 3:1 over its glow (lint:color check 8).
-- **Straw selection** (brass, ruling 12c, 15 Oct 2026; warm peach before) — `oklch(0.89 0.09 80)` light, `oklch(0.42 0.07 72)` dark. Its floor is a distance, not a contrast: OKLab dE 10 or more from the canvas and 7 or more from the surface, elevated and card hover (sunken exempt). This is the most-felt moment; never tune to a whisper.
+- **Straw selection** (brass, ruling 12c, 15 Oct 2026; warm peach before) — `oklch(0.89 0.09 80)` light, `oklch(0.42 0.07 72)` dark. Its floor is a distance, not a contrast: OKLab dE 10 or more from the light canvas and 7 or more from every other text ground in both modes (sunken exempt), held by lint:color check 11. This is the most-felt moment; never tune to a whisper.
 - **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026; lint:color check 10 holds both modes within 0.01 of 1.10), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 
 ### Utility classes (mirror typography pattern)
