@@ -2931,7 +2931,8 @@ dialog.client-work::backdrop {
   line-height: 0.98;
   letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.015, looser than rung 5 */
   color: var(--text-primary);
-  /* Rung 6, the arrival crescendo. Weight and nothing else now.
+  /* Rung 6, the arrival crescendo. Size and nothing else now: the weight is
+     body weight since ruling 8b (16 Oct 2026), so size alone carries it.
 
      RULING 5'S MECHANISM CHANGED TWICE IN ONE SESSION, and the second change
      deleted most of what the first one moved to. 0b took `wght` and `wdth` out
@@ -5316,10 +5317,13 @@ html.dark .figure-placeholder {
   /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
      The band itself sets no font-weight — the weight lives on the sibling's
      utility — so §2.3's "every container that sets font-weight" never fires
-     here. Declared explicitly instead. The arrow carries text-h3 in JSX to
-     get the label's font-size: in this base band it is a SIBLING of the type
-     and would otherwise inherit the band's. Under --unruled it sits inside
-     the label, where the utility agrees with what it would inherit. */
+     here. Declared explicitly instead. The arrow and the label both carry
+     text-h3 in JSX, but since ruling 6b (16 Oct 2026) their size comes from
+     the shared `.about-work-band__label, .about-work-band__arrow` rule below
+     (--type-standfirst), which wins over the utility. That rule names the
+     arrow because in this base band it is a SIBLING of the type and would
+     otherwise inherit the band's size. Under --unruled it sits inside the
+     label, where the rule agrees with what it would inherit. */
   --icon-stroke: 1.70;
   display: flex;
   align-items: center;

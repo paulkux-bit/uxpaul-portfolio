@@ -525,7 +525,7 @@ Do not implement from it.
 inside that plan.
 
 ### Swap protocol
-If Commissioner is ever replaced, four surfaces change. This list is longer than
+If Commissioner is ever replaced, five surfaces change. This list is longer than
 the two-step one it replaces, and the third entry is the one that bit us.
 
 1. **`app/fonts.ts`** — the `src` path, the `variable` name and the `weight`
@@ -541,7 +541,14 @@ the two-step one it replaces, and the third entry is the one that bit us.
    one check that can fail in production while passing CI. Check 8b stayed green
    the whole time, because it asserts a probe *exists*, not that the probe
    measures a live axis. Repoint it or it lies.
-4. **This section**, and the test that reads it.
+4. **The two "Commissioner Fallback" faces at the top of `app/globals.css`**:
+   their size-adjust and ascent and descent overrides are measured against
+   Commissioner and written by hand since ruling 9a (16 Oct 2026), so a new face
+   leaves them silently wrong with no build failure. Re-derive them from the new
+   face by the method in the comment above them. Do not delete them in favour
+   of next/font's generated fallback: that one has no bold face, which is the
+   defect 9a fixed.
+5. **This section**, and the test that reads it.
 
 The role utilities and component usage stay identical. No find-and-replace.
 

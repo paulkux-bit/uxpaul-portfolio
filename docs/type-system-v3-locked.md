@@ -110,9 +110,9 @@ There is no fourth value and no per-module choice. If you are picking a width by
 | Token | Value | Used by |
 |---|---|---|
 | `--wght-thin` | `340` | Signature only, ceiling ≥40px |
-| `--wght-body` | `400` | Body, standfirsts, captions |
+| `--wght-body` | `400` | Body, standfirsts, captions; on the five studies, the title, section headings and milestone date (ruling 8b, 16 Oct 2026) |
 | `--wght-credit` | `500` | Credit lines, quiet emphasis, h3 |
-| `--wght-display` | `600` | Headings, headlines, eyebrows, prose emphasis |
+| `--wght-display` | `600` | Headings outside the studies (About, the client work dialog), headlines, eyebrows, prose emphasis, the turn key phrase (ruling 8b, 16 Oct 2026) |
 | `--wght-loud` | `720` | Signature only, ceiling ≥40px |
 
 **The signature (ruling 3).** The 340/720 pair is reserved for exactly three placements: the home hero, the about page opener, and one moment per case study chosen by the author. It is illegal on any role whose **desktop ceiling** is under 40px, and illegal anywhere else without an entry in the lint allowlist. It exists because it is the one typographic idea on the site that reads in under a second, at any size, and survives the fallback font.
@@ -200,6 +200,8 @@ The table says rung 5 tracks at −0.025em. The shipped CSS had `.hero-block__se
 The two clauses are a **natural experiment** and that is why this reverses the usual direction. They are the two halves of one headline — same rung, same rendered size, same weight, adjacent on screen and co-visible in a single glance. The only variable is the tracking. Rendered side by side in Commissioner, **only the −0.025 half read as crowded**. Nothing else about the comparison could have produced that, which is a stronger warrant than a spec value carried over from a typeface with different sidebearings.
 
 So the value moves to **−0.020 for rung 5**, `--open` was corrected to match `--anxious`, and the record says `--anxious` was never a drift.
+
+**Retired 16 Oct 2026 by ruling 3b (§11).** Every live display role now tracks at `--track-display`, so the inversion described next no longer exists; see the §3.4 amendment above. The paragraph is kept as the record.
 
 **The convention inversion persists and is not fixed here.** Rung 6 tracks at −0.015 and rung 5 at −0.020, so the *larger* type is the *looser* — the opposite of the usual rule that tracking tightens as size grows. Rung 6's value was set on eye alone and holds on eye. Naming it rather than quietly correcting one of them: both were judged against rendered type and neither is wrong on its own terms. The inconsistency is between them, and resolving it needs a bench, not an edit.
 
