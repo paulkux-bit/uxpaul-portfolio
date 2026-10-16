@@ -657,8 +657,9 @@ The named gates are three different tools; two are external and do NOT read pros
   project banned words ("craft", "seamless") in `BANNED_WORDS`. Extend that list, not the code.
 
 Full chain: **tsc -> eslint -> build (runs lint:type, lint:space, lint:color,
-next build, lint:works, lint:interaction, lint:prose, lint:motion and vitest run, in that
-order, failing on the first) -> detector (visual, external)**.
+next build, lint:works, lint:interaction, lint:prose, lint:motion and
+`NODE_ENV=test vitest run`, in that order, failing on the first) -> detector (visual,
+external)**.
 
 - **works** = `npm run lint:works` (`scripts/lint-works.mjs`). Reads the rendered study
   pages after `next build`: every Template A study renders exactly one friction moment,
@@ -675,9 +676,12 @@ order, failing on the first) -> detector (visual, external)**.
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
 `npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
-`lint:works`, `lint:interaction`, `lint:prose`, `lint:motion` and `vitest run`. Since
-15 Oct 2026 a red vitest assertion fails the deploy, but a green one still only proves the
-source. `__tests__/noindex.test.mjs` is the case that matters: it asserts
+`lint:works`, `lint:interaction`, `lint:prose`, `lint:motion` and `NODE_ENV=test vitest
+run`. The `NODE_ENV=test` is load-bearing: Vercel sets `NODE_ENV=production` for the whole
+build and vitest keeps an existing value, so without it React loads its production build,
+which has no `act()`, and the suite fails on Vercel while passing locally. Check a build
+change with `NODE_ENV=production npm run build`, as Vercel runs it. Since 15 Oct 2026 a
+red vitest assertion fails the deploy, but a green one still only proves the source. `__tests__/noindex.test.mjs` is the case that matters: it asserts
 `BLOCK_INDEXING`, `app/robots.ts` and the `next.config.mjs` header rule, all from source.
 A green suite with a missing header on the live site is the failure that would
 actually cost something, and only a request to the deployed URL can see it:
