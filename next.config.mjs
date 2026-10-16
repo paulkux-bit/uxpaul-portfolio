@@ -1,4 +1,5 @@
 import createMDX from '@next/mdx';
+import { join } from 'node:path';
 import { BLOCK_INDEXING } from './seo.config.mjs';
 
 /** @type {import('next').NextConfig} */
@@ -41,6 +42,12 @@ const withMDX = createMDX({
       'remark-frontmatter',
       ['remark-mdx-frontmatter', { name: 'frontmatter' }],
     ],
+    // Ruling 5b (16 Oct 2026): a short word that opens a sentence is bound to
+    // the next word, so no line ends on it. A local file, by path, for the same
+    // serialisation reason as above, as an absolute path because the loader
+    // resolves a relative one against itself, not the project. From cwd, not
+    // import.meta.url, which is not a file: URL when vitest imports this file.
+    rehypePlugins: [join(process.cwd(), 'lib', 'rehype-bind-openers.mjs')],
   },
 });
 

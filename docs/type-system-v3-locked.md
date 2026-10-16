@@ -110,9 +110,9 @@ There is no fourth value and no per-module choice. If you are picking a width by
 | Token | Value | Used by |
 |---|---|---|
 | `--wght-thin` | `340` | Signature only, ceiling ≥40px |
-| `--wght-body` | `400` | Body, standfirsts, captions |
+| `--wght-body` | `400` | Body, standfirsts, captions; on the five studies, the title, section headings and milestone date (ruling 8b, 16 Oct 2026) |
 | `--wght-credit` | `500` | Credit lines, quiet emphasis, h3 |
-| `--wght-display` | `600` | Headings, headlines, eyebrows, prose emphasis |
+| `--wght-display` | `600` | Headings outside the studies (About, the client work dialog), headlines, eyebrows, prose emphasis, the turn key phrase (ruling 8b, 16 Oct 2026) |
 | `--wght-loud` | `720` | Signature only, ceiling ≥40px |
 
 **The signature (ruling 3).** The 340/720 pair is reserved for exactly three placements: the home hero, the about page opener, and one moment per case study chosen by the author. It is illegal on any role whose **desktop ceiling** is under 40px, and illegal anywhere else without an entry in the lint allowlist. It exists because it is the one typographic idea on the site that reads in under a second, at any size, and survives the fallback font.
@@ -126,6 +126,8 @@ There is no fourth value and no per-module choice. If you are picking a width by
 **Updated 5 Oct 2026: the case-study moment is spent, by the turn's answer (T6).** Weight 340 at rung 5, one per study, allowlisted as `.case-study-prose .turn-answer`. Its heavy half is 600 rather than 720 (ruling K1), so it is a light-against-heavy contrast in the signature's spirit without being a second 340/720 pair. The about opener is the one placement left.
 
 **Updated 13 Oct 2026: the home hero spends only the light half, until the design system pass.** Paul ruled the home h1 one weight and one colour (structure 1a amended): the whole sentence rides `text-lede`'s 340 in `--text-primary`, with no emphasis inside it. The 720 half is unspent, so the inventory above is history: its three `font-[720]` spans moved to a `.text-lede strong` rule on 1 Oct 2026, and that rule and its allowlist entry were removed on 13 Oct. The placement stays the home hero's, allowlisted as `.text-lede`; whether its loud half returns is the design system pass's call.
+
+**Updated 16 Oct 2026, ruled (§11): the home hero stays one weight (1a), and the signature is the turns'.** The Plot Panel, CC's reviewers and the Falsifier all rejected a heavy half on home: split mid-clause, the bold half answers no question and reads as a landing-page device. The home placement keeps `.text-lede` at 340; the About placement is unspent. On the studies, ruling 8b moves the title, section headings and milestone date to 400, so the turn's key phrase is the only 600 display line in a study, and the light-against-heavy contrast reads there because heavy is rare. 720 remains unused on every route.
 
 ### 3.3 The ladder
 
@@ -163,6 +165,8 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 
 `balance` for anything under four lines that reads as a unit. `pretty` for multi-line body. Never both.
 
+**AMENDED 16 Oct 2026 (§11, ruling 3b): the letter-spacing column above is history for every live display role.** Rungs 4, 5 and 6, the turn answer, `text-lede`, `text-h1` and `text-h2` all track at `--track-display`, -0.012em, one token, which retires the rung 6 / rung 5 inversion recorded below. Reading rungs are unchanged.
+
 **AMENDED 28 Sep 2026: `pretty` now reaches all case-study body text (ruling 3a).** It had reached only problem and frictions sections. It now applies through `:where(.case-study-prose) p`, which took one-word last lines across the five studies from 15 to 0 at 390, 768 and 1440 with no line added or lost.
 
 **AMENDED 28 Sep 2026: rung 1 line-height is 1.70 for case-study prose (ruling 4b).** `.case-study-prose` had always shipped 1.70 while this table said 1.65. The spec yields, because every copy ruling was judged at 1.70. The `text-body` utility on home and about stays 1.65.
@@ -179,7 +183,7 @@ Before 28 Sep 2026: measured worst adjacent ratio across 320–2560 with the cor
 | role | selector | size | weight | colour | line-height | tracking | max-width | wrap | voice |
 |---|---|---|---|---|---|---|---|---|---|
 | question | `.case-study-prose .cs-section--turn h2` | rung 2, `--type-standfirst` (21 to 24) | 400 | `--text-secondary` | 1.45 | 0 | 40ch | balance (inherited from the h2) | plain, `--flar: 0` |
-| answer | `.case-study-prose .turn-answer` | rung 5, `--type-case-study-hero` (40 to 72) | 340 | `--text-primary` | 1.00 | −0.025em | 18ch | balance | flared |
+| answer | `.case-study-prose .turn-answer` | rung 5, `--type-case-study-hero` (40 to 72) | 340 | `--text-primary` | 1.00 | `var(--track-display)` (−0.012em, ruling 3b) | 19ch (ruling T1a, 16 Oct 2026) | balance | flared |
 | key phrase | `.case-study-prose .turn-answer__key` | inherits | 600 (K1) | inherits | inherits | inherits | own line (`display: block`) | | flared (inherits) |
 
 - **Both are off the ladder.** They share a rung's clamp with that rung's own selector (answer with `.hero-block__title`, question with the standfirst), so a ladder entry would compute 1.00 against its twin. In `RUNGS` both carry `ladder: false`.
@@ -196,6 +200,8 @@ The table says rung 5 tracks at −0.025em. The shipped CSS had `.hero-block__se
 The two clauses are a **natural experiment** and that is why this reverses the usual direction. They are the two halves of one headline — same rung, same rendered size, same weight, adjacent on screen and co-visible in a single glance. The only variable is the tracking. Rendered side by side in Commissioner, **only the −0.025 half read as crowded**. Nothing else about the comparison could have produced that, which is a stronger warrant than a spec value carried over from a typeface with different sidebearings.
 
 So the value moves to **−0.020 for rung 5**, `--open` was corrected to match `--anxious`, and the record says `--anxious` was never a drift.
+
+**Retired 16 Oct 2026 by ruling 3b (§11).** Every live display role now tracks at `--track-display`, so the inversion described next no longer exists; see the §3.4 amendment above. The paragraph is kept as the record.
 
 **The convention inversion persists and is not fixed here.** Rung 6 tracks at −0.015 and rung 5 at −0.020, so the *larger* type is the *looser* — the opposite of the usual rule that tracking tightens as size grows. Rung 6's value was set on eye alone and holds on eye. Naming it rather than quietly correcting one of them: both were judged against rendered type and neither is wrong on its own terms. The inconsistency is between them, and resolving it needs a bench, not an edit.
 
@@ -483,6 +489,7 @@ Assertion 4 has two halves and both are enforced: a weight of 340 or 720 fails i
 | **11** | **The flared set in CSS matches `RUNGS`' `voice: 'flared'`, both directions** |
 | **12** | **Reading-band `font-size` comes from a `--type-*` token (§3.6), added 28 Sep 2026** |
 | **13** | **Every `font-weight` is one of the five declared in §3.2 (340, 400, 500, 600, 720, or `var(--wght-*)`), added 1 Oct 2026** |
+| **14** | **Every live display role carries its ruled weight and `var(--track-display)`, added 16 Oct 2026 (§11)** |
 
 **Check 13 exists because check 4 only ever guarded the signature pair.** Delivery Promise shipped 700, the browser's `bold`, on three rules (the journey line's sentiment labels and numbered marks, and the node chart's average label) that nobody chose it for, and every gate passed. The human-made review found it; Paul ruled the three to 600 (D1b) and this check (D2b) on 1 Oct 2026. Its allowlist, `ALLOWLIST.weights`, carries the Also shipped titles' per-brand weights (the shelf's sanctioned brand exception) and rules that render on no route, each with a reason.
 
@@ -660,3 +667,29 @@ It is not hierarchy. Hierarchy is size, weight and colour, and the flare rides o
 It is not per-module character. There is one flared value and one plain one; a surface does not get its own.
 
 And it is not the differentiation argument the swap was sold on. Per 1b, it does its work quietly.
+
+---
+
+## 11. Type and spacing rhythm, 16 Oct 2026
+
+Step 6, part 3 of the design-system pass. Ruled by Paul as `1a 2b 3b 4b 5b 6b 8b 9a 10a` from two boards (`docs/previews/type-rhythm/board-part3.html`, `board-signature.html`) after the Plot Panel, CC's reviewers (`docs/type-signature-review-cc.md`) and the Falsifier. Records: `claude/design-pass-type-rhythm.md`, `claude/type-signature-plot-panel.md`, `claude/type-signature-falsifier.md`.
+
+| # | Ruling | Mechanism |
+|---|---|---|
+| 1a | The home h1 stays one weight, 340 | No change; §3.2 updated |
+| 2b | The home proof paragraph at the reading measure | `.hero-proof { max-width: var(--measure-reading) }`, replacing `max-w-[62ch]` (728px, lines of 92, 85, 76 characters at 1440; now 71, 68, 68, 45) |
+| 3b | One tracking value for every live display role | `--track-display: -0.012em` on rungs 4 to 6, the turn answer, `text-lede`, `text-h1`, `text-h2` |
+| 4b | Study title to role line, 24 | Spacing v1 §13 |
+| 5b | No line ends on a sentence-opening word of three letters or fewer | `lib/rehype-bind-openers.mjs` binds it to the next word with U+00A0 in the case-study MDX, across element boundaries (a bold run-in ending a sentence); the painting credit calls the same `bindOpeners`; home binds "At URBN" by hand; `.about-cv__company` balances. Measured after: 0 such line ends on home, About and the five studies at 390, 1024, 1440 and 1920 (13 on main at 390 and 1440) |
+| 6b | Two near-duplicate sizes snap to their neighbours | The next-study label (and arrow) at `--type-standfirst`, weight 500; `.milestone__frame` at `--type-prose`. Each sat 1.011 to 1.05 from its neighbour |
+| 8b | On the studies, title, section headings and milestone date at 400 | `var(--wght-body)` on `.hero-block__sentence--open`/`--anxious`, `.case-study-prose h2`, `.milestone__date`. **Amends ruling 5.** The turn key phrase (600) is the only 600 display line in a study. About and the client work dialog keep 600 |
+| 9a | The fallback keeps its bold | `adjustFontFallback: false`; "Commissioner Fallback" declared in `globals.css` with a regular Arial face (next/font's metrics) and an Arial Bold face for 600 to 720 (size-adjust 95.87%, measured) |
+| 10a | The study role line at body weight | `.hero-block__role` 500 to 400 |
+
+**R9 was false in practice until 9a.** It says anything that matters must survive the fallback, and the signature is a weight contrast for that reason. But next/font's generated fallback had no bold face and `font-synthesis: none` forbids a synthetic one, so on a Mac or Windows machine the 600 half vanished during swap. Found by CC's accessibility pass, confirmed in the built CSS and reproduced (600 set at the 400 width, 665.3 against 665.3px; a real bold face gives 707.7px).
+
+**Enforcement.** Check 14 (§7) holds the nine live display selectors to their ruled weight and the tracked ones to `var(--track-display)`, because checks 4 and 13 test only that a weight is legal. Proved red with a 600 section heading and a stray -0.015em.
+
+**Not yet benched:** FLAR on a 400 stem at 52, 72 and 88px. §10.3's cut was judged at 600. Paul's preview look is the bench.
+
+**Logged, not ruled:** Bard's three resolution headlines (rung 3, 30px, 600) now sit under 400 section headings; the run-in bold leads (16 to 25 per study) are denser per stroke than a 400 heading and the reviewers suggest rationing them to about one per section (a copy question).

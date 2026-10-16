@@ -13,8 +13,42 @@
    Resolved at build time (no var() at runtime, no swap).
    ============================================================ */
 
+/* The fallback family, regular and bold (ruling 9a, 16 Oct 2026). Painted while
+   Commissioner loads (display: swap) and if it fails. next/font used to generate
+   one local(Arial) face with no weight descriptor, and with font-synthesis: none
+   that meant no bold at all on a Mac or Windows machine. app/fonts.ts now sets
+   adjustFontFallback: false and these two faces replace it.
+
+   Regular: next/font's own numbers, carried over unchanged (derived from
+   Commissioner's 400 default instance against Arial).
+   Bold: Arial Bold for 600 to 720. size-adjust 95.87% is next's 101.44% scaled
+   by the measured width ratio of Commissioner 600 to Arial Bold against
+   Commissioner 400 to Arial (93.73 / 99.17, a 200-character sample of the site's
+   own headings, Liberation Sans standing in for Arial); ascent and descent are
+   Commissioner's 1.017 and 0.206 em divided by that size-adjust, as next/font
+   computes them. Machines without Arial (Linux, Android) fall through to
+   system-ui, which has a bold of its own. */
+@font-face {
+  font-family: "Commissioner Fallback";
+  src: local("Arial"), local("ArialMT");
+  font-weight: 340 599;
+  ascent-override: 100.26%;
+  descent-override: 20.31%;
+  line-gap-override: 0%;
+  size-adjust: 101.44%;
+}
+@font-face {
+  font-family: "Commissioner Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 720;
+  ascent-override: 106.08%;
+  descent-override: 21.49%;
+  line-gap-override: 0%;
+  size-adjust: 95.87%;
+}
+
 @theme {
-  --font-sans: var(--font-commissioner), system-ui, sans-serif;
+  --font-sans: var(--font-commissioner), "Commissioner Fallback", system-ui, sans-serif;
 
   /* Breakpoints — wired to the project's documented design targets (CLAUDE.md).
      Without these, Tailwind's defaults were active (sm 640 / xl 1280 / 2xl 1536).
@@ -95,6 +129,13 @@
   --wght-credit:  500;
   --wght-display: 600;
   --wght-loud:    720;
+
+  /* Tracking for every live display role (ruling 3b, 16 Oct 2026): one value,
+     -0.012em, inside the -0.003 to -0.015em that Apple's, Carbon's and
+     Material's display type use. It replaces five values (-0.015 to -0.025)
+     and the rung 6 / rung 5 inversion v3 §3.4 recorded. lint:type check 14
+     holds every live display role to it. */
+  --track-display: -0.012em;
 
   /* Size, the reading band (ruling 7 d-c, 28 Sep 2026; tokens ruled 1a 2a 3a the
      same day). Two layers, the way colour works: the scale, named by value, and
@@ -714,11 +755,15 @@
      and notices. Audited at C3: zero italic usage on the site today, so this
      changes nothing rendered and exists to keep it that way.
 
-     Synthetic BOLD is disabled too, and that is safe rather than incidental:
-     @font-face declares font-weight: 340 720, so an out-of-range request clamps
-     to a real instance instead of synthesising, and the Arial fallback carries
-     genuine bold faces. Verified rather than assumed — the only weight outside
-     340-720 in this file is the unmounted takes wall's 800. */
+     Synthetic BOLD is disabled too. @font-face declares font-weight: 340 720,
+     so an out-of-range request clamps to a real instance instead of
+     synthesising. The fallback needs a real bold face for the same reason, and
+     until 16 Oct 2026 it had none: next/font's generated fallback was one
+     regular Arial face, so this rule silently removed every bold during swap
+     on a Mac or Windows machine (found by CC's accessibility pass). The
+     "Commissioner Fallback" family at the top of this file now carries a bold
+     face (ruling 9a). The only weight outside 340-720 in this file is the
+     unmounted takes wall's 800. */
   html {
     font-synthesis: none;
   }
@@ -726,8 +771,10 @@
   /* v3 R4: emphasis is AUTHORED. Tailwind preflight ships
      `b, strong { font-weight: bolder }`, which resolves against the 400 body
      to the browser's 700 — nobody chose it, and it made an inline emphasis in
-     18px body the heaviest thing on the page. 600 is --wght-display, so a
-     strong now matches the headings rather than out-shouting them. Scoped
+     18px body the heaviest thing on the page. 600 is --wght-display. Since
+     ruling 8b (16 Oct 2026) the study headings are 400, so a run-in strong is
+     denser per stroke than the heading above it; size carries the hierarchy
+     there, and the reviewers judged the heading still leads by eye. Scoped
      rules that already author 600 (.case-study-meta, .case-study-numbers,
      .figure__caption) are unaffected; they now agree with the base instead of
      each patching it locally. */
@@ -807,7 +854,7 @@
 @utility text-lede {
   font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
   line-height: 1.08;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-display);
   font-weight: 340;
   /* NOT tokenised, deliberately. v3 §9: this role's 60px ceiling sits in the
      53-71px gap between the display and large-display bands, so §3.1 returns
@@ -844,14 +891,14 @@
 @utility text-h1 {
   font-size: clamp(2.25rem, 1.75vw + 1.625rem, 3.5rem);
   line-height: 1.05;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-display);
   font-weight: 600;
 }
 
 @utility text-h2 {
   font-size: clamp(1.75rem, 1vw + 1.375rem, 2.5rem);
   line-height: 1.15;
-  letter-spacing: -0.015em;
+  letter-spacing: var(--track-display);
   font-weight: 600;
 }
 
@@ -2457,9 +2504,11 @@ dialog.client-work::backdrop {
    .case-study-numbers h3. */
 .case-study-prose h2 {
   font-size: clamp(1.875rem, 3vw + 1rem, 3.25rem);
-  font-weight: 600; /* v3 §5: 96 -> 94. Rung 4. */
+  /* Rung 4 at body weight (ruling 8b, 16 Oct 2026). Size carries the heading;
+     the only 600 display line in a study is the turn's key phrase. */
+  font-weight: var(--wght-body);
   line-height: 1.08;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--track-display);
   /* Bottom 24 to whatever opens the section (ruling 7b, 5 Oct 2026; spacing v1
      §12). The standfirst takes 16 instead (rule below), and a milestone keeps its
      own 32 (2a). Was 32 here, with a 16 override for body paragraphs (A1c,
@@ -2778,13 +2827,13 @@ dialog.client-work::backdrop {
   padding-block: var(--spacing-xl) var(--spacing-l);
 }
 
-/* The question: standfirst size and colour, weight 400, plain. --flar: 0 is an
-   override, not a restatement of the initial value: `.case-study-prose h2`
-   flares every section heading and this one must not. */
+/* The question: standfirst size and colour, plain. --flar: 0 is an override,
+   not a restatement of the initial value: `.case-study-prose h2` flares every
+   section heading and this one must not. Its weight is the h2's own 400 since
+   ruling 8b (16 Oct 2026), so it no longer states one. */
 .case-study-prose .cs-section--turn h2 {
   --flar: 0;
   font-size: var(--type-standfirst);
-  font-weight: 400;
   line-height: 1.45;
   letter-spacing: 0;
   color: var(--text-secondary);
@@ -2793,15 +2842,22 @@ dialog.client-work::backdrop {
 
 /* The answer: rung 5 size, leading and flare, weight 340, primary. The 340 spends
    the "one moment per case study" signature placement (§3.2; allowlisted in
-   lint:type). Tracking is the test page's -0.025em, not the -0.020 rung 5 took on
-   22 Aug 2026. S3b: 48 to the paragraph after it. */
+   lint:type). Tracking is the display value, --track-display (ruling 3b,
+   16 Oct 2026; it was the test page's -0.025em). S3b: 48 to the paragraph
+   after it.
+
+   Measure 19ch, not 18 (ruling T1a, 16 Oct 2026). At --track-display, FDT-E's
+   key phrase "You make it show its work." was 7px wider than 18ch from 768 up,
+   so the line K1 puts on its own broke in two. Cowork measured 19ch: FDT-E
+   39px spare at 1440, 36 at 1024 and 17 at 768; no other turn's breaks
+   change, and 390 is unchanged. */
 .case-study-prose .turn-answer {
   font-size: var(--type-case-study-hero);
   line-height: 1;
-  letter-spacing: -0.025em;
+  letter-spacing: var(--track-display);
   font-weight: 340;
   color: var(--text-primary);
-  max-width: 18ch;
+  max-width: 19ch;
   text-wrap: balance;
   margin: var(--spacing-s) 0 var(--spacing-xl);
 }
@@ -2865,7 +2921,10 @@ dialog.client-work::backdrop {
 .milestone__frame {
   margin: 0;
   max-width: 40ch;
-  font-size: clamp(var(--type-16), 0.476vw + 0.8839rem, var(--type-21)); /* 16 -> 21px (ruling 7 d-c, 28 Sep 2026; was 16 -> 22): text-lead tier, supporting. Scales down on mobile so the date:frame ratio holds (date clamps to its 52px floor). */
+  /* The study body token, 18 -> 20px (ruling 6b, 16 Oct 2026). It was its own
+     16 -> 21px clamp, 1.011 from the body at 1024 and 1.05 at 1440: a size of
+     its own nobody could see. */
+  font-size: var(--type-prose);
   line-height: 1.4;
   font-weight: 400;
   letter-spacing: -0.005em;
@@ -2876,9 +2935,10 @@ dialog.client-work::backdrop {
   margin: var(--spacing-2xs) 0 0;
   font-size: var(--ms-date-size, clamp(3.25rem, 4.8vw + 1.96rem, 5.5rem)); /* rung 6, ratio B */
   line-height: 0.98;
-  letter-spacing: -0.015em; /* -0.020 -> -0.015; rung 6, on eye alone */
+  letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.015, looser than rung 5 */
   color: var(--text-primary);
-  /* Rung 6, the arrival crescendo. Weight and nothing else now.
+  /* Rung 6, the arrival crescendo. Size and nothing else now: the weight is
+     body weight since ruling 8b (16 Oct 2026), so size alone carries it.
 
      RULING 5'S MECHANISM CHANGED TWICE IN ONE SESSION, and the second change
      deleted most of what the first one moved to. 0b took `wght` and `wdth` out
@@ -2892,8 +2952,12 @@ dialog.client-work::backdrop {
      the section defended hardest: a real 44-unit push at 52-88px, the single
      place Bricolage's drawn display cut actually showed. Commissioner has one
      drawing at every size, so there is nothing to pin and nothing to defend.
-     What replaces the display cut is FLAR, and it arrives in C4. */
-  font-weight: var(--wght-display);
+     What replaces the display cut is FLAR, and it arrives in C4.
+
+     RULING 5 AMENDED, 16 Oct 2026 (8b): the date is 400, not 600. At 600 it
+     was the darkest line on the page and outweighed the turn's key phrase,
+     which is now the only 600 display line in a study. */
+  font-weight: var(--wght-body);
 }
 .milestone__sub {
   margin: var(--spacing-s) 0 0;
@@ -4328,7 +4392,11 @@ html.dark .figure-placeholder {
 .hero-block__type {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-s);
+  /* Title to role line: 24, the gap every other heading takes to its first
+     block (ruling 4b, 16 Oct 2026, spacing v1 §13; 7b, 5 Oct). It was 16, so
+     the biggest type on the page had the smallest gap: 31px baseline to cap
+     at 1440, now 39. */
+  gap: var(--spacing-m);
 }
 
 /* ── Typographic register ────────────────────────────────────────────── */
@@ -4353,6 +4421,15 @@ html.dark .figure-placeholder {
    for. It does not make it CHECKED — no check enforces the vocabulary today. */
 .hero-credit-name {
   font-weight: var(--wght-credit);
+}
+
+/* The home proof paragraph: the reading measure, as in the studies (ruling 2b,
+   16 Oct 2026). It was max-w-[62ch], the same ch trap the type spec found in
+   the studies on 22 Aug: 1ch in Commissioner is 0.652em, so 62ch was 728px and
+   lines ran 92, 85 and 76 characters at 1440. At 32em (576px) they run 71, 68,
+   68 and 45. Below about 620px the column, not the token, sets the measure. */
+.hero-proof {
+  max-width: var(--measure-reading);
 }
 
 .hero-block__title {
@@ -4391,19 +4468,21 @@ html.dark .figure-placeholder {
    The two rules stay separate because they are semantically distinct and may
    diverge again. What they no longer carry is 0.005em of differentiation
    nobody could name: the split is content and module semantics, and tracking
-   was never the thing expressing it. */
+   was never the thing expressing it.
+
+   16 OCT 2026: both take --track-display (ruling 3b), the one value every live
+   display role now shares, and both are 400 (ruling 8b). */
 .hero-block__sentence--open {
-  letter-spacing: -0.020em; /* -0.025 -> -0.020, and now equal to --anxious */
-  font-weight: 600;
+  letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.020 */
+  font-weight: var(--wght-body); /* 600 -> 400, ruling 8b, 16 Oct 2026 */
 }
 
 .hero-block__sentence--anxious {
-  /* Unchanged, and unchanged ON PURPOSE. The benched step preserved a 0.005em
-     offset between the clauses because a comparison moves one variable at a
-     time; carrying that offset into the shipped value would have moved this
-     rule to -0.015 and off the number the evidence had just proved right. */
-  letter-spacing: -0.02em; /* 88, unchanged */
-  font-weight: 600;
+  /* Kept separate from --open on purpose (see above). Its tracking held at
+     -0.02 through 21 Aug 2026 and moved with every display role to
+     --track-display on 16 Oct 2026. */
+  letter-spacing: var(--track-display); /* ruling 3b, 16 Oct 2026; was -0.02 */
+  font-weight: var(--wght-body); /* 600 -> 400, ruling 8b, 16 Oct 2026 */
 }
 
 .hero-block__role {
@@ -4412,9 +4491,11 @@ html.dark .figure-placeholder {
   max-width: 38ch;
   color: var(--text-primary);
   margin: 0; /* 100, unchanged — 18px, rung 1 */
-  /* wght 500 — authored credit register, not body prose */
-  font-weight: 500;
-  text-wrap: pretty;               /* credit line: no one-word last line at 38ch (body→pretty register) */
+  /* Body weight under the title (ruling 10a, 16 Oct 2026). It was 500, a credit
+     register of its own, and read heavier than the title above it once the
+     title moved to 400 (8b); every reviewer dropped it to 400. */
+  font-weight: var(--wght-body);
+  text-wrap: pretty;               /* no one-word last line at 38ch */
 }
 
 /* ── Image cell ──────────────────────────────────────────────────────── */
@@ -4768,6 +4849,10 @@ html.dark .figure-placeholder {
   grid-area: 1 / 1;
   color: var(--text-primary);
   font-weight: var(--wght-credit);
+  /* Balanced, so a two-line name breaks in the middle rather than leaving
+     one word on line two ("U.S. Navy, NIWC / Pacific", "Empathy Lab, now /
+     EPAM" at 390). Ruling 5b, 16 Oct 2026. */
+  text-wrap: balance;
 }
 
 .about-cv__title {
@@ -5238,10 +5323,13 @@ html.dark .figure-placeholder {
   /* §2.1: adjacent type is .about-work-band__label at text-h3, weight 500.
      The band itself sets no font-weight — the weight lives on the sibling's
      utility — so §2.3's "every container that sets font-weight" never fires
-     here. Declared explicitly instead. The arrow carries text-h3 in JSX to
-     get the label's font-size: in this base band it is a SIBLING of the type
-     and would otherwise inherit the band's. Under --unruled it sits inside
-     the label, where the utility agrees with what it would inherit. */
+     here. Declared explicitly instead. The arrow and the label both carry
+     text-h3 in JSX, but since ruling 6b (16 Oct 2026) their size comes from
+     the shared `.about-work-band__label, .about-work-band__arrow` rule below
+     (--type-standfirst), which wins over the utility. That rule names the
+     arrow because in this base band it is a SIBLING of the type and would
+     otherwise inherit the band's size. Under --unruled it sits inside the
+     label, where the rule agrees with what it would inherit. */
   --icon-stroke: 1.70;
   display: flex;
   align-items: center;
@@ -5320,6 +5408,15 @@ html.dark .figure-placeholder {
    icon on the label's lowercase, by eye at both breakpoints. */
 .about-work-band__tail {
   white-space: nowrap;
+}
+
+/* The next-study label and its arrow at the standfirst size, weight 500 from
+   text-h3 kept (ruling 6b, 16 Oct 2026). text-h3's clamp put it 1.013 from the
+   standfirst at 1024 and 1.05 at 1440, a size of its own; both elements carry
+   text-h3 in JSX, so both take the size here, which wins over the utility. */
+.about-work-band__label,
+.about-work-band__arrow {
+  font-size: var(--type-standfirst);
 }
 
 .about-work-band--unruled .about-work-band__arrow {

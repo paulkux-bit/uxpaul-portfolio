@@ -1,4 +1,5 @@
 import manifest from './journey-manifest.json';
+import { bindAfter } from '@/lib/rehype-bind-openers.mjs';
 
 type Point = { x: number; y: number };
 type Composition = {
@@ -174,7 +175,7 @@ export default function JourneyLine() {
 
       <figcaption className="bento-theme__caption">
         <strong className="bento-theme__lead">{caption.lead}</strong>{' '}
-        <span className="bento-theme__gloss">{caption.gloss}</span>
+        <span className="bento-theme__gloss">{bindAfter(caption.lead, caption.gloss)}</span>
       </figcaption>
     </figure>
   );

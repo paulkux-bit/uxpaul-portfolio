@@ -18,7 +18,7 @@ the other place.
 
 | System | Spec | Gate |
 |---|---|---|
-| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 12 checks |
+| Type | `docs/type-system-v3-locked.md` | `npm run lint:type` — 13 checks |
 | Spacing | `docs/spacing-system-v1-locked.md` | `npm run lint:space` — 7 checks |
 | Colour | `docs/color-system-v2-locked.md` | `npm run lint:color` — 11 checks |
 | Interaction | `docs/interaction-system-v1-locked.md` | `npm run lint:interaction` — 9 checks |
@@ -165,8 +165,9 @@ whenever two pieces of work look equally worthy.
   **The career timeline was deleted** in v4; no `about-timeline` or `ERAS`
   references remain, and its CSS went with it.
 - About's hero: the portrait (the header handoff anchor), then the label
-  "Senior Product Designer", then the `<h1>` in one weight and one colour until
-  the design system pass (it was split two-tone until 13 Oct 2026), then the
+  "Senior Product Designer", then the `<h1>` in one weight (600) and one colour,
+  confirmed by the type and rhythm pass on 16 Oct 2026 (ruling 8b left About
+  unchanged; it was split two-tone until 13 Oct 2026), then the
   Résumé (PDF) button and LinkedIn. The title above the h1 is a label, not the
   heading.
 
@@ -313,10 +314,16 @@ code. If you change one, the other reddens. That is deliberate: see
   - Instanced to `weight: '340 720'` in two independent places, the CSS and the
     binary, so a request outside the range clamps twice and the lint gets the
     same answer from the stylesheet and from the file.
-  - The binary's **default instance is repositioned to 400**. next/font derives
+  - The binary's **default instance is repositioned to 400**. next/font derived
     its Arial-fallback metrics from the default instance, and Commissioner's
     source defaults to Thin; shipping that would have computed every fallback
     measurement against a hairline.
+  - **The fallback family is declared in `app/globals.css`, not generated**
+    (ruling 9a, 16 Oct 2026): `adjustFontFallback: false` in `app/fonts.ts`, and
+    two "Commissioner Fallback" faces, regular (next/font's own metrics, carried
+    over) and bold (Arial Bold for 600 to 720). The generated face had no bold,
+    and `font-synthesis: none` forbids a synthetic one, so every 600 rendered
+    regular during swap on a Mac or Windows machine.
 - **Mono:** None. Add only if a real need appears (code blocks in case studies).
 
 ### Hard constraints
@@ -343,7 +350,7 @@ real clamp, and every type-role utility must have a row.
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
-| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour until the design system pass; the signature's 720 half is unspent. |
+| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour, ruled 16 Oct 2026 (1a): no heavy half on home; the signature's heavy half lives on the turns. |
 | `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
@@ -449,7 +456,7 @@ for an entire judgment session while every gate stayed green.
 ### Page typographic arc + spacing (Phase 2)
 Registers separate on **size, weight and colour**. No register owns an axis, and
 there is no width column here any more: width is gone with the axis.
-1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340) until the design system pass.
+1. **Display** (hero h1, `text-lede`): owns **weight**; one weight (340), ruled 16 Oct 2026 (1a). On the studies, titles, section headings and the milestone date are 400 (8b), so the turn's key phrase is the only 600 display line; every live display role tracks at `--track-display` (3b). `lint:type` check 14 holds both.
 2. **Major** (work titles: Selected Work card questions + Earlier work shelf): size. Since T4 (14 Oct 2026) the card questions are regular weight, so weight no longer separates this register.
 3. **Editorial** (hero proof, prose, `text-body`) — neutral, for reading.
 4. **Eyebrow/Caption** (sentence-case section labels, client and project meta) — tracking.
@@ -518,7 +525,7 @@ Do not implement from it.
 inside that plan.
 
 ### Swap protocol
-If Commissioner is ever replaced, four surfaces change. This list is longer than
+If Commissioner is ever replaced, five surfaces change. This list is longer than
 the two-step one it replaces, and the third entry is the one that bit us.
 
 1. **`app/fonts.ts`** — the `src` path, the `variable` name and the `weight`
@@ -534,7 +541,14 @@ the two-step one it replaces, and the third entry is the one that bit us.
    one check that can fail in production while passing CI. Check 8b stayed green
    the whole time, because it asserts a probe *exists*, not that the probe
    measures a live axis. Repoint it or it lies.
-4. **This section**, and the test that reads it.
+4. **The two "Commissioner Fallback" faces at the top of `app/globals.css`**:
+   their size-adjust and ascent and descent overrides are measured against
+   Commissioner and written by hand since ruling 9a (16 Oct 2026), so a new face
+   leaves them silently wrong with no build failure. Re-derive them from the new
+   face by the method in the comment above them. Do not delete them in favour
+   of next/font's generated fallback: that one has no bold face, which is the
+   defect 9a fixed.
+5. **This section**, and the test that reads it.
 
 The role utilities and component usage stay identical. No find-and-replace.
 
@@ -644,13 +658,14 @@ The named gates are three different tools; two are external and do NOT read pros
   overused fonts, nested cards, dark-glow, etc.). It does **not** read prose.
 - **type** = `npm run lint:type` (`scripts/lint-type.mjs`), a real repo script and the
   only mechanical typography check that exists. Parses `app/globals.css` with postcss
-  and enforces the twelve v3 §7 assertions: the 14px floor, the
+  and enforces the thirteen v3 §7 assertions: the 14px floor, the
   1.15× rung ratio computed across 320–2560, the 340/720 signature, authored `strong`,
   no `color-mix(… currentColor …)` on text colour, exactly one `font-variation-settings`
   (on `*`, reading `--flar`), no `font-stretch` or `font-optical-sizing` because those
   axes do not exist, the flared set in CSS matching `RUNGS`, reading-band sizes
   coming from `--type-*` tokens (check 12), every weight one of the five declared
-  (check 13), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
+  (check 13), every live display role at its ruled weight and on `--track-display`
+  (check 14, 16 Oct 2026), and both halves of the font-load check. **It gates `npm run build`** — the build runs it first and
   stops on failure. Allowlist entries live in the script, each with a one-line reason.
   It also prints one UNCHECKED blind spot it cannot see: arbitrary font-weight
   utilities authored in JSX, which check 4 cannot reach because it parses

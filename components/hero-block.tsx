@@ -1,6 +1,10 @@
 import Image from 'next/image';
 import type { CSSProperties, ReactNode } from 'react';
 import { PlaceholderFrame } from './_placeholder-utils';
+// Ruling 5b (16 Oct 2026): a short word that opens a sentence is bound to the
+// next one. The title, role and callout arrive here as props, outside the MDX
+// tree the rehype plugin walks, so they are bound here.
+import { bindOpeners } from '@/lib/rehype-bind-openers.mjs';
 
 type HeroBlockProps = {
   /* No eyebrow and no callout label. Paul ruled both off every study on 3 Oct
@@ -74,7 +78,7 @@ export function HeroBlock({
   calloutPosition = 'bottom-left',
   calloutWidth,
 }: HeroBlockProps) {
-  const sentences = typeof title === 'string' ? [title] : title;
+  const sentences = (typeof title === 'string' ? [title] : title).map((s) => bindOpeners(s));
 
   return (
     <header className="hero-block">
@@ -99,7 +103,7 @@ export function HeroBlock({
             </span>
           ))}
         </h1>
-        <p className="hero-block__role">{role}</p>
+        <p className="hero-block__role">{bindOpeners(role)}</p>
       </div>
 
       <div className="hero-block__image">
@@ -141,7 +145,9 @@ export function HeroBlock({
                sentence is the whole content, so naming it would only repeat it. */
             role="note"
           >
-            <p className="hero-block__callout-body">{callout.body}</p>
+            <p className="hero-block__callout-body">
+              {typeof callout.body === 'string' ? bindOpeners(callout.body) : callout.body}
+            </p>
           </aside>
         ) : null}
       </div>

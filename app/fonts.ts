@@ -28,13 +28,21 @@ import localFont from 'next/font/local';
  * it because the axis stops there. The lint's weight rules then get the same answer
  * from the stylesheet and from the file.
  *
- * WHY THE FALLBACK METRICS COME OUT SANE. next/font derives size-adjust and
+ * WHY THE FALLBACK METRICS COME OUT SANE. next/font derived size-adjust and
  * ascent-override from the variable font's DEFAULT INSTANCE. Commissioner's source
  * defaults to Thin (wght 100), so shipping the binary with its native default would
  * have computed the adjusted-Arial fallback against a hairline and quietly poisoned
  * every fallback measurement. C1 repositions the default to 400 with
  * updateFontNames=True. That reposition is usually justified by the desktop/Figma/PDF
- * consequence; this is the second and larger reason for it.
+ * consequence; this was the second and larger reason for it.
+ *
+ * THE FALLBACK IS NOW OURS (ruling 9a, 16 Oct 2026). next/font's generated face was
+ * one `local(Arial)` face with no weight descriptor, and `font-synthesis: none` in
+ * globals.css forbids a synthetic bold, so on a Mac or Windows machine every 600 on
+ * the site rendered as Arial Regular while the font loaded or if it failed: the turn's
+ * key phrase, every strong. `adjustFontFallback: false` turns the generated face off,
+ * and globals.css declares "Commissioner Fallback" itself, a regular face (next's own
+ * metrics, carried over) and a bold one (Arial Bold, metrics measured for wght 600).
  */
 export const commissioner = localFont({
   src: './_fonts/commissioner-latin.woff2',
@@ -42,4 +50,5 @@ export const commissioner = localFont({
   display: 'swap',
   weight: '340 720',
   style: 'normal',
+  adjustFontFallback: false,
 });

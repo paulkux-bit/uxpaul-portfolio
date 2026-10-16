@@ -1,6 +1,7 @@
 import { Fragment } from 'react';
 import type { CSSProperties } from 'react';
 import manifest from './inversion-manifest.json';
+import { bindAfter } from '@/lib/rehype-bind-openers.mjs';
 
 /**
  * Missed delivery dates on the overnight tier only, broken out by node. Three
@@ -105,7 +106,7 @@ export default function NodeChart() {
 
       <figcaption className="bento-theme__caption">
         <strong className="bento-theme__lead">{caption.lead}</strong>{' '}
-        <span className="bento-theme__gloss">{caption.gloss}</span>
+        <span className="bento-theme__gloss">{bindAfter(caption.lead, caption.gloss)}</span>
       </figcaption>
     </figure>
   );

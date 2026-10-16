@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { BentoBand } from '@/components/bento';
 import manifest from './walk-manifest.json';
+import { bindAfter } from '@/lib/rehype-bind-openers.mjs';
 
 /**
  * Section 05 — one delivery date walked through five stages of an order.
@@ -163,7 +164,7 @@ export default function PromiseWalk() {
                   into full sentences and cross-references. See $captionDoc. */}
               <figcaption className="bento-theme__caption">
                 <strong className="bento-theme__lead">{m.caption.lead}</strong>{' '}
-                <span className="bento-theme__gloss">{m.caption.gloss}</span>
+                <span className="bento-theme__gloss">{bindAfter(m.caption.lead, m.caption.gloss)}</span>
               </figcaption>
 
               <Image

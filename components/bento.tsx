@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react';
 import { type Slot, SLOT_ASPECT, SLOT_COLS } from '@/lib/bento-slots';
+import { bindAfter } from '@/lib/rehype-bind-openers.mjs';
 
 /**
  * <BentoTheme> / <BentoItem> + breakouts <BentoBand> / <BentoRibbon>
@@ -194,7 +195,7 @@ function BreakoutCaption({ caption, gloss }: { caption?: string; gloss?: string 
   return (
     <figcaption className="bento-theme__caption">
       <strong className="bento-theme__lead">{caption}</strong>
-      {gloss ? <span className="bento-theme__gloss">{' '}{gloss}</span> : null}
+      {gloss ? <span className="bento-theme__gloss">{' '}{bindAfter(caption, gloss)}</span> : null}
     </figcaption>
   );
 }
@@ -208,7 +209,7 @@ function BentoFigure({ slot, priority, ...item }: BentoItemProps & { slot: Slot;
     >
       <figcaption className="bento-theme__caption">
         <strong className="bento-theme__lead">{item.caption}</strong>
-        {item.gloss ? <span className="bento-theme__gloss">{' '}{item.gloss}</span> : null}
+        {item.gloss ? <span className="bento-theme__gloss">{' '}{bindAfter(item.caption, item.gloss)}</span> : null}
       </figcaption>
       <div className="bento-theme__media">
         <BentoMediaInner
