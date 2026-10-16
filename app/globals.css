@@ -2877,7 +2877,10 @@ dialog.client-work::backdrop {
 .milestone__frame {
   margin: 0;
   max-width: 40ch;
-  font-size: clamp(var(--type-16), 0.476vw + 0.8839rem, var(--type-21)); /* 16 -> 21px (ruling 7 d-c, 28 Sep 2026; was 16 -> 22): text-lead tier, supporting. Scales down on mobile so the date:frame ratio holds (date clamps to its 52px floor). */
+  /* The study body token, 18 -> 20px (ruling 6b, 16 Oct 2026). It was its own
+     16 -> 21px clamp, 1.011 from the body at 1024 and 1.05 at 1440: a size of
+     its own nobody could see. */
+  font-size: var(--type-prose);
   line-height: 1.4;
   font-weight: 400;
   letter-spacing: -0.005em;
@@ -5357,6 +5360,15 @@ html.dark .figure-placeholder {
    icon on the label's lowercase, by eye at both breakpoints. */
 .about-work-band__tail {
   white-space: nowrap;
+}
+
+/* The next-study label and its arrow at the standfirst size, weight 500 from
+   text-h3 kept (ruling 6b, 16 Oct 2026). text-h3's clamp put it 1.013 from the
+   standfirst at 1024 and 1.05 at 1440, a size of its own; both elements carry
+   text-h3 in JSX, so both take the size here, which wins over the utility. */
+.about-work-band__label,
+.about-work-band__arrow {
+  font-size: var(--type-standfirst);
 }
 
 .about-work-band--unruled .about-work-band__arrow {
