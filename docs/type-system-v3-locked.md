@@ -705,4 +705,6 @@ Step 6, part 4 of the design-system pass. Ruled by Paul as `1b, 2 as Comparative
 | # | Ruling | Mechanism |
 |---|---|---|
 | 1b | The home h1 grows on phones and tablets | `text-lede` `clamp(2.25rem, 2.2857vw + 1.6929rem, 3.75rem)` at 340: 36px at 390, 44.6 at 768, 50.4 at 1024, 60 from 1440 (was 32px from 320 to 711, 34.6 at 768, and smaller than the About h1 or a section heading at every width from 320 to 1066). U+00A0 binds "no one" so 1b's fourth line at 320 to 378 does not split it. Stem at 390, measured on the outline: 2.57px against the name line's 2.35 (was 2.29) |
+| 2 | Bard's Metrics summary band scales like Comparative trends | `scrollFloor` removed from the KPI strip (Paul: "treat it like Comparative trends"); 342 x 30 at 390, all four KPIs in view. No live `scrollFloor` remains; the prop and `.bento-band__track` are Phase 12 deletions |
+| 3e | No smooth scroll; the painting's box is reserved | `scroll-behavior: smooth` deleted (interaction v1 §3); `.friction-moment__image` width `min(100%, var(--art-w), calc(var(--art-max-height) * var(--art-ratio)))` from works.json, 0% distortion at a 14 and 16px root |
 

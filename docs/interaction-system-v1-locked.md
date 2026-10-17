@@ -161,6 +161,17 @@ Easing is unchanged: `--ease-out-soft` for state changes, `--ease-out-quint`
 where it is already in use. The reveal stagger (70 / 140 / 210 / 280ms) is a
 sequence of **delays**, not durations, and is unaffected.
 
+**Scroll has no duration (16 Oct 2026, step 6 part 4, ruling 3e).** The site sets no
+`scroll-behavior: smooth`: in-page jumps, anchors and page changes are instant, so
+the browser never picks a scroll speed this section does not name. Smooth scroll on
+`html` made a cold, pasted `#outcome` link stop 213 to 712px short in Chromium when
+an image or the webfont arrived mid-scroll, animated every page change to the top
+(90 frames, 786ms) and left a card click 49px short. The one smooth scroll kept is
+the client work dialog's `scrollTo({ behavior: 'smooth' })`: short, started by the
+reader, it shows which slide is next, and it checks reduced motion. Measured on the
+3e prototype: 20 of 20 cold loads land (12 at 80px, 8 at maximum scroll), both
+engines, with 600ms image and font delay.
+
 `--duration-theme` is a **name for a speed that already ships**, not a new speed.
 This section was written from an interaction audit and inherited its blind spot:
 a mode transition is neither an interaction nor an entrance, so it had no

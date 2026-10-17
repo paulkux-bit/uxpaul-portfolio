@@ -699,9 +699,14 @@
     /* Keep the sticky header from obscuring focused / anchored targets
        (WCAG 2.2 SC 2.4.11). 5rem clears the 56–64px header with room. */
     scroll-padding-top: 5rem;
-    /* Smooth in-page anchor scroll (e.g. the header "Work" → #selected-work).
-       The prefers-reduced-motion block forces this back to auto. */
-    scroll-behavior: smooth;
+    /* No scroll-behavior: smooth (step 6 part 4, ruling 3e, 16 Oct 2026). It
+       made a cold load of a pasted #outcome or #role stop 213 to 712px short
+       in Chromium when an image or the webfont arrived mid-scroll (an instant
+       jump is held by scroll anchoring; a smooth one is not), and it animated
+       every page change from the old scroll position to the top (90 frames,
+       786ms) and left a card click 49px short. Jumps are instant. The client
+       work dialog keeps its own short, user-started smooth slide. Interaction
+       v1 §3. */
   }
 
   html.dark { color-scheme: dark; }
@@ -3799,7 +3804,14 @@ html.dark .cover-art {
    the same property site-wide. */
 .friction-moment__image {
   display: block;
-  width: auto;
+  /* The box is reserved before the painting loads (step 6 part 4, ruling 3e,
+     16 Oct 2026). `width: auto` overrode the img's width and height, so the
+     box was 0px until the bytes arrived and the page grew under the reader.
+     --art-w and --art-ratio come from works.json (FrictionMoment). The third
+     term caps the width where --art-max-height would bind, so a tall work
+     narrows instead of being squashed: without it, a definite width plus the
+     height cap stretched three paintings 13 to 14% at a 14px root. */
+  width: min(100%, var(--art-w), calc(var(--art-max-height) * var(--art-ratio)));
   max-width: 100%;
   height: auto;
   max-height: var(--art-max-height);
