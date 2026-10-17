@@ -225,6 +225,8 @@ So the value moves to **−0.020 for rung 5**, `--open` was corrected to match `
 
 **This is the second typeface and there will be a third.** The table is written per-face so the third does not have to rediscover that `ch` is not a unit of characters.
 
+**Reserved line boxes (step 6 part 4, ruling 4.4a, 16 Oct 2026).** Text reserves height in `lh` only, as `min-height`: `2lh` on the card question (K2a) and `1lh` on a bento caption row. `lh` is the element's own computed line height, so the reservation follows the text under text zoom and WCAG 1.4.12 spacing overrides, where a `rem` or `px` reservation would clip. A text box is never given a fixed `height` in lines.
+
 ### 3.5 Colour
 
 Four roles, four full-opacity values per mode. The literal oklch lives in `globals.css`; `docs/color-system.md` owns the palette and is not superseded by this document. What follows is the type system's use of it.
@@ -274,6 +276,8 @@ Four reasons this is a rule and not a preference:
 
 This repo proved the point before the rule was written. From `globals.css`: *"A token step, not opacity. opacity:0.88 made the whole button translucent."*
 
+**One stated exception (step 6 part 4, ruling 4.5a, 16 Oct 2026; Paul's ruling of 15 Oct 2026).** The Selected work card's meta is a two-line pair at rung 0 (14px): the client in `--text-secondary`, then the product and years in `--text-muted`. Rung 0 takes `--text-muted`; the client takes secondary so the brand leads the product line inside the pair. It is a pair rule, not a rung change: a lone 14px caption still takes `--text-muted`. Secondary clears AA-normal at 14px on the card surface.
+
 **Where alpha remains correct**, and is not covered by this rule: state layers (hover, press), scrims, shadows, and focus rings. Those are surfaces and effects, not type colour. Ten oklch alpha values ship today across focus rings and shadows; all are legitimate.
 
 **Sitewide status, verified 7 Aug 2026:** zero alpha on text colour, zero `rgba`/`hsla` anywhere, zero Tailwind alpha utilities (`text-*/50`) in JSX. Sixteen `currentColor` mixes remain on borders and backgrounds — out of scope for this section, since they are not type colour, but they bypass `--border-*` tokens in roughly a third of cases and are queued for their own pass.
@@ -296,7 +300,11 @@ This repo proved the point before the rule was written. From `globals.css`: *"A 
 
 Ladder selectors take the role tokens; every other reading-band size takes a scale token. A clamp outside the ladder takes scale tokens at both ends and keeps its slope raw, because the slope is the path between two sizes, not a size. 54 declarations were tokenized with zero rendered change, measured element by element on all seven routes at 390, 768 and 1440. Fifteen stay raw, each allowlisted in `ALLOWLIST.rawSize` with its reason: two live About sizes owned by the About pass, thirteen rules that render on no route. **Check 12 enforces it**, and it was proven red three ways before it was trusted: a raw value, a misspelled token, and a token change that broke the ladder (check 3 caught that one, because the lint resolves tokens before it measures). Display sizes above 30px are not tokenized yet.
 
-**AMENDED 14 Oct 2026: the card question (home cards T4, rulings K1a and K2a).** `text-cover` is now `clamp(var(--type-21), 4.6cqi, var(--type-24))` at weight 400 (`--wght-body`), line-height 1.25, letter-spacing -0.005em, with every question reserving two lines (`min-height: 2lh`). It sits in rung 2's size range off the ladder, the same shape as the T6 question, so `RUNGS` gives it `rung: 2, band: 'read', voice: 'plain', ladder: false`. Two things in it are not this spec's existing rules, and both are rulings rather than drift: its leading and tracking are K1a's 1.25 and -0.005em, not §3.4's rung 2 row (1.45 and 0); and its slope is container-relative (`cqi`, against `.case-card` as an inline-size container), where every other slope here is `vw`. The rule above, scale tokens at both ends and a raw slope, holds. Whether a container-relative slope is a sanctioned kind of slope, and who governs a reserved line box (`lh`), are open in `docs/unspecified-surfaces.md`. Until T4 the role was 22 to 32px at 600, display band.
+**AMENDED 14 Oct 2026: the card question (home cards T4, rulings K1a and K2a).** `text-cover` is now `clamp(var(--type-21), 4.6cqi, var(--type-24))` at weight 400 (`--wght-body`), line-height 1.25, letter-spacing -0.005em, with every question reserving two lines (`min-height: 2lh`). It sits in rung 2's size range off the ladder, the same shape as the T6 question, so `RUNGS` gives it `rung: 2, band: 'read', voice: 'plain', ladder: false`. Two things in it are not this spec's existing rules, and both are rulings rather than drift: its leading and tracking are K1a's 1.25 and -0.005em, not §3.4's rung 2 row (1.45 and 0); and its slope is container-relative (`cqi`, against `.case-card` as an inline-size container), where every other slope here is `vw`. The rule above, scale tokens at both ends and a raw slope, holds. Both questions were open in `docs/unspecified-surfaces.md` until 16 Oct 2026 and are now ruled (below, and §3.4's reserved line boxes). Until T4 the role was 22 to 32px at 600, display band.
+
+**AMENDED 16 Oct 2026 (step 6 part 4, ruling 4.3a): a container-relative slope is sanctioned, narrowly.** A `cqi` slope is allowed for a card-only role that sits off the ladder, and only between `rem`-based endpoints (scale tokens), so the role still grows with text zoom; an all-`cqi` clamp would not. Outside its container `cqi` falls back to the viewport, so the role is applied only inside the container that owns it (`.case-card`, `@container`). Check 3 does not walk it, because the role is `ladder: false`. Today `text-cover` is the one such role.
+
+**AMENDED 16 Oct 2026 (step 6 part 4, ruling 4.6a): the Earlier work row title is a named off-ladder role.** `.shelf__title` is `--type-21` at `--wght-body`, 1.25 leading, -0.01em tracking, `band: 'read'`, `voice: 'plain'`, `ladder: false` in `RUNGS`. It shares the card question's `--type-21` floor by design: the two work titles on home tie at 390 (21 and 21) and sit 1.02 apart at 1024, and the card question sits a step above at 768 and 1440 (1.143 at 1440, under the ladder's 1.15, which an off-ladder pair does not owe).
 
 ## 4. The rules
 
@@ -707,4 +715,10 @@ Step 6, part 4 of the design-system pass. Ruled by Paul as `1b, 2 as Comparative
 | 1b | The home h1 grows on phones and tablets | `text-lede` `clamp(2.25rem, 2.2857vw + 1.6929rem, 3.75rem)` at 340: 36px at 390, 44.6 at 768, 50.4 at 1024, 60 from 1440 (was 32px from 320 to 711, 34.6 at 768, and smaller than the About h1 or a section heading at every width from 320 to 1066). U+00A0 binds "no one" so 1b's fourth line at 320 to 378 does not split it. Stem at 390, measured on the outline: 2.57px against the name line's 2.35 (was 2.29) |
 | 2 | Bard's Metrics summary band scales like Comparative trends | `scrollFloor` removed from the KPI strip (Paul: "treat it like Comparative trends"); 342 x 30 at 390, all four KPIs in view. No live `scrollFloor` remains; the prop and `.bento-band__track` are Phase 12 deletions |
 | 3e | No smooth scroll; the painting's box is reserved | `scroll-behavior: smooth` deleted (interaction v1 §3); `.friction-moment__image` width `min(100%, var(--art-w), calc(var(--art-max-height) * var(--art-ratio)))` from works.json, 0% distortion at a 14 and 16px root |
+| 4.1a | Every colour token has a row | Colour v2 §4 component, interaction and effect table; `__tests__/color-token-coverage.test.mjs` reads token values, not names (25 found, 9 were missing) |
+| 4.2a | The card drawing's width is a token | `--card-art-share: 44%`, `--card-art-max: 13.125rem`; `COVER_SIZES` states 0.44 and 13.125rem |
+| 4.3a | `cqi` slopes sanctioned narrowly | §3.6 amendment: card-only, off-ladder, rem endpoints |
+| 4.4a | Text reserves height in `lh` only | §3.4 |
+| 4.5a | The card meta pair | §3.5: client secondary, product muted |
+| 4.6a | The Earlier work row title is named | §3.6 amendment; `RUNGS` entry |
 

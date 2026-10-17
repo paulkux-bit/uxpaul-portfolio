@@ -213,6 +213,34 @@ card deepens rather than turning brown (ruling 11b).
 bias 1.33x at the canvas and chroma climbing 4.33x to the elevated surface.
 Lightness was untouched from v1, which held in oklch and not in contrast (§5).
 
+### Component, interaction and effect tokens (16 Oct 2026)
+
+Step 6 part 4, ruling 4.1a. Every colour token in `globals.css` that is not one of
+the palette roles above has a row here, written as it is authored (a mix is a
+mix, not a resolved number), so the table cannot go stale against the code. The
+measured ratios are lint:color's output, not copied here: run `npm run lint:color`.
+`__tests__/color-token-coverage.test.mjs` fails when a custom property in
+`globals.css` holds an `oklch()` or a `color-mix()` and has no row in a table in
+this file. Hue for every row is held by check 9.
+
+| Token | Light | Dark | Role | Held by |
+|---|---|---|---|---|
+| `--scrim` | `color-mix(in oklch, var(--text-primary) 46%, transparent)` | `color-mix(in oklch, var(--bg-sunken) 60%, transparent)` | Client work dialog backdrop; dims in both modes (11 Oct 2026) | check 9 |
+| `--face-disc` | `var(--bg-surface)` | `color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas))` | Header coin disc, one coin in both modes (12 Oct 2026) | check 9 |
+| `--face-ring` | `color-mix(in oklch, var(--text-primary) 28%, transparent)` | same | Header coin ring; frames an image inside a named link, so no 3:1 owed | check 9 |
+| `--shot-frame` | none (the ring is transparent in light) | `oklch(0.255 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 3))` | The 6b screenshot frame (15 Oct 2026) | check 9 |
+| `--fill-quiet` | `color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas))` | `color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas))` | Delivery Promise node chart bars; canvas only, 3:1 as a graphical object | check 9 |
+| `--focus-ring` | `oklch(0.220 0.018 55 / 0.55)` | `oklch(0.945 0.012 78 / 0.55)` | Focus outline, a state layer | checks 8 and 9 |
+| `--selection-text` | `oklch(0.180 0.020 50)` | `oklch(0.970 0.012 78)` | Text on `--selection-bg` | checks 9 and 11 |
+| `--shadow-rest` | `0 1px 2px oklch(0.30 0.04 50 / 0.05)` | `0 1px 2px oklch(0.12 0.03 50 / 0.30)` | Resting shadow (sandbox video card only) | check 9 |
+| `--shadow-hover` | two layers, `oklch(0.30 0.04 50 / 0.06)` and `/ 0.10` | two layers, `oklch(0.12 0.03 50 / 0.35)` and `/ 0.40` | Hover shadow (sandbox video card only) | check 9 |
+
+`--card-hover` (dark row above; light is `var(--bg-surface-elevated)`) is held by
+check 10, and `--link-hover`, `--focus-glow` and `--selection-bg` by the v2.1 table
+in §9. Component tokens are mixed in the theme layer to author them, never at the
+point of use (R1), and stay outside the twelve palette roles so check 2 does not
+read an alpha as a border's.
+
 ---
 
 ## 5. Verified, not asserted

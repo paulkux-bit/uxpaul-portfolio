@@ -33,7 +33,10 @@ than missing. **Home card drawing width** joined on 14 Oct 2026, the first entry
 on a width, which no linter reads in JSX. **The card question's container units**
 joined the same day, the first entry on a CSS unit rather than a value. **The
 card hover panel** joined on 15 Oct 2026, the first entry for a surface that
-was right in one mode and wrong in the other.*
+was right in one mode and wrong in the other. **The home card drawing's
+width, the card question's container units and the card hover panel left on
+16 Oct 2026** (step 6 part 4, rulings 4.1a to 4.4a), into colour v2 §4, type v3
+§3.4 and §3.6, and the tokens `--card-art-share` and `--card-art-max`.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -108,25 +111,15 @@ roles only, because the design system pass will revisit colour, the type scale
 and weight. Each item below borrows the nearest role, and each is an input to
 that pass rather than a settled answer:
 
-1. **The row title has no rung.** The project name and its client set
-   `--type-21` at `--wght-body` (400), with `text-h3`'s 1.25 leading and
-   -0.01em tracking, on `.shelf__title` (3a ruling 3c, 15 Oct 2026). Until then
-   they borrowed `text-h3` (22 to 25.2px here), which T4 (14 Oct) had left
-   larger than the Selected work card questions (21 to 24px, `text-cover`,
-   sized to the card) at 390, 1024 and 1440. At 21 the shelf sits a step under
-   the questions at 768 and 1440 and level with them at 390 and 1024. Chosen
-   over keeping text-h3, 21 to 24px, and 18px, rendered side by side. The client
-   takes `--text-secondary`, after the hero signature. Needs: the design
-   system pass to give the row title a rung of its own.
-2. **A resting underline on touch only.** Under `@media (hover: none)` the
+1. **A resting underline on touch only.** Under `@media (hover: none)` the
    project name carries the base `a` rule's resting underline (1px
    `--border-interactive`). A quiet link otherwise has no signifier at rest
    where hover cannot stand in. Interaction v1 §5 gives a text link hover and
    no pressed state, and names no input-dependent rest state. Pointer devices
    keep `.quiet-link`.
 
-Needs: rulings from the design system pass on a list-title rung and on whether
-touch gets a rest signifier site-wide. (The row halo, governed by interaction
+Needs: a ruling on whether touch gets a rest signifier site-wide. (The row
+title became a named off-ladder role on 16 Oct 2026, type v3 §3.6, ruling 4.6a.) (The row halo, governed by interaction
 v1 §5 since 14 Oct 2026, and the brand shelf's dead code, deleted 15 Oct 2026,
 left this list on 15 Oct 2026.)
 
@@ -158,11 +151,11 @@ input to the design system pass:
      `--bg-canvas` in dark. `--face-ring` is `--text-primary` at 28% in both.
    - **Contrast.** The ring measures 1.83:1 on the disc and 2.00:1 on the
      header in light. In dark it is 1.06:1 on the disc, where the disc's own
-     edge (13.49:1) draws the circle. Neither has to reach 3:1: the circle
+     edge (about 13.0:1 on walnut; 13.49:1 on the quiet ground before 15 Oct) draws the circle. Neither has to reach 3:1: the circle
      frames an image inside a link named "uxpaul".
-   - What a spec would need: a role for an identity mark in colour v2, and
-     whether component tokens like `--scrim` and `--face-*` belong in the
-     locked palette.
+   - The two tokens' values have rows in colour v2 §4 (component tokens, 16
+     Oct 2026, ruling 4.1a). What a spec would still need: a role for an
+     identity mark.
 2. **The sequenced swap and its beat.** The leaving element fades at
    `--duration-control`, and the arriving one at `--duration-card` after a beat
    of `calc(var(--duration-control) / 2)` (90ms), so no frame holds the word and
@@ -180,9 +173,9 @@ input to the design system pass:
    states, so the target never moves. What a spec would need: when a halo may
    describe a child rather than the control.
 
-Needs: rulings from the design system pass on all three. Until then
-`--face-disc`, `--face-ring` and `--card-hover` are the only component colour
-tokens besides `--scrim`.
+Needs: rulings on all three. The component colour tokens (`--scrim`,
+`--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`) are listed in
+colour v2 §4 since 16 Oct 2026.
 
 **Hero headings in one weight and one colour.** Joined 13 Oct 2026 from the
 home and About copy build (`docs/cc-prompt-hero-about-build.md`, Paul's final
@@ -276,60 +269,6 @@ guard. The dev scripts `check-details.mjs`, `shoot-interaction.mjs`,
 Needs: the design system pass to delete items 1 to 3 with their allowlist
 entries and the five assertions, and to rule on the rename.
 
-**The home card drawing's width.** Joined 14 Oct 2026 from the home cards
-build. Each Selected work card's cover drawing is
-`w-[44%] max-w-[210px]` on its `<picture>` in `components/case-study-card.tsx`
-(home cards H1b, Paul, 14 Oct 2026; it was 55% and 280px). The 210px cap is a
-literal: no token names it, no locked spec governs how wide a decorative image
-may be, and no gate sees it, because `lint:space` reads spacing utilities and
-nothing reads a width utility in JSX. It lints clean, which is why it is
-logged. The cap binds only from a 576px viewport to 1023; from 1024 the two
-columns hold the drawing at 176.6 to 203.7px, under it.
-
-What a spec would need to say: whether decorative card art takes a width token
-(and whether the same token should serve the percentage), whether the cap is
-`px` or `rem`, and that `COVER_SIZES` in the same file states the rendered
-widths for `srcset` and has to be re-measured whenever either value moves.
-
-Needs: the design system pass to give the cap a token, or to rule that a
-measured literal is the right answer here.
-
-**The card question's container units (`cqi` and `lh`).** Joined 14 Oct 2026
-from the home cards T4 build. Two units no locked spec governs, both in the
-card question (`text-cover` and `.case-card__question` in `app/globals.css`):
-
-1. **A container-relative type slope.** The question is
-   `clamp(var(--type-21), 4.6cqi, var(--type-24))` (K1a), sized to the card's
-   inline size, with `.case-card` as the container (`@container`). Type v3
-   §3.6 lets a clamp outside the ladder keep its slope raw, and every slope it
-   has seen is `vw`. `lint:type` evaluates only `vw` and `rem` in a preferred
-   term, so check 3 could not walk this role if it ever joined the ladder, and
-   outside a container `cqi` falls back to the viewport.
-2. **A reserved line box.** Every question reserves `min-height: 2lh` (K2a), so
-   drawings in a row share one height. No spec governs a height reserved in
-   lines. One other rule uses `lh` (`min-height: 1lh` on a caption row in the
-   bento grid), equally ungoverned.
-
-Needs: type v3 to rule whether a container-relative slope is a sanctioned kind
-of slope (and how check 3 would measure it), and the type or spacing system to
-own reserved line boxes.
-
-**The card hover panel.** Joined 15 Oct 2026 from the home page finesse pass (3a,
-ruling 1b). The Selected work card's hover panel was `--bg-surface-elevated`
-in both modes (H-b, 14 Oct). In dark that stepped 1.13:1 off `--bg-surface`
-and took chroma from 7 units to 13, so the hovered card read brown; light's
-step is 1.10:1. `--card-hover` is a component token on `--face-disc`'s
-precedent: `--bg-surface-elevated` in light, unchanged, and
-`oklch(0.243 calc(var(--chroma-unit) * 10) var(--hue-surface))` in dark, a
-1.10:1 step. It sits between `--bg-surface` and `--bg-surface-elevated`, both
-of which lint:color checks 4 and 8 measure; on the new dark value itself,
-measured 15 Oct: `--text-primary` 13.93, `--text-secondary` 9.53,
-`--text-muted` 6.23. lint:color does not measure `--card-hover` itself; its
-dark value sits between two surfaces the checks do measure, but nothing fails
-if a later edit moves it out of that range. What a spec would need: whether a
-hover panel is a palette role, and whether its dark value should become a
-derived step (light's ratio) rather than a written lightness.
-
 **Hand-authored data visualisation.** Joined 23 Aug 2026, from the Delivery
 Promise build, and the first to arrive from a coordinate-space question rather
 than a token one. No locked spec governs a drawn chart: not its type sizes, not
@@ -402,12 +341,10 @@ caption's 400 in `--text-secondary` (since 15 Oct 2026; it was 500 in
 question), then the product and its years in `text-muted`
 ("Bard, 2025 to now"), the range held on one line by `whitespace-nowrap`. It is
 the card's top line on screen and follows the `h2` in the DOM (`order-first`),
-with a visually hidden comma after the client. The client's colour is a
-recorded deviation: it is 14px in `--text-secondary`, which type v3 §3.5's
-colour-by-rung table gives to 16px support text (rung 0.5), while 14px caption
-text (rung 0) takes `--text-muted`. Paul ruled it on 15 Oct 2026 over
-`--text-muted` so the brand keeps its lead over the product line. Needs: the
-design system pass to settle the meta's rung, and with it this colour.
+with a visually hidden comma after the client. The client's colour (14px in
+`--text-secondary`) left this list on 16 Oct 2026: type v3 §3.5 now states it as
+a pair rule (step 6 part 4, ruling 4.5a). Needs: the meta's density and the gap
+to the drawing.
 
 **Pinned specimen tones.** A colour whose job is to **not** follow the theme:
 the light and dark cells of a `ModePair` comparison, and the fixed placeholder

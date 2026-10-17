@@ -39,7 +39,7 @@ export const COVER_1200 = new Set(['bard', 'fdte', 'dagr', 'urbn']);
 // about 553 up, including 1024 to 1140 where the art itself is under 200. A 390
 // phone at 3x (386 px) takes the 600.
 const COVER_SIZES =
-  '(min-width: 1024px) 204px, (min-width: 768px) 210px, min(calc((100vw - 98px) * 0.44), 210px)';
+  '(min-width: 1024px) 204px, (min-width: 768px) 13.125rem, min(calc((100vw - 98px) * 0.44), 13.125rem)';
 
 /**
  * One entry in the case-study index. There is one cover: **typographic**. The
@@ -147,9 +147,11 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
                <picture> (webp + png). next/image would re-encode and strip the
                fixed dimensions the blend relies on. The <picture> is the block
                sizing box (percentage width on an inline picture's <img> misresolves);
-               44% of the card's content width, capped at 210px (home cards H1b,
-               14 Oct 2026), centred between the meta and the question. */
-            <picture className="mx-auto my-auto block w-[44%] max-w-[210px]">
+               --card-art-share (44%) of the card's content width, capped at
+               --card-art-max (13.125rem, 210px at the default root; home cards
+               H1b, 14 Oct 2026; tokens since 16 Oct 2026, ruling 4.2a),
+               centred between the meta and the question. */
+            <picture className="mx-auto my-auto block w-(--card-art-share) max-w-(--card-art-max)">
               {/* One <source> and one <img>, direct children: a fragment between
                   them and <picture> loses @next/next/no-img-element's picture
                   exemption. Only the four 1200 covers get srcset and sizes. */}

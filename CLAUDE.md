@@ -777,6 +777,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Borders** — `--border-subtle`, `--border-default`, `--border-strong`
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
+- **Component and chart**: `--scrim`, `--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`, `--fill-quiet`; with `--border-interactive`, every colour token has a row in the colour spec, read by value (`__tests__/color-token-coverage.test.mjs`, 16 Oct 2026)
 - ~~**PopUp**: six surface and text tokens~~ **DELETED** 1 Oct 2026 (system retired, consumed by nothing)
 - ~~**Brand shelf**: per-brand border and fill tokens~~ **DELETED** 15 Oct 2026 (consumed by nothing since 12 Oct 2026)
 
