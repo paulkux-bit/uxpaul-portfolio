@@ -416,7 +416,13 @@ const add = (id, title, failures, note) =>
 {
   const f = [];
   const seen = new Map();
-  const COLOUR_TOKEN = /^--(bg|text|border|focus|selection|link|shadow|popup|qh|chroma|hue|color)[\w-]*$/;
+  // Widened 17 Oct 2026 (part 5) to the component colour tokens: the panel
+  // edges (--card-edge, --panel-line, --callout-line), the header coin
+  // (--face-*), --fill-quiet and --scrim sat outside the old prefixes, so a
+  // misspelt reference to one passed every gate and drew nothing. Proved red
+  // in __tests__/color-lint.test.mjs with a var(--panel-lin).
+  const COLOUR_TOKEN =
+    /^--(bg|text|border|focus|selection|link|shadow|popup|qh|chroma|hue|color|card|panel|callout|face|fill|scrim)[\w-]*$/;
   for (const d of decls) {
     for (const m of d.value.matchAll(/var\(\s*(--[\w-]+)\s*[,)]/g)) {
       if (!COLOUR_TOKEN.test(m[1])) continue;

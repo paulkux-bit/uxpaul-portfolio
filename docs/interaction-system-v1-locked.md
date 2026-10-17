@@ -216,18 +216,15 @@ removed on 15 Oct 2026 (design system pass, ruling 2d).
 --radius-full: 999px;
 ```
 
-**Five steps, not four.** `--radius-l` exists so the card keeps 16px and gets its
-own step above the button, rather than being pulled down to 12 to fit a scale
-that had no room for it. Radius scales with surface size: a button is not a card,
-and the ladder should say so.
+`--radius-l` is the card step: the case card and the testimony cell read it, so
+they move together. Since part 5 (R3, 17 Oct 2026) it is 0, so cards are square,
+matching the paintings. The ladder rises with surface size through the controls
+(4, 8, 12px); the card step drops to square on purpose.
 
-**The card step is square since 17 Oct 2026** (step 6 part 5, ruling R3). With the
-card drawn by a hairline on near-white paper (colour v2.2), 16px corners read as
-the stock component-kit card (a white page, a stone hairline within about dE 1,
-12 to 16px corners), and square matches the paintings. The step keeps its own
-name, because the card and the Delivery Promise testimony cell read it and are
-meant to move together; it now sits below the button rather than above it. The
-hero callout and the milestone keep `--radius-s`.
+**Why square** (step 6 part 5, ruling R3, 17 Oct 2026). With the card drawn by a
+hairline on near-white paper (colour v2.2), 16px corners read as the stock
+component-kit card (a white page, a stone hairline within about dE 1, 12 to 16px
+corners). The hero callout and the milestone keep `--radius-s`.
 
 `--radius-image` (12px) and `--radius-portrait` (4px) stay as media tokens. They
 now coincide in value with `m` and `xs` while remaining distinct in meaning —

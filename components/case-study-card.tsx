@@ -120,11 +120,13 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
   return (
     <article
       className={[
-        // The border is transparent, not removed (T4): the card is a panel of
-        // --bg-surface on --bg-canvas, and the 1px edge stays so forced-colors
-        // mode still draws it. @container makes the card the inline-size
-        // container the question's cqi size resolves against (text-cover).
-        'case-card @container relative isolate flex h-full flex-col overflow-hidden border border-transparent bg-surface',
+        // A 1px border, kept since T4 so forced-colors mode always draws the
+        // card's edge. Its colour comes from .case-card in globals.css,
+        // var(--card-edge): the hairline in light, where the surface equals the
+        // page (colour v2.2), and transparent in dark, where the walnut panel
+        // carries the card. @container makes the card the inline-size container
+        // the question's cqi size resolves against (text-cover).
+        'case-card @container relative isolate flex h-full flex-col overflow-hidden border bg-surface',
         // Hover/focus response is a promise of a click target. An unpublished
         // card has none, so it rests: same border, no response.
         // The states themselves live in globals.css (R4); this modifier is the
@@ -134,7 +136,7 @@ export function CaseStudyCard({ study }: { study: CaseStudy }) {
         .filter(Boolean)
         .join(' ')}
     >
-      {/* One cream panel, top to bottom: the meta, the drawing, the question
+      {/* One panel, top to bottom: the meta, the drawing, the question
           (home cards T4, 14 Oct 2026). Equal heights again: the grid sets every
           row to the tallest card (grid-auto-rows: 1fr in app/page.tsx), which
           reverses round 1's text-follows-the-drawing (H3c). The column's gap-l

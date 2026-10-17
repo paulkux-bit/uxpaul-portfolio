@@ -517,8 +517,9 @@
      with chroma 0.0169 - still monochrome-warm. */
   --fill-quiet:             color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas));
   /* Non-text contrast carrier for underlines and interactive edges.
-     --border-default (0.360 chroma-light) sits under 3:1 against the cream
-     canvas, so it cannot legally carry an affordance on its own. */
+     --border-default sits under 3:1 against the canvas (1.42:1 on the light
+     page since colour v2.2), so it cannot legally carry an affordance on its
+     own. */
   --border-interactive:     oklch(0.500 calc(var(--chroma-unit) * 9) calc(var(--hue-ground) - 20));
 
   --focus-ring:             oklch(0.220 0.018 55 / 0.55);
@@ -606,19 +607,20 @@
      because heavy weight reads heavier on the walnut canvas. */
   --mark-weight:            700;
 
-  /* Radius, interaction system v1 §4. Five steps, so radius scales with
-     surface size: --radius-l exists so the card has its own step above the
-     button. Square since part 5 (ruled 17 Oct 2026, R3): with the card drawn
-     by a hairline on near-white paper, 16px corners read as the stock
-     component-kit card, and square matches the paintings. The card and the
-     testimony cell read it; the step stays so they move together. */
+  /* Radius, interaction system v1 §4. The ladder rises with surface size
+     through the controls (4, 8, 12px). --radius-l is the card step: the case
+     card and the testimony cell read it, so they move together. Since part 5
+     (ruled 17 Oct 2026, R3) it is 0, so cards are square, matching the
+     paintings; it drops below the controls on purpose, because with the card
+     drawn by a hairline on near-white paper, 16px corners read as the stock
+     component-kit card. */
   --radius-xs:               4px;  /* inline marks, small media, focus-ring rounding */
   --radius-s:                8px;  /* compact controls — theme toggle, nav */
   --radius-m:               12px;  /* buttons */
   --radius-l:                0px;  /* cards: square (R3, 17 Oct 2026; was 16px) */
   --radius-full:           999px;
 
-  /* Containment radius for bright UI-capture images on the warm canvas (hero
+  /* Containment radius for bright UI-capture images on the canvas (hero
      dashboard, PROBLEM legacy screenshots) — one value so they read as one system.
      Mode-independent. Coincides in value with --radius-m; distinct in meaning. */
   --radius-image:           12px;
@@ -3091,8 +3093,8 @@ dialog.client-work::backdrop {
 
 /* PROBLEM legacy screenshots: same containment as the hero dashboard image so the
    two bright UI captures read as one system — shared radius token, and an inset
-   hairline in BOTH modes (parity) so the panels keep a defined edge against cream
-   (Paper) and walnut. Mode-aware via --border-subtle; no recolor. */
+   hairline in BOTH modes (parity) so the panels keep a defined edge against the
+   near-white page (Paper) and walnut. Mode-aware via --border-subtle; no recolor. */
 .cs-section--problem .framed-pair__cell .figure__image {
   border-radius: var(--radius-image);
   box-shadow: var(--shot-edge), var(--shot-ring);
@@ -4618,7 +4620,7 @@ html.dark .figure-placeholder {
      frontmatter, so next/image generates no blur placeholder, and the callout
      that overlaps this frame renders on time over nothing.
      --bg-sunken by the role map: "inset against bg-canvas". It is the only
-     surface token darker than the canvas in BOTH modes (0.900 vs 0.978 light,
+     surface token darker than the canvas in BOTH modes (0.972 vs 0.990 light,
      0.150 vs 0.180 dark), so it recedes either way and reads as a well waiting
      to be filled rather than as a finished panel that then swaps — which is what
      --bg-surface, "default panel: cards, content modules, footer", would do.
@@ -4626,7 +4628,7 @@ html.dark .figure-placeholder {
      tRNS) and object-fit: cover leaves no letterbox. */
   background-color: var(--bg-sunken);
   /* Hairline defines the screenshot's edge in BOTH modes (parity): the light panel
-     against cream (Paper) and against walnut. Mode-aware via
+     against the near-white page (Paper) and against walnut. Mode-aware via
      --border-subtle; inset → no layout shift, follows the radius. Plus the
      6b frame, outside the box, in dark. */
   box-shadow: var(--shot-edge), var(--shot-ring);
@@ -6751,8 +6753,10 @@ html.dark .figure-placeholder {
 
      THE GAP STAYS --spacing-l (32px) and does not follow .framed-pair down to
      --spacing-m. FramedPair's cells are bright screenshots that self-separate
-     against the ground; these are two --bg-surface boxes one step off canvas,
-     and 24px between low-contrast surfaces reads as one box with a slot. */
+     against the ground; these are two quiet boxes, drawn in light by a
+     hairline on the page (colour v2.2) and in dark by one tone step off the
+     canvas, and 24px between such low-contrast boxes reads as one box with a
+     slot. */
 }
 
 /* `.cs-section p:has(+ .testimony-pair) { margin-bottom: 0 }` was here, zeroing the

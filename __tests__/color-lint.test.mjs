@@ -111,6 +111,25 @@ describe('lint:color path mode', () => {
   });
 });
 
+// Check 6 reads only names it recognises as colour tokens. Until 17 Oct 2026
+// the component tokens (the panel edges, the header coin, --fill-quiet, --scrim)
+// sat outside its prefixes, so a misspelt reference to one passed. The red case
+// misspells the first use of --panel-line (the milestone's outline).
+describe('lint:color check 6, every reference resolves', () => {
+  it('passes on the real palette', () => {
+    expect(lint(CSS, 6, 'real-refs')).toMatch(/^✓ 6\./);
+  });
+
+  it('fails on a misspelt component token (var(--panel-lin))', () => {
+    const at = CSS.indexOf('outline: 1px solid var(--panel-line)');
+    expect(at, 'no outline reads --panel-line').toBeGreaterThan(0);
+    const css = CSS.slice(0, at) + CSS.slice(at).replace('var(--panel-line)', 'var(--panel-lin)');
+    const block = lint(css, 6, 'panel-lin');
+    expect(block).toMatch(/^✗ 6\./);
+    expect(block).toMatch(/--panel-lin is referenced but never defined/);
+  });
+});
+
 /** Replace exactly one occurrence, inside the light :root block, or throw. */
 function inLight(css, from, to) {
   const at = css.indexOf('\n.dark {');

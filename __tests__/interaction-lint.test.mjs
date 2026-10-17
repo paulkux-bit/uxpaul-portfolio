@@ -556,8 +556,10 @@ describe('§5 pressed states — the specified values, on the specified surfaces
 
   // H-b (home cards T4, 14 Oct 2026), replacing H1b's border-only hover, and
   // per mode since part 5 (ruled 17 Oct 2026, 2a 3a). The card's 1px border
-  // (transparent in the JSX, kept for forced colors) takes --card-edge: the
-  // hairline in light, transparent in dark. Its hover moves both channels at
+  // (the JSX `border` width class, kept for forced colors) takes its colour from
+  // .case-card alone, --card-edge: the hairline in light, transparent in dark.
+  // The JSX names no border colour: `border-transparent` was inert once
+  // .case-card set the edge in both modes, and was removed (17 Oct 2026). Its hover moves both channels at
   // --duration-card: the panel to --card-hover (dark's 1.10:1 step; the page
   // itself in light) and the edge to --card-edge-hover (light's 1.95:1 step;
   // transparent in dark). The question underlines at 1px (K3a). It does not
@@ -574,7 +576,8 @@ describe('§5 pressed states — the specified values, on the specified surfaces
   it('the card rests on its edge token and moves panel and edge on hover (H-b, per mode)', () => {
     const card = blankComments(readFileSync(join(REPO, 'components', 'case-study-card.tsx'), 'utf8'));
     expect(card).not.toMatch(/\blift\b/);
-    expect(card).toMatch(/\bborder-transparent\b/);
+    expect(card, 'the card keeps a 1px border (the `border` width class)').toMatch(/(?<![\w-])border(?![\w-])/);
+    expect(card, 'the border colour comes from .case-card, not the JSX').not.toMatch(/\bborder-transparent\b/);
     expect(card).not.toMatch(/\bborder-(subtle|default|strong)\b/);
     expect([...declsOf('.case-card--linked:hover')]).toEqual([
       ['background-color', 'var(--card-hover)'],
@@ -660,7 +663,7 @@ describe('§4 radius mapping — the right step, not merely a token', () => {
     ['.mode-pair__cell', '--radius-s'],
     ['.hero-block__callout', '--radius-s'],
     ['.about-btn', '--radius-m'],        // the button
-    ['.case-card', '--radius-l'],        // the card sits a step above the button
+    ['.case-card', '--radius-l'],        // the card step, square since part 5 (R3)
     ['.about-roles__step::before', '--radius-full'],
   ];
   for (const [sel, token] of EXPECT) {
