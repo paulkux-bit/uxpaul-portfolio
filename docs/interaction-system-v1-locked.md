@@ -169,8 +169,15 @@ an image or the webfont arrived mid-scroll, animated every page change to the to
 (90 frames, 786ms) and left a card click 49px short. The one smooth scroll kept is
 the client work dialog's `scrollTo({ behavior: 'smooth' })`: short, started by the
 reader, it shows which slide is next, and it checks reduced motion. Measured on the
-3e prototype: 20 of 20 cold loads land (12 at 80px, 8 at maximum scroll), both
-engines, with 600ms image and font delay.
+tip of the responsive pass (16 Oct 2026; Playwright, `next start`, viewports 1440 x
+900 and 390 x 844, 600ms added to every image and font response, 20 cold loads of
+`#outcome` and `#role` on the five studies): with motion on, Chromium 151 and WebKit
+26.5 each land 20 of 20 (14 at 80px, 6 at maximum scroll). Under reduced motion
+WebKit lands 20 of 20 and Chromium 18: Dagr's and Delivery Promise's `#outcome` at
+1440 overshoot by 254 and 147px when the webfont swaps. That overshoot is identical
+on `main`, so it predates this ruling. The font alone moved smooth landings: 10 of 20
+off in the Falsifier's run (box fixed, smooth kept, Chromium 1194) and 20 of 20 on
+`main` (Chromium 151).
 
 `--duration-theme` is a **name for a speed that already ships**, not a new speed.
 This section was written from an interaction audit and inherited its blind spot:

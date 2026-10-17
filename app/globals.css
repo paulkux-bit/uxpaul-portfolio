@@ -712,10 +712,13 @@
     scroll-padding-top: 5rem;
     /* No scroll-behavior: smooth (step 6 part 4, ruling 3e, 16 Oct 2026). It
        made a cold load of a pasted #outcome or #role stop 213 to 712px short
-       in Chromium when an image or the webfont arrived mid-scroll (an instant
-       jump is held by scroll anchoring; a smooth one is not), and it animated
-       every page change from the old scroll position to the top (90 frames,
-       786ms) and left a card click 49px short. Jumps are instant. The client
+       in Chromium when an image or the webfont arrived mid-scroll, and it
+       animated every page change from the old scroll position to the top (90
+       frames, 786ms) and left a card click 49px short. Jumps are instant.
+       Measured 16 Oct 2026 with images and the font 600ms late: instant jumps
+       land in Chromium and WebKit, except two Chromium overshoots under
+       reduced motion when the font arrives late (Dagr and Delivery Promise
+       #outcome at 1440, 254 and 147px), which main has too. The client
        work dialog keeps its own short, user-started smooth slide. Interaction
        v1 §3. */
   }
@@ -882,7 +885,7 @@
      h1 sat on its 32px floor from 320 to 711px and was smaller than the About
      h1 or a study section heading at every width from 320 to 1066; at 390 its
      stem (2.29px) was lighter than the 22px name line's (2.35px). Now 36px
-     at 390, 44.6 at 768, 50.4 at 1024, 60 from 1440, never smaller than the
+     at 390, 44.6 at 768, 50.5 at 1024, 60 from 1440, never smaller than the
      About h1 or a section heading. The rem intercept lets it grow under
      text-only zoom (1.45x at 1440 with a 200% root; it was 1.08x). Weight
      stays 340 (ruling 1a). The size is not a --type-* token: display sizes

@@ -151,7 +151,10 @@ input to the design system pass:
      `--bg-canvas` in dark. `--face-ring` is `--text-primary` at 28% in both.
    - **Contrast.** The ring measures 1.83:1 on the disc and 2.00:1 on the
      header in light. In dark it is 1.06:1 on the disc, where the disc's own
-     edge (about 13.0:1 on walnut; 13.49:1 on the quiet ground before 15 Oct) draws the circle. Neither has to reach 3:1: the circle
+     edge (13.03:1 on walnut; 13.49:1 on the quiet ground before 15 Oct) draws the circle.
+     The 13.03 was measured 16 Oct 2026: `--face-disc` against `--bg-canvas`
+     (the header has no ground of its own), each resolved by the browser and
+     rasterised to sRGB, WCAG 2 ratio, equal in Chromium 151 and WebKit 26.5. Neither has to reach 3:1: the circle
      frames an image inside a link named "uxpaul".
    - The two tokens' values have rows in colour v2 §4 (component tokens, 16
      Oct 2026, ruling 4.1a). What a spec would still need: a role for an
