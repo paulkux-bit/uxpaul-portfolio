@@ -852,16 +852,19 @@
    Plain font-weight maps to the wght axis; there is no font-variation-settings
    here and no opsz, because the axis does not exist. */
 @utility text-lede {
-  font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
+  font-size: clamp(2.25rem, 2.2857vw + 1.6929rem, 3.75rem); /* 36 at 390 → 60 at 1440 */
   line-height: 1.08;
   letter-spacing: var(--track-display);
   font-weight: 340;
-  /* NOT tokenised, deliberately. v3 §9: this role's 60px ceiling sits in the
-     53-71px gap between the display and large-display bands, so §3.1 returns
-     no band for it. 100 is already legal so check 1 is satisfied and no edit
-     is forced; tokenising would encode a banding answer that is being
-     deferred. This is the home h1 — decided against real content, not by
-     rounding to the nearer band. */
+  /* Step 6 part 4, ruling 1b (16 Oct 2026). The slope was 4.5vw alone, so the
+     h1 sat on its 32px floor from 320 to 711px and was smaller than the About
+     h1 or a study section heading at every width from 320 to 1066; at 390 its
+     stem (2.29px) was lighter than the 22px name line's (2.35px). Now 36px
+     at 390, 44.6 at 768, 50.4 at 1024, 60 from 1440, never smaller than the
+     About h1 or a section heading. The rem intercept lets it grow under
+     text-only zoom (1.45x at 1440 with a 200% root; it was 1.08x). Weight
+     stays 340 (ruling 1a). The size is not a --type-* token: display sizes
+     over 30px are not tokenised yet (type v3 §3.6). */
   text-wrap: balance;
 }
 

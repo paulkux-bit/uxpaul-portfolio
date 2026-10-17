@@ -350,7 +350,7 @@ real clamp, and every type-role utility must have a row.
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
-| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour, ruled 16 Oct 2026 (1a): no heavy half on home; the signature's heavy half lives on the turns. |
+| `text-lede` | 36 → 60px | Home hero h1. One weight (wght 340) and one colour, ruled 16 Oct 2026 (1a): no heavy half on home; the signature's heavy half lives on the turns. |
 | `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |

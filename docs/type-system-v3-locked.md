@@ -117,7 +117,7 @@ There is no fourth value and no per-module choice. If you are picking a width by
 
 **The signature (ruling 3).** The 340/720 pair is reserved for exactly three placements: the home hero, the about page opener, and one moment per case study chosen by the author. It is illegal on any role whose **desktop ceiling** is under 40px, and illegal anywhere else without an entry in the lint allowlist. It exists because it is the one typographic idea on the site that reads in under a second, at any size, and survives the fallback font.
 
-**"≥40px" means the role's ceiling, not its rendered size (settled 7 Aug 2026).** The earlier wording said only "illegal below 40px," which read as a statement about rendered size and put the home hero in breach of the spec on every phone: `text-lede` is `clamp(2rem, 4.5vw, 3.75rem)`, so it sits at 32px until an 889px viewport. Assertion 4 had always tested the ceiling, so spec and test disagreed. Resolved in favour of the test, on evidence: the hero was checked on device in both modes at the 32px floor, and the contrast registers in well under a second with the light weight reading as recessive rather than fragile. The signature is a *relationship* between two weights, and that relationship survives the scale change; a rendered-size rule would also have made the same role legal on desktop and illegal on mobile, which is not a property a role can have.
+**"≥40px" means the role's ceiling, not its rendered size (settled 7 Aug 2026).** The earlier wording said only "illegal below 40px," which read as a statement about rendered size and put the home hero in breach of the spec on every phone: `text-lede` was `clamp(2rem, 4.5vw, 3.75rem)`, so it sat at 32px until a 711px viewport (it is `clamp(2.25rem, 2.2857vw + 1.6929rem, 3.75rem)` since §12, 36px at 390). Assertion 4 had always tested the ceiling, so spec and test disagreed. Resolved in favour of the test, on evidence: the hero was checked on device in both modes at the 32px floor, and the contrast registers in well under a second with the light weight reading as recessive rather than fragile. The signature is a *relationship* between two weights, and that relationship survives the scale change; a rendered-size rule would also have made the same role legal on desktop and illegal on mobile, which is not a property a role can have.
 
 **The five are the whole set (1 Oct 2026).** A weight outside them fails `lint:type` check 13 unless it is allowlisted with a reason (§7).
 
@@ -693,3 +693,16 @@ Step 6, part 3 of the design-system pass. Ruled by Paul as `1a 2b 3b 4b 5b 6b 8b
 **Not yet benched:** FLAR on a 400 stem at 52, 72 and 88px. §10.3's cut was judged at 600. Paul's preview look is the bench.
 
 **Logged, not ruled:** Bard's three resolution headlines (rung 3, 30px, 600) now sit under 400 section headings; the run-in bold leads (16 to 25 per study) are denser per stroke than a 400 heading and the reviewers suggest rationing them to about one per section (a copy question).
+
+---
+
+## 12. Responsive pass, 16 Oct 2026
+
+Step 6, part 4 of the design-system pass. Ruled by Paul as `1b, 2 as Comparative trends, 3e, 4a, 5a, 6a` from `docs/previews/part4/board-part4-v3.html`, after the Plot Panel (`docs/previews/part4/part4-plot-panel.md`), CC's reviewers and doers (`docs/part4-review-cc.md`) and the Falsifier (`docs/previews/part4/part4-falsifier.md`). Record: `claude/design-pass-part4.md`.
+
+**The responsive sweep** (7 routes, 360 to 2560, both modes, every visible text node): 0 text under AA, 0 under 14px, 0 horizontal overflow at the default text size. Spacing monotonic. The one type finding was the home h1.
+
+| # | Ruling | Mechanism |
+|---|---|---|
+| 1b | The home h1 grows on phones and tablets | `text-lede` `clamp(2.25rem, 2.2857vw + 1.6929rem, 3.75rem)` at 340: 36px at 390, 44.6 at 768, 50.4 at 1024, 60 from 1440 (was 32px from 320 to 711, 34.6 at 768, and smaller than the About h1 or a section heading at every width from 320 to 1066). U+00A0 binds "no one" so 1b's fourth line at 320 to 378 does not split it. Stem at 390, measured on the outline: 2.57px against the name line's 2.35 (was 2.29) |
+
