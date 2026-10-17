@@ -36,7 +36,10 @@ card hover panel** joined on 15 Oct 2026, the first entry for a surface that
 was right in one mode and wrong in the other. **The home card drawing's
 width, the card question's container units and the card hover panel left on
 16 Oct 2026** (step 6 part 4, rulings 4.1a to 4.4a), into colour v2 §4, type v3
-§3.4 and §3.6, and the tokens `--card-art-share` and `--card-art-max`.*
+§3.4 and §3.6, and the tokens `--card-art-share` and `--card-art-max`. The card
+hover is per mode since 17 Oct 2026 (part 5, 3a): light steps the card's edge,
+dark deepens the panel, both in colour v2.2 §4 and §7 item 10 and interaction
+v1 §5.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -136,21 +139,25 @@ input to the design system pass:
    - **Size.** The circle is 2.25rem below 768 and 2.5rem from 768, inside a
      2.75rem target (ruling 2a). No spacing or size token governs a header
      mark.
-   - **Picture.** `public/header-face.webp`, 120px, 3,736 bytes, made by
+   - **Picture.** `public/header-face.webp`, 120px, 3,802 bytes since 17 Oct 2026 (3,736 before), made by
      `scripts/build-header-face.mjs` from the md5-pinned cutout. It crops an
      840px square at x 80, y 50, stretches Rec. 709 luma between two fixed
      levels measured on that crop (0.076 and 0.847, its 1st and 99th
      percentiles, ruled 12 Oct after the sign-off sheet), then maps it from
      light `--text-primary` to light `--bg-canvas` at gamma 0.88, resizes to
      120px and encodes WebP at q82. Its ink and paper are the two tokens' sRGB,
-     written into the script, so a palette change needs a re-run.
+     read from `app/globals.css` by the script since 17 Oct 2026 (part 5, K1;
+     written into it as literals before, so the face kept the v2.1 ink after
+     the palette moved). A palette change still needs a re-run.
    - **Coin.** Two component tokens, authored by mixing in the theme layer on
      `--scrim`'s precedent and kept out of the twelve palette roles (Paul, 12
      Oct: logged here, no change to the locked colour spec). `--face-disc` is
-     `--bg-surface` in light and `--text-primary` mixed 92% toward
-     `--bg-canvas` in dark. `--face-ring` is `--text-primary` at 28% in both.
-   - **Contrast.** The ring measures 1.83:1 on the disc and 2.00:1 on the
-     header in light. In dark it is 1.06:1 on the disc, where the disc's own
+     its own quiet step in light since 17 Oct 2026 (oklch 0.968, 1.06:1 on
+     the canvas; it was `--bg-surface`, which now equals the canvas) and
+     `--text-primary` mixed 92% toward `--bg-canvas` in dark. `--face-ring` is `--text-primary` at 28% in both.
+   - **Contrast.** The ring measures 1.81:1 on the disc and 1.82:1 on the
+     header in light since 17 Oct 2026 (8-bit sRGB composite arithmetic; 1.83
+     and 1.84 on the v2.1 palette, where this line said 2.00 on the header). In dark it is 1.06:1 on the disc, where the disc's own
      edge (13.03:1 on walnut; 13.49:1 on the quiet ground before 15 Oct) draws the circle.
      The 13.03 was measured 16 Oct 2026: `--face-disc` against `--bg-canvas`
      (the header has no ground of its own), each resolved by the browser and
@@ -178,7 +185,8 @@ input to the design system pass:
 
 Needs: rulings on all three. The component colour tokens (`--scrim`,
 `--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`) are listed in
-colour v2 §4 since 16 Oct 2026.
+colour v2 §4 since 16 Oct 2026, with the panel edge tokens (`--card-edge`,
+`--card-edge-hover`, `--panel-line`, `--callout-line`) since 17 Oct 2026.
 
 **Hero headings in one weight and one colour.** Joined 13 Oct 2026 from the
 home and About copy build (`docs/cc-prompt-hero-about-build.md`, Paul's final

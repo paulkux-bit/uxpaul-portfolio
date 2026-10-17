@@ -212,14 +212,19 @@ removed on 15 Oct 2026 (design system pass, ruling 2d).
 --radius-xs:   4px;   /* inline marks, small media, focus-ring rounding */
 --radius-s:    8px;   /* compact controls — theme toggle, nav */
 --radius-m:   12px;   /* buttons */
---radius-l:   16px;   /* cards */
+--radius-l:    0px;   /* cards: square since part 5 (R3, 17 Oct 2026); was 16px */
 --radius-full: 999px;
 ```
 
-**Five steps, not four.** `--radius-l` exists so the card keeps 16px and gets its
-own step above the button, rather than being pulled down to 12 to fit a scale
-that had no room for it. Radius scales with surface size: a button is not a card,
-and the ladder should say so.
+`--radius-l` is the card step: the case card and the testimony cell read it, so
+they move together. Since part 5 (R3, 17 Oct 2026) it is 0, so cards are square,
+matching the paintings. The ladder rises with surface size through the controls
+(4, 8, 12px); the card step drops to square on purpose.
+
+**Why square** (step 6 part 5, ruling R3, 17 Oct 2026). With the card drawn by a
+hairline on near-white paper (colour v2.2), 16px corners read as the stock
+component-kit card (a white page, a stone hairline within about dE 1, 12 to 16px
+corners). The hero callout and the milestone keep `--radius-s`.
 
 `--radius-image` (12px) and `--radius-portrait` (4px) stay as media tokens. They
 now coincide in value with `m` and `xs` while remaining distinct in meaning —
@@ -319,7 +324,7 @@ halo, one box. The values do not change, only the box they surround.
 | Nav link | colour + underline | sink 1px |
 | Button | background `--text-primary` → `--text-secondary` | sink 1px |
 | Theme toggle | colour + border `--border-strong` | sink 1px |
-| Card | panel `--bg-surface` → `--card-hover` (the elevated surface in light; 0.243 in dark, 3a ruling 1b, 15 Oct 2026) + question underline at 1px, 0.18em offset (H-b and K3a, 14 Oct 2026; was `--border-strong` + title underline at H1b, 1 Oct 2026, and `translateY(-3px)` + `--shadow-hover` + `--border-strong` before that). Nothing fills on keyboard focus | sink 1px |
+| Card | per mode since 17 Oct 2026 (part 5, 3a): light, edge `--card-edge` → `--card-edge-hover` (1.42:1 to 1.95:1 on the canvas) with no fill; dark, panel `--bg-surface` → `--card-hover` (L 0.260, 3a ruling 1b, 15 Oct 2026) with no edge. Both + question underline at 1px, 0.18em offset (H-b and K3a, 14 Oct 2026; was `--border-strong` + title underline at H1b, 1 Oct 2026, and `translateY(-3px)` + `--shadow-hover` + `--border-strong` before that). Nothing fills on keyboard focus | sink 1px |
 | Work band | arrow `translateX(3px)` + label underline; the unruled band (`--unruled`, 2 Oct 2026, no hairlines) is underlined at rest and the underline thickens to 2px in `--link-hover` | sink 1px, **on the band** |
 | Disclosure row | colour | none — the rotation is the feedback |
 
@@ -334,7 +339,11 @@ and the border change firing together to be the template part of the card. Every
 surface now sinks and does nothing else. **Since T4 (14 Oct 2026) the card has no
 visible border either:** it is a `--bg-surface` panel on `--bg-canvas` with a
 transparent 1px border, kept so forced-colors mode draws its edge, and its hover
-is the panel deepening (H-b) rather than the border.
+is the panel deepening (H-b) rather than the border. **Per mode since part 5
+(ruled 17 Oct 2026, 2a 3a):** light's panel equals the page, so in light the
+1px border takes `--card-edge` at rest and steps to `--card-edge-hover` on hover,
+moving at `--duration-card` with the panel; dark keeps H-b exactly, with the
+border transparent. Nothing else moved: no lift, no shadow, and the same 1px sink.
 
 **The work band sinks as a band.** It is a single `<Link>` whose hover is
 expressed on two descendants, so `lint:interaction` check 7 reports it twice; the

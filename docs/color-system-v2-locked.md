@@ -1,10 +1,17 @@
-# The uxpaul.com colour system — v2.1, locked
+# The uxpaul.com colour system, v2.2, locked
 
 Decided 8 Aug 2026. **Amended 15 Oct 2026 (v2.1)** in the design system pass:
 the dark mode moves from quiet ground to **walnut** (ruling 9b), and the
 interaction accents from amber to **brass** (ruling 10b). The sections
 below carry the amended values and say where v2 stood; the v2 values are in git
 history at `a11e8b7`.
+
+**Amended 17 Oct 2026 (v2.2)** in step 6 part 5, ruled "1BC 2a 3a 4d 5a E1 R3 N1
+K1": light becomes **white paper with walnut ink**. The beige light ramp sat on
+anthropic.com's own lightness steps one for one, so light drops its tinted
+surfaces, draws its panels by an edge, and puts its colour in the ink. Dark is
+unchanged. The v2.1 light values are in git history at `21c42b2` and in the
+paragraph under the light table in §4.
 
 v2 was decided 8 Aug 2026. Supersedes the palette values in `docs/color-system.md`,
 which remains the owner of the palette's *rationale* and its accessibility
@@ -20,13 +27,14 @@ That is a constraint, not a coincidence — see §2.
 | # | Decision | Ruling |
 |---|---|---|
 | 1 | Dark ground | **Walnut** (v2.1, 15 Oct 2026). A warm wood-dark base, warmth still rising with elevation. Was **quiet**: near-neutral at the base |
-| 2 | Light surfaces | **Deepened.** Canvas held; the three below it dropped for separation |
-| 3 | Where warmth lives | **On the objects, not in the air** |
+| 2 | Light surfaces | **White paper** (v2.2, 17 Oct 2026). Canvas, surface and elevated are one value; a panel is drawn by its edge. Was **deepened**: canvas held, the three below it dropped for separation |
+| 3 | Where warmth lives | **On the objects, not in the air.** In light since v2.2, **in the ink** |
 | 4 | Opacity | **None, anywhere in the palette.** Solid tokens only |
 | 5 | Accent | **None at rest.** The warmth is the colour |
 | 6 | Architecture | **Two layers.** Tuning primitives, then semantic roles |
 | 7 | Enforcement | **`npm run lint:color`**, beside `lint:type` and `lint:space` |
 | 8 | Interaction accent | **Brass** (v2.1, 15 Oct 2026). Hover, glow and selection at hue 72 to 80. Was amber, hue 55 to 65 |
+| 9 | Light ink | **Walnut, 4d** (v2.2, 17 Oct 2026). The text ramp carries 18 to 21 chroma units at hue 52 to 58; the primary sits OKLab dE 6.3 from Anthropic's near-black, where v2.1's sat 2.9 |
 
 ---
 
@@ -84,6 +92,13 @@ the text ramp's lightness by up to 0.035, so no v2 dark ratio carries over.
 Every pair is re-measured in §5, and `lint:color` checks 4, 8 and 10 hold the
 floors and the card step.
 
+**v2.2 is not darker in light.** The light grounds rise to L 0.990 and the ink
+lightens from L 0.215 to 0.240, so no v2.1 light ratio carries over. Every
+light pair is re-measured in §5. On the canvas the primary moves from 16.54 to
+16.15 and the secondary from 10.51 to 10.50, the only two that fall; muted rises
+from 6.06 to 6.40 and subtle from 3.86 to 4.10. The worst cases all rise, because
+the deepened surfaces are gone: primary 13.02 to 15.33, muted 4.77 to 6.08.
+
 Every text-on-surface pair was measured, not assumed. See §5.
 
 ---
@@ -108,15 +123,16 @@ no arithmetic beyond multiplication, and **without changing a single shipped
 value.**
 
 **Hue is a band primitive plus a signed degree offset.** Chroma does not need
-offsets; hue does, because the bands carry real internal variance — light
-grounds span 66–76, dark grounds 50–56 (55–60 in v2).
+offsets; hue does, because the bands carry real internal variance: light
+grounds span 60–78 (66–76 until v2.2), dark grounds 50–56 (55–60 in v2).
 
 **Primitives use the same names in both modes, redefined in `.dark`.** Not
 separate `-light` and `-dark` names. The decisive evidence is that **the bands
 swap between modes**: light text sits at hue 55 while light grounds run 66–76,
 and dark text is 70–80 while dark grounds run 50–56 (v2.1; 68–78 and 55–60 in
 v2). One vocabulary makes that
-inversion legible as a per-mode setting of the same role. Two vocabularies
+inversion legible as a per-mode setting of the same role. (v2.2: the light text
+ramp now runs 52 to 58 around its band of 55.) Two vocabularies
 would hide it and let the modes drift apart silently.
 
 ```css
@@ -156,27 +172,44 @@ structure it was twenty-four hand-tuned triples.
 
 Hex is given for reference only; `oklch` is the source of truth.
 
-### Light — deepened
+### Light: white paper, walnut ink (v2.2, 17 Oct 2026)
 
-| Token | oklch | hex | |
+| Token | oklch | hex | composed as |
 |---|---|---|---|
-| `--bg-canvas` | `0.978 0.016 76` | `#fef7ec` | changed |
-| `--bg-surface` | `0.948 0.022 72` | `#f7ecde` | changed |
-| `--bg-surface-elevated` | `0.918 0.026 68` | `#f0e1d2` | changed |
-| `--bg-sunken` | `0.900 0.028 66` | `#ebdbcb` | changed |
-| `--text-primary` | `0.215 0.018 55` | `#201712` | |
-| `--text-secondary` | `0.355 0.020 55` | `#443932` | |
-| `--text-muted` | `0.485 0.022 55` | `#695c53` | |
-| `--text-subtle` | `0.590 0.020 60` | `#877b72` | **changed — see §5** |
-| `--border-subtle` | `0.905 0.030 66` | `#eedccb` | changed |
-| `--border-default` | `0.855 0.034 60` | `#e1cbba` | changed |
-| `--border-strong` | `0.760 0.040 55` | `#c6ab99` | |
-| `--border-interactive` | `0.500 0.018 50` | `#6c605a` | |
+| `--bg-canvas` | `0.990 0.006 78` | `#fefbf7` | 3 units, ground + 8 |
+| `--bg-surface` | `0.990 0.006 78` | `#fefbf7` | 3 units, ground + 8 (the canvas) |
+| `--bg-surface-elevated` | `0.990 0.006 78` | `#fefbf7` | 3 units, ground + 8 (the canvas) |
+| `--bg-sunken` | `0.972 0.006 75` | `#f8f5f1` | 3 units, ground + 5 |
+| `--text-primary` | `0.240 0.040 52` | `#2e190c` | 20 units, text - 3 |
+| `--text-secondary` | `0.365 0.042 53` | `#503829` | 21 units, text - 2 |
+| `--text-muted` | `0.480 0.040 55` | `#705848` | 20 units, text |
+| `--text-subtle` | `0.585 0.036 58` | `#8d7767` | 18 units, text + 3 |
+| `--border-subtle` | `0.925 0.010 70` | `#ebe5df` | 5 units, ground |
+| `--border-default` | `0.875 0.014 66` | `#dcd4cc` | 7 units, ground - 4 |
+| `--border-strong` | `0.780 0.020 60` | `#c1b5ab` | 10 units, ground - 10 |
+| `--border-interactive` | `0.500 0.018 50` | `#6c605a` | 9 units, ground - 20 (unchanged) |
 
-Canvas is held at the top and the three surfaces below it drop. Separation goes
-from `0.023 / 0.022 / 0.015` to `0.030 / 0.030 / 0.018`, so a card reads as an
-object rather than as a slightly different patch of page — without the canvas
-itself getting heavier.
+Primitives are unchanged: `--hue-ground` 70, `--hue-surface` 68, `--hue-text` 55,
+`--chroma-unit` 0.002. Every multiplier is a whole number (R4).
+
+**Why.** Measured on 16 and 17 Oct 2026, the v2.1 light page, card, card hover,
+deepest panel, hairline and muted text each sat within 0.01 L of one of
+anthropic.com's four ivories, every pair under OKLab dE 3, and every warm
+off-white this system allows (L 0.89 to 0.99, chroma up to 0.03, hue 50 to 80)
+lands within dE 3 of one of them. The ground alone cannot move away, so v2.2
+removes the beige tiles and moves the ink: the panels are the page, drawn by an
+edge (`--card-edge`, `--panel-line`, `--callout-line`, §4 below), and the text
+ramp is walnut. The 4d primary is 4b's darkness with 4a's chroma, so the 340 h1
+keeps its weight. Neighbouring text roles stay OKLab dE 10 or more apart (12.5,
+11.5, 10.5; v2.1's secondary to muted step was 13.0). Records:
+`claude/colour-anthropic-check.md`, `docs/colour-anthropic-review-cc.md`,
+`docs/previews/colour-anthropic/`.
+
+**v2.1, deepened (8 Aug to 17 Oct 2026).** Canvas `0.978 0.016 76`, surface
+`0.948 0.022 72`, elevated `0.918 0.026 68`, sunken `0.900 0.028 66`; text
+`0.215 0.018 55`, `0.355 0.020 55`, `0.485 0.022 55`, `0.590 0.020 60`; borders
+`0.905 0.030 66`, `0.855 0.034 60`, `0.760 0.040 55`. Canvas held at the top
+and the three surfaces below it dropped, so a card read as an object by tone.
 
 ### Dark: walnut (v2.1, 15 Oct 2026)
 
@@ -226,17 +259,22 @@ this file. Hue for every row is held by check 9.
 | Token | Light | Dark | Role | Held by |
 |---|---|---|---|---|
 | `--scrim` | `color-mix(in oklch, var(--text-primary) 46%, transparent)` | `color-mix(in oklch, var(--bg-sunken) 60%, transparent)` | Client work dialog backdrop; dims in both modes (11 Oct 2026) | check 9 |
-| `--face-disc` | `var(--bg-surface)` | `color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas))` | Header coin disc, one coin in both modes (12 Oct 2026) | check 9 |
-| `--face-ring` | `color-mix(in oklch, var(--text-primary) 28%, transparent)` | same | Header coin ring; frames an image inside a named link, so no 3:1 owed | check 9 |
+| `--face-disc` | `oklch(0.968 calc(var(--chroma-unit) * 4) calc(var(--hue-ground) + 2))`, 1.06:1 on the canvas (v2.2, K1; was `var(--bg-surface)`) | `color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas))` | Header coin disc, one coin in both modes (12 Oct 2026) | check 9 |
+| `--face-ring` | `color-mix(in oklch, var(--text-primary) 28%, transparent)` | same | Header coin ring; frames an image inside a named link, so no 3:1 owed (light v2.2: 1.81:1 on the disc, 1.82:1 on the header, 8-bit composite arithmetic) | check 9 |
 | `--shot-frame` | none (the ring is transparent in light) | `oklch(0.255 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 3))` | The 6b screenshot frame (15 Oct 2026) | check 9 |
-| `--fill-quiet` | `color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas))` | `color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas))` | Delivery Promise node chart bars; canvas only, 3:1 as a graphical object | check 9 |
+| `--fill-quiet` | `color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas))` | `color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas))` | Delivery Promise node chart bars; canvas only, 3:1 as a graphical object (light about 3.2 on the v2.2 canvas, by OKLab mix arithmetic) | check 9 |
+| `--card-hover` | `oklch(0.990 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 8))`, the surface (v2.2) | `oklch(0.260 calc(var(--chroma-unit) * 11) calc(var(--hue-surface) - 1))` | Selected work card hover panel: no fill step in light, 1.10:1 in dark | check 10 |
+| `--card-edge` | `var(--border-default)`, 1.42:1 on the canvas | `transparent` | The Selected work card's 1px border at rest (v2.2) | check 10 |
+| `--card-edge-hover` | `var(--border-strong)`, 1.95:1 on the canvas | `transparent` | The card's border on hover (v2.2, 3a) | check 10 |
+| `--panel-line` | `var(--border-default)` | `transparent` | The milestone and testimony panels, a -1px outline (v2.2, E1) | check 9 by its target |
+| `--callout-line` | `var(--border-default)` | `var(--border-subtle)` | The hero callout's 1px border (v2.2) | check 9 by its target |
 | `--focus-ring` | `oklch(0.220 0.018 55 / 0.55)` | `oklch(0.945 0.012 78 / 0.55)` | Focus outline, a state layer | checks 8 and 9 |
 | `--selection-text` | `oklch(0.180 0.020 50)` | `oklch(0.970 0.012 78)` | Text on `--selection-bg` | checks 9 and 11 |
 | `--shadow-rest` | `0 1px 2px oklch(0.30 0.04 50 / 0.05)` | `0 1px 2px oklch(0.12 0.03 50 / 0.30)` | Resting shadow (sandbox video card only) | check 9 |
 | `--shadow-hover` | two layers, `oklch(0.30 0.04 50 / 0.06)` and `/ 0.10` | two layers, `oklch(0.12 0.03 50 / 0.35)` and `/ 0.40` | Hover shadow (sandbox video card only) | check 9 |
 
-`--card-hover` (dark row above; light is `var(--bg-surface-elevated)`) is held by
-check 10, and `--link-hover`, `--focus-glow` and `--selection-bg` by the v2.1 table
+`--card-hover` is held by check 10 (light was `var(--bg-surface-elevated)` until
+v2.2), and `--link-hover`, `--focus-glow` and `--selection-bg` by the v2.1 table
 in §9. Component tokens are mixed in the theme layer to author them, never at the
 point of use (R1), and stay outside the twelve palette roles so check 2 does not
 read an alpha as a border's.
@@ -270,7 +308,18 @@ elevated, sunken and `--card-hover`). Worst case is `--text-subtle` on
 worst and `--text-primary` ranges 12.51–16.50. (v2, quiet ground: worst
 `--text-subtle` on `elevated` at 3.46; `--text-primary` 13.48–17.12.)
 
-**Light — one failure, and it is pre-existing. Corrected 8 Aug 2026.**
+**Light (v2.2, white paper and walnut ink): zero failures.** Measured by
+`lint:color`'s arithmetic on 17 Oct 2026, across the canvas (which the surface,
+the elevated surface and `--card-hover` equal) and sunken. `--text-primary`
+16.15 on the canvas and 15.33 on sunken; `--text-secondary` 10.50 and 9.97;
+`--text-muted` 6.40 and 6.08; `--text-subtle` 4.10 and 3.89 (large only). The
+resting underline (`--border-interactive`) is 5.89 and 5.59. The card edge is
+1.42:1 at rest and 1.95:1 on hover. The selection sits dE 13.06 from the canvas
+and 11.74 from sunken; `--selection-text` on it is 13.48, unchanged. The light
+`--focus-ring` and `--selection-text` stay literals tuned to the v2.1 ink; both
+still clear their checks (8 and 11) and are listed in §9.
+
+**Light, v2.1: one failure, and it is pre-existing. Corrected 8 Aug 2026.**
 
 An earlier draft of this section claimed deepening the surfaces *caused*
 `--text-subtle` to fail. It does not. Measured against the **current** light
@@ -315,7 +364,10 @@ stays retired.
 **R3** Warmth rises with elevation. Chroma on a raised surface is the design;
 chroma at a ground is held below it. Any new surface token continues the climb.
 (v2.1: walnut gives the dark canvas 7 units, where v2 treated any chroma at a
-ground as a liability, and the climb continues above it to 14.)
+ground as a liability, and the climb continues above it to 14.) **v2.2, 17 Oct
+2026: R3 holds in dark only.** Light has one ground for the canvas, surface and
+elevated surface, and draws elevation by an edge (`--card-edge`, `--panel-line`,
+`--callout-line`), not by tone or chroma.
 
 **R4** No semantic token may be **independent of the primitives.** Compose every
 one from layer 1: chroma as `calc(var(--chroma-unit) * n)`, hue as the band
@@ -392,12 +444,16 @@ Fails on:
    exception was deleted and the band had no exception left to allow for.
    Proved red in `__tests__/color-lint.test.mjs`, through the script's optional
    CSS path: the dark ground at 85, the dark glow at 81, the dark sunken at 49.
-10. A card step, `--card-hover` on `--bg-surface`, more than 0.01 from 1.10:1
-    in either mode. The step is ruled (H-b, 14 Oct 2026; 3a ruling 1b, 15 Oct
-    2026), and a dark retune that moves one of the two tokens without the
-    other changes it silently. `--card-hover` is followed through a bare
-    `var()`, since in light it names the elevated surface. Added 15 Oct 2026;
-    proved red with the dark `--card-hover` 0.012 lighter.
+10. The card step, per mode (v2.2, 17 Oct 2026). Dark: `--card-hover` on
+    `--bg-surface` more than 0.01 from 1.10:1 (H-b, 14 Oct 2026; 3a ruling 1b,
+    15 Oct 2026), since a retune that moves one of the two tokens without the
+    other changes it silently. Light: `--card-hover` on `--bg-surface` more than
+    0.01 from 1.000 (no fill step), `--card-edge` under 1.30:1 on `--bg-canvas`,
+    or `--card-edge-hover` under 1.3 times `--card-edge`'s ratio (ruled 1.42 to
+    1.95). Tokens are followed through a bare `var()`. Added 15 Oct 2026; per
+    mode since 17 Oct 2026; proved red with the dark `--card-hover` 0.012
+    lighter, the light `--card-hover` at L 0.960, and the light
+    `--card-edge-hover` set to `var(--border-default)`.
 11. A `--selection-bg` closer than its distance floor to a text ground: OKLab
     dE x100 of 10 from the light canvas, 7 from every other ground in both
     modes, the sunken well exempt by name (no selectable text sits on it).
@@ -501,6 +557,12 @@ surface and the card hover; the sunken well is exempt. Measured light: canvas
 11.50, surface 8.96, elevated and card hover 7.06, sunken 6.40; dark 15.15 at
 the least. `--selection-text` on it measures 13.48 light and 7.86 dark. All by
 lint arithmetic, not rasterised.
+
+**17 Oct 2026, v2.2: still open.** The light `--focus-ring`
+(`oklch(0.220 0.018 55 / 0.55)`) and `--selection-text` (`oklch(0.180 0.020 50)`)
+are literals tuned to the v2.1 ink and do not follow the walnut primary; both
+clear checks 8 and 11. The section 1 drawings and card covers print in pure
+black over walnut type (the "one ink" step, after v2.2).
 
 **15 Oct 2026, v2.1: the screenshot frame (ruling 6b).** In dark only, product
 screenshots sit in a 6px frame, `--shot-frame` `oklch(0.255 0.026 55)`

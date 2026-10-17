@@ -737,9 +737,14 @@ samples, and both ends moved in a single pass. Do not treat it as a gate. Dagr's
 5 sits at **109** house-basis after the 26 Sep trim, and BARD's Role at **29** is short on
 purpose. Both are deliberate. Do not trim one to reach a round number or pad the other.
 
-## Color system — locked (v2.1)
+## Color system, locked (v2.2)
 
-**Name:** Paper & Walnut (dark was Low Light until 15 Oct 2026)
+**Name:** Paper & Walnut (dark was Low Light until 15 Oct 2026). Since v2.2 (17 Oct
+2026) light is **white paper with walnut ink**: canvas, surface and elevated are
+one near-white (`oklch(0.990 0.006 78)`), panels are drawn by an edge rather than
+a tone, and the colour lives in the text ramp (walnut, chroma 0.036 to 0.042).
+Dark is unchanged. Ruled "1BC 2a 3a 4d 5a E1 R3 N1 K1" after the light ramp
+measured on anthropic.com's own lightness steps one for one.
 **Spec:** `docs/color-system-v2-locked.md` — the palette, the two-layer
 architecture, the rules and every measured ratio. Enforced by
 `npm run lint:color` (11 checks), which gates `npm run build`.
@@ -783,7 +788,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Borders** — `--border-subtle`, `--border-default`, `--border-strong`
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
-- **Component and chart**: `--scrim`, `--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`, `--fill-quiet`; with `--border-interactive`, every colour token has a row in the colour spec, read by value (`__tests__/color-token-coverage.test.mjs`, 16 Oct 2026)
+- **Component and chart**: `--scrim`, `--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`, `--fill-quiet`, and the panel edges `--card-edge`, `--card-edge-hover`, `--panel-line`, `--callout-line` (17 Oct 2026); with `--border-interactive`, every colour token has a row in the colour spec, read by value (`__tests__/color-token-coverage.test.mjs`, 16 Oct 2026)
 - ~~**PopUp**: six surface and text tokens~~ **DELETED** 1 Oct 2026 (system retired, consumed by nothing)
 - ~~**Brand shelf**: per-brand border and fill tokens~~ **DELETED** 15 Oct 2026 (consumed by nothing since 12 Oct 2026)
 
@@ -792,7 +797,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Two-layer focus halo** — `outline` (focus-ring) + `box-shadow` (focus-glow). Don't replace with a single ring.
 - **Two-channel link hover** — underline thickness (1px → 2px) *and* color (border-interactive → link-hover) shift together. In light the brass hover (L 0.52) sits near the resting underline's lightness (0.50), so the thickness carries the hover and the colour shifts hue, not brightness (ruling 13a, 15 Oct 2026). The resting underline owes 3:1 on all five grounds, and the focus ring 3:1 over its glow (lint:color check 8).
 - **Straw selection** (brass, ruling 12c, 15 Oct 2026; warm peach before) — `oklch(0.89 0.09 80)` light, `oklch(0.42 0.07 72)` dark. Its floor is a distance, not a contrast: OKLab dE 10 or more from the light canvas and 7 or more from every other text ground in both modes (sunken exempt), held by lint:color check 11. This is the most-felt moment; never tune to a whisper.
-- **Card hover deepens the panel** (H-b, 14 Oct 2026, replacing H1b's border-only hover of 1 Oct): the borderless card goes from `--bg-surface` to `--card-hover` over `--duration-card` (the elevated surface in light; in dark a gentler 1.10:1 step, 3a ruling 1b, 15 Oct 2026; lint:color check 10 holds both modes within 0.01 of 1.10), and the question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills on keyboard focus, which draws one halo round the whole card. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
+- **Card hover, per mode** (H-b, 14 Oct 2026; per mode since part 5, 17 Oct 2026, 3a): in light the card is the page drawn by a 1px edge, `--card-edge` (1.42:1) stepping to `--card-edge-hover` (1.95:1) on hover with no fill; in dark the borderless walnut panel deepens from `--bg-surface` to `--card-hover` (1.10:1, 3a ruling 1b, 15 Oct 2026). Both move over `--duration-card`, and lint:color check 10 holds each mode's step. The question underlines at 1px with a 0.18em offset (K3a, the stated exception to the 2px link hover). No lift, no shadow, and nothing fills or steps on keyboard focus, which draws one halo round the whole card. The milestone and testimony panels take `--panel-line` as a -1px outline in light (no layout, drawn in forced colours), the hero callout `--callout-line`. The `lift` / `lift-hover` utilities remain for the sandbox video card only.
 
 ### Utility classes (mirror typography pattern)
 
@@ -808,7 +813,7 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
 
 ### Accessibility floor
 
-- Body text (`text-primary` on `bg-canvas`) hits **AAA** in both modes.
+- Body text (`text-primary` on `bg-canvas`) hits **AAA** in both modes (16.15:1 in light since v2.2).
 - `text-muted` hits **AA normal** — fine for any body-text size.
 - `text-subtle` is **AA-large only** — never below **24px (or 18.66px bold)**, which is
   the actual WCAG large-text definition. It clears roughly 3:1 and nothing more, so any
@@ -816,7 +821,7 @@ For one-off needs, use the CSS variable directly: `style={{ color: 'var(--text-m
   line here said "18px, or 14px bold"; that was too permissive and disagreed with this
   file's own contrast-floor bullet. Reconciled 8 Aug 2026: `docs/color-system.md`
   now records the measured range, 3.04-3.86 in light and 3.46-4.41 in dark; 3.77-4.97
-  in dark since walnut, 15 Oct 2026.)
+  in dark since walnut, 15 Oct 2026; 3.89-4.10 in light since v2.2, 17 Oct 2026.)
 - Focus uses `outline` + `box-shadow` (never `border-color`). Layout never shifts.
 - Link affordance is multi-channel — underline at rest, thicker + brass on hover. Thickness carries it in light, where the brass sits near the resting underline's lightness. Color alone is never the only signal.
 - `color-scheme` set per mode so native controls theme correctly.
