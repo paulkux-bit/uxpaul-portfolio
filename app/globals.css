@@ -708,8 +708,14 @@
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
     /* Keep the sticky header from obscuring focused / anchored targets
-       (WCAG 2.2 SC 2.4.11). 5rem clears the 56–64px header with room. */
-    scroll-padding-top: 5rem;
+       (WCAG 2.2 SC 2.4.11). At the default size the header is 57px (65 from
+       768) and this stays 5rem. When the header wraps (200% text, or a phone
+       at 200% page zoom: 89px at 195px wide, 177px at 390 with a 200% root)
+       the padding follows its measured height, --header-h, which
+       components/wordmark-link.tsx writes from its ResizeObserver. 0.875rem,
+       not 1rem, so the 65px header still gives exactly 5rem. Before
+       hydration, or without JavaScript, the fallback leaves 5rem. */
+    scroll-padding-top: max(5rem, calc(var(--header-h, 0rem) + 0.875rem));
     /* No scroll-behavior: smooth (step 6 part 4, ruling 3e, 16 Oct 2026). It
        made a cold load of a pasted #outcome or #role stop 213 to 712px short
        in Chromium when an image or the webfont arrived mid-scroll, and it

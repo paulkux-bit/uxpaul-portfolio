@@ -329,7 +329,13 @@ things in it no locked spec governs:
 assigns it a rung or a step. Since 16 Oct 2026 the header row wraps
 (`flex-wrap`, `min-h-14 md:min-h-16`) so at 200% text the theme toggle stays on
 screen (step 6 part 4, ruling 5a); how the wrapped header should look is
-unspecified.
+unspecified. A wrapped header is taller than the fixed 5rem scroll padding: 89px
+at 195px wide (a 390 phone at 200% page zoom), where `#outcome` landed 9px under
+it in both engines, and 177px at 390 with a 200% root, 17px under in Chromium
+(WebKit, whose padding stayed 80px, already overlapped by 33px on `main`). So
+`scroll-padding-top` is `max(5rem, calc(var(--header-h, 0rem) + 0.875rem))`,
+with `--header-h` written from the wordmark's ResizeObserver (Paul, 16 Oct 2026).
+Whether a header height belongs in the spacing system is open.
 
 **Text zoom at 320 with 200% text.** Joined 16 Oct 2026 from step 6 part 4, and
 deferred by ruling (5a covered causes 1 to 4). At a 320px viewport with a 200%
