@@ -17,13 +17,13 @@ export default function Home() {
       {/* Intro to "Selected work" is 64, not the 128 section break: the intro
           introduces the work (top-of-page ruling T2b, 1 Oct 2026). mb-2xl! because
           space-y-section sets this margin on every non-last child; the work to
-          Client work break stays 128. The page top above is 64 (T1c). */}
+          Earlier work break stays 128. The page top above is 64 (T1c). */}
       <section className="space-y-xl mb-2xl!">
         <h1
           className="hero-beat text-lede text-primary max-w-[18ch] min-[1280px]:max-w-[30ch]"
           style={{ ['--beat' as string]: 0 }}
         >
-          I take on the parts of a product no one can afford to get&nbsp;wrong.
+          I take on the parts of a product no&nbsp;one can afford to get&nbsp;wrong.
         </h1>
 
         <div className="space-y-m">
@@ -78,7 +78,7 @@ export default function Home() {
         </RevealGrid>
       </section>
 
-      {/* Client work: the shelf of four agency-era client pieces (Template B).
+      {/* Earlier work: the shelf of four agency-era client pieces (Template B).
           Each row's title opens the piece in the client work dialog. */}
       <QuickHitsSection />
     </div>

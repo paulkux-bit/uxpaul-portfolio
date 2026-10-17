@@ -113,8 +113,25 @@ export function WordmarkLink() {
 
     const mutations = new MutationObserver(track);
     mutations.observe(main, { childList: true, subtree: true });
+    let firstResize = true;
     const resize = new ResizeObserver(() => {
-      if (anchor && header.getBoundingClientRect().height !== headerHeight) observe();
+      // The header's measured height feeds scroll-padding-top (globals.css, the
+      // html rule), so an anchor jump clears a header that has wrapped to two
+      // rows (200% text, or a phone at 200% page zoom). Written on every
+      // resize, the first included (step 6 part 4, 16 Oct 2026).
+      const height = header.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--header-h', `${height}px`);
+      // A cold load of a #fragment jumps before this property exists, so a
+      // wrapped header can cover the target. Once, on the first run: if the
+      // fragment's element sits above the header's bottom edge, jump to it
+      // again now that the padding is right.
+      if (firstResize) {
+        firstResize = false;
+        const id = decodeURIComponent(location.hash.slice(1));
+        const target = id ? document.getElementById(id) : null;
+        if (target && target.getBoundingClientRect().top < header.getBoundingClientRect().bottom) target.scrollIntoView();
+      }
+      if (anchor && height !== headerHeight) observe();
     });
     resize.observe(header);
     track();

@@ -32,7 +32,8 @@ function Credit({ work }: { work: Work }) {
  * scripts/build-fine-art.mjs at the 1x box and twice it, so the bytes are measured
  * before they ship rather than decided at request time. `sizes` is the narrower of
  * the mobile column and the 1x width; the measure and --art-max-height can only
- * make the rendered box smaller, so it never under-asks.
+ * make the rendered box smaller, so it never under-asks. --art-w and --art-ratio
+ * let the CSS reserve that box before the bytes arrive (ruling 3e, 16 Oct 2026).
  *
  * The artwork is never altered: no filter, blend, transform, mat or motion, in
  * either theme (globals.css, .friction-moment).
@@ -51,6 +52,7 @@ export function FrictionMoment({ work: slug }: { work: string }) {
         <source type="image/webp" srcSet={`${webp1} ${width}w, ${webp2} ${width * 2}w`} sizes={sizes} />
         <img
           className="friction-moment__image"
+          style={{ ['--art-w' as string]: `${width}px`, ['--art-ratio' as string]: `${width} / ${height}` }}
           src={webp1}
           width={width}
           height={height}

@@ -350,7 +350,7 @@ real clamp, and every type-role utility must have a row.
 | Utility | Size (mobile → desktop) | Use |
 |---|---|---|
 | `text-statement` | 40 → 96px | Home positioning statement. Largest single type role. Once per page. |
-| `text-lede` | 32 → 60px | Home hero h1. One weight (wght 340) and one colour, ruled 16 Oct 2026 (1a): no heavy half on home; the signature's heavy half lives on the turns. |
+| `text-lede` | 36 → 60px | Home hero h1. One weight (wght 340) and one colour, ruled 16 Oct 2026 (1a): no heavy half on home; the signature's heavy half lives on the turns. |
 | `text-hero` | 48 → 80px | Case study hero. (About moved off it in v4: its h1 is `text-h1`.) |
 | `text-h1` | 36 → 56px | Case study titles, section page titles |
 | `text-h2` | 28 → 40px | Major section breaks; card title (media-tier cover) |
@@ -695,6 +695,12 @@ external)**.
   and transition in `globals.css` to the guard covering it, and names any selector with
   none. It takes an optional CSS path so it stays negative-testable from the repo root.
 
+- **sweep** = `npm run sweep` (`scripts/sweep.mjs`), LOCAL ONLY and not in the build (it
+  needs a browser and a running server). Fails on any text past the page edge on the seven
+  routes at 320 and 195px at the default size and at 390 and 1440 with a 200% root (step 6
+  part 4, ruling 6a, 16 Oct 2026). Run it against `next start` before calling a layout
+  change done.
+
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
 `npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
@@ -777,6 +783,7 @@ this paragraph said "no exception" while the shelf shipped one. True again from
 - **Borders** — `--border-subtle`, `--border-default`, `--border-strong`
 - **Interaction states** — `--focus-ring`, `--focus-glow`, `--selection-bg`, `--selection-text`, `--link-hover`
 - **Shadows** — `--shadow-rest`, `--shadow-hover` (warm-toned, not black)
+- **Component and chart**: `--scrim`, `--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`, `--fill-quiet`; with `--border-interactive`, every colour token has a row in the colour spec, read by value (`__tests__/color-token-coverage.test.mjs`, 16 Oct 2026)
 - ~~**PopUp**: six surface and text tokens~~ **DELETED** 1 Oct 2026 (system retired, consumed by nothing)
 - ~~**Brand shelf**: per-brand border and fill tokens~~ **DELETED** 15 Oct 2026 (consumed by nothing since 12 Oct 2026)
 

@@ -173,6 +173,10 @@ const RUNGS = [
   // at a 32px ceiling and weight 600; the flare was tested at 32 and cut.
   { rung: 2, role: 'Card question (T4)', selector: '.text-cover', band: 'read', voice: 'plain' /* 24px ceiling, sized by cqi */, ladder: false },
 
+  // ── The Earlier work row title, named 16 Oct 2026 (step 6 part 4, 4.6a) ──
+  // --type-21 at 400, the card question's floor, off the ladder (type v3 §3.6).
+  { rung: null, role: 'Earlier work row title', selector: '.shelf__title', band: 'read', voice: 'plain' /* 21px */, ladder: false },
+
   // ── `dead: true` — in the CSS, on no page ────────────────────────────────
   // MARKED, NOT DELETED, AND THAT IS THE WHOLE POINT. Removing an entry makes
   // the map lie by omission, which is precisely what produced the rung-5

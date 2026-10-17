@@ -18,7 +18,8 @@
     "lint:works": "node scripts/lint-works.mjs",
     "build:fine-art": "node scripts/build-fine-art.mjs",
     "build:client-work": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-client-work.mjs",
-    "build:header-face": "node scripts/build-header-face.mjs"
+    "build:header-face": "node scripts/build-header-face.mjs",
+    "sweep": "node scripts/sweep.mjs"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

@@ -106,8 +106,7 @@
       "mode": "light",
       "jurisdiction": "FL",
       "breakout": "band",
-      "aspect": 11.37,
-      "scrollFloor": 1088
+      "aspect": 11.37
     }
   ],
   "working_library_dark": [
@@ -132,6 +131,7 @@
   "change_log": [
     "empty-state standard(3:4)->feature(16:10): lone standard stretched full-width+soft; feature is the correct solo slot (full-width but ~680px tall, sharp)",
     "kpi-strip ribbon->band: band scales as a unit so all 4 KPIs stay visible on mobile",
+    "kpi-strip scrollFloor 1088 removed (16 Oct 2026, step 6 part 4, Paul: treat it like Comparative trends): the band scales to the column at every width again, as the line above intended. At 390 it is 342x30 with all four KPIs in view; the alt text carries the four numbers. Removes the last horizontal pan on the site, its tab stop and the under-sized phone image (sizes asked ~326px while the floor painted 1088).",
     "empty-state feature(16:10)->band(2.18:1): 16:10 couldn't fit the 1345px clean band between column-headers and the in-context heading without bleeding; 2.18 band clears both with margin, renders ~500px tall"
   ]
 }

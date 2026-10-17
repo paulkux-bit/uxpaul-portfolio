@@ -191,6 +191,15 @@
      zoom like the measure beside it. No locked spec governs an image's height, so
      the surface is recorded in docs/unspecified-surfaces.md. */
   --art-max-height: 40rem;
+
+  /* The Selected work card drawing (home cards H1b, 14 Oct 2026; tokenised in
+     step 6 part 4, ruling 4.2a, 16 Oct 2026). 44% of the card's content width,
+     capped at 13.125rem, 210px at the default root, in rem like the art height
+     cap above so it grows with text zoom. COVER_SIZES in
+     components/case-study-card.tsx states the same 0.44 and 13.125rem for
+     srcset; change all three together. */
+  --card-art-share: 44%;
+  --card-art-max: 13.125rem;
 }
 
 /* ============================================================
@@ -525,15 +534,17 @@
 
   /* Scrim behind the client work dialog (::backdrop). A state layer, so alpha
      is allowed (v2 R1); mixed here to author the token, never at the point of
-     use. Light: the text ink at 46%, as the locked prototype set it. No spec
-     owns a scrim yet: docs/unspecified-surfaces.md, client work dialog, item 3. */
+     use. Light: the text ink at 46%, as the locked prototype set it. Its values
+     live in colour v2 §4 (component tokens, 16 Oct 2026); the dialog's other
+     gaps are in docs/unspecified-surfaces.md, client work dialog, item 3. */
   --scrim:                  color-mix(in oklch, var(--text-primary) 46%, transparent);
 
   /* Header identity mark: the coin the wordmark hands off to (ruled 12 Oct
      2026). Component tokens on --scrim's precedent, mixed here to author them,
      never at the point of use, and outside the twelve palette roles so
-     lint:color check 2 does not read the ring's alpha as a border's. No spec
-     owns them yet: docs/unspecified-surfaces.md, header identity mark, item 1.
+     lint:color check 2 does not read the ring's alpha as a border's. Their
+     values are owned by colour v2 §4 (component tokens, 16 Oct 2026); the mark
+     itself is logged in docs/unspecified-surfaces.md (header identity mark).
      Light: the disc is the surface; the ring, ink at 28%, draws the circle
      (2.00:1 on the header ground). */
   --face-disc:              var(--bg-surface);
@@ -561,7 +572,7 @@
   /* Selected work card hover panel (3a ruling 1b, 15 Oct 2026). A component
      token on --face-disc's precedent, outside the twelve palette roles. Light
      keeps H-b's step exactly: the elevated surface, 1.10:1 over --bg-surface.
-     No spec owns it yet: docs/unspecified-surfaces.md, card hover panel. */
+     Owned by colour v2 §4 (component tokens) and held by lint:color check 10. */
   --card-hover:             var(--bg-surface-elevated);
 
 
@@ -697,11 +708,25 @@
     -moz-osx-font-smoothing: grayscale;
     color-scheme: light;
     /* Keep the sticky header from obscuring focused / anchored targets
-       (WCAG 2.2 SC 2.4.11). 5rem clears the 56–64px header with room. */
-    scroll-padding-top: 5rem;
-    /* Smooth in-page anchor scroll (e.g. the header "Work" → #selected-work).
-       The prefers-reduced-motion block forces this back to auto. */
-    scroll-behavior: smooth;
+       (WCAG 2.2 SC 2.4.11). At the default size the header is 57px (65 from
+       768) and this stays 5rem. When the header wraps (200% text, or a phone
+       at 200% page zoom: 89px at 195px wide, 177px at 390 with a 200% root)
+       the padding follows its measured height, --header-h, which
+       components/wordmark-link.tsx writes from its ResizeObserver. 0.875rem,
+       not 1rem, so the 65px header still gives exactly 5rem. Before
+       hydration, or without JavaScript, the fallback leaves 5rem. */
+    scroll-padding-top: max(5rem, calc(var(--header-h, 0rem) + 0.875rem));
+    /* No scroll-behavior: smooth (step 6 part 4, ruling 3e, 16 Oct 2026). It
+       made a cold load of a pasted #outcome or #role stop 213 to 712px short
+       in Chromium when an image or the webfont arrived mid-scroll, and it
+       animated every page change from the old scroll position to the top (90
+       frames, 786ms) and left a card click 49px short. Jumps are instant.
+       Measured 16 Oct 2026 with images and the font 600ms late: instant jumps
+       land in Chromium and WebKit, except two Chromium overshoots under
+       reduced motion when the font arrives late (Dagr and Delivery Promise
+       #outcome at 1440, 254 and 147px), which main has too. The client
+       work dialog keeps its own short, user-started smooth slide. Interaction
+       v1 §3. */
   }
 
   html.dark { color-scheme: dark; }
@@ -709,6 +734,12 @@
   body {
     background-color: var(--bg-canvas);
     color: var(--text-primary);
+    /* A word wider than its column breaks rather than pushing the page sideways
+       (step 6 part 4, ruling 5a, 16 Oct 2026). break-word only acts on a word
+       that cannot fit its line, so at the default text size nothing moves; at
+       200% text it caught the About email and looking-for values, Bard's turn
+       answer and FDT-E's milestone date. */
+    overflow-wrap: break-word;
     position: relative;
     /* The footer sits at the foot of the window on a page shorter than the
        window, which until the 404 (E1b, 1 Oct 2026) no page was. A flex column
@@ -852,16 +883,19 @@
    Plain font-weight maps to the wght axis; there is no font-variation-settings
    here and no opsz, because the axis does not exist. */
 @utility text-lede {
-  font-size: clamp(2rem, 4.5vw, 3.75rem); /* 32 → 60px */
+  font-size: clamp(2.25rem, 2.2857vw + 1.6929rem, 3.75rem); /* 36 at 390 → 60 at 1440 */
   line-height: 1.08;
   letter-spacing: var(--track-display);
   font-weight: 340;
-  /* NOT tokenised, deliberately. v3 §9: this role's 60px ceiling sits in the
-     53-71px gap between the display and large-display bands, so §3.1 returns
-     no band for it. 100 is already legal so check 1 is satisfied and no edit
-     is forced; tokenising would encode a banding answer that is being
-     deferred. This is the home h1 — decided against real content, not by
-     rounding to the nearer band. */
+  /* Step 6 part 4, ruling 1b (16 Oct 2026). The slope was 4.5vw alone, so the
+     h1 sat on its 32px floor from 320 to 711px and was smaller than the About
+     h1 or a study section heading at every width from 320 to 1066; at 390 its
+     stem (2.29px) was lighter than the 22px name line's (2.35px). Now 36px
+     at 390, 44.6 at 768, 50.5 at 1024, 60 from 1440, never smaller than the
+     About h1 or a section heading. The rem intercept lets it grow under
+     text-only zoom (1.45x at 1440 with a 200% root; it was 1.08x). Weight
+     stays 340 (ruling 1a). The size is not a --type-* token: display sizes
+     over 30px are not tokenised yet (type v3 §3.6). */
   text-wrap: balance;
 }
 
@@ -916,10 +950,10 @@
    voice plain). The 1.25 leading and -0.005em tracking are ruled for this
    role (K1a), not rung 2's 1.45 and 0 (type v3 §3.6, amended 14 Oct 2026).
    cqi resolves against .case-card, the inline-size container; with no
-   container it falls back to the viewport, so the role stays card-only. No
-   locked spec governs container-relative sizing yet
-   (docs/unspecified-surfaces.md). It was 22 to 32px at 600, display band,
-   until T4. */
+   container it falls back to the viewport, so the role stays card-only. The
+   container-relative slope is sanctioned for card-only, off-ladder roles with
+   rem-based endpoints (type v3 §3.6, step 6 part 4, ruling 4.3a). It was 22
+   to 32px at 600, display band, until T4. */
 @utility text-cover {
   font-size: clamp(var(--type-21), 4.6cqi, var(--type-24));
   line-height: 1.25;
@@ -932,8 +966,8 @@
    (home cards K2a), so a one-line question and a two-line one leave the
    drawings beside them at one height across a row. 2lh is two lines at the
    question's own leading. A three-line question grows the card, and the row's
-   equal height follows it. lh is ungoverned by any locked spec
-   (docs/unspecified-surfaces.md). */
+   equal height follows it. Text reserves height in lh only, as min-height
+   (type v3 §3.4, step 6 part 4, ruling 4.4a). */
 .case-card__question {
   min-height: 2lh;
   display: flex;
@@ -1516,8 +1550,10 @@
    (text-primary, text-secondary, text-caption, text-muted); this carries
    layout, weight and states, and since 3a ruling 3c (15 Oct 2026) the row
    title's size, leading and tracking. Built from existing roles only, because the
-   design system pass will revisit colour, the type scale and weight. The
-   borrowings are logged in docs/unspecified-surfaces.md (Earlier work shelf).
+   design system pass will revisit colour, the type scale and weight. The row
+   title is a named off-ladder role since 16 Oct 2026 (type v3 §3.6, ruling
+   4.6a); the touch-only underline is still logged in
+   docs/unspecified-surfaces.md (Earlier work shelf).
    The list's reveal is the .reveal-list contract below, on the whole <ol>.
    ============================================================ */
 
@@ -3796,7 +3832,14 @@ html.dark .cover-art {
    the same property site-wide. */
 .friction-moment__image {
   display: block;
-  width: auto;
+  /* The box is reserved before the painting loads (step 6 part 4, ruling 3e,
+     16 Oct 2026). `width: auto` overrode the img's width and height, so the
+     box was 0px until the bytes arrived and the page grew under the reader.
+     --art-w and --art-ratio come from works.json (FrictionMoment). The third
+     term caps the width where --art-max-height would bind, so a tall work
+     narrows instead of being squashed: without it, a definite width plus the
+     height cap stretched three paintings 13 to 14% at a 14px root. */
+  width: min(100%, var(--art-w), calc(var(--art-max-height) * var(--art-ratio)));
   max-width: 100%;
   height: auto;
   max-height: var(--art-max-height);
@@ -4370,7 +4413,11 @@ html.dark .figure-placeholder {
 
 .hero-block {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, 1fr), not 1fr: a 1fr track's floor is its content's
+     min-content, so at 200% text Delivery Promise's long hero word widened the
+     whole hero past the viewport (step 6 part 4, ruling 5a). The lg rule below
+     already uses minmax(0, ...). */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--spacing-xl);
   /* Top is the page top, 64 on every page (top-of-page ruling T1c, 1 Oct
      2026): the header is unbounded, so this is not a section break. Bottom
@@ -5825,7 +5872,10 @@ html.dark .figure-placeholder {
 
 .journey-line__sentiment-cols {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr), not 1fr (step 6 part 4, ruling 5a): a 1fr column cannot
+     shrink below its label, so at 200% text "ANGRY" pushed the chart past the
+     viewport. The three columns stay equal at every size. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   text-align: center;
 }
 
@@ -6007,7 +6057,7 @@ html.dark .figure-placeholder {
    the edge at phone width. */
 .tier-chart__tiers {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* not 1fr: see .journey-line__sentiment-cols (ruling 5a) */
   list-style: none;
   margin: var(--spacing-xs) 0 0;
   padding: 0;
@@ -6086,7 +6136,9 @@ html.dark .figure-placeholder {
    top of the slack, where the marker sits on the bars it labels. */
 .node-chart__body {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  /* The name column may shrink below its max-content (step 6 part 4, ruling
+     5a): at 200% text the names and values were wider than a 390 phone. */
+  grid-template-columns: minmax(0, max-content) 1fr max-content;
   column-gap: var(--spacing-s);
   align-content: start;
 }
