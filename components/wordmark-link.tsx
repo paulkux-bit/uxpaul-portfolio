@@ -58,6 +58,14 @@ export function WordmarkLink() {
     let on: IntersectionObserver | undefined;
     let off: IntersectionObserver | undefined;
     let cancelled = false;
+    // Set by the reader's own input, so the font re-jump below never undoes a
+    // scroll they have started.
+    let readerMoved = false;
+    const INPUTS = ['wheel', 'touchstart', 'keydown', 'pointerdown'] as const;
+    const onInput = () => {
+      readerMoved = true;
+    };
+    for (const t of INPUTS) window.addEventListener(t, onInput, { passive: true, capture: true });
 
     const apply = () => {
       if (!cancelled) setFacePath(decoded && past ? pathname : null);
@@ -130,6 +138,19 @@ export function WordmarkLink() {
         const id = decodeURIComponent(location.hash.slice(1));
         const target = id ? document.getElementById(id) : null;
         if (target && target.getBoundingClientRect().top < header.getBoundingClientRect().bottom) target.scrollIntoView();
+        // A late webfont reflows the page after that jump, and Chromium under
+        // reduced motion does not hold the target through it (Dagr and
+        // Delivery Promise #outcome at 1440 overshot 254 and 147px with the
+        // font 600ms late, on main too). Once the fonts are in, jump once more
+        // if the target has left the scroll-padding line by more than 2px,
+        // unless the reader has scrolled, tapped, clicked or pressed a key.
+        if (target) {
+          document.fonts.ready.then(() => {
+            if (cancelled || readerMoved) return;
+            const line = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+            if (Math.abs(target.getBoundingClientRect().top - line) > 2) target.scrollIntoView();
+          });
+        }
       }
       if (anchor && height !== headerHeight) observe();
     });
@@ -138,6 +159,7 @@ export function WordmarkLink() {
 
     return () => {
       cancelled = true;
+      for (const t of INPUTS) window.removeEventListener(t, onInput, { capture: true });
       on?.disconnect();
       off?.disconnect();
       mutations.disconnect();
