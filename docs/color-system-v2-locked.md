@@ -259,8 +259,8 @@ this file. Hue for every row is held by check 9.
 | Token | Light | Dark | Role | Held by |
 |---|---|---|---|---|
 | `--scrim` | `color-mix(in oklch, var(--text-primary) 46%, transparent)` | `color-mix(in oklch, var(--bg-sunken) 60%, transparent)` | Client work dialog backdrop; dims in both modes (11 Oct 2026) | check 9 |
-| `--face-disc` | `var(--bg-surface)` | `color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas))` | Header coin disc, one coin in both modes (12 Oct 2026) | check 9 |
-| `--face-ring` | `color-mix(in oklch, var(--text-primary) 28%, transparent)` | same | Header coin ring; frames an image inside a named link, so no 3:1 owed | check 9 |
+| `--face-disc` | `oklch(0.968 calc(var(--chroma-unit) * 4) calc(var(--hue-ground) + 2))`, 1.06:1 on the canvas (v2.2, K1; was `var(--bg-surface)`) | `color-mix(in oklch, var(--text-primary) 92%, var(--bg-canvas))` | Header coin disc, one coin in both modes (12 Oct 2026) | check 9 |
+| `--face-ring` | `color-mix(in oklch, var(--text-primary) 28%, transparent)` | same | Header coin ring; frames an image inside a named link, so no 3:1 owed (light v2.2: 1.81:1 on the disc, 1.82:1 on the header, 8-bit composite arithmetic) | check 9 |
 | `--shot-frame` | none (the ring is transparent in light) | `oklch(0.255 calc(var(--chroma-unit) * 13) calc(var(--hue-ground) + 3))` | The 6b screenshot frame (15 Oct 2026) | check 9 |
 | `--fill-quiet` | `color-mix(in oklch, var(--text-primary) 46%, var(--bg-canvas))` | `color-mix(in oklch, var(--text-primary) 44%, var(--bg-canvas))` | Delivery Promise node chart bars; canvas only, 3:1 as a graphical object (light about 3.2 on the v2.2 canvas, by OKLab mix arithmetic) | check 9 |
 | `--card-hover` | `oklch(0.990 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 8))`, the surface (v2.2) | `oklch(0.260 calc(var(--chroma-unit) * 11) calc(var(--hue-surface) - 1))` | Selected work card hover panel: no fill step in light, 1.10:1 in dark | check 10 |

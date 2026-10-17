@@ -552,9 +552,13 @@
      lint:color check 2 does not read the ring's alpha as a border's. Their
      values are owned by colour v2 §4 (component tokens, 16 Oct 2026); the mark
      itself is logged in docs/unspecified-surfaces.md (header identity mark).
-     Light: the disc is the surface; the ring, ink at 28%, draws the circle
-     (2.00:1 on the header ground). */
-  --face-disc:              var(--bg-surface);
+     Light: the disc has its own value since part 5 (ruled 17 Oct 2026, K1),
+     one quiet step off the page (1.06:1), because the surface it used to
+     borrow now equals the canvas and the disc vanished. The ring, ink at 28%,
+     draws the circle: 1.81:1 on the disc and 1.82:1 on the header ground (8-bit
+     sRGB composite arithmetic; the 2.00 this comment gave before was never
+     what it measured, 1.84 on the v2.1 palette, CC 17 Oct 2026). */
+  --face-disc:              oklch(0.968 calc(var(--chroma-unit) * 4) calc(var(--hue-ground) + 2));
   --face-ring:              color-mix(in oklch, var(--text-primary) 28%, transparent);
 
   /* Screenshot edge and frame (ruling 6b, 15 Oct 2026). Every product
