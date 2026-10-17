@@ -145,10 +145,15 @@ export function WordmarkLink() {
         // if the target has left the scroll-padding line by more than 2px,
         // unless the reader has scrolled, tapped, clicked or pressed a key.
         if (target) {
+          // fonts.ready resolves before the swapped face is laid out (measured:
+          // resolved at 625ms, the page shrank at 640ms), so wait two frames
+          // and read the layout the new face produces.
           document.fonts.ready.then(() => {
-            if (cancelled || readerMoved) return;
-            const line = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
-            if (Math.abs(target.getBoundingClientRect().top - line) > 2) target.scrollIntoView();
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              if (cancelled || readerMoved) return;
+              const line = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop);
+              if (Math.abs(target.getBoundingClientRect().top - line) > 2) target.scrollIntoView();
+            }));
           });
         }
       }
