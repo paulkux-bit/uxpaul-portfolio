@@ -725,6 +725,12 @@
   body {
     background-color: var(--bg-canvas);
     color: var(--text-primary);
+    /* A word wider than its column breaks rather than pushing the page sideways
+       (step 6 part 4, ruling 5a, 16 Oct 2026). break-word only acts on a word
+       that cannot fit its line, so at the default text size nothing moves; at
+       200% text it caught the About email and looking-for values, Bard's turn
+       answer and FDT-E's milestone date. */
+    overflow-wrap: break-word;
     position: relative;
     /* The footer sits at the foot of the window on a page shorter than the
        window, which until the 404 (E1b, 1 Oct 2026) no page was. A flex column
@@ -4398,7 +4404,11 @@ html.dark .figure-placeholder {
 
 .hero-block {
   display: grid;
-  grid-template-columns: 1fr;
+  /* minmax(0, 1fr), not 1fr: a 1fr track's floor is its content's
+     min-content, so at 200% text Delivery Promise's long hero word widened the
+     whole hero past the viewport (step 6 part 4, ruling 5a). The lg rule below
+     already uses minmax(0, ...). */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--spacing-xl);
   /* Top is the page top, 64 on every page (top-of-page ruling T1c, 1 Oct
      2026): the header is unbounded, so this is not a section break. Bottom
@@ -5853,7 +5863,10 @@ html.dark .figure-placeholder {
 
 .journey-line__sentiment-cols {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* minmax(0, 1fr), not 1fr (step 6 part 4, ruling 5a): a 1fr column cannot
+     shrink below its label, so at 200% text "ANGRY" pushed the chart past the
+     viewport. The three columns stay equal at every size. */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   text-align: center;
 }
 
@@ -6035,7 +6048,7 @@ html.dark .figure-placeholder {
    the edge at phone width. */
 .tier-chart__tiers {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* not 1fr: see .journey-line__sentiment-cols (ruling 5a) */
   list-style: none;
   margin: var(--spacing-xs) 0 0;
   padding: 0;
@@ -6114,7 +6127,9 @@ html.dark .figure-placeholder {
    top of the slack, where the marker sits on the bars it labels. */
 .node-chart__body {
   display: grid;
-  grid-template-columns: max-content 1fr max-content;
+  /* The name column may shrink below its max-content (step 6 part 4, ruling
+     5a): at 200% text the names and values were wider than a 390 phone. */
+  grid-template-columns: minmax(0, max-content) 1fr max-content;
   column-gap: var(--spacing-s);
   align-content: start;
 }

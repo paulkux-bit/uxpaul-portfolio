@@ -721,4 +721,5 @@ Step 6, part 4 of the design-system pass. Ruled by Paul as `1b, 2 as Comparative
 | 4.4a | Text reserves height in `lh` only | §3.4 |
 | 4.5a | The card meta pair | §3.5: client secondary, product muted |
 | 4.6a | The Earlier work row title is named | §3.6 amendment; `RUNGS` entry |
+| 5a | Text at 200% stays on the page (causes 1 to 4) | `body { overflow-wrap: break-word }`; `.hero-block`, `.journey-line__sentiment-cols`, `.tier-chart__tiers` tracks `minmax(0, 1fr)`; `.node-chart__body` name column `minmax(0, max-content)`; the header row wraps (`flex-wrap`, `min-h-14 md:min-h-16`). 0 text past the edge on all seven routes at 390 with a 200% root, at 195px (a 390 phone at 200% page zoom), at 320 and at 1440 with a 200% root. Cause 5, 320 with a 200% root, is logged in `docs/unspecified-surfaces.md` |
 

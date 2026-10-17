@@ -323,7 +323,19 @@ things in it no locked spec governs:
    than this surface's.
 
 **Nav.** Type sizes, weights and the spacing between items. Neither system
-assigns it a rung or a step.
+assigns it a rung or a step. Since 16 Oct 2026 the header row wraps
+(`flex-wrap`, `min-h-14 md:min-h-16`) so at 200% text the theme toggle stays on
+screen (step 6 part 4, ruling 5a); how the wrapped header should look is
+unspecified.
+
+**Text zoom at 320 with 200% text.** Joined 16 Oct 2026 from step 6 part 4, and
+deferred by ruling (5a covered causes 1 to 4). At a 320px viewport with a 200%
+root, after 5a: the About h1 reaches 338px, About's "2019 to present" dates
+344px (`white-space: nowrap`), and the Résumé (PDF) button 360px. 320 at the
+default size and 1440 at 200% text are clean on all seven routes, and a 390
+phone at 200% page zoom (a 195px viewport) is clean after 5a. Needs: display
+floors that cannot outgrow a 320 column at a 200% root, and a ruling on whether
+the dates may wrap.
 
 **Footer.** Same, plus the relationship between the footer's top boundary and
 the last section above it — which is a section-break question the spacing

@@ -22,7 +22,11 @@ export function SiteHeader() {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
-      <div className="page-container flex h-14 md:h-16 items-center justify-between">
+      {/* min-h and flex-wrap, not a fixed height (step 6 part 4, ruling 5a, 16 Oct
+          2026): at 200% text the wordmark, nav and theme toggle no longer fit
+          one row on a phone, and the toggle sat past the viewport on every
+          route. At the default size it is one row at exactly the old height. */}
+      <div className="page-container flex flex-wrap min-h-14 md:min-h-16 items-center justify-between">
         <WordmarkLink />
         <div className="flex items-center gap-s md:gap-m">
           <ClientNav />
