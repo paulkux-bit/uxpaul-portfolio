@@ -602,14 +602,16 @@
      because heavy weight reads heavier on the walnut canvas. */
   --mark-weight:            700;
 
-  /* Radius — interaction system v1 §4. Five steps, so radius scales with
-     surface size: --radius-l exists to let the card keep 16px and sit a step
-     above the button rather than being pulled down to 12 to fit a shorter
-     ladder. */
+  /* Radius, interaction system v1 §4. Five steps, so radius scales with
+     surface size: --radius-l exists so the card has its own step above the
+     button. Square since part 5 (ruled 17 Oct 2026, R3): with the card drawn
+     by a hairline on near-white paper, 16px corners read as the stock
+     component-kit card, and square matches the paintings. The card and the
+     testimony cell read it; the step stays so they move together. */
   --radius-xs:               4px;  /* inline marks, small media, focus-ring rounding */
   --radius-s:                8px;  /* compact controls — theme toggle, nav */
   --radius-m:               12px;  /* buttons */
-  --radius-l:               16px;  /* cards */
+  --radius-l:                0px;  /* cards: square (R3, 17 Oct 2026; was 16px) */
   --radius-full:           999px;
 
   /* Containment radius for bright UI-capture images on the warm canvas (hero
@@ -1333,9 +1335,9 @@
    ============================================================ */
 
 /* The card box. Moved out of JSX (`rounded-2xl`) so the radius comes from this
-   system's scale rather than Tailwind's — 16px either way, so nothing moves.
-   --radius-l exists for exactly this: the card keeps its size and sits a step
-   above the button instead of being pulled down to 12.
+   system's scale rather than Tailwind's (16px either way at the time, so
+   nothing moved). --radius-l exists for exactly this: the card has its own
+   step above the button. Square since part 5 (R3, 17 Oct 2026).
 
    This also closes the base class's forward reference. `.case-card` was added by
    I1 as a hook with "I2, I3 and I4 all target this element" and had no rule of
