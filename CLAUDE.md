@@ -695,6 +695,12 @@ external)**.
   and transition in `globals.css` to the guard covering it, and names any selector with
   none. It takes an optional CSS path so it stays negative-testable from the repo root.
 
+- **sweep** = `npm run sweep` (`scripts/sweep.mjs`), LOCAL ONLY and not in the build (it
+  needs a browser and a running server). Fails on any text past the page edge on the seven
+  routes at 320 and 195px at the default size and at 390 and 1440 with a 200% root (step 6
+  part 4, ruling 6a, 16 Oct 2026). Run it against `next start` before calling a layout
+  change done.
+
 **Every gate above is LOCAL, and a local gate is only ever a proxy for deployed
 behaviour.** The two are different claims and the difference is easy to elide. Vercel runs
 `npm run build`, which runs `lint:type`, `lint:space`, `lint:color`, `next build`,
