@@ -33,7 +33,8 @@ interface ManifestImage {
   breakout?: 'band' | 'ribbon';
   aspect?: number;
   /** Band only: below md, floor the media at this px width in a scroll track (targeted
-   *  per-crop; unset = no floor). Set for the KPI strip, illegibly thin on mobile. */
+   *  per-crop; unset = no floor). No band sets it since 16 Oct 2026 (step 6 part 4: the
+   *  KPI strip scales like Comparative trends); the prop and the track code go in Phase 12. */
   scrollFloor?: number;
 }
 type CompEntry = { name: string; mode: Mode };
