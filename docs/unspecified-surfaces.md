@@ -36,7 +36,10 @@ card hover panel** joined on 15 Oct 2026, the first entry for a surface that
 was right in one mode and wrong in the other. **The home card drawing's
 width, the card question's container units and the card hover panel left on
 16 Oct 2026** (step 6 part 4, rulings 4.1a to 4.4a), into colour v2 §4, type v3
-§3.4 and §3.6, and the tokens `--card-art-share` and `--card-art-max`.*
+§3.4 and §3.6, and the tokens `--card-art-share` and `--card-art-max`. The card
+hover is per mode since 17 Oct 2026 (part 5, 3a): light steps the card's edge,
+dark deepens the panel, both in colour v2.2 §4 and §7 item 10 and interaction
+v1 §5.*
 
 **The client work dialog (Template B).** Joined 11 Oct 2026 from the Template B
 build brief (`docs/cc-prompt-template-b-build.md`), and logged before the
@@ -178,7 +181,8 @@ input to the design system pass:
 
 Needs: rulings on all three. The component colour tokens (`--scrim`,
 `--face-disc`, `--face-ring`, `--card-hover`, `--shot-frame`) are listed in
-colour v2 §4 since 16 Oct 2026.
+colour v2 §4 since 16 Oct 2026, with the panel edge tokens (`--card-edge`,
+`--card-edge-hover`, `--panel-line`, `--callout-line`) since 17 Oct 2026.
 
 **Hero headings in one weight and one colour.** Joined 13 Oct 2026 from the
 home and About copy build (`docs/cc-prompt-hero-about-build.md`, Paul's final

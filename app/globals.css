@@ -474,27 +474,34 @@
    ============================================================ */
 
 :root {
-  /* Canvas is held at the top and the three surfaces below it drop, so a card
-     reads as an object rather than as a slightly different patch of page —
-     without the page itself getting heavier. Separation goes 0.023 / 0.022 /
-     0.015 -> 0.030 / 0.030 / 0.018. Unlike the dark side, lightness moves
-     here: that is the point of the commit. */
-  --bg-canvas:              oklch(0.978 calc(var(--chroma-unit) * 8) calc(var(--hue-ground) + 6));
-  --bg-surface:             oklch(0.948 calc(var(--chroma-unit) * 11) calc(var(--hue-ground) + 2));
-  --bg-surface-elevated:    oklch(0.918 calc(var(--chroma-unit) * 13) var(--hue-surface));
-  --bg-sunken:              oklch(0.900 calc(var(--chroma-unit) * 14) calc(var(--hue-ground) - 4));
+  /* White paper, walnut ink (step 6 part 5, ruled 17 Oct 2026: 1BC 2a 4d).
+     The beige ramp sat on anthropic.com's own lightness steps one for one
+     (page, card, card hover and deepest panel within 0.01 L, every pair under
+     OKLab dE 3), so light drops the tinted surfaces and puts its colour in the
+     ink instead. Canvas, surface and elevated are one value: a panel in light
+     is drawn by its edge (--card-edge, --panel-line), not by a step of tone,
+     so colour v2 R3 (warmth rises with elevation) holds in dark only. Each is
+     written as its own formula rather than an alias, so lint:color resolves
+     it like every other ground. --bg-sunken keeps one quiet step for the few
+     wells that use it. Dark is unchanged. */
+  --bg-canvas:              oklch(0.990 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 8));
+  --bg-surface:             oklch(0.990 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 8));
+  --bg-surface-elevated:    oklch(0.990 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 8));
+  --bg-sunken:              oklch(0.972 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 5));
 
-  --text-primary:           oklch(0.215 calc(var(--chroma-unit) * 9) var(--hue-text));
-  --text-secondary:         oklch(0.355 calc(var(--chroma-unit) * 10) var(--hue-text));
-  --text-muted:             oklch(0.485 calc(var(--chroma-unit) * 11) var(--hue-text));
-  /* 0.625 -> 0.590 repairs a live WCAG failure, not a side effect of the
-     surfaces moving: at 0.625 this measured 2.91 on elevated and 2.78 on
-     sunken, both under the 3.0 AA-large floor, and both shipped. */
-  --text-subtle:            oklch(0.590 calc(var(--chroma-unit) * 10) calc(var(--hue-text) + 5));
+  /* Walnut ink, 4d: 4b's darkness with 4a's chroma, so the 340 h1 keeps its
+     weight (the Falsifier, 17 Oct 2026) and the ink sits OKLab dE 6.3 from
+     Anthropic's near-black (today's sat 2.9). Neighbouring roles stay dE 10
+     or more apart (12.5, 11.5, 10.5). */
+  --text-primary:           oklch(0.240 calc(var(--chroma-unit) * 20) calc(var(--hue-text) - 3));
+  --text-secondary:         oklch(0.365 calc(var(--chroma-unit) * 21) calc(var(--hue-text) - 2));
+  --text-muted:             oklch(0.480 calc(var(--chroma-unit) * 20) var(--hue-text));
+  /* AA-large and non-text only: 4.10 on the canvas, 3.89 on sunken. */
+  --text-subtle:            oklch(0.585 calc(var(--chroma-unit) * 18) calc(var(--hue-text) + 3));
 
-  --border-subtle:          oklch(0.905 calc(var(--chroma-unit) * 15) calc(var(--hue-ground) - 4));
-  --border-default:         oklch(0.855 calc(var(--chroma-unit) * 17) calc(var(--hue-ground) - 10));
-  --border-strong:          oklch(0.760 calc(var(--chroma-unit) * 20) calc(var(--hue-ground) - 15));
+  --border-subtle:          oklch(0.925 calc(var(--chroma-unit) * 5) var(--hue-ground));
+  --border-default:         oklch(0.875 calc(var(--chroma-unit) * 7) calc(var(--hue-ground) - 4));
+  --border-strong:          oklch(0.780 calc(var(--chroma-unit) * 10) calc(var(--hue-ground) - 10));
 
   /* Quiet fill for NodeChart's bars. AUTHORED AS A TOKEN, not mixed at the point of
      use: a color-mix that produces a named token in the theme layer is legitimate,
@@ -571,9 +578,24 @@
 
   /* Selected work card hover panel (3a ruling 1b, 15 Oct 2026). A component
      token on --face-disc's precedent, outside the twelve palette roles. Light
-     keeps H-b's step exactly: the elevated surface, 1.10:1 over --bg-surface.
-     Owned by colour v2 §4 (component tokens) and held by lint:color check 10. */
-  --card-hover:             var(--bg-surface-elevated);
+     takes no fill step since part 5 (ruled 17 Oct 2026, 3a): the panel stays
+     the page and the card's edge steps instead, so this equals the surface,
+     written as its own formula. Dark keeps H-b's 1.10:1 panel step. Owned by
+     colour v2 §4 (component tokens) and held by lint:color check 10, per mode. */
+  --card-hover:             oklch(0.990 calc(var(--chroma-unit) * 3) calc(var(--hue-ground) + 8));
+
+  /* Panel edges (step 6 part 5, ruled 17 Oct 2026: 2a 3a E1). Component tokens
+     on --card-hover's precedent, outside the twelve palette roles. In light a
+     panel is the page, so its edge draws it: the Selected work card rests on
+     --card-edge (1.42:1 on the canvas) and steps to --card-edge-hover (1.95:1)
+     on hover; the milestone and testimony panels take --panel-line as a -1px
+     outline (no layout, drawn in forced colours, the client work panel's
+     edge); the hero callout keeps its 1px border, now --callout-line. Owned by
+     colour v2 §4; the card step is held by lint:color check 10, per mode. */
+  --card-edge:              var(--border-default);
+  --card-edge-hover:        var(--border-strong);
+  --panel-line:             var(--border-default);
+  --callout-line:           var(--border-default);
 
 
   /* "Off the clock" wall mark weight (heavy display). Per-mode: lighter in dark
@@ -691,6 +713,13 @@
      between the surface (54) and the elevated surface (56). lint:color
      check 10 holds the step within 0.01. */
   --card-hover:             oklch(0.260 calc(var(--chroma-unit) * 11) calc(var(--hue-surface) - 1));
+  /* Panel edges, dark (part 5, 17 Oct 2026, 5a): dark is unchanged, so the
+     card and the two panels keep their walnut fill and draw no edge, and the
+     callout keeps the hairline it had. */
+  --card-edge:              transparent;
+  --card-edge-hover:        transparent;
+  --panel-line:             transparent;
+  --callout-line:           var(--border-subtle);
 
   --mark-weight:            650;
 }
@@ -1314,16 +1343,23 @@
 .case-card {
   border-radius: var(--radius-l);
   /* H-b (home cards T4, 14 Oct 2026), replacing H1b of 1 Oct: the card's
-     one surface signal is now its panel, which deepens on hover, so the
-     panel's colour is what moves, at the card's speed. H1b had already taken
-     away the lift and the shadow; T4 takes away the visible border. The 1px
-     border stays, transparent, so forced-colors mode still draws the edge.
+     one surface signal was its panel, which deepened on hover. H1b had
+     already taken away the lift and the shadow; T4 took away the visible
+     border. The 1px border stays, so forced-colors mode still draws the edge.
+
+     Per mode since part 5 (ruled 17 Oct 2026, 2a 3a): in light the panel is
+     the page, so the border takes --card-edge and the edge is what moves on
+     hover; in dark --card-edge is transparent and the walnut panel deepens as
+     before. Both move at the card's speed. This rule is unlayered, so it wins
+     over the JSX's `border-transparent` utility.
 
      TRANSFORM IS NOT TRANSITIONED, which is interaction spec §5's closed
      item, kept. Under .lift the press eased at 300ms, so a ~43ms tap reached
      0.53px and never the specified 1px. The card snaps to 1px and holds, as
      the button, nav link, toggle and work band do. */
-  transition: background-color var(--duration-card) var(--ease-out-soft);
+  border-color: var(--card-edge);
+  transition: background-color var(--duration-card) var(--ease-out-soft),
+              border-color var(--duration-card) var(--ease-out-soft);
 }
 
 /* Footer links: standalone destinations in a row, not text in a sentence, so
@@ -1372,13 +1408,16 @@
 
 /* A hover response is a promise of a click target, so it is scoped to a card
    that has one. An unpublished card keeps its resting panel. H-b (home cards
-   T4, 14 Oct 2026): the panel deepens from --bg-surface to --card-hover
-   (the elevated surface in light; a gentler dark step since 3a ruling 1b,
-   15 Oct 2026), and the question underlines through
+   T4, 14 Oct 2026), per mode since part 5 (17 Oct 2026, 3a): in light the
+   edge steps from --card-edge to --card-edge-hover and --card-hover equals
+   the surface, so nothing fills; in dark the panel deepens from --bg-surface
+   to --card-hover (the 1.10:1 step of 3a ruling 1b, 15 Oct 2026) and the edge
+   stays transparent. The question underlines through
    .case-card__title-link:hover, because the stretched link covers the card.
    Hover only: nothing fills on keyboard focus, which takes the halo below. */
 .case-card--linked:hover {
   background-color: var(--card-hover);
+  border-color: var(--card-edge-hover);
 }
 
 /* K3a (14 Oct 2026): the question's hover underline is 1px at a 0.18em
@@ -2951,8 +2990,15 @@ dialog.client-work::backdrop {
 .milestone {
   margin-top: var(--spacing-l);
   padding: var(--spacing-crescendo) var(--spacing-m);
-  background: var(--bg-surface-elevated); /* warm lift, distinct from the --bg-canvas field; AA verified */
-  border-radius: var(--radius-s);                     /* soft panel, no border — not a card */
+  background: var(--bg-surface-elevated); /* warm lift in dark; the page itself in light since part 5 */
+  border-radius: var(--radius-s);
+  /* A soft panel, not a card, with no border until part 5 (ruled 17 Oct 2026,
+     2a E1): light's elevated surface now equals the canvas, so the panel is
+     drawn by --panel-line as a -1px outline (the client work panel's edge: no
+     layout, drawn in forced colours). Transparent in dark, where the walnut
+     lift still contains it. */
+  outline: 1px solid var(--panel-line);
+  outline-offset: -1px;
 }
 .milestone__frame {
   margin: 0;
@@ -4595,7 +4641,8 @@ html.dark .figure-placeholder {
 
 /* Contained info-card ON the image at ALL breakpoints — bottom-left, inset 1.25rem
    (the wrapper has no padding now, so this lands on the image). The elevated fill
-   and the hairline keep it crisp over the screenshot. No shadow (S3, 3 Oct 2026):
+   and the hairline keep it crisp over the screenshot (in light since part 5 the
+   fill is the page and the hairline does the work). No shadow (S3, 3 Oct 2026):
    it carried --shadow-hover at rest, the lifted look of something picked up, and
    the interaction spec gives no surface a resting shadow since H1b. */
 .hero-block__callout {
@@ -4605,7 +4652,10 @@ html.dark .figure-placeholder {
   /* --top-left variant below swaps the corner; everything else identical. */
   max-width: min(78%, var(--hero-callout-w, 18rem)); /* 78% keeps the mobile inset; the fallback is the default card width, overridable per case study via HeroBlock's calloutWidth */
   background: var(--bg-surface-elevated);
-  border: 1px solid var(--border-subtle);
+  /* --callout-line since part 5 (17 Oct 2026, 2a): --border-default in light,
+     where the fill is now the page and the edge carries the card over the
+     screenshot; --border-subtle in dark, as before. */
+  border: 1px solid var(--callout-line);
   border-radius: var(--radius-s);
   padding: var(--spacing-m); /* single even token — tight, no baggy margins */
 }
@@ -6733,12 +6783,15 @@ html.dark .figure-placeholder {
    four signals saying "a different kind of text". The rule was a fifth
    separator doing a job four others had already done.
 
-   NO BORDER AND NO INSET HAIRLINE, DELIBERATELY. --bg-surface sits a step off
-   --bg-canvas in both modes and contains on its own; an outline would be a
-   second containment doing the same job as the tone. Judged in both modes at
-   390 and 1440. The v2 prototype declares the hairline and then switches it off
-   in its own default state (docs/previews/testimony-v2.html) - the shipped
-   answer is the default, not the base rule.
+   NO BORDER AND NO INSET HAIRLINE UNTIL PART 5. --bg-surface sat a step off
+   --bg-canvas in both modes and contained on its own, so an outline would have
+   been a second containment doing the same job as the tone (judged in both
+   modes at 390 and 1440). Since part 5 (ruled 17 Oct 2026, 2a E1) light's
+   surface equals the canvas, so the tone no longer contains and the cell takes
+   --panel-line as a -1px outline. An outline, not a border: a 1px border
+   narrowed the cell and pushed the right quote from two lines to three at
+   1440 (CC, 17 Oct 2026); the outline takes no layout. Transparent in dark,
+   where the surface step still contains.
 
    grid-template-rows: auto 1fr is the pin. The quote takes its own height, the
    source gets the slack and is pushed to the bottom by align-self: end below,
@@ -6746,7 +6799,9 @@ html.dark .figure-placeholder {
    levelness used to be the leads' job; it is now the box's. */
 .testimony-pair__cell {
   background: var(--bg-surface);
-  border-radius: var(--radius-l); /* the cards step, globals.css:443 */
+  border-radius: var(--radius-l); /* the cards step */
+  outline: 1px solid var(--panel-line);
+  outline-offset: -1px;
   padding: var(--spacing-m);
   display: grid;
   grid-template-rows: auto 1fr;

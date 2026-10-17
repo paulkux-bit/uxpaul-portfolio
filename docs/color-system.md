@@ -29,7 +29,7 @@
 
 ## Concept
 
-Light mode is **paper** — warm cream canvas with visible chroma, deep warm charcoal text, layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **walnut** (low light until 15 Oct 2026) — a warm wood-dark canvas, warm cream text, ambient and lamplit rather than printed. Both modes share the same hue axis (50–80, walnut to brass; warm amber/sepia until 15 Oct 2026) so the swap reads as one world under different lighting.
+Light mode is **paper**: since 17 Oct 2026 (colour v2.2) white paper with walnut ink, panels drawn by a hairline rather than by layered stocks; until then a warm cream canvas with visible chroma, deep warm charcoal text and layered surface stocks. (It carried a whisper of grain until 15 Oct 2026; see Paper grain.) Dark mode is **walnut** (low light until 15 Oct 2026): a warm wood-dark canvas, warm cream text, ambient and lamplit rather than printed. Both modes share the same hue axis (50–80, walnut to brass; warm amber/sepia until 15 Oct 2026) so the swap reads as one world under different lighting.
 
 The base palette has **no accent color at rest**. Nothing chromatic sits on the page demanding attention. But interaction is a different state — when the user *does* something (hovers a link, selects text, focuses an input, picks up a card) the system responds with a warm chromatic moment. That's not an accent system. It's an interaction system.
 
@@ -41,7 +41,7 @@ The **PopUp annotation layer** once carried a chromatic identity at rest. It is 
 
 1. **No accent at rest.** A page sitting still should have no chromatic noise demanding attention. Brand color is not the differentiator; typography, scale, and craft are.
 2. **Interaction earns color.** Hover, focus, selection, and active states are *moments*, not roles. They get warm chromatic treatment because they're functional signals — not decoration.
-3. **Paper has character.** The canvas isn't white. It's cream with real chroma (0.018), layered surfaces with visible lightness steps, with no texture overlay (the light-mode grain was removed on 15 Oct 2026).
+3. **Paper has character.** Since v2.2 (17 Oct 2026) the character is in the ink, not the stock: a near-white page (chroma 0.006, not pure white), walnut text (chroma 0.036 to 0.042), and panels drawn by an edge. The cream canvas with layered stocks it replaced sat on anthropic.com's own lightness steps one for one. No texture overlay (the light-mode grain was removed on 15 Oct 2026).
 4. **Same world, different lighting.** Light and dark share the hue axis but are tuned independently. Dark mode is not inverted light mode.
 5. **Chromatic restraint scales up at the moment of attention.** Selection is a real highlighter. Focus has a halo. Hover does two things at once. The system whispers until it needs to speak.
 
@@ -113,8 +113,8 @@ are in git history at `a11e8b7`.
 ### Surface
 
 - **`bg-canvas`** — the page itself. Body background. Use exactly once per view.
-- **`bg-surface`** — default panel. Case study cards, content modules, footer.
-- **`bg-surface-elevated`** — raised against `bg-surface`. Cards on cards. Hover-raised states. Use sparingly.
+- **`bg-surface`**: default panel. Case study cards, content modules, footer. In light it equals the canvas since v2.2 (17 Oct 2026); the panel's edge token draws it.
+- **`bg-surface-elevated`**: raised against `bg-surface` in dark. Cards on cards. Hover-raised states. Use sparingly. Equals the canvas in light since v2.2.
 - **`bg-sunken`** — inset against `bg-canvas`. Code blocks, blockquote backgrounds, inline pre.
 
 ### Text
@@ -192,8 +192,9 @@ Light mode carried an SVG noise overlay on `body::before` (multiply, opacity 0.5
 
 - **Body text hits AAA** in both modes. `text-primary` on `bg-canvas` measures ~14–15:1.
 - **`text-muted` hits AA normal** (~5.5–6:1) at all body sizes.
-- **`text-subtle` is AA-large only** (**3.04–3.86:1**, measured in K3 across the four
-  light surfaces; 3.77–4.97 in dark, walnut, by lint arithmetic). Never use below 24px or 18.66px bold. `lint:color`
+- **`text-subtle` is AA-large only** (3.89 to 4.10:1 in light since v2.2, 17 Oct 2026;
+  **3.04–3.86:1** in K3 across the four v2.1 light surfaces; 3.77–4.97 in dark, walnut,
+  by lint arithmetic). Never use below 24px or 18.66px bold. `lint:color`
   check 4 enforces it. The earlier "~3.5–4:1" here was an estimate, and it was wrong at
   the bottom: the real floor-adjacent value was 2.78, a live WCAG failure that shipped
   until K3 moved the token to `L 0.590`.
@@ -252,7 +253,7 @@ The decisions, in order of forking:
 4. **Mirrored world, two designs** — same hue axis across modes, but tuned independently for distinct moods.
 5. **PopUp takes a tint.** The annotation layer carried the only chromatic identity that persisted at rest. (Retired: the layer was decommissioned and its tokens deleted on 1 Oct 2026. The "Client work" shelf is the one resting exception now.)
 6. **(v2) Interaction earns color** — hover, focus, selection get warm chromatic treatment as *moments*, not roles. Defensible because nothing chromatic sits at rest.
-7. **(v2) Paper has real character** — visible chroma, layered surfaces. The canvas is cream stock, not generated white.
+7. **(v2) Paper has real character**: visible chroma, layered surfaces. The canvas is cream stock, not generated white. (v2.2, 17 Oct 2026: replaced by white paper with walnut ink; see principle 3.)
 
 ---
 

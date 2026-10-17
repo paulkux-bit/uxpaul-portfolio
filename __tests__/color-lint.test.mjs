@@ -111,11 +111,44 @@ describe('lint:color path mode', () => {
   });
 });
 
+/** Replace exactly one occurrence, inside the light :root block, or throw. */
+function inLight(css, from, to) {
+  const at = css.indexOf('\n.dark {');
+  expect(at, 'no .dark block').toBeGreaterThan(0);
+  const head = css.slice(0, at);
+  expect(head.split(from).length - 1, `"${from}" is not unique before .dark`).toBe(1);
+  return head.replace(from, to) + css.slice(at);
+}
+
+// Per mode since step 6 part 5 (ruled 17 Oct 2026, 2a 3a): dark deepens the
+// panel 1.10:1, light keeps the panel the page and steps the card's edge.
 describe('lint:color check 10, the card step', () => {
-  it('passes on the real palette and reports both steps', () => {
+  it('passes on the real palette and reports both modes', () => {
     const block = lint(CSS, 10, 'real-step');
     expect(block).toMatch(/^✓ 10\./);
-    expect(block).toMatch(/light 1\.\d{3}, dark 1\.\d{3}/);
+    expect(block).toMatch(/dark fill 1\.\d{3}; light fill 1\.\d{3}, edge \d\.\d\d to \d\.\d\d/);
+  });
+
+  it('fails with a light fill step (the light --card-hover at L 0.960)', () => {
+    const decl = /--card-hover\s*:\s+oklch\(([\d.]+) /.exec(CSS.slice(0, CSS.indexOf('\n.dark {')));
+    expect(decl, 'light --card-hover has no colour value of its own').toBeTruthy();
+    const css = inLight(CSS, decl[0], decl[0].replace(decl[1], '0.960'));
+    const block = lint(css, 10, 'light-fill');
+    expect(block).toMatch(/^✗ 10\./);
+    expect(block).toMatch(/light: --card-hover on --bg-surface = 1\.\d{3}, ruled 1\.000 within 0\.01 \(no fill step\)/);
+    expect(block).not.toMatch(/dark:/);
+  });
+
+  it('fails when the light hover edge does not step (--card-edge-hover set to --border-default)', () => {
+    // Found by pattern, not written out: lint:interaction check 8 reads any
+    // literal "hover" plus a colon as a Tailwind state utility.
+    const decl = /--card-edge-hover\s*:\s*var\(--border-strong\);/.exec(CSS.slice(0, CSS.indexOf('\n.dark {')));
+    expect(decl, 'light --card-edge-hover does not name --border-strong').toBeTruthy();
+    const css = inLight(CSS, decl[0], decl[0].replace('--border-strong', '--border-default'));
+    const block = lint(css, 10, 'light-edge');
+    expect(block).toMatch(/^✗ 10\./);
+    expect(block).toMatch(/light: --card-edge-hover on --bg-canvas = 1\.\d\d, under 1\.3 times the resting edge's 1\.\d\d/);
+    expect(block).not.toMatch(/dark:/);
   });
 
   it('fails with the dark --card-hover 0.012 lighter', () => {
@@ -167,15 +200,18 @@ describe('lint:color check 11, the selection distance floor', () => {
     expect(block).toMatch(/lowest dE \d+\.\d\d/);
   });
 
-  it('fails with the light selection lifted to L 0.91, toward the elevated surface', () => {
+  // Moved 17 Oct 2026 (part 5): the elevated surface now equals the canvas, so
+  // the old fixture (L 0.91, toward the elevated surface) passed at dE 11.60.
+  // Lifted to L 0.95 it fails on the canvas floor alone (dE 9.30, floor 10).
+  it('fails with the light selection lifted to L 0.95, toward the canvas', () => {
     const root = CSS.slice(0, CSS.indexOf('\n.dark {'));
     const decl = /--selection-bg\s*:\s+oklch\(([\d.]+) /.exec(root);
     expect(decl, 'light --selection-bg has no colour value of its own').toBeTruthy();
     const at = CSS.indexOf(decl[0]);
-    const css = CSS.slice(0, at) + decl[0].replace(decl[1], '0.910') + CSS.slice(at + decl[0].length);
-    const block = lint(css, 11, 'selection-091');
+    const css = CSS.slice(0, at) + decl[0].replace(decl[1], '0.950') + CSS.slice(at + decl[0].length);
+    const block = lint(css, 11, 'selection-095');
     expect(block).toMatch(/^✗ 11\./);
-    expect(block).toMatch(/light: --selection-bg is dE \d\.\d\d from --bg-surface-elevated, floor 7/);
+    expect(block).toMatch(/light: --selection-bg is dE \d\.\d\d from --bg-canvas, floor 10/);
     expect(block).not.toMatch(/dark:/);
   });
 });

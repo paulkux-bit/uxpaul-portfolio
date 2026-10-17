@@ -604,33 +604,59 @@ const add = (id, title, failures, note) =>
   add(9, `Every colour token sits in the warm hue band, ${HUE_MIN} to ${HUE_MAX}, accents included (hue axis)`, f, `${n} values`);
 }
 
-// 10: the card step. The Selected work card deepens from --bg-surface to
-// --card-hover on hover (H-b, 14 Oct 2026), and the step is ruled at 1.10:1 in
-// both modes: the elevated surface in light, and a token of its own in dark
-// (3a ruling 1b, 15 Oct 2026), which took light's step after the elevated
-// surface stepped 1.13:1 in dark and read brown. A dark retune that moves
-// --bg-surface or --card-hover without the other changes the step silently;
-// this holds it within 0.01. --card-hover is followed through var() to the
-// surface it names. Proved red in __tests__/color-lint.test.mjs with the dark
-// --card-hover moved 0.012 lighter.
+// 10: the card step, per mode (step 6 part 5, ruled 17 Oct 2026: 2a 3a). The
+// Selected work card answers a hover differently in each mode. Dark keeps H-b
+// (14 Oct 2026): the panel deepens from --bg-surface to --card-hover, ruled at
+// 1.10:1 (3a ruling 1b, 15 Oct 2026), held within 0.01, because a retune that
+// moves one without the other changes the step silently. Light draws the card
+// by its edge since part 5: --card-hover equals the surface (1.000 within
+// 0.01, so no fill appears), the resting edge --card-edge must be visible on
+// the canvas (1.30:1 or more; ruled 1.42), and the hover edge --card-edge-hover
+// must step from it (1.3 times its ratio or more; ruled 1.95, 1.37 times).
+// Tokens are followed through var() to what they name. Proved red in
+// __tests__/color-lint.test.mjs with the dark --card-hover 0.012 lighter, the
+// light --card-hover at L 0.960, and the light --card-edge-hover set to
+// var(--border-default).
 {
   const f = [];
   const STEP = 1.1;
   const TOLERANCE = 0.01;
+  const EDGE_MIN = 1.3;
+  const EDGE_STEP = 1.3;
   const steps = [];
-  for (const mode of ['light', 'dark']) {
-    const hv = resolveToken('--card-hover', mode);
-    const sv = resolveToken('--bg-surface', mode);
-    if (!hv || !sv) {
-      f.push({ where: CSS_FILE, detail: `${mode}: cannot resolve --card-hover or --bg-surface` });
-      continue;
+  {
+    const hv = resolveToken('--card-hover', 'dark');
+    const sv = resolveToken('--bg-surface', 'dark');
+    if (!hv || !sv) f.push({ where: CSS_FILE, detail: 'dark: cannot resolve --card-hover or --bg-surface' });
+    else {
+      const r = contrast(hv, sv);
+      steps.push(`dark fill ${r.toFixed(3)}`);
+      if (Math.abs(r - STEP) > TOLERANCE)
+        f.push({ where: CSS_FILE, detail: `dark: --card-hover on --bg-surface = ${r.toFixed(3)}, ruled ${STEP.toFixed(2)} within ${TOLERANCE}` });
     }
-    const r = contrast(hv, sv);
-    steps.push(`${mode} ${r.toFixed(3)}`);
-    if (Math.abs(r - STEP) > TOLERANCE)
-      f.push({ where: CSS_FILE, detail: `${mode}: --card-hover on --bg-surface = ${r.toFixed(3)}, ruled ${STEP.toFixed(2)} within ${TOLERANCE}` });
   }
-  add(10, 'The card step, --card-hover on --bg-surface, is 1.10:1 in both modes (H-b, 3a ruling 1b)', f, steps.join(', '));
+  {
+    const hv = resolveToken('--card-hover', 'light');
+    const sv = resolveToken('--bg-surface', 'light');
+    const cv = resolveToken('--bg-canvas', 'light');
+    const ev = resolveToken('--card-edge', 'light');
+    const xv = resolveToken('--card-edge-hover', 'light');
+    if (!hv || !sv || !cv || !ev || !xv)
+      f.push({ where: CSS_FILE, detail: 'light: cannot resolve --card-hover, --bg-surface, --bg-canvas, --card-edge or --card-edge-hover' });
+    else {
+      const fill = contrast(hv, sv);
+      const edge = contrast(ev, cv);
+      const hover = contrast(xv, cv);
+      steps.push(`light fill ${fill.toFixed(3)}, edge ${edge.toFixed(2)} to ${hover.toFixed(2)}`);
+      if (Math.abs(fill - 1) > TOLERANCE)
+        f.push({ where: CSS_FILE, detail: `light: --card-hover on --bg-surface = ${fill.toFixed(3)}, ruled 1.000 within ${TOLERANCE} (no fill step)` });
+      if (edge < EDGE_MIN)
+        f.push({ where: CSS_FILE, detail: `light: --card-edge on --bg-canvas = ${edge.toFixed(2)}, floor ${EDGE_MIN.toFixed(2)}` });
+      if (hover < edge * EDGE_STEP)
+        f.push({ where: CSS_FILE, detail: `light: --card-edge-hover on --bg-canvas = ${hover.toFixed(2)}, under ${EDGE_STEP} times the resting edge's ${edge.toFixed(2)}` });
+    }
+  }
+  add(10, 'The card step, per mode: dark deepens the panel 1.10:1, light steps the edge (H-b, part 5)', f, steps.join('; '));
 }
 
 // 11: the selection's distance floor (brass, ruling 12c, 15 Oct 2026). The
